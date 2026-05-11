@@ -45,43 +45,43 @@
     "batch_id": "20260511-code_gen-006",
     "category": "code_gen",
     "criteria_results": {
-      "construct_diversity": false,
-      "idiomatic_jac": false,
-      "not_python_like": false,
-      "prompt_clarity": false
+      "construct_diversity": true,
+      "idiomatic_jac": true,
+      "not_python_like": true,
+      "prompt_clarity": true
     },
     "example_id": "code_gen-20260511-006-0004",
-    "notes": "Pending manual review.",
-    "review_status": "pending",
-    "reviewer": "manual-reviewer"
+    "notes": "Manual review passed: prompt is clear and the factorial solution uses typed Jac function syntax, while loop, semicolons, and entry block.",
+    "review_status": "passed",
+    "reviewer": "ayush"
   },
   {
     "batch_id": "20260511-code_gen-006",
     "category": "code_gen",
     "criteria_results": {
-      "construct_diversity": false,
-      "idiomatic_jac": false,
-      "not_python_like": false,
-      "prompt_clarity": false
+      "construct_diversity": true,
+      "idiomatic_jac": true,
+      "not_python_like": true,
+      "prompt_clarity": true
     },
     "example_id": "code_gen-20260511-006-0005",
-    "notes": "Pending manual review.",
-    "review_status": "pending",
-    "reviewer": "manual-reviewer"
+    "notes": "Manual review passed: clear utility prompt, typed function, Jac block syntax, and entry example are appropriate.",
+    "review_status": "passed",
+    "reviewer": "ayush"
   },
   {
     "batch_id": "20260511-code_gen-006",
     "category": "code_gen",
     "criteria_results": {
-      "construct_diversity": false,
-      "idiomatic_jac": false,
-      "not_python_like": false,
-      "prompt_clarity": false
+      "construct_diversity": true,
+      "idiomatic_jac": true,
+      "not_python_like": true,
+      "prompt_clarity": true
     },
     "example_id": "code_gen-20260511-006-0006",
-    "notes": "Pending manual review.",
-    "review_status": "pending",
-    "reviewer": "manual-reviewer"
+    "notes": "Manual review passed: Task is modeled as a Jac node with has fields and an idiomatic method, matching the prompt.",
+    "review_status": "passed",
+    "reviewer": "ayush"
   },
   {
     "batch_id": "20260511-code_gen-006",
@@ -143,15 +143,15 @@
     "batch_id": "20260511-code_gen-006",
     "category": "code_gen",
     "criteria_results": {
-      "construct_diversity": false,
-      "idiomatic_jac": false,
-      "not_python_like": false,
-      "prompt_clarity": false
+      "construct_diversity": true,
+      "idiomatic_jac": true,
+      "not_python_like": true,
+      "prompt_clarity": true
     },
     "example_id": "code_gen-20260511-006-0011",
-    "notes": "Pending manual review.",
-    "review_status": "pending",
-    "reviewer": "manual-reviewer"
+    "notes": "Manual review passed: status-code mapping uses typed Jac function syntax and clear conditional behavior matching the prompt.",
+    "review_status": "passed",
+    "reviewer": "ayush"
   },
   {
     "batch_id": "20260511-code_gen-006",

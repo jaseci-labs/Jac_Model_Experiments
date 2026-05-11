@@ -2,35 +2,528 @@
   "clusters": [
     {
       "action": "manual_review_required",
+      "category": "code_gen",
+      "cluster_id": "4a63f8b910309aa7",
+      "reason": "high normalized content similarity",
+      "record_ids": [
+        "code_gen-20260508-005-0002",
+        "code_gen-20260511-006-0009"
+      ],
+      "resolution": {
+        "action": "keep_distinct",
+        "cluster_id": "4a63f8b910309aa7",
+        "notes": "Distinct sum tasks: one filters positives while the other sums all values; keep both for data-processing variety.",
+        "reviewer": "ayush"
+      },
+      "resolution_status": "keep_distinct",
+      "similarity": 0.9072
+    },
+    {
+      "action": "manual_review_required",
+      "category": "code_gen",
+      "cluster_id": "e91b62afb58c30f2",
+      "reason": "high normalized content similarity",
+      "record_ids": [
+        "code_gen-20260511-004-0002",
+        "code_gen-20260511-006-0003"
+      ],
+      "resolution": {
+        "action": "keep_distinct",
+        "cluster_id": "e91b62afb58c30f2",
+        "notes": "Same even-check pattern but different prompt wording and implementation detail using explicit remainder; acceptable simple utility variety.",
+        "reviewer": "ayush"
+      },
+      "resolution_status": "keep_distinct",
+      "similarity": 0.925
+    },
+    {
+      "action": "manual_review_required",
+      "category": "code_gen",
+      "cluster_id": "466140b1f331f4fd",
+      "reason": "high normalized content similarity",
+      "record_ids": [
+        "code_gen-20260511-004-0003",
+        "code_gen-20260511-004-0006"
+      ],
+      "resolution": {
+        "action": "keep_distinct",
+        "cluster_id": "466140b1f331f4fd",
+        "notes": "Loop skeleton is similar, but one sums values and the other counts positives; distinct behavior and prompt intent.",
+        "reviewer": "ayush"
+      },
+      "resolution_status": "keep_distinct",
+      "similarity": 0.9023
+    },
+    {
+      "action": "manual_review_required",
+      "category": "code_gen",
+      "cluster_id": "3e0ea2d4320b8703",
+      "reason": "high normalized content similarity",
+      "record_ids": [
+        "code_gen-20260511-004-0003",
+        "code_gen-20260511-006-0009"
+      ],
+      "resolution": {
+        "action": "keep_distinct",
+        "cluster_id": "3e0ea2d4320b8703",
+        "notes": "Both are summation examples, but one is an existing simple loop and the other is typed medium data-processing; keep as acceptable seed overlap.",
+        "reviewer": "ayush"
+      },
+      "resolution_status": "keep_distinct",
+      "similarity": 0.9043
+    },
+    {
+      "action": "manual_review_required",
       "category": "debug",
+      "cluster_id": "226faa4078c3f1e6",
+      "reason": "high normalized content similarity",
+      "record_ids": [
+        "debug-20260508-005-0002",
+        "debug-20260508-006-0002"
+      ],
+      "resolution": {
+        "action": "keep_distinct",
+        "cluster_id": "226faa4078c3f1e6",
+        "notes": "Both are return-type mismatch examples, but use different literals and batches; keep as intentional error-class coverage.",
+        "reviewer": "ayush"
+      },
+      "resolution_status": "keep_distinct",
+      "similarity": 0.9892
+    },
+    {
+      "action": "manual_review_required",
+      "category": "debug",
+      "cluster_id": "87ddd30d72c3de95",
+      "reason": "high normalized content similarity",
+      "record_ids": [
+        "debug-20260508-005-0002",
+        "debug-20260511-004-0008"
+      ],
+      "resolution": {
+        "action": "keep_distinct",
+        "cluster_id": "87ddd30d72c3de95",
+        "notes": "Both cover return type mismatches in opposite directions/intended return types; distinct fixes and learning targets.",
+        "reviewer": "ayush"
+      },
+      "resolution_status": "keep_distinct",
+      "similarity": 0.9412
+    },
+    {
+      "action": "manual_review_required",
+      "category": "debug",
+      "cluster_id": "e4c001ae3083acda",
+      "reason": "high normalized content similarity",
+      "record_ids": [
+        "debug-20260508-006-0001",
+        "debug-20260511-003-0001"
+      ],
+      "resolution": {
+        "action": "keep_distinct",
+        "cluster_id": "e4c001ae3083acda",
+        "notes": "Both are missing semicolon after return, but use different functions and arithmetic contexts; keep as Jac semicolon coverage.",
+        "reviewer": "ayush"
+      },
+      "resolution_status": "keep_distinct",
+      "similarity": 0.9562
+    },
+    {
+      "action": "manual_review_required",
+      "category": "debug",
+      "cluster_id": "56e0a8977b80113c",
+      "reason": "high normalized content similarity",
+      "record_ids": [
+        "debug-20260508-006-0001",
+        "debug-20260511-004-0001"
+      ],
+      "resolution": {
+        "action": "keep_distinct",
+        "cluster_id": "56e0a8977b80113c",
+        "notes": "Both are semicolon syntax issues, one after return and one after assignment in entry; distinct statement contexts.",
+        "reviewer": "ayush"
+      },
+      "resolution_status": "keep_distinct",
+      "similarity": 0.9
+    },
+    {
+      "action": "manual_review_required",
+      "category": "debug",
+      "cluster_id": "ad31bfe2568d3fed",
+      "reason": "high normalized content similarity",
+      "record_ids": [
+        "debug-20260508-006-0002",
+        "debug-20260511-004-0008"
+      ],
+      "resolution": {
+        "action": "keep_distinct",
+        "cluster_id": "ad31bfe2568d3fed",
+        "notes": "Both are type mismatch fixes but target different declared return types and corrected literals; keep distinct.",
+        "reviewer": "ayush"
+      },
+      "resolution_status": "keep_distinct",
+      "similarity": 0.9412
+    },
+    {
+      "action": "manual_review_required",
+      "category": "debug",
+      "cluster_id": "401183a80ac5f0e4",
+      "reason": "high normalized content similarity",
+      "record_ids": [
+        "debug-20260508-006-0003",
+        "debug-20260511-003-0003"
+      ],
+      "resolution": {
+        "action": "keep_distinct",
+        "cluster_id": "401183a80ac5f0e4",
+        "notes": "Both are undefined-name examples, but use different variable names and arithmetic functions; acceptable scoped-name coverage.",
+        "reviewer": "ayush"
+      },
+      "resolution_status": "keep_distinct",
+      "similarity": 0.937
+    },
+    {
+      "action": "manual_review_required",
+      "category": "debug",
+      "cluster_id": "f4be90eb2fbd7d4f",
+      "reason": "high normalized content similarity",
+      "record_ids": [
+        "debug-20260508-006-0003",
+        "debug-20260511-004-0002"
+      ],
+      "resolution": {
+        "action": "keep_distinct",
+        "cluster_id": "f4be90eb2fbd7d4f",
+        "notes": "High normalized similarity from small snippets, but errors differ: undefined variable versus missing closing brace.",
+        "reviewer": "ayush"
+      },
+      "resolution_status": "keep_distinct",
+      "similarity": 0.9
+    },
+    {
+      "action": "manual_review_required",
+      "category": "debug",
+      "cluster_id": "347965a685f37feb",
+      "reason": "high normalized content similarity",
+      "record_ids": [
+        "debug-20260508-006-0004",
+        "debug-20260511-004-0013"
+      ],
+      "resolution": {
+        "action": "keep_distinct",
+        "cluster_id": "347965a685f37feb",
+        "notes": "Both replace unresolved imports with local functions, but imported symbols and function bodies differ; keep as missing-module variants.",
+        "reviewer": "ayush"
+      },
+      "resolution_status": "keep_distinct",
+      "similarity": 0.95
+    },
+    {
+      "action": "manual_review_required",
+      "category": "debug",
+      "cluster_id": "91c0c5874b6dba05",
+      "reason": "high normalized content similarity",
+      "record_ids": [
+        "debug-20260511-001-0001",
+        "debug-20260511-001-0003"
+      ],
+      "resolution": {
+        "action": "keep_distinct",
+        "cluster_id": "91c0c5874b6dba05",
+        "notes": "Different root causes: missing semicolon versus undefined parameter; keep as distinct debug tasks.",
+        "reviewer": "ayush"
+      },
+      "resolution_status": "keep_distinct",
+      "similarity": 0.924
+    },
+    {
+      "action": "manual_review_required",
+      "category": "debug",
+      "cluster_id": "b5cca45fe2ea68d5",
+      "reason": "high normalized content similarity",
+      "record_ids": [
+        "debug-20260511-002-0002",
+        "debug-20260511-004-0003"
+      ],
+      "resolution": {
+        "action": "keep_distinct",
+        "cluster_id": "b5cca45fe2ea68d5",
+        "notes": "Different syntax errors in entry block: missing closing brace versus missing semicolon after print.",
+        "reviewer": "ayush"
+      },
+      "resolution_status": "keep_distinct",
+      "similarity": 0.912
+    },
+    {
+      "action": "manual_review_required",
+      "category": "debug",
+      "cluster_id": "d75add58b3387b78",
+      "reason": "high normalized content similarity",
+      "record_ids": [
+        "debug-20260511-002-0005",
+        "debug-20260511-004-0005"
+      ],
+      "resolution": {
+        "action": "keep_distinct",
+        "cluster_id": "d75add58b3387b78",
+        "notes": "Both are typed variable initializer mismatches with different literals; keep for repeated primitive type-error coverage.",
+        "reviewer": "ayush"
+      },
+      "resolution_status": "keep_distinct",
+      "similarity": 0.9846
+    },
+    {
+      "action": "manual_review_required",
+      "category": "debug",
+      "cluster_id": "b7d270332b1700cc",
       "reason": "high normalized content similarity",
       "record_ids": [
         "debug-20260511-002-0008",
         "debug-20260511-002-0010"
       ],
+      "resolution": {
+        "action": "keep_distinct",
+        "cluster_id": "b7d270332b1700cc",
+        "notes": "One is a typed node-field initializer error and the other a missing walker closing brace; distinct Jac constructs.",
+        "reviewer": "ayush"
+      },
+      "resolution_status": "keep_distinct",
       "similarity": 0.9665
     },
     {
       "action": "manual_review_required",
       "category": "debug",
+      "cluster_id": "e7b30b68457ddb85",
       "reason": "high normalized content similarity",
       "record_ids": [
         "debug-20260511-002-0008",
         "debug-20260511-002-0011"
       ],
+      "resolution": {
+        "action": "keep_distinct",
+        "cluster_id": "e7b30b68457ddb85",
+        "notes": "Both are archetype field type mismatches, but one node and one walker; keep to cover construct-specific field validation.",
+        "reviewer": "ayush"
+      },
+      "resolution_status": "keep_distinct",
       "similarity": 1.0
     },
     {
       "action": "manual_review_required",
       "category": "debug",
+      "cluster_id": "4c185ea2576bb4d9",
       "reason": "high normalized content similarity",
       "record_ids": [
         "debug-20260511-002-0010",
         "debug-20260511-002-0011"
       ],
+      "resolution": {
+        "action": "keep_distinct",
+        "cluster_id": "4c185ea2576bb4d9",
+        "notes": "One missing walker brace and one walker field type mismatch; distinct walker error modes.",
+        "reviewer": "ayush"
+      },
+      "resolution_status": "keep_distinct",
       "similarity": 0.9665
+    },
+    {
+      "action": "manual_review_required",
+      "category": "debug",
+      "cluster_id": "25d961cbdcef7a8f",
+      "reason": "high normalized content similarity",
+      "record_ids": [
+        "debug-20260511-003-0002",
+        "debug-20260511-004-0002"
+      ],
+      "resolution": {
+        "action": "keep_distinct",
+        "cluster_id": "25d961cbdcef7a8f",
+        "notes": "Different root causes: return type mismatch versus missing closing function brace.",
+        "reviewer": "ayush"
+      },
+      "resolution_status": "keep_distinct",
+      "similarity": 0.9464
+    },
+    {
+      "action": "manual_review_required",
+      "category": "debug",
+      "cluster_id": "8634381685cb562f",
+      "reason": "high normalized content similarity",
+      "record_ids": [
+        "debug-20260511-004-0001",
+        "debug-20260511-004-0004"
+      ],
+      "resolution": {
+        "action": "keep_distinct",
+        "cluster_id": "8634381685cb562f",
+        "notes": "Different syntax errors: missing semicolon after assignment versus missing closing parenthesis in function call.",
+        "reviewer": "ayush"
+      },
+      "resolution_status": "keep_distinct",
+      "similarity": 0.9571
+    },
+    {
+      "action": "manual_review_required",
+      "category": "debug",
+      "cluster_id": "5e7bb2a50917dcf5",
+      "reason": "high normalized content similarity",
+      "record_ids": [
+        "debug-20260511-004-0001",
+        "debug-20260511-004-0012"
+      ],
+      "resolution": {
+        "action": "keep_distinct",
+        "cluster_id": "5e7bb2a50917dcf5",
+        "notes": "Different root causes: entry assignment semicolon versus undefined argument name.",
+        "reviewer": "ayush"
+      },
+      "resolution_status": "keep_distinct",
+      "similarity": 0.9695
+    },
+    {
+      "action": "manual_review_required",
+      "category": "debug",
+      "cluster_id": "1b37425ff0261311",
+      "reason": "high normalized content similarity",
+      "record_ids": [
+        "debug-20260511-004-0004",
+        "debug-20260511-004-0012"
+      ],
+      "resolution": {
+        "action": "keep_distinct",
+        "cluster_id": "1b37425ff0261311",
+        "notes": "Different root causes in similar call snippets: missing parenthesis versus undefined variable.",
+        "reviewer": "ayush"
+      },
+      "resolution_status": "keep_distinct",
+      "similarity": 0.9573
+    },
+    {
+      "action": "manual_review_required",
+      "category": "debug",
+      "cluster_id": "145e60067679d120",
+      "reason": "high normalized content similarity",
+      "record_ids": [
+        "debug-20260511-004-0006",
+        "debug-20260511-004-0015"
+      ],
+      "resolution": {
+        "action": "keep_distinct",
+        "cluster_id": "145e60067679d120",
+        "notes": "Different debug scenarios: return type mismatch versus unresolved import replaced by local function.",
+        "reviewer": "ayush"
+      },
+      "resolution_status": "keep_distinct",
+      "similarity": 0.9432
+    },
+    {
+      "action": "manual_review_required",
+      "category": "debug",
+      "cluster_id": "27d4a8e557c17ef5",
+      "reason": "high normalized content similarity",
+      "record_ids": [
+        "debug-20260511-004-0013",
+        "debug-20260511-004-0014"
+      ],
+      "resolution": {
+        "action": "keep_distinct",
+        "cluster_id": "27d4a8e557c17ef5",
+        "notes": "Both are unresolved import examples, but symbols/domains differ; keep as acceptable import-error variants.",
+        "reviewer": "ayush"
+      },
+      "resolution_status": "keep_distinct",
+      "similarity": 0.9231
+    },
+    {
+      "action": "manual_review_required",
+      "category": "explanation",
+      "cluster_id": "6811e2008377ba6c",
+      "reason": "high normalized content similarity",
+      "record_ids": [
+        "explanation-20260508-005-0001",
+        "explanation-20260511-003-0001"
+      ],
+      "resolution": {
+        "action": "keep_distinct",
+        "cluster_id": "6811e2008377ba6c",
+        "notes": "Both explain clamp functions with different sample values and granularity; keep as acceptable explanation overlap.",
+        "reviewer": "ayush"
+      },
+      "resolution_status": "keep_distinct",
+      "similarity": 0.9918
+    },
+    {
+      "action": "manual_review_required",
+      "category": "explanation",
+      "cluster_id": "787a46d73d1ba7a3",
+      "reason": "high normalized content similarity",
+      "record_ids": [
+        "explanation-20260508-005-0002",
+        "explanation-20260511-004-0002"
+      ],
+      "resolution": {
+        "action": "keep_distinct",
+        "cluster_id": "787a46d73d1ba7a3",
+        "notes": "Both explain while loops but with opposite count directions and different line-by-line behavior.",
+        "reviewer": "ayush"
+      },
+      "resolution_status": "keep_distinct",
+      "similarity": 0.9273
+    },
+    {
+      "action": "manual_review_required",
+      "category": "explanation",
+      "cluster_id": "8018be089c45531c",
+      "reason": "high normalized content similarity",
+      "record_ids": [
+        "explanation-20260508-005-0003",
+        "explanation-20260511-004-0005"
+      ],
+      "resolution": {
+        "action": "keep_distinct",
+        "cluster_id": "8018be089c45531c",
+        "notes": "Both explain stateful add methods, but one is a node Counter and one an obj Score with different fields/defaults.",
+        "reviewer": "ayush"
+      },
+      "resolution_status": "keep_distinct",
+      "similarity": 0.918
+    },
+    {
+      "action": "manual_review_required",
+      "category": "explanation",
+      "cluster_id": "ea69a9b9ba1af0e4",
+      "reason": "high normalized content similarity",
+      "record_ids": [
+        "explanation-20260511-004-0008",
+        "explanation-20260511-004-0010"
+      ],
+      "resolution": {
+        "action": "keep_distinct",
+        "cluster_id": "ea69a9b9ba1af0e4",
+        "notes": "Different control-flow explanations: falsy string fallback versus numeric max if/else.",
+        "reviewer": "ayush"
+      },
+      "resolution_status": "keep_distinct",
+      "similarity": 0.9071
+    },
+    {
+      "action": "manual_review_required",
+      "category": "conversion",
+      "cluster_id": "7558e8718896b46f",
+      "reason": "high normalized content similarity",
+      "record_ids": [
+        "conversion-20260508-005-0003",
+        "conversion-20260511-003-0001"
+      ],
+      "resolution": {
+        "action": "keep_distinct",
+        "cluster_id": "7558e8718896b46f",
+        "notes": "Both process even numbers but outputs differ: list of evens versus sum of evens; keep distinct conversion targets.",
+        "reviewer": "ayush"
+      },
+      "resolution_status": "keep_distinct",
+      "similarity": 0.9159
     }
   ],
-  "flagged_count": 3,
+  "flagged_count": 29,
+  "unresolved_count": 0,
   "version": "jac-synth-v0.1.0"
 }

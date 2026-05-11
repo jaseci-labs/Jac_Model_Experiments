@@ -59,14 +59,14 @@
     "batch_id": "20260511-code_gen-003",
     "category": "code_gen",
     "criteria_results": {
-      "construct_diversity": false,
-      "idiomatic_jac": false,
-      "not_python_like": false,
-      "prompt_clarity": false
+      "construct_diversity": true,
+      "idiomatic_jac": true,
+      "not_python_like": true,
+      "prompt_clarity": true
     },
     "example_id": "code_gen-20260511-003-0005",
-    "notes": "Pending manual review.",
-    "review_status": "pending",
-    "reviewer": "manual-reviewer"
+    "notes": "Manual review failed: the prompt asks for a walker-shaped audit accumulator, but the walker is only declared and never used for the audit behavior; the rest of the Jac syntax is typed and idiomatic.",
+    "review_status": "failed",
+    "reviewer": "ayush"
   }
 ]

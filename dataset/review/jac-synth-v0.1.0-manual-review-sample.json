@@ -3,29 +3,16 @@
     "code_gen": {
       "records": [
         {
-          "batch_id": "20260511-code_gen-004",
+          "batch_id": "20260511-code_gen-003",
           "category": "code_gen",
-          "complexity": "simple",
+          "complexity": "hard",
           "criteria": [
             "prompt_clarity",
             "idiomatic_jac",
             "construct_diversity",
             "not_python_like"
           ],
-          "id": "code_gen-20260511-004-0003",
-          "source_path": null
-        },
-        {
-          "batch_id": "20260511-code_gen-004",
-          "category": "code_gen",
-          "complexity": "simple",
-          "criteria": [
-            "prompt_clarity",
-            "idiomatic_jac",
-            "construct_diversity",
-            "not_python_like"
-          ],
-          "id": "code_gen-20260511-004-0004",
+          "id": "code_gen-20260511-003-0005",
           "source_path": null
         },
         {
@@ -38,7 +25,7 @@
             "construct_diversity",
             "not_python_like"
           ],
-          "id": "code_gen-20260511-004-0012",
+          "id": "code_gen-20260511-004-0011",
           "source_path": null
         },
         {
@@ -53,14 +40,66 @@
           ],
           "id": "code_gen-20260511-004-0021",
           "source_path": null
+        },
+        {
+          "batch_id": "20260511-code_gen-006",
+          "category": "code_gen",
+          "complexity": "simple",
+          "criteria": [
+            "prompt_clarity",
+            "idiomatic_jac",
+            "construct_diversity",
+            "not_python_like"
+          ],
+          "id": "code_gen-20260511-006-0004",
+          "source_path": null
+        },
+        {
+          "batch_id": "20260511-code_gen-006",
+          "category": "code_gen",
+          "complexity": "simple",
+          "criteria": [
+            "prompt_clarity",
+            "idiomatic_jac",
+            "construct_diversity",
+            "not_python_like"
+          ],
+          "id": "code_gen-20260511-006-0005",
+          "source_path": null
+        },
+        {
+          "batch_id": "20260511-code_gen-006",
+          "category": "code_gen",
+          "complexity": "simple",
+          "criteria": [
+            "prompt_clarity",
+            "idiomatic_jac",
+            "construct_diversity",
+            "not_python_like"
+          ],
+          "id": "code_gen-20260511-006-0006",
+          "source_path": null
+        },
+        {
+          "batch_id": "20260511-code_gen-006",
+          "category": "code_gen",
+          "complexity": "medium",
+          "criteria": [
+            "prompt_clarity",
+            "idiomatic_jac",
+            "construct_diversity",
+            "not_python_like"
+          ],
+          "id": "code_gen-20260511-006-0011",
+          "source_path": null
         }
       ],
-      "sample_size": 4
+      "sample_size": 7
     },
     "conversion": {
       "records": [
         {
-          "batch_id": "20260508-conversion-002",
+          "batch_id": "20260511-conversion-003",
           "category": "conversion",
           "complexity": "medium",
           "criteria": [
@@ -69,7 +108,7 @@
             "meaningful_conversion_notes",
             "not_mechanical_translation"
           ],
-          "id": "conversion-20260508-002-0005",
+          "id": "conversion-20260511-003-0001",
           "source_path": null
         },
         {
@@ -82,7 +121,7 @@
             "meaningful_conversion_notes",
             "not_mechanical_translation"
           ],
-          "id": "conversion-20260511-004-0005",
+          "id": "conversion-20260511-004-0010",
           "source_path": null
         },
         {
@@ -95,7 +134,7 @@
             "meaningful_conversion_notes",
             "not_mechanical_translation"
           ],
-          "id": "conversion-20260511-004-0011",
+          "id": "conversion-20260511-004-0016",
           "source_path": null
         },
         {
@@ -108,7 +147,7 @@
             "meaningful_conversion_notes",
             "not_mechanical_translation"
           ],
-          "id": "conversion-20260511-004-0013",
+          "id": "conversion-20260511-004-0017",
           "source_path": null
         }
       ],
@@ -130,7 +169,7 @@
           "source_path": null
         },
         {
-          "batch_id": "20260508-debug-003",
+          "batch_id": "20260511-debug-001",
           "category": "debug",
           "complexity": "medium",
           "criteria": [
@@ -139,7 +178,20 @@
             "fixed_code_precise",
             "specific_explanation"
           ],
-          "id": "debug-20260508-003-0004",
+          "id": "debug-20260511-001-0001",
+          "source_path": null
+        },
+        {
+          "batch_id": "20260511-debug-003",
+          "category": "debug",
+          "complexity": "medium",
+          "criteria": [
+            "exactly_one_error",
+            "realistic_error",
+            "fixed_code_precise",
+            "specific_explanation"
+          ],
+          "id": "debug-20260511-003-0001",
           "source_path": null
         },
         {
@@ -152,20 +204,7 @@
             "fixed_code_precise",
             "specific_explanation"
           ],
-          "id": "debug-20260511-004-0007",
-          "source_path": null
-        },
-        {
-          "batch_id": "20260511-debug-004",
-          "category": "debug",
-          "complexity": "medium",
-          "criteria": [
-            "exactly_one_error",
-            "realistic_error",
-            "fixed_code_precise",
-            "specific_explanation"
-          ],
-          "id": "debug-20260511-004-0014",
+          "id": "debug-20260511-004-0019",
           "source_path": null
         }
       ],
@@ -173,6 +212,19 @@
     },
     "explanation": {
       "records": [
+        {
+          "batch_id": "20260508-explanation-005",
+          "category": "explanation",
+          "complexity": "hard",
+          "criteria": [
+            "accurate_explanation",
+            "specific_jac_semantics",
+            "granularity_matches_request",
+            "not_python_behavior"
+          ],
+          "id": "explanation-20260508-005-0001",
+          "source_path": null
+        },
         {
           "batch_id": "20260508-explanation-005",
           "category": "explanation",
@@ -187,19 +239,6 @@
           "source_path": null
         },
         {
-          "batch_id": "20260508-explanation-005",
-          "category": "explanation",
-          "complexity": "hard",
-          "criteria": [
-            "accurate_explanation",
-            "specific_jac_semantics",
-            "granularity_matches_request",
-            "not_python_behavior"
-          ],
-          "id": "explanation-20260508-005-0004",
-          "source_path": null
-        },
-        {
           "batch_id": "20260511-explanation-004",
           "category": "explanation",
           "complexity": "medium",
@@ -209,7 +248,7 @@
             "granularity_matches_request",
             "not_python_behavior"
           ],
-          "id": "explanation-20260511-004-0001",
+          "id": "explanation-20260511-004-0005",
           "source_path": null
         }
       ],

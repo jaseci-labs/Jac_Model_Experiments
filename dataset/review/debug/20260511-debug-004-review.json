@@ -255,15 +255,15 @@
     "batch_id": "20260511-debug-004",
     "category": "debug",
     "criteria_results": {
-      "exactly_one_error": false,
-      "fixed_code_precise": false,
-      "realistic_error": false,
-      "specific_explanation": false
+      "exactly_one_error": true,
+      "fixed_code_precise": true,
+      "realistic_error": true,
+      "specific_explanation": true
     },
     "example_id": "debug-20260511-004-0019",
-    "notes": "Pending manual review.",
-    "review_status": "pending",
-    "reviewer": "manual-reviewer"
+    "notes": "Manual review passed: module-scope return is a single semantic error, and the fix moves return into a typed function with a clear explanation.",
+    "review_status": "passed",
+    "reviewer": "ayush"
   },
   {
     "batch_id": "20260511-debug-004",

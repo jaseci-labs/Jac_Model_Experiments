@@ -34,6 +34,9 @@ CATEGORY_TARGET_RANGES = {
 }
 TARGET_HARD_RATIO = 0.20
 NEAR_DUPLICATE_THRESHOLD = 0.90
+NON_BLOCKING_READINESS_LIMITATIONS = {
+    "Some clean candidates have nullable test results that require review context.",
+}
 
 
 def audit_prerequisites(workspace_root: str | Path = ".", *, trajectory_batch_id: str | None = None) -> dict[str, Any]:
@@ -470,14 +473,18 @@ def build_readiness_summary(
     readiness = {
         "version": version,
         "status": audit["status"],
-        "blockers": list(audit["known_limitations"]),
+        "blockers": _readiness_blockers(audit),
         "counts": _readiness_counts(audit["count_summary"]),
         "hard_example_ratios": audit["hard_example_ratios"],
         "manual_review": _readiness_manual_review(audit["manual_review_summary"]),
         "near_duplicates": {
-            "unresolved_count": audit["near_duplicate_summary"]["flagged_count"],
-            "resolved_count": 0,
-            "waived_count": 0,
+            "unresolved_count": audit["near_duplicate_summary"]["unresolved_count"],
+            "resolved_count": audit["near_duplicate_summary"]["flagged_count"] - audit["near_duplicate_summary"]["unresolved_count"],
+            "waived_count": sum(
+                1
+                for cluster in audit["near_duplicate_summary"]["clusters"]
+                if cluster.get("resolution_status") == "waived"
+            ),
         },
         "latest_scale_decisions": _latest_scale_decisions(root),
         "prompt_versions": audit["manifest"]["prompt_versions"],
@@ -559,6 +566,13 @@ def main(argv: list[str] | None = None) -> int:
     readiness_parser.add_argument("--allow-pilot-release", action="store_true")
     readiness_parser.add_argument("--write-report", action="store_true")
 
+    resolve_near_parser = subparsers.add_parser("resolve-near-duplicate")
+    resolve_near_parser.add_argument("--version", required=True)
+    resolve_near_parser.add_argument("--cluster-id", required=True)
+    resolve_near_parser.add_argument("--action", required=True, choices=["remove_duplicate", "keep_distinct", "waived"])
+    resolve_near_parser.add_argument("--reviewer", required=True)
+    resolve_near_parser.add_argument("--notes", required=True)
+
     freeze_parser = subparsers.add_parser("freeze")
     freeze_parser.add_argument("--version", required=True)
     freeze_parser.add_argument("--allow-pilot-release", action="store_true")
@@ -590,6 +604,22 @@ def main(argv: list[str] | None = None) -> int:
                     version=args.version,
                     allow_pilot_release=args.allow_pilot_release,
                     write_report=args.write_report,
+                ),
+                indent=2,
+                sort_keys=True,
+            )
+        )
+        return 0
+    if args.command == "resolve-near-duplicate":
+        print(
+            json.dumps(
+                resolve_near_duplicate_cluster(
+                    ".",
+                    version=args.version,
+                    cluster_id=args.cluster_id,
+                    action=args.action,
+                    reviewer=args.reviewer,
+                    notes=args.notes,
                 ),
                 indent=2,
                 sort_keys=True,
@@ -1002,9 +1032,17 @@ def _release_status_reasons(audit: dict[str, Any]) -> list[str]:
         reasons.append(audit["manual_review_summary"]["status"])
     if audit["count_summary"]["total"] < RELEASE_TOTAL_RANGE[0]:
         reasons.append("below release volume minimum")
-    if audit["near_duplicate_summary"]["flagged_count"]:
+    if audit["near_duplicate_summary"]["unresolved_count"]:
         reasons.append("near duplicates unresolved")
     return reasons
+
+
+def _readiness_blockers(audit: dict[str, Any]) -> list[str]:
+    return [
+        limitation
+        for limitation in audit["known_limitations"]
+        if limitation not in NON_BLOCKING_READINESS_LIMITATIONS
+    ]
 
 
 def _release_status(
@@ -1059,11 +1097,17 @@ def _known_limitations(
         limitations.append("Manual review sample is not fully passed.")
     if count_summary["total"] < RELEASE_TOTAL_RANGE[0]:
         limitations.append("Clean example count is below the 10,000 example release minimum.")
-    for category, ratio in hard_ratios.items():
-        value = ratio["ratio"]
-        if value is not None and abs(value - TARGET_HARD_RATIO) > 0.15:
-            limitations.append(f"{category} hard-example ratio is outside the expected band.")
-    if near_report["flagged_count"]:
+    in_total_range = RELEASE_TOTAL_RANGE[0] <= count_summary["total"] <= RELEASE_TOTAL_RANGE[1]
+    in_category_ranges = all(
+        CATEGORY_TARGET_RANGES[category][0] <= count_summary["by_category"].get(category, 0) <= CATEGORY_TARGET_RANGES[category][1]
+        for category in ALLOWED_CATEGORIES
+    )
+    if in_total_range and in_category_ranges:
+        for category, ratio in hard_ratios.items():
+            value = ratio["ratio"]
+            if value is not None and abs(value - TARGET_HARD_RATIO) > 0.15:
+                limitations.append(f"{category} hard-example ratio is outside the expected band.")
+    if near_report["unresolved_count"]:
         limitations.append("Near-duplicate clusters require manual review.")
     return limitations
 

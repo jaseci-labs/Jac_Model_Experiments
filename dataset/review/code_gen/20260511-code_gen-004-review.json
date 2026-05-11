@@ -143,15 +143,15 @@
     "batch_id": "20260511-code_gen-004",
     "category": "code_gen",
     "criteria_results": {
-      "construct_diversity": false,
-      "idiomatic_jac": false,
-      "not_python_like": false,
-      "prompt_clarity": false
+      "construct_diversity": true,
+      "idiomatic_jac": true,
+      "not_python_like": true,
+      "prompt_clarity": true
     },
     "example_id": "code_gen-20260511-004-0011",
-    "notes": "Pending manual review.",
-    "review_status": "pending",
-    "reviewer": "manual-reviewer"
+    "notes": "Manual review passed: clear prompt, typed node state, idiomatic has declarations and method syntax, no Python-style class/self parameter usage.",
+    "review_status": "passed",
+    "reviewer": "ayush"
   },
   {
     "batch_id": "20260511-code_gen-004",
@@ -283,14 +283,14 @@
     "batch_id": "20260511-code_gen-004",
     "category": "code_gen",
     "criteria_results": {
-      "construct_diversity": false,
-      "idiomatic_jac": false,
-      "not_python_like": false,
-      "prompt_clarity": false
+      "construct_diversity": true,
+      "idiomatic_jac": true,
+      "not_python_like": true,
+      "prompt_clarity": true
     },
     "example_id": "code_gen-20260511-004-0021",
-    "notes": "Pending manual review.",
-    "review_status": "pending",
-    "reviewer": "manual-reviewer"
+    "notes": "Manual review passed: implements the requested sorted-list merge with typed Jac function syntax, braces, semicolons, and entry demonstration.",
+    "review_status": "passed",
+    "reviewer": "ayush"
   }
 ]

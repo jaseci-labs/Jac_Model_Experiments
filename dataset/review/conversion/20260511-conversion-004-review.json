@@ -129,15 +129,15 @@
     "batch_id": "20260511-conversion-004",
     "category": "conversion",
     "criteria_results": {
-      "idiomatic_jac": false,
-      "meaningful_conversion_notes": false,
-      "not_mechanical_translation": false,
-      "preserves_behavior": false
+      "idiomatic_jac": true,
+      "meaningful_conversion_notes": true,
+      "not_mechanical_translation": true,
+      "preserves_behavior": true
     },
     "example_id": "conversion-20260511-004-0010",
-    "notes": "Pending manual review.",
-    "review_status": "pending",
-    "reviewer": "manual-reviewer"
+    "notes": "Manual review passed: Python task class state is idiomatically modeled as a Jac node with has fields and methods preserving complete/status behavior.",
+    "review_status": "passed",
+    "reviewer": "ayush"
   },
   {
     "batch_id": "20260511-conversion-004",
@@ -213,29 +213,29 @@
     "batch_id": "20260511-conversion-004",
     "category": "conversion",
     "criteria_results": {
-      "idiomatic_jac": false,
-      "meaningful_conversion_notes": false,
-      "not_mechanical_translation": false,
-      "preserves_behavior": false
+      "idiomatic_jac": true,
+      "meaningful_conversion_notes": true,
+      "not_mechanical_translation": true,
+      "preserves_behavior": true
     },
     "example_id": "conversion-20260511-004-0016",
-    "notes": "Pending manual review.",
-    "review_status": "pending",
-    "reviewer": "manual-reviewer"
+    "notes": "Manual review passed: validation behavior is preserved in a typed Jac function with clear guard clauses and meaningful notes.",
+    "review_status": "passed",
+    "reviewer": "ayush"
   },
   {
     "batch_id": "20260511-conversion-004",
     "category": "conversion",
     "criteria_results": {
-      "idiomatic_jac": false,
-      "meaningful_conversion_notes": false,
-      "not_mechanical_translation": false,
-      "preserves_behavior": false
+      "idiomatic_jac": true,
+      "meaningful_conversion_notes": true,
+      "not_mechanical_translation": true,
+      "preserves_behavior": true
     },
     "example_id": "conversion-20260511-004-0017",
-    "notes": "Pending manual review.",
-    "review_status": "pending",
-    "reviewer": "manual-reviewer"
+    "notes": "Manual review passed: LineItem fields and total method are preserved, with Jac node/has syntax and non-mechanical conversion notes.",
+    "review_status": "passed",
+    "reviewer": "ayush"
   },
   {
     "batch_id": "20260511-conversion-004",

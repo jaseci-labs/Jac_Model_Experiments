@@ -497,6 +497,21 @@ def test_readiness_summary_lists_blockers_targets_and_latest_scale_decisions(tmp
     assert "candidate_audit_warning_counts" in readiness["validation"]
 
 
+def test_readiness_summary_does_not_list_candidate_warnings_as_blockers(tmp_path):
+    for category in ALLOWED_CATEGORIES:
+        write_batch(tmp_path, category=category)
+    batch_id = "20260511-explanation-001"
+    review_path = tmp_path / f"dataset/review/explanation/{batch_id}-review.json"
+    review_payload = json.loads(review_path.read_text())
+    review_payload[0]["review_status"] = "failed"
+    review_path.write_text(json.dumps(review_payload))
+
+    readiness = build_readiness_summary(tmp_path, version="jac-synth-v0.1.0")
+
+    assert readiness["validation"]["candidate_audit_status"] == "warning"
+    assert "Some clean candidates have nullable test results that require review context." not in readiness["blockers"]
+
+
 def test_full_release_status_blocks_when_hard_ratios_are_outside_band(tmp_path):
     records = {
         category: [
@@ -566,6 +581,21 @@ def test_full_release_status_blocks_unresolved_near_duplicates():
     ) == "blocked"
 
 
+def test_known_limitations_skip_hard_ratios_until_volume_is_complete_and_resolved_near_duplicates():
+    from data_generation.release import _known_limitations
+
+    limitations = _known_limitations(
+        {"overall_status": "complete"},
+        {"warnings": []},
+        {"status": "complete"},
+        {"total": 166, "by_category": {category: 1 for category in ALLOWED_CATEGORIES}},
+        {category: {"ratio": 0.0} for category in ALLOWED_CATEGORIES},
+        {"flagged_count": 2, "unresolved_count": 0},
+    )
+
+    assert limitations == ["Clean example count is below the 10,000 example release minimum."]
+
+
 def test_readiness_and_audit_cli_write_reports_only_when_requested(tmp_path, monkeypatch, capsys):
     for category in ALLOWED_CATEGORIES:
         write_batch(tmp_path, category=category)
@@ -583,6 +613,34 @@ def test_readiness_and_audit_cli_write_reports_only_when_requested(tmp_path, mon
 
     assert '"current_total": 5' in readiness_output
     assert (tmp_path / "dataset/logs/audit/jac-synth-v0.1.0-readiness.json").exists()
+
+
+def test_resolve_near_duplicate_cli_records_decision(tmp_path, monkeypatch, capsys):
+    monkeypatch.chdir(tmp_path)
+
+    assert (
+        main(
+            [
+                "resolve-near-duplicate",
+                "--version",
+                "jac-synth-v0.1.0",
+                "--cluster-id",
+                "cluster-1",
+                "--action",
+                "keep_distinct",
+                "--reviewer",
+                "ayush",
+                "--notes",
+                "Different task intent.",
+            ]
+        )
+        == 0
+    )
+
+    output = json.loads(capsys.readouterr().out)
+    assert output["action"] == "keep_distinct"
+    resolutions = json.loads((tmp_path / "dataset/logs/deduplication/jac-synth-v0.1.0-near-resolutions.json").read_text())
+    assert resolutions["resolutions"]["cluster-1"]["notes"] == "Different task intent."
 
 
 def test_freeze_release_writes_immutable_pilot_release_and_cli_audit(tmp_path, monkeypatch, capsys):
