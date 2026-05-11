@@ -1,0 +1,16 @@
+{
+  "batch_ids_affected": [
+    "20260511-code_gen-002"
+  ],
+  "category": "code_gen",
+  "changed_at": "2026-05-11T00:00:00Z",
+  "changed_fields": [
+    "user_prompt"
+  ],
+  "notes": "Inspect validation and review artifacts before rerunning this category.",
+  "observed_pass_rate_after": null,
+  "observed_pass_rate_before": 0.0,
+  "previous_prompt_version": "prompt-code_gen-v1",
+  "prompt_version": "prompt-code_gen-v2",
+  "reason_for_change": "Pilot batch did not meet Task 4 validation or manual review scale gates."
+}

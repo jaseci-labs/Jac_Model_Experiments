@@ -1,7 +1,11 @@
 from __future__ import annotations
 
+import argparse
+import json
+import sys
 from dataclasses import asdict, dataclass
 from enum import StrEnum
+from pathlib import Path
 from typing import Any
 
 from data_generation.prompt_design import PROMPT_REVISION_LOG_REQUIRED_FIELDS
@@ -169,3 +173,147 @@ def default_review_records(batch_id: str, category: str, example_ids: list[str])
         )
         for example_id in example_ids
     ]
+
+
+VALID_REVIEW_STATUSES = ("pending", "passed", "failed", "waived")
+
+
+def list_review_records(workspace_root: str | Path = ".", *, status: str | None = None) -> list[dict[str, Any]]:
+    records = []
+    for path, record, _index in _iter_review_records(Path(workspace_root)):
+        if status and record.get("review_status") != status:
+            continue
+        records.append({**record, "_review_path": str(path)})
+    return sorted(records, key=lambda record: str(record.get("example_id", "")))
+
+
+def mark_review_record(
+    workspace_root: str | Path = ".",
+    *,
+    example_id: str,
+    status: str,
+    reviewer: str,
+    criteria_results: dict[str, bool],
+    notes: str,
+) -> dict[str, Any]:
+    if status not in VALID_REVIEW_STATUSES:
+        raise ValueError(f"invalid review status: {status}")
+    if status in {"failed", "waived"} and not notes.strip():
+        raise ValueError("notes are required for failed or waived reviews")
+
+    root = Path(workspace_root)
+    for path, record, index in _iter_review_records(root):
+        if record.get("example_id") != example_id:
+            continue
+        category = str(record.get("category"))
+        _validate_criteria(category, criteria_results)
+        payload = _read_review_payload(path)
+        updated = {
+            **record,
+            "review_status": status,
+            "reviewer": reviewer,
+            "criteria_results": criteria_results,
+            "notes": notes,
+        }
+        payload[index] = updated
+        path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
+        return updated
+    raise ValueError(f"review record not found: {example_id}")
+
+
+def validate_review_files(workspace_root: str | Path = ".") -> dict[str, Any]:
+    errors = []
+    for path, record, _index in _iter_review_records(Path(workspace_root)):
+        category = str(record.get("category", ""))
+        status = record.get("review_status")
+        if status not in VALID_REVIEW_STATUSES:
+            errors.append({"path": str(path), "example_id": record.get("example_id"), "reason": f"invalid status: {status}"})
+        try:
+            _validate_criteria(category, record.get("criteria_results", {}))
+        except ValueError as error:
+            errors.append({"path": str(path), "example_id": record.get("example_id"), "reason": str(error)})
+        if status in {"failed", "waived"} and not str(record.get("notes", "")).strip():
+            errors.append({"path": str(path), "example_id": record.get("example_id"), "reason": "notes are required"})
+    return {"status": "blocked" if errors else "complete", "errors": errors}
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description="Manage Jac synthetic data manual reviews.")
+    subparsers = parser.add_subparsers(dest="command", required=True)
+
+    list_parser = subparsers.add_parser("list")
+    list_parser.add_argument("--status", choices=VALID_REVIEW_STATUSES, default=None)
+
+    mark_parser = subparsers.add_parser("mark")
+    mark_parser.add_argument("--id", required=True)
+    mark_parser.add_argument("--status", choices=VALID_REVIEW_STATUSES, required=True)
+    mark_parser.add_argument("--reviewer", required=True)
+    mark_parser.add_argument("--criteria", action="append", default=[])
+    mark_parser.add_argument("--notes", default="")
+
+    subparsers.add_parser("validate")
+
+    args = parser.parse_args(argv)
+    if args.command == "list":
+        print(json.dumps(list_review_records(".", status=args.status), indent=2, sort_keys=True))
+        return 0
+    if args.command == "mark":
+        print(
+            json.dumps(
+                mark_review_record(
+                    ".",
+                    example_id=args.id,
+                    status=args.status,
+                    reviewer=args.reviewer,
+                    criteria_results=_parse_criteria_args(args.criteria),
+                    notes=args.notes,
+                ),
+                indent=2,
+                sort_keys=True,
+            )
+        )
+        return 0
+    if args.command == "validate":
+        print(json.dumps(validate_review_files("."), indent=2, sort_keys=True))
+        return 0
+    return 2
+
+
+def _iter_review_records(root: Path) -> Any:
+    for path in sorted((root / "dataset/review").glob("**/*.json")):
+        payload = _read_review_payload(path)
+        for index, record in enumerate(payload):
+            if isinstance(record, dict) and "example_id" in record:
+                yield path, record, index
+
+
+def _read_review_payload(path: Path) -> list[dict[str, Any]]:
+    payload = json.loads(path.read_text())
+    if isinstance(payload, dict):
+        payload = payload.get("records", [])
+    if not isinstance(payload, list):
+        return []
+    return payload
+
+
+def _validate_criteria(category: str, criteria_results: dict[str, bool]) -> None:
+    expected = set(CATEGORY_REVIEW_CRITERIA.get(category, ()))
+    actual = set(criteria_results)
+    if actual != expected:
+        raise ValueError(f"invalid review criteria for {category}: {sorted(actual ^ expected)}")
+    if not all(isinstance(value, bool) for value in criteria_results.values()):
+        raise ValueError("criteria values must be booleans")
+
+
+def _parse_criteria_args(values: list[str]) -> dict[str, bool]:
+    parsed = {}
+    for value in values:
+        if "=" not in value:
+            raise ValueError(f"invalid criteria argument: {value}")
+        key, raw = value.split("=", 1)
+        parsed[key] = raw.lower() == "true"
+    return parsed
+
+
+if __name__ == "__main__":
+    sys.exit(main())

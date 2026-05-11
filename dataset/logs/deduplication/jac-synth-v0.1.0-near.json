@@ -1,0 +1,36 @@
+{
+  "clusters": [
+    {
+      "action": "manual_review_required",
+      "category": "debug",
+      "reason": "high normalized content similarity",
+      "record_ids": [
+        "debug-20260511-002-0008",
+        "debug-20260511-002-0010"
+      ],
+      "similarity": 0.9665
+    },
+    {
+      "action": "manual_review_required",
+      "category": "debug",
+      "reason": "high normalized content similarity",
+      "record_ids": [
+        "debug-20260511-002-0008",
+        "debug-20260511-002-0011"
+      ],
+      "similarity": 1.0
+    },
+    {
+      "action": "manual_review_required",
+      "category": "debug",
+      "reason": "high normalized content similarity",
+      "record_ids": [
+        "debug-20260511-002-0010",
+        "debug-20260511-002-0011"
+      ],
+      "similarity": 0.9665
+    }
+  ],
+  "flagged_count": 3,
+  "version": "jac-synth-v0.1.0"
+}

@@ -1,0 +1,40 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "annotations": [],
+        "audio": null,
+        "content": "{ \"examples\": [ { \"code\": \"def clamp(value: int, low: int, high: int) -> int {\\n    if value < low {\\n        return low;\\n    }\\n    if value > high {\\n        return high;\\n    }\\n    return value;\\n}\\n\\nwith entry {\\n    print(clamp(12, 0, 10));\\n}\", \"explanation\": \"This Jac module defines a typed function-style ability with `def`. The line `def clamp(value: int, low: int, high: int) -> int` declares three integer parameters and an integer return type. The two `if` blocks use Jac brace-delimited control flow to return a boundary value when `value` is outside the allowed range. The final `return value;` handles the in-range case. The `with entry` block is the program entry point, and it prints the result of calling `clamp`.\" , \"granularity\": \"line\" }, { \"code\": \"node Product {\\n    has name: str;\\n    has price: float;\\n\\n    def discounted(rate: float) -> float {\\n        return self.price - (self.price * rate);\\n    }\\n}\\n\\nwith entry {\\n    item = Product(name=\\\"Notebook\\\", price=5.0);\\n    print(item.discounted(0.2));\\n}\", \"explanation\": \"The `Product` node declares two typed fields with `has`: `name` as `str` and `price` as `float`. Its `discounted` ability is declared with `def` and uses `self.price` to read the node instance's stored price. In the entry block, `Product(name=\\\"Notebook\\\", price=5.0)` constructs a node instance with field values, and `item.discounted(0.2)` calls the node ability to compute the discounted price.\" , \"granularity\": \"block\" }, { \"code\": \"node City {\\n    has name: str;\\n}\\n\\nedge Road {\\n    has distance: int = 1;\\n}\\n\\nwith entry {\\n    start = root() ++> City(name=\\\"Aster\\\");\\n    start ++> City(name=\\\"Beryl\\\");\\n    print(\\\"cities linked\\\");\\n}\", \"explanation\": \"This module introduces graph-oriented Jac constructs. `City` is a node archetype with a typed `name` field. `Road` is an edge archetype with a default integer field, although the entry block uses the simple built-in `++>` connection form rather than explicitly attaching a typed edge. The `with entry` block obtains the graph root with `root()`, connects it to a `City` node, then connects that city to another city. The final print confirms that the graph-building statements ran.\" , \"granularity\": \"module\" }, { \"code\": \"walker Tally {\\n    has total: int = 0;\\n\\n    def record(value: int) {\\n        if value > 0 {\\n            self.total = self.total + value;\\n        }\\n    }\\n}\\n\\nwith entry {\\n    tally = Tally();\\n    tally.record(3);\\n    tally.record(-2);\\n    tally.record(4);\\n    print(tally.total);\\n}\", \"explanation\": \"The `Tally` walker stores traversal-related state in the typed field `total`. Its `record` ability accepts an integer and uses an `if` block so that only positive values are added. The entry block constructs the walker, calls its ability several times, and prints the accumulated state. This example treats the walker as a Jac archetype with fields and abilities; it does not rely on Python-style classes or syntax.\" , \"granularity\": \"block\" }, { \"code\": \"def sum_even(limit: int) -> int {\\n    total: int = 0;\\n    current: int = 0;\\n    while current <= limit {\\n        if current % 2 == 0 {\\n            total = total + current;\\n        }\\n        current = current + 1;\\n    }\\n    return total;\\n}\\n\\nwith entry {\\n    print(sum_even(6));\\n}\", \"explanation\": \"This complete Jac module demonstrates typed local variables and common control flow. The `sum_even` function-style ability declares an integer parameter and integer return type. Inside it, `while current <= limit` repeats a brace-delimited block. The nested `if current % 2 == 0` checks whether the current value is even before adding it to `total`. The entry block calls the ability with `6`, so the printed value is the sum of `0`, `2`, `4`, and `6`.\" , \"granularity\": \"module\" } ] }",
+        "function_call": null,
+        "parsed": null,
+        "refusal": null,
+        "role": "assistant",
+        "tool_calls": null
+      }
+    }
+  ],
+  "created": 1778527724,
+  "id": "chatcmpl-DeQayju8ojZ6FkxUXTObjYJMPRsSg",
+  "model": "gpt-5.5-2026-04-23",
+  "object": "chat.completion",
+  "service_tier": "default",
+  "system_fingerprint": null,
+  "usage": {
+    "completion_tokens": 2918,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 1869,
+      "rejected_prediction_tokens": 0
+    },
+    "prompt_tokens": 5926,
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cached_tokens": 4864
+    },
+    "total_tokens": 8844
+  }
+}

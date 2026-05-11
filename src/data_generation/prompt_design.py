@@ -14,6 +14,32 @@ from data_generation.foundation import (
 DEFAULT_CONTEXT_BUNDLE_VERSION = "jac-context-v1"
 DEFAULT_PROMPT_VERSION = 1
 
+PROMPT_VERSION_REGISTRY = {
+    "code_gen": {
+        1: {"status": "pilot-only"},
+        2: {"status": "deprecated"},
+        3: {"status": "deprecated"},
+        4: {"status": "scale-approved"},
+    },
+    "debug": {
+        1: {"status": "pilot-only"},
+        2: {"status": "deprecated"},
+        3: {"status": "deprecated"},
+        4: {"status": "scale-approved"},
+    },
+    "explanation": {
+        1: {"status": "pilot-only"},
+        2: {"status": "deprecated"},
+        3: {"status": "scale-approved"},
+    },
+    "conversion": {
+        1: {"status": "pilot-only"},
+        2: {"status": "deprecated"},
+        3: {"status": "deprecated"},
+        4: {"status": "scale-approved"},
+    },
+}
+
 TASK4_COMPILER_FAILURE_CONSTRAINTS = """Observed compiler-failure guardrails for this prompt revision:
 - Use `def`, not `can`, for function-style declarations.
 - Never use `import:py`; prefer examples that do not require Python imports.
@@ -28,13 +54,30 @@ TASK4_RETRY_CONSTRAINTS = """Additional retry guardrails from prompt v2 validati
 - Avoid hard examples that require nested list mutation, boolean-list indexing, or long shortest-path implementations.
 """
 
+TASK4_DEBUG_FAILURE_CONSTRAINTS = """Debugging-specific compiler-failure guardrails:
+- The broken_code field must fail `jac check`; do not use warning-only cases such as missing imports that still pass.
+- Prefer obvious syntax, type, and undefined-name errors that the compiler reports as errors.
+- The fixed_code field must be the same small program with only the intended error corrected.
+- Avoid import-based broken examples unless the missing import is known to be a hard compiler error.
+"""
+
+TASK4_CODE_GEN_SCALE_CONSTRAINTS = """Code-generation scale-failure guardrails:
+- Annotate every local variable before arithmetic or boolean use; avoid relying on inferred `Unknown` values.
+- Use `True` and `False`, never lowercase `true` or `false`.
+- Prefer `+=`, `-=`, and `*=` updates over `x = x + y` in loops and counters.
+- Avoid using `+` to concatenate lists or strings unless the context bundle shows that exact pattern.
+- Avoid walker examples that read state from a spawned walker result; prefer pure functions, nodes, edges, and direct walker visits shown in context.
+- Do not use repeated walker ability names in the same walker.
+- Avoid Python-style helper methods such as `.keys()`, `.append()`, or free-form list/dict idioms unless shown in the Jac context bundle.
+"""
+
 SHARED_SYSTEM_PROMPT_TEMPLATE = """You generate synthetic supervised fine-tuning examples for the Jac programming language.
 
 Jac is its own programming language. Do not treat Jac as Python, JavaScript, or pseudocode. Prefer idiomatic Jac constructs from the provided context, including walkers, nodes, edges, abilities, imports, type annotations, and graph-oriented patterns when they fit the task.
 
 All Jac code fields in your response will be validated with the Jac compiler. Code that does not compile will be rejected. For debugging examples, broken_code must fail for exactly the intended reason and fixed_code must compile.
 
-Return strict JSON only. Do not include markdown fences, comments outside JSON, prose before JSON, or prose after JSON. The top-level value must be a JSON array. Every object in the array must match the category schema exactly.
+Return strict JSON only. Do not include markdown fences, comments outside JSON, prose before JSON, or prose after JSON. The top-level value must be a JSON object with exactly one key named `examples`. The `examples` value must be an array, and every object in that array must match the category schema exactly.
 
 Use the provided Jac context bundle as the source of truth for syntax and idioms. If a requested example cannot be generated confidently from the context, choose a simpler valid Jac example rather than guessing syntax.
 
@@ -155,7 +198,7 @@ CATEGORY_SCHEMAS = {
 CATEGORY_PROMPT_TEMPLATES = {
     "code_gen": """Generate {requested_count} Jac code generation examples.
 
-Return a JSON array. Each item must contain exactly: prompt, code, complexity.
+Return a JSON object with exactly one key named `examples`. Each item in `examples` must contain exactly: prompt, code, complexity.
 
 Requirements:
 - The prompt must be a natural language task with one reasonable implementation.
@@ -170,7 +213,7 @@ Requirements:
 """,
     "debug": """Generate {requested_count} Jac debugging examples.
 
-Return a JSON array. Each item must contain exactly: broken_code, error_type, error_message, fixed_code, fix_explanation.
+Return a JSON object with exactly one key named `examples`. Each item in `examples` must contain exactly: broken_code, error_type, error_message, fixed_code, fix_explanation.
 
 Requirements:
 - broken_code must contain exactly one intended error.
@@ -185,7 +228,7 @@ Requirements:
 """,
     "explanation": """Generate {requested_count} Jac explanation examples.
 
-Return a JSON array. Each item must contain exactly: code, granularity, explanation.
+Return a JSON object with exactly one key named `examples`. Each item in `examples` must contain exactly: code, granularity, explanation.
 
 Requirements:
 - code must be valid Jac expected to compile.
@@ -199,7 +242,7 @@ Requirements:
 """,
     "conversion": """Generate {requested_count} Python-to-Jac conversion examples.
 
-Return a JSON array. Each item must contain exactly: python_code, jac_code, conversion_notes.
+Return a JSON object with exactly one key named `examples`. Each item in `examples` must contain exactly: python_code, jac_code, conversion_notes.
 
 Requirements:
 - python_code must be clear, self-contained Python.
@@ -242,17 +285,44 @@ def schema_for_category(category: str) -> dict[str, Any]:
     return deepcopy(CATEGORY_SCHEMAS[category])
 
 
+def latest_scale_prompt_version(category: str) -> int:
+    if category not in PROMPT_VERSION_REGISTRY:
+        raise ValueError(f"Unsupported scripted category: {category}")
+    approved = [
+        version
+        for version, metadata in PROMPT_VERSION_REGISTRY[category].items()
+        if metadata["status"] == "scale-approved"
+    ]
+    if not approved:
+        raise ValueError(f"No scale-approved prompt version for {category}")
+    return max(approved)
+
+
+def _ensure_scale_approved_prompt(category: str, prompt_version_number: int) -> None:
+    status = PROMPT_VERSION_REGISTRY.get(category, {}).get(prompt_version_number, {}).get("status")
+    if status != "scale-approved":
+        raise ValueError(f"Prompt {build_prompt_version(category, prompt_version_number)} is not scale-approved")
+
+
 def build_prompt_request(
     *,
     category: str,
     context_bundle: str,
     requested_count: int | None = None,
     context_bundle_version: str = DEFAULT_CONTEXT_BUNDLE_VERSION,
-    prompt_version_number: int = DEFAULT_PROMPT_VERSION,
+    prompt_version_number: int | None = None,
     template_overrides: dict[str, str] | None = None,
+    scale_mode: bool = False,
+    complexity_target: str | None = None,
 ) -> dict[str, Any]:
     if category not in SCRIPTED_CATEGORIES:
         raise ValueError(f"Unsupported scripted category: {category}")
+
+    if scale_mode and prompt_version_number is None:
+        prompt_version_number = latest_scale_prompt_version(category)
+    prompt_version_number = prompt_version_number or DEFAULT_PROMPT_VERSION
+    if scale_mode:
+        _ensure_scale_approved_prompt(category, prompt_version_number)
 
     prompt_version = build_prompt_version(category, prompt_version_number)
     values = {
@@ -265,10 +335,18 @@ def build_prompt_request(
         values.update(template_overrides)
 
     user_prompt = CATEGORY_PROMPT_TEMPLATES[category].format(**values)
+    if complexity_target:
+        if complexity_target not in ALLOWED_COMPLEXITIES:
+            raise ValueError(f"Unsupported complexity target: {complexity_target}")
+        user_prompt = f"{user_prompt}\nTarget complexity for every example: {complexity_target}."
     if prompt_version_number >= 2:
         user_prompt = f"{user_prompt}\n{TASK4_COMPILER_FAILURE_CONSTRAINTS}"
     if prompt_version_number >= 3:
         user_prompt = f"{user_prompt}\n{TASK4_RETRY_CONSTRAINTS}"
+    if category == "debug" and prompt_version_number >= 4:
+        user_prompt = f"{user_prompt}\n{TASK4_DEBUG_FAILURE_CONSTRAINTS}"
+    if category == "code_gen" and prompt_version_number >= 4:
+        user_prompt = f"{user_prompt}\n{TASK4_CODE_GEN_SCALE_CONSTRAINTS}"
 
     return {
         "category": category,

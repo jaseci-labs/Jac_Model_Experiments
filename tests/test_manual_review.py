@@ -1,3 +1,5 @@
+import json
+
 from data_generation.manual_review import (
     CATEGORY_REVIEW_CRITERIA,
     ReviewRecord,
@@ -5,6 +7,10 @@ from data_generation.manual_review import (
     build_prompt_revision_record,
     decide_scale_up,
     default_review_records,
+    list_review_records,
+    main,
+    mark_review_record,
+    validate_review_files,
 )
 from data_generation.validation import CompilerResult, validate_example
 
@@ -159,3 +165,138 @@ def test_default_review_records_support_trajectory():
         "idiomatic_jac": False,
         "no_private_context": False,
     }
+
+
+def test_list_mark_and_validate_review_records(tmp_path):
+    review_dir = tmp_path / "dataset/review/code_gen"
+    review_dir.mkdir(parents=True)
+    review_path = review_dir / "20260511-code_gen-001-review.json"
+    review_path.write_text(
+        json.dumps(
+            [
+                {
+                    "batch_id": "20260511-code_gen-001",
+                    "category": "code_gen",
+                    "example_id": "code_gen-20260511-001-0001",
+                    "review_status": "pending",
+                    "reviewer": "manual-reviewer",
+                    "criteria_results": {criterion: False for criterion in CATEGORY_REVIEW_CRITERIA["code_gen"]},
+                    "notes": "Pending manual review.",
+                }
+            ]
+        )
+    )
+
+    pending = list_review_records(tmp_path, status="pending")
+    updated = mark_review_record(
+        tmp_path,
+        example_id="code_gen-20260511-001-0001",
+        status="passed",
+        reviewer="ayush",
+        criteria_results={criterion: True for criterion in CATEGORY_REVIEW_CRITERIA["code_gen"]},
+        notes="Looks good.",
+    )
+    validation = validate_review_files(tmp_path)
+
+    assert pending[0]["example_id"] == "code_gen-20260511-001-0001"
+    assert updated["review_status"] == "passed"
+    assert validation["status"] == "complete"
+    assert json.loads(review_path.read_text())[0]["reviewer"] == "ayush"
+
+
+def test_mark_review_record_rejects_invalid_criteria_and_requires_failure_notes(tmp_path):
+    review_dir = tmp_path / "dataset/review/debug"
+    review_dir.mkdir(parents=True)
+    (review_dir / "20260511-debug-001-review.json").write_text(
+        json.dumps(
+            [
+                {
+                    "batch_id": "20260511-debug-001",
+                    "category": "debug",
+                    "example_id": "debug-20260511-001-0001",
+                    "review_status": "pending",
+                    "reviewer": "manual-reviewer",
+                    "criteria_results": {criterion: False for criterion in CATEGORY_REVIEW_CRITERIA["debug"]},
+                    "notes": "Pending manual review.",
+                }
+            ]
+        )
+    )
+
+    try:
+        mark_review_record(
+            tmp_path,
+            example_id="debug-20260511-001-0001",
+            status="failed",
+            reviewer="ayush",
+            criteria_results={"not_a_debug_criterion": False},
+            notes="Bad.",
+        )
+    except ValueError as error:
+        assert "invalid review criteria" in str(error)
+    else:
+        raise AssertionError("expected invalid criteria to fail")
+
+    try:
+        mark_review_record(
+            tmp_path,
+            example_id="debug-20260511-001-0001",
+            status="failed",
+            reviewer="ayush",
+            criteria_results={criterion: False for criterion in CATEGORY_REVIEW_CRITERIA["debug"]},
+            notes="",
+        )
+    except ValueError as error:
+        assert "notes are required" in str(error)
+    else:
+        raise AssertionError("expected missing notes to fail")
+
+
+def test_manual_review_cli_lists_marks_and_validates(tmp_path, monkeypatch, capsys):
+    review_dir = tmp_path / "dataset/review/explanation"
+    review_dir.mkdir(parents=True)
+    (review_dir / "20260511-explanation-001-review.json").write_text(
+        json.dumps(
+            [
+                {
+                    "batch_id": "20260511-explanation-001",
+                    "category": "explanation",
+                    "example_id": "explanation-20260511-001-0001",
+                    "review_status": "pending",
+                    "reviewer": "manual-reviewer",
+                    "criteria_results": {criterion: False for criterion in CATEGORY_REVIEW_CRITERIA["explanation"]},
+                    "notes": "Pending manual review.",
+                }
+            ]
+        )
+    )
+    monkeypatch.chdir(tmp_path)
+
+    assert main(["list", "--status", "pending"]) == 0
+    assert "explanation-20260511-001-0001" in capsys.readouterr().out
+    assert (
+        main(
+            [
+                "mark",
+                "--id",
+                "explanation-20260511-001-0001",
+                "--status",
+                "passed",
+                "--reviewer",
+                "ayush",
+                "--criteria",
+                "accurate_explanation=true",
+                "--criteria",
+                "specific_jac_semantics=true",
+                "--criteria",
+                "granularity_matches_request=true",
+                "--criteria",
+                "not_python_behavior=true",
+                "--notes",
+                "Reviewed.",
+            ]
+        )
+        == 0
+    )
+    assert main(["validate"]) == 0
+    assert '"status": "complete"' in capsys.readouterr().out

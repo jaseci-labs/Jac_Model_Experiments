@@ -1,0 +1,7 @@
+{
+  "batch_id": "20260511-debug-003",
+  "category": "debug",
+  "example_count": 5,
+  "model": "gpt-5.5",
+  "prompt_version": "prompt-debug-v3"
+}

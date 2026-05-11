@@ -83,3 +83,41 @@ Prepare validated examples for a reproducible dataset release. This task defines
 ## Completion Criteria
 
 This task is complete when the dataset is deduplicated, reviewed, versioned, audited, frozen, and ready to be referenced by training runs.
+
+## Operator Commands
+
+Check readiness:
+
+```bash
+python -m data_generation.release readiness --version jac-synth-v0.1.0 --write-report
+```
+
+Dry-run scale planning:
+
+```bash
+python -m data_generation.single_turn_generation scale --version jac-synth-v0.1.0 --date 20260511 --target-total 10000 --dry-run
+```
+
+List pending reviews:
+
+```bash
+python -m data_generation.manual_review list --status pending
+```
+
+Validate review files:
+
+```bash
+python -m data_generation.manual_review validate
+```
+
+Write a release audit report:
+
+```bash
+python -m data_generation.release audit --version jac-synth-v0.1.0 --write-report
+```
+
+Freeze a ready release:
+
+```bash
+python -m data_generation.release freeze --version jac-synth-v0.1.0 --training-run TRAINING_RUN_ID
+```

@@ -12,11 +12,15 @@ from data_generation.release import (
     build_exact_duplicate_clusters,
     build_manifest,
     build_near_duplicate_report,
+    build_readiness_summary,
     build_review_sample,
     deduplicate_records,
     freeze_release,
     load_clean_candidates,
     main,
+    repair_clean_metadata,
+    resolve_near_duplicate_cluster,
+    write_audit_snapshot,
     summarize_manual_review,
 )
 
@@ -204,6 +208,125 @@ def test_load_clean_candidates_and_audit_metadata_and_validation_logs(tmp_path):
     assert any("compiler_pass is false" in failure["reason"] for failure in candidate_audit["failures"])
 
 
+def test_candidate_audit_allows_null_test_pass_with_completed_review_evidence(tmp_path):
+    record = metadata_record(
+        record_id="code_gen-20260511-001-0001",
+        batch_id="20260511-code_gen-001",
+        category="code_gen",
+        test_pass=None,
+        manually_reviewed=True,
+        review_status="passed",
+    )
+    write_batch(tmp_path, category="code_gen", records=[record])
+    candidates = load_clean_candidates(tmp_path)
+
+    candidate_audit = audit_candidates(tmp_path, candidates)
+
+    assert candidate_audit["status"] == "complete"
+    assert candidate_audit["warnings"] == []
+
+
+def test_repair_clean_metadata_backfills_legacy_clean_records_from_validation_logs(tmp_path):
+    ensure_dataset_tree(tmp_path)
+    batch_id = "20260511-code_gen-004"
+    legacy = {"id": "code_gen-20260511-004-0001", "prompt": "Say hi", "code": "valid jac", "complexity": "simple"}
+    write_jsonl(tmp_path / f"dataset/clean_dataset/code_gen/{batch_id}.jsonl", [legacy])
+    write_jsonl(
+        tmp_path / f"dataset/logs/validation/{batch_id}.jsonl",
+        [
+            {
+                "batch_id": batch_id,
+                "prompt_version": "prompt-code_gen-v3",
+                "context_bundle_version": "jac-context-v1",
+                "category": "code_gen",
+                "example_id": legacy["id"],
+                "json_schema_result": True,
+                "compiler_result": [{"passed": True}],
+                "test_result": None,
+                "rejection_reason": None,
+                "retry_count": 0,
+                "final_disposition": "clean",
+                "validator_version": "validator-v1",
+                "dataset_version": "jac-synth-v0.1.0",
+            }
+        ],
+    )
+    write_json(
+        tmp_path / f"dataset/review/code_gen/{batch_id}-review.json",
+        [
+            {
+                "batch_id": batch_id,
+                "category": "code_gen",
+                "example_id": legacy["id"],
+                "review_status": "passed",
+                "reviewer": "manual-reviewer",
+                "criteria_results": {"idiomatic_jac": True},
+                "notes": "Reviewed.",
+            }
+        ],
+    )
+
+    summary = repair_clean_metadata(tmp_path)
+    repaired = json.loads((tmp_path / f"dataset/clean_dataset/code_gen/{batch_id}.jsonl").read_text().splitlines()[0])
+    candidate_audit = audit_candidates(tmp_path, load_clean_candidates(tmp_path))
+
+    assert summary["updated_count"] == 1
+    assert repaired["batch_id"] == batch_id
+    assert repaired["category"] == "code_gen"
+    assert repaired["compiler_pass"] is True
+    assert repaired["generator"] == "openai-api"
+    assert repaired["source_prompt_version"] == "prompt-code_gen-v3"
+    assert repaired["manually_reviewed"] is True
+    assert repaired["review_status"] == "passed"
+    assert candidate_audit["status"] == "complete"
+    assert candidate_audit["failures"] == []
+
+
+def test_repair_clean_metadata_treats_expected_debug_broken_code_failure_as_clean(tmp_path):
+    ensure_dataset_tree(tmp_path)
+    batch_id = "20260511-debug-004"
+    legacy = {
+        "id": "debug-20260511-004-0001",
+        "broken_code": "BROKEN jac",
+        "error_type": "syntax",
+        "error_message": "syntax error",
+        "fixed_code": "valid jac",
+        "fix_explanation": "Removed the invalid token.",
+        "compiler_pass": False,
+    }
+    write_jsonl(tmp_path / f"dataset/clean_dataset/debug/{batch_id}.jsonl", [legacy])
+    write_jsonl(
+        tmp_path / f"dataset/logs/validation/{batch_id}.jsonl",
+        [
+            {
+                "batch_id": batch_id,
+                "prompt_version": "prompt-debug-v3",
+                "context_bundle_version": "jac-context-v1",
+                "category": "debug",
+                "example_id": legacy["id"],
+                "json_schema_result": True,
+                "compiler_result": [
+                    {"field_name": "broken_code", "expected_to_compile": False, "passed": False},
+                    {"field_name": "fixed_code", "expected_to_compile": True, "passed": True},
+                ],
+                "test_result": None,
+                "rejection_reason": None,
+                "retry_count": 0,
+                "final_disposition": "clean",
+                "validator_version": "validator-v1",
+                "dataset_version": "jac-synth-v0.1.0",
+            }
+        ],
+    )
+
+    repair_clean_metadata(tmp_path)
+
+    repaired = json.loads((tmp_path / f"dataset/clean_dataset/debug/{batch_id}.jsonl").read_text().splitlines()[0])
+    candidate_audit = audit_candidates(tmp_path, load_clean_candidates(tmp_path))
+    assert repaired["compiler_pass"] is True
+    assert candidate_audit["failures"] == []
+
+
 def test_exact_deduplication_keeps_highest_quality_record_and_logs_removed_duplicate(tmp_path):
     batch_id = "20260511-code_gen-001"
     low_quality = metadata_record(record_id="code_gen-20260511-001-0001", batch_id=batch_id, category="code_gen")
@@ -245,8 +368,75 @@ def test_near_duplicate_report_flags_trivial_prompt_rewrites(tmp_path):
     report = build_near_duplicate_report(tmp_path, {"code_gen": [first, second]}, version="jac-synth-v0.1.0")
 
     assert report["flagged_count"] == 1
+    assert report["clusters"][0]["cluster_id"]
+    assert report["clusters"][0]["resolution_status"] == "pending"
     assert report["clusters"][0]["action"] == "manual_review_required"
     assert (tmp_path / "dataset/logs/deduplication/jac-synth-v0.1.0-near.json").exists()
+
+
+def test_near_duplicate_resolution_marks_cluster_resolved_and_unblocks_summary(tmp_path):
+    first = metadata_record(
+        record_id="code_gen-20260511-001-0001",
+        batch_id="20260511-code_gen-001",
+        category="code_gen",
+        extra={"prompt": "Create a walker that sums alpha values.", "code": "node Alpha { has value: int; }"},
+    )
+    second = metadata_record(
+        record_id="code_gen-20260511-001-0002",
+        batch_id="20260511-code_gen-001",
+        category="code_gen",
+        extra={"prompt": "Create a walker that sums beta values.", "code": "node Beta { has value: int; }"},
+    )
+    report = build_near_duplicate_report(tmp_path, {"code_gen": [first, second]}, version="jac-synth-v0.1.0")
+    cluster_id = report["clusters"][0]["cluster_id"]
+
+    resolution = resolve_near_duplicate_cluster(
+        tmp_path,
+        version="jac-synth-v0.1.0",
+        cluster_id=cluster_id,
+        action="keep_distinct",
+        reviewer="ayush",
+        notes="Same structure but intentionally different entity naming exercise.",
+    )
+    resolved_report = build_near_duplicate_report(tmp_path, {"code_gen": [first, second]}, version="jac-synth-v0.1.0")
+
+    assert resolution["action"] == "keep_distinct"
+    assert resolved_report["unresolved_count"] == 0
+    assert resolved_report["clusters"][0]["resolution_status"] == "keep_distinct"
+
+
+def test_readiness_summary_counts_only_unresolved_near_duplicates(tmp_path):
+    records = [
+        metadata_record(
+            record_id="code_gen-20260511-001-0001",
+            batch_id="20260511-code_gen-001",
+            category="code_gen",
+            extra={"prompt": "Create a walker that sums alpha values.", "code": "node Alpha { has value: int; }"},
+        ),
+        metadata_record(
+            record_id="code_gen-20260511-001-0002",
+            batch_id="20260511-code_gen-001",
+            category="code_gen",
+            extra={"prompt": "Create a walker that sums beta values.", "code": "node Beta { has value: int; }"},
+        ),
+    ]
+    write_batch(tmp_path, category="code_gen", records=records)
+    for category in set(ALLOWED_CATEGORIES) - {"code_gen"}:
+        write_batch(tmp_path, category=category)
+    report = build_near_duplicate_report(tmp_path, {"code_gen": records}, version="jac-synth-v0.1.0")
+    resolve_near_duplicate_cluster(
+        tmp_path,
+        version="jac-synth-v0.1.0",
+        cluster_id=report["clusters"][0]["cluster_id"],
+        action="keep_distinct",
+        reviewer="ayush",
+        notes="Same structure but intentionally different entity naming exercise.",
+    )
+
+    readiness = build_readiness_summary(tmp_path, version="jac-synth-v0.1.0")
+
+    assert readiness["near_duplicates"]["unresolved_count"] == 0
+    assert not any("near duplicate" in reason.lower() for reason in readiness["release_status_reasons"])
 
 
 def test_review_sample_is_deterministic_and_summary_blocks_missing_completed_review(tmp_path):
@@ -289,6 +479,112 @@ def test_manifest_and_audit_report_pilot_only_when_counts_are_below_release_targ
     assert audit["count_summary"]["total"] == 5
 
 
+def test_readiness_summary_lists_blockers_targets_and_latest_scale_decisions(tmp_path):
+    for category in ALLOWED_CATEGORIES:
+        write_batch(tmp_path, category=category, scale_ready=category != "debug")
+
+    readiness = build_readiness_summary(tmp_path, version="jac-synth-v0.1.0")
+
+    assert readiness["version"] == "jac-synth-v0.1.0"
+    assert readiness["status"] == "pilot_only_not_volume_complete"
+    assert readiness["counts"]["current_total"] == 5
+    assert readiness["counts"]["target_total_range"] == [10_000, 15_000]
+    assert readiness["counts"]["by_category"]["code_gen"]["current"] == 1
+    assert readiness["manual_review"]["status"] == "complete"
+    assert readiness["near_duplicates"]["unresolved_count"] == 0
+    assert readiness["latest_scale_decisions"]["debug"]["decision"] == "revise_prompt"
+    assert any("Clean example count is below" in blocker for blocker in readiness["blockers"])
+    assert "candidate_audit_warning_counts" in readiness["validation"]
+
+
+def test_full_release_status_blocks_when_hard_ratios_are_outside_band(tmp_path):
+    records = {
+        category: [
+            metadata_record(
+                record_id=f"{category}-20260511-001-{index:04d}",
+                batch_id=f"20260511-{category}-001",
+                category=category,
+                complexity="simple",
+            )
+            for index in range(1, 3)
+        ]
+        for category in ALLOWED_CATEGORIES
+    }
+
+    audit = {
+        "preflight": {"overall_status": "complete"},
+        "candidate_audit": {"status": "complete"},
+        "manual_review_summary": {"status": "complete"},
+        "count_summary": {
+            "total": 10_000,
+            "by_category": {
+                "code_gen": 3_000,
+                "debug": 2_000,
+                "explanation": 1_000,
+                "conversion": 1_000,
+                "trajectory": 3_000,
+            },
+        },
+        "hard_example_ratios": {
+            category: {"ratio": 0.0, "target_ratio": 0.2}
+            for category in ALLOWED_CATEGORIES
+        },
+    }
+
+    from data_generation.release import _release_status
+
+    assert _release_status(
+        audit["preflight"],
+        audit["candidate_audit"],
+        audit["manual_review_summary"],
+        audit["count_summary"],
+        False,
+        hard_ratios=audit["hard_example_ratios"],
+    ) == "blocked"
+
+
+def test_full_release_status_blocks_unresolved_near_duplicates():
+    from data_generation.release import _release_status
+
+    assert _release_status(
+        {"overall_status": "complete"},
+        {"status": "complete"},
+        {"status": "complete"},
+        {
+            "total": 10_000,
+            "by_category": {
+                "code_gen": 3_000,
+                "debug": 2_000,
+                "explanation": 1_000,
+                "conversion": 1_000,
+                "trajectory": 3_000,
+            },
+        },
+        False,
+        hard_ratios={category: {"ratio": 0.2} for category in ALLOWED_CATEGORIES},
+        near_report={"unresolved_count": 1},
+    ) == "blocked"
+
+
+def test_readiness_and_audit_cli_write_reports_only_when_requested(tmp_path, monkeypatch, capsys):
+    for category in ALLOWED_CATEGORIES:
+        write_batch(tmp_path, category=category)
+    monkeypatch.chdir(tmp_path)
+
+    assert main(["audit", "--version", "jac-synth-v0.1.0"]) == 0
+    assert '"status": "pilot_only_not_volume_complete"' in capsys.readouterr().out
+    assert not (tmp_path / "dataset/logs/audit/jac-synth-v0.1.0-audit.json").exists()
+
+    assert main(["audit", "--version", "jac-synth-v0.1.0", "--write-report"]) == 0
+    assert (tmp_path / "dataset/logs/audit/jac-synth-v0.1.0-audit.json").exists()
+
+    assert main(["readiness", "--version", "jac-synth-v0.1.0", "--write-report"]) == 0
+    readiness_output = capsys.readouterr().out
+
+    assert '"current_total": 5' in readiness_output
+    assert (tmp_path / "dataset/logs/audit/jac-synth-v0.1.0-readiness.json").exists()
+
+
 def test_freeze_release_writes_immutable_pilot_release_and_cli_audit(tmp_path, monkeypatch, capsys):
     for category in ALLOWED_CATEGORIES:
         write_batch(tmp_path, category=category)
@@ -307,3 +603,71 @@ def test_freeze_release_writes_immutable_pilot_release_and_cli_audit(tmp_path, m
     assert json.loads((tmp_path / "dataset/releases/jac-synth-v0.1.0/training_runs.json").read_text()) == []
     with pytest.raises(FileExistsError):
         freeze_release(tmp_path, version="jac-synth-v0.1.0", allow_pilot_release=True)
+
+
+def test_freeze_release_from_snapshot_writes_checksums_and_refuses_drift(tmp_path):
+    for category in ALLOWED_CATEGORIES:
+        write_batch(tmp_path, category=category)
+    audit = audit_release_readiness(tmp_path, version="jac-synth-v0.1.0", allow_pilot_release=True)
+    snapshot_path = write_audit_snapshot(tmp_path, audit)
+
+    release = freeze_release(
+        tmp_path,
+        version="jac-synth-v0.1.0",
+        allow_pilot_release=True,
+        audit_snapshot_path=snapshot_path,
+    )
+    lock = json.loads((tmp_path / "dataset/releases/jac-synth-v0.1.0/IMMUTABLE_RELEASE.json").read_text())
+
+    assert release["status"] == audit["status"]
+    assert lock["audit_fingerprint"] == audit["fingerprint"]
+    assert "manifest.json" in lock["checksums"]
+
+    write_batch(tmp_path, category="code_gen", sequence=99)
+    with pytest.raises(ValueError, match="audit snapshot is stale"):
+        freeze_release(
+            tmp_path,
+            version="jac-synth-v0.1.1",
+            allow_pilot_release=True,
+            audit_snapshot_path=snapshot_path,
+        )
+
+
+def test_repair_metadata_cli_updates_legacy_clean_files(tmp_path, monkeypatch, capsys):
+    ensure_dataset_tree(tmp_path)
+    batch_id = "20260511-conversion-004"
+    legacy = {
+        "id": "conversion-20260511-004-0001",
+        "python_code": "print('hi')",
+        "jac_code": "valid jac",
+        "conversion_notes": "Uses Jac.",
+    }
+    write_jsonl(tmp_path / f"dataset/clean_dataset/conversion/{batch_id}.jsonl", [legacy])
+    write_jsonl(
+        tmp_path / f"dataset/logs/validation/{batch_id}.jsonl",
+        [
+            {
+                "batch_id": batch_id,
+                "prompt_version": "prompt-conversion-v3",
+                "context_bundle_version": "jac-context-v1",
+                "category": "conversion",
+                "example_id": legacy["id"],
+                "json_schema_result": True,
+                "compiler_result": [{"passed": True}],
+                "test_result": None,
+                "rejection_reason": None,
+                "retry_count": 0,
+                "final_disposition": "clean",
+                "validator_version": "validator-v1",
+                "dataset_version": "jac-synth-v0.1.0",
+            }
+        ],
+    )
+    monkeypatch.chdir(tmp_path)
+
+    assert main(["repair-metadata"]) == 0
+
+    assert '"updated_count": 1' in capsys.readouterr().out
+    repaired = json.loads((tmp_path / f"dataset/clean_dataset/conversion/{batch_id}.jsonl").read_text().splitlines()[0])
+    assert repaired["category"] == "conversion"
+    assert repaired["source_prompt_version"] == "prompt-conversion-v3"

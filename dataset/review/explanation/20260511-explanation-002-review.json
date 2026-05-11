@@ -1,0 +1,16 @@
+[
+  {
+    "batch_id": "20260511-explanation-002",
+    "category": "explanation",
+    "criteria_results": {
+      "accurate_explanation": false,
+      "granularity_matches_request": false,
+      "not_python_behavior": false,
+      "specific_jac_semantics": false
+    },
+    "example_id": "explanation-20260511-002-0001",
+    "notes": "Pending manual review.",
+    "review_status": "pending",
+    "reviewer": "manual-reviewer"
+  }
+]

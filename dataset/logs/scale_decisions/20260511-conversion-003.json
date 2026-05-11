@@ -1,0 +1,13 @@
+{
+  "batch_id": "20260511-conversion-003",
+  "category": "conversion",
+  "compiler_pass_rate": 1.0,
+  "decision": "revise_prompt",
+  "json_parse_pass_rate": 1.0,
+  "manual_review_pass_rate": 0.0,
+  "prompt_revision_required": true,
+  "reasons": [
+    "manual review pass rate below threshold",
+    "blocking review issue"
+  ]
+}

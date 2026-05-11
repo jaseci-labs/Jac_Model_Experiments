@@ -6,7 +6,10 @@ from data_generation.trajectory_generation import (
     INITIAL_SFT_CONTEXT_LIMIT_TOKENS,
     TrajectoryPilotRunner,
     build_candidate_task_bank,
+    build_trajectory_scale_plan,
     build_trajectory_record,
+    ingest_normalized_transcript,
+    main,
     count_consecutive_failed_validation_calls,
     estimate_trajectory_tokens,
     normalize_transcript_turns,
@@ -166,7 +169,7 @@ def test_runner_rejects_missing_required_mcp_docs(tmp_path):
             {
                 "task": task,
                 "turns": turns,
-                "final_code": "valid jac",
+                "final_code": 'with entry { print("hi"); }',
                 "validation_result": {"passed": True},
             }
         ],
@@ -208,7 +211,7 @@ def test_runner_rejects_more_than_three_failed_validation_attempts(tmp_path):
             {
                 "task": task,
                 "turns": turns,
-                "final_code": "valid jac",
+                "final_code": 'with entry { print("hi"); }',
                 "validation_result": {"passed": True},
             }
         ],
@@ -219,3 +222,104 @@ def test_runner_rejects_more_than_three_failed_validation_attempts(tmp_path):
     rejected = tmp_path / "dataset/rejected/trajectory/20260511-trajectory-001.jsonl"
     record = json.loads(rejected.read_text().splitlines()[0])
     assert record["rejection_reason"] == "more than three consecutive compiler failures"
+
+
+def test_ingest_normalized_transcript_writes_validated_trajectory_batch(tmp_path):
+    task = select_pilot_tasks(build_candidate_task_bank())[0].to_dict()
+    transcript_path = tmp_path / "transcript.json"
+    transcript_path.write_text(
+        json.dumps(
+            {
+                "task": task,
+                "turns": valid_turns(),
+                "final_code": 'with entry { print("hi"); }',
+                "validation_result": {"passed": True},
+            }
+        )
+    )
+
+    summary = ingest_normalized_transcript(
+        tmp_path,
+        input_path=transcript_path,
+        date="20260511",
+        sequence=2,
+        generation_date="2026-05-11T00:00:00Z",
+        compiler=passing_compiler,
+    )
+
+    assert summary.clean_count == 1
+    assert (tmp_path / "dataset/clean_dataset/trajectory/20260511-trajectory-002.jsonl").exists()
+
+
+def test_ingest_normalized_transcript_rejects_secret_like_content(tmp_path):
+    task = select_pilot_tasks(build_candidate_task_bank())[0].to_dict()
+    transcript_path = tmp_path / "transcript.json"
+    turns = valid_turns()
+    turns.append({"role": "assistant", "content": "OPENAI_API_KEY=sk-secret"})
+    transcript_path.write_text(
+        json.dumps(
+            {
+                "task": task,
+                "turns": turns,
+                "final_code": "valid jac",
+                "validation_result": {"passed": True},
+            }
+        )
+    )
+
+    summary = ingest_normalized_transcript(
+        tmp_path,
+        input_path=transcript_path,
+        date="20260511",
+        sequence=2,
+        generation_date="2026-05-11T00:00:00Z",
+        compiler=passing_compiler,
+    )
+
+    assert summary.clean_count == 0
+    rejected = tmp_path / "dataset/rejected/trajectory/20260511-trajectory-002.jsonl"
+    assert json.loads(rejected.read_text().splitlines()[0])["rejection_reason"] == "trajectory contains secret-like content"
+
+
+def test_trajectory_scale_plan_rotates_tasks_and_preserves_hard_ratio():
+    plan = build_trajectory_scale_plan(target_count=10, existing_count=3)
+
+    assert plan["missing_count"] == 7
+    assert len(plan["tasks"]) == 7
+    assert 0.15 <= plan["hard_ratio"] <= 0.35
+
+
+def test_trajectory_cli_plan_and_ingest(tmp_path, monkeypatch, capsys):
+    task = select_pilot_tasks(build_candidate_task_bank())[0].to_dict()
+    transcript_path = tmp_path / "transcript.json"
+    transcript_path.write_text(
+        json.dumps(
+            {
+                "task": task,
+                "turns": valid_turns(),
+                "final_code": 'with entry { print("hi"); }',
+                "validation_result": {"passed": True},
+            }
+        )
+    )
+    monkeypatch.chdir(tmp_path)
+
+    assert main(["plan", "--target-count", "10", "--existing-count", "3"]) == 0
+    assert '"missing_count": 7' in capsys.readouterr().out
+    assert (
+        main(
+            [
+                "ingest",
+                "--input",
+                str(transcript_path),
+                "--date",
+                "20260511",
+                "--sequence",
+                "3",
+                "--generation-date",
+                "2026-05-11T00:00:00Z",
+            ]
+        )
+        == 0
+    )
+    assert '"clean_count": 1' in capsys.readouterr().out

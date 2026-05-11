@@ -10,6 +10,7 @@ from typing import Any
 
 from data_generation.artifacts import artifact_path, ensure_dataset_tree, write_json, write_jsonl
 from data_generation.foundation import build_batch_id, build_example_id
+from data_generation.jac_compiler import JacCliCompilerRunner
 from data_generation.manual_review import default_review_records
 from data_generation.validation import (
     RETRY_LIMITS,
@@ -167,6 +168,73 @@ def select_pilot_tasks(task_bank: list[TrajectoryTask]) -> list[TrajectoryTask]:
             raise ValueError(f"missing {complexity} trajectory task")
         selected.append(match)
     return selected
+
+
+def build_trajectory_scale_plan(*, target_count: int, existing_count: int = 0) -> dict[str, Any]:
+    missing_count = max(0, target_count - existing_count)
+    task_bank = build_candidate_task_bank()
+    by_complexity = {
+        "hard": [task for task in task_bank if task.complexity == "hard"],
+        "medium": [task for task in task_bank if task.complexity == "medium"],
+        "simple": [task for task in task_bank if task.complexity == "simple"],
+    }
+    tasks = []
+    for index in range(missing_count):
+        if index % 5 == 0:
+            group = by_complexity["hard"]
+        elif index % 2 == 0:
+            group = by_complexity["simple"]
+        else:
+            group = by_complexity["medium"]
+        tasks.append(group[(index // max(1, len(group))) % len(group)] if group else task_bank[index % len(task_bank)])
+    hard_count = sum(1 for task in tasks if task.complexity == "hard")
+    return {
+        "target_count": target_count,
+        "existing_count": existing_count,
+        "missing_count": missing_count,
+        "hard_ratio": hard_count / len(tasks) if tasks else None,
+        "tasks": [task.to_dict() for task in tasks],
+    }
+
+
+def ingest_normalized_transcript(
+    workspace_root: str | Path = ".",
+    *,
+    input_path: str | Path,
+    date: str,
+    sequence: int,
+    generation_date: str,
+    compiler: Any,
+) -> TrajectoryPilotSummary:
+    payload = json.loads(Path(input_path).read_text())
+    sessions = payload if isinstance(payload, list) else [payload]
+    task_bank = {task.prompt: task for task in build_candidate_task_bank()}
+    raw_sessions = []
+    for session in sessions:
+        task_payload = session["task"]
+        if isinstance(task_payload, dict):
+            task = task_bank.get(task_payload.get("prompt")) or TrajectoryTask(
+                prompt=task_payload["prompt"],
+                complexity=task_payload["complexity"],
+                difficulty_reason=task_payload.get("difficulty_reason", "Imported trajectory task."),
+                expected_capabilities=tuple(task_payload.get("expected_capabilities", ())),
+            )
+        else:
+            task = task_payload
+        raw_sessions.append(
+            {
+                "task": task,
+                "turns": session["turns"],
+                "final_code": session["final_code"],
+                "validation_result": session["validation_result"],
+            }
+        )
+    return TrajectoryPilotRunner(workspace_root=workspace_root, compiler=compiler).write_pilot_batch(
+        date=date,
+        sequence=sequence,
+        raw_sessions=raw_sessions,
+        generation_date=generation_date,
+    )
 
 
 def normalize_transcript_turns(raw_turns: list[dict[str, Any]]) -> list[TrajectoryTurn]:
@@ -398,6 +466,8 @@ def _trajectory_rejection_reason(turns: list[TrajectoryTurn]) -> str | None:
     if "tool_call" not in roles or "tool_result" not in roles:
         return "missing MCP tool call or result"
     all_content = "\n".join(turn.content for turn in turns)
+    if _contains_secret_like_content(all_content):
+        return "trajectory contains secret-like content"
     if "jac://guide/pitfalls" not in all_content or "jac://guide/patterns" not in all_content:
         return "missing required Jac MCP context fetch"
     if "validate_jac" not in all_content:
@@ -414,6 +484,11 @@ def _tool_result_failed(content: str) -> bool:
     if '"passed": true' in lower or "'passed': true" in lower or "validation passed" in lower:
         return False
     return any(marker in lower for marker in ('"passed": false', "'passed': false", "error", "failed"))
+
+
+def _contains_secret_like_content(content: str) -> bool:
+    secret_patterns = ("OPENAI_API_KEY=", "sk-", "BEGIN PRIVATE KEY", "AWS_SECRET_ACCESS_KEY")
+    return any(pattern in content for pattern in secret_patterns)
 
 
 def _validation_result_failed(validation_result: Any) -> bool:
@@ -450,6 +525,14 @@ def _build_parser() -> argparse.ArgumentParser:
     subparsers = parser.add_subparsers(dest="command", required=True)
     audit = subparsers.add_parser("audit")
     audit.add_argument("--batch-id", required=True)
+    plan = subparsers.add_parser("plan")
+    plan.add_argument("--target-count", type=int, required=True)
+    plan.add_argument("--existing-count", type=int, default=0)
+    ingest = subparsers.add_parser("ingest")
+    ingest.add_argument("--input", required=True)
+    ingest.add_argument("--date", required=True)
+    ingest.add_argument("--sequence", type=int, required=True)
+    ingest.add_argument("--generation-date", required=True)
     return parser
 
 
@@ -457,6 +540,20 @@ def main(argv: list[str] | None = None) -> int:
     args = _build_parser().parse_args(argv)
     if args.command == "audit":
         print(json.dumps(audit_task_status(".", batch_id=args.batch_id), indent=2, sort_keys=True))
+        return 0
+    if args.command == "plan":
+        print(json.dumps(build_trajectory_scale_plan(target_count=args.target_count, existing_count=args.existing_count), indent=2, sort_keys=True))
+        return 0
+    if args.command == "ingest":
+        summary = ingest_normalized_transcript(
+            ".",
+            input_path=args.input,
+            date=args.date,
+            sequence=args.sequence,
+            generation_date=args.generation_date,
+            compiler=JacCliCompilerRunner(),
+        )
+        print(json.dumps(summary.__dict__, indent=2, sort_keys=True))
         return 0
     return 2
 

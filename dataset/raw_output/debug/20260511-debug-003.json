@@ -1,0 +1,40 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "annotations": [],
+        "audio": null,
+        "content": "{\n  \"examples\": [\n    {\n      \"broken_code\": \"def area(width: int, height: int) -> int {\\n    return width * height\\n}\\n\\nwith entry {\\n    print(area(3, 4));\\n}\",\n      \"error_message\": \"SyntaxError: expected ';' after return statement expression.\",\n      \"error_type\": \"syntax\",\n      \"fix_explanation\": \"Added the missing semicolon after `return width * height`. Jac statements must be terminated with semicolons inside the function body.\",\n      \"fixed_code\": \"def area(width: int, height: int) -> int {\\n    return width * height;\\n}\\n\\nwith entry {\\n    print(area(3, 4));\\n}\"\n    },\n    {\n      \"broken_code\": \"def next_count(count: int) -> int {\\n    return \\\"count\\\";\\n}\\n\\nwith entry {\\n    print(next_count(4));\\n}\",\n      \"error_message\": \"TypeError: return type mismatch, expected int but got str.\",\n      \"error_type\": \"type\",\n      \"fix_explanation\": \"Changed the return expression from the string literal `\\\"count\\\"` to the integer expression `count + 1`, matching the declared `int` return type.\",\n      \"fixed_code\": \"def next_count(count: int) -> int {\\n    return count + 1;\\n}\\n\\nwith entry {\\n    print(next_count(4));\\n}\"\n    },\n    {\n      \"broken_code\": \"def final_price(price: int) -> int {\\n    return price - discount;\\n}\\n\\nwith entry {\\n    print(final_price(20));\\n}\",\n      \"error_message\": \"NameError: name 'discount' is not defined in this scope.\",\n      \"error_type\": \"scope\",\n      \"fix_explanation\": \"Declared `discount` inside `final_price` before using it. The broken version referenced a variable that was not available in the function scope.\",\n      \"fixed_code\": \"def final_price(price: int) -> int {\\n    discount = 2;\\n    return price - discount;\\n}\\n\\nwith entry {\\n    print(final_price(20));\\n}\"\n    },\n    {\n      \"broken_code\": \"import no_such_jac_module;\\n\\ndef local_value() -> int {\\n    return 7;\\n}\\n\\nwith entry {\\n    print(local_value());\\n}\",\n      \"error_message\": \"ImportError: could not resolve module 'no_such_jac_module'.\",\n      \"error_type\": \"import\",\n      \"fix_explanation\": \"Removed the unresolved import because the program only needs the local `local_value` function. The fixed code has no external module dependency.\",\n      \"fixed_code\": \"def local_value() -> int {\\n    return 7;\\n}\\n\\nwith entry {\\n    print(local_value());\\n}\"\n    },\n    {\n      \"broken_code\": \"def combine(left: int, right: int) -> int {\\n    return left + right;\\n}\\n\\ndef combine(left: int, right: int) -> int {\\n    return left - right;\\n}\\n\\nwith entry {\\n    print(combine(8, 3));\\n}\",\n      \"error_message\": \"SemanticError: duplicate definition for symbol 'combine'.\",\n      \"error_type\": \"semantic\",\n      \"fix_explanation\": \"Renamed the second function to `difference` so the module no longer defines two functions with the same name and signature.\",\n      \"fixed_code\": \"def combine(left: int, right: int) -> int {\\n    return left + right;\\n}\\n\\ndef difference(left: int, right: int) -> int {\\n    return left - right;\\n}\\n\\nwith entry {\\n    print(combine(8, 3));\\n    print(difference(8, 3));\\n}\"\n    }\n  ]\n}",
+        "function_call": null,
+        "parsed": null,
+        "refusal": null,
+        "role": "assistant",
+        "tool_calls": null
+      }
+    }
+  ],
+  "created": 1778527618,
+  "id": "chatcmpl-DeQZGvcF75MSP74lud5btQZXPQZkT",
+  "model": "gpt-5.5-2026-04-23",
+  "object": "chat.completion",
+  "service_tier": "default",
+  "system_fingerprint": null,
+  "usage": {
+    "completion_tokens": 4205,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 3324,
+      "rejected_prediction_tokens": 0
+    },
+    "prompt_tokens": 5945,
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cached_tokens": 4864
+    },
+    "total_tokens": 10150
+  }
+}

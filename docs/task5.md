@@ -219,3 +219,23 @@ Discard trajectories where:
 ## Completion Criteria
 
 This task is complete when the Cursor one-shot pilot produces a reasoned task bank, three pilot trajectory sessions, valid raw transcripts, clean JSONL records, Jac MCP validation logs, rejected records where applicable, and review notes showing whether the process is ready for volume generation.
+
+## Operator Commands
+
+Plan trajectory collection:
+
+```bash
+python -m data_generation.trajectory_generation plan --target-count 2000 --existing-count 0
+```
+
+Ingest a normalized trajectory transcript:
+
+```bash
+python -m data_generation.trajectory_generation ingest --input transcript.json --date 20260511 --sequence 2 --generation-date 2026-05-11T00:00:00Z
+```
+
+Audit trajectory task status:
+
+```bash
+python -m data_generation.trajectory_generation audit --batch-id 20260511-trajectory-002
+```

@@ -1,0 +1,241 @@
+{
+  "categories": {
+    "code_gen": {
+      "records": [
+        {
+          "batch_id": "20260511-code_gen-004",
+          "category": "code_gen",
+          "complexity": "simple",
+          "criteria": [
+            "prompt_clarity",
+            "idiomatic_jac",
+            "construct_diversity",
+            "not_python_like"
+          ],
+          "id": "code_gen-20260511-004-0003",
+          "source_path": null
+        },
+        {
+          "batch_id": "20260511-code_gen-004",
+          "category": "code_gen",
+          "complexity": "simple",
+          "criteria": [
+            "prompt_clarity",
+            "idiomatic_jac",
+            "construct_diversity",
+            "not_python_like"
+          ],
+          "id": "code_gen-20260511-004-0004",
+          "source_path": null
+        },
+        {
+          "batch_id": "20260511-code_gen-004",
+          "category": "code_gen",
+          "complexity": "medium",
+          "criteria": [
+            "prompt_clarity",
+            "idiomatic_jac",
+            "construct_diversity",
+            "not_python_like"
+          ],
+          "id": "code_gen-20260511-004-0012",
+          "source_path": null
+        },
+        {
+          "batch_id": "20260511-code_gen-004",
+          "category": "code_gen",
+          "complexity": "hard",
+          "criteria": [
+            "prompt_clarity",
+            "idiomatic_jac",
+            "construct_diversity",
+            "not_python_like"
+          ],
+          "id": "code_gen-20260511-004-0021",
+          "source_path": null
+        }
+      ],
+      "sample_size": 4
+    },
+    "conversion": {
+      "records": [
+        {
+          "batch_id": "20260508-conversion-002",
+          "category": "conversion",
+          "complexity": "medium",
+          "criteria": [
+            "preserves_behavior",
+            "idiomatic_jac",
+            "meaningful_conversion_notes",
+            "not_mechanical_translation"
+          ],
+          "id": "conversion-20260508-002-0005",
+          "source_path": null
+        },
+        {
+          "batch_id": "20260511-conversion-004",
+          "category": "conversion",
+          "complexity": "medium",
+          "criteria": [
+            "preserves_behavior",
+            "idiomatic_jac",
+            "meaningful_conversion_notes",
+            "not_mechanical_translation"
+          ],
+          "id": "conversion-20260511-004-0005",
+          "source_path": null
+        },
+        {
+          "batch_id": "20260511-conversion-004",
+          "category": "conversion",
+          "complexity": "medium",
+          "criteria": [
+            "preserves_behavior",
+            "idiomatic_jac",
+            "meaningful_conversion_notes",
+            "not_mechanical_translation"
+          ],
+          "id": "conversion-20260511-004-0011",
+          "source_path": null
+        },
+        {
+          "batch_id": "20260511-conversion-004",
+          "category": "conversion",
+          "complexity": "medium",
+          "criteria": [
+            "preserves_behavior",
+            "idiomatic_jac",
+            "meaningful_conversion_notes",
+            "not_mechanical_translation"
+          ],
+          "id": "conversion-20260511-004-0013",
+          "source_path": null
+        }
+      ],
+      "sample_size": 4
+    },
+    "debug": {
+      "records": [
+        {
+          "batch_id": "20260508-debug-003",
+          "category": "debug",
+          "complexity": "medium",
+          "criteria": [
+            "exactly_one_error",
+            "realistic_error",
+            "fixed_code_precise",
+            "specific_explanation"
+          ],
+          "id": "debug-20260508-003-0003",
+          "source_path": null
+        },
+        {
+          "batch_id": "20260508-debug-003",
+          "category": "debug",
+          "complexity": "medium",
+          "criteria": [
+            "exactly_one_error",
+            "realistic_error",
+            "fixed_code_precise",
+            "specific_explanation"
+          ],
+          "id": "debug-20260508-003-0004",
+          "source_path": null
+        },
+        {
+          "batch_id": "20260511-debug-004",
+          "category": "debug",
+          "complexity": "medium",
+          "criteria": [
+            "exactly_one_error",
+            "realistic_error",
+            "fixed_code_precise",
+            "specific_explanation"
+          ],
+          "id": "debug-20260511-004-0007",
+          "source_path": null
+        },
+        {
+          "batch_id": "20260511-debug-004",
+          "category": "debug",
+          "complexity": "medium",
+          "criteria": [
+            "exactly_one_error",
+            "realistic_error",
+            "fixed_code_precise",
+            "specific_explanation"
+          ],
+          "id": "debug-20260511-004-0014",
+          "source_path": null
+        }
+      ],
+      "sample_size": 4
+    },
+    "explanation": {
+      "records": [
+        {
+          "batch_id": "20260508-explanation-005",
+          "category": "explanation",
+          "complexity": "simple",
+          "criteria": [
+            "accurate_explanation",
+            "specific_jac_semantics",
+            "granularity_matches_request",
+            "not_python_behavior"
+          ],
+          "id": "explanation-20260508-005-0002",
+          "source_path": null
+        },
+        {
+          "batch_id": "20260508-explanation-005",
+          "category": "explanation",
+          "complexity": "hard",
+          "criteria": [
+            "accurate_explanation",
+            "specific_jac_semantics",
+            "granularity_matches_request",
+            "not_python_behavior"
+          ],
+          "id": "explanation-20260508-005-0004",
+          "source_path": null
+        },
+        {
+          "batch_id": "20260511-explanation-004",
+          "category": "explanation",
+          "complexity": "medium",
+          "criteria": [
+            "accurate_explanation",
+            "specific_jac_semantics",
+            "granularity_matches_request",
+            "not_python_behavior"
+          ],
+          "id": "explanation-20260511-004-0001",
+          "source_path": null
+        }
+      ],
+      "sample_size": 3
+    },
+    "trajectory": {
+      "records": [
+        {
+          "batch_id": "20260511-trajectory-001",
+          "category": "trajectory",
+          "complexity": "hard",
+          "criteria": [
+            "task_solved",
+            "logical_mcp_tool_use",
+            "compiler_recovery_present",
+            "final_code_validated",
+            "idiomatic_jac",
+            "no_private_context"
+          ],
+          "id": "trajectory-20260511-001-0003",
+          "source_path": null
+        }
+      ],
+      "sample_size": 1
+    }
+  },
+  "sample_rate": 0.1,
+  "version": "jac-synth-v0.1.0"
+}

@@ -168,3 +168,80 @@ def test_openai_generation_client_uses_custom_timeout():
     )
 
     assert calls[0]["timeout"] == 12.0
+
+
+def test_openai_generation_client_retries_transient_failures_and_records_metadata():
+    attempts = 0
+
+    class FakeCompletions:
+        def parse(self, **kwargs):
+            nonlocal attempts
+            attempts += 1
+            if attempts == 1:
+                raise TimeoutError("temporary timeout")
+
+            class Usage:
+                prompt_tokens = 10
+                completion_tokens = 5
+                total_tokens = 15
+
+            class Message:
+                parsed = {"examples": [{"prompt": "Say hi", "code": "valid jac", "complexity": "simple"}]}
+                content = ""
+                refusal = None
+
+            class Choice:
+                message = Message()
+                finish_reason = "stop"
+
+            class Completion:
+                choices = [Choice()]
+                id = "completion-id"
+                usage = Usage()
+
+                def model_dump(self):
+                    return {"id": self.id}
+
+            return Completion()
+
+    class FakeChat:
+        completions = FakeCompletions()
+
+    class FakeSdk:
+        chat = FakeChat()
+
+    result = OpenAIGenerationClient(sdk_client=FakeSdk(), max_retries=1).generate_batch(
+        {
+            "system_prompt": "system",
+            "user_prompt": "user",
+            "response_schema": {"type": "array"},
+            "category": "code_gen",
+        }
+    )
+
+    assert attempts == 2
+    assert result.raw_response["generation_metadata"]["retry_count"] == 1
+    assert result.raw_response["generation_metadata"]["usage"]["total_tokens"] == 15
+    assert result.raw_response["generation_metadata"]["finish_reason"] == "stop"
+
+
+def test_openai_generation_client_stops_after_max_retries():
+    class FakeCompletions:
+        def parse(self, **kwargs):
+            raise TimeoutError("temporary timeout")
+
+    class FakeChat:
+        completions = FakeCompletions()
+
+    class FakeSdk:
+        chat = FakeChat()
+
+    with pytest.raises(TimeoutError):
+        OpenAIGenerationClient(sdk_client=FakeSdk(), max_retries=1).generate_batch(
+            {
+                "system_prompt": "system",
+                "user_prompt": "user",
+                "response_schema": {"type": "array"},
+                "category": "code_gen",
+            }
+        )

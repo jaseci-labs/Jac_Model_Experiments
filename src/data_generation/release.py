@@ -82,7 +82,7 @@ def audit_candidates(workspace_root: str | Path, candidates: dict[str, list[dict
 
             if record.get("test_pass") is False and not _has_review_exception(record, review_index):
                 failures.append({"id": record_id, "category": category, "reason": "test_pass is false without review exception"})
-            elif record.get("test_pass") is None:
+            elif record.get("test_pass") is None and not _has_review_exception(record, review_index):
                 warnings.append({"id": record_id, "category": category, "reason": "test_pass is null; manual review evidence required"})
 
             batch_id = record.get("batch_id")
@@ -91,6 +91,39 @@ def audit_candidates(workspace_root: str | Path, candidates: dict[str, list[dict
 
     status = "blocked" if failures else "warning" if warnings else "complete"
     return {"status": status, "failures": failures, "warnings": warnings}
+
+
+def repair_clean_metadata(workspace_root: str | Path = ".") -> dict[str, Any]:
+    root = Path(workspace_root)
+    validation_records = _validation_record_index(root)
+    review_index = _review_index(root)
+    updated: list[dict[str, Any]] = []
+    skipped: list[dict[str, str]] = []
+
+    for category in ALLOWED_CATEGORIES:
+        clean_dir = root / "dataset/clean_dataset" / category
+        for path in sorted(clean_dir.glob("*.jsonl")):
+            changed = False
+            repaired_records = []
+            for line in path.read_text().splitlines():
+                if not line.strip():
+                    continue
+                record = json.loads(line)
+                record_id = str(record.get("id", ""))
+                validation = validation_records.get(record_id)
+                if validation is None:
+                    skipped.append({"id": record_id or "<missing id>", "reason": "missing validation log entry"})
+                    repaired_records.append(record)
+                    continue
+                repaired = _repair_record(record, category=category, validation=validation, review=review_index.get(record_id))
+                changed = changed or repaired != record
+                repaired_records.append(repaired)
+                if repaired != record:
+                    updated.append({"id": record_id, "path": str(path)})
+            if changed:
+                write_jsonl(path, repaired_records)
+
+    return {"updated_count": len(updated), "updated": updated, "skipped": skipped}
 
 
 def build_exact_duplicate_clusters(records_by_category: dict[str, list[dict[str, Any]]]) -> list[dict[str, Any]]:
@@ -194,6 +227,7 @@ def build_near_duplicate_report(
     write_logs: bool = True,
 ) -> dict[str, Any]:
     clusters = []
+    resolutions = _near_duplicate_resolutions(Path(workspace_root), version)
     for category, records in records_by_category.items():
         for left_index, left in enumerate(records):
             for right in records[left_index + 1 :]:
@@ -203,21 +237,53 @@ def build_near_duplicate_report(
                     continue
                 score = difflib.SequenceMatcher(None, left_key, right_key).ratio()
                 if score >= NEAR_DUPLICATE_THRESHOLD:
+                    cluster_id = _near_duplicate_cluster_id(category, [left["id"], right["id"]])
+                    resolution = resolutions.get(cluster_id)
                     clusters.append(
                         {
+                            "cluster_id": cluster_id,
                             "category": category,
                             "record_ids": [left["id"], right["id"]],
                             "similarity": round(score, 4),
                             "reason": "high normalized content similarity",
                             "action": "manual_review_required",
+                            "resolution_status": resolution.get("action", "pending") if resolution else "pending",
+                            "resolution": resolution,
                         }
                     )
 
-    report = {"version": version, "flagged_count": len(clusters), "clusters": clusters}
+    unresolved_count = sum(1 for cluster in clusters if cluster["resolution_status"] == "pending")
+    report = {"version": version, "flagged_count": len(clusters), "unresolved_count": unresolved_count, "clusters": clusters}
     if write_logs:
         ensure_dataset_tree(workspace_root)
         write_json(Path(workspace_root) / "dataset/logs/deduplication" / f"{version}-near.json", report)
     return report
+
+
+def resolve_near_duplicate_cluster(
+    workspace_root: str | Path = ".",
+    *,
+    version: str,
+    cluster_id: str,
+    action: str,
+    reviewer: str,
+    notes: str,
+) -> dict[str, Any]:
+    if action not in {"remove_duplicate", "keep_distinct", "waived"}:
+        raise ValueError(f"invalid near-duplicate resolution action: {action}")
+    if not notes.strip():
+        raise ValueError("notes are required for near-duplicate resolution")
+    root = Path(workspace_root)
+    resolutions = _near_duplicate_resolutions(root, version)
+    resolution = {
+        "cluster_id": cluster_id,
+        "action": action,
+        "reviewer": reviewer,
+        "notes": notes,
+    }
+    resolutions[cluster_id] = resolution
+    write_json(root / "dataset/logs/deduplication" / f"{version}-near-resolutions.json", {"version": version, "resolutions": resolutions})
+    return resolution
 
 
 def build_review_sample(
@@ -335,7 +401,9 @@ def audit_release_readiness(
     version: str,
     allow_pilot_release: bool = False,
     write_artifacts: bool = False,
+    write_report: bool = False,
 ) -> dict[str, Any]:
+    root = Path(workspace_root)
     candidates = load_clean_candidates(workspace_root)
     candidate_audit = audit_candidates(workspace_root, candidates)
     deduped, dedup_summary = deduplicate_records(workspace_root, candidates, version=version, write_logs=write_artifacts)
@@ -346,10 +414,18 @@ def audit_release_readiness(
     preflight = audit_prerequisites(workspace_root)
     count_summary = _count_summary(deduped)
     hard_ratios = _hard_ratios(deduped)
-    status = _release_status(preflight, candidate_audit, review_summary, count_summary, allow_pilot_release)
+    status = _release_status(
+        preflight,
+        candidate_audit,
+        review_summary,
+        count_summary,
+        allow_pilot_release,
+        hard_ratios=hard_ratios,
+        near_report=near_report,
+    )
     limitations = _known_limitations(preflight, candidate_audit, review_summary, count_summary, hard_ratios, near_report)
 
-    return {
+    audit = {
         "version": version,
         "status": status,
         "preflight": preflight,
@@ -363,6 +439,59 @@ def audit_release_readiness(
         "manifest": {**manifest, "known_limitations": limitations},
         "known_limitations": limitations,
     }
+    audit["fingerprint"] = _audit_fingerprint(audit)
+    if write_report:
+        write_json(root / "dataset/logs/audit" / f"{version}-audit.json", audit)
+    return audit
+
+
+def write_audit_snapshot(workspace_root: str | Path, audit: dict[str, Any]) -> str:
+    root = Path(workspace_root)
+    path = root / "dataset/logs/audit" / f"{audit['version']}-audit-snapshot.json"
+    write_json(path, audit)
+    return str(path)
+
+
+def build_readiness_summary(
+    workspace_root: str | Path = ".",
+    *,
+    version: str,
+    allow_pilot_release: bool = False,
+    write_report: bool = False,
+) -> dict[str, Any]:
+    root = Path(workspace_root)
+    audit = audit_release_readiness(
+        root,
+        version=version,
+        allow_pilot_release=allow_pilot_release,
+        write_artifacts=False,
+        write_report=False,
+    )
+    readiness = {
+        "version": version,
+        "status": audit["status"],
+        "blockers": list(audit["known_limitations"]),
+        "counts": _readiness_counts(audit["count_summary"]),
+        "hard_example_ratios": audit["hard_example_ratios"],
+        "manual_review": _readiness_manual_review(audit["manual_review_summary"]),
+        "near_duplicates": {
+            "unresolved_count": audit["near_duplicate_summary"]["flagged_count"],
+            "resolved_count": 0,
+            "waived_count": 0,
+        },
+        "latest_scale_decisions": _latest_scale_decisions(root),
+        "prompt_versions": audit["manifest"]["prompt_versions"],
+        "validation": {
+            "candidate_audit_status": audit["candidate_audit"]["status"],
+            "candidate_audit_failure_count": len(audit["candidate_audit"]["failures"]),
+            "candidate_audit_warning_count": len(audit["candidate_audit"]["warnings"]),
+            "candidate_audit_warning_counts": _reason_counts(audit["candidate_audit"]["warnings"]),
+        },
+        "release_status_reasons": _release_status_reasons(audit),
+    }
+    if write_report:
+        write_json(root / "dataset/logs/audit" / f"{version}-readiness.json", readiness)
+    return readiness
 
 
 def freeze_release(
@@ -372,6 +501,7 @@ def freeze_release(
     allow_pilot_release: bool = False,
     force: bool = False,
     training_runs: list[str] | None = None,
+    audit_snapshot_path: str | Path | None = None,
 ) -> dict[str, Any]:
     root = Path(workspace_root)
     release_dir = root / "dataset/releases" / version
@@ -380,7 +510,13 @@ def freeze_release(
     if release_dir.exists() and force:
         shutil.rmtree(release_dir)
 
-    audit = audit_release_readiness(root, version=version, allow_pilot_release=allow_pilot_release, write_artifacts=True)
+    if audit_snapshot_path:
+        audit = json.loads(Path(audit_snapshot_path).read_text())
+        current_audit = audit_release_readiness(root, version=audit["version"], allow_pilot_release=allow_pilot_release, write_artifacts=False)
+        if current_audit["fingerprint"] != audit.get("fingerprint"):
+            raise ValueError("audit snapshot is stale; re-run audit before freezing")
+    else:
+        audit = audit_release_readiness(root, version=version, allow_pilot_release=allow_pilot_release, write_artifacts=True)
     if audit["status"] == "blocked" or (audit["status"] == "pilot_only_not_volume_complete" and not allow_pilot_release):
         raise ValueError(f"release is not ready: {audit['status']}")
 
@@ -396,6 +532,16 @@ def freeze_release(
     write_json(release_dir / "manual_review_sample.json", audit["manual_review_sample"])
     write_json(release_dir / "deduplication_summary.json", audit["deduplication_summary"])
     write_json(release_dir / "training_runs.json", training_runs or [])
+    checksums = _release_checksums(release_dir)
+    write_json(
+        release_dir / "IMMUTABLE_RELEASE.json",
+        {
+            "version": version,
+            "status": audit["status"],
+            "audit_fingerprint": audit["fingerprint"],
+            "checksums": checksums,
+        },
+    )
     return {"version": version, "status": audit["status"], "release_path": str(release_dir), "audit": audit}
 
 
@@ -406,6 +552,12 @@ def main(argv: list[str] | None = None) -> int:
     audit_parser = subparsers.add_parser("audit")
     audit_parser.add_argument("--version", required=True)
     audit_parser.add_argument("--allow-pilot-release", action="store_true")
+    audit_parser.add_argument("--write-report", action="store_true")
+
+    readiness_parser = subparsers.add_parser("readiness")
+    readiness_parser.add_argument("--version", required=True)
+    readiness_parser.add_argument("--allow-pilot-release", action="store_true")
+    readiness_parser.add_argument("--write-report", action="store_true")
 
     freeze_parser = subparsers.add_parser("freeze")
     freeze_parser.add_argument("--version", required=True)
@@ -413,9 +565,36 @@ def main(argv: list[str] | None = None) -> int:
     freeze_parser.add_argument("--force", action="store_true")
     freeze_parser.add_argument("--training-run", action="append", default=[])
 
+    subparsers.add_parser("repair-metadata")
+
     args = parser.parse_args(argv)
     if args.command == "audit":
-        print(json.dumps(audit_release_readiness(".", version=args.version, allow_pilot_release=args.allow_pilot_release), indent=2, sort_keys=True))
+        print(
+            json.dumps(
+                audit_release_readiness(
+                    ".",
+                    version=args.version,
+                    allow_pilot_release=args.allow_pilot_release,
+                    write_report=args.write_report,
+                ),
+                indent=2,
+                sort_keys=True,
+            )
+        )
+        return 0
+    if args.command == "readiness":
+        print(
+            json.dumps(
+                build_readiness_summary(
+                    ".",
+                    version=args.version,
+                    allow_pilot_release=args.allow_pilot_release,
+                    write_report=args.write_report,
+                ),
+                indent=2,
+                sort_keys=True,
+            )
+        )
         return 0
     if args.command == "freeze":
         print(
@@ -431,6 +610,9 @@ def main(argv: list[str] | None = None) -> int:
                 sort_keys=True,
             )
         )
+        return 0
+    if args.command == "repair-metadata":
+        print(json.dumps(repair_clean_metadata("."), indent=2, sort_keys=True))
         return 0
     return 2
 
@@ -531,6 +713,18 @@ def _validation_log_index(root: Path) -> dict[str, set[str]]:
     return index
 
 
+def _validation_record_index(root: Path) -> dict[str, dict[str, Any]]:
+    index = {}
+    for path in sorted((root / "dataset/logs/validation").glob("*.jsonl")):
+        for line in path.read_text().splitlines():
+            if not line.strip():
+                continue
+            record = json.loads(line)
+            if record.get("example_id"):
+                index[str(record["example_id"])] = record
+    return index
+
+
 def _review_index(root: Path) -> dict[str, dict[str, Any]]:
     index = {}
     for path in sorted((root / "dataset/review").glob("**/*.json")):
@@ -543,6 +737,69 @@ def _review_index(root: Path) -> dict[str, dict[str, Any]]:
             if isinstance(record, dict) and "example_id" in record:
                 index[str(record["example_id"])] = record
     return index
+
+
+def _repair_record(
+    record: dict[str, Any],
+    *,
+    category: str,
+    validation: dict[str, Any],
+    review: dict[str, Any] | None,
+) -> dict[str, Any]:
+    batch_id = str(validation.get("batch_id") or record.get("batch_id") or _batch_id_from_record_id(str(record.get("id", "")), category))
+    review_passed = bool(review and review.get("review_status") == "passed" and all(review.get("criteria_results", {}).values()))
+    repaired = dict(record)
+    repaired["batch_id"] = batch_id
+    repaired["category"] = category
+    repaired["complexity"] = _record_complexity(category, repaired)
+    repaired["compiler_pass"] = _validation_compiler_pass(validation)
+    repaired["test_pass"] = validation.get("test_result")
+    repaired["manually_reviewed"] = review_passed
+    repaired["generator"] = "cursor-jac-mcp" if category == "trajectory" else "openai-api"
+    repaired["generation_date"] = repaired.get("generation_date") or _generation_date_from_batch_id(batch_id)
+    repaired["source_prompt_version"] = validation.get("prompt_version") or repaired.get("source_prompt_version") or f"prompt-{category}-v1"
+    repaired["context_bundle_version"] = validation.get("context_bundle_version") or repaired.get("context_bundle_version") or "jac-context-v1"
+    repaired["validator_version"] = validation.get("validator_version") or repaired.get("validator_version") or "validator-v1"
+    repaired["dataset_version"] = validation.get("dataset_version") or repaired.get("dataset_version") or "jac-synth-v0.1.0"
+    repaired["review_status"] = review.get("review_status") if review else repaired.get("review_status", "pending")
+    repaired["rejection_reason"] = validation.get("rejection_reason")
+    return repaired
+
+
+def _record_complexity(category: str, record: dict[str, Any]) -> str:
+    if record.get("complexity"):
+        return str(record["complexity"])
+    if category == "explanation":
+        granularity = record.get("granularity")
+        return "simple" if granularity == "line" else "hard" if granularity == "module" else "medium"
+    if category == "trajectory":
+        return "medium"
+    return "medium"
+
+
+def _validation_compiler_pass(validation: dict[str, Any]) -> bool | None:
+    results = validation.get("compiler_result")
+    if isinstance(results, list) and results:
+        return all(
+            bool(result.get("passed")) is bool(result.get("expected_to_compile", True))
+            for result in results
+            if isinstance(result, dict)
+        )
+    return None
+
+
+def _batch_id_from_record_id(record_id: str, category: str) -> str:
+    parts = record_id.removeprefix(f"{category}-").split("-")
+    if len(parts) >= 2:
+        return f"{parts[0]}-{category}-{parts[1]}"
+    return ""
+
+
+def _generation_date_from_batch_id(batch_id: str) -> str:
+    date = batch_id.split("-", 1)[0]
+    if len(date) == 8:
+        return f"{date[0:4]}-{date[4:6]}-{date[6:8]}T00:00:00Z"
+    return ""
 
 
 def _has_review_exception(record: dict[str, Any], review_index: dict[str, dict[str, Any]]) -> bool:
@@ -568,6 +825,19 @@ def _exact_key_values(record: dict[str, Any]) -> list[tuple[str, Any]]:
 
 def _record_dedup_hash(record: dict[str, Any]) -> str:
     return _sha256(_normalize_jsonish({key: value for key, value in _exact_key_values(record)}))
+
+
+def _near_duplicate_cluster_id(category: str, record_ids: list[str]) -> str:
+    return _sha256(_normalize_jsonish({"category": category, "record_ids": sorted(record_ids)}))[:16]
+
+
+def _near_duplicate_resolutions(root: Path, version: str) -> dict[str, dict[str, Any]]:
+    path = root / "dataset/logs/deduplication" / f"{version}-near-resolutions.json"
+    if not path.exists():
+        return {}
+    payload = json.loads(path.read_text())
+    resolutions = payload.get("resolutions", {})
+    return resolutions if isinstance(resolutions, dict) else {}
 
 
 def _near_key(record: dict[str, Any]) -> str:
@@ -602,6 +872,23 @@ def _normalize_identifiers(value: str) -> str:
 
 def _sha256(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
+
+
+def _audit_fingerprint(audit: dict[str, Any]) -> str:
+    payload = deepcopy(audit)
+    payload.pop("fingerprint", None)
+    volatile = payload.get("near_duplicate_summary")
+    if isinstance(volatile, dict):
+        volatile.pop("clusters", None)
+    return _sha256(json.dumps(payload, sort_keys=True, separators=(",", ":")))
+
+
+def _release_checksums(release_dir: Path) -> dict[str, str]:
+    checksums = {}
+    for path in sorted(release_dir.glob("**/*")):
+        if path.is_file() and path.name != "IMMUTABLE_RELEASE.json":
+            checksums[str(path.relative_to(release_dir))] = hashlib.sha256(path.read_bytes()).hexdigest()
+    return checksums
 
 
 def _strip_internal_fields(record: dict[str, Any]) -> dict[str, Any]:
@@ -650,12 +937,84 @@ def _hard_ratios(records_by_category: dict[str, list[dict[str, Any]]]) -> dict[s
     return ratios
 
 
+def _readiness_counts(count_summary: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "current_total": count_summary["total"],
+        "target_total_range": list(count_summary["target_total_range"]),
+        "by_category": {
+            category: {
+                "current": count_summary["by_category"].get(category, 0),
+                "target_range": list(count_summary["category_target_ranges"][category]),
+            }
+            for category in ALLOWED_CATEGORIES
+        },
+    }
+
+
+def _readiness_manual_review(review_summary: dict[str, Any]) -> dict[str, Any]:
+    categories = {}
+    for category, summary in review_summary["categories"].items():
+        categories[category] = {
+            "sample_size": summary.get("sample_size", 0),
+            "reviewed_count": summary.get("reviewed_count", 0),
+            "passed_count": summary.get("passed_count", 0),
+            "pending_count": len(summary.get("pending_ids", [])),
+            "pass_rate": summary.get("pass_rate"),
+        }
+    return {
+        "status": review_summary["status"],
+        "threshold": review_summary["threshold"],
+        "categories": categories,
+    }
+
+
+def _reason_counts(items: list[dict[str, Any]]) -> dict[str, int]:
+    counts: dict[str, int] = {}
+    for item in items:
+        reason = str(item.get("reason", "unknown"))
+        counts[reason] = counts.get(reason, 0) + 1
+    return counts
+
+
+def _latest_scale_decisions(root: Path) -> dict[str, dict[str, Any]]:
+    decisions = {}
+    for category in SCRIPTED_CATEGORIES:
+        paths = sorted((root / "dataset/logs/scale_decisions").glob(f"*-{category}-*.json"))
+        if not paths:
+            decisions[category] = {"status": "missing"}
+            continue
+        payload = json.loads(paths[-1].read_text())
+        decisions[category] = {
+            "batch_id": payload.get("batch_id"),
+            "decision": payload.get("decision"),
+            "reasons": payload.get("reasons", []),
+        }
+    return decisions
+
+
+def _release_status_reasons(audit: dict[str, Any]) -> list[str]:
+    reasons = []
+    if audit["preflight"]["overall_status"] != "complete":
+        reasons.append("preflight incomplete")
+    if audit["candidate_audit"]["status"] == "blocked":
+        reasons.append("candidate audit blocked")
+    if audit["manual_review_summary"]["status"].startswith("blocked"):
+        reasons.append(audit["manual_review_summary"]["status"])
+    if audit["count_summary"]["total"] < RELEASE_TOTAL_RANGE[0]:
+        reasons.append("below release volume minimum")
+    if audit["near_duplicate_summary"]["flagged_count"]:
+        reasons.append("near duplicates unresolved")
+    return reasons
+
+
 def _release_status(
     preflight: dict[str, Any],
     candidate_audit: dict[str, Any],
     review_summary: dict[str, Any],
     count_summary: dict[str, Any],
     allow_pilot_release: bool,
+    hard_ratios: dict[str, Any] | None = None,
+    near_report: dict[str, Any] | None = None,
 ) -> str:
     if preflight["overall_status"] == "blocked" or candidate_audit["status"] == "blocked" or review_summary["status"].startswith("blocked"):
         return "blocked"
@@ -667,8 +1026,20 @@ def _release_status(
         for category in ALLOWED_CATEGORIES
     )
     if in_total_range and in_category_ranges:
+        if _hard_ratio_blocked(hard_ratios or {}):
+            return "blocked"
+        if (near_report or {}).get("unresolved_count", 0):
+            return "blocked"
         return "ready"
     return "pilot_only_not_volume_complete" if allow_pilot_release or total < RELEASE_TOTAL_RANGE[0] else "blocked"
+
+
+def _hard_ratio_blocked(hard_ratios: dict[str, Any]) -> bool:
+    for ratio in hard_ratios.values():
+        value = ratio.get("ratio")
+        if value is not None and abs(value - TARGET_HARD_RATIO) > 0.15:
+            return True
+    return False
 
 
 def _known_limitations(
