@@ -8,7 +8,7 @@ Cursor is the required environment for this workflow because this workspace alre
 
 ## Inputs Needed
 
-- [`context.md`](context.md) for trajectory strategy and target counts.
+- [`context.md`](../context.md) for trajectory strategy and target counts.
 - [`task1.md`](task1.md) for metadata and storage policy.
 - [`task3.md`](task3.md) for compiler validation and retry limits.
 - Access to Cursor with Jac MCP/tooling attached.

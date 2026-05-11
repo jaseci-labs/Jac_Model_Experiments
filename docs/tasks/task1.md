@@ -6,7 +6,7 @@ Establish the source-of-truth structure for the Jac synthetic dataset before any
 
 ## Inputs Needed
 
-- [`context.md`](context.md) as the strategy source of truth.
+- [`context.md`](../context.md) as the strategy source of truth.
 - The current Jac syntax documentation.
 - The current `skills.md` or equivalent Jac guidance used by the Jac MCP.
 - Access to the Jac compiler or Jac MCP for later validation tasks.

@@ -6,7 +6,7 @@ Prepare validated examples for a reproducible dataset release. This task defines
 
 ## Inputs Needed
 
-- [`context.md`](context.md) for target distribution and quality rules.
+- [`context.md`](../context.md) for target distribution and quality rules.
 - [`task1.md`](task1.md) for metadata, naming, and storage policy.
 - [`task3.md`](task3.md) for validation logs and pass-rate thresholds.
 - Clean candidates from single-turn generation and trajectory collection.

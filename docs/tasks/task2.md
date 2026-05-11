@@ -6,7 +6,7 @@ Design the OpenAI API prompts and strict JSON schemas used for the scripted sing
 
 ## Inputs Needed
 
-- [`context.md`](context.md) for the overall strategy.
+- [`context.md`](../context.md) for the overall strategy.
 - [`task1.md`](task1.md) for metadata, naming, and context bundle requirements.
 - The Jac context bundle version selected in Task 1.
 - Category targets for code generation, debugging, explanation, and conversion.

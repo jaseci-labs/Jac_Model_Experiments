@@ -6,10 +6,10 @@ Define the validation gates that protect the clean dataset. This task covers com
 
 ## Inputs Needed
 
-- `[context.md](context.md)` for validation principles.
-- `[task1.md](task1.md)` for metadata and storage policy.
-- `[task2.md](task2.md)` for OpenAI prompt schemas.
-- Access to the Jac compiler or Jac MCP compiler tool. cursor and claude code both have these so there's nothing to double check here. 
+- [`context.md`](../context.md) for validation principles.
+- [`task1.md`](task1.md) for metadata and storage policy.
+- [`task2.md`](task2.md) for OpenAI prompt schemas.
+- Access to the Jac compiler or Jac MCP compiler tool. cursor and claude code both have these so there's nothing to double check here.
 - A small set of expected-good examples for sanity checks.
 
 ## Artifacts To Produce

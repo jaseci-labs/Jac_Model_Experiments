@@ -6,7 +6,7 @@ Define the slow, repeatable generation loops for the four scripted OpenAI API ca
 
 ## Inputs Needed
 
-- [`context.md`](context.md) for category targets and quality rules.
+- [`context.md`](../context.md) for category targets and quality rules.
 - [`task1.md`](task1.md) for storage, metadata, and context bundle requirements.
 - [`task2.md`](task2.md) for prompt templates and schemas.
 - [`task3.md`](task3.md) for validation, retries, and pass-rate thresholds.
