@@ -4,6 +4,7 @@ from data_generation.manual_review import (
     ScaleDecisionStatus,
     build_prompt_revision_record,
     decide_scale_up,
+    default_review_records,
 )
 from data_generation.validation import CompilerResult, validate_example
 
@@ -129,3 +130,32 @@ def test_category_review_criteria_cover_task4_categories():
     assert "exactly_one_error" in CATEGORY_REVIEW_CRITERIA["debug"]
     assert "accurate_explanation" in CATEGORY_REVIEW_CRITERIA["explanation"]
     assert "preserves_behavior" in CATEGORY_REVIEW_CRITERIA["conversion"]
+
+
+def test_category_review_criteria_cover_trajectory():
+    assert CATEGORY_REVIEW_CRITERIA["trajectory"] == (
+        "task_solved",
+        "logical_mcp_tool_use",
+        "compiler_recovery_present",
+        "final_code_validated",
+        "idiomatic_jac",
+        "no_private_context",
+    )
+
+
+def test_default_review_records_support_trajectory():
+    records = default_review_records(
+        "20260511-trajectory-001",
+        "trajectory",
+        ["trajectory-20260511-001-0001"],
+    )
+
+    assert records[0].review_status == "pending"
+    assert records[0].criteria_results == {
+        "task_solved": False,
+        "logical_mcp_tool_use": False,
+        "compiler_recovery_present": False,
+        "final_code_validated": False,
+        "idiomatic_jac": False,
+        "no_private_context": False,
+    }

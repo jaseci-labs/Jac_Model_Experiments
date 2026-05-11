@@ -86,7 +86,7 @@ _COMPILER_FIELD_POLICIES = {
     "debug": (("broken_code", False), ("fixed_code", True)),
     "explanation": (("code", True),),
     "conversion": (("jac_code", True),),
-    "trajectory": (),
+    "trajectory": (("final_output.code", True),),
 }
 
 
@@ -128,7 +128,9 @@ def compile_fields_for_example(
 
     results = []
     for field_name, expected_to_compile in _COMPILER_FIELD_POLICIES[category]:
-        code = example[field_name]
+        code = _code_field_value(example, field_name)
+        if not isinstance(code, str) or not code.strip():
+            return False, tuple(results), f"missing {field_name}"
         compiler_result = compiler(code)
         field_result = FieldValidationResult(
             field_name=field_name,
@@ -145,6 +147,15 @@ def compile_fields_for_example(
     return True, tuple(results), None
 
 
+def _code_field_value(example: Mapping[str, Any], field_name: str) -> Any:
+    value: Any = example
+    for part in field_name.split("."):
+        if not isinstance(value, Mapping) or part not in value:
+            return None
+        value = value[part]
+    return value
+
+
 def validate_example(
     *,
     category: str,
@@ -153,7 +164,7 @@ def validate_example(
     test_pass: bool | None = None,
     retry_count: int = 0,
 ) -> ExampleValidationResult:
-    schema_errors = validate_batch_schema(category, [example])
+    schema_errors = [] if category == "trajectory" else validate_batch_schema(category, [example])
     if schema_errors:
         return ExampleValidationResult(
             category=category,

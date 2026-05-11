@@ -105,6 +105,56 @@ def test_conversion_compiler_gate_compiles_jac_code_field():
     assert results[0].field_name == "jac_code"
 
 
+def test_trajectory_compiler_gate_compiles_final_output_code():
+    passed, results, reason = compile_fields_for_example(
+        "trajectory",
+        {
+            "final_output": {
+                "language": "jac",
+                "code": "valid jac",
+                "validation_tool": "user-jac.validate_jac",
+                "validation_result": "passed",
+            }
+        },
+        fake_compiler,
+    )
+
+    assert passed is True
+    assert reason is None
+    assert results[0].field_name == "final_output.code"
+    assert results[0].expected_to_compile is True
+
+
+def test_trajectory_compiler_gate_rejects_missing_final_output_code():
+    passed, results, reason = compile_fields_for_example(
+        "trajectory",
+        {"final_output": {"language": "jac"}},
+        fake_compiler,
+    )
+
+    assert passed is False
+    assert results == ()
+    assert reason == "missing final_output.code"
+
+
+def test_trajectory_compile_failure_is_rejected():
+    result = validate_example(
+        category="trajectory",
+        example={
+            "final_output": {
+                "language": "jac",
+                "code": "BROKEN jac",
+                "validation_tool": "user-jac.validate_jac",
+                "validation_result": "failed",
+            }
+        },
+        compiler=fake_compiler,
+    )
+
+    assert result.disposition == Disposition.REJECTED
+    assert result.rejection_reason == "final_output.code failed compiler validation"
+
+
 def test_debug_compiler_gate_expects_broken_code_to_fail_and_fixed_code_to_pass():
     passed, results, reason = compile_fields_for_example(
         "debug",
@@ -291,3 +341,33 @@ def test_validation_log_record_contains_required_fields_and_is_json_serializable
     assert record["validator_version"] == "validator-v1"
     assert record["dataset_version"] == "jac-synth-v0.1.0"
     json.dumps(record)
+
+
+def test_trajectory_validation_log_records_nested_final_code_field():
+    result = validate_example(
+        category="trajectory",
+        example={
+            "final_output": {
+                "language": "jac",
+                "code": "valid jac",
+                "validation_tool": "user-jac.validate_jac",
+                "validation_result": "passed",
+            }
+        },
+        compiler=fake_compiler,
+    )
+
+    record = build_validation_log_record(
+        result,
+        batch_id="20260511-trajectory-001",
+        prompt_version="trajectory-prompt-v1",
+        context_bundle_version="jac-context-v1",
+        example_id="trajectory-20260511-001-0001",
+        validator_version="jac-mcp-validate-v1",
+        dataset_version="jac-synth-v0.1.0",
+    )
+
+    assert record["category"] == "trajectory"
+    assert record["compiler_result"][0]["field_name"] == "final_output.code"
+    assert record["validator_version"] == "jac-mcp-validate-v1"
+    assert record["dataset_version"] == "jac-synth-v0.1.0"

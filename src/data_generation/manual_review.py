@@ -33,6 +33,14 @@ CATEGORY_REVIEW_CRITERIA = {
         "meaningful_conversion_notes",
         "not_mechanical_translation",
     ),
+    "trajectory": (
+        "task_solved",
+        "logical_mcp_tool_use",
+        "compiler_recovery_present",
+        "final_code_validated",
+        "idiomatic_jac",
+        "no_private_context",
+    ),
 }
 
 
