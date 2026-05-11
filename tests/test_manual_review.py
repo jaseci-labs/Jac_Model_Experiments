@@ -82,6 +82,29 @@ def test_scale_decision_requires_prompt_revision_when_manual_review_fails():
     assert "blocking review issue" in decision.reasons
 
 
+def test_scale_decision_pauses_after_repeated_prompt_revisions():
+    results = [
+        validate_example(
+            category="code_gen",
+            example={"prompt": "Say hi", "code": "valid jac", "complexity": "simple"},
+            compiler=passing_compiler,
+        )
+        for _ in range(5)
+    ]
+
+    decision = decide_scale_up(
+        batch_id="20260508-code_gen-006",
+        category="code_gen",
+        validation_results=results,
+        review_records=[],
+        prompt_revision_count=2,
+    )
+
+    assert decision.decision == ScaleDecisionStatus.PAUSED
+    assert decision.prompt_revision_required is False
+    assert "prompt revision retry limit reached" in decision.reasons
+
+
 def test_prompt_revision_record_matches_required_policy_fields():
     record = build_prompt_revision_record(
         prompt_version="prompt-code_gen-v2",

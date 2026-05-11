@@ -1,0 +1,72 @@
+[
+  {
+    "batch_id": "20260508-explanation-005",
+    "category": "explanation",
+    "criteria_results": {
+      "accurate_explanation": true,
+      "granularity_matches_request": true,
+      "not_python_behavior": true,
+      "specific_jac_semantics": true
+    },
+    "example_id": "explanation-20260508-005-0001",
+    "notes": "Manual review passed: module-level clamp explanation is accurate and Jac-specific.",
+    "review_status": "passed",
+    "reviewer": "manual-reviewer"
+  },
+  {
+    "batch_id": "20260508-explanation-005",
+    "category": "explanation",
+    "criteria_results": {
+      "accurate_explanation": true,
+      "granularity_matches_request": true,
+      "not_python_behavior": true,
+      "specific_jac_semantics": true
+    },
+    "example_id": "explanation-20260508-005-0002",
+    "notes": "Manual review passed: line-level loop explanation matches the snippet.",
+    "review_status": "passed",
+    "reviewer": "manual-reviewer"
+  },
+  {
+    "batch_id": "20260508-explanation-005",
+    "category": "explanation",
+    "criteria_results": {
+      "accurate_explanation": true,
+      "granularity_matches_request": true,
+      "not_python_behavior": true,
+      "specific_jac_semantics": true
+    },
+    "example_id": "explanation-20260508-005-0003",
+    "notes": "Manual review passed: node ability explanation is accurate and specific.",
+    "review_status": "passed",
+    "reviewer": "manual-reviewer"
+  },
+  {
+    "batch_id": "20260508-explanation-005",
+    "category": "explanation",
+    "criteria_results": {
+      "accurate_explanation": true,
+      "granularity_matches_request": true,
+      "not_python_behavior": true,
+      "specific_jac_semantics": true
+    },
+    "example_id": "explanation-20260508-005-0004",
+    "notes": "Manual review passed: module-level node and edge explanation is Jac-specific.",
+    "review_status": "passed",
+    "reviewer": "manual-reviewer"
+  },
+  {
+    "batch_id": "20260508-explanation-005",
+    "category": "explanation",
+    "criteria_results": {
+      "accurate_explanation": true,
+      "granularity_matches_request": true,
+      "not_python_behavior": true,
+      "specific_jac_semantics": true
+    },
+    "example_id": "explanation-20260508-005-0005",
+    "notes": "Manual review passed: block-level walker and node explanation avoids Python framing.",
+    "review_status": "passed",
+    "reviewer": "manual-reviewer"
+  }
+]

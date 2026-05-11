@@ -1,0 +1,40 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "annotations": [],
+        "audio": null,
+        "content": "{\"examples\":[{\"code\":\"def factorial(n: int) -> int {\\n    result: int = 1;\\n    i: int = 2;\\n    while i <= n {\\n        result = result * i;\\n        i = i + 1;\\n    }\\n    return result;\\n}\\n\\nwith entry {\\n    value: int = 6;\\n    print(factorial(value));\\n}\",\"complexity\":\"simple\",\"prompt\":\"Write a small Jac utility program that defines a typed factorial function using a loop and prints the factorial of 6.\"},{\"code\":\"def sum_positive(values: list[int]) -> int {\\n    total: int = 0;\\n    for item in values {\\n        if item > 0 {\\n            total = total + item;\\n        }\\n    }\\n    return total;\\n}\\n\\nwith entry {\\n    readings: list[int] = [12, -4, 7, 0, -2, 9];\\n    print(sum_positive(readings));\\n}\",\"complexity\":\"simple\",\"prompt\":\"Create a Jac data processing script that sums only the positive integers from a list and prints the result.\"},{\"code\":\"node City {\\n    has name: str;\\n    has population: int = 0;\\n\\n    def is_large() -> bool {\\n        return self.population >= 1000000;\\n    }\\n}\\n\\nedge Road {\\n    has distance: int = 1;\\n}\\n\\nwith entry {\\n    a = City(name=\\\"Aster\\\", population=1200000);\\n    b = City(name=\\\"Beryl\\\", population=450000);\\n    c = City(name=\\\"Coda\\\", population=2100000);\\n\\n    root() ++> a;\\n    a ++> b;\\n    b ++> c;\\n\\n    cities: list[City] = [a, b, c];\\n    large_count: int = 0;\\n    for city in cities {\\n        if city.is_large() {\\n            large_count = large_count + 1;\\n        }\\n    }\\n    print(large_count);\\n}\",\"complexity\":\"medium\",\"prompt\":\"Build a small Jac graph-oriented program with City nodes connected by edges, give each city a population ability, and print how many cities are large.\"},{\"code\":\"def route_action(method: str, path: str) -> str {\\n    if method == \\\"GET\\\" {\\n        if path == \\\"/health\\\" {\\n            return \\\"health check\\\";\\n        } else {\\n            if path == \\\"/users\\\" {\\n                return \\\"list users\\\";\\n            }\\n        }\\n    } else {\\n        if method == \\\"POST\\\" {\\n            if path == \\\"/users\\\" {\\n                return \\\"create user\\\";\\n            }\\n        }\\n    }\\n    return \\\"not found\\\";\\n}\\n\\nwith entry {\\n    print(route_action(\\\"GET\\\", \\\"/health\\\"));\\n    print(route_action(\\\"POST\\\", \\\"/users\\\"));\\n    print(route_action(\\\"DELETE\\\", \\\"/users\\\"));\\n}\",\"complexity\":\"medium\",\"prompt\":\"Write a compact Jac web-routing utility that maps a method and path to a handler description and prints three example lookups.\"},{\"code\":\"node Station {\\n    has name: str;\\n    has index: int;\\n\\n    def label() -> str {\\n        return self.name;\\n    }\\n}\\n\\nedge Link {\\n    has cost: int = 1;\\n}\\n\\ndef min_unvisited(dist: list[int], used: list[bool]) -> int {\\n    best_index: int = -1;\\n    best_value: int = 999999;\\n    i: int = 0;\\n    while i < len(dist) {\\n        if !used[i] {\\n            if dist[i] < best_value {\\n                best_value = dist[i];\\n                best_index = i;\\n            }\\n        }\\n        i = i + 1;\\n    }\\n    return best_index;\\n}\\n\\ndef shortest_from_zero(costs: list[list[int]]) -> list[int] {\\n    n: int = len(costs);\\n    dist: list[int] = [999999, 999999, 999999, 999999];\\n    used: list[bool] = [false, false, false, false];\\n    dist[0] = 0;\\n\\n    step: int = 0;\\n    while step < n {\\n        u: int = min_unvisited(dist, used);\\n        if u == -1 {\\n            break;\\n        }\\n        used[u] = true;\\n        v: int = 0;\\n        while v < n {\\n            cost: int = costs[u][v];\\n            if cost > 0 {\\n                alt: int = dist[u] + cost;\\n                if alt < dist[v] {\\n                    dist[v] = alt;\\n                }\\n            }\\n            v = v + 1;\\n        }\\n        step = step + 1;\\n    }\\n    return dist;\\n}\\n\\nwith entry {\\n    s0 = Station(name=\\\"North\\\", index=0);\\n    s1 = Station(name=\\\"East\\\", index=1);\\n    s2 = Station(name=\\\"South\\\", index=2);\\n    s3 = Station(name=\\\"West\\\", index=3);\\n\\n    root() ++> s0;\\n    s0 ++> s1;\\n    s1 ++> s2;\\n    s0 ++> s3;\\n    s3 ++> s2;\\n\\n    costs: list[list[int]] = [\\n        [0, 4, 0, 2],\\n        [0, 0, 5, 0],\\n        [0, 0, 0, 0],\\n        [0, 1, 8, 0]\\n    ];\\n    result: list[int] = shortest_from_zero(costs);\\n    print(result);\\n}\",\"complexity\":\"hard\",\"prompt\":\"Implement a Jac graph algorithm example that models four Station nodes, connects them, computes shortest path distances from the first station using an adjacency cost matrix, and prints the distance list.\"}]}",
+        "function_call": null,
+        "parsed": null,
+        "refusal": null,
+        "role": "assistant",
+        "tool_calls": null
+      }
+    }
+  ],
+  "created": 1778520467,
+  "id": "chatcmpl-DeOhv7e1D6qIAAMfywiGBXuN1KqYy",
+  "model": "gpt-5.5-2026-04-23",
+  "object": "chat.completion",
+  "service_tier": "default",
+  "system_fingerprint": null,
+  "usage": {
+    "completion_tokens": 3964,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 2559,
+      "rejected_prediction_tokens": 0
+    },
+    "prompt_tokens": 5880,
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cached_tokens": 0
+    },
+    "total_tokens": 9844
+  }
+}

@@ -88,6 +88,21 @@ def test_category_prompts_include_task4_compiler_failure_constraints():
         assert "Keep each Jac code snippet small enough for fast compiler validation." in user_prompt
 
 
+def test_category_prompts_include_task4_v3_retry_constraints():
+    for category in SCRIPTED_CATEGORIES:
+        request = build_prompt_request(
+            category=category,
+            context_bundle="Jac context",
+            requested_count=5,
+            prompt_version_number=3,
+        )
+        user_prompt = request["user_prompt"]
+
+        assert "Use `not value`, not Python-style `!value`, for boolean negation." in user_prompt
+        assert "For debugging examples, broken_code must produce a compiler error, not only a warning." in user_prompt
+        assert "Avoid hard examples that require nested list mutation, boolean-list indexing, or long shortest-path implementations." in user_prompt
+
+
 def test_parser_expectations_reject_markdown_and_extra_prose():
     assert JSON_PARSER_EXPECTATIONS["top_level"] == "array"
     assert JSON_PARSER_EXPECTATIONS["allow_markdown_fences"] is False

@@ -1,0 +1,40 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "annotations": [],
+        "audio": null,
+        "content": "{\n  \"examples\": [\n    {\n      \"broken_code\": \"with entry {\\n    print(\\\"Hello from Jac\\\")\\n}\\n\",\n      \"error_message\": \"Syntax Error: expected semicolon after statement\",\n      \"error_type\": \"syntax\",\n      \"fix_explanation\": \"Added the missing semicolon after the print statement so the entry block statement is properly terminated.\",\n      \"fixed_code\": \"with entry {\\n    print(\\\"Hello from Jac\\\");\\n}\\n\"\n    },\n    {\n      \"broken_code\": \"def make_count() -> int {\\n    return \\\"three\\\";\\n}\\n\\nwith entry {\\n    print(make_count());\\n}\\n\",\n      \"error_message\": \"Type Error: function declared to return int but returns str\",\n      \"error_type\": \"type\",\n      \"fix_explanation\": \"Changed the return value from the string \\\"three\\\" to the integer 3 so it matches the declared int return type.\",\n      \"fixed_code\": \"def make_count() -> int {\\n    return 3;\\n}\\n\\nwith entry {\\n    print(make_count());\\n}\\n\"\n    },\n    {\n      \"broken_code\": \"with entry {\\n    print(message);\\n}\\n\",\n      \"error_message\": \"Name Error: name 'message' is not defined\",\n      \"error_type\": \"scope\",\n      \"fix_explanation\": \"Defined message before it is printed so the name is in scope when used.\",\n      \"fixed_code\": \"with entry {\\n    message = \\\"ready\\\";\\n    print(message);\\n}\\n\"\n    },\n    {\n      \"broken_code\": \"node Step {\\n    has label: str;\\n}\\n\\nwith entry {\\n    root() ++> Step(label=\\\"start\\\");\\n    visit [-->];\\n}\\n\",\n      \"error_message\": \"Walker Error: visit statements can only be used from a walker traversal context\",\n      \"error_type\": \"walker\",\n      \"fix_explanation\": \"Removed the visit statement from the plain entry block. The code now only creates and connects a node from root(), which is valid outside a walker.\",\n      \"fixed_code\": \"node Step {\\n    has label: str;\\n}\\n\\nwith entry {\\n    root() ++> Step(label=\\\"start\\\");\\n    print(\\\"step created\\\");\\n}\\n\"\n    },\n    {\n      \"broken_code\": \"with entry {\\n    break;\\n}\\n\",\n      \"error_message\": \"Semantic Error: break statement used outside of a loop\",\n      \"error_type\": \"semantic\",\n      \"fix_explanation\": \"Removed the break statement because there is no surrounding loop for it to exit. The entry block now contains a valid print statement.\",\n      \"fixed_code\": \"with entry {\\n    print(\\\"no loop to break from\\\");\\n}\\n\"\n    }\n  ]\n}",
+        "function_call": null,
+        "parsed": null,
+        "refusal": null,
+        "role": "assistant",
+        "tool_calls": null
+      }
+    }
+  ],
+  "created": 1778520553,
+  "id": "chatcmpl-DeOjJVGHPk3T3AcJXTFsTyKhVGE7J",
+  "model": "gpt-5.5-2026-04-23",
+  "object": "chat.completion",
+  "service_tier": "default",
+  "system_fingerprint": null,
+  "usage": {
+    "completion_tokens": 2866,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 2224,
+      "rejected_prediction_tokens": 0
+    },
+    "prompt_tokens": 5879,
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cached_tokens": 0
+    },
+    "total_tokens": 8745
+  }
+}

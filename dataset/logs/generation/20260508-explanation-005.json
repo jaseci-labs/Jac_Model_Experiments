@@ -1,0 +1,7 @@
+{
+  "batch_id": "20260508-explanation-005",
+  "category": "explanation",
+  "example_count": 5,
+  "model": "gpt-5.5",
+  "prompt_version": "prompt-explanation-v2"
+}

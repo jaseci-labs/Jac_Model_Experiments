@@ -1,0 +1,40 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "annotations": [],
+        "audio": null,
+        "content": "{\n  \"examples\": [\n    {\n      \"code\": \"def factorial(n: int) -> int {\\n    result: int = 1;\\n    for i in range(2, n + 1) {\\n        result = result * i;\\n    }\\n    return result;\\n}\\n\\nwith entry {\\n    print(factorial(5));\\n}\",\n      \"complexity\": \"simple\",\n      \"prompt\": \"Write a small Jac utility program that defines a typed factorial function using a loop and prints the factorial of 5.\"\n    },\n    {\n      \"code\": \"def route_status(method: str, path: str) -> int {\\n    if method == \\\"GET\\\" and path == \\\"/\\\" {\\n        return 200;\\n    }\\n    if method == \\\"GET\\\" and path == \\\"/health\\\" {\\n        return 200;\\n    }\\n    if method == \\\"POST\\\" and path == \\\"/items\\\" {\\n        return 201;\\n    }\\n    return 404;\\n}\\n\\nwith entry {\\n    print(route_status(\\\"GET\\\", \\\"/health\\\"));\\n    print(route_status(\\\"DELETE\\\", \\\"/items\\\"));\\n}\",\n      \"complexity\": \"simple\",\n      \"prompt\": \"Create a simple web routing utility in Jac that returns an HTTP-like status code for a few method and path combinations, then print two sample lookups.\"\n    },\n    {\n      \"code\": \"def normalize_scores(scores: list[int]) -> list[float] {\\n    max_score: int = 0;\\n    for score in scores {\\n        if score > max_score {\\n            max_score = score;\\n        }\\n    }\\n\\n    scaled: list[float] = [];\\n    for score in scores {\\n        if max_score == 0 {\\n            scaled.append(0.0);\\n        } else {\\n            scaled.append((score * 100.0) / max_score);\\n        }\\n    }\\n    return scaled;\\n}\\n\\nwith entry {\\n    print(normalize_scores([10, 25, 50]));\\n}\",\n      \"complexity\": \"medium\",\n      \"prompt\": \"Write a Jac data processing program that normalizes a list of integer scores to percentages of the maximum score and prints the normalized list.\"\n    },\n    {\n      \"code\": \"node Task {\\n    has title: str;\\n    has minutes: int;\\n\\n    def label() -> str {\\n        return self.title;\\n    }\\n}\\n\\nwalker TaskCounter {\\n    has seen: int = 0;\\n}\\n\\ndef total_minutes(items: list[int]) -> int {\\n    total: int = 0;\\n    for minutes in items {\\n        total = total + minutes;\\n    }\\n    return total;\\n}\\n\\nwith entry {\\n    root() ++> node::Task(title=\\\"design\\\", minutes=30);\\n    root() ++> node::Task(title=\\\"build\\\", minutes=90);\\n    print(total_minutes([30, 90]));\\n}\",\n      \"complexity\": \"medium\",\n      \"prompt\": \"Define a small graph-oriented task model in Jac with task nodes and a walker state type, connect two task nodes from the root, and print the total minutes from a list of task durations.\"\n    },\n    {\n      \"code\": \"node Job {\\n    has name: str;\\n    has duration: int;\\n\\n    def finish_time(start_time: int) -> int {\\n        return start_time + self.duration;\\n    }\\n}\\n\\nedge DependsOn {\\n    has note: str = \\\"required before next job\\\";\\n}\\n\\nwalker ScheduleStats {\\n    has total_duration: int = 0;\\n    has longest_job: int = 0;\\n\\n    def record(duration: int) -> int {\\n        self.total_duration = self.total_duration + duration;\\n        if duration > self.longest_job {\\n            self.longest_job = duration;\\n        }\\n        return self.total_duration;\\n    }\\n}\\n\\ndef buffered_duration(durations: list[int], buffer: int) -> int {\\n    total: int = 0;\\n    for duration in durations {\\n        total = total + duration + buffer;\\n    }\\n    return total;\\n}\\n\\nwith entry {\\n    root() ++> node::Job(name=\\\"extract\\\", duration=20);\\n    root() ++> node::Job(name=\\\"transform\\\", duration=40);\\n    root() ++> node::Job(name=\\\"load\\\", duration=15);\\n    print(buffered_duration([20, 40, 15], 5));\\n}\",\n      \"complexity\": \"hard\",\n      \"prompt\": \"Create a compact Jac dependency-scheduling example with job nodes, an edge type, a walker for schedule statistics, and a function that computes total buffered duration for a list of jobs.\"\n    }\n  ]\n}",
+        "function_call": null,
+        "parsed": null,
+        "refusal": null,
+        "role": "assistant",
+        "tool_calls": null
+      }
+    }
+  ],
+  "created": 1778520860,
+  "id": "chatcmpl-DeOoG5AIV3dEM64GiibnCsPBJSCq7",
+  "model": "gpt-5.5-2026-04-23",
+  "object": "chat.completion",
+  "service_tier": "default",
+  "system_fingerprint": null,
+  "usage": {
+    "completion_tokens": 4655,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 3546,
+      "rejected_prediction_tokens": 0
+    },
+    "prompt_tokens": 5946,
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cached_tokens": 4864
+    },
+    "total_tokens": 10601
+  }
+}

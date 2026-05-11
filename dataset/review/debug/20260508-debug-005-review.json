@@ -1,0 +1,72 @@
+[
+  {
+    "batch_id": "20260508-debug-005",
+    "category": "debug",
+    "criteria_results": {
+      "exactly_one_error": false,
+      "fixed_code_precise": false,
+      "realistic_error": false,
+      "specific_explanation": false
+    },
+    "example_id": "debug-20260508-005-0001",
+    "notes": "Pending manual review.",
+    "review_status": "pending",
+    "reviewer": "manual-reviewer"
+  },
+  {
+    "batch_id": "20260508-debug-005",
+    "category": "debug",
+    "criteria_results": {
+      "exactly_one_error": false,
+      "fixed_code_precise": false,
+      "realistic_error": false,
+      "specific_explanation": false
+    },
+    "example_id": "debug-20260508-005-0002",
+    "notes": "Pending manual review.",
+    "review_status": "pending",
+    "reviewer": "manual-reviewer"
+  },
+  {
+    "batch_id": "20260508-debug-005",
+    "category": "debug",
+    "criteria_results": {
+      "exactly_one_error": false,
+      "fixed_code_precise": false,
+      "realistic_error": false,
+      "specific_explanation": false
+    },
+    "example_id": "debug-20260508-005-0003",
+    "notes": "Pending manual review.",
+    "review_status": "pending",
+    "reviewer": "manual-reviewer"
+  },
+  {
+    "batch_id": "20260508-debug-005",
+    "category": "debug",
+    "criteria_results": {
+      "exactly_one_error": false,
+      "fixed_code_precise": false,
+      "realistic_error": false,
+      "specific_explanation": false
+    },
+    "example_id": "debug-20260508-005-0004",
+    "notes": "Pending manual review.",
+    "review_status": "pending",
+    "reviewer": "manual-reviewer"
+  },
+  {
+    "batch_id": "20260508-debug-005",
+    "category": "debug",
+    "criteria_results": {
+      "exactly_one_error": false,
+      "fixed_code_precise": false,
+      "realistic_error": false,
+      "specific_explanation": false
+    },
+    "example_id": "debug-20260508-005-0005",
+    "notes": "Pending manual review.",
+    "review_status": "pending",
+    "reviewer": "manual-reviewer"
+  }
+]

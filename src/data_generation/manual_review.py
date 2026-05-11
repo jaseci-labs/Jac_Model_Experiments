@@ -79,6 +79,7 @@ def decide_scale_up(
     category: str,
     validation_results: list[ExampleValidationResult],
     review_records: list[ReviewRecord],
+    prompt_revision_count: int = 0,
 ) -> ScaleDecision:
     pass_rates = calculate_pass_rates(validation_results)
     review_total = len(review_records)
@@ -99,7 +100,11 @@ def decide_scale_up(
     if blocking_review_issue:
         reasons.append("blocking review issue")
 
-    decision = ScaleDecisionStatus.SCALE_READY if not reasons else ScaleDecisionStatus.REVISE_PROMPT
+    if reasons and prompt_revision_count >= 2:
+        reasons.append("prompt revision retry limit reached")
+        decision = ScaleDecisionStatus.PAUSED
+    else:
+        decision = ScaleDecisionStatus.SCALE_READY if not reasons else ScaleDecisionStatus.REVISE_PROMPT
     return ScaleDecision(
         batch_id=batch_id,
         category=category,
@@ -108,7 +113,7 @@ def decide_scale_up(
         manual_review_pass_rate=manual_review_pass_rate,
         decision=decision,
         reasons=reasons,
-        prompt_revision_required=decision != ScaleDecisionStatus.SCALE_READY,
+        prompt_revision_required=decision == ScaleDecisionStatus.REVISE_PROMPT,
     )
 
 

@@ -1,0 +1,13 @@
+{
+  "batch_id": "20260508-code_gen-005",
+  "category": "code_gen",
+  "compiler_pass_rate": 0.8,
+  "decision": "revise_prompt",
+  "json_parse_pass_rate": 1.0,
+  "manual_review_pass_rate": 0.0,
+  "prompt_revision_required": true,
+  "reasons": [
+    "manual review pass rate below threshold",
+    "blocking review issue"
+  ]
+}

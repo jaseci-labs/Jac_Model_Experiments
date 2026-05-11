@@ -1,0 +1,40 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "annotations": [],
+        "audio": null,
+        "content": "{\n  \"examples\": [\n    {\n      \"broken_code\": \"def add(a: int, b: int) -> int {\\n    return a + b\\n}\\n\\nwith entry {\\n    print(add(2, 3));\\n}\",\n      \"error_message\": \"Syntax error: expected semicolon after return statement.\",\n      \"error_type\": \"syntax\",\n      \"fix_explanation\": \"Added the missing semicolon after `return a + b` so the return statement is properly terminated.\",\n      \"fixed_code\": \"def add(a: int, b: int) -> int {\\n    return a + b;\\n}\\n\\nwith entry {\\n    print(add(2, 3));\\n}\"\n    },\n    {\n      \"broken_code\": \"def make_count() -> int {\\n    return \\\"five\\\";\\n}\\n\\nwith entry {\\n    print(make_count());\\n}\",\n      \"error_message\": \"Type error: function `make_count` is declared to return int but returns str.\",\n      \"error_type\": \"type\",\n      \"fix_explanation\": \"Changed the return value from the string `\\\"five\\\"` to the integer `5` so it matches the declared return type.\",\n      \"fixed_code\": \"def make_count() -> int {\\n    return 5;\\n}\\n\\nwith entry {\\n    print(make_count());\\n}\"\n    },\n    {\n      \"broken_code\": \"def scale(value: int) -> int {\\n    return value * factor;\\n}\\n\\nwith entry {\\n    print(scale(6));\\n}\",\n      \"error_message\": \"Name error: `factor` is not defined in this scope.\",\n      \"error_type\": \"scope\",\n      \"fix_explanation\": \"Defined `factor` inside the function before it is used, so the multiplication references an in-scope variable.\",\n      \"fixed_code\": \"def scale(value: int) -> int {\\n    factor: int = 3;\\n    return value * factor;\\n}\\n\\nwith entry {\\n    print(scale(6));\\n}\"\n    },\n    {\n      \"broken_code\": \"import from \\\"./missing_math_tools.jac\\\" { double };\\n\\nwith entry {\\n    print(double(4));\\n}\",\n      \"error_message\": \"Import error: could not resolve module `./missing_math_tools.jac`.\",\n      \"error_type\": \"import\",\n      \"fix_explanation\": \"Removed the unresolved external import and defined `double` directly in the module so the code has no missing dependency.\",\n      \"fixed_code\": \"def double(value: int) -> int {\\n    return value * 2;\\n}\\n\\nwith entry {\\n    print(double(4));\\n}\"\n    },\n    {\n      \"broken_code\": \"def label() -> str {\\n    return \\\"alpha\\\";\\n}\\n\\ndef label() -> str {\\n    return \\\"beta\\\";\\n}\\n\\nwith entry {\\n    print(label());\\n}\",\n      \"error_message\": \"Semantic error: symbol `label` is already defined in this module.\",\n      \"error_type\": \"semantic\",\n      \"fix_explanation\": \"Renamed the second function to `backup_label` so the module no longer defines two functions with the same name.\",\n      \"fixed_code\": \"def label() -> str {\\n    return \\\"alpha\\\";\\n}\\n\\ndef backup_label() -> str {\\n    return \\\"beta\\\";\\n}\\n\\nwith entry {\\n    print(label());\\n    print(backup_label());\\n}\"\n    }\n  ]\n}",
+        "function_call": null,
+        "parsed": null,
+        "refusal": null,
+        "role": "assistant",
+        "tool_calls": null
+      }
+    }
+  ],
+  "created": 1778520862,
+  "id": "chatcmpl-DeOoIMkY7VKiKu0C3AqjFcLvGnpa0",
+  "model": "gpt-5.5-2026-04-23",
+  "object": "chat.completion",
+  "service_tier": "default",
+  "system_fingerprint": null,
+  "usage": {
+    "completion_tokens": 2831,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 2048,
+      "rejected_prediction_tokens": 0
+    },
+    "prompt_tokens": 5945,
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cached_tokens": 4864
+    },
+    "total_tokens": 8776
+  }
+}

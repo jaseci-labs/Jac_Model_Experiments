@@ -22,6 +22,12 @@ TASK4_COMPILER_FAILURE_CONSTRAINTS = """Observed compiler-failure guardrails for
 - Keep each Jac code snippet small enough for fast compiler validation.
 """
 
+TASK4_RETRY_CONSTRAINTS = """Additional retry guardrails from prompt v2 validation:
+- Use `not value`, not Python-style `!value`, for boolean negation.
+- For debugging examples, broken_code must produce a compiler error, not only a warning.
+- Avoid hard examples that require nested list mutation, boolean-list indexing, or long shortest-path implementations.
+"""
+
 SHARED_SYSTEM_PROMPT_TEMPLATE = """You generate synthetic supervised fine-tuning examples for the Jac programming language.
 
 Jac is its own programming language. Do not treat Jac as Python, JavaScript, or pseudocode. Prefer idiomatic Jac constructs from the provided context, including walkers, nodes, edges, abilities, imports, type annotations, and graph-oriented patterns when they fit the task.
@@ -261,6 +267,8 @@ def build_prompt_request(
     user_prompt = CATEGORY_PROMPT_TEMPLATES[category].format(**values)
     if prompt_version_number >= 2:
         user_prompt = f"{user_prompt}\n{TASK4_COMPILER_FAILURE_CONSTRAINTS}"
+    if prompt_version_number >= 3:
+        user_prompt = f"{user_prompt}\n{TASK4_RETRY_CONSTRAINTS}"
 
     return {
         "category": category,
