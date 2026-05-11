@@ -1,0 +1,8 @@
+{
+  "batch_id": "20260508-code_gen-001",
+  "category": "code_gen",
+  "errors": [
+    "top-level JSON value must be an array"
+  ],
+  "retry_count": 1
+}

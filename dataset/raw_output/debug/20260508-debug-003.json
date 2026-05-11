@@ -1,0 +1,40 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "annotations": [],
+        "audio": null,
+        "content": "{\n  \"examples\": [\n    {\n      \"broken_code\": \"with entry {\\n    print(\\\"Jac syntax check\\\")\\n}\",\n      \"error_message\": \"SyntaxError: expected ';' after expression statement\",\n      \"error_type\": \"syntax\",\n      \"fix_explanation\": \"Added the missing semicolon after the print call because Jac statements inside a block must be terminated properly.\",\n      \"fixed_code\": \"with entry {\\n    print(\\\"Jac syntax check\\\");\\n}\"\n    },\n    {\n      \"broken_code\": \"node Counter {\\n    has count: int = \\\"five\\\";\\n}\\n\\nwith entry {\\n    c = Counter();\\n    print(c.count);\\n}\",\n      \"error_message\": \"TypeError: expected value of type int for field count, got str\",\n      \"error_type\": \"type\",\n      \"fix_explanation\": \"Changed the default value of the typed node field count from the string \\\"five\\\" to the integer 5 so it matches the declared int type.\",\n      \"fixed_code\": \"node Counter {\\n    has count: int = 5;\\n}\\n\\nwith entry {\\n    c = Counter();\\n    print(c.count);\\n}\"\n    },\n    {\n      \"broken_code\": \"walker Messenger {\\n    text: str = \\\"ready\\\";\\n}\\n\\nwith entry {\\n    print(\\\"ready\\\");\\n}\",\n      \"error_message\": \"WalkerError: walker field declarations must use 'has'\",\n      \"error_type\": \"walker\",\n      \"fix_explanation\": \"Added the has keyword to the walker field declaration because walker state must be declared with has declarations.\",\n      \"fixed_code\": \"walker Messenger {\\n    has text: str = \\\"ready\\\";\\n}\\n\\nwith entry {\\n    print(\\\"ready\\\");\\n}\"\n    },\n    {\n      \"broken_code\": \"with entry {\\n    total = base + 10;\\n    print(total);\\n}\",\n      \"error_message\": \"NameError: name 'base' is not defined\",\n      \"error_type\": \"scope\",\n      \"fix_explanation\": \"Declared and initialized base before using it in the total expression so the name is in scope.\",\n      \"fixed_code\": \"with entry {\\n    base = 7;\\n    total = base + 10;\\n    print(total);\\n}\"\n    },\n    {\n      \"broken_code\": \"import:py from math { squareroot };\\n\\nwith entry {\\n    print(squareroot(16.0));\\n}\",\n      \"error_message\": \"ImportError: cannot import name 'squareroot' from 'math'\",\n      \"error_type\": \"import\",\n      \"fix_explanation\": \"Replaced the nonexistent math import squareroot with the valid sqrt function and updated the call to use sqrt.\",\n      \"fixed_code\": \"import:py from math { sqrt };\\n\\nwith entry {\\n    print(sqrt(16.0));\\n}\"\n    }\n  ]\n}",
+        "function_call": null,
+        "parsed": null,
+        "refusal": null,
+        "role": "assistant",
+        "tool_calls": null
+      }
+    }
+  ],
+  "created": 1778279222,
+  "id": "chatcmpl-DdNws480gOCfoxqwkNRgEkeEfsXxu",
+  "model": "gpt-5.5-2026-04-23",
+  "object": "chat.completion",
+  "service_tier": "default",
+  "system_fingerprint": null,
+  "usage": {
+    "completion_tokens": 3849,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 3171,
+      "rejected_prediction_tokens": 0
+    },
+    "prompt_tokens": 5786,
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cached_tokens": 4864
+    },
+    "total_tokens": 9635
+  }
+}

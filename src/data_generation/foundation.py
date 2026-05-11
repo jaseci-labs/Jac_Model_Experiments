@@ -50,10 +50,14 @@ DATASET_STORAGE_PATHS = {
         "generation": "dataset/logs/generation",
         "parsing": "dataset/logs/parsing",
         "compiler": "dataset/logs/compiler",
+        "validation": "dataset/logs/validation",
         "test": "dataset/logs/test",
         "retry": "dataset/logs/retry",
         "deduplication": "dataset/logs/deduplication",
+        "prompt_revisions": "dataset/logs/prompt_revisions",
+        "scale_decisions": "dataset/logs/scale_decisions",
     },
+    "context": "dataset/context",
     "releases": "dataset/releases",
 }
 

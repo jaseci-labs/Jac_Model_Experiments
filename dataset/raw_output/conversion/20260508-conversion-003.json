@@ -1,0 +1,40 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "annotations": [],
+        "audio": null,
+        "content": "{\n  \"examples\": [\n    {\n      \"conversion_notes\": \"The Python function is converted to a top-level Jac ability with explicit parameter and return types. The loop and accumulator stay imperative, but Jac uses braces and semicolons instead of Python indentation.\",\n      \"jac_code\": \"can factorial(n: int) -> int {\\n    result = 1;\\n    for i in range(2, n + 1) {\\n        result *= i;\\n    }\\n    return result;\\n}\\n\\nwith entry {\\n    print(factorial(5));\\n    print(factorial(0));\\n}\",\n      \"python_code\": \"def factorial(n: int) -> int:\\n    result = 1\\n    for i in range(2, n + 1):\\n        result *= i\\n    return result\\n\\nprint(factorial(5))\\nprint(factorial(0))\"\n    },\n    {\n      \"conversion_notes\": \"The Python class becomes a Jac node because the object represents a domain entity with persistent state. Python methods become node abilities, and fields are declared with has declarations.\",\n      \"jac_code\": \"node BankAccount {\\n    has owner: str;\\n    has balance: float = 0.0;\\n\\n    can deposit(amount: float) {\\n        self.balance += amount;\\n    }\\n\\n    can withdraw(amount: float) -> bool {\\n        if amount > self.balance {\\n            return false;\\n        }\\n        self.balance -= amount;\\n        return true;\\n    }\\n\\n    can summary() -> str {\\n        return self.owner + \\\" has an account balance.\\\";\\n    }\\n}\\n\\nwith entry {\\n    account = BankAccount(owner=\\\"Mira\\\", balance=25.0);\\n    account.deposit(10.0);\\n    print(account.withdraw(20.0));\\n    print(account.balance);\\n    print(account.summary());\\n}\",\n      \"python_code\": \"class BankAccount:\\n    def __init__(self, owner: str, balance: float = 0.0):\\n        self.owner = owner\\n        self.balance = balance\\n\\n    def deposit(self, amount: float) -> None:\\n        self.balance += amount\\n\\n    def withdraw(self, amount: float) -> bool:\\n        if amount > self.balance:\\n            return False\\n        self.balance -= amount\\n        return True\\n\\n    def summary(self) -> str:\\n        return self.owner + \\\" has an account balance.\\\"\\n\\naccount = BankAccount(\\\"Mira\\\", 25.0)\\naccount.deposit(10.0)\\nprint(account.withdraw(20.0))\\nprint(account.balance)\\nprint(account.summary())\"\n    },\n    {\n      \"conversion_notes\": \"The Python utility function is converted to a typed Jac ability. The dictionary update logic is kept explicit so the behavior is clear and independent of Python-specific helpers such as collections.Counter.\",\n      \"jac_code\": \"can word_counts(words: list[str]) -> dict[str, int] {\\n    counts: dict[str, int] = {};\\n    for word in words {\\n        if word in counts {\\n            counts[word] += 1;\\n        } else {\\n            counts[word] = 1;\\n        }\\n    }\\n    return counts;\\n}\\n\\nwith entry {\\n    words = [\\\"red\\\", \\\"blue\\\", \\\"red\\\", \\\"green\\\", \\\"blue\\\", \\\"red\\\"];\\n    print(word_counts(words));\\n}\",\n      \"python_code\": \"def word_counts(words: list[str]) -> dict[str, int]:\\n    counts: dict[str, int] = {}\\n    for word in words:\\n        if word in counts:\\n            counts[word] += 1\\n        else:\\n            counts[word] = 1\\n    return counts\\n\\nwords = [\\\"red\\\", \\\"blue\\\", \\\"red\\\", \\\"green\\\", \\\"blue\\\", \\\"red\\\"]\\nprint(word_counts(words))\"\n    },\n    {\n      \"conversion_notes\": \"The Python graph algorithm is expressed as a Jac ability over a typed adjacency dictionary. The conversion keeps the graph data structure self-contained while using Jac's typed lists and brace-delimited control flow.\",\n      \"jac_code\": \"can shortest_path(graph: dict[str, list[str]], start: str, goal: str) -> list[str] {\\n    queue: list[list[str]] = [[start]];\\n    seen: list[str] = [start];\\n\\n    while len(queue) > 0 {\\n        path = queue.pop(0);\\n        current = path[-1];\\n\\n        if current == goal {\\n            return path;\\n        }\\n\\n        for next_node in graph[current] {\\n            if !(next_node in seen) {\\n                seen.append(next_node);\\n                queue.append(path + [next_node]);\\n            }\\n        }\\n    }\\n\\n    return [];\\n}\\n\\nwith entry {\\n    graph = {\\n        \\\"A\\\": [\\\"B\\\", \\\"C\\\"],\\n        \\\"B\\\": [\\\"D\\\"],\\n        \\\"C\\\": [\\\"D\\\", \\\"E\\\"],\\n        \\\"D\\\": [\\\"F\\\"],\\n        \\\"E\\\": [\\\"F\\\"],\\n        \\\"F\\\": []\\n    };\\n    print(shortest_path(graph, \\\"A\\\", \\\"F\\\"));\\n}\",\n      \"python_code\": \"def shortest_path(graph: dict[str, list[str]], start: str, goal: str) -> list[str]:\\n    queue = [[start]]\\n    seen = {start}\\n\\n    while queue:\\n        path = queue.pop(0)\\n        current = path[-1]\\n\\n        if current == goal:\\n            return path\\n\\n        for next_node in graph[current]:\\n            if next_node not in seen:\\n                seen.add(next_node)\\n                queue.append(path + [next_node])\\n\\n    return []\\n\\ngraph = {\\n    \\\"A\\\": [\\\"B\\\", \\\"C\\\"],\\n    \\\"B\\\": [\\\"D\\\"],\\n    \\\"C\\\": [\\\"D\\\", \\\"E\\\"],\\n    \\\"D\\\": [\\\"F\\\"],\\n    \\\"E\\\": [\\\"F\\\"],\\n    \\\"F\\\": [],\\n}\\nprint(shortest_path(graph, \\\"A\\\", \\\"F\\\"))\"\n    },\n    {\n      \"conversion_notes\": \"The Python tree traversal is rewritten using Jac's graph-oriented model. Tree values become Number nodes, parent-child links are graph edges, and a walker visits connected nodes to accumulate the total instead of calling a recursive Python function.\",\n      \"jac_code\": \"node Number {\\n    has value: int;\\n}\\n\\nwalker SumWalker {\\n    has total: int = 0;\\n\\n    can start with `root entry {\\n        visit [-->];\\n    }\\n\\n    can add with Number entry {\\n        self.total += here.value;\\n        visit [-->];\\n    }\\n}\\n\\nwith entry {\\n    left = Number(value=3);\\n    right = Number(value=4);\\n    child = Number(value=5);\\n\\n    root ++> left;\\n    root ++> right;\\n    left ++> child;\\n\\n    walker = SumWalker();\\n    walker spawn root;\\n    print(walker.total);\\n}\",\n      \"python_code\": \"class TreeNode:\\n    def __init__(self, value: int):\\n        self.value = value\\n        self.children = []\\n\\n    def add_child(self, child: \\\"TreeNode\\\") -> None:\\n        self.children.append(child)\\n\\n\\ndef sum_tree(node: TreeNode) -> int:\\n    total = node.value\\n    for child in node.children:\\n        total += sum_tree(child)\\n    return total\\n\\nroot = TreeNode(0)\\nleft = TreeNode(3)\\nright = TreeNode(4)\\nchild = TreeNode(5)\\nroot.add_child(left)\\nroot.add_child(right)\\nleft.add_child(child)\\nprint(sum_tree(root))\"\n    }\n  ]\n}",
+        "function_call": null,
+        "parsed": null,
+        "refusal": null,
+        "role": "assistant",
+        "tool_calls": null
+      }
+    }
+  ],
+  "created": 1778279792,
+  "id": "chatcmpl-DdO642yMsiabMFUkLSCsmo37LayeI",
+  "model": "gpt-5.5-2026-04-23",
+  "object": "chat.completion",
+  "service_tier": "default",
+  "system_fingerprint": null,
+  "usage": {
+    "completion_tokens": 4343,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 2559,
+      "rejected_prediction_tokens": 0
+    },
+    "prompt_tokens": 5785,
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cached_tokens": 4864
+    },
+    "total_tokens": 10128
+  }
+}

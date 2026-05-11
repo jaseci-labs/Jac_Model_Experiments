@@ -1,0 +1,8 @@
+{
+  "batch_id": "20260508-debug-001",
+  "category": "debug",
+  "errors": [
+    "top-level JSON value must be an array"
+  ],
+  "retry_count": 1
+}

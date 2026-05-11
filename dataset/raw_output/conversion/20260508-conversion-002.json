@@ -1,0 +1,40 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "annotations": [],
+        "audio": null,
+        "content": "{ \"examples\": [\n  {\n    \"conversion_notes\": \"The Python function becomes a top-level Jac ability with explicit parameter and return types. The loop and conditional logic are kept straightforward, while Jac statement blocks use braces and semicolons.\",\n    \"jac_code\": \"can sum_even(nums: list) -> int {\\n    total = 0;\\n    for n in nums {\\n        if n % 2 == 0 {\\n            total += n;\\n        }\\n    }\\n    return total;\\n}\\n\\nwith entry {\\n    values = [1, 2, 3, 4, 5, 6];\\n    print(sum_even(values));\\n}\",\n    \"python_code\": \"def sum_even(nums):\\n    total = 0\\n    for n in nums:\\n        if n % 2 == 0:\\n            total += n\\n    return total\\n\\nvalues = [1, 2, 3, 4, 5, 6]\\nprint(sum_even(values))\"\n  },\n  {\n    \"conversion_notes\": \"The Python class is represented as a Jac node because it models a domain entity with persistent fields. Instance methods are converted to node abilities, and field declarations use Jac has clauses.\",\n    \"jac_code\": \"node TodoItem {\\n    has title: str;\\n    has done: bool = False;\\n\\n    can mark_done() -> None {\\n        self.done = True;\\n    }\\n\\n    can label() -> str {\\n        if self.done {\\n            return \\\"[x] \\\" + self.title;\\n        }\\n        return \\\"[ ] \\\" + self.title;\\n    }\\n}\\n\\nwith entry {\\n    task = TodoItem(title=\\\"write report\\\");\\n    print(task.label());\\n    task.mark_done();\\n    print(task.label());\\n}\",\n    \"python_code\": \"class TodoItem:\\n    def __init__(self, title, done=False):\\n        self.title = title\\n        self.done = done\\n\\n    def mark_done(self):\\n        self.done = True\\n\\n    def label(self):\\n        if self.done:\\n            return \\\"[x] \\\" + self.title\\n        return \\\"[ ] \\\" + self.title\\n\\ntask = TodoItem(\\\"write report\\\")\\nprint(task.label())\\ntask.mark_done()\\nprint(task.label())\"\n  },\n  {\n    \"conversion_notes\": \"The Python utility function becomes a typed Jac ability. The dictionary-based counting pattern is preserved, but the Jac version uses brace-delimited control flow and semicolon-terminated statements.\",\n    \"jac_code\": \"can word_counts(words: list) -> dict {\\n    counts = {};\\n    for word in words {\\n        key = word.lower();\\n        if key in counts {\\n            counts[key] += 1;\\n        } else {\\n            counts[key] = 1;\\n        }\\n    }\\n    return counts;\\n}\\n\\nwith entry {\\n    data = [\\\"Jac\\\", \\\"python\\\", \\\"Jac\\\", \\\"Graph\\\", \\\"graph\\\"];\\n    print(word_counts(data));\\n}\",\n    \"python_code\": \"def word_counts(words):\\n    counts = {}\\n    for word in words:\\n        key = word.lower()\\n        if key in counts:\\n            counts[key] += 1\\n        else:\\n            counts[key] = 1\\n    return counts\\n\\ndata = [\\\"Jac\\\", \\\"python\\\", \\\"Jac\\\", \\\"Graph\\\", \\\"graph\\\"]\\nprint(word_counts(data))\"\n  },\n  {\n    \"conversion_notes\": \"The Python adjacency-list traversal is rewritten as an object-spatial Jac graph. Places are nodes connected with graph edges, and a walker performs the traversal while collecting names instead of manually recursing over a dictionary.\",\n    \"jac_code\": \"node Place {\\n    has name: str;\\n}\\n\\nwalker CollectNames {\\n    has names: list = [];\\n\\n    can start with `root entry {\\n        visit [-->];\\n    }\\n\\n    can collect with Place entry {\\n        self.names.append(here.name);\\n        visit [-->];\\n    }\\n}\\n\\nwith entry {\\n    a = Place(name=\\\"A\\\");\\n    b = Place(name=\\\"B\\\");\\n    c = Place(name=\\\"C\\\");\\n    d = Place(name=\\\"D\\\");\\n    root ++> a;\\n    a ++> b;\\n    a ++> c;\\n    c ++> d;\\n    w = CollectNames();\\n    root spawn w;\\n    print(w.names);\\n}\",\n    \"python_code\": \"def collect_names(graph, start):\\n    names = []\\n\\n    def visit(node):\\n        names.append(node)\\n        for child in graph.get(node, []):\\n            visit(child)\\n\\n    visit(start)\\n    return names\\n\\ngraph = {\\n    \\\"A\\\": [\\\"B\\\", \\\"C\\\"],\\n    \\\"B\\\": [],\\n    \\\"C\\\": [\\\"D\\\"],\\n    \\\"D\\\": []\\n}\\nprint(collect_names(graph, \\\"A\\\"))\"\n  },\n  {\n    \"conversion_notes\": \"The Python recursive tree class is converted into Jac nodes connected as a graph. The aggregation is expressed as a walker traversal, making the graph structure explicit and using Jac's object-spatial style rather than nested Python child lists.\",\n    \"jac_code\": \"node Employee {\\n    has name: str;\\n    has salary: int;\\n}\\n\\nwalker PayrollTotal {\\n    has total: int = 0;\\n\\n    can begin with `root entry {\\n        visit [-->];\\n    }\\n\\n    can add_salary with Employee entry {\\n        self.total += here.salary;\\n        visit [-->];\\n    }\\n}\\n\\nwith entry {\\n    manager = Employee(name=\\\"Mira\\\", salary=120);\\n    engineer = Employee(name=\\\"Lee\\\", salary=90);\\n    designer = Employee(name=\\\"Ari\\\", salary=80);\\n    intern = Employee(name=\\\"Noor\\\", salary=30);\\n    root ++> manager;\\n    manager ++> engineer;\\n    manager ++> designer;\\n    engineer ++> intern;\\n    payroll = PayrollTotal();\\n    root spawn payroll;\\n    print(payroll.total);\\n}\",\n    \"python_code\": \"class Employee:\\n    def __init__(self, name, salary):\\n        self.name = name\\n        self.salary = salary\\n        self.children = []\\n\\n    def add_child(self, employee):\\n        self.children.append(employee)\\n\\n\\ndef total_salary(employee):\\n    total = employee.salary\\n    for child in employee.children:\\n        total += total_salary(child)\\n    return total\\n\\nmanager = Employee(\\\"Mira\\\", 120)\\nengineer = Employee(\\\"Lee\\\", 90)\\ndesigner = Employee(\\\"Ari\\\", 80)\\nintern = Employee(\\\"Noor\\\", 30)\\nmanager.add_child(engineer)\\nmanager.add_child(designer)\\nengineer.add_child(intern)\\nprint(total_salary(manager))\"\n  }\n] }",
+        "function_call": null,
+        "parsed": null,
+        "refusal": null,
+        "role": "assistant",
+        "tool_calls": null
+      }
+    }
+  ],
+  "created": 1778278699,
+  "id": "chatcmpl-DdNoRKAY6MO9Fz5EILX2Oo8lfjJhM",
+  "model": "gpt-5.5-2026-04-23",
+  "object": "chat.completion",
+  "service_tier": "default",
+  "system_fingerprint": null,
+  "usage": {
+    "completion_tokens": 4647,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 3056,
+      "rejected_prediction_tokens": 0
+    },
+    "prompt_tokens": 5785,
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cached_tokens": 4864
+    },
+    "total_tokens": 10432
+  }
+}

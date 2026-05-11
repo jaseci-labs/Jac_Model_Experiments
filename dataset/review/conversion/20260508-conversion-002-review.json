@@ -1,0 +1,72 @@
+[
+  {
+    "batch_id": "20260508-conversion-002",
+    "category": "conversion",
+    "criteria_results": {
+      "idiomatic_jac": false,
+      "meaningful_conversion_notes": false,
+      "not_mechanical_translation": false,
+      "preserves_behavior": false
+    },
+    "example_id": "conversion-20260508-002-0001",
+    "notes": "Pending manual review.",
+    "review_status": "pending",
+    "reviewer": "manual-reviewer"
+  },
+  {
+    "batch_id": "20260508-conversion-002",
+    "category": "conversion",
+    "criteria_results": {
+      "idiomatic_jac": false,
+      "meaningful_conversion_notes": false,
+      "not_mechanical_translation": false,
+      "preserves_behavior": false
+    },
+    "example_id": "conversion-20260508-002-0002",
+    "notes": "Pending manual review.",
+    "review_status": "pending",
+    "reviewer": "manual-reviewer"
+  },
+  {
+    "batch_id": "20260508-conversion-002",
+    "category": "conversion",
+    "criteria_results": {
+      "idiomatic_jac": false,
+      "meaningful_conversion_notes": false,
+      "not_mechanical_translation": false,
+      "preserves_behavior": false
+    },
+    "example_id": "conversion-20260508-002-0003",
+    "notes": "Pending manual review.",
+    "review_status": "pending",
+    "reviewer": "manual-reviewer"
+  },
+  {
+    "batch_id": "20260508-conversion-002",
+    "category": "conversion",
+    "criteria_results": {
+      "idiomatic_jac": false,
+      "meaningful_conversion_notes": false,
+      "not_mechanical_translation": false,
+      "preserves_behavior": false
+    },
+    "example_id": "conversion-20260508-002-0004",
+    "notes": "Pending manual review.",
+    "review_status": "pending",
+    "reviewer": "manual-reviewer"
+  },
+  {
+    "batch_id": "20260508-conversion-002",
+    "category": "conversion",
+    "criteria_results": {
+      "idiomatic_jac": false,
+      "meaningful_conversion_notes": false,
+      "not_mechanical_translation": false,
+      "preserves_behavior": false
+    },
+    "example_id": "conversion-20260508-002-0005",
+    "notes": "Pending manual review.",
+    "review_status": "pending",
+    "reviewer": "manual-reviewer"
+  }
+]

@@ -1,0 +1,72 @@
+[
+  {
+    "batch_id": "20260508-explanation-003",
+    "category": "explanation",
+    "criteria_results": {
+      "accurate_explanation": false,
+      "granularity_matches_request": false,
+      "not_python_behavior": false,
+      "specific_jac_semantics": false
+    },
+    "example_id": "explanation-20260508-003-0001",
+    "notes": "Pending manual review.",
+    "review_status": "pending",
+    "reviewer": "manual-reviewer"
+  },
+  {
+    "batch_id": "20260508-explanation-003",
+    "category": "explanation",
+    "criteria_results": {
+      "accurate_explanation": false,
+      "granularity_matches_request": false,
+      "not_python_behavior": false,
+      "specific_jac_semantics": false
+    },
+    "example_id": "explanation-20260508-003-0002",
+    "notes": "Pending manual review.",
+    "review_status": "pending",
+    "reviewer": "manual-reviewer"
+  },
+  {
+    "batch_id": "20260508-explanation-003",
+    "category": "explanation",
+    "criteria_results": {
+      "accurate_explanation": false,
+      "granularity_matches_request": false,
+      "not_python_behavior": false,
+      "specific_jac_semantics": false
+    },
+    "example_id": "explanation-20260508-003-0003",
+    "notes": "Pending manual review.",
+    "review_status": "pending",
+    "reviewer": "manual-reviewer"
+  },
+  {
+    "batch_id": "20260508-explanation-003",
+    "category": "explanation",
+    "criteria_results": {
+      "accurate_explanation": false,
+      "granularity_matches_request": false,
+      "not_python_behavior": false,
+      "specific_jac_semantics": false
+    },
+    "example_id": "explanation-20260508-003-0004",
+    "notes": "Pending manual review.",
+    "review_status": "pending",
+    "reviewer": "manual-reviewer"
+  },
+  {
+    "batch_id": "20260508-explanation-003",
+    "category": "explanation",
+    "criteria_results": {
+      "accurate_explanation": false,
+      "granularity_matches_request": false,
+      "not_python_behavior": false,
+      "specific_jac_semantics": false
+    },
+    "example_id": "explanation-20260508-003-0005",
+    "notes": "Pending manual review.",
+    "review_status": "pending",
+    "reviewer": "manual-reviewer"
+  }
+]

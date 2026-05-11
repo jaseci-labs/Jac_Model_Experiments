@@ -1,0 +1,40 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "annotations": [],
+        "audio": null,
+        "content": "{\"examples\":[{\"code\":\"can gcd(a: int, b: int) -> int {\\n    x: int = a;\\n    y: int = b;\\n\\n    while y != 0 {\\n        r: int = x % y;\\n        x = y;\\n        y = r;\\n    }\\n\\n    if x < 0 {\\n        return 0 - x;\\n    }\\n    return x;\\n}\\n\\nwith entry {\\n    print(gcd(84, 30));\\n}\",\"complexity\":\"simple\",\"prompt\":\"Write a complete Jac utility program that computes the greatest common divisor of two integers using a loop and prints the result for 84 and 30.\"},{\"code\":\"can count_long_words(words: list[str], min_len: int) -> int {\\n    count: int = 0;\\n\\n    for word in words {\\n        if len(word) >= min_len {\\n            count += 1;\\n        }\\n    }\\n\\n    return count;\\n}\\n\\nwith entry {\\n    sample: list[str] = [\\\"jac\\\", \\\"walker\\\", \\\"node\\\", \\\"ability\\\", \\\"edge\\\"];\\n    print(count_long_words(sample, 5));\\n}\",\"complexity\":\"simple\",\"prompt\":\"Write a complete Jac data processing program that counts how many words in a list have at least a requested minimum length, then prints the count for a sample list.\"},{\"code\":\"can route_response(method: str, path: str) -> str {\\n    if method == \\\"GET\\\" {\\n        if path == \\\"/\\\" {\\n            return \\\"home page\\\";\\n        }\\n        if path == \\\"/status\\\" {\\n            return \\\"service is healthy\\\";\\n        }\\n    }\\n\\n    if method == \\\"POST\\\" {\\n        if path == \\\"/items\\\" {\\n            return \\\"item created\\\";\\n        }\\n    }\\n\\n    return \\\"404 not found\\\";\\n}\\n\\nwith entry {\\n    print(route_response(\\\"GET\\\", \\\"/status\\\"));\\n    print(route_response(\\\"POST\\\", \\\"/items\\\"));\\n    print(route_response(\\\"DELETE\\\", \\\"/items\\\"));\\n}\",\"complexity\":\"medium\",\"prompt\":\"Write a complete Jac program that simulates a tiny web router. It should return different text for GET /, GET /status, and POST /items, and return a 404 message otherwise.\"},{\"code\":\"node Number {\\n    has value: int = 0;\\n}\\n\\nedge Link {}\\n\\nwalker SumWalk {\\n    has total: int = 0;\\n\\n    can count with Number entry {\\n        self.total += here.value;\\n        visit [-->];\\n    }\\n}\\n\\nwith entry {\\n    first = Number(value=3);\\n    second = Number(value=7);\\n    third = Number(value=11);\\n\\n    first +:Link:+> second;\\n    second +:Link:+> third;\\n\\n    counter = SumWalk();\\n    first spawn counter;\\n    print(counter.total);\\n}\",\"complexity\":\"medium\",\"prompt\":\"Write a complete Jac graph program with Number nodes connected by Link edges. Use a walker to visit the directed chain, sum the node values, and print the total.\"},{\"code\":\"can choose_next(distance: list[int], done: list[bool]) -> int {\\n    best: int = 1000000;\\n    best_idx: int = -1;\\n    i: int = 0;\\n\\n    while i < len(distance) {\\n        if done[i] == False {\\n            if distance[i] < best {\\n                best = distance[i];\\n                best_idx = i;\\n            }\\n        }\\n        i += 1;\\n    }\\n\\n    return best_idx;\\n}\\n\\ncan shortest_paths(cost: list[list[int]], start: int) -> list[int] {\\n    n: int = len(cost);\\n    distance: list[int] = [];\\n    done: list[bool] = [];\\n    i: int = 0;\\n\\n    while i < n {\\n        distance.append(1000000);\\n        done.append(False);\\n        i += 1;\\n    }\\n\\n    distance[start] = 0;\\n    rounds: int = 0;\\n\\n    while rounds < n {\\n        current: int = choose_next(distance, done);\\n        if current == -1 {\\n            break;\\n        }\\n\\n        done[current] = True;\\n        neighbor: int = 0;\\n        while neighbor < n {\\n            weight: int = cost[current][neighbor];\\n            if weight > 0 {\\n                candidate: int = distance[current] + weight;\\n                if candidate < distance[neighbor] {\\n                    distance[neighbor] = candidate;\\n                }\\n            }\\n            neighbor += 1;\\n        }\\n        rounds += 1;\\n    }\\n\\n    return distance;\\n}\\n\\nwith entry {\\n    graph: list[list[int]] = [\\n        [0, 4, 2, 0],\\n        [0, 0, 1, 5],\\n        [0, 0, 0, 8],\\n        [0, 0, 0, 0]\\n    ];\\n    print(shortest_paths(graph, 0));\\n}\",\"complexity\":\"hard\",\"prompt\":\"Write a complete Jac graph algorithm program that represents a weighted directed graph as an adjacency matrix, computes shortest path distances from node 0 using Dijkstra-style relaxation, and prints the resulting distance list.\"}]}",
+        "function_call": null,
+        "parsed": null,
+        "refusal": null,
+        "role": "assistant",
+        "tool_calls": null
+      }
+    }
+  ],
+  "created": 1778279029,
+  "id": "chatcmpl-DdNtld4bhUTIrumC6LiEK1VzxLnYg",
+  "model": "gpt-5.5-2026-04-23",
+  "object": "chat.completion",
+  "service_tier": "default",
+  "system_fingerprint": null,
+  "usage": {
+    "completion_tokens": 4333,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 3070,
+      "rejected_prediction_tokens": 0
+    },
+    "prompt_tokens": 5787,
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cached_tokens": 4864
+    },
+    "total_tokens": 10120
+  }
+}

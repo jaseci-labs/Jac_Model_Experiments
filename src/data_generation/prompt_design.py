@@ -14,6 +14,14 @@ from data_generation.foundation import (
 DEFAULT_CONTEXT_BUNDLE_VERSION = "jac-context-v1"
 DEFAULT_PROMPT_VERSION = 1
 
+TASK4_COMPILER_FAILURE_CONSTRAINTS = """Observed compiler-failure guardrails for this prompt revision:
+- Use `def`, not `can`, for function-style declarations.
+- Never use `import:py`; prefer examples that do not require Python imports.
+- Use `root()` instead of bare `root`.
+- Use simple built-in edge connection syntax such as `++>` unless the context bundle shows a typed edge syntax you can reproduce exactly.
+- Keep each Jac code snippet small enough for fast compiler validation.
+"""
+
 SHARED_SYSTEM_PROMPT_TEMPLATE = """You generate synthetic supervised fine-tuning examples for the Jac programming language.
 
 Jac is its own programming language. Do not treat Jac as Python, JavaScript, or pseudocode. Prefer idiomatic Jac constructs from the provided context, including walkers, nodes, edges, abilities, imports, type annotations, and graph-oriented patterns when they fit the task.
@@ -250,6 +258,10 @@ def build_prompt_request(
     if template_overrides:
         values.update(template_overrides)
 
+    user_prompt = CATEGORY_PROMPT_TEMPLATES[category].format(**values)
+    if prompt_version_number >= 2:
+        user_prompt = f"{user_prompt}\n{TASK4_COMPILER_FAILURE_CONSTRAINTS}"
+
     return {
         "category": category,
         "prompt_version": prompt_version,
@@ -258,7 +270,7 @@ def build_prompt_request(
             context_bundle_version=context_bundle_version,
             context_bundle=context_bundle,
         ),
-        "user_prompt": CATEGORY_PROMPT_TEMPLATES[category].format(**values),
+        "user_prompt": user_prompt,
         "response_schema": schema_for_category(category),
         "parser_expectations": JSON_PARSER_EXPECTATIONS.copy(),
     }

@@ -1,0 +1,40 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "annotations": [],
+        "audio": null,
+        "content": "{ \"examples\": [\n  {\n    \"conversion_notes\": \"Converted the standalone Python function into a top-level Jac ability using explicit list and numeric type annotations. The Jac version keeps the same min-max normalization behavior but uses Jac block syntax, semicolons, and an entry block for the runnable example instead of Python's if-main style.\",\n    \"jac_code\": \"can normalize_scores(scores: list[int]) -> list[float] {\\n    if len(scores) == 0 {\\n        return [];\\n    }\\n    low = scores[0];\\n    high = scores[0];\\n    for score in scores {\\n        if score < low {\\n            low = score;\\n        }\\n        if score > high {\\n            high = score;\\n        }\\n    }\\n    if high == low {\\n        result = [];\\n        for score in scores {\\n            result.append(0.0);\\n        }\\n        return result;\\n    }\\n    result = [];\\n    spread = high - low;\\n    for score in scores {\\n        result.append((score - low) / spread);\\n    }\\n    return result;\\n}\\n\\nwith entry {\\n    print(normalize_scores([10, 20, 30]));\\n}\",\n    \"python_code\": \"def normalize_scores(scores):\\n    if not scores:\\n        return []\\n    low = min(scores)\\n    high = max(scores)\\n    if high == low:\\n        return [0.0 for _ in scores]\\n    spread = high - low\\n    return [(score - low) / spread for score in scores]\\n\\nprint(normalize_scores([10, 20, 30]))\"\n  },\n  {\n    \"conversion_notes\": \"Replaced the Python class with a Jac node because the account is a stateful domain entity that may participate in a graph later. Python instance methods become node abilities, fields become has declarations, and the executable example is placed in a Jac entry block.\",\n    \"jac_code\": \"node BankAccount {\\n    has owner: str;\\n    has balance: int = 0;\\n\\n    can deposit(amount: int) -> int {\\n        self.balance += amount;\\n        return self.balance;\\n    }\\n\\n    can withdraw(amount: int) -> bool {\\n        if amount <= self.balance {\\n            self.balance -= amount;\\n            return True;\\n        }\\n        return False;\\n    }\\n}\\n\\nwith entry {\\n    acct = BankAccount(owner=\\\"Mira\\\", balance=40);\\n    acct.deposit(15);\\n    print(acct.withdraw(20));\\n    print(acct.balance);\\n}\",\n    \"python_code\": \"class BankAccount:\\n    def __init__(self, owner, balance=0):\\n        self.owner = owner\\n        self.balance = balance\\n\\n    def deposit(self, amount):\\n        self.balance += amount\\n        return self.balance\\n\\n    def withdraw(self, amount):\\n        if amount <= self.balance:\\n            self.balance -= amount\\n            return True\\n        return False\\n\\nacct = BankAccount(\\\"Mira\\\", 40)\\nacct.deposit(15)\\nprint(acct.withdraw(20))\\nprint(acct.balance)\"\n  },\n  {\n    \"conversion_notes\": \"Translated the Python dictionary utility into a Jac ability that works over typed lists of strings and returns a typed dictionary. The conversion keeps the same counting algorithm while using Jac control-flow blocks and semicolon-terminated statements rather than Python indentation.\",\n    \"jac_code\": \"can word_counts(words: list[str]) -> dict[str, int] {\\n    counts = {};\\n    for word in words {\\n        if word in counts {\\n            counts[word] += 1;\\n        } else {\\n            counts[word] = 1;\\n        }\\n    }\\n    return counts;\\n}\\n\\nwith entry {\\n    print(word_counts([\\\"red\\\", \\\"blue\\\", \\\"red\\\", \\\"green\\\", \\\"blue\\\", \\\"red\\\"]));\\n}\",\n    \"python_code\": \"def word_counts(words):\\n    counts = {}\\n    for word in words:\\n        if word in counts:\\n            counts[word] += 1\\n        else:\\n            counts[word] = 1\\n    return counts\\n\\nprint(word_counts([\\\"red\\\", \\\"blue\\\", \\\"red\\\", \\\"green\\\", \\\"blue\\\", \\\"red\\\"]))\"\n  },\n  {\n    \"conversion_notes\": \"Rewrote the Python adjacency-list DFS as an idiomatic Jac graph traversal. The Python dictionary of outgoing links becomes actual Jac node-to-node edges, and the recursive traversal is replaced with a walker that visits connected nodes and accumulates their values.\",\n    \"jac_code\": \"node Place {\\n    has name: str;\\n    has value: int;\\n}\\n\\nwalker SumReachable {\\n    has total: int = 0;\\n\\n    can start with `root entry {\\n        visit [-->];\\n    }\\n\\n    can add_place with Place entry {\\n        self.total += here.value;\\n        visit [-->];\\n    }\\n\\n    can report with `root exit {\\n        print(self.total);\\n    }\\n}\\n\\nwith entry {\\n    alpha = Place(name=\\\"alpha\\\", value=3);\\n    beta = Place(name=\\\"beta\\\", value=5);\\n    gamma = Place(name=\\\"gamma\\\", value=7);\\n    delta = Place(name=\\\"delta\\\", value=11);\\n\\n    root ++> alpha;\\n    alpha ++> beta;\\n    alpha ++> gamma;\\n    beta ++> delta;\\n\\n    SumReachable() spawn root;\\n}\",\n    \"python_code\": \"graph = {\\n    \\\"alpha\\\": [\\\"beta\\\", \\\"gamma\\\"],\\n    \\\"beta\\\": [\\\"delta\\\"],\\n    \\\"gamma\\\": [],\\n    \\\"delta\\\": []\\n}\\nvalues = {\\\"alpha\\\": 3, \\\"beta\\\": 5, \\\"gamma\\\": 7, \\\"delta\\\": 11}\\n\\ndef sum_reachable(start, seen=None):\\n    if seen is None:\\n        seen = set()\\n    if start in seen:\\n        return 0\\n    seen.add(start)\\n    total = values[start]\\n    for nxt in graph[start]:\\n        total += sum_reachable(nxt, seen)\\n    return total\\n\\nprint(sum_reachable(\\\"alpha\\\"))\"\n  },\n  {\n    \"conversion_notes\": \"Converted a small Python parsing utility into a Jac ability returning a dictionary. The behavior is preserved for ampersand-separated key-value pairs, while the Jac version uses explicit types and a with entry block for execution.\",\n    \"jac_code\": \"can parse_query(query: str) -> dict[str, str] {\\n    result = {};\\n    if query == \\\"\\\" {\\n        return result;\\n    }\\n    pairs = query.split(\\\"&\\\");\\n    for pair in pairs {\\n        parts = pair.split(\\\"=\\\");\\n        if len(parts) == 2 {\\n            result[parts[0]] = parts[1];\\n        }\\n    }\\n    return result;\\n}\\n\\nwith entry {\\n    print(parse_query(\\\"user=ana&role=admin&active=yes\\\"));\\n}\",\n    \"python_code\": \"def parse_query(query):\\n    result = {}\\n    if query == \\\"\\\":\\n        return result\\n    for pair in query.split(\\\"&\\\"):\\n        parts = pair.split(\\\"=\\\")\\n        if len(parts) == 2:\\n            result[parts[0]] = parts[1]\\n    return result\\n\\nprint(parse_query(\\\"user=ana&role=admin&active=yes\\\"))\"\n  }\n] }",
+        "function_call": null,
+        "parsed": null,
+        "refusal": null,
+        "role": "assistant",
+        "tool_calls": null
+      }
+    }
+  ],
+  "created": 1778280116,
+  "id": "chatcmpl-DdOBIympEORYyxq3asuXqQsikuD2z",
+  "model": "gpt-5.5-2026-04-23",
+  "object": "chat.completion",
+  "service_tier": "default",
+  "system_fingerprint": null,
+  "usage": {
+    "completion_tokens": 4754,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 3050,
+      "rejected_prediction_tokens": 0
+    },
+    "prompt_tokens": 5785,
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cached_tokens": 4864
+    },
+    "total_tokens": 10539
+  }
+}

@@ -72,6 +72,22 @@ def test_prompt_request_includes_context_bundle_and_strict_json_schema():
     json.dumps(request["response_schema"])
 
 
+def test_category_prompts_include_task4_compiler_failure_constraints():
+    for category in SCRIPTED_CATEGORIES:
+        request = build_prompt_request(
+            category=category,
+            context_bundle="Jac context",
+            requested_count=5,
+            prompt_version_number=2,
+        )
+        user_prompt = request["user_prompt"]
+
+        assert "Use `def`, not `can`, for function-style declarations." in user_prompt
+        assert "Never use `import:py`" in user_prompt
+        assert "Use `root()` instead of bare `root`" in user_prompt
+        assert "Keep each Jac code snippet small enough for fast compiler validation." in user_prompt
+
+
 def test_parser_expectations_reject_markdown_and_extra_prose():
     assert JSON_PARSER_EXPECTATIONS["top_level"] == "array"
     assert JSON_PARSER_EXPECTATIONS["allow_markdown_fences"] is False
