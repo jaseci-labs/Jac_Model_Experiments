@@ -1,7 +1,0 @@
-{
-  "batch_id": "20260511-conversion-003",
-  "category": "conversion",
-  "example_count": 5,
-  "model": "gpt-5.5",
-  "prompt_version": "prompt-conversion-v3"
-}

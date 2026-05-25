@@ -1,8 +1,0 @@
-{
-  "batch_id": "20260508-explanation-001",
-  "category": "explanation",
-  "errors": [
-    "top-level JSON value must be an array"
-  ],
-  "retry_count": 1
-}

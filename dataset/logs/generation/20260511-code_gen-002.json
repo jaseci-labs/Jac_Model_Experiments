@@ -1,7 +1,0 @@
-{
-  "batch_id": "20260511-code_gen-002",
-  "category": "code_gen",
-  "example_count": 5,
-  "model": "gpt-5.5",
-  "prompt_version": "prompt-code_gen-v1"
-}

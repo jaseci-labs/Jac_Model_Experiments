@@ -1,8 +1,0 @@
-{
-  "batch_id": "20260508-conversion-001",
-  "category": "conversion",
-  "errors": [
-    "top-level JSON value must be an array"
-  ],
-  "retry_count": 1
-}

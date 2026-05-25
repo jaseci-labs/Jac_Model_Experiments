@@ -1,7 +1,0 @@
-{
-  "batch_id": "20260511-conversion-001",
-  "category": "conversion",
-  "example_count": 5,
-  "model": "curated-task4-pilot",
-  "prompt_version": "prompt-conversion-v4"
-}

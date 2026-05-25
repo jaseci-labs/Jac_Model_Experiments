@@ -1,7 +1,0 @@
-{
-  "batch_id": "20260511-debug-001",
-  "category": "debug",
-  "example_count": 5,
-  "model": "curated-task4-pilot",
-  "prompt_version": "prompt-debug-v4"
-}
