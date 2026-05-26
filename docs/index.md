@@ -7,6 +7,8 @@ This documentation covers the Jac synthetic data pipeline for both maintainers a
 - Maintainers: [`pipeline.md`](pipeline.md), [`dataset.md`](dataset.md), [`quality.md`](quality.md), [`operations.md`](operations.md), then [`tasks/`](tasks/).
 - Dataset consumers: [`stats.md`](stats.md), [`dataset.md`](dataset.md), [`quality.md`](quality.md), and release artifacts under `dataset/releases/` when a version is frozen.
 - Operators scaling data: [`operations.md`](operations.md), [`scale_runbook.md`](scale_runbook.md), and [`tasks/task6.md`](tasks/task6.md).
+- Full-app strategy reviewers: [`newdatagenstrat/`](newdatagenstrat/) for the proposed Claude Code + Jac MCP app-generation workflow.
+- Model selection: [`modeltesting/`](modeltesting/) for the 3-model comparison strategy (Gemma 4, Qwen3-Coder, DeepSeek-V3-Lite) on 5k sample data before full-scale generation.
 
 ## Pages
 
@@ -17,6 +19,8 @@ This documentation covers the Jac synthetic data pipeline for both maintainers a
 - [`operations.md`](operations.md): commands for readiness, stats, scale planning, manual review, trajectory ingestion, audit, and freeze.
 - [`stats.md`](stats.md): generated dataset snapshot from current repository artifacts.
 - [`scale_runbook.md`](scale_runbook.md): detailed scale and release runbook.
+- [`newdatagenstrat/`](newdatagenstrat/): proposed full-app generation strategy with tests, repair loops, MCP/plugin validation, and DPO logging.
+- [`modeltesting/`](modeltesting/): model comparison strategy and evaluation methodology for testing Gemma 4 26B A4B, Qwen3-Coder-30B-A3B, and DeepSeek-V3-Lite on a 5k example sample before committing to full-scale generation.
 - [`tasks/`](tasks/): roadmap and task-by-task build plan for the pipeline.
 
 ## Source Of Truth
