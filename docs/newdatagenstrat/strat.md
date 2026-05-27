@@ -48,6 +48,8 @@ Every language construct must appear in the training data in proportion to how o
 
 Synthetic-only is bearable because rejection sampling is free. Generate 100 candidates, keep the 1 that compiles and passes tests, discard the rest. This lets you use cheap, faster, lower-quality generators for bulk volume — failure is silent and cheap. Every other anchor degrades if the compiler step is skipped or softened.
 
+However, the compiler alone is insufficient. Code that compiles can still produce incorrect results. Following the MultiPL-T approach (Cassano et al. 2024), cross-compiled tests are the second oracle. Tests generated in Python (where LLMs are reliable) are compiled to Jac using a deterministic rule-based test compiler, then run against Jac translations. This eliminates LLM hallucination from the test layer and catches semantic errors that the compiler misses. For deterministic categories, test validation is a hard gate alongside compilation.
+
 ### 3. Python is the proxy distribution
 
 Real Jac doesn't exist, but real Python does, and Jac is built on Python. Any frontier model produces idiomatic Python at very high quality. Generating Python tasks at scale and translating them to idiomatic Jac inherits the entire shape of real-world software problems — the kinds of data structures, algorithms, control flows, error patterns, and decomposition strategies that actual programmers reach for. This single bridge is the largest data source available.
@@ -66,13 +68,32 @@ Parse the Jac grammar into a flat list of constructs (walker, node, edge, abilit
 
 **Why it matters:** this is the only mechanism that guarantees no language feature is absent from training. Without it, generators converge on the subset of features they happen to find natural — typically the most Python-shaped ones, which is exactly the wrong bias.
 
-### Recipe 2 — Synthetic Python ↔ Jac parallel corpus
+### Recipe 2 — Synthetic Python ↔ Jac parallel corpus (MultiPL-T enhanced)
 
-**Goal:** highest-volume single recipe. 100k+ pairs achievable per week.
+**Goal:** highest-volume single recipe. 100k+ pairs achievable per week. Enhanced with cross-compiled test validation following MultiPL-T (Cassano et al. 2024).
 
-Step 1: generate (NL_task, Python_code) pairs from synthetic personas. Step 2: for each Python solution, generate a Jac translation through an explicit idiom-mapping pass (class → node/archetype where appropriate, function chains → walker traversals where appropriate). Step 3: compile + Python-runtime verify both. Step 4: for deterministic functions, run shared test inputs and confirm outputs match.
+**Step 1: Build a filtered Python source pool.** Do not translate arbitrary Python. Filter aggressively: require docstrings, Pyright type-check passing, return values, no TODO/FIXME markers, no overlap with HumanEval/MBPP/known benchmarks. The MultiPL-T paper reduced 22 million Python functions to 133,000 high-quality candidates through similar filtering. Target: 10,000+ filtered functions as the translation source pool.
 
-**Output:** three datasets from one pipeline — (NL → Jac) for generation, (Python → Jac) for conversion, (Python, Jac, NL) triples for explanation. Failed translations also become DPO negatives. Critically: reject anything that compiles but reads like Python with syntax swapped. Use an idiom-judge with `skills.md` as context to score this.
+**Step 2: Generate unit tests in Python.** Use an LLM to generate unit tests for each filtered Python function. Generate multiple independent test suites per function (5 suites at temperature 0.8). Run tests, discard failing tests, aggregate passing tests. Require at least 90% line coverage. Discard functions that cannot achieve 90% coverage. This step produces the ground-truth behavioral specification for each function.
+
+**Step 3: Infer Python types from test execution.** Run the Python tests and observe argument types and return types at runtime. For each argument position, compute the union type across all tests. Simplify unions to canonical forms (e.g., `Union[int, None]` → `Optional[int]`). These inferred types are injected into the Jac translation prompt so the LLM produces correctly typed Jac code rather than guessing types from identifier names.
+
+**Step 4: Translate Python to idiomatic Jac with multiple candidates.** For each Python function, generate 50–100 candidate Jac translations at high temperature (0.8) using cheap APIs (DeepSeek/Qwen). The prompt includes: the Python function with inferred types, the docstring translated to a Jac comment, the function signature translated to Jac syntax, and the original Python code as reference. Instruct: "Convert this Python code to idiomatic Jac. Do not simply swap syntax — use Jac-native patterns where appropriate." Include relevant `skills.md` sections as idiom context.
+
+**Step 5: Cross-compile tests to Jac.** Compile the Python test assertions to Jac using a deterministic rule-based compiler (not an LLM). This compiler handles `assert f(x) == y` for first-order values (ints, strings, booleans, lists, tuples, dicts). Drop test cases that use Python features without Jac equivalents. If zero test cases survive compilation for a function, flag it for manual review.
+
+**Step 6: Validate translations with cross-compiled tests.** Compile each candidate Jac translation. Run cross-compiled tests against each compilable candidate. Keep all candidates that pass all tests. This is a hard gate — test failure rejects the candidate.
+
+**Step 7: Deduplicate within candidates.** For each source function, the surviving candidates may include near-duplicates (same logic, renamed variables). Deduplicate using ROUGE-L (threshold 0.6) after stripping comments. Keep diverse implementations — two solutions that pass the same tests but use different algorithms (e.g., recursive vs. walker-based) are both valuable.
+
+**Output per pipeline run (3 datasets from 1):**
+- (NL, Jac_code) — code generation SFT data
+- (Python_code, Jac_code) — conversion training data  
+- (Python_code, Jac_code, NL) triples — explanation training data
+
+Failed translations also become DPO negatives. Critically: reject anything that compiles and passes tests but reads like Python with syntax swapped. Use an idiom-judge with `skills.md` as context to score this.
+
+**Why this is the highest-leverage recipe:** the MultiPL-T paper proved that this approach (translate validated Python with test-based filtering) outperforms both self-instruction and training on existing data for low-resource languages. Self-instruction produced 80% buggy code on Racket. Training further on existing data actually hurt performance. Translation with test validation was the only approach that consistently improved all target languages.
 
 ### Recipe 3 — Compiler-driven adversarial negatives
 
@@ -164,7 +185,7 @@ Targets are for *verified, deduplicated, compiler-passed* examples. Generate rou
 | Subset | Target (verified examples) | Source recipes |
 |---|---|---|
 | Core code generation SFT | 150–250k | 1, 2, 5, 6, 10 |
-| Python ↔ Jac conversion pairs | 80–150k | 2 |
+| Python ↔ Jac conversion pairs (test-validated) | 80–150k | 2 |
 | Debugging (broken → fix) | 30–60k | 3, 4 |
 | Multi-turn agentic conversations | 8–20k convs (~50–100k turns) | 4, 8 |
 | Reasoning-augmented examples | 60–120k (overlay) | 9 |
@@ -190,6 +211,8 @@ Maintain a live dashboard of construct usage frequency vs. target, persona distr
 ### Two-stage deduplication: code first, prose second
 
 MinHash dedup at the code level (cheaper) catches the most duplicates. Then check task descriptions across surviving examples for high cosine similarity using a sentence-embedding model. Generators repeat themselves more than expected — same problem described two ways with the same solution, or near-identical code with cosmetic variation.
+
+For Recipe 2 specifically, deduplication happens in three stages: (1) within the 50–100 candidates per source function using ROUGE-L, (2) code-level MinHash across the full conversion dataset, and (3) prose cosine similarity across task descriptions. The first stage is the cheapest and catches the most duplicates because the same source function's translations share structure.
 
 ---
 

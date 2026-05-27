@@ -64,6 +64,44 @@ Ingest a normalized transcript:
 python -m data_generation.trajectory_generation ingest --input transcript.json --date 20260511 --sequence 2 --generation-date 2026-05-11T00:00:00Z
 ```
 
+## Python Source Pool And Cross-Compiled Tests
+
+Filter Python source functions for the translation pool:
+
+```bash
+python -m data_generation.python_source filter --min-coverage 90 --require-docstring --require-typecheck --exclude-benchmarks --output dataset/context/python_source/
+```
+
+Generate and validate Python test suites for source functions:
+
+```bash
+python -m data_generation.python_source generate-tests --input dataset/context/python_source/ --min-coverage 90 --max-suites 5
+```
+
+Infer Python types from test execution:
+
+```bash
+python -m data_generation.python_source infer-types --input dataset/context/python_source/ --method runtime_observation
+```
+
+Compile Python tests to Jac:
+
+```bash
+python -m data_generation.test_compiler compile --input dataset/context/python_source/tests/ --output dataset/context/python_source/compiled_tests/
+```
+
+Validate a conversion batch with cross-compiled tests:
+
+```bash
+python -m data_generation.single_turn_generation validate-cross-compiled --batch-id 20260511-conversion-001 --tests dataset/context/python_source/compiled_tests/
+```
+
+Check Python source pool stats:
+
+```bash
+python -m data_generation.python_source stats
+```
+
 ## Manual Review
 
 List pending reviews:

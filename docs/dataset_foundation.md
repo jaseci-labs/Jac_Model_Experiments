@@ -69,6 +69,8 @@ dataset/
     explanation/
     conversion/
     trajectory/
+  context/
+    python_source/
   logs/
     generation/
     parsing/
@@ -206,11 +208,17 @@ Allowed `generator` values:
   "dedup_hash": "sha256-or-other-stable-hash",
   "reviewer": "reviewer identifier",
   "review_status": "pending | passed | failed | needs_adjudication",
-  "rejection_reason": "short reason for rejection"
+  "rejection_reason": "short reason for rejection",
+  "source_python_id": "python-func-00042",
+  "source_test_count": 7,
+  "test_coverage_percent": 95,
+  "cross_compiled_tests_pass": true,
+  "candidate_translation_count": 50,
+  "type_inference_method": "runtime_observation"
 }
 ```
 
-Optional fields are category-specific and must not become required for unrelated categories. For example, `error_type` is useful for debugging examples, `granularity` is useful for explanation examples, and `trajectory_length_tokens` is useful for trajectory examples.
+Optional fields are category-specific and must not become required for unrelated categories. For example, `error_type` is useful for debugging examples, `granularity` is useful for explanation examples, and `trajectory_length_tokens` is useful for trajectory examples. `source_python_id` links conversion and Python-sourced code_gen examples to their source Python function. `source_test_count`, `test_coverage_percent`, and `cross_compiled_tests_pass` record cross-compiled test validation results following the MultiPL-T methodology. `candidate_translation_count` records how many candidate translations were generated for the source function. `type_inference_method` records how Python types were inferred for Jac type annotations (`runtime_observation`, `pyright_static`, or `none`).
 
 ### Clean Code Generation Metadata Example
 
@@ -269,6 +277,7 @@ Each context bundle version must include:
 - `skills.md` or equivalent Jac MCP guidance used by the active Jac tooling.
 - Examples covering walkers, nodes, edges, abilities, imports, type annotations, standard library usage, and code organization.
 - Output schema instructions for the target category, once Task 2 defines those category schemas.
+- Filtered Python source function pool with test suites, used as translation sources for `conversion` and Python-sourced `code_gen` examples.
 
 The initial bundle should be named `jac-context-v1`. Increment the version whenever syntax references, guidance, examples, or category schema instructions change in a way that could affect generation quality or validation behavior.
 

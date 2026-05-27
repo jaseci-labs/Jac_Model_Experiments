@@ -41,6 +41,7 @@ flowchart TD
         BASE_G["Base Gemma 4 (local)\n(free negatives)"]
         FINE_G["Finetuned Gemma vN\n(self-distill)"]
         CURSOR["Cursor / Codex\n(diversity checks)"]
+        TC["Python-to-Jac\nTest Compiler\n(deterministic)"]
     end
 
     subgraph P2["Phase 2: Data Generation (10 Recipes)"]
@@ -76,6 +77,7 @@ flowchart TD
     CHEAP --> R2 & R4 & R5 & R6
     BASE_G --> R3
     CURSOR -.->|diversity check| R2
+    TC -.->|cross-compiled tests| V1B
     FINE_G --> R7
 
     RAW["~1.5-2.5M\nRaw Candidates"]
@@ -84,10 +86,11 @@ flowchart TD
     subgraph P3["Phase 3: Verification Pipeline"]
         direction TB
         V1["Stage 1: Compiler Gate\n(HARD -- every code field)\nExpected: 60-80% pass"]
-        V2["Stage 2: Test Suite\n(deterministic functions)\nExpected: 70-90% pass"]
+        V1B["Cross-compiled tests\n(hard gate, deterministic)"]
+        V2["Stage 2: Test Suite\n(non-cross-compiled)\nExpected: 70-90% pass"]
         V3["Stage 3: Idiom Judge\n(LLM scores vs skills.md)\nScore >= 4 accepted\nExpected: 40-60% pass"]
         V4["Stage 4: Manual Review\n(5-10% sample)\nReviewer checklist"]
-        V1 --> V2 --> V3 --> V4
+        V1 --> V1B --> V2 --> V3 --> V4
 
         REJ_COMP["Rejected:\nCompiler Fail"]
         REJ_IDIOM["Rejected:\nIdiom Score <= 2"]

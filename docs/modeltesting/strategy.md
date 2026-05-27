@@ -42,7 +42,7 @@ The 5,000 examples are allocated across task categories as follows:
 | Code generation (NL to Jac) | ~2,000 | 40% | Core capability, largest share of full dataset |
 | Debugging (broken Jac + error to fix) | ~800 | 16% | Tests error-recovery and code understanding |
 | Explanation (Jac code to NL) | ~600 | 12% | Tests comprehension and articulation |
-| Conversion (Python to idiomatic Jac) | ~600 | 12% | Tests idiom mapping, critical for de-Python-ification |
+| Conversion (Python to idiomatic Jac) | ~600 | 12% | Tests idiom mapping via cross-compiled test validation, critical for de-Python-ification |
 | Multi-turn conversations | ~500 | 10% | Tests agentic interaction and context maintenance |
 | DPO preference pairs | ~500 | 10% | Tests whether model learns from negative signal |
 
@@ -80,6 +80,7 @@ Every example in the 5,000-example set must pass:
 2. **Functional testing**: deterministic examples must produce correct output on test inputs
 3. **Idiom judge**: a judge prompt scores each example for Jac-idiomatic usage (not Python-with-Jac-syntax)
 4. **Manual spot-check**: a random 10% sample is manually reviewed for quality, correctness, and naturalness
+5. **Cross-compiled test validation**: for deterministic code_gen and conversion examples, Python-generated tests compiled to Jac must pass. This follows the MultiPL-T methodology.
 
 ### SFT and DPO format inclusion
 
@@ -224,4 +225,4 @@ If all three models score within 0.5 weighted points of each other, the decision
 
 The model testing phase does not change the data generation strategy described in [`../newdatagenstrat/strat.md`](../newdatagenstrat/strat.md). The ten generation recipes, the verification pipeline, the volume targets, and the quality controls all remain the same regardless of which base model is selected. The only thing that changes is the target model name in the finetuning configuration.
 
-This is by design. The data pipeline was built to be model-agnostic: it generates high-quality Jac training data that any capable base model should benefit from. The model testing phase answers the question of which base model benefits the most.
+This is by design. The data pipeline was built to be model-agnostic: it generates high-quality Jac training data that any capable base model should benefit from. The 5,000-example test dataset should include conversion examples validated with cross-compiled tests to ensure the selected model can learn from test-validated translations, which form the backbone of Recipe 2 at scale. The model testing phase answers the question of which base model benefits the most.

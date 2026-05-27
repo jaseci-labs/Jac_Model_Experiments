@@ -30,6 +30,7 @@ Prepare validated examples for a reproducible dataset release. This task defines
   - Remove identical Jac code outputs.
   - Remove identical Python inputs for conversion examples.
   - Remove identical trajectory transcripts.
+- [ ] For conversion examples with multiple candidate translations per source function (50--100 candidates), deduplicate within candidates first using ROUGE-L (threshold 0.6) before running cross-dataset deduplication. This candidate-level dedup is the cheapest and catches the most duplicates.
 - [ ] Run near-duplicate review:
   - Flag prompts that differ only by variable names.
   - Flag code that differs only by renamed identifiers.
@@ -65,6 +66,7 @@ Prepare validated examples for a reproducible dataset release. This task defines
 
 - [ ] Search for missing required metadata fields.
 - [ ] Confirm no example has `compiler_pass: false` in the clean dataset.
+- [ ] Confirm all deterministic code_gen and conversion examples have `cross_compiled_tests_pass: true` or a documented exception (zero test cases survived compilation).
 - [ ] Confirm testable examples have `test_pass: true` or a documented manual-review exception.
 - [ ] Confirm all sampled review failures are resolved, removed, or documented.
 - [ ] Confirm duplicate clusters were handled intentionally.
@@ -78,6 +80,7 @@ Prepare validated examples for a reproducible dataset release. This task defines
 - If metadata is inconsistent, fix the metadata generation process before patching records manually in volume.
 - If category distribution is badly imbalanced, generate only the missing category after rechecking its quality gates.
 - If hard examples are underrepresented, add targeted hard-example pilots before scaling.
+- If candidate-level deduplication for conversion removes too many translations (leaving fewer than 3 unique per source function), lower ROUGE-L threshold to 0.5 or generate additional candidates at different temperatures.
 - If release artifacts and manifest counts disagree, stop and reconcile before training uses the dataset.
 
 ## Completion Criteria

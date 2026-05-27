@@ -20,6 +20,7 @@ Design the OpenAI API prompts and strict JSON schemas used for the scripted sing
 - A prompt version naming convention.
 - Pilot batch settings for each category.
 - A prompt revision log policy.
+- Python source filtering criteria and type inference methodology for conversion prompts.
 
 ## Step-By-Step Checklist
 
@@ -52,6 +53,21 @@ Design the OpenAI API prompts and strict JSON schemas used for the scripted sing
   - Python source style and complexity constraints.
   - Requirement that Jac output is idiomatic, not a direct syntax translation.
   - JSON schema requiring `python_code`, `jac_code`, and `conversion_notes`.
+- [ ] Add type inference instructions to the conversion user prompt:
+  - Infer Python argument and return types from test execution (runtime observation) or Pyright static analysis.
+  - Inject inferred types into the Jac translation prompt so the LLM produces correctly typed Jac code.
+  - Include type annotations in the prompt format: provide the Python function signature with inferred types alongside the code and docstring.
+- [ ] Define Python source filtering criteria for conversion and Python-sourced code_gen:
+  - Python function must have a docstring.
+  - Python function must pass Pyright type-checking and return a value.
+  - Python function must not contain TODO, FIXME, or incomplete markers.
+  - Python function must not overlap with known Code LLM benchmarks (HumanEval, MBPP).
+  - Python function must have LLM-generated unit tests with at least 90% line coverage.
+- [ ] Define multi-candidate translation settings for conversion:
+  - Generate 50--100 candidate Jac translations per Python source function.
+  - Use high temperature (0.8) to encourage diverse translations.
+  - Keep all candidates that pass cross-compiled tests.
+  - Deduplicate within candidates using ROUGE-L (threshold 0.6) before adding to clean dataset.
 - [ ] Define pilot batch sizes:
   - 5 examples for code generation.
   - 5 examples for debugging.
@@ -88,6 +104,8 @@ Design the OpenAI API prompts and strict JSON schemas used for the scripted sing
 - If generated Jac resembles Python syntax, add more Jac-specific examples and reduce batch size.
 - If output truncates, reduce requested count before removing Jac context.
 - If examples cluster around the same pattern, add explicit diversity constraints for constructs and problem domains.
+- If type inference produces incorrect types (Jac compilation fails on type annotations), fall back to untyped Jac translation and note `type_inference_method: none` in metadata.
+- If cross-compiled tests reject more than 70% of candidate translations for a source function, flag the source function as unsuitable for translation and skip it.
 
 ## Completion Criteria
 

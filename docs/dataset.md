@@ -23,6 +23,7 @@ The dataset is organized by artifact lifecycle first, then by category. Definiti
 - `dataset/logs/deduplication/`: exact and near-duplicate reports and resolutions.
 - `dataset/logs/audit/`: readiness and release audit reports.
 - `dataset/context/`: Jac context bundles used by prompts and validators.
+- `dataset/context/python_source/`: filtered Python function pool with docstrings, types, and generated test suites used as translation sources for conversion and Python-sourced code_gen examples.
 - `dataset/releases/`: frozen release artifacts.
 
 ## Naming
@@ -50,7 +51,7 @@ Every clean candidate must carry:
 - `validator_version`
 - `dataset_version`
 
-Optional category-specific fields include `error_type`, `granularity`, `trajectory_length_tokens`, `dedup_hash`, `reviewer`, `review_status`, and `rejection_reason`.
+Optional category-specific fields include `error_type`, `granularity`, `trajectory_length_tokens`, `dedup_hash`, `reviewer`, `review_status`, `rejection_reason`, `source_python_id`, `source_test_count`, `test_coverage_percent`, `cross_compiled_tests_pass`, `candidate_translation_count`, and `type_inference_method`.
 
 ## Release Artifacts
 

@@ -14,7 +14,7 @@ flowchart TD
     subgraph Anchors["Three Anchors"]
         G["Jac Grammar\n(distribution target)"]
         C["Jac Compiler\n(unlimited oracle)"]
-        P["Python\n(proxy distribution)"]
+        P["Python\n(proxy distribution\n+ test source)"]
     end
 
     subgraph Generators["Generator Fleet"]
@@ -23,6 +23,7 @@ flowchart TD
         BG["Base Gemma 4\n(free negatives)"]
         FG["Finetuned Gemma vN\n(self-distill)"]
         CU["Cursor / Codex\n(diversity checks)"]
+        TC["Python-to-Jac\nTest Compiler\n(deterministic)"]
     end
 
     subgraph Recipes["Ten Recipes"]
@@ -47,17 +48,19 @@ flowchart TD
     BG --> R3
     FG --> R7
     CU -.->|diversity check| R2
+    TC -.->|cross-compiled tests| V1B
 
     R1 & R2 & R3 & R4 & R5 & R6 & R7 & R8 & R9 & R10 --> RAW["~1.5–2.5M\nraw candidates"]
 
     subgraph Verification["Verification Gate"]
         V1["Compiler pass\n(hard gate)"]
-        V2["Test suite\n(deterministic)"]
+        V1B["Cross-compiled tests\n(hard gate, deterministic)"]
+        V2["Test suite\n(non-cross-compiled)"]
         V3["Idiom judge\n(vs skills.md)"]
         V4["Sample review\n(manual spot)"]
     end
 
-    RAW --> C --> V1 --> V2 --> V3 --> V4
+    RAW --> C --> V1 --> V1B --> V2 --> V3 --> V4
 
     V4 -->|~20-40% survive| VER["Verified pool"]
 

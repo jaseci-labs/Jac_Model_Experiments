@@ -10,6 +10,7 @@ The work should proceed slowly: design a small sample, generate a tiny batch, va
 
 - Quality is more important than volume. A smaller clean dataset is better than a larger noisy one.
 - Every generated Jac code field must pass compiler validation before entering the clean dataset.
+- For deterministic code_gen and conversion examples, cross-compiled test validation is a hard gate alongside compilation. Tests are generated in Python and compiled to Jac deterministically, following the MultiPL-T methodology.
 - OpenAI API generation is used for single-turn examples: code generation, debugging, explanation, and conversion.
 - Vibe-coding agent sessions with Jac MCP/tooling are used for agentic trajectories because the transcript is the artifact. Suitable environments include Cursor, Codex, and Claude Code.
 - Raw output, rejected examples, and clean examples must be stored separately.
@@ -39,13 +40,14 @@ Use the same cadence for every category:
 2. Build a tiny prompt sample with 3-5 examples.
 3. Generate a pilot batch of 5-10 examples through OpenAI's API or one vibe-coding agent trajectory session with Jac MCP/tooling.
 4. Validate all Jac code fields with the compiler.
-5. Run behavior tests where behavior can be specified.
-6. Manually inspect the whole pilot batch.
-7. Record failure modes and revise the prompt, schema, or validation rules.
-8. Repeat until pilot quality is stable.
-9. Increase to 20-50 examples per batch.
-10. Run deduplication after each batch.
-11. Scale only after the category passes the definition of done.
+5. For conversion and Python-sourced code_gen, validate with cross-compiled tests (hard gate).
+6. Run behavior tests where behavior can be specified.
+7. Manually inspect the whole pilot batch.
+8. Record failure modes and revise the prompt, schema, or validation rules.
+9. Repeat until pilot quality is stable.
+10. Increase to 20-50 examples per batch.
+11. Run deduplication after each batch.
+12. Scale only after the category passes the definition of done.
 
 ---
 
@@ -74,6 +76,8 @@ Use the same cadence for every category:
 - Rejected-example recycling rules are documented.
 - Retry limits and failure thresholds are defined.
 - Logs needed for debugging generation quality are specified.
+- Cross-compiled test infrastructure is built and validated for deterministic categories.
+- Python source filtering criteria are documented and the source pool is populated.
 
 ### Task 4: Single-Turn Generation
 
@@ -105,6 +109,8 @@ Use the same cadence for every category:
 - [ ] Foundation documents reviewed before prompt work begins.
 - [ ] Prompt templates reviewed before any scripted generation begins.
 - [ ] Validation rules reviewed before any generated examples are accepted.
+- [ ] Cross-compiled test compiler validated on a pilot batch before scaling conversion or Python-sourced code_gen.
+- [ ] Filtered Python source pool populated with at least 1,000 functions before scaling Recipe 2.
 - [ ] At least one pilot batch per single-turn category passes before scaling.
 - [ ] At least one pilot trajectory passes before collecting trajectories in volume.
 - [ ] Manual review pass rate remains at or above 80% before continuing volume generation.

@@ -162,6 +162,10 @@ Suggested scale criteria:
 - What retry budget gives useful repairs without creating too much low-quality data?
 - Which MCP/plugin checks can be fully automated before manual review?
 
+## MultiPL-T Enhancements
+
+Recipe 2 has been enhanced with cross-compiled test validation, multi-candidate translation, Python source filtering, and type inference following the MultiPL-T paper (Cassano et al. 2024). These additions strengthen the validation pipeline by ensuring that generated Jac code is verified against deterministically compiled tests derived from Python sources, that multiple translation candidates are evaluated per source function, that the Python source pool is filtered for quality and suitability before translation, and that type inference from test execution guides accurate Jac type annotations.
+
 ## Recommendation
 
 Run this as a pilot tier before large-scale generation. The current pipeline already has schema, compiler, review, and release concepts; the full-app strategy should extend those gates with stronger behavior tests, structured repair logs, and DPO-ready preference pairs. Scaling should wait until the pilot shows that the generated projects are not only syntactically valid Jac, but also logically correct and testable.

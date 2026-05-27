@@ -8,6 +8,8 @@ Synthetic dataset construction for supervised finetuning and reinforcement learn
 
 The dataset is entirely synthetic. There is no existing public corpus of Jac code large or diverse enough to use directly, so generation must be deliberate, validated, and heavily reviewed before scaling.
 
+A key lesson from the MultiPL-T paper (Cassano et al. 2024, "Knowledge Transfer from High-Resource to Low-Resource Programming Languages for Code LLMs") is that directly generating code in a low-resource language produces poor results. The paper showed that 4 of 5 self-generated Racket functions had bugs. Jac is an even lower-resource language than Racket, so the pipeline should favor translating validated Python code over direct generation wherever possible. When direct Jac generation is unavoidable (e.g., walker/graph patterns with no Python equivalent), apply stricter validation gates.
+
 Generation uses two distinct workflows depending on the task category:
 
 - **Scripted OpenAI API pipeline**: for code generation, debugging, explanation, and conversion. A script calls OpenAI's API, validates output programmatically using the Jac compiler, and writes clean examples to disk only after the validation gates pass.
@@ -119,7 +121,13 @@ Without this instruction, batches cluster around similar examples and the datase
 
 **Explanation** examples use the structure: valid Jac code -> natural language explanation. Include line-level, block-level, and module-level explanations. These require manual accuracy review because the compiler cannot validate explanation quality.
 
-**Code conversion** examples use the structure: Python code -> idiomatic Jac code that preserves behavior. Cover function-to-ability conversion, class-to-node conversion, graph pattern conversion, and algorithms rewritten around walkers and traversal.
+**Code conversion** examples use the structure: Python code -> idiomatic Jac code that preserves behavior. Cover function-to-ability conversion, class-to-node conversion, graph pattern conversion, and algorithms rewritten around walkers and traversal. Generate 50--100 candidate Jac translations per Python source function at high temperature (0.8). Keep all translations that pass cross-compiled tests. This diversity-through-sampling approach produces more varied training data than generating a single translation per source.
+
+Before translating, filter Python source functions aggressively: require docstrings, Pyright type-check passing, no TODO/incomplete markers, no benchmark contamination, and LLM-generated unit tests with at least 90% line coverage. This filtering follows the MultiPL-T methodology that reduced 22 million Python functions to 133,000 high-quality translation candidates.
+
+### Type inference from test execution
+
+For conversion examples targeting Jac (which has type annotations), infer Python argument and return types by executing the Python test suite and observing runtime values. Inject these inferred types into the Jac translation prompt so the LLM produces correctly typed Jac code. This avoids the LLM guessing types from identifier names alone, which is unreliable for low-resource target languages.
 
 ### Compiler validation (hard gate)
 
@@ -136,7 +144,23 @@ Rejected code generation examples are not wasted. A rejected example that fails 
 
 Debugging examples are the exception to the general code-compiles rule: `broken_code` is expected to fail, and `fixed_code` is expected to compile.
 
+### Cross-Compiled Test Validation (hard gate for deterministic categories)
+
+For code generation and conversion examples with deterministic behavior, test validation is a hard gate, not a soft gate. Following the MultiPL-T approach, tests should be generated in Python (where LLMs are reliable), then compiled to Jac using a deterministic rule-based test compiler — not an LLM. This eliminates LLM hallucination from the test layer entirely.
+
+The cross-compiled test gate works as follows:
+- Generate unit tests in Python for the source function
+- Verify tests pass against the Python source with at least 90% line coverage
+- Compile Python assertions to Jac assertions using a deterministic compiler
+- Run compiled tests against the Jac translation
+- Pass: example enters the clean dataset
+- Fail: example is rejected (not routed to manual review)
+
+This gate applies to code generation and conversion categories. Explanation and trajectory categories remain under manual review because their correctness cannot be tested automatically.
+
 ### Test harness validation (soft gate)
+
+For non-deterministic categories (explanation, trajectory) and examples without cross-compiled tests, the test harness remains a soft gate.
 
 For code generation and conversion examples where testable behavior can be defined, run a small test against the compiled output. This checks that the code produces correct output on known inputs, not just that it compiles.
 

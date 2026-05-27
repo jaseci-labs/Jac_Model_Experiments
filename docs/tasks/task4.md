@@ -29,6 +29,7 @@ Define the slow, repeatable generation loops for the four scripted OpenAI API ca
 - [ ] Validate that each item has `prompt`, `code`, and `complexity`.
 - [ ] Compile every `code` field.
 - [ ] Run behavior tests when prompts include expected observable outputs.
+- [ ] For code_gen examples sourced from Python (translated tasks), use cross-compiled tests as a hard gate: generate tests in Python, verify coverage, compile to Jac deterministically, reject examples that fail.
 - [ ] Manually inspect all pilot examples for prompt clarity and idiomatic Jac.
 - [ ] Revise the prompt if examples are vague, trivial, duplicated, or Python-like.
 - [ ] Scale only after the pilot has clean JSON, strong compiler results, and acceptable review quality.
@@ -58,15 +59,28 @@ Define the slow, repeatable generation loops for the four scripted OpenAI API ca
 
 ### Code Conversion
 
-- [ ] Generate a pilot batch of 5 Python-to-Jac conversions.
+- [ ] Build a filtered Python source pool before generating any conversions:
+  - Filter Python functions to require: docstring present, Pyright type-check passing, returns a value, no TODO/FIXME/incomplete markers, no overlap with HumanEval/MBPP benchmarks.
+  - Generate unit tests for each Python function using an LLM. Verify tests pass. Require at least 90% line coverage.
+  - Infer Python argument and return types from test execution (runtime observation) or Pyright static analysis.
+  - Target: 10,000+ filtered Python functions as the translation source pool.
+- [ ] Build or adapt a deterministic Python-to-Jac test compiler:
+  - Translate Python assertions (`assert f(x) == y`) to Jac assertions.
+  - Handle first-order values: ints, strings, booleans, lists, tuples, dicts.
+  - No LLM involvement in test compilation.
+  - Drop test cases that use Python features without Jac equivalents.
+- [ ] Generate a pilot batch of 5 Python-to-Jac conversions using cross-compiled test validation:
+  - For each Python source, generate 50--100 candidate translations at high temperature (0.8).
+  - Compile each candidate.
+  - Run cross-compiled tests against each compilable candidate.
+  - Keep all candidates that pass. Deduplicate within candidates using ROUGE-L (threshold 0.6).
 - [ ] Include at least one function conversion and one class or data-structure conversion.
 - [ ] Validate that each item has `python_code`, `jac_code`, and `conversion_notes`.
-- [ ] Compile every `jac_code` field.
-- [ ] Run equivalence tests where inputs and expected outputs are clear.
-- [ ] Manually inspect whether the Jac output is idiomatic and graph-aware where appropriate.
+- [ ] Inject inferred Python types into the translation prompt for correctly typed Jac output.
+- [ ] Manually inspect whether surviving Jac translations are idiomatic and graph-aware where appropriate.
 - [ ] Reject conversions that preserve Python structure mechanically without using Jac concepts.
 - [ ] Revise the prompt if conversion notes do not explain meaningful design changes.
-- [ ] Scale only after converted Jac compiles and preserves behavior in tested cases.
+- [ ] Scale only after the pilot shows cross-compiled test pass rate above 80% for compilable candidates, and surviving translations are idiomatic.
 
 ## Testing And Validation Checklist
 
@@ -85,6 +99,9 @@ Define the slow, repeatable generation loops for the four scripted OpenAI API ca
 - If conversion output is too Python-like, add prompt examples that demonstrate Jac nodes, edges, abilities, and walkers.
 - If a category's failures repeat across two prompt revisions, pause that category and inspect the Jac context bundle.
 - If scaled batches introduce duplicates, add stronger diversity constraints and run deduplication before continuing.
+- If cross-compiled tests reject more than 70% of candidate translations for a Python source function, remove that source from the pool rather than relaxing test criteria.
+- If the deterministic test compiler cannot handle a Python test case's assertion format, drop that test case. If zero test cases survive compilation for a source function, flag it for manual review.
+- If type inference produces incorrect types causing Jac compilation failures, fall back to untyped translation and record `type_inference_method: none`.
 
 ## Completion Criteria
 

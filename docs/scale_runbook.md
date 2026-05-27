@@ -7,6 +7,8 @@ This runbook describes the safe operating flow for scaling Jac synthetic data to
 - Set `OPENAI_API_KEY` or `OPEN_AI_API_KEY` before live single-turn generation.
 - Run all commands from the repository root.
 - Do not hand-edit generated dataset artifacts unless the command workflow below cannot represent the review decision.
+- Build or verify the deterministic Python-to-Jac test compiler before scaling conversion or Python-sourced code_gen examples.
+- Build or verify the filtered Python source pool (docstrings, type-checked, 90% test coverage, no benchmark contamination) before scaling Recipe 2 / conversion generation.
 
 ## 1. Check Readiness
 
@@ -37,6 +39,23 @@ python -m data_generation.single_turn_generation scale --version jac-synth-v0.1.
 ```
 
 Inspect the generated validation, generation, review, and scale-decision logs before continuing.
+
+## 3.5 Validate Cross-Compiled Test Infrastructure
+
+Before scaling conversion or Python-sourced code_gen categories, verify the cross-compiled test pipeline end to end:
+
+```bash
+# Verify Python source pool filtering
+python -m data_generation.python_source filter --min-coverage 90 --output dataset/context/python_source/
+
+# Verify test compilation works on a sample
+python -m data_generation.test_compiler compile --input dataset/context/python_source/sample.json --output dataset/context/python_source/compiled_tests/
+
+# Run a smoke test: translate 5 Python functions, validate with cross-compiled tests
+python -m data_generation.single_turn_generation scale --version jac-synth-v0.1.0 --date 20260511 --target-total 10000 --category conversion --max-batches 1 --max-retries 1 --use-cross-compiled-tests
+```
+
+Inspect that cross-compiled tests correctly catch bad translations while accepting good ones. If the test compiler drops too many test cases for a source function (zero surviving), flag that function for removal from the source pool.
 
 ## 4. Continue Scaling
 
@@ -117,3 +136,5 @@ Frozen releases include `IMMUTABLE_RELEASE.json` with checksums and an audit fin
 - Hard-ratio imbalance: rely on dry-run `complexity_target`; if needed, run targeted category batches until the hard ratio returns to the expected band.
 - Manual review failure: revise prompt/context or remove the failed examples, then regenerate replacements.
 - Duplicate explosion: resolve clusters or strengthen prompt diversity before continuing scale.
+- Cross-compiled test pass rate drops: inspect whether the test compiler is too strict (dropping valid assertions) or the translations are genuinely wrong. If test compiler is too strict, expand assertion support. If translations are wrong, revise the translation prompt.
+- Python source pool exhaustion: if all filtered Python functions have been translated and more conversion data is needed, expand the source pool by relaxing the docstring requirement to include functions with comments, or by generating Python functions synthetically and filtering them through the same pipeline.

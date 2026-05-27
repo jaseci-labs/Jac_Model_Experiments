@@ -34,17 +34,24 @@ Define the validation gates that protect the clean dataset. This task covers com
   - Explanation: compile `code`.
   - Conversion: compile `jac_code`.
   - Trajectory: compile the final Jac output from the transcript.
+- Define cross-compiled test validation as a hard gate for deterministic categories:
+  - For `code_gen` examples with deterministic behavior: generate tests in Python, verify 90% line coverage, compile tests to Jac using a deterministic rule-based test compiler, run compiled tests against the Jac code. Pass = proceed. Fail = reject.
+  - For `conversion` examples: compile the Python source's existing test suite to Jac. Run compiled tests against each candidate translation. Pass = proceed. Fail = reject the candidate.
+  - For `debug` examples where the original working code had cross-compiled tests: `fixed_code` must pass the same cross-compiled tests. Fail = reject the debugging pair.
+  - The deterministic test compiler translates Python assertions (`assert f(x) == y`) to Jac assertions. It handles first-order values (ints, strings, booleans, lists, tuples, dicts). It does NOT use an LLM. If a test case uses Python features that cannot be compiled to Jac (e.g., complex object comparisons), that test case is dropped. If zero test cases survive compilation, the example is flagged for manual review rather than auto-rejected.
+  - Cross-compiled test validation does not apply to `explanation` or `trajectory` categories.
 - Define compiler pass handling:
   - Passing examples can move to the next gate.
   - Failing code generation examples move to `rejected/` and may be recycled into debugging seeds.
   - Failing `fixed_code` examples cause the debugging pair to be discarded.
   - Debugging `broken_code` must fail; if it compiles, reject or regenerate the pair.
 - Define behavior test expectations:
-  - Code generation examples get tests when the prompt defines observable behavior.
+  - Code generation examples with deterministic behavior get cross-compiled tests as a hard gate. Tests are generated in Python, verified for coverage, and compiled to Jac deterministically. Test failure rejects the example.
   - Conversion examples get equivalence tests where known inputs and outputs are available.
   - Explanation examples do not get behavior tests; they require manual review.
   - Trajectories rely on final compiler validation plus transcript review.
 - Define soft-gate behavior:
+  - Soft-gate behavior applies only to non-deterministic categories (explanation, trajectory) and examples where cross-compiled tests could not be generated. For deterministic code_gen and conversion examples, test validation is a hard gate — see cross-compiled test validation above.
   - Test failures do not automatically delete examples.
   - Test failures mark examples for manual review.
   - Manual review decides whether the issue is the code, test, or prompt.
@@ -58,6 +65,9 @@ Define the validation gates that protect the clean dataset. This task covers com
   - Scaled-batch compiler pass rate warning: below 70%.
   - Manual review pass rate minimum: 80%.
   - JSON parse pass rate target: 100% before scaling.
+  - Cross-compiled test pass rate target for code_gen: at least 70% of compilable deterministic examples.
+  - Cross-compiled test pass rate target for conversion: at least 80% of compilable candidate translations.
+  - Python source test coverage minimum before translation: 90% line coverage.
 - Define validation logs:
   - Batch ID.
   - Prompt version.
@@ -78,6 +88,7 @@ Define the validation gates that protect the clean dataset. This task covers com
   - Stop a category if pilot manual review falls below 80%.
   - Stop scaling if duplicates or repeated patterns dominate a batch.
   - Stop generation if compiler failures point to stale Jac context.
+  - Stop conversion generation for a Python source function if more than 70% of candidate translations fail cross-compiled tests. Flag the source function as unsuitable.
 
 ## Testing And Validation Checklist
 
