@@ -63,6 +63,10 @@ Design the OpenAI API prompts and strict JSON schemas used for the scripted sing
   - Python function must not contain TODO, FIXME, or incomplete markers.
   - Python function must not overlap with known Code LLM benchmarks (HumanEval, MBPP).
   - Python function must have LLM-generated unit tests with at least 90% line coverage.
+- [ ] Add a docstring-quality filter to Python source curation: drop functions with misleading docstrings via a binary docstring-quality LLM classifier (SelfCodeAlign, 2410.24198). The return-value requirement above already guarantees tests have meaningful assertions.
+- [ ] Define an interleaved generation mode for directly-generated code categories: the model emits the Jac solution and its Jac tests in one completion, filtered on execution (SelfCodeAlign).
+- [ ] Define a snippet-seeded prompt variant: seed generation with 1--15 random Python lines, abstract to concepts, then request an unrelated self-contained Jac task (OSS-Instruct / Magicoder, 2312.02120).
+- [ ] Record `seed_source` (`grammar_matrix`, `python_translation`, `oss_instruct`, `zero_seed`, `persona`, `doc`, `evol`) and `token_count` on every generated example.
 - [ ] Define multi-candidate translation settings for conversion:
   - Generate 50--100 candidate Jac translations per Python source function.
   - Use high temperature (0.8) to encourage diverse translations.

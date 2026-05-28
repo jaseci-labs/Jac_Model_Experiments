@@ -285,7 +285,7 @@ The decontamination check is cheap (shingle comparison is O(1) per example with 
 
 ## Phase 2: Data generation
 
-This phase produces the raw material. The ten recipes below are self-contained generation pipelines that compose multiplicatively. A single seed task from Recipe 1 can yield an SFT example, two DPO pairs via Recipe 3, a debugging trace via Recipe 4, a multi-turn conversation via Recipe 8, a reasoning trace via Recipe 9, and a Python translation pair via Recipe 2. Plan every verified artifact as a seed crystal that grows in multiple directions.
+This phase produces the raw material. The twelve recipes below are self-contained generation pipelines that compose multiplicatively. A single seed task from Recipe 1 can yield an SFT example, two DPO pairs via Recipe 3, a debugging trace via Recipe 4, a multi-turn conversation via Recipe 8, a reasoning trace via Recipe 9, and a Python translation pair via Recipe 2. Plan every verified artifact as a seed crystal that grows in multiple directions. Recipes 11-12 and the repo-level packing subsection extend generation beyond isolated snippets -- into real-world-seeded tasks, zero-seed self-generated tasks, and multi-file projects.
 
 ### Generator allocation
 
@@ -369,6 +369,8 @@ Failed translations become DPO negatives. Reject anything that compiles and pass
 
 **Why this approach works:** the MultiPL-T paper proved that translating validated Python with test-based filtering outperforms both self-instruction and training on existing data for low-resource languages. Self-instruction on Racket produced 80% buggy code. Training on existing low-resource data actually hurt performance. Translation with cross-compiled test validation was the only consistently effective approach.
 
+**Note on directly-generated candidates (SelfCodeAlign, Wei et al. 2024, arXiv:2410.24198):** for the non-translated path -- where a candidate is generated from scratch rather than converted from Python -- generate the solution and its tests interleaved in a single pass rather than in two separate calls. SelfCodeAlign found that one-pass interleaved (solution + tests) generation improves consistency between code and tests, because the model writes both against the same in-context intent instead of re-inferring intent for a second call. The cross-compiled test path above still applies to translated candidates; interleaved generation is the analog for directly-generated ones.
+
 **Expected yield:** 100,000+ pairs per week at cheap API rates. Higher quality than the original recipe because every surviving translation is test-validated, not just compiler-validated.
 
 **Failure modes:**
@@ -392,9 +394,23 @@ Failed translations become DPO negatives. Reject anything that compiles and pass
 
 **Expected yield:** 1 DPO pair per input example. With 100k+ verified examples as input, this produces 40,000-80,000 DPO pairs.
 
+**Mutual code-test credibility ranking (CodeDPO enhanced, Zhang et al. 2024, arXiv:2410.05605):** naively trusting a single synthetic test to label a solution chosen-vs-rejected is unreliable. CodeDPO replaces single-test trust with a self-validation loop where solutions and tests vouch for each other.
+
+1. For each task, generate N solutions (15 at temperature 1.5 for diversity) and M tests alongside them.
+2. Run every solution against every test to build a bipartite pass/fail graph: solution nodes on one side, test nodes on the other, an edge for each pass.
+3. Iterate coupled PageRank scores over the graph (damping 0.85, ~10 iterations): a solution gains credibility by passing tests that many credible solutions also pass; a test gains credibility by being passed by credible solutions and failed by incredible ones. Solution and test scores reinforce each other until convergence.
+4. Pick DPO winners and losers by credibility, not by single-test pass/fail. The highest-credibility solution becomes `chosen`; a low-credibility-but-compiling solution becomes `rejected`. CodeDPO reports the credibility ranking correlates with true correctness at Spearman 0.86 versus 0.61 for single-test trust.
+
+**Runtime-efficiency DPO axis:** beyond idiom and correctness, add a third preference axis. Time the solutions that pass the top-credibility tests, then pair a fast solution (`chosen`) against a correct-but-slow one (`rejected`). This teaches the model to prefer efficient Jac, not merely working Jac.
+
+**Pair hygiene:**
+- **Filter near-identical-score pairs.** When `chosen` and `rejected` have nearly equal credibility, the preference signal is noise -- drop the pair to avoid training on indistinguishable margins.
+- **RPO loss (regularized preference optimization).** Train with the standard DPO log-probability ratio plus a weighted SFT term on the `chosen` response. The auxiliary SFT term keeps the model anchored to high-quality outputs and prevents the degenerate solution where DPO lowers the probability of both chosen and rejected.
+
 **Failure modes:**
 - Base Gemma produces outputs that are accidentally idiomatic (unlikely before finetuning, but possible). Mitigation: run the idiom judge; if the adversarial version scores high, discard the pair.
 - Some constructs have no meaningful Python-style alternative. Mitigation: skip constructs that are unique to Jac with no Python analog.
+- All N solutions for a task fail every test (credibility graph degenerates). Mitigation: skip the task; a graph with no passing edges produces no usable ranking.
 
 ### Recipe 4 -- Bug-synthesis pipeline
 
@@ -482,11 +498,18 @@ Failed translations become DPO negatives. Reject anything that compiles and pass
 4. Compile-verify the evolved code.
 5. Track lineage: original task ID -> evolution axis -> evolved task ID. This lineage is essential for ablation studies later (which evolution axes contribute most to model quality).
 
+**Merge-all-rounds and Evol-Stop (WizardCoder enhanced, Luo et al. 2023, arXiv:2306.08568):** evolution is iterative -- each round takes the prior round's output as input and applies another evolution operation. Two findings from WizardCoder change how the rounds are kept and bounded.
+
+1. **Keep all rounds merged, do not replace.** Discarding earlier (simpler) rounds in favor of the latest (hardest) round destroys the difficulty gradient the model needs. Merge the seed plus every evolution round into the training pool together. The retained spread from atomic to deeply-evolved is what teaches the model to handle the full complexity range.
+2. **Stop via a held-out dev set, not a fixed round count.** Quality gains from evolution are non-monotonic -- they peak and then degrade as the generator over-complicates tasks into incoherence. Hold out a small dev set, train (or judge) after each round, and stop when the dev metric stops improving. WizardCoder found ~3 rounds optimal before returns turn negative.
+3. **Bound the constraint budget per round.** Each evolution step should add roughly one constraint of about 10 words, not an open-ended rewrite. A bounded budget keeps the difficulty increase incremental and the evolved task coherent.
+
 **Expected yield:** 2-3 evolved versions per seed task. Applied to 50,000 seeds = 100,000-150,000 evolved examples (pre-filtering).
 
 **Failure modes:**
 - Evolution produces tasks that are too similar to the original (dedup catches this).
 - Composed tasks exceed reasonable complexity. Mitigation: cap composition depth at 2-3 chained tasks.
+- Evolution runs too many rounds and degrades into incoherent over-constrained tasks. Mitigation: Evol-Stop on the held-out dev set; do not extend past the round where the dev metric peaks.
 
 ### Recipe 7 -- Self-distillation loop
 
@@ -504,11 +527,16 @@ Failed translations become DPO negatives. Reject anything that compiles and pass
 - **Retain frontier-model data each round.** At least 30-50% of the training set must remain frontier-model-generated to prevent quality drift. The self-distilled data supplements; it does not replace.
 - **Do not relax verification.** Local models produce subtler errors than frontier models -- errors that look plausible but are wrong. The compiler and judge gates must stay at full strictness.
 
+**Self-distillation can beat cross-distillation (SelfCodeAlign enhanced, Wei et al. 2024, arXiv:2410.24198):** the default assumption is that a stronger frontier teacher always produces better data than the model distilling from itself. SelfCodeAlign found this is not universally true -- a model generating its own aligned data outperformed distillation from a stronger external model on some axes. Do not assume cross-distillation dominates; validate self- versus cross-distilled data per capability axis (code gen, conversion, debugging, reasoning) on the held-out eval set, and keep whichever wins for each axis. Some axes will favor self-generated data, which is also free.
+
+**fastText recall-expansion of the source pool (DeepSeek-Coder-V2 enhanced, Zhu et al. 2024, arXiv:2406.11931):** self-distillation still needs seed tasks, and the richest source is translation-friendly Python from the Recipe 2 pool. To grow that pool, train a fastText classifier on a small set of known translation-friendly Python seeds (positive) versus generic Python (negative), then run it as a recall-oriented filter over the broader source corpus to mine more candidates that map well to Jac strengths (graph operations, data modeling, traversal). DeepSeek-Coder-V2 used exactly this fastText recall-expansion step to enlarge its code corpus cheaply. Tune the threshold for recall, then let the downstream compiler and test gates remove the false positives.
+
 **Expected yield:** each round adds 10,000-30,000 verified examples at zero API cost. After 2-3 rounds, the model produces data the frontier models wouldn't generate in the same shape -- it has internalized Jac patterns and generates novel compositions.
 
 **Failure modes:**
 - Model collapse: the model trains on its own errors and amplifies them. Mitigation: frontier data retention + strict verification.
 - Diminishing returns after 2-3 rounds. This is expected. Stop when the marginal quality improvement per round drops below a threshold.
+- Assuming cross-distillation always wins and never testing self-generated data. Mitigation: per-axis self-vs-cross validation on the eval holdout.
 
 ### Recipe 8 -- Multi-turn conversation synthesis
 
@@ -583,6 +611,58 @@ Failed translations become DPO negatives. Reject anything that compiles and pass
 **Failure modes:**
 - Generator ignores the documentation context and produces generic code. Mitigation: require explicit references to documented patterns in the output.
 - Documentation is incomplete or has errors. Mitigation: use this recipe as a documentation audit -- if the generator cannot produce valid examples for a section, the documentation may need updating.
+
+### Recipe 11 -- OSS-Instruct snippet-seeded generation
+
+**Goal:** inject orthogonal real-world signal into task generation by seeding from real Python source, following the OSS-Instruct method (Magicoder, Wei et al. 2023, arXiv:2312.02120).
+
+**Inputs:** the filtered Python source pool from Recipe 2, used purely as inspiration rather than as a translation target.
+
+**Process:**
+1. Sample 1-15 random consecutive lines of real Python from the source pool. These lines are a seed, not a specification -- they need not be a complete function.
+2. Abstract the seed into concepts first, then design the task. Rather than feeding raw lines straight into a problem prompt, first ask the generator to extract the high-level concepts the snippet touches (e.g., "graph traversal," "priority ordering," "rate limiting"), then design a fresh problem from those concepts. SelfCodeAlign reported this concept-abstraction step lifts results (65.2 vs 59.8) over seeding from raw snippets.
+3. Prompt the generator to produce an unrelated, self-contained Jac problem "inspired by" the abstracted concepts -- a new task description plus an idiomatic Jac solution. The output must not reference, translate, or resemble the seed lines; the seed only nudges the domain.
+4. Run the solution through the full verification pipeline like any other recipe.
+
+**Why this approach works:** seeding from real code spreads task generation across the genuine distribution of real-world programming domains, which a self-instruction loop tends to under-sample. OSS-Instruct data has the lowest measured similarity to evaluation benchmarks of any generation method here, yet Magicoder found it produced the best downstream results -- the orthogonal real-world domain signal is the reason.
+
+**Expected yield:** 30,000-60,000 domain-diverse SFT examples, with markedly different domain coverage from the coverage matrix and persona recipes.
+
+**Failure modes:**
+- Generator anchors too closely to the seed and effectively translates it (collapsing into Recipe 2). Mitigation: the concept-abstraction step plus an explicit "the problem must be unrelated to the snippet" instruction; reject outputs with high similarity to the seed.
+- Seeds drawn from domains with no Jac analog produce strained tasks. Mitigation: bias seed sampling toward graph/data-modeling-heavy Python.
+
+### Recipe 12 -- Zero-seed template extraction
+
+**Goal:** self-generate fresh instructions with no corpus and no seed tasks at all, once a v0 Jac model exists, following the Magpie method (Xu et al. 2024, arXiv:2406.08464).
+
+**Inputs:** the finetuned Jac model (v0 onward) and its chat template -- nothing else.
+
+**Process:**
+1. Prompt the model with only the pre-query portion of its chat template (the template prefix that normally precedes a user turn) and let it continue. Because the model was instruction-tuned, it self-generates a plausible user instruction in the empty user slot. Sample with temperature 1.0-1.25 and top-p 0.99 for instruction diversity.
+2. Take each self-generated instruction, feed it back as a normal user turn, and decode the response greedily (temperature 0) for a clean, deterministic answer.
+3. Send the (instruction, response) pair through the full verification pipeline.
+
+**Why this approach works:** Magpie extracts the latent instruction distribution the model already carries, requiring no human seed data, no source corpus, and no external generator. For a low-resource language with no existing instruction corpus, this is the strongest single lever against the no-corpus problem.
+
+**Expected yield:** open-ended; bounded only by inference budget. Survival depends on v0 quality, so this recipe scales up as later model versions improve.
+
+**Failure modes:**
+- v0 self-generates off-distribution or non-Jac instructions. Mitigation: filter generated instructions for Jac relevance before answering them; gate hard on the compiler afterward.
+- Greedy decoding amplifies a narrow response style. Mitigation: blend with the higher-temperature recipes; track diversity in the distribution dashboard.
+
+### Repo-level synthetic projects (DeepSeek-Coder, 2401.14196)
+
+The recipes above produce isolated snippets and single-file programs. Real Jac codebases span multiple files with cross-file dependencies, and a model trained only on isolated snippets degrades on cross-file completion. DeepSeek-Coder (Guo et al. 2024, arXiv:2401.14196) addressed this with repo-level packing, and the same approach applies here: synthesize multi-file Jac projects, not only isolated snippets, and pack each project so the model learns project structure.
+
+**Process:**
+1. Generate a small multi-file Jac project (a handful of files with `import`/`include` relationships and node-walker references across files) rather than a single file.
+2. Build a file-dependency graph: a node per file, a directed edge from a file to each file it depends on via `import`, `include`, or cross-file node-walker references.
+3. Topologically sort the graph so that within a single training sample every file appears after the files it depends on. Use a modified topological sort that repeatedly picks the file with minimal in-degree, which tolerates import cycles (real Jac projects have them) rather than failing on a non-DAG. Handle disconnected subgraphs separately, ordering each component on its own.
+4. Prepend a file-path comment to every file before packing (e.g., `# path: project/walkers/traverse.jac`) so the model learns the mapping from file path to file content and the overall project layout, not just the code.
+5. Concatenate the ordered, path-annotated files into one training sample.
+
+DeepSeek-Coder's ablation showed that removing repo-level packing measurably drops cross-file completion performance, so this is not an optional flourish -- it is the only part of the pipeline that teaches multi-file structure. Feed these samples through the verification pipeline as a project (compile the whole project together), and apply the repo-level dedup from Phase 4.
 
 ### Batch scheduling and sequencing strategy
 
@@ -668,6 +748,14 @@ For examples with deterministic behavior (pure functions, graph traversals with 
 4. Pass = all tests match. Fail = flag for review (the code may be correct with wrong tests, or vice versa).
 
 This stage is a soft gate: failures route to manual review, not automatic rejection. Test generation itself can have errors.
+
+### Stage 2.5: Credibility scoring (CodeDPO)
+
+The test stages above implicitly trust the synthetic tests they run. When tests are themselves synthetic and untrusted -- as they are for most directly-generated candidates -- this is unsafe: a wrong test can reject a correct solution, and a vacuous test can pass a wrong one. CodeDPO's mutual credibility scoring (Zhang et al. 2024, arXiv:2410.05605) addresses this by weighting tests rather than trusting them uniformly.
+
+Reuse the coupled code-test credibility graph from Recipe 3 here as a verification step: rather than treating every synthetic test as ground truth, weight each test by its mutual code-test credibility, and route low-credibility tests out of the gate entirely (they neither accept nor reject a solution). A solution's pass/fail label is then a credibility-weighted aggregate over the surviving high-credibility tests, not a raw count. This makes Stage 2's soft gate far less noisy on the synthetic-test categories.
+
+**Reward-model note (DeepSeek-Coder-V2, Zhu et al. 2024, arXiv:2406.11931).** Retain the gate outcomes themselves -- the per-example compiler and test 0-1 labels -- as training data, not just as accept/reject decisions. These labels can train a reward model that emits a continuous score, giving a denser learning signal than the binary gate. DeepSeek-Coder-V2 used compiler/test feedback as the reward signal for its reinforcement-learning stage. This reward model is consumed in Phase 6 (Stage 3 alignment) to supply rewards.
 
 ### Stage 3: Idiom judge (LLM-based scoring)
 
@@ -821,6 +909,24 @@ The dashboard does not need to be fancy. A Python script that reads the metadata
 
 **Expected dedup rate:** 15-30% of examples that pass verification are near-duplicates. Generators repeat themselves more than expected.
 
+### Repo-level near-dedup
+
+The two-stage dedup above operates per file. The repo-level synthetic projects (Phase 2) need a third pass that deduplicates at the project level, not the file level (DeepSeek-Coder, Guo et al. 2024, arXiv:2401.14196). Concatenate each synthetic project into a single document and run MinHash near-dedup over the concatenation. Two projects can share many individually-common files (a similar walker, a similar node) yet be distinct as a whole; file-level dedup would over-prune them, while project-level MinHash keeps distinct projects and removes genuine project duplicates.
+
+### Diversity filtering and coverage controls
+
+**Min-neighbor-distance FAISS filter (Magpie, Xu et al. 2024, arXiv:2406.08464).** Beyond removing near-duplicates, actively select the most-isolated examples. Embed every example, index with FAISS, and for each example compute the distance to its nearest neighbor; keep the examples with the largest min-neighbor distance (the most novel) and downsample dense clusters. Blend multiple filter configurations rather than a single threshold -- Magpie found that mixing several diversity-filter settings yields a better final mixture than any one setting alone.
+
+**Cross-family judge validation.** The idiom judge is a single LLM and can carry its own family's blind spots. Validate it with a judge from a different model family on a shared sample, and compare scores. Large systematic disagreement means the judge is miscalibrated, not that the data is bad -- recalibrate the rubric before trusting it at scale.
+
+**Keep a controlled fraction of stubbed/partial samples (Magicoder, Wei et al. 2023, arXiv:2312.02120).** Do not filter the dataset down to only complete, polished programs. Magicoder's ablation showed that retaining a controlled fraction of stubbed or partial samples (incomplete functions, TODO bodies, scaffolding) improved results -- real development is incomplete, and the model needs to handle partial code. Keep an explicit, bounded slice rather than discarding all of it.
+
+**Cosine-to-holdout diagnostic per generation method.** For each generation method (each recipe), measure the mean cosine similarity of its outputs to the eval holdout. This is a diagnostic, not a hard filter: a method whose outputs sit suspiciously close to the holdout warrants a contamination audit, while a method with very low similarity (e.g., OSS-Instruct, which is expected to be far) confirms it is contributing orthogonal coverage.
+
+**Semantic-domain coverage matrix.** The Phase 1 coverage matrix tracks grammar constructs. Add a second, orthogonal matrix tracking semantic domains: embed every example, cluster into roughly 10 domains (web, graph algorithms, data processing, simulation, etc.), and track coverage per domain. A dataset can cover every construct yet cluster into two or three domains; this matrix catches that. Drive generation (especially Recipes 5 and 11) to fill thin domains.
+
+**Structural pretrain filters (DeepSeek-Coder-V2, Zhu et al. 2024, arXiv:2406.11931).** Apply cheap structural filters before the expensive judge, to drop obviously-degenerate samples. Following DeepSeek-Coder-V2's data-cleaning rules, reject any sample with an average line length over 100 characters, a maximum line length over 1000 characters, or fewer than 25% alphabetic characters. These catch minified, generated-blob, or data-dump content that wastes judge budget and pollutes the distribution.
+
 ### Category balance enforcement
 
 After deduplication, check that the dataset matches the target distribution:
@@ -881,6 +987,32 @@ For reasoning-augmented examples, include the reasoning in the assistant respons
 {"messages": [{"role": "user", "content": "Build a task queue with priority ordering in Jac."}, {"role": "assistant", "content": "Here's a priority queue using nodes and edges..."}, {"role": "user", "content": "Can you make it handle duplicate priorities?"}, {"role": "assistant", "content": "Sure, I'll add a timestamp tiebreaker..."}]}
 ```
 
+### Fill-in-the-Middle (FIM) data format
+
+None of the Phase 2 recipes produce infill data -- they all generate complete programs left-to-right. But IDE-style usage is dominated by completion at the cursor, where the model must condition on both the code before and after a hole. Add a FIM/infill data format so the model learns IDE-style completion (DeepSeek-Coder, Guo et al. 2024, arXiv:2401.14196).
+
+**Construction.** Take a verified complete Jac program, split it into a prefix, a middle (the held-out span), and a suffix, then reorder the three pieces with sentinel tokens. Apply FIM at the document level *before* packing, so each FIM document is a self-contained training sample. Use PSM (prefix-suffix-middle) ordering with the sentinel layout:
+
+```
+<|fim_start|>pre<|fim_hole|>suf<|fim_end|>middle<|eos|>
+```
+
+**Rate and mode.** Apply FIM to 0.5 of documents, leaving the other half as plain left-to-right. DeepSeek-Coder's ablation is specific here: 100% FIM hurts left-to-right generation, a 50% FIM rate is the sweet spot, and PSM mode beats SPM (suffix-prefix-middle). Use PSM at a 0.5 rate.
+
+### Data composition ratios
+
+The dataset so far is almost entirely Jac code. DeepSeek-Coder's v1.5 continue-pretrain recipe (Guo et al. 2024, arXiv:2401.14196) found that blending in non-code data gives large math and natural-language gains for a small cost in coding performance. Target a composition close to theirs:
+
+| Component | Share | Source |
+|---|---|---|
+| Code (Jac, all recipes) | ~70% | Phase 2 output |
+| Code-related natural language (docs, comments, READMEs) | ~10% | Recipe 10, doc corpus |
+| Natural language about code (explanations, Q&A) | ~7% | Recipe 9, explanation outputs |
+| Math | ~7% | External math corpus |
+| Bilingual natural language | ~6% | External NL corpus |
+
+The math and general-NL portions are cheap to add and prevent the model from regressing on reasoning and language while it specializes in Jac.
+
 ### Train/val/test split strategy
 
 Split the clean dataset into train (90%), validation (5%), and test (5%) sets. The split must be stratified by:
@@ -910,7 +1042,7 @@ val_idx, test_idx = next(splitter2.split(temp_df, temp_df['strat_key']))
 
 ### Metadata and provenance per example
 
-Every example in the final dataset carries full provenance:
+Every example in the final dataset carries full provenance. The `token_count` field (prompt plus completion, under the target tokenizer) is recorded per example so that packing, FIM document selection, and the Phase 7 token accounting can all read it without retokenizing:
 
 ```json
 {
@@ -928,6 +1060,7 @@ Every example in the final dataset carries full provenance:
   "context_bundle_version": "jac-context-v2",
   "source_prompt_version": "prompt-code_gen-v3",
   "generation_date": "2026-06-01",
+  "token_count": 412,
   "dataset_version": "jac-synth-v1.0.0"
 }
 ```
@@ -1086,6 +1219,13 @@ eval_every: 250               # Validation frequency
 
 **Why these target modules:** in MoE models, the expert layers (gate_proj, up_proj, down_proj) are where specialized knowledge lives. Training LoRA adapters on these layers teaches the model Jac-specific patterns without disturbing the general routing mechanism. The attention layers (q/k/v/o_proj) allow the model to attend to Jac syntax patterns differently. Together, they cover the full transformation pipeline.
 
+### Seed and source curation refinements
+
+Two cheap curation filters on the seed/source pool meaningfully raise the quality of what reaches training:
+
+- **Return-value filter.** Keep only functions that return a value. A function returning nothing has no value to assert against, so its synthetic tests are vacuous and its Recipe 3 credibility graph carries no signal. Restricting the seed pool to value-returning functions guarantees tests can make meaningful assertions.
+- **Docstring-quality classifier.** Run an LLM classifier over candidate seeds and sources to score docstring quality, and drop seeds whose docstrings are missing, trivial, or uninformative. The docstring becomes the task description and the Jac comment, so its quality directly bounds the quality of the generated example.
+
 ### Multi-stage training strategy
 
 Training proceeds in four stages, each building on the previous. Adapters from each stage are merged before the next stage begins (or stacked if mlx-lm supports adapter composition).
@@ -1123,7 +1263,7 @@ python -m mlx_lm.lora \
 - **Learning rate:** 3e-5 (slightly lower than stage 1 to avoid catastrophic forgetting)
 - **Start from:** stage 1 adapter
 
-#### Stage 3: DPO (preference alignment)
+#### Stage 3: Preference alignment (DPO or GRPO)
 
 - **Data:** DPO preference pairs -- idiomatic Jac (chosen) vs. Python-style Jac (rejected). ~40,000-80,000 pairs.
 - **Purpose:** teach the model to discriminate between syntactically valid but non-idiomatic code and truly idiomatic Jac. This is the alignment step that prevents the model from falling back to Python patterns.
@@ -1136,6 +1276,12 @@ Note: as of this writing, mlx-lm may not natively support DPO training. If not, 
 1. Implement DPO loss in a custom MLX training script (the math is straightforward: log-probability ratio between chosen and rejected, with a KL penalty).
 2. Use the TRL library with PyTorch + MPS backend for the DPO stage only (slower but proven).
 3. Convert adapters to PyTorch for DPO training on a cloud A100, then convert back to MLX.
+
+**GRPO alternative (DeepSeek-Coder-V2, Zhu et al. 2024, arXiv:2406.11931).** Consider Group-Relative Policy Optimization in place of (or after) DPO for this alignment stage. GRPO drops the value/critic network that PPO requires -- it estimates the baseline from the mean reward of a group of sampled responses to the same prompt -- which makes it substantially cheaper to run, and it is the method that drove DeepSeek-Coder-V2's code gains. Two pieces of this pipeline make GRPO low-friction to adopt:
+- The Recipe 3 adversarial-negative groups are ready-made GRPO comparison groups: multiple sampled solutions per task, scored relative to each other, are exactly the group structure GRPO needs.
+- The reward model trained on retained gate outcomes (Phase 3, Stage 2.5) supplies the reward signal -- a denser, continuous signal than the binary compiler/test gate.
+
+**Learning-rate nuance (SelfCodeAlign, Wei et al. 2024, arXiv:2410.24198).** Match the learning rate to the data source. SelfCodeAlign used a lower learning rate (~1e-5) for self-generated data and a higher one (~2e-5) for cross-model data. Self-distilled data (Recipe 7) and Magpie data (Recipe 12) are self-generated and should train at the lower rate; frontier- and cross-model-generated data tolerate the higher rate. Where a stage mixes both, lean toward the lower rate to avoid overfitting the self-generated portion.
 
 #### Stage 4: Multi-turn conversation fine-tuning
 
@@ -1232,6 +1378,22 @@ Broader than compiler pass rate -- includes partial correctness. Even if the ful
 
 - **Methodology:** parse the generated code line-by-line and count syntactically valid vs. invalid lines.
 - **Use case:** understanding whether failures are localized (one wrong line) or systemic (the model doesn't understand Jac syntax).
+
+#### Token accounting
+
+Track tokens as a first-class evaluation output, both for cost control and for budgeting future generation runs.
+
+- **Per-example token counts:** report prompt tokens and completion tokens for every eval response, read from the `token_count` provenance field where available or recomputed under the eval tokenizer.
+- **Aggregate consumption:** roll tokens up per batch and per run, broken out by generator and by recipe, so the cost of each generation method is attributable. This tells you which recipes are expensive per surviving example, not just per raw example.
+- **Use case:** cost reporting and budget planning. A recipe with a high token cost per accepted example may be worth retiring even if its raw output volume is high.
+
+#### Runtime efficiency
+
+For correct solutions only (those that compile and pass tests), measure how efficiently the model reaches the answer. This complements the existing token-efficiency metric, which measures output length irrespective of correctness.
+
+- **Tokens-to-correct:** completion tokens spent on solutions that turn out correct. A model that is both correct and concise scores best.
+- **Execution time:** wall-clock runtime of the correct compiled Jac program on the test inputs. Pair fast-and-correct against slow-and-correct to track the runtime-efficiency axis introduced as a DPO/GRPO signal in Recipe 3.
+- **Reporting:** report runtime-efficiency only over the correct subset, so a model is not rewarded for being fast-but-wrong.
 
 ### Judge-based evaluation
 

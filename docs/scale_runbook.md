@@ -9,6 +9,8 @@ This runbook describes the safe operating flow for scaling Jac synthetic data to
 - Do not hand-edit generated dataset artifacts unless the command workflow below cannot represent the review decision.
 - Build or verify the deterministic Python-to-Jac test compiler before scaling conversion or Python-sourced code_gen examples.
 - Build or verify the filtered Python source pool (docstrings, type-checked, 90% test coverage, no benchmark contamination) before scaling Recipe 2 / conversion generation.
+- Configure token accounting so per-example token counts and aggregate per-batch usage are logged from the first batch.
+- For generated-test categories, enable credibility scoring (CodeDPO) so DPO pairs are selected from trusted tests rather than any single synthetic test.
 
 ## 1. Check Readiness
 
@@ -138,3 +140,5 @@ Frozen releases include `IMMUTABLE_RELEASE.json` with checksums and an audit fin
 - Duplicate explosion: resolve clusters or strengthen prompt diversity before continuing scale.
 - Cross-compiled test pass rate drops: inspect whether the test compiler is too strict (dropping valid assertions) or the translations are genuinely wrong. If test compiler is too strict, expand assertion support. If translations are wrong, revise the translation prompt.
 - Python source pool exhaustion: if all filtered Python functions have been translated and more conversion data is needed, expand the source pool by relaxing the docstring requirement to include functions with comments, or by generating Python functions synthetically and filtering them through the same pipeline.
+- Token budget overrun: check the aggregate token report by generator and recipe; shift bulk volume from expensive generators to cheap APIs behind the compiler/test gate.
+- DPO pairs noisy or ambiguous: filter pairs whose winner/loser credibility scores are near-identical; regenerate candidates at higher temperature (1.5) to widen the credibility spread.

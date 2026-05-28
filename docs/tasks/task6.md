@@ -59,6 +59,10 @@ Prepare validated examples for a reproducible dataset release. This task defines
   - Deduplication summary.
   - Manual review summary.
   - Known limitations.
+- [ ] For DPO preference pairs, select winners/losers by mutual code↔test credibility (CodeDPO, 2410.05605) and drop pairs whose credibility scores are near-identical (ambiguous).
+- [ ] Add a runtime-efficiency preference axis: among solutions passing top-credibility tests, pair faster vs slower as preferred/rejected.
+- [ ] For multi-file synthetic Jac projects, run repo-level MinHash near-dedup over the concatenated project rather than per file (DeepSeek-Coder, 2401.14196).
+- [ ] Confirm every clean example records `token_count`; confirm aggregate token usage per batch is logged.
 - [ ] Move the frozen dataset to release storage.
 - [ ] Record which training runs consume the release version.
 
@@ -72,6 +76,7 @@ Prepare validated examples for a reproducible dataset release. This task defines
 - [ ] Confirm duplicate clusters were handled intentionally.
 - [ ] Confirm release counts match the manifest.
 - [ ] Confirm the release artifact is immutable after version freeze.
+- [ ] Confirm DPO pairs were filtered for credibility-score ambiguity.
 
 ## Failure Conditions And Retry Guidance
 
@@ -82,6 +87,7 @@ Prepare validated examples for a reproducible dataset release. This task defines
 - If hard examples are underrepresented, add targeted hard-example pilots before scaling.
 - If candidate-level deduplication for conversion removes too many translations (leaving fewer than 3 unique per source function), lower ROUGE-L threshold to 0.5 or generate additional candidates at different temperatures.
 - If release artifacts and manifest counts disagree, stop and reconcile before training uses the dataset.
+- If DPO training is unstable, use RPO loss (DPO plus a weighted SFT term on the chosen response) (CodeDPO).
 
 ## Completion Criteria
 

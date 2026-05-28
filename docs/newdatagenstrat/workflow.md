@@ -26,7 +26,7 @@ flowchart TD
         TC["Python-to-Jac\nTest Compiler\n(deterministic)"]
     end
 
-    subgraph Recipes["Ten Recipes"]
+    subgraph Recipes["Twelve Recipes"]
         R1["R1: Grammar-walked\ncoverage matrix"]
         R2["R2: Python↔Jac\nparallel corpus"]
         R3["R3: Adversarial\nnegatives (DPO)"]
@@ -37,6 +37,8 @@ flowchart TD
         R8["R8: Multi-turn\nconversation synth"]
         R9["R9: Reasoning-trace\naugmentation"]
         R10["R10: Doc-grounded\nlesson synthesis"]
+        R11["R11: OSS-Instruct\nsnippet-seeded gen"]
+        R12["R12: Zero-seed\ntemplate extraction"]
     end
 
     G --> R1
@@ -50,17 +52,18 @@ flowchart TD
     CU -.->|diversity check| R2
     TC -.->|cross-compiled tests| V1B
 
-    R1 & R2 & R3 & R4 & R5 & R6 & R7 & R8 & R9 & R10 --> RAW["~1.5–2.5M\nraw candidates"]
+    R1 & R2 & R3 & R4 & R5 & R6 & R7 & R8 & R9 & R10 & R11 & R12 --> RAW["~1.5–2.5M\nraw candidates"]
 
     subgraph Verification["Verification Gate"]
         V1["Compiler pass\n(hard gate)"]
         V1B["Cross-compiled tests\n(hard gate, deterministic)"]
+        VCR["Credibility scoring\n(code↔test PageRank)"]
         V2["Test suite\n(non-cross-compiled)"]
         V3["Idiom judge\n(vs skills.md)"]
         V4["Sample review\n(manual spot)"]
     end
 
-    RAW --> C --> V1 --> V1B --> V2 --> V3 --> V4
+    RAW --> C --> V1 --> V1B --> VCR --> V2 --> V3 --> V4
 
     V4 -->|~20-40% survive| VER["Verified pool"]
 
@@ -68,9 +71,10 @@ flowchart TD
         DC["Decontamination\n(vs eval holdout)"]
         DM["Distribution monitoring\n(construct freq, persona, difficulty)"]
         DD["Two-stage dedup\n(code MinHash → prose cosine)"]
+        TOK["Token accounting\n(per-example + aggregate)"]
     end
 
-    VER --> DC --> DM --> DD
+    VER --> DC --> DM --> DD --> TOK
 
     subgraph Output["~300–500k verified examples"]
         SFT["SFT 150–250k\n(code gen)"]

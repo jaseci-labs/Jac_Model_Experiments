@@ -115,7 +115,7 @@ Without this instruction, batches cluster around similar examples and the datase
 
 ### Category quality rules
 
-**Code generation** examples use the structure: natural language prompt -> correct, compilable Jac code. Prompts should be unambiguous, should have one reasonable implementation, and should vary from single-function tasks to small complete programs. Complexity should be roughly 40% simple, 40% medium, and 20% hard.
+**Code generation** examples use the structure: natural language prompt -> correct, compilable Jac code. Prompts should be unambiguous, should have one reasonable implementation, and should vary from single-function tasks to small complete programs. Complexity should be roughly 40% simple, 40% medium, and 20% hard. For directly-generated (non-translated) code examples with testable behavior, have the model emit the Jac solution and its tests in one completion, then filter on execution — co-generating tests improves consistency (SelfCodeAlign, 2410.24198).
 
 **Debugging** examples use the structure: broken Jac code + compiler error message -> fixed Jac code + explanation. Generate these from valid compiler-verified Jac code, inject one realistic error type, confirm the broken version fails as expected, and confirm the fixed version compiles.
 
@@ -123,7 +123,7 @@ Without this instruction, batches cluster around similar examples and the datase
 
 **Code conversion** examples use the structure: Python code -> idiomatic Jac code that preserves behavior. Cover function-to-ability conversion, class-to-node conversion, graph pattern conversion, and algorithms rewritten around walkers and traversal. Generate 50--100 candidate Jac translations per Python source function at high temperature (0.8). Keep all translations that pass cross-compiled tests. This diversity-through-sampling approach produces more varied training data than generating a single translation per source.
 
-Before translating, filter Python source functions aggressively: require docstrings, Pyright type-check passing, no TODO/incomplete markers, no benchmark contamination, and LLM-generated unit tests with at least 90% line coverage. This filtering follows the MultiPL-T methodology that reduced 22 million Python functions to 133,000 high-quality translation candidates.
+Before translating, filter Python source functions aggressively: require docstrings, Pyright type-check passing, no TODO/incomplete markers, no benchmark contamination, and LLM-generated unit tests with at least 90% line coverage. This filtering follows the MultiPL-T methodology that reduced 22 million Python functions to 133,000 high-quality translation candidates. Two further criteria sharpen the candidate pool: keep only Python functions that return a value, so generated tests have meaningful assertions (SelfCodeAlign, 2410.24198); and drop functions with misleading docstrings using a binary docstring-quality LLM classifier (SelfCodeAlign).
 
 ### Type inference from test execution
 
@@ -169,6 +169,15 @@ Soft gate: failing the test harness flags the example for manual review, it does
 ### Deduplication
 
 After each batch, run a deduplication pass. Remove exact duplicates and near-duplicates where prompts differ only in variable names or trivial surface changes. Run a full deduplication pass again before finalizing the dataset.
+
+---
+
+## Seeding And Coverage Beyond The Grammar
+
+Two coverage axes that complement direct generation:
+
+- **Snippet-seeded generation (OSS-Instruct, Magicoder 2312.02120).** Feed the generator 1--15 random lines of real Python code and ask it to invent a self-contained, unrelated Jac problem inspired by the fragment. This injects real-world domain structure that grammar-driven or persona-driven prompts miss. Abstract the snippet to high-level concepts before generating so the model does not echo an out-of-distribution format (SelfCodeAlign found seed→concepts beats seed→instruction directly).
+- **Semantic-domain coverage.** Track a domain axis (algorithmic, DB/SQL, web, security, systems, data-processing, graph, math, CLI, domain-specific) orthogonal to the Jac construct coverage. Cluster generated tasks by embedding and balance domains so the dataset does not over-index on whatever the generator finds easy.
 
 ---
 
@@ -263,6 +272,12 @@ For trajectories, review the same 5--10% sample checking that agent reasoning is
 The category ranges are planning bands. Their absolute lower bounds add up to 9,000, but a release should continue generation and balancing until it reaches at least 10,000 clean examples.
 
 Hard examples (20% of each category) matter most for ceiling performance. Do not deprioritize them in favor of generating more easy examples quickly.
+
+---
+
+## Token Accounting
+
+Track tokens at two levels. Per-example: record each example's token count (prompt plus completion) so context-window fit and token-efficiency can be measured and over-long examples filtered before training. Aggregate: log total tokens consumed per batch and per generation run, broken down by generator and recipe, for cost and budget tracking. Per-example counts live in example metadata; aggregate counts live in the generation logs.
 
 ---
 

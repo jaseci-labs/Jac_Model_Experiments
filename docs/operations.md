@@ -102,6 +102,32 @@ Check Python source pool stats:
 python -m data_generation.python_source stats
 ```
 
+## Token Accounting And Credibility Scoring
+
+Report per-example and aggregate token usage:
+
+```bash
+python -m data_generation.tokens report --version jac-synth-v0.1.0 --by generator,recipe
+```
+
+Compute mutual code↔test credibility scores for a task's candidate solutions and tests (CodeDPO):
+
+```bash
+python -m data_generation.credibility score --task-id code_gen-20260511-006-0001 --solutions 15 --temperature 1.5 --damping 0.85 --iterations 10
+```
+
+Build DPO preference pairs from credibility scores (drops near-identical-score pairs, adds runtime-efficiency pairs):
+
+```bash
+python -m data_generation.credibility build-dpo --version jac-synth-v0.1.0 --include-runtime-efficiency
+```
+
+Cross-validate the idiom judge with an out-of-family model:
+
+```bash
+python -m data_generation.manual_review cross-judge --sample 50 --judge-family qwen
+```
+
 ## Manual Review
 
 List pending reviews:

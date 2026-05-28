@@ -40,6 +40,12 @@ Define the validation gates that protect the clean dataset. This task covers com
   - For `debug` examples where the original working code had cross-compiled tests: `fixed_code` must pass the same cross-compiled tests. Fail = reject the debugging pair.
   - The deterministic test compiler translates Python assertions (`assert f(x) == y`) to Jac assertions. It handles first-order values (ints, strings, booleans, lists, tuples, dicts). It does NOT use an LLM. If a test case uses Python features that cannot be compiled to Jac (e.g., complex object comparisons), that test case is dropped. If zero test cases survive compilation, the example is flagged for manual review rather than auto-rejected.
   - Cross-compiled test validation does not apply to `explanation` or `trajectory` categories.
+- Define credibility scoring for untrusted generated tests (CodeDPO, 2410.05605):
+  - Generate multiple candidate solutions (15 at temperature 1.5) and multiple candidate tests per task.
+  - Build a bipartite pass/fail graph; iterate coupled PageRank scores (damping 0.85, ~10 iterations).
+  - Use credibility to select trusted tests and rank solutions instead of trusting any single synthetic test.
+  - Cross-compiled tests remain the strongest gate; credibility scoring applies where only generated tests exist.
+- Retain compiler/test gate outcomes (0--1 labels) as training data for a reward model that gives a denser signal than the binary gate (DeepSeek-Coder-V2, 2406.11931).
 - Define compiler pass handling:
   - Passing examples can move to the next gate.
   - Failing code generation examples move to `rejected/` and may be recycled into debugging seeds.
@@ -68,6 +74,7 @@ Define the validation gates that protect the clean dataset. This task covers com
   - Cross-compiled test pass rate target for code_gen: at least 70% of compilable deterministic examples.
   - Cross-compiled test pass rate target for conversion: at least 80% of compilable candidate translations.
   - Python source test coverage minimum before translation: 90% line coverage.
+  - Prefer credibility ranking over naive passed-test-count ranking when generated tests are untrusted.
 - Define validation logs:
   - Batch ID.
   - Prompt version.

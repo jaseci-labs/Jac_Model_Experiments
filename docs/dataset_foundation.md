@@ -35,7 +35,7 @@ flowchart TD
 
 `dataset/review/` stores manual review samples, reviewer notes, adjudication records, and review status updates. Review files must reference the relevant example IDs and batch IDs rather than duplicating clean examples as independent source records.
 
-`dataset/logs/` stores process logs for generation, parsing, compiler checks, tests, retries, and deduplication. Logs support reproducibility and failure analysis; they are not examples.
+`dataset/logs/` stores process logs for generation, parsing, compiler checks, tests, retries, and deduplication. Logs support reproducibility and failure analysis; they are not examples. `dataset/logs/generation/` also records aggregate token usage per batch and per run, broken down by generator and recipe, for cost and budget tracking.
 
 `dataset/releases/` stores frozen dataset versions used by training runs. Release contents should be immutable after version freeze and should reference the exact dataset version consumed by training.
 
@@ -214,11 +214,19 @@ Allowed `generator` values:
   "test_coverage_percent": 95,
   "cross_compiled_tests_pass": true,
   "candidate_translation_count": 50,
-  "type_inference_method": "runtime_observation"
+  "type_inference_method": "runtime_observation",
+  "token_count": 412,
+  "prompt_token_count": 96,
+  "completion_token_count": 316,
+  "test_credibility_score": 0.91,
+  "solution_credibility_score": 0.88,
+  "runtime_ms": 14,
+  "semantic_domain": "graph",
+  "seed_source": "oss_instruct"
 }
 ```
 
-Optional fields are category-specific and must not become required for unrelated categories. For example, `error_type` is useful for debugging examples, `granularity` is useful for explanation examples, and `trajectory_length_tokens` is useful for trajectory examples. `source_python_id` links conversion and Python-sourced code_gen examples to their source Python function. `source_test_count`, `test_coverage_percent`, and `cross_compiled_tests_pass` record cross-compiled test validation results following the MultiPL-T methodology. `candidate_translation_count` records how many candidate translations were generated for the source function. `type_inference_method` records how Python types were inferred for Jac type annotations (`runtime_observation`, `pyright_static`, or `none`).
+Optional fields are category-specific and must not become required for unrelated categories. For example, `error_type` is useful for debugging examples, `granularity` is useful for explanation examples, and `trajectory_length_tokens` is useful for trajectory examples. `source_python_id` links conversion and Python-sourced code_gen examples to their source Python function. `source_test_count`, `test_coverage_percent`, and `cross_compiled_tests_pass` record cross-compiled test validation results following the MultiPL-T methodology. `candidate_translation_count` records how many candidate translations were generated for the source function. `type_inference_method` records how Python types were inferred for Jac type annotations (`runtime_observation`, `pyright_static`, or `none`). `token_count` (and optional `prompt_token_count` / `completion_token_count`) record per-example token length for context-window fit and token-efficiency tracking. `test_credibility_score` and `solution_credibility_score` record CodeDPO-style mutual code↔test credibility (0–1). `runtime_ms` records execution time for runtime-efficiency preference pairs. `semantic_domain` records the embedding-clustered domain (algorithmic, db_sql, web, security, systems, data_processing, graph, math, cli, domain_specific). `seed_source` records how the example was seeded (`grammar_matrix`, `python_translation`, `oss_instruct`, `zero_seed`, `persona`, `doc`, `evol`).
 
 ### Clean Code Generation Metadata Example
 

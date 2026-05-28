@@ -84,6 +84,8 @@ Parse the Jac grammar into a flat list of constructs (walker, node, edge, abilit
 
 **Step 6: Validate translations with cross-compiled tests.** Compile each candidate Jac translation. Run cross-compiled tests against each compilable candidate. Keep all candidates that pass all tests. This is a hard gate — test failure rejects the candidate.
 
+**Note — interleaved (solution + tests) generation (SelfCodeAlign).** Where a candidate is generated directly rather than translated from validated Python, have the model emit the Jac solution and its Jac tests in a single completion, then filter on execution. Co-generating the tests with the response improves solution↔test consistency over running a separate test-writing pass after the fact.
+
 **Step 7: Deduplicate within candidates.** For each source function, the surviving candidates may include near-duplicates (same logic, renamed variables). Deduplicate using ROUGE-L (threshold 0.6) after stripping comments. Keep diverse implementations — two solutions that pass the same tests but use different algorithms (e.g., recursive vs. walker-based) are both valuable.
 
 **Output per pipeline run (3 datasets from 1):**
@@ -105,6 +107,8 @@ For every working example, also generate the "tempting wrong version" — what a
 - **Compiles but non-idiomatic:** confirm with judge against `skills.md`, pair with idiomatic version for DPO. Model learns to prefer the Jac way over the syntactically-valid-but-wrong way.
 
 A Python-priored base model will fail in exactly these ways. Positive-only training will not fix this — the model needs explicit negative signal. This is one of the highest-leverage recipes for a language with strong neighbour-language interference.
+
+**Mutual code↔test credibility ranking (CodeDPO, 2410.05605).** Synthetic tests are untrusted, so do not let a single generated test decide which solution wins a DPO pair. For each task, generate N candidate Jac solutions (15, temperature 1.5) and M candidate Jac tests, then build a bipartite pass/fail graph linking each solution to each test it passes. Iterate two coupled PageRank-style scores (damping 0.85, ~10 iterations): a solution gains credibility from passing tests that many credible solutions pass, and a test gains credibility from being passed by credible solutions. Select DPO winners (high-credibility solutions) and losers (low-credibility) from these converged scores rather than from any single test outcome. This self-calibrating signal correlated with true accuracy at Spearman 0.86, versus 0.61 for the naive "passes all tests" heuristic. Three refinements harden the pairs: (a) a second orthogonal DPO axis — **runtime-efficiency pairs**: among solutions that pass the top-credibility tests, time their execution and pair fast-vs-slow as preferred/rejected, teaching efficiency independently of correctness; (b) filter out preference pairs whose winner and loser credibility scores are near-identical, since ambiguous pairs add noise rather than signal; (c) train with the RPO loss (DPO plus a weighted SFT term on the chosen response) for stability.
 
 ### Recipe 4 — Bug-synthesis pipeline
 
@@ -134,11 +138,17 @@ Some personas should produce *bad* task descriptions — ambiguous, missing cont
 
 Track lineage. After training, ablate which evolution axes contributed most — that's how you tune the recipe mix for v2.
 
+**Merge-all-rounds and Evol-Stop (WizardCoder, 2306.08568).** Do not discard earlier evolution tiers: keep every round merged with all prior rounds and the original seed, not just the latest tier. This preserves the easy→hard difficulty gradient the model needs, and WizardCoder's ablation showed the combined set beats any single round in isolation. Halt evolution against a held-out Jac dev set — stop the round its performance drops rather than evolving blindly; ~3 rounds was optimal and the gains are non-monotonic. Cap each round to a bounded constraint budget (~10 words of new constraints per round) so difficulty rises gradually rather than in large, hard-to-verify jumps.
+
 ### Recipe 7 — Self-distillation loop
 
 **Goal:** scale beyond external-model budgets after v0 is trained.
 
 Once v0 of finetuned Gemma exists, fold it back in as a generator. v0 generates → compiler/tests verify → keep what passes → mix into training set → train v1 → repeat. Two non-negotiables: (a) retain some fraction of frontier-model-generated data each round to prevent drift, and (b) do not relax verification — local models will produce subtler errors than frontier models. After 2–3 iterations, v_n contributes data the frontier models wouldn't produce in the same shape.
+
+**Self-distill can beat cross-distill (SelfCodeAlign, 2410.24198).** Do not assume a stronger external teacher always wins. A model often learns better from its own verified outputs than from a stronger but distribution-different teacher — for example, a Python-priored frontier model translating to Jac injects an off-distribution accent that the self-distilled samples avoid — unless the raw capability gap is large. Validate self-distill vs cross-distill per-axis rather than assuming the bigger teacher is better everywhere.
+
+**fastText recall-expansion (DeepSeek-Coder-V2, 2406.11931).** Seed a fastText classifier with validated Jac snippets, then iteratively mine the Python source pool for functions whose patterns translate cleanly to Jac, prioritizing the high-yield translation candidates the classifier surfaces. Run ~3 iterations, folding newly validated translations back into the classifier seed each round so recall expands toward the parts of the Python pool that actually yield good Jac.
 
 ### Recipe 8 — Multi-turn conversation synthesis
 
@@ -159,6 +169,18 @@ Recent reasoning-aware code-data research has shown this kind of trace can subst
 **Goal:** guarantee every documented feature has training data.
 
 For each section of `skills.md` and other internal docs, generate a "lesson pack": 3–5 worked examples illustrating the section's content, 5–10 practice problems with solutions, 5–10 common-mistake examples paired with corrections, 2–3 advanced compositions combining this material with other sections. Doc text goes into the generator's context as authoritative reference. Pair with test-suite generation: each example gets its own test suite, which becomes data for the "write tests for this code" capability.
+
+### Recipe 11 — OSS-Instruct snippet-seeded generation (Magicoder, 2312.02120)
+
+**Goal:** inject real-world domain structure that grammar-walks and personas miss.
+
+Feed the generator 1–15 random consecutive lines of real open-source code — seed from the Python source pool, since no Jac corpus exists — and prompt it to invent a self-contained, *unrelated* Jac problem "inspired by" the fragment. The point is the orthogonal real-world signal the snippet carries (banking logic, RL agents, ETL stages, color maps), not reuse of the snippet itself. Magicoder showed this approach has the lowest similarity to eval sets yet the best downstream results, which is direct evidence the gains come from genuine diversity and not leakage. Abstract the seed snippet to high-level concepts before generating: SelfCodeAlign found seed→concepts→instruction beats seed→instruction directly (65.2 vs 59.8), so the model draws on the domain idea rather than echoing an out-of-distribution Python format.
+
+### Recipe 12 — Zero-seed template extraction (Magpie, 2406.08464)
+
+**Goal:** break the diversity ceiling of seed-anchored recipes once a v0 Jac model exists.
+
+Prompt the finetuned Jac model with only the pre-query chat-template prefix — no seed, no instruction — and let auto-regression self-generate a fresh Jac instruction; a second pass then generates the response. Decode the instruction at high temperature (1.0–1.25, top-p 0.99) to maximize difficulty and diversity, but decode the response greedily, since the highest-probability tokens best reflect the correct training distribution the model has internalized. This is the strongest lever against the "no corpus exists" constraint because it manufactures novel instructions with no seed dependency at all. Run every output through the full verification pipeline (compiler, tests, idiom judge) before keeping it.
 
 ---
 
@@ -214,6 +236,30 @@ MinHash dedup at the code level (cheaper) catches the most duplicates. Then chec
 
 For Recipe 2 specifically, deduplication happens in three stages: (1) within the 50–100 candidates per source function using ROUGE-L, (2) code-level MinHash across the full conversion dataset, and (3) prose cosine similarity across task descriptions. The first stage is the cheapest and catches the most duplicates because the same source function's translations share structure.
 
+### Semantic-domain coverage matrix (Magicoder)
+
+Add a domain axis orthogonal to the grammar-construct matrix of Recipe 1. Cluster generated tasks with an instruction-tuned embedder into ~10 semantic domains (algorithmic, DB/SQL, web, security, systems, data-processing, graph, math, CLI, domain-specific) and balance the distribution across them. Without this, the dataset over-indexes on whatever domain the generator happens to find easy, which the construct matrix alone cannot detect because a single construct can be exercised entirely within one domain.
+
+### Min-neighbor-distance filtering, not just dedup (Magpie)
+
+Treat embedding nearest-neighbor distance (computed with FAISS) as a tunable quality/diversity filter, not merely a duplicate detector — keep the most *isolated* examples rather than only dropping near-duplicates, combining the distance threshold with quality, difficulty, and length thresholds. No single filter configuration wins across all benchmarks, so produce several differently-filtered Jac subsets and blend them rather than committing to one cutoff.
+
+### Cross-family judge validation (Magpie)
+
+Re-score a sample of idiom-judge outputs with an out-of-model-family judge (for example, Qwen scoring outputs the Claude-family idiom judge already scored, or vice versa) to confirm the idiom judge is not self-favoring its own family's outputs. Since the idiom judge is the most-used judge in the pipeline, a quiet self-preference bias would skew the whole corpus.
+
+### Keep a controlled fraction of stubbed samples (Magicoder)
+
+Do not filter out all incomplete code. Magicoder's ablation found that retaining a small fraction of compiler-valid but partially-implemented Jac — code containing `pass` or other stubs — beat the fully-cleaned set. Keep a controlled fraction of these so the model still sees realistic in-progress code rather than only finished solutions.
+
+### Cosine-to-holdout as a quality diagnostic (Magicoder)
+
+Track the mean cosine similarity of each generation method's output to the eval holdout, and prefer methods that score *lower* (more novel) while still passing the compiler and test gates. This is a quality signal about which recipes produce genuinely new distribution, kept separate from decontamination-by-removal — here a low score is good, whereas in decontamination a high overlap triggers deletion.
+
+### Reward model on gate outcomes (DeepSeek-Coder-V2)
+
+For sparse-coverage tasks, train a reward model on the compiler/test 0–1 gate labels to produce a denser, less noisy signal than the raw binary gate, then use it to rank candidates and to feed GRPO (group-relative preference optimization). The adversarial-negative groups from Recipe 3 are ready-made comparison groups for GRPO, so the credibility-ranked solution sets and the reward model compose directly.
+
 ---
 
 > **The compounding insight.** Recipes compose multiplicatively. A single base task from Recipe 1 can yield: 1 SFT example, 2 DPO pairs (via Recipe 3), a debugging trace (Recipe 4), a multi-turn refinement conversation (Recipe 8), a reasoning trace (Recipe 9), and a Python translation (Recipe 2 in reverse). Plan every verified artifact as a seed crystal that grows in multiple directions — that's how volume and diversity emerge from a fully synthetic pipeline.
@@ -227,6 +273,12 @@ For Recipe 2 specifically, deduplication happens in three stages: (1) within the
 - Eval holdout set composition — should mirror the six target capabilities (generation, debugging, explanation, conversion, agentic, orchestration) at 50–100 tasks each.
 - Compiler harness throughput target — for 1.5–2.5M raw candidates, the compiler needs to handle ~5k examples/hour sustained. Confirm this is achievable on the available infra.
 - Storage and lineage format — every verified example should carry its full provenance (recipe, generator, seed, evolution path, verification levels passed) for ablation studies later.
+
+---
+
+## Token accounting
+
+Track tokens at two levels. (1) **Per-example:** record the token count of every generated example (prompt + completion) so context-window fit and the token-efficiency eval metric can be computed, and so over-long examples can be filtered out before training. (2) **Aggregate:** log total tokens consumed per batch and per generation run, broken down by generator and recipe, for cost and budget tracking. Per-example counts live in each example's metadata (`token_count`, with optional `prompt_token_count` / `completion_token_count`); aggregate counts live in `dataset/logs/generation/`.
 
 ---
 

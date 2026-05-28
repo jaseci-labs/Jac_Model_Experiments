@@ -51,7 +51,7 @@ Every clean candidate must carry:
 - `validator_version`
 - `dataset_version`
 
-Optional category-specific fields include `error_type`, `granularity`, `trajectory_length_tokens`, `dedup_hash`, `reviewer`, `review_status`, `rejection_reason`, `source_python_id`, `source_test_count`, `test_coverage_percent`, `cross_compiled_tests_pass`, `candidate_translation_count`, and `type_inference_method`.
+Optional category-specific fields include `error_type`, `granularity`, `trajectory_length_tokens`, `dedup_hash`, `reviewer`, `review_status`, `rejection_reason`, `source_python_id`, `source_test_count`, `test_coverage_percent`, `cross_compiled_tests_pass`, `candidate_translation_count`, `type_inference_method`, `token_count`, `prompt_token_count`, `completion_token_count`, `test_credibility_score`, `solution_credibility_score`, `runtime_ms`, `semantic_domain`, and `seed_source`.
 
 ## Release Artifacts
 

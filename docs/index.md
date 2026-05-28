@@ -23,6 +23,7 @@ This documentation covers the Jac synthetic data pipeline for both maintainers a
 - Cross-compiled test validation, Python source filtering, type inference from test execution, and multi-candidate translation are documented throughout the pipeline docs following the MultiPL-T methodology (Cassano et al. 2024).
 - [`modeltesting/`](modeltesting/): model comparison strategy and evaluation methodology for testing Gemma 4 26B A4B, Qwen3-Coder-30B-A3B, and DeepSeek-V3-Lite on a 5k example sample before committing to full-scale generation.
 - [`tasks/`](tasks/): roadmap and task-by-task build plan for the pipeline.
+- Additional generation and verification techniques are adopted from a set of code-LLM papers (WizardCoder, Magicoder/OSS-Instruct, DeepSeek-Coder, DeepSeek-Coder-V2, Magpie, CodeDPO, SelfCodeAlign): snippet-seeded and zero-seed generation, credibility-ranked DPO, runtime-efficiency pairs, semantic-domain coverage, FIM data, repo-level synthetic projects, and token accounting. See `newdatagenstrat/` and `wholestack/`.
 
 ## Source Of Truth
 
@@ -35,4 +36,6 @@ The docs intentionally point back to code-backed definitions:
 - `src/data_generation/release.py` defines readiness, audit, deduplication, manifest, and freeze behavior.
 - `src/data_generation/python_source.py` defines Python source filtering, test generation, type inference, and source pool management.
 - `src/data_generation/test_compiler.py` defines the deterministic Python-to-Jac test compiler for cross-compiled test validation.
+- `src/data_generation/credibility.py` defines CodeDPO-style mutual code↔test credibility scoring, DPO pair construction, and runtime-efficiency pairs.
+- `src/data_generation/tokens.py` defines per-example and aggregate token accounting.
 - `src/data_generation/docs_stats.py` generates the stats page from current artifacts.

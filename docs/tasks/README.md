@@ -16,6 +16,9 @@ The work should proceed slowly: design a small sample, generate a tiny batch, va
 - Raw output, rejected examples, and clean examples must be stored separately.
 - Prompts, schemas, validation logs, and dataset versions must be reproducible.
 - Scaling happens only after pilot batches show stable quality.
+- Generation seeds from multiple sources (grammar matrix, Python translation, OSS-Instruct snippets, doc-grounded, personas, Evol-Instruct, and zero-seed extraction once a v0 model exists); track `seed_source` per example.
+- Untrusted synthetic tests are weighted by mutual code↔test credibility (CodeDPO); cross-compiled tests remain the strongest gate.
+- Track tokens per example and in aggregate per batch/run for context-window fit and cost.
 
 ---
 
@@ -27,6 +30,7 @@ The work should proceed slowly: design a small sample, generate a tiny batch, va
 - [ ] [`task4.md`](task4.md): Single-turn category generation loops.
 - [ ] [`task5.md`](task5.md): Agentic trajectory generation with vibe-coding agents and Jac MCP/tooling.
 - [ ] [`task6.md`](task6.md): Deduplication, manual review, versioning, and release readiness.
+- [ ] [`task7.md`](task7.md): Advanced generation and preference recipes (snippet-seeded, zero-seed, credibility-ranked DPO, runtime-efficiency pairs, FIM data, repo-level projects). [Planned]
 
 Each phase depends on the previous phase. Do not begin high-volume generation before the setup, prompt design, validation, and pilot review phases are complete.
 
@@ -68,6 +72,8 @@ Use the same cadence for every category:
 - Prompt revision rules are documented.
 - Pilot batch settings are defined.
 - JSON parsing and schema validation expectations are written.
+- Type inference, Python source filtering, snippet-seeded, and interleaved generation modes are documented.
+- `seed_source` and `token_count` are recorded on every generated example.
 
 ### Task 3: Validation
 
@@ -96,11 +102,21 @@ Use the same cadence for every category:
 
 ### Task 6: Release Readiness
 
-- Deduplication rules are documented.
+- Deduplication rules are documented (including repo-level dedup for multi-file projects).
 - Manual review sampling process is documented.
 - Dataset versioning rules are documented.
 - Final audit checklist is complete.
 - Release criteria are clear.
+- DPO pairs are selected by credibility, filtered for ambiguity, and include a runtime-efficiency axis.
+- Every clean example records `token_count`; aggregate token usage per batch is logged.
+
+### Task 7: Advanced Generation and Preference Recipes
+
+- Snippet-seeded and zero-seed generation modes are documented with pilot results.
+- Credibility-ranked DPO and runtime-efficiency pairs are documented.
+- FIM data format and repo-level synthetic projects are documented.
+- Evolution control (merge-all-rounds, Evol-Stop) is documented.
+- A decision is recorded on which advanced recipes graduate into volume generation.
 
 ---
 
@@ -116,6 +132,8 @@ Use the same cadence for every category:
 - [ ] Manual review pass rate remains at or above 80% before continuing volume generation.
 - [ ] Deduplication is run after every batch and again before release.
 - [ ] Final dataset version is frozen before training consumes it.
+- [ ] Credibility scoring validated before building DPO pairs from generated (non-cross-compiled) tests.
+- [ ] Token accounting active from the first batch.
 
 ---
 

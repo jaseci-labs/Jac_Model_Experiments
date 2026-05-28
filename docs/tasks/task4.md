@@ -30,6 +30,8 @@ Define the slow, repeatable generation loops for the four scripted OpenAI API ca
 - [ ] Compile every `code` field.
 - [ ] Run behavior tests when prompts include expected observable outputs.
 - [ ] For code_gen examples sourced from Python (translated tasks), use cross-compiled tests as a hard gate: generate tests in Python, verify coverage, compile to Jac deterministically, reject examples that fail.
+- [ ] Add a snippet-seeded generation variant: seed with 1--15 random Python lines, abstract to concepts, request an unrelated self-contained Jac task (OSS-Instruct / Magicoder, 2312.02120) to inject real-world domain diversity.
+- [ ] For testable code generation, emit the Jac solution and its tests in one completion and filter on execution (SelfCodeAlign, 2410.24198).
 - [ ] Manually inspect all pilot examples for prompt clarity and idiomatic Jac.
 - [ ] Revise the prompt if examples are vague, trivial, duplicated, or Python-like.
 - [ ] Scale only after the pilot has clean JSON, strong compiler results, and acceptable review quality.
@@ -59,6 +61,7 @@ Define the slow, repeatable generation loops for the four scripted OpenAI API ca
 
 ### Code Conversion
 
+- [ ] Keep only Python sources that return a value (meaningful assertions) and drop misleading-docstring sources via a docstring-quality classifier (SelfCodeAlign).
 - [ ] Build a filtered Python source pool before generating any conversions:
   - Filter Python functions to require: docstring present, Pyright type-check passing, returns a value, no TODO/FIXME/incomplete markers, no overlap with HumanEval/MBPP benchmarks.
   - Generate unit tests for each Python function using an LLM. Verify tests pass. Require at least 90% line coverage.
@@ -102,6 +105,7 @@ Define the slow, repeatable generation loops for the four scripted OpenAI API ca
 - If cross-compiled tests reject more than 70% of candidate translations for a Python source function, remove that source from the pool rather than relaxing test criteria.
 - If the deterministic test compiler cannot handle a Python test case's assertion format, drop that test case. If zero test cases survive compilation for a source function, flag it for manual review.
 - If type inference produces incorrect types causing Jac compilation failures, fall back to untyped translation and record `type_inference_method: none`.
+- If grammar-driven and persona-driven prompts produce a narrow domain distribution, add snippet-seeded (OSS-Instruct) batches to broaden semantic-domain coverage.
 
 ## Completion Criteria
 

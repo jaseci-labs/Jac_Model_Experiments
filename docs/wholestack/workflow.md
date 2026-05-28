@@ -66,6 +66,8 @@ flowchart TD
 
         subgraph BOOTSTRAP["Bootstrap (Week 5+)"]
             R7["R7: Self-Distillation\nLoop\n(10-30k/round free)"]
+            R11["R11: OSS-Instruct\nSnippet-Seeded Gen"]
+            R12["R12: Zero-Seed\nTemplate Extraction"]
         end
 
         CORE_RECIPES --> NEG_RECIPES
@@ -82,15 +84,17 @@ flowchart TD
 
     RAW["~1.5-2.5M\nRaw Candidates"]
     CORE_RECIPES & NEG_RECIPES & OVERLAY_RECIPES & BOOTSTRAP --> RAW
+    R11 & R12 --> RAW
 
     subgraph P3["Phase 3: Verification Pipeline"]
         direction TB
         V1["Stage 1: Compiler Gate\n(HARD -- every code field)\nExpected: 60-80% pass"]
         V1B["Cross-compiled tests\n(hard gate, deterministic)"]
+        VCR["Credibility Scoring\n(code<->test PageRank)"]
         V2["Stage 2: Test Suite\n(non-cross-compiled)\nExpected: 70-90% pass"]
         V3["Stage 3: Idiom Judge\n(LLM scores vs skills.md)\nScore >= 4 accepted\nExpected: 40-60% pass"]
         V4["Stage 4: Manual Review\n(5-10% sample)\nReviewer checklist"]
-        V1 --> V1B --> V2 --> V3 --> V4
+        V1 --> V1B --> VCR --> V2 --> V3 --> V4
 
         REJ_COMP["Rejected:\nCompiler Fail"]
         REJ_IDIOM["Rejected:\nIdiom Score <= 2"]
@@ -117,7 +121,9 @@ flowchart TD
         DD2["Prose-Level Dedup\n(Cosine similarity > 0.92)"]
         BAL["Category Balance\nEnforcement\n(vs target proportions)"]
         REG["Batch Quality\nRegression Checks"]
-        DC --> DM --> DD1 --> DD2 --> BAL --> REG
+        TOK["Token Accounting\n(per-example + aggregate)"]
+        SDC["Semantic Domain Coverage\n(topic/domain distribution)"]
+        DC --> DM --> DD1 --> DD2 --> BAL --> REG --> TOK --> SDC
     end
 
     VER --> P4
