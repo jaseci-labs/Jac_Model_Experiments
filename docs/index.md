@@ -8,7 +8,7 @@ This documentation covers the Jac synthetic data pipeline for both maintainers a
 - Dataset consumers: [`stats.md`](stats.md), [`dataset.md`](dataset.md), [`quality.md`](quality.md), and release artifacts under `dataset/releases/` when a version is frozen.
 - Operators scaling data: [`operations.md`](operations.md), [`scale_runbook.md`](scale_runbook.md), and [`tasks/task6.md`](tasks/task6.md).
 - Full-app strategy reviewers: [`newdatagenstrat/`](newdatagenstrat/) for the proposed Claude Code + Jac MCP app-generation workflow.
-- Model selection: [`modeltesting/`](modeltesting/) for the 3-model comparison strategy (Gemma 4, Qwen3-Coder, DeepSeek-V3-Lite) on 5k sample data before full-scale generation.
+- Model selection: [`modeltesting/`](modeltesting/) for the 3-model comparison strategy (Gemma 4, Qwen3-Coder, DeepSeek-V3-Lite) on 5k sample data before full-scale generation, starting with the single-category [`modeltesting/conversion_probe.md`](modeltesting/conversion_probe.md) pre-step.
 
 ## Pages
 

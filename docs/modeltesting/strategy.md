@@ -13,6 +13,12 @@
 
 ---
 
+## Conversion Probe (pre-step)
+
+Before this full 5,000-example comparison, run a cheaper single-category **conversion probe** ([`conversion_probe.md`](conversion_probe.md)). It finetunes all three candidates on ~1,500 Python→Jac conversion pairs (plus a small DPO set) and ranks them by cross-compiled test pass rate — an objective metric that needs no subjective judge. Its only job is to drop clear losers cheaply: a model that cannot improve on the most-verifiable category is disqualified before the full comparison spends compute on it. Models that pass the probe (or tie within noise) advance here. The probe does not replace this comparison; it gates entry to it.
+
+---
+
 ## Why test before committing to full-scale generation
 
 The full-scale data generation pipeline targets 300,000 to 500,000 verified examples. Producing that volume requires significant investment across multiple dimensions: API costs for Claude Max and other frontier generators run into thousands of dollars, compiler verification time for the 1.5-2.5 million raw candidates needed to yield that volume is measured in days of sustained compute, and the human review effort for quality control is substantial. Once the data is generated, the LoRA finetuning run itself is a multi-day process. If the base model turns out to be poorly suited to learning Jac from synthetic data, all of that investment is wasted.
@@ -189,6 +195,7 @@ A model wins outright if it leads by more than 0.5 points on the weighted total 
 
 | Day | Activity |
 |---|---|
+| Pre-step | Run the conversion probe ([`conversion_probe.md`](conversion_probe.md)), ~3-5 days. Drop any model that does not improve on cross-compiled test pass rate; advance the rest into the schedule below. |
 | Day 1 | Generate 5,000-example test dataset using Claude Max. Run compiler verification, test suite, idiom judge. Manual spot-check 500 examples. |
 | Day 2 | Download and quantize all three models. Verify MLX compatibility. Dry-run training with 100 examples each to confirm memory fits and training loop works. |
 | Day 3-4 | Train Model 1 (Gemma 4 26B A4B). Monitor loss curves, save checkpoints every 500 steps. |

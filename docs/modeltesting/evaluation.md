@@ -14,6 +14,8 @@ The evaluation must answer one question: which of the three candidate models lea
 
 **Statistical rigor.** With a relatively small evaluation set (50-100 tasks per capability area), individual task results can be noisy. The evaluation accounts for this by running each model multiple times (2-3 runs with different random seeds), computing confidence intervals, and requiring statistically meaningful differences before declaring a winner.
 
+**Conversion-probe subset.** The pre-step conversion probe ([`conversion_probe.md`](conversion_probe.md)) reuses this framework but restricted to **Area 3 (conversion)** with a reduced metric set: cross-compiled test pass rate is the primary objective metric, supported by compiler pass rate, construct diversity, and idiom adherence. Metric definitions below are unchanged; the probe simply applies them to the conversion holdout.
+
 ---
 
 ## Benchmark suite design

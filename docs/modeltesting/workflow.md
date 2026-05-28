@@ -11,6 +11,18 @@ config:
     fontSize: 18px
 ---
 flowchart TD
+    subgraph Probe["Phase 0: Conversion Probe (pre-step)"]
+        PGEN["Generate ~1.5k Python→Jac\nconversion pairs + small DPO\n(Claude Max, Recipe 2)"]
+        PGEN --> PHOLD["Build conversion holdout\n(150-200 tasks)\n+ decontaminate"]
+        PHOLD --> PTRAIN["SFT + small DPO\nall 3 models, Q4 LoRA\n(identical config)"]
+        PTRAIN --> PEVAL["Eval: cross-compiled\ntest pass rate\n(objective, primary)"]
+        PEVAL --> PDEC{"Model improves\non Jac conversion?"}
+        PDEC -->|"yes / tie"| ADVANCE["Advance to full comparison"]
+        PDEC -->|"no"| DROP["Drop model\nbefore full run"]
+    end
+
+    ADVANCE --> GEN
+
     subgraph DataPrep["Phase 1: Test Data Preparation"]
         GEN["Generate 5k examples\nvia Claude Max\n(highest quality)"]
         
@@ -106,6 +118,7 @@ flowchart TD
         FULLGEN --> FULLTRAIN["Full LoRA finetune\non complete dataset"]
     end
 
+    style Probe fill:#fde8e8,stroke:#E53935
     style DataPrep fill:#e8f4f8,stroke:#2196F3
     style ModelPrep fill:#f3e8f4,stroke:#9C27B0
     style Training fill:#e8f4e8,stroke:#4CAF50
