@@ -8,14 +8,15 @@ version = "0.1.0"
 description = "Synthetic Jac data generation planning and prompt utilities"
 requires-python = ">=3.11"
 dependencies = [
+    "jaclang",
     "openai",
     "pydantic",
     "python-dotenv",
 ]
 
 [tool.pytest.ini_options]
-pythonpath = ["src"]
+pythonpath = ["srccurrent"]
 testpaths = ["tests"]
 
 [tool.setuptools.packages.find]
-where = ["src"]
+where = ["srccurrent"]

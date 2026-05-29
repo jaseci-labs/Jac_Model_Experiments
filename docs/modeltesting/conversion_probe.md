@@ -22,7 +22,7 @@ The probe runs *before* the full comparison and gates which models advance. A mo
 
 ## Why conversion is the probe category
 
-Conversion (Python → idiomatic Jac) is the ideal probe because it has an **objective** correctness signal. Following the MultiPL-T / Recipe 2 methodology (see [`../newdatagenstrat/strat.md`](../newdatagenstrat/strat.md) and [`../tasks/task4.md`](../tasks/task4.md)), tests are written in Python where LLMs are reliable, compiled to Jac with a deterministic rule-based test compiler, and run against the translation. Model ranking therefore depends on compiler + behavioral test outcomes, not on a subjective judge. No other category gives this clean a read on raw learning ability.
+Conversion (Python → idiomatic Jac) is the ideal probe because it has an **objective** correctness signal. Following the MultiPL-T / Recipe 2 methodology (see [`../datagenstrat/strat.md`](../datagenstrat/strat.md)), tests are written in Python where LLMs are reliable, compiled to Jac with a deterministic rule-based test compiler, and run against the translation. Model ranking therefore depends on compiler + behavioral test outcomes, not on a subjective judge. No other category gives this clean a read on raw learning ability.
 
 Conversion also directly stresses the hardest thing about Jac: producing idiomatic, graph-spatial Jac instead of Python-with-Jac-syntax. If a model can be finetuned to convert well, it is a strong candidate for the full pipeline.
 
