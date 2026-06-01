@@ -1,5 +1,8 @@
 .env
 tests/__pycache__/
-dataset/ 
+dataset/
 src/data_generation/__pycache__/
+.jac/
+__pycache__/
+*.pyc
 
