@@ -1,6 +1,6 @@
 # Data Generation Strategy
 
-*100% synthetic Jac training data for finetuning a coding model (Gemma 4 26B A4B Instruct, MoE 3.8B active; Qwen3-Coder-30B-A3B / DeepSeek-V3-Lite as fallbacks).*
+*100% synthetic Jac training data for finetuning a coding model (Gemma 4 26B A4B Instruct, MoE 3.8B active; Qwen3-Coder-30B-A3B as fallback).*
 
 | | |
 |---|---|

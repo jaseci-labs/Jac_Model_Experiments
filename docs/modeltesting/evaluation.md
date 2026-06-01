@@ -1,12 +1,12 @@
 # Model Comparison Evaluation Methodology
 
-*Systematic evaluation framework for comparing Gemma 4 26B A4B, Qwen3-Coder-30B-A3B, and DeepSeek-V3-Lite after finetuning on 5,000 Jac examples.*
+*Systematic evaluation framework for comparing Gemma 4 26B A4B and Qwen3-Coder-30B-A3B after finetuning on 5,000 Jac examples.*
 
 ---
 
 ## Evaluation design principles
 
-The evaluation must answer one question: which of the three candidate models learns Jac best from the same synthetic training data? To answer this question reliably, the evaluation framework enforces three principles:
+The evaluation must answer one question: which of the two candidate models learns Jac best from the same synthetic training data? To answer this question reliably, the evaluation framework enforces three principles:
 
 **Controlled comparison.** Every variable except the base model is held constant. Same training data, same LoRA rank, same learning rate, same number of training steps, same evaluation tasks, same evaluation prompts, same sampling parameters. The only difference is the model architecture and pre-trained weights. This isolates the effect of the base model on Jac learning.
 
@@ -98,7 +98,7 @@ Each task includes:
 - The expected key points that a correct explanation must cover
 - A rubric for scoring explanation quality (completeness, accuracy, clarity)
 
-Explanation tasks are evaluated by a judge model (Claude) using the rubric. The judge scores each explanation on a 1-5 scale for accuracy, completeness, and clarity. The rubric ensures consistent scoring across all three models.
+Explanation tasks are evaluated by a judge model (Claude) using the rubric. The judge scores each explanation on a 1-5 scale for accuracy, completeness, and clarity. The rubric ensures consistent scoring across both models.
 
 ### Area 5: Multi-turn conversation
 
@@ -256,7 +256,7 @@ This score is orthogonal to idiom adherence. Code can be idiomatic but poorly st
 
 ### Controlled variables
 
-To ensure the comparison is fair, the following variables are held constant across all three models:
+To ensure the comparison is fair, the following variables are held constant across both models:
 
 | Variable | Value | Rationale |
 |---|---|---|
@@ -313,16 +313,16 @@ The final model selection uses a weighted scoring matrix. Each dimension is scor
 
 ### Scoring table template
 
-| Dimension | Weight | Gemma 4 26B A4B | Qwen3-Coder-30B-A3B | DeepSeek-V3-Lite |
-|---|---|---|---|---|
-| Compiler pass rate | 25% | _/5 | _/5 | _/5 |
-| Functional correctness (test pass) | 20% | _/5 | _/5 | _/5 |
-| Idiom adherence | 20% | _/5 | _/5 | _/5 |
-| Training efficiency | 10% | _/5 | _/5 | _/5 |
-| Inference speed | 10% | _/5 | _/5 | _/5 |
-| Construct diversity | 10% | _/5 | _/5 | _/5 |
-| License and ecosystem | 5% | _/5 | _/5 | _/5 |
-| **Weighted total** | **100%** | **_/5** | **_/5** | **_/5** |
+| Dimension | Weight | Gemma 4 26B A4B | Qwen3-Coder-30B-A3B |
+|---|---|---|---|
+| Compiler pass rate | 25% | _/5 | _/5 |
+| Functional correctness (test pass) | 20% | _/5 | _/5 |
+| Idiom adherence | 20% | _/5 | _/5 |
+| Training efficiency | 10% | _/5 | _/5 |
+| Inference speed | 10% | _/5 | _/5 |
+| Construct diversity | 10% | _/5 | _/5 |
+| License and ecosystem | 5% | _/5 | _/5 |
+| **Weighted total** | **100%** | **_/5** | **_/5** |
 
 ### Scoring rubric per dimension
 
@@ -452,16 +452,14 @@ With 100 tasks per capability area, the evaluation can reliably detect 10+ perce
 
 ### Evaluation script structure
 
-The evaluation pipeline is fully automated. After all three models are trained and fused, a single script runs the complete evaluation:
+The evaluation pipeline is fully automated. After both models are trained and fused, a single script runs the complete evaluation:
 
 ```bash
-# Run evaluation for all three models
+# Run evaluation for both models
 python eval/run_evaluation.py \
   --models \
     ./models/gemma4-26b-jac-fused-q8 \
-    ./models/qwen3-coder-30b-jac-fused-q8 \
-    ./models/deepseek-v3-lite-jac-fused-q8 \
-  --eval-set ./eval/benchmark_tasks/ \
+    ./models/qwen3-coder-30b-jac-fused-q8 \  --eval-set ./eval/benchmark_tasks/ \
   --output-dir ./eval/results/ \
   --runs 3 \
   --seeds 42,123,456
@@ -500,7 +498,7 @@ For each model, categorize the tasks it fails on:
 - **Completeness failures**: code is truncated or incomplete
 - **Format failures**: code is embedded in prose/markdown that breaks compilation
 
-If the three models fail on different tasks, this reveals complementary strengths that could inform ensemble strategies or data augmentation for the full pipeline.
+If the two models fail on different tasks, this reveals complementary strengths that could inform ensemble strategies or data augmentation for the full pipeline.
 
 ### Learning curve analysis
 
@@ -522,14 +520,14 @@ This reveals the learning curve: does the model improve steadily, or does it pla
 
 Break down performance by Jac construct:
 
-| Construct | Gemma pass rate | Qwen pass rate | DeepSeek pass rate |
-|---|---|---|---|
-| Walker definition | _% | _% | _% |
-| Node definition | _% | _% | _% |
-| Edge definition | _% | _% | _% |
-| Ability dispatch | _% | _% | _% |
-| Graph traversal | _% | _% | _% |
-| Type annotations | _% | _% | _% |
-| ... | ... | ... | ... |
+| Construct | Gemma pass rate | Qwen pass rate |
+|---|---|---|
+| Walker definition | _% | _% |
+| Node definition | _% | _% |
+| Edge definition | _% | _% |
+| Ability dispatch | _% | _% |
+| Graph traversal | _% | _% |
+| Type annotations | _% | _% |
+| ... | ... | ... |
 
 This analysis reveals whether specific Jac constructs are harder for certain models to learn. If one model struggles with walkers but excels at nodes, and another shows the reverse pattern, this information helps design the training data distribution for the full pipeline — allocate more examples to the constructs that the selected model finds hardest.

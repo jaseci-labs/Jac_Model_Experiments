@@ -495,7 +495,7 @@ These decisions are not subject to change:
 | Documentation (strategy, operations, quality gates) | Complete |
 | Test suite (13 modules, ~3,000 lines) | Complete |
 | Pilot generation (187 clean examples across 5 categories) | Complete |
-| Model testing strategy (3-model comparison on 5k examples) | Documented, not yet executed |
+| Model testing strategy (2-model comparison on 5k examples) | Documented, not yet executed |
 | Full-app generation tier (Claude Code + Jac MCP) | Documented, not yet executed |
 | Full-scale data generation (~1.5–2.5M raw → ~300–500k verified) | Not started |
 | Multi-stage LoRA finetuning | Not started |

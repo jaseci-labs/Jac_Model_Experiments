@@ -1,11 +1,11 @@
 # Model Testing Strategy
 
-*Comparative evaluation of 3 candidate base models before committing to full-scale synthetic data generation for Jac*
+*Comparative evaluation of 2 candidate base models before committing to full-scale synthetic data generation for Jac*
 
 | | |
 |---|---|
 | **Objective** | Identify which base model learns Jac best from synthetic finetuning |
-| **Candidates** | Gemma 4 26B A4B, Qwen3-Coder-30B-A3B, DeepSeek-V3-Lite |
+| **Candidates** | Gemma 4 26B A4B, Qwen3-Coder-30B-A3B |
 | **Test sample** | 5,000 verified examples (curated mini-dataset) |
 | **Hardware** | Mac M5 Pro, 20-core GPU, 48GB unified RAM |
 | **Framework** | MLX (Apple Silicon native) |
@@ -15,7 +15,7 @@
 
 ## Conversion Probe (pre-step)
 
-Before this full 5,000-example comparison, run a cheaper single-category **conversion probe** ([`conversion_probe.md`](conversion_probe.md)). It finetunes all three candidates on ~1,500 Python→Jac conversion pairs (plus a small DPO set) and ranks them by cross-compiled test pass rate — an objective metric that needs no subjective judge. Its only job is to drop clear losers cheaply: a model that cannot improve on the most-verifiable category is disqualified before the full comparison spends compute on it. Models that pass the probe (or tie within noise) advance here. The probe does not replace this comparison; it gates entry to it.
+Before this full 5,000-example comparison, run a cheaper single-category **conversion probe** ([`conversion_probe.md`](conversion_probe.md)). It finetunes both candidates on ~1,500 Python→Jac conversion pairs (plus a small DPO set) and ranks them by cross-compiled test pass rate — an objective metric that needs no subjective judge. Its only job is to drop clear losers cheaply: a model that cannot improve on the most-verifiable category is disqualified before the full comparison spends compute on it. Models that pass the probe (or tie within noise) advance here. The probe does not replace this comparison; it gates entry to it.
 
 ---
 
@@ -23,11 +23,11 @@ Before this full 5,000-example comparison, run a cheaper single-category **conve
 
 The full-scale data generation pipeline targets 300,000 to 500,000 verified examples. Producing that volume requires significant investment across multiple dimensions: API costs for Claude Max and other frontier generators run into thousands of dollars, compiler verification time for the 1.5-2.5 million raw candidates needed to yield that volume is measured in days of sustained compute, and the human review effort for quality control is substantial. Once the data is generated, the LoRA finetuning run itself is a multi-day process. If the base model turns out to be poorly suited to learning Jac from synthetic data, all of that investment is wasted.
 
-Testing three candidate models on a small but representative 5,000-example sample costs a fraction of the full pipeline. The API cost for generating 5,000 high-quality examples with Claude Max is roughly 1-2% of the full budget. Each finetuning run on 5,000 examples completes in hours rather than days. The evaluation suite can be run in minutes. The entire three-model comparison can be completed in under a week, compared to the months required for full-scale generation and training.
+Testing two candidate models on a small but representative 5,000-example sample costs a fraction of the full pipeline. The API cost for generating 5,000 high-quality examples with Claude Max is roughly 1-2% of the full budget. Each finetuning run on 5,000 examples completes in hours rather than days. The evaluation suite can be run in minutes. The entire two-model comparison can be completed in under a week, compared to the months required for full-scale generation and training.
 
 More importantly, the 5,000-example test reveals failure modes that no amount of pre-training benchmark analysis can predict. A model might score well on LiveCodeBench (Python, JavaScript, C++) but fail to generalize its code understanding to Jac's walker-graph paradigm. A model might handle single-construct Jac code fine but collapse when constructs compose. MoE routing might not adapt well to LoRA updates for one architecture but work perfectly for another. These are empirical questions that can only be answered by actually finetuning on Jac data and measuring outcomes.
 
-The cost of choosing wrong is asymmetric. Spending one week testing three models costs roughly 3% of the total budget. Choosing the wrong model and discovering it after full-scale generation costs 100% of the budget plus the time to start over. This is a straightforward expected-value calculation that strongly favors testing first.
+The cost of choosing wrong is asymmetric. Spending one week testing two models costs roughly 3% of the total budget. Choosing the wrong model and discovering it after full-scale generation costs 100% of the budget plus the time to start over. This is a straightforward expected-value calculation that strongly favors testing first.
 
 ---
 
@@ -152,15 +152,14 @@ These are rough estimates based on MLX benchmarks for similar-sized MoE models o
 |---|---|---|
 | Gemma 4 26B A4B | ~4-8 hours | ~2-4 hours |
 | Qwen3-Coder-30B-A3B | ~4-8 hours | ~2-4 hours |
-| DeepSeek-V3-Lite | ~4-8 hours (architecture-dependent) | ~2-4 hours |
 
-Total wall-clock time for all three models: approximately 18-36 hours of training plus 6-12 hours of evaluation, spread across 2-3 days with some parallelism in data preparation and result analysis.
+Total wall-clock time for both models: approximately 8-16 hours of training plus 4-8 hours of evaluation, spread across 1-2 days with some parallelism in data preparation and result analysis.
 
 ---
 
 ## Evaluation framework
 
-All three models are evaluated using the identical evaluation suite, described in detail in [`evaluation.md`](evaluation.md). The key principle is that every variable except the base model is held constant:
+Both models are evaluated using the identical evaluation suite, described in detail in [`evaluation.md`](evaluation.md). The key principle is that every variable except the base model is held constant:
 
 - **Same training data**: the exact same 5,000-example dataset, in the same order, with the same train/validation split
 - **Same LoRA configuration**: same rank, same alpha, same target modules (adjusted only where architectures differ), same learning rate schedule
@@ -187,7 +186,7 @@ The decision matrix uses a weighted scoring system across seven dimensions. Each
 | Construct diversity | 10% | Does the model use the full Jac feature set or collapse to a subset? |
 | License and ecosystem | 5% | Apache 2.0, community support, tooling availability |
 
-A model wins outright if it leads by more than 0.5 points on the weighted total (on a 5-point scale). If two or more models are within 0.5 points, additional tiebreaker runs are conducted with a larger evaluation set, or the model with better idiom adherence wins (since that is the hardest capability to train and the most important for Jac adoption).
+A model wins outright if it leads by more than 0.5 points on the weighted total (on a 5-point scale). If the two models are within 0.5 points, additional tiebreaker runs are conducted with a larger evaluation set, or the model with better idiom adherence wins (since that is the hardest capability to train and the most important for Jac adoption).
 
 ---
 
@@ -197,12 +196,11 @@ A model wins outright if it leads by more than 0.5 points on the weighted total 
 |---|---|
 | Pre-step | Run the conversion probe ([`conversion_probe.md`](conversion_probe.md)), ~3-5 days. Drop any model that does not improve on cross-compiled test pass rate; advance the rest into the schedule below. |
 | Day 1 | Generate 5,000-example test dataset using Claude Max. Run compiler verification, test suite, idiom judge. Manual spot-check 500 examples. |
-| Day 2 | Download and quantize all three models. Verify MLX compatibility. Dry-run training with 100 examples each to confirm memory fits and training loop works. |
+| Day 2 | Download and quantize both models. Verify MLX compatibility. Dry-run training with 100 examples each to confirm memory fits and training loop works. |
 | Day 3-4 | Train Model 1 (Gemma 4 26B A4B). Monitor loss curves, save checkpoints every 500 steps. |
 | Day 4-5 | Train Model 2 (Qwen3-Coder-30B-A3B). Same monitoring. |
-| Day 5-6 | Train Model 3 (DeepSeek-V3-Lite). Same monitoring. |
-| Day 6 | Merge LoRA adapters into Q8 base weights for all three models. Run full evaluation suite on all three. |
-| Day 7 | Analyze results. Populate decision matrix. Write comparison report. Make recommendation. |
+| Day 5 | Merge LoRA adapters into Q8 base weights for both models. Run full evaluation suite on both. |
+| Day 6 | Analyze results. Populate decision matrix. Write comparison report. Make recommendation. |
 
 This is a conservative schedule that assumes sequential training (one model at a time, since each saturates the M5 Pro's memory). If any model shows catastrophic failure during training (loss divergence, NaN gradients, memory overflow), it is disqualified early and the schedule compresses.
 
@@ -216,15 +214,15 @@ Despite the memory budget analysis showing headroom, edge cases exist (unexpecte
 
 ### MLX does not support a model architecture
 
-MLX's model support is broad but not universal. Some MoE architectures may require custom conversion scripts. Mitigation: download and convert all three models on Day 2 before any training begins. If a model fails to convert, investigate community forks or alternative quantization tools. If conversion is fundamentally blocked, the model is disqualified.
+MLX's model support is broad but not universal. Some MoE architectures may require custom conversion scripts. Mitigation: download and convert both models on Day 2 before any training begins. If a model fails to convert, investigate community forks or alternative quantization tools. If conversion is fundamentally blocked, the model is disqualified.
 
-### All three models perform poorly
+### Both models perform poorly
 
 If no model achieves >50% compiler pass rate on the evaluation set after finetuning, the problem is likely data quality or data format rather than model choice. Mitigation: inspect failure modes, adjust the training data format, and re-run with a revised 5,000-example set. Do not proceed to full-scale generation until at least one model demonstrates meaningful Jac capability improvement from finetuning.
 
 ### Results are too close to call
 
-If all three models score within 0.5 weighted points of each other, the decision is less about which model is "best" and more about secondary factors: community ecosystem, long-term maintenance, inference deployment options. In this case, default to Gemma 4 26B A4B (the original primary target) unless a compelling reason emerges to switch.
+If both models score within 0.5 weighted points of each other, the decision is less about which model is "best" and more about secondary factors: community ecosystem, long-term maintenance, inference deployment options. In this case, default to Gemma 4 26B A4B (the original primary target) unless a compelling reason emerges to switch.
 
 ---
 

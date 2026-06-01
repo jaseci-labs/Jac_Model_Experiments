@@ -6,7 +6,7 @@
 |---|---|
 | **Objective** | Measure how each candidate model responds to Jac finetuning on one highly-verifiable category |
 | **Probe category** | Python→Jac conversion only |
-| **Candidates** | Gemma 4 26B A4B, Qwen3-Coder-30B-A3B, DeepSeek-V3-Lite |
+| **Candidates** | Gemma 4 26B A4B, Qwen3-Coder-30B-A3B |
 | **Dataset** | ~1,500 conversion SFT pairs + ~300-500 DPO pairs |
 | **Objective type** | SFT, then a small DPO stage |
 | **Hardware / framework** | Mac M5 Pro, 48GB, MLX (Q4 train, Q8 eval) |
@@ -16,7 +16,7 @@
 
 ## Purpose
 
-The full model comparison ([`strategy.md`](strategy.md)) finetunes three models on a 5,000-example multi-category dataset and scores them with a weighted decision matrix. That comparison mixes five categories and three training objectives, which is expensive and confounds many variables. Before paying that cost, the probe answers one isolated question: **which base model learns Jac best from finetuning?**
+The full model comparison ([`strategy.md`](strategy.md)) finetunes two models on a 5,000-example multi-category dataset and scores them with a weighted decision matrix. That comparison mixes five categories and three training objectives, which is expensive and confounds many variables. Before paying that cost, the probe answers one isolated question: **which base model learns Jac best from finetuning?**
 
 The probe runs *before* the full comparison and gates which models advance. A model that cannot meaningfully improve on the most-verifiable category is dropped, so the full comparison only spends compute on models that can plausibly learn Jac.
 
@@ -45,7 +45,7 @@ Generate with the existing Recipe 2 pipeline, restricted to conversion:
 - This is a conversion-only subset mirroring **Area 3** of [`evaluation.md`](evaluation.md).
 - Decontaminate train vs eval (14-gram overlap) before training, per the quality-control rules in [`../wholestack/strat.md`](../wholestack/strat.md). The holdout must exist before any training data is generated so decontamination is meaningful.
 
-## Training configuration (identical across all three models)
+## Training configuration (identical across both models)
 
 Only the base model differs. Everything else is held constant to isolate model capability.
 
@@ -94,7 +94,7 @@ If the top models are within noise on the primary metric, advance them all to th
 | Day | Activity |
 |---|---|
 | Day 1 | Generate ~1,500 conversion SFT pairs + small DPO set via Claude Max with cross-compiled test validation. Build the ~150–200 task holdout first; decontaminate. |
-| Day 2–4 | Sequentially SFT + DPO each of the three models (Q4 LoRA), checkpointing every ~250 steps. |
+| Day 2–4 | Sequentially SFT + DPO each of the two models (Q4 LoRA), checkpointing every ~250 steps. |
 | Day 5 | Merge adapters to Q8, run the conversion eval on base and finetuned, analyze deltas and learning curves, decide which models advance. |
 
 Far cheaper than the full multi-category comparison.
