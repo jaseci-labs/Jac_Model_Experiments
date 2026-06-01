@@ -17,12 +17,13 @@ import builtins;
 import re;
 import subprocess;
 import from pathlib { Path }
+import from typing { Any }
 
 glob DATASET: str = "Vezora/Tested-22k-Python-Alpaca";
 glob POOL_PATH: str = "dataset/source_pool/mined.jsonl";
 glob ALLOWED_IMPORTS: list[str] = ["math", "re", "string", "functools", "collections", "itertools"];
 glob BANNED: list[str] = ["np.", "pd.", "yield", "open(", "input(", "@", "class ", "async ", "lambda", "print(", "self"];
-glob INPUTS: list = ["hello", "Racecar", "abcabc", "level", "Hello World",
+glob INPUTS: list[Any] = ["hello", "Racecar", "abcabc", "level", "Hello World",
                      5, 10, 2, 0, 7, [1, 2, 3, 4], [3, 1, 2], [5, 5, 5],
                      ["a", "b", "a"], [10, 20, 30], [2, 4, 6, 8], 2.5];
 
@@ -38,11 +39,11 @@ def fetch_rows(n: int) -> list[dict] {
             ["curl", "-s", "-H", "User-Agent: jacgen", url],
             capture_output=True, text=True, timeout=60
         );
-        data: dict = json.loads(p.stdout);
+        data: dict[str, Any] = json.loads(p.stdout);
         rows: list[dict] = data["rows"];
         if len(rows) == 0 { break; }
         for r in rows {
-            row: dict = r["row"];
+            row: dict[str, Any] = r["row"];
             out.append(row);
         }
         off += batch;
@@ -80,13 +81,13 @@ def is_clean(code: str) -> bool {
 
 
 def try_run(code: str) -> dict {
-    ns: dict = {};
+    ns: dict[str, Any] = {};
     try {
         exec(code, {"__builtins__": builtins}, ns);
-    } except Exception {
+    } except Exception {  # jac:ignore[W2052] mined code can raise anything
         return {"ok": False};
     }
-    funcs: list = [];
+    funcs: list[Any] = [];
     names: list[str] = [];
     for (k, v) in ns.items() {
         if callable(v) and not k.startswith("__") {
@@ -100,13 +101,13 @@ def try_run(code: str) -> dict {
     try {
         params = inspect.signature(fn).parameters;
         if len(params) != 1 { return {"ok": False}; }
-    } except Exception {
+    } except (ValueError, TypeError) {
         return {"ok": False};
     }
     for a in INPUTS {
         try {
             o = fn(a);
-        } except Exception {
+        } except Exception {  # jac:ignore[W2052] mined code can raise anything
             continue;
         }
         if o is None { continue; }
@@ -126,7 +127,7 @@ def mine(scan: int, limit: int) -> list[dict] {
         output: str = r["output"];
         src: str = first_func(output);
         if src == "" or not is_clean(src) { continue; }
-        res: dict = try_run(src);
+        res: dict[str, Any] = try_run(src);
         ok: bool = res["ok"];
         if not ok { continue; }
         name: str = res["name"];

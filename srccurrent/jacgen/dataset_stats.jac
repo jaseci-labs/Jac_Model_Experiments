@@ -6,6 +6,7 @@ Run from the repo root:
 
 import json;
 import from pathlib { Path }
+import from typing { Any }
 
 glob SFT_FILES: list[str] = ["dataset/conversion/sft.jsonl", "dataset/conversion/sft_auto.jsonl"];
 glob DPO_FILE: str = "dataset/conversion/dpo.jsonl";
@@ -20,7 +21,7 @@ def count_file(path: str) -> dict {
     if not p.exists() { return {"total": 0, "by_diff": by_diff, "by_gen": by_gen, "by_source": by_source}; }
     for line in p.read_text().split("\n") {
         if line.strip() == "" { continue; }
-        rec: dict = json.loads(line);
+        rec: dict[str, Any] = json.loads(line);
         meta: dict[str, str] = rec["meta"];
         diff: str = meta["difficulty"];
         gen: str = meta["generator"];
@@ -47,7 +48,7 @@ with entry {
     grand: int = 0;
     print("=== Conversion SFT dataset ===");
     for f in SFT_FILES {
-        r: dict = count_file(f);
+        r: dict[str, Any] = count_file(f);
         t: int = r["total"];
         grand += t;
         print(f + ":  " + str(t));

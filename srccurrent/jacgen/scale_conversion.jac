@@ -13,6 +13,7 @@ Run from the repo root:
 import from corpus { fetch_page, first_func, is_clean, py_cases, transpile, normalize }
 import from writer { make_sft_example, append_jsonl, run_jac }
 import from pathlib { Path }
+import from typing { Any }
 
 glob OUT_PATH: str = "dataset/conversion/sft_auto.jsonl";
 glob SOURCE: str = "Vezora/Tested-22k-Python-Alpaca";
@@ -38,7 +39,7 @@ with entry {
     open(OUT_PATH, "w").close();
 
     print("generating up to " + str(TARGET) + " conversion examples from " + SOURCE + " ...");
-    seen: dict = {};
+    seen: dict[str, int] = {};
     kept: int = 0;
     cand: int = 0;
     tp_fail: int = 0;
@@ -65,13 +66,13 @@ with entry {
             if norm in seen { continue; }
             seen[norm] = 1;
 
-            pc: dict = py_cases(src, 3);
+            pc: dict[str, Any] = py_cases(src, 3);
             ok: bool = pc["ok"];
             if not ok { continue; }
             cand += 1;
             name: str = pc["name"];
-            inputs: list = pc["inputs"];
-            outputs: list = pc["outputs"];
+            inputs: list[Any] = pc["inputs"];
+            outputs: list[Any] = pc["outputs"];
 
             jac_fn: str = transpile(src);
             if jac_fn == "" { tp_fail += 1; continue; }
@@ -82,7 +83,7 @@ with entry {
             if code != 0 or out.strip() != expected.strip() { behave_fail += 1; continue; }
 
             diff: str = difficulty_of(jac_fn);
-            ex: dict = make_sft_example(src, prog, diff, expected, SOURCE, "jac-py2jac");
+            ex: dict[str, Any] = make_sft_example(src, prog, diff, expected, SOURCE, "jac-py2jac");
             append_jsonl(OUT_PATH, ex);
             kept += 1;
             if kept % 100 == 0 {

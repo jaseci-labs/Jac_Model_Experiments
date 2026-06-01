@@ -15,16 +15,17 @@ import subprocess;
 import tempfile;
 import signal;
 import from pathlib { Path }
+import from typing { Any }
 
 
-def _on_timeout(signum: int, frame: object) {
+def _on_timeout(_signum: int, _frame: object) {
     raise TimeoutError("exec timeout");
 }
 
 glob DATASET: str = "Vezora/Tested-22k-Python-Alpaca";
 glob ALLOWED_IMPORTS: list[str] = ["math", "re", "string", "functools", "collections", "itertools"];
 glob BANNED: list[str] = ["np.", "pd.", "yield", "open(", "input(", "@", "class ", "async ", "lambda", "print(", "self"];
-glob INPUTS: list = ["hello", "Racecar", "abcabc", "level", "Hello, World!", "step on no pets",
+glob INPUTS: list[Any] = ["hello", "Racecar", "abcabc", "level", "Hello, World!", "step on no pets",
                      5, 10, 2, 0, 7, 12, 1, 100,
                      [1, 2, 3, 4], [3, 1, 2], [5, 5, 5], ["a", "b", "a"],
                      [10, 20, 30], [2, 4, 6, 8], [4, 2, 7, 1, 9], 3.5];
@@ -44,13 +45,13 @@ def fetch_page(offset: int, length: int) -> list[dict] {
         body: str = p.stdout.strip();
         if body == "" { continue; }
         try {
-            data: dict = json.loads(body);
-        } except Exception {
+            data: dict[str, Any] = json.loads(body);
+        } except json.JSONDecodeError {
             continue;
         }
         rows: list[dict] = data["rows"];
         out: list[dict] = [];
-        for r in rows { row: dict = r["row"]; out.append(row); }
+        for r in rows { row: dict[str, Any] = r["row"]; out.append(row); }
         return out;
     }
     return [];
@@ -99,13 +100,13 @@ def is_clean(code: str) -> bool {
 
 
 def py_cases(code: str, max_cases: int = 3) -> dict {
-    ns: dict = {};
+    ns: dict[str, Any] = {};
     try {
         exec(code, {"__builtins__": builtins}, ns);
-    } except Exception {
+    } except Exception {  # jac:ignore[W2052] mined code can raise anything
         return {"ok": False};
     }
-    funcs: list = [];
+    funcs: list[Any] = [];
     names: list[str] = [];
     for (k, v) in ns.items() {
         if callable(v) and not k.startswith("__") {
@@ -118,11 +119,11 @@ def py_cases(code: str, max_cases: int = 3) -> dict {
     name: str = names[-1];
     try {
         if len(inspect.signature(fn).parameters) != 1 { return {"ok": False}; }
-    } except Exception {
+    } except (ValueError, TypeError) {
         return {"ok": False};
     }
-    inputs: list = [];
-    outputs: list = [];
+    inputs: list[Any] = [];
+    outputs: list[Any] = [];
     seen_out: list[str] = [];
     signal.signal(signal.SIGALRM, _on_timeout);
     for a in INPUTS {
@@ -134,7 +135,7 @@ def py_cases(code: str, max_cases: int = 3) -> dict {
         } except TimeoutError {
             signal.alarm(0);
             break;
-        } except Exception {
+        } except Exception {  # jac:ignore[W2052] mined code can raise anything
             signal.alarm(0);
             continue;
         }

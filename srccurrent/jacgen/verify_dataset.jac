@@ -12,6 +12,7 @@ Run from the repo root:
 import json;
 import from writer { revalidate_example }
 import from pathlib { Path }
+import from typing { Any }
 
 glob FILES: list[str] = ["dataset/conversion/sft.jsonl", "dataset/conversion/sft_auto.jsonl"];
 glob SAMPLE_EVERY: int = 1;  # 1 = check all; e.g. 20 = check every 20th line
@@ -27,7 +28,7 @@ def audit_file(path: str) -> dict {
         if line.strip() == "" { continue; }
         idx += 1;
         if idx % SAMPLE_EVERY != 0 { continue; }
-        rec: dict = json.loads(line);
+        rec: dict[str, Any] = json.loads(line);
         (ok, detail) = revalidate_example(rec);
         checked += 1;
         if not ok {
@@ -43,7 +44,7 @@ with entry {
     total: int = 0;
     total_fail: int = 0;
     for f in FILES {
-        r: dict = audit_file(f);
+        r: dict[str, int] = audit_file(f);
         checked: int = r["checked"];
         failed: int = r["failed"];
         total += checked;
