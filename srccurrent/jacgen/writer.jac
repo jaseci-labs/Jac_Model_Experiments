@@ -12,7 +12,8 @@ import from pathlib { Path }
 
 
 def make_sft_example(python_code: str, jac_code: str, difficulty: str,
-                     expected_output: str, source: str = "generated_seed") -> dict {
+                     expected_output: str, source: str = "generated_seed",
+                     generator: str = "claude-code-mcp") -> dict {
     user: str = "Convert this Python to idiomatic Jac:\n\n```python\n" + python_code.strip() + "\n```";
     assistant: str = "```jac\n" + jac_code.strip() + "\n```";
     return {
@@ -26,7 +27,7 @@ def make_sft_example(python_code: str, jac_code: str, difficulty: str,
             "compiler_pass": True,
             "behavioral_pass": True,
             "expected_output": expected_output,
-            "generator": "claude-code-mcp",
+            "generator": generator,
             "source": source
         }
     };
