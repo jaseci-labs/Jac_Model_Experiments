@@ -21,6 +21,20 @@ import from pathlib { Path }
 import from typing { Any }
 
 
+glob BUILTINS: list[str] = ["set", "list", "dict", "tuple", "type", "str", "int", "float",
+                            "bool", "range", "len", "sum", "min", "max", "sorted", "map",
+                            "filter", "zip", "enumerate", "abs", "round", "reversed"];
+
+
+def sanitize_transpile(code: str) -> str {
+    # py2jac over-escapes builtins as `set(), `list() etc.; strip the backtick so
+    # the Python-shaped negative still compiles.
+    out: str = code;
+    for b in BUILTINS { out = out.replace("`" + b, b); }
+    return out;
+}
+
+
 def compiles(jac_code: str) -> bool {
     with tempfile.TemporaryDirectory() as d {
         fp = Path(d) / "r.jac";
@@ -69,7 +83,7 @@ with entry {
 
         py: str = extract_python(prompt);
         chosen_jac: str = extract_idiomatic(assistant["content"]);
-        rejected_jac: str = transpile(py);
+        rejected_jac: str = sanitize_transpile(transpile(py));
         if rejected_jac.strip() == "" or chosen_jac == "" { skipped += 1; continue; }
         if not compiles(rejected_jac) { skipped += 1; continue; }
 
