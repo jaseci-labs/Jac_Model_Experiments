@@ -1,0 +1,36 @@
+# Conversion-probe LoRA SFT config for mlx_lm.lora.
+# SCAFFOLD — not run by the data-prep work. Needs `pip install mlx-lm` + a model.
+# Set `model` to a local Q4 MLX model path (see run_probe.sh), then:
+#     mlx_lm.lora --config configs/lora.yaml
+#
+# NOTE: mlx-lm config keys vary by version — verify against your installed
+# mlx-lm (`mlx_lm.lora --help`) before the real run.
+
+model: "PUT_Q4_MLX_MODEL_PATH_HERE"      # e.g. models/qwen-q4
+train: true
+data: "dataset/mlx"                       # train.jsonl + valid.jsonl (messages format)
+
+fine_tune_type: lora
+num_layers: 16
+
+lora_parameters:
+  rank: 16
+  scale: 2.0          # alpha/rank = 32/16; some versions take `alpha: 32` instead
+  dropout: 0.05
+
+# 417 train examples, ~3 epochs at batch 2 ≈ 600 iters
+batch_size: 2
+iters: 600
+learning_rate: 2.0e-5
+lr_schedule:
+  name: cosine_decay
+  warmup: 60
+  arguments: [2.0e-5, 600, 1.0e-6]
+
+max_seq_length: 2048
+adapter_path: "adapters/conversion-probe"
+save_every: 100
+steps_per_eval: 100
+steps_per_report: 20
+val_batches: 20
+seed: 42
