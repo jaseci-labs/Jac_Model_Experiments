@@ -15,24 +15,10 @@ Run from the repo root:
 import json;
 import subprocess;
 import tempfile;
-import from corpus { transpile }
+import from corpus { transpile, sanitize_transpile }
 import from writer { append_jsonl }
 import from pathlib { Path }
 import from typing { Any }
-
-
-glob BUILTINS: list[str] = ["set", "list", "dict", "tuple", "type", "str", "int", "float",
-                            "bool", "range", "len", "sum", "min", "max", "sorted", "map",
-                            "filter", "zip", "enumerate", "abs", "round", "reversed"];
-
-
-def sanitize_transpile(code: str) -> str {
-    # py2jac over-escapes builtins as `set(), `list() etc.; strip the backtick so
-    # the Python-shaped negative still compiles.
-    out: str = code;
-    for b in BUILTINS { out = out.replace("`" + b, b); }
-    return out;
-}
 
 
 def compiles(jac_code: str) -> bool {

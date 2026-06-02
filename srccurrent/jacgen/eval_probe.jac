@@ -1,8 +1,10 @@
 """Conversion-probe eval harness: score a model on the decontaminated holdout.
 
 For each holdout task: generate Jac from the Python prompt, extract the code,
-compile-check it, then run it on the recorded behavioral test_cases and compare
-outputs. Reports compiler pass rate and cross-compiled test pass rate.
+run it on the recorded behavioral test_cases and compare outputs. Reports
+run rate (compiles+executes) and cross-compiled test pass rate. The gate is
+`jac run`, not `jac check` — the strict type-checker rejects untyped-but-runnable
+code, which is not what "the conversion works" means.
 
 Model-agnostic via `generate`:
   - GEN_MODE="py2jac": smoke stand-in (jac py2jac of the source) -- NO LLM,
@@ -16,9 +18,8 @@ Run from the repo root:
 
 import json;
 import subprocess;
-import tempfile;
 import os;
-import from corpus { transpile }
+import from corpus { transpile, sanitize_transpile }
 import from writer { run_jac }
 import from pathlib { Path }
 import from typing { Any }
@@ -35,7 +36,7 @@ def eval_mode() -> str {
 
 def generate(prompt: str, python: str) -> str {
     if eval_mode() == "py2jac" {
-        return transpile(python);
+        return sanitize_transpile(transpile(python));
     }
     model: str = os.environ.get("JAC_EVAL_MODEL", MLX_MODEL);
     proc = subprocess.run(
@@ -56,20 +57,6 @@ def extract_jac(output: str) -> str {
     }
     body = body.split("with entry", 1)[0];
     return body.strip();
-}
-
-
-def compiles(jac_code: str) -> bool {
-    with tempfile.TemporaryDirectory() as d {
-        fp = Path(d) / "e.jac";
-        fp.write_text(jac_code);
-        try {
-            proc = subprocess.run(["jac", "check", str(fp)], capture_output=True, text=True, timeout=30);
-        } except (subprocess.SubprocessError, OSError) {
-            return False;
-        }
-        return proc.returncode == 0;
-    }
 }
 
 
@@ -103,17 +90,17 @@ with entry {
 
         out: str = generate(prompt, python);
         jac: str = extract_jac(out);
-        if not compiles(jac) { continue; }
-        comp += 1;
-
         (prog, expected) = build_program(jac, func, cases);
         (code, sout, serr) = run_jac(prog);
+        # gate on RUN (execution), not `jac check`: the strict type-checker rejects
+        # untyped-but-runnable code, which is not what "the conversion works" means.
+        if code == 0 { comp += 1; }
         if code == 0 and sout.strip() == expected.strip() { passed += 1; }
     }
 
     crate: int = comp * 100 // total;
     prate: int = passed * 100 // total;
     print("=== conversion probe (" + eval_mode() + ") on " + str(total) + " holdout tasks ===");
-    print("compiler pass rate:       " + str(crate) + "%  (" + str(comp) + "/" + str(total) + ")");
+    print("runs (compiles+executes): " + str(crate) + "%  (" + str(comp) + "/" + str(total) + ")");
     print("cross-compiled test pass: " + str(prate) + "%  (" + str(passed) + "/" + str(total) + ")");
 }

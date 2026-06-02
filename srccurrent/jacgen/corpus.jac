@@ -25,6 +25,9 @@ def _on_timeout(_signum: int, _frame: object) {
 glob DATASET: str = "Vezora/Tested-22k-Python-Alpaca";
 glob ALLOWED_IMPORTS: list[str] = ["math", "re", "string", "functools", "collections", "itertools"];
 glob BANNED: list[str] = ["np.", "pd.", "yield", "open(", "input(", "@", "class ", "async ", "lambda", "print(", "self"];
+glob BUILTINS: list[str] = ["set", "list", "dict", "tuple", "type", "str", "int", "float",
+                            "bool", "range", "len", "sum", "min", "max", "sorted", "map",
+                            "filter", "zip", "enumerate", "abs", "round", "reversed"];
 glob INPUTS: list[Any] = ["hello", "Racecar", "abcabc", "level", "Hello, World!", "step on no pets",
                      5, 10, 2, 0, 7, 12, 1, 100,
                      [1, 2, 3, 4], [3, 1, 2], [5, 5, 5], ["a", "b", "a"],
@@ -164,6 +167,15 @@ def transpile(py_src: str) -> str {
         if r.returncode != 0 { return ""; }
         return r.stdout;
     }
+}
+
+
+def sanitize_transpile(code: str) -> str {
+    # py2jac over-escapes builtins as `set(), `list() etc.; strip the backtick so
+    # the transpiled code compiles.
+    out: str = code;
+    for b in BUILTINS { out = out.replace("`" + b, b); }
+    return out;
 }
 
 
