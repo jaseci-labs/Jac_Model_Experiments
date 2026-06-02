@@ -13,10 +13,26 @@ Run from the repo root:
 """
 
 import json;
+import subprocess;
+import tempfile;
 import from corpus { transpile }
 import from writer { append_jsonl }
 import from pathlib { Path }
 import from typing { Any }
+
+
+def compiles(jac_code: str) -> bool {
+    with tempfile.TemporaryDirectory() as d {
+        fp = Path(d) / "r.jac";
+        fp.write_text(jac_code);
+        try {
+            proc = subprocess.run(["jac", "check", str(fp)], capture_output=True, text=True, timeout=30);
+        } except (subprocess.SubprocessError, OSError) {
+            return False;
+        }
+        return proc.returncode == 0;
+    }
+}
 
 glob SFT_PATH: str = "dataset/conversion/sft.jsonl";
 glob DPO_PATH: str = "dataset/conversion/dpo.jsonl";
@@ -55,6 +71,7 @@ with entry {
         chosen_jac: str = extract_idiomatic(assistant["content"]);
         rejected_jac: str = transpile(py);
         if rejected_jac.strip() == "" or chosen_jac == "" { skipped += 1; continue; }
+        if not compiles(rejected_jac) { skipped += 1; continue; }
 
         meta: dict[str, str] = rec["meta"];
         append_jsonl(DPO_PATH, {
