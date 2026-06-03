@@ -21,9 +21,31 @@ The eval scoring loop is validated with a `jac py2jac` stand-in (no LLM):
 
 ## What is NOT done (needs your resources — no ML happened here)
 
-- `pip install mlx-lm`
+Environment note: anaconda was intentionally removed. Install these into whatever
+Python you standardize on (must be on PATH):
+
+- `pip install jaclang` — the `jac` CLI the whole pipeline shells out to
+- `pip install mlx-lm` — training + generation (`mlx_lm.*` console scripts)
+- `pip install matplotlib` — PNG graphs (the ASCII dashboard needs nothing)
 - download + quantize a model (~50-60 GB each): Gemma 4 26B A4B / Qwen3-Coder-30B-A3B
 - the actual LoRA training run and the base-vs-finetuned eval
+
+## Live metrics + graphs
+
+`run_probe.sh` does: quantize → base eval → **30-iter dry-run** (bail check) →
+full train (tee to `results/<name>-train.log`) with a live loop that, every ~60s,
+runs a **50-task adapter eval** (no fuse) appending a learning-curve point to
+`results/<name>-metrics.jsonl` and redraws the **ASCII dashboard**
+(`dashboard.jac`). After training: fuse → full 150 eval → **PNG graphs**
+(`plot_metrics.jac`).
+
+- `dashboard.jac` (zero-dep): train/val loss, LR, tokens/sec, and the holdout
+  test-pass learning curve — live in the terminal.
+- `plot_metrics.jac` (matplotlib): the same as `results/*.png`; the learning
+  curve (`results/learning_curve.png`) is the one that tells you if it's learning
+  Jac, not just lowering loss.
+- Config intervals: `configs/lora.yaml` reports train loss every 10 steps, val
+  loss every 50, checkpoints every 100.
 
 ## Run order (later)
 

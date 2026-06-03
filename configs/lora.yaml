@@ -29,8 +29,8 @@ lr_schedule:
 
 max_seq_length: 2048
 adapter_path: "adapters/conversion-probe"
-save_every: 100
-steps_per_eval: 100
-steps_per_report: 20
+save_every: 100          # checkpoint every 100 steps -> learning-curve points
+steps_per_eval: 50       # val loss every 50 steps (frequent live metrics)
+steps_per_report: 10     # train loss every 10 steps
 val_batches: 20
 seed: 42

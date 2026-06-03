@@ -6,3 +6,6 @@ src/data_generation/__pycache__/
 __pycache__/
 *.pyc
 
+results/
+models/
+adapters/

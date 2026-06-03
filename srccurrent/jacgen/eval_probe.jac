@@ -39,11 +39,14 @@ def generate(prompt: str, python: str) -> str {
         return sanitize_transpile(transpile(python));
     }
     model: str = os.environ.get("JAC_EVAL_MODEL", MLX_MODEL);
-    proc = subprocess.run(
-        ["python", "-m", "mlx_lm.generate", "--model", model,
-         "--prompt", prompt, "--temp", "0.0", "--max-tokens", "512"],
-        capture_output=True, text=True, timeout=120
-    );
+    cmd: list = ["mlx_lm.generate", "--model", model,
+                 "--prompt", prompt, "--temp", "0.0", "--max-tokens", "512"];
+    adapter: str = os.environ.get("JAC_EVAL_ADAPTER", "");
+    if adapter != "" {
+        # eval a checkpoint adapter directly -- no fuse needed per checkpoint
+        cmd = cmd + ["--adapter-path", adapter];
+    }
+    proc = subprocess.run(cmd, capture_output=True, text=True, timeout=120);
     return proc.stdout;
 }
 
@@ -78,9 +81,11 @@ with entry {
     total: int = 0;
     comp: int = 0;
     passed: int = 0;
+    limit: int = int(os.environ.get("JAC_EVAL_LIMIT", "0"));  # 0 = all; e.g. 50 during training
 
     for line in p.read_text().split("\n") {
         if line.strip() == "" { continue; }
+        if limit > 0 and total >= limit { break; }
         rec: dict[str, Any] = json.loads(line);
         func: str = rec["func_name"];
         python: str = rec["python"];
@@ -103,4 +108,13 @@ with entry {
     print("=== conversion probe (" + eval_mode() + ") on " + str(total) + " holdout tasks ===");
     print("runs (compiles+executes): " + str(crate) + "%  (" + str(comp) + "/" + str(total) + ")");
     print("cross-compiled test pass: " + str(prate) + "%  (" + str(passed) + "/" + str(total) + ")");
+
+    # append a metrics line for the learning curve (set by run_probe.sh per checkpoint)
+    metrics_out: str = os.environ.get("JAC_EVAL_METRICS_OUT", "");
+    if metrics_out != "" {
+        step: int = int(os.environ.get("JAC_EVAL_STEP", "0"));
+        row: dict = {"step": step, "total": total, "runs": comp, "test_pass": passed,
+                     "runs_pct": crate, "test_pass_pct": prate};
+        with open(metrics_out, "a") as f { f.write(json.dumps(row) + "\n"); }
+    }
 }
