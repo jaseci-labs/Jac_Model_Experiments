@@ -21,11 +21,11 @@ def count_file(path: str) -> dict {
     if not p.exists() { return {"total": 0, "by_diff": by_diff, "by_gen": by_gen, "by_source": by_source}; }
     for line in p.read_text().split("\n") {
         if line.strip() == "" { continue; }
-        rec: dict[str, Any] = json.loads(line);
-        meta: dict[str, str] = rec["meta"];
-        diff: str = meta["difficulty"];
-        gen: str = meta["generator"];
-        source: str = meta["source"];
+        rec: dict = dict(json.loads(line));
+        meta: dict = dict(rec["meta"]);
+        diff: str = str(meta["difficulty"]);
+        gen: str = str(meta["generator"]);
+        source: str = str(meta["source"]);
         by_diff[diff] = by_diff.get(diff, 0) + 1;
         by_gen[gen] = by_gen.get(gen, 0) + 1;
         by_source[source] = by_source.get(source, 0) + 1;
@@ -48,8 +48,8 @@ with entry {
     grand: int = 0;
     print("=== Conversion SFT dataset ===");
     for f in SFT_FILES {
-        r: dict[str, Any] = count_file(f);
-        t: int = r["total"];
+        r: dict = count_file(f);
+        t: int = int(r["total"]);
         grand += t;
         print(f + ":  " + str(t));
         print("    by difficulty: " + str(r["by_diff"]));

@@ -100,11 +100,11 @@ with entry {
     for line in p.read_text().split("\n") {
         if line.strip() == "" { continue; }
         if limit > 0 and total >= limit { break; }
-        rec: dict[str, Any] = json.loads(line);
-        func: str = rec["func_name"];
-        python: str = rec["python"];
-        prompt: str = rec["prompt"];
-        cases: list = rec["test_cases"];
+        rec: dict = dict(json.loads(line));
+        func: str = str(rec["func_name"]);
+        python: str = str(rec["python"]);
+        prompt: str = str(rec["prompt"]);
+        cases: list = list(rec["test_cases"]);
         total += 1;
 
         out: str = generate(prompt, python);

@@ -39,11 +39,11 @@ def fetch_rows(n: int) -> list[dict] {
             ["curl", "-s", "-H", "User-Agent: jacgen", url],
             capture_output=True, text=True, timeout=60
         );
-        data: dict[str, Any] = json.loads(p.stdout);
-        rows: list[dict] = data["rows"];
+        data: dict = dict(json.loads(p.stdout));
+        rows: list = list(data["rows"]);
         if len(rows) == 0 { break; }
         for r in rows {
-            row: dict[str, Any] = r["row"];
+            row: dict = dict(r["row"]);
             out.append(row);
         }
         off += batch;
@@ -72,7 +72,7 @@ def is_clean(code: str) -> bool {
     head: str = code.split("\n")[0];
     if "*" in head { return False; }
     for b in BANNED { if b in code { return False; } }
-    imports: list[str] = re.findall("(?:^\\s*import |^\\s*from )(\\w+)", code, re.M);
+    imports: list = list(re.findall("(?:^\\s*import |^\\s*from )(\\w+)", code, re.M));  # jac:ignore[E1054]
     for m in imports { if m not in ALLOWED_IMPORTS { return False; } }
     if re.search("\\breturn\\s+\\S", code) is None { return False; }
     nlines: int = len(code.split("\n"));
@@ -81,25 +81,25 @@ def is_clean(code: str) -> bool {
 
 
 def try_run(code: str) -> dict {
-    ns: dict[str, Any] = {};
+    ns: dict = {};
     try {
         exec(code, {"__builtins__": builtins}, ns);
     } except Exception {  # jac:ignore[W2052] mined code can raise anything
         return {"ok": False};
     }
-    funcs: list[Any] = [];
+    funcs: list = [];
     names: list[str] = [];
     for (k, v) in ns.items() {
         if callable(v) and not k.startswith("__") {
             funcs.append(v);
-            names.append(k);
+            names.append(str(k));
         }
     }
     if len(funcs) == 0 { return {"ok": False}; }
     fn = funcs[-1];
     name: str = names[-1];
     try {
-        params = inspect.signature(fn).parameters;
+        params = inspect.signature(fn).parameters;  # jac:ignore[E1053]
         if len(params) != 1 { return {"ok": False}; }
     } except (ValueError, TypeError) {
         return {"ok": False};
@@ -124,13 +124,13 @@ def mine(scan: int, limit: int) -> list[dict] {
     kept: list[dict] = [];
     for r in rows {
         if len(kept) >= limit { break; }
-        output: str = r["output"];
+        output: str = str(r["output"]);
         src: str = first_func(output);
         if src == "" or not is_clean(src) { continue; }
-        res: dict[str, Any] = try_run(src);
-        ok: bool = res["ok"];
+        res: dict = try_run(src);
+        ok: bool = bool(res["ok"]);
         if not ok { continue; }
-        name: str = res["name"];
+        name: str = str(res["name"]);
         call_input = res["input"];
         expected = res["output"];
         kept.append({
@@ -159,7 +159,7 @@ with entry {
     write_pool(items);
     print("mined " + str(len(items)) + " runnable functions -> " + POOL_PATH);
     for it in items[:10] {
-        fname: str = it["func_name"];
+        fname: str = str(it["func_name"]);
         print("  " + fname);
     }
 }

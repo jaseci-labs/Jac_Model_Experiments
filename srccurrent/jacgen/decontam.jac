@@ -13,9 +13,9 @@ import from typing { Any }
 
 
 def extract_python(rec: dict) -> str {
-    msgs: list[dict] = rec["messages"];
-    user: dict[str, str] = msgs[0];
-    content: str = user["content"];
+    msgs: list = list(rec["messages"]);
+    user: dict = dict(msgs[0]);
+    content: str = str(user["content"]);
     if "```python" not in content { return ""; }
     after: str = content.split("```python", 1)[1];
     return after.rsplit("```", 1)[0].strip();
@@ -40,7 +40,7 @@ def build_training_shingles(paths: list[str]) -> dict {
         if not p.exists() { continue; }
         for line in p.read_text().split("\n") {
             if line.strip() == "" { continue; }
-            rec: dict[str, Any] = json.loads(line);
+            rec: dict = dict(json.loads(line));
             py: str = extract_python(rec);
             for sh in shingles(py) { s[sh] = 1; }
         }

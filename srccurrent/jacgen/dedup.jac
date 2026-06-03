@@ -46,9 +46,9 @@ def dedup_examples(examples: list[dict], threshold: float = 0.6) -> tuple[list[d
     kept_codes: list[str] = [];
     removed: int = 0;
     for ex in examples {
-        msgs: list[dict] = ex["messages"];
-        assistant: dict[str, str] = msgs[1];
-        code: str = assistant["content"];
+        msgs: list = list(ex["messages"]);
+        assistant: dict = dict(msgs[1]);
+        code: str = str(assistant["content"]);
         dup: bool = False;
         for kc in kept_codes {
             if rouge_l(code, kc) >= threshold { dup = True; break; }

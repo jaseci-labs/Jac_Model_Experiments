@@ -19,7 +19,7 @@ import from typing { Any }
 def _num(line: str, pattern: str) -> float {
     m = re.search(pattern, line);
     if m is None { return -1.0; }
-    return float(m.group(1));
+    return float(str(m.group(1)));
 }
 
 
@@ -33,7 +33,7 @@ def parse_train(path: str) -> dict {
     for line in p.read_text().split("\n") {
         m = re.search("Iter (\\d+)", line);
         if m is None { continue; }
-        it: int = int(m.group(1));
+        it: int = int(str(m.group(1)));
         tl: float = _num(line, "Train loss ([0-9.]+)");
         if tl >= 0.0 { train.append([it, tl]); }
         vl: float = _num(line, "Val loss ([0-9.]+)");
@@ -61,18 +61,19 @@ def render(label: str, points: list) {
         print("--- " + label + ": (no data yet) ---");
         return;
     }
-    lo: float = points[0][1];
-    hi: float = points[0][1];
+    lo: float = float(str(points[0][1]));
+    hi: float = float(str(points[0][1]));
     for pt in points {
-        if pt[1] < lo { lo = pt[1]; }
-        if pt[1] > hi { hi = pt[1]; }
+        v: float = float(str(pt[1]));
+        if v < lo { lo = v; }
+        if v > hi { hi = v; }
     }
     print("--- " + label + "  [min " + str(lo) + ", max " + str(hi) + "] ---");
     start: int = 0;
     if len(points) > 12 { start = len(points) - 12; }
     for i in range(start, len(points)) {
         pt = points[i];
-        print("  " + str(pt[0]) + "\t" + str(pt[1]) + "\t" + bar(pt[1], lo, hi, 28));
+        print("  " + str(pt[0]) + "\t" + str(pt[1]) + "\t" + bar(float(str(pt[1])), lo, hi, 28));
     }
 }
 
@@ -83,17 +84,17 @@ with entry {
 
     t: dict = parse_train(train_log);
     print("==================== TRAINING DASHBOARD ====================");
-    render("train loss", t["train"]);
-    render("val loss", t["val"]);
-    render("learning rate", t["lr"]);
-    render("tokens/sec", t["tps"]);
+    render("train loss", list(t["train"]));
+    render("val loss", list(t["val"]));
+    render("learning rate", list(t["lr"]));
+    render("tokens/sec", list(t["tps"]));
 
     lc: list = [];
     mp = Path(metrics);
     if mp.exists() {
         for line in mp.read_text().split("\n") {
             if not line.strip().startswith("{") { continue; }   # skip blank/partial lines
-            r: dict[str, Any] = json.loads(line);
+            r: dict = dict(json.loads(line));
             lc.append([r["step"], r["test_pass_pct"]]);
         }
     }

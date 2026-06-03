@@ -33,7 +33,7 @@ with entry {
         train: list[str] = [];
         valid: list[str] = [];
         for (i, line) in enumerate(lines) {
-            rec: dict[str, Any] = json.loads(line);
+            rec: dict = dict(json.loads(line));
             stripped: dict = {"messages": rec["messages"]};
             out: str = json.dumps(stripped);
             if i % VALID_EVERY == 0 { valid.append(out); } else { train.append(out); }

@@ -48,13 +48,13 @@ def fetch_page(offset: int, length: int) -> list[dict] {
         body: str = p.stdout.strip();
         if body == "" { continue; }
         try {
-            data: dict[str, Any] = json.loads(body);
+            data: dict = dict(json.loads(body));
         } except json.JSONDecodeError {
             continue;
         }
-        rows: list[dict] = data["rows"];
+        rows: list = list(data["rows"]);
         out: list[dict] = [];
-        for r in rows { row: dict[str, Any] = r["row"]; out.append(row); }
+        for r in rows { row: dict = dict(r["row"]); out.append(row); }
         return out;
     }
     return [];
@@ -94,7 +94,7 @@ def is_clean(code: str) -> bool {
     head: str = code.split("\n")[0];
     if "*" in head { return False; }
     for b in BANNED { if b in code { return False; } }
-    imports: list[str] = re.findall("(?:^\\s*import |^\\s*from )(\\w+)", code, re.M);
+    imports: list = list(re.findall("(?:^\\s*import |^\\s*from )(\\w+)", code, re.M));  # jac:ignore[E1054]
     for m in imports { if m not in ALLOWED_IMPORTS { return False; } }
     if re.search("\\breturn\\s+\\S", code) is None { return False; }
     nlines: int = len(code.split("\n"));
@@ -103,32 +103,32 @@ def is_clean(code: str) -> bool {
 
 
 def py_cases(code: str, max_cases: int = 3) -> dict {
-    ns: dict[str, Any] = {};
+    ns: dict = {};
     try {
         exec(code, {"__builtins__": builtins}, ns);
     } except Exception {  # jac:ignore[W2052] mined code can raise anything
         return {"ok": False};
     }
-    funcs: list[Any] = [];
+    funcs: list = [];
     names: list[str] = [];
     for (k, v) in ns.items() {
         if callable(v) and not k.startswith("__") {
             funcs.append(v);
-            names.append(k);
+            names.append(str(k));
         }
     }
     if len(funcs) == 0 { return {"ok": False}; }
     fn = funcs[-1];
     name: str = names[-1];
     try {
-        if len(inspect.signature(fn).parameters) != 1 { return {"ok": False}; }
+        if len(inspect.signature(fn).parameters) != 1 { return {"ok": False}; }  # jac:ignore[E1053]
     } except (ValueError, TypeError) {
         return {"ok": False};
     }
-    inputs: list[Any] = [];
-    outputs: list[Any] = [];
+    inputs: list = [];
+    outputs: list = [];
     seen_out: list[str] = [];
-    signal.signal(signal.SIGALRM, _on_timeout);
+    signal.signal(signal.SIGALRM, _on_timeout);  # jac:ignore[E1053]
     for a in INPUTS {
         if len(inputs) >= max_cases { break; }
         signal.alarm(2);
@@ -157,7 +157,7 @@ def py_cases(code: str, max_cases: int = 3) -> dict {
 
 def transpile(py_src: str) -> str {
     with tempfile.TemporaryDirectory() as d {
-        fp = Path(d) / "f.py";
+        fp = Path(str(d)) / "f.py";
         fp.write_text(py_src);
         try {
             r = subprocess.run(["jac", "py2jac", str(fp)], capture_output=True, text=True, timeout=30);

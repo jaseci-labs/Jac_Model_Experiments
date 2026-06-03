@@ -59,20 +59,20 @@ with entry {
 
         for r in rows {
             if kept >= TARGET { break; }
-            output: str = r["output"];
+            output: str = str(r["output"]);
             src: str = first_func(output);
             if src == "" or not is_clean(src) { continue; }
             norm: str = normalize(src);
             if norm in seen { continue; }
             seen[norm] = 1;
 
-            pc: dict[str, Any] = py_cases(src, 3);
-            ok: bool = pc["ok"];
+            pc: dict = py_cases(src, 3);
+            ok: bool = bool(pc["ok"]);
             if not ok { continue; }
             cand += 1;
-            name: str = pc["name"];
-            inputs: list[Any] = pc["inputs"];
-            outputs: list[Any] = pc["outputs"];
+            name: str = str(pc["name"]);
+            inputs: list = list(pc["inputs"]);
+            outputs: list = list(pc["outputs"]);
 
             jac_fn: str = transpile(src);
             if jac_fn == "" { tp_fail += 1; continue; }
@@ -83,7 +83,7 @@ with entry {
             if code != 0 or out.strip() != expected.strip() { behave_fail += 1; continue; }
 
             diff: str = difficulty_of(jac_fn);
-            ex: dict[str, Any] = make_sft_example(src, prog, diff, expected, SOURCE, "jac-py2jac");
+            ex: dict = make_sft_example(src, prog, diff, expected, SOURCE, "jac-py2jac");
             append_jsonl(OUT_PATH, ex);
             kept += 1;
             if kept % 100 == 0 {

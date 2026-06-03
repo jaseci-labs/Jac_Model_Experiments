@@ -23,7 +23,7 @@ import from typing { Any }
 
 def compiles(jac_code: str) -> bool {
     with tempfile.TemporaryDirectory() as d {
-        fp = Path(d) / "r.jac";
+        fp = Path(str(d)) / "r.jac";
         fp.write_text(jac_code);
         try {
             proc = subprocess.run(["jac", "check", str(fp)], capture_output=True, text=True, timeout=30);
@@ -61,19 +61,19 @@ with entry {
     skipped: int = 0;
     for line in p.read_text().split("\n") {
         if line.strip() == "" { continue; }
-        rec: dict[str, Any] = json.loads(line);
-        msgs: list[dict] = rec["messages"];
-        user: dict[str, str] = msgs[0];
-        assistant: dict[str, str] = msgs[1];
-        prompt: str = user["content"];
+        rec: dict = dict(json.loads(line));
+        msgs: list = list(rec["messages"]);
+        user: dict = dict(msgs[0]);
+        assistant: dict = dict(msgs[1]);
+        prompt: str = str(user["content"]);
 
         py: str = extract_python(prompt);
-        chosen_jac: str = extract_idiomatic(assistant["content"]);
+        chosen_jac: str = extract_idiomatic(str(assistant["content"]));
         rejected_jac: str = sanitize_transpile(transpile(py));
         if rejected_jac.strip() == "" or chosen_jac == "" { skipped += 1; continue; }
         if not compiles(rejected_jac) { skipped += 1; continue; }
 
-        meta: dict[str, str] = rec["meta"];
+        meta: dict = dict(rec["meta"]);
         append_jsonl(DPO_PATH, {
             "prompt": prompt,
             "chosen": "```jac\n" + chosen_jac + "\n```",

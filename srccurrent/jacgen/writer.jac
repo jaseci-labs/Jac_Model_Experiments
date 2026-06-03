@@ -45,7 +45,7 @@ def append_jsonl(path: str, rec: dict) {
 
 def run_jac(jac_code: str, timeout: int = 30) -> tuple[int, str, str] {
     with tempfile.TemporaryDirectory() as d {
-        f = Path(d) / "snippet.jac";
+        f = Path(str(d)) / "snippet.jac";
         f.write_text(jac_code);
         try {
             p = subprocess.run(
@@ -60,9 +60,9 @@ def run_jac(jac_code: str, timeout: int = 30) -> tuple[int, str, str] {
 
 
 def extract_jac(rec: dict) -> str {
-    msgs: list[dict] = rec["messages"];
-    assistant: dict[str, str] = msgs[1];
-    content: str = assistant["content"];
+    msgs: list = list(rec["messages"]);
+    assistant: dict = dict(msgs[1]);
+    content: str = str(assistant["content"]);
     return content.split("```jac", 1)[1].rsplit("```", 1)[0].strip();
 }
 
@@ -73,8 +73,8 @@ def revalidate_example(rec: dict) -> tuple[bool, str] {
     if code != 0 {
         return (False, "compile/run failed exit " + str(code) + ": " + err.strip()[:200]);
     }
-    meta: dict[str, str] = rec["meta"];
-    expected: str = meta["expected_output"];
+    meta: dict = dict(rec["meta"]);
+    expected: str = str(meta["expected_output"]);
     if out.strip() != expected.strip() {
         return (False, "output " + repr(out.strip()) + " != expected " + repr(expected.strip()));
     }

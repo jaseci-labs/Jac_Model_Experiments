@@ -1058,11 +1058,11 @@ def build() {
     candidates: list[dict] = [];
     labels: list[str] = [];
     for s in SEEDS {
-        py: str = s["py"];
-        jaccode: str = s["jac"];
-        difficulty: str = s["difficulty"];
-        expected: str = s["expected"];
-        src: str = s.get("source", "generated_seed");
+        py: str = str(s["py"]);
+        jaccode: str = str(s["jac"]);
+        difficulty: str = str(s["difficulty"]);
+        expected: str = str(s["expected"]);
+        src: str = str(s.get("source", "generated_seed"));
         candidates.append(make_sft_example(py, jaccode, difficulty, expected, src));
         labels.append(difficulty);
     }
@@ -1079,9 +1079,9 @@ def build() {
     for ex in examples { append_jsonl(SFT_PATH, ex); }
 
     for d in DPO_PAIRS {
-        prompt: str = d["prompt"];
-        chosen: str = d["chosen"];
-        rejected: str = d["rejected"];
+        prompt: str = str(d["prompt"]);
+        chosen: str = str(d["chosen"]);
+        rejected: str = str(d["rejected"]);
         append_jsonl(DPO_PATH, {
             "prompt": prompt, "chosen": chosen, "rejected": rejected,
             "meta": {

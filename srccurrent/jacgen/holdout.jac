@@ -55,7 +55,7 @@ with entry {
 
         for r in rows {
             if kept >= TARGET { break; }
-            output: str = r["output"];
+            output: str = str(r["output"]);
             src: str = first_func(output);
             if src == "" or not is_clean(src) { continue; }
             if src in seen { continue; }
@@ -63,17 +63,17 @@ with entry {
             if is_contaminated(src, train) { contam += 1; continue; }
 
             pc: dict = py_cases(src, 3);
-            ok: bool = pc["ok"];
+            ok: bool = bool(pc["ok"]);
             if not ok { continue; }
-            name: str = pc["name"];
-            inputs: list = pc["inputs"];
-            outputs: list = pc["outputs"];
+            name: str = str(pc["name"]);
+            inputs: list = list(pc["inputs"]);
+            outputs: list = list(pc["outputs"]);
             cases: list = [];
             for (i, inp) in enumerate(inputs) {
                 cases.append({"input": inp, "output": outputs[i]});
             }
 
-            rec: dict[str, Any] = {
+            rec: dict = {
                 "func_name": name,
                 "python": src,
                 "prompt": make_prompt(src),

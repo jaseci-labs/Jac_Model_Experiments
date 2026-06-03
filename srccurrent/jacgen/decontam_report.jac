@@ -25,12 +25,12 @@ with entry {
     contam: int = 0;
     for line in p.read_text().split("\n") {
         if line.strip() == "" { continue; }
-        rec: dict[str, Any] = json.loads(line);
-        py: str = rec["python"];
+        rec: dict = dict(json.loads(line));
+        py: str = str(rec["python"]);
         total += 1;
         if is_contaminated(py, train) {
             contam += 1;
-            print("  CONTAMINATED: " + rec["func_name"]);
+            print("  CONTAMINATED: " + str(rec["func_name"]));
         }
     }
     print("holdout decontam: " + str(total - contam) + "/" + str(total) + " clean, "

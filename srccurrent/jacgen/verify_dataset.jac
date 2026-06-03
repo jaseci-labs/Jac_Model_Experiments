@@ -28,7 +28,7 @@ def audit_file(path: str) -> dict {
         if line.strip() == "" { continue; }
         idx += 1;
         if idx % SAMPLE_EVERY != 0 { continue; }
-        rec: dict[str, Any] = json.loads(line);
+        rec: dict = dict(json.loads(line));
         (ok, detail) = revalidate_example(rec);
         checked += 1;
         if not ok {
@@ -44,9 +44,9 @@ with entry {
     total: int = 0;
     total_fail: int = 0;
     for f in FILES {
-        r: dict[str, int] = audit_file(f);
-        checked: int = r["checked"];
-        failed: int = r["failed"];
+        r: dict = audit_file(f);
+        checked: int = int(r["checked"]);
+        failed: int = int(r["failed"]);
         total += checked;
         total_fail += failed;
         print(f + ": " + str(checked - failed) + "/" + str(checked) + " re-validated");

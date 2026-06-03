@@ -32,12 +32,13 @@ source .venv/bin/activate      # jac + mlx_lm on PATH
 `run_probe.sh` and `check.sh` auto-prepend `.venv/bin` to PATH, so the pipeline's
 internal `jac`/`mlx_lm` subprocess calls resolve without activation.
 
-**On `jac check`:** the full type-checker (jaclang 0.16.0) is over-strict on
-dynamic Python-interop — `json.loads`, `subprocess`, `os.environ`, matplotlib all
-return `Any`, which it refuses to assign to typed vars (E1001/E1053/…). The old
-anaconda env did not enforce this, and the code runs correctly regardless. So the
-gate is **`jac check -p`** (syntax) + **`jac run`** (behavior), which `check.sh`
-runs. `jac run` is the real gate — it's how every dataset example was validated.
+**On `jac check`:** all 20 modules pass the **full** type-checker. Dynamic
+Python-interop (`json.loads`/`subprocess`/regex/matplotlib return `Any`, which
+jaclang 0.16.0 won't assign to typed vars) is handled with `str()`/`list()`/
+`dict()`/`int()` casts at the boundary; a few genuinely-untypeable stdlib calls
+(`inspect.signature`, `signal`, matplotlib stubs) carry `# jac:ignore[...]`.
+`check.sh` runs full `jac check` + `jac run` (behavior — the real gate, how every
+dataset example was validated).
 
 Still needed for the actual probe: download + quantize a model (~50-60 GB each)
 and run `./run_probe.sh <model> <name>`.

@@ -998,10 +998,10 @@ with entry {
 def build() {
     examples: list[dict] = [];
     for s in SEEDS {
-        py: str = s["py"];
-        jaccode: str = s["jac"];
-        difficulty: str = s["difficulty"];
-        expected: str = s["expected"];
+        py: str = str(s["py"]);
+        jaccode: str = str(s["jac"]);
+        difficulty: str = str(s["difficulty"]);
+        expected: str = str(s["expected"]);
         ex: dict = make_sft_example(py, jaccode, difficulty, expected, "generated_idiomatic");
         append_jsonl(SFT_PATH, ex);
         examples.append(ex);
