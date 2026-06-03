@@ -80,7 +80,7 @@ with entry {
     mp = Path(metrics);
     if mp.exists() {
         for line in mp.read_text().split("\n") {
-            if line.strip() == "" { continue; }
+            if not line.strip().startswith("{") { continue; }   # skip blank/partial lines
             r: dict[str, Any] = json.loads(line);
             lc.append([r["step"], r["test_pass_pct"]]);
         }

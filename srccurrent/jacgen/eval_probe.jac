@@ -19,6 +19,7 @@ Run from the repo root:
 import json;
 import subprocess;
 import os;
+import re;
 import from corpus { transpile, sanitize_transpile }
 import from writer { run_jac }
 import from pathlib { Path }
@@ -46,8 +47,13 @@ def generate(prompt: str, python: str) -> str {
         # eval a checkpoint adapter directly -- no fuse needed per checkpoint
         cmd = cmd + ["--adapter-path", adapter];
     }
-    proc = subprocess.run(cmd, capture_output=True, text=True, timeout=120);
-    return proc.stdout;
+    try {
+        proc = subprocess.run(cmd, capture_output=True, text=True, timeout=180);
+        if proc.returncode != 0 { return ""; }
+        return proc.stdout;
+    } except (subprocess.SubprocessError, OSError) {
+        return "";
+    }
 }
 
 
@@ -60,6 +66,14 @@ def extract_jac(output: str) -> str {
     }
     body = body.split("with entry", 1)[0];
     return body.strip();
+}
+
+
+def detect_func(jac_code: str, fallback: str) -> str {
+    # call the function the model actually defined, even if it renamed it
+    m = re.search("def (\\w+)\\s*\\(", jac_code);
+    if m is None { return fallback; }
+    return m.group(1);
 }
 
 
@@ -95,7 +109,8 @@ with entry {
 
         out: str = generate(prompt, python);
         jac: str = extract_jac(out);
-        (prog, expected) = build_program(jac, func, cases);
+        name: str = detect_func(jac, func);
+        (prog, expected) = build_program(jac, name, cases);
         (code, sout, serr) = run_jac(prog);
         # gate on RUN (execution), not `jac check`: the strict type-checker rejects
         # untyped-but-runnable code, which is not what "the conversion works" means.
@@ -103,18 +118,22 @@ with entry {
         if code == 0 and sout.strip() == expected.strip() { passed += 1; }
     }
 
-    crate: int = comp * 100 // total;
-    prate: int = passed * 100 // total;
-    print("=== conversion probe (" + eval_mode() + ") on " + str(total) + " holdout tasks ===");
-    print("runs (compiles+executes): " + str(crate) + "%  (" + str(comp) + "/" + str(total) + ")");
-    print("cross-compiled test pass: " + str(prate) + "%  (" + str(passed) + "/" + str(total) + ")");
+    if total == 0 {
+        print("=== conversion probe: no tasks found at " + HOLDOUT + " ===");
+    } else {
+        crate: int = comp * 100 // total;
+        prate: int = passed * 100 // total;
+        print("=== conversion probe (" + eval_mode() + ") on " + str(total) + " holdout tasks ===");
+        print("runs (compiles+executes): " + str(crate) + "%  (" + str(comp) + "/" + str(total) + ")");
+        print("cross-compiled test pass: " + str(prate) + "%  (" + str(passed) + "/" + str(total) + ")");
 
-    # append a metrics line for the learning curve (set by run_probe.sh per checkpoint)
-    metrics_out: str = os.environ.get("JAC_EVAL_METRICS_OUT", "");
-    if metrics_out != "" {
-        step: int = int(os.environ.get("JAC_EVAL_STEP", "0"));
-        row: dict = {"step": step, "total": total, "runs": comp, "test_pass": passed,
-                     "runs_pct": crate, "test_pass_pct": prate};
-        with open(metrics_out, "a") as f { f.write(json.dumps(row) + "\n"); }
+        # append a metrics line for the learning curve (set by run_probe.sh per checkpoint)
+        metrics_out: str = os.environ.get("JAC_EVAL_METRICS_OUT", "");
+        if metrics_out != "" {
+            step: int = int(os.environ.get("JAC_EVAL_STEP", "0"));
+            row: dict = {"step": step, "total": total, "runs": comp, "test_pass": passed,
+                         "runs_pct": crate, "test_pass_pct": prate};
+            with open(metrics_out, "a") as f { f.write(json.dumps(row) + "\n"); }
+        }
     }
 }
