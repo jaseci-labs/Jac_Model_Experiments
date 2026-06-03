@@ -15,6 +15,10 @@
 #       (per-checkpoint learning curve + dashboard) -> fuse -> full eval -> graphs.
 set -euo pipefail
 
+# use the project venv toolchain (jaclang + mlx-lm) — no anaconda needed
+SELF_DIR="$(cd "$(dirname "$0")" && pwd)"
+[ -d "$SELF_DIR/.venv/bin" ] && export PATH="$SELF_DIR/.venv/bin:$PATH"
+
 HF_MODEL="${1:?hf model id, e.g. Qwen/Qwen3-Coder-30B-A3B}"
 NAME="${2:?short name, e.g. qwen}"
 EVAL_EVERY="${EVAL_EVERY:-60}"

@@ -21,14 +21,26 @@ The eval scoring loop is validated with a `jac py2jac` stand-in (no LLM):
 
 ## What is NOT done (needs your resources — no ML happened here)
 
-Environment note: anaconda was intentionally removed. Install these into whatever
-Python you standardize on (must be on PATH):
+Environment (anaconda intentionally removed — use a project venv):
 
-- `pip install jaclang` — the `jac` CLI the whole pipeline shells out to
-- `pip install mlx-lm` — training + generation (`mlx_lm.*` console scripts)
-- `pip install matplotlib` — PNG graphs (the ASCII dashboard needs nothing)
-- download + quantize a model (~50-60 GB each): Gemma 4 26B A4B / Qwen3-Coder-30B-A3B
-- the actual LoRA training run and the base-vs-finetuned eval
+```bash
+./setup_env.sh                 # python3 -m venv .venv + pip install jaclang mlx-lm matplotlib
+source .venv/bin/activate      # jac + mlx_lm on PATH
+./check.sh                     # syntax (jac check -p, 20/20) + behavior (jac run, 32/32)
+```
+
+`run_probe.sh` and `check.sh` auto-prepend `.venv/bin` to PATH, so the pipeline's
+internal `jac`/`mlx_lm` subprocess calls resolve without activation.
+
+**On `jac check`:** the full type-checker (jaclang 0.16.0) is over-strict on
+dynamic Python-interop — `json.loads`, `subprocess`, `os.environ`, matplotlib all
+return `Any`, which it refuses to assign to typed vars (E1001/E1053/…). The old
+anaconda env did not enforce this, and the code runs correctly regardless. So the
+gate is **`jac check -p`** (syntax) + **`jac run`** (behavior), which `check.sh`
+runs. `jac run` is the real gate — it's how every dataset example was validated.
+
+Still needed for the actual probe: download + quantize a model (~50-60 GB each)
+and run `./run_probe.sh <model> <name>`.
 
 ## Live metrics + graphs
 
