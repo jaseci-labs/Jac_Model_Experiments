@@ -1,26 +1,23 @@
 # Jac Data Generation
 
-Synthetic data generation pipeline for training Jac coding models. The project builds, validates, reviews, deduplicates, and releases Jac examples across code generation, debugging, explanation, conversion, and agentic trajectory categories.
+Synthetic **Python→Jac conversion** data + a mini finetuning probe. All tooling
+is written in Jac (`srccurrent/jacgen/`), validated against the Jac compiler.
 
-## Quickstart
+**Start here → [`process.md`](process.md)** — set up the env and run the probe.
 
 ```bash
-python -m pytest
-python -m data_generation.release readiness --version jac-synth-v0.1.0
-python -m data_generation.docs_stats --version jac-synth-v0.1.0 --output docs/stats.md
+./setup_env.sh && source .venv/bin/activate   # venv + jaclang/mlx-lm/matplotlib
+./check.sh                                     # jac check (20/20) + jac run (32/32)
+./run_probe.sh <hf-model-id> <name>            # quantize → train → eval → graphs
 ```
 
-Set `OPENAI_API_KEY` or `OPEN_AI_API_KEY` before live OpenAI generation.
+## Layout
 
-## Current Snapshot
-
-The generated dataset snapshot lives in [`docs/stats.md`](docs/stats.md). It summarizes clean counts, rejected counts, review files, readiness blockers, prompt versions, and duplicate-review status from repository artifacts.
-
-## Documentation
-
-- [`docs/index.md`](docs/index.md): documentation map and reading paths.
-- [`docs/pipeline.md`](docs/pipeline.md): how generation flows from context bundle to release.
-- [`docs/dataset.md`](docs/dataset.md): storage layout, metadata, naming, and categories.
-- [`docs/quality.md`](docs/quality.md): validation, review, dedupe, and release gates.
-- [`docs/operations.md`](docs/operations.md): command reference for generation, review, stats, and release.
-- [`docs/tasks/`](docs/tasks/): original task roadmap and phase checklists.
+| Path | What |
+|---|---|
+| `srccurrent/jacgen/*.jac` | the pipeline: generate, validate, dedup, decontaminate, split, train-eval harness, dashboard |
+| `dataset/` (gitignored) | generated data: ~1616 SFT, 85 DPO, 150 decontaminated eval holdout |
+| `configs/lora.yaml` | LoRA SFT config (mlx-lm) |
+| `run_probe.sh` / `setup_env.sh` / `check.sh` | run / setup / validate |
+| `docs/` | strategy, model-testing, datagen plans |
+| `context.md`, `papers/` | background (parts of `context.md` predate the current pipeline) |
