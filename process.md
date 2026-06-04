@@ -77,6 +77,58 @@ Tunables (env): `EVAL_EVERY` (dashboard secs), `SUBSET` (tasks/checkpoint),
 - Live view during training: the ASCII dashboard (auto-refreshed), or manually
   `JAC_TRAIN_LOG=results/qwen-train.log JAC_METRICS=results/qwen-metrics.jsonl jac run srccurrent/jacgen/dashboard.jac`.
 
+## Pausing / resuming (close the laptop anytime)
+
+`run_probe.sh` is **resumable** — kill it, shut down, or re-run, and it continues:
+
+- It runs under `caffeinate`, so it won't idle-sleep mid-run.
+- **Lid close / sleep:** the process suspends and **continues on wake** — nothing lost.
+- **Shutdown / kill / crash:** just re-run the same command. It skips finished
+  stages (quantize, base eval) via `results/.<name>.*.done` markers and **resumes
+  LoRA training from the last saved checkpoint** (mlx saves every 100 steps to
+  `adapters/<name>-probe/`), training only the remaining iters. The learning-curve
+  metrics append rather than reset.
+
+**Auto-resume after a full shutdown** (optional — re-runs itself at login): create
+`~/Library/LaunchAgents/com.jaseci.probe.plist`, then `launchctl load` it:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+  <key>Label</key><string>com.jaseci.probe</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string><string>-lc</string>
+    <string>cd /Users/ayush/Downloads/JaseciLabs/DataGeneration && ./run_probe.sh Qwen/Qwen3-Coder-30B-A3B qwen >> results/qwen-autoresume.log 2>&1</string>
+  </array>
+  <key>RunAtLoad</key><true/>
+</dict></plist>
+```
+
+`launchctl load ~/Library/LaunchAgents/com.jaseci.probe.plist`. On every login it
+re-runs; once finished, all stages are `*.done` and it exits immediately. Remove
+with `launchctl unload ...` when the probe is complete.
+
+## Time (rough, M5 Pro, first run)
+
+Highly variable — dominated by download, training, and 30B-model generation.
+
+| Stage | Estimate | Notes |
+|---|---|---|
+| Download model (FP16 ~60 GB) | 10 min – 2.5 hr | network-bound; one-time (cached after) |
+| Quantize Q4 + Q8 | ~15–30 min | one-time |
+| Base eval (150 tasks) | ~15–40 min | generation on the 30B model |
+| LoRA train (600 iters) | ~0.5–1.7 hr | + per-checkpoint eval competes for the GPU |
+| Per-checkpoint evals | ~0.3–1 hr | the live 50-task evals, concurrent with training |
+| Fuse + final eval | ~0.3–0.7 hr | |
+| **Total (first run)** | **~3–6 hr** | subsequent runs skip download/quantize → **~2–4 hr** |
+
+**Cut the time:** the per-checkpoint eval on a 30B model is the hidden cost (it
+shares the GPU with training). Run with `SUBSET=20 EVAL_EVERY=300 ./run_probe.sh ...`
+to eval fewer tasks less often, or `EVAL_EVERY=99999` to skip live evals and just
+read base-vs-finetuned at the end.
+
 ## Notes / limits
 
 - **SFT first.** DPO is a later stage (mlx-lm native DPO is unconfirmed);

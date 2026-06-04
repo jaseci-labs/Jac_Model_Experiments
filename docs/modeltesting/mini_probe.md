@@ -90,3 +90,8 @@ reads `JAC_EVAL_MODE` / `JAC_EVAL_MODEL` from the environment (no source edits).
 - Holdout carries behavioral cases, not reference Jac — sufficient for the
   primary metric; an idiom-judge over outputs can be added later.
 - `configs/lora.yaml` keys vary by mlx-lm version — verify against your install.
+- Resume specifics vary by mlx-lm version: `run_probe.sh` assumes checkpoints named
+  `NNNN_adapters.safetensors` and a `--resume-adapter-file` flag. If your mlx-lm
+  uses different names/flags, adjust the discovery block. On resume the LR schedule
+  restarts per-invocation (loads weights, re-warms up) — continues learning, not a
+  perfectly-stitched resume.
