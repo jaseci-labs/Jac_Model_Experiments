@@ -82,15 +82,16 @@ with entry {
     matplotlib.use("Agg");
     train_log: str = os.environ.get("JAC_TRAIN_LOG", "results/train.log");
     metrics: str = os.environ.get("JAC_METRICS", "results/metrics.jsonl");
+    d: str = os.environ.get("JAC_PLOT_DIR", "results");   # per-model output dir (e.g. results/qwen)
 
     t: dict = parse_train(train_log);
-    plot_one(list(t["train"]), "Train Loss", "loss", "results/train_loss.png");
-    plot_one(list(t["val"]), "Validation Loss", "loss", "results/val_loss.png");
-    plot_one(list(t["lr"]), "Learning Rate", "lr", "results/learning_rate.png");
-    plot_one(list(t["tps"]), "Throughput", "tokens/sec", "results/tokens_per_sec.png");
-    plot_one(list(t["itsec"]), "Iterations/sec", "it/sec", "results/iters_per_sec.png");
-    plot_one(list(t["trained"]), "Trained Tokens (cumulative)", "tokens", "results/trained_tokens.png");
-    plot_one(list(t["peak"]), "Peak Memory", "GB", "results/peak_mem.png");
+    plot_one(list(t["train"]), "Train Loss", "loss", d + "/train_loss.png");
+    plot_one(list(t["val"]), "Validation Loss", "loss", d + "/val_loss.png");
+    plot_one(list(t["lr"]), "Learning Rate", "lr", d + "/learning_rate.png");
+    plot_one(list(t["tps"]), "Throughput", "tokens/sec", d + "/tokens_per_sec.png");
+    plot_one(list(t["itsec"]), "Iterations/sec", "it/sec", d + "/iters_per_sec.png");
+    plot_one(list(t["trained"]), "Trained Tokens (cumulative)", "tokens", d + "/trained_tokens.png");
+    plot_one(list(t["peak"]), "Peak Memory", "GB", d + "/peak_mem.png");
 
     lc: list = [];
     mp = Path(metrics);
@@ -102,6 +103,6 @@ with entry {
         }
     }
     plot_one(lc, "Holdout test-pass % per checkpoint (learning curve)", "test-pass %",
-             "results/learning_curve.png");
-    print("graphs in results/");
+             d + "/learning_curve.png");
+    print("graphs in " + d + "/");
 }

@@ -10,24 +10,27 @@ Run from the repo root:
 """
 
 import json;
+import os;
 import from writer { revalidate_example }
 import from pathlib { Path }
 import from typing { Any }
 
 glob FILES: list[str] = ["dataset/conversion/sft.jsonl", "dataset/conversion/sft_auto.jsonl"];
-glob SAMPLE_EVERY: int = 1;  # 1 = check all; e.g. 20 = check every 20th line
+glob SAMPLE_EVERY: int = 1;  # 1 = check all; override with env JAC_SAMPLE_EVERY (e.g. 40)
 
 
 def audit_file(path: str) -> dict {
     p = Path(path);
     if not p.exists() { return {"checked": 0, "failed": 0}; }
+    every: int = int(os.environ.get("JAC_SAMPLE_EVERY", str(SAMPLE_EVERY)));
+    if every < 1 { every = 1; }
     checked: int = 0;
     failed: int = 0;
     idx: int = 0;
     for line in p.read_text().split("\n") {
         if line.strip() == "" { continue; }
         idx += 1;
-        if idx % SAMPLE_EVERY != 0 { continue; }
+        if idx % every != 0 { continue; }
         rec: dict = dict(json.loads(line));
         (ok, detail) = revalidate_example(rec);
         checked += 1;

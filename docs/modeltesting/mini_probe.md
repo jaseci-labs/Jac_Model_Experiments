@@ -11,7 +11,7 @@ and scoring is one command once `mlx-lm` and a model are present.
 | Balanced training manifest (1:3 idiom:transpile, 464) | `dataset/conversion/sft_train.jsonl` |
 | mlx-lm splits (messages format) | `dataset/mlx/train.jsonl` (417) + `valid.jsonl` (47) |
 | Decontaminated eval holdout (150, behavioral cases) | `dataset/eval_holdout/conversion.jsonl` |
-| DPO pairs (compile-gated, 85) | `dataset/conversion/dpo.jsonl` |
+| DPO pairs (compile-gated, 60) | `dataset/conversion/dpo.jsonl` |
 | LoRA config (scaffold) | `configs/lora.yaml` |
 | Eval harness (model-agnostic) | `srccurrent/jacgen/eval_probe.jac` |
 | Runner (scaffold) | `run_probe.sh` |
@@ -26,31 +26,40 @@ Environment (anaconda intentionally removed — use a project venv):
 ```bash
 ./setup_env.sh                 # python3 -m venv .venv + pip install jaclang mlx-lm matplotlib
 source .venv/bin/activate      # jac + mlx_lm on PATH
-./check.sh                     # syntax (jac check -p, 20/20) + behavior (jac run, 32/32)
+./check.sh                     # jac check (19) + eval_probe parse + non-destructive jac run audit
 ```
 
 `run_probe.sh` and `check.sh` auto-prepend `.venv/bin` to PATH, so the pipeline's
 internal `jac`/`mlx_lm` subprocess calls resolve without activation.
 
-**On `jac check`:** all 20 modules pass the **full** type-checker. Dynamic
+**On `jac check`:** 19 modules pass the **full** type-checker; `eval_probe.jac` is
+**parse-checked only** (`jac check -p`) because jaclang 0.16.0's type-checker
+*crashes* resolving `mlx_lm`'s model types (internal bug) — so `eval_probe.jac`
+lazy-imports `mlx_lm` *inside* its functions, never at top level. Dynamic
 Python-interop (`json.loads`/`subprocess`/regex/matplotlib return `Any`, which
 jaclang 0.16.0 won't assign to typed vars) is handled with `str()`/`list()`/
 `dict()`/`int()` casts at the boundary; a few genuinely-untypeable stdlib calls
 (`inspect.signature`, `signal`, matplotlib stubs) carry `# jac:ignore[...]`.
-`check.sh` runs full `jac check` + `jac run` (behavior — the real gate, how every
-dataset example was validated).
+`check.sh` runs full `jac check` (19) + parse-check (eval_probe) + a **sampled,
+non-destructive** `jac run` re-validation (`verify_dataset.jac`, the real gate —
+behavioral, how every dataset example was validated). It does **not** mutate the
+dataset. (Earlier it ran `seed_conversion.jac`, which truncated `sft.jsonl` to 32
+every invocation — fixed.)
 
 Still needed for the actual probe: download + quantize a model (~50-60 GB each)
-and run `./run_probe.sh <model> <name>`.
+and run `./run_probe.sh <model> <name>`. Full handoff with all gotchas:
+`docs/modeltesting/HANDOFF.md`.
 
 ## Live metrics + graphs
 
 `run_probe.sh` does: quantize → base eval → **30-iter dry-run** (bail check) →
-full train (tee to `results/<name>-train.log`) with a live loop that, every ~60s,
-runs a **50-task adapter eval** (no fuse) appending a learning-curve point to
-`results/<name>-metrics.jsonl` and redraws the **ASCII dashboard**
-(`dashboard.jac`). After training: fuse → full 150 eval → **PNG graphs**
-(`plot_metrics.jac`).
+full train (redirected — not piped — to `results/<name>-train.log` so `$!` is the
+trainer) with a live loop that, every `EVAL_EVERY`s, runs a `SUBSET`-task adapter
+eval (no fuse) appending a learning-curve point to `results/<name>-metrics.jsonl`
+and redraws the **ASCII dashboard** (`dashboard.jac`) + the **PNG graphs**
+(`plot_metrics.jac`). After training: fuse → full 150 eval → final graphs.
+The eval loads the model **once** in-process (mlx) and reuses it across the whole
+subset — an earlier version reloaded the 30B model per task and was unusably slow.
 
 - `dashboard.jac` (zero-dep): train/val loss, LR, tokens/sec, and the holdout
   test-pass learning curve — live in the terminal.
@@ -66,8 +75,8 @@ runs a **50-task adapter eval** (no fuse) appending a learning-curve point to
 pip install mlx-lm
 # rebuild splits if data changed:
 jac run srccurrent/jacgen/build_splits.jac
-# set configs/lora.yaml `model:` to your Q4 path, then:
-./run_probe.sh Qwen/Qwen3-Coder-30B-A3B qwen
+# run (the script passes --model to override configs/lora.yaml's placeholder path):
+./run_probe.sh Qwen/Qwen3-Coder-30B-A3B-Instruct qwen   # -Instruct (bare id 401s)
 ```
 
 `run_probe.sh` quantizes → base eval → LoRA SFT → fuse → finetuned eval, writing
@@ -76,10 +85,13 @@ reads `JAC_EVAL_MODE` / `JAC_EVAL_MODEL` from the environment (no source edits).
 
 ## Metrics
 
-`eval_probe.jac` reports, over the 150 holdout tasks:
-- **compiler pass rate** — generated Jac type-checks (`jac check`)
+`eval_probe.jac` reports, over the 150 holdout tasks (gate is `jac run`, never
+`jac check`):
+- **runs rate** — generated Jac compiles and executes (`jac run` exit 0)
 - **cross-compiled test pass rate** — generated Jac runs and matches the recorded
   behavioral `test_cases` (the probe's primary, objective metric)
+- **generation tokens**, **eval tokens/sec** (avg `generation_tps`), and
+  **tokens-to-correct** (avg generated tokens per correct conversion)
 
 ## Notes / limits
 

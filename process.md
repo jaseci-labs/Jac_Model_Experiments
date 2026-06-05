@@ -4,6 +4,9 @@ Start-to-finish for the mini model test: finetune one base model on the
 Python→Jac conversion data and measure base-vs-finetuned on the held-out set.
 Everything is built; this is the run order.
 
+> Deep handoff (architecture, every module, all gotchas, dataset rebuild order):
+> **`docs/modeltesting/HANDOFF.md`**. Read it if anything below is unclear.
+
 ## 0. Prereqs (one time)
 
 Anaconda was removed on purpose. Use the project venv:
@@ -21,8 +24,10 @@ You also need disk for a model (~50–60 GB per model to download + quantize).
 ./check.sh
 ```
 
-Expect: `20 passed` (full `jac check`) and `32/32 re-validated` (behavior). If
-that's green, jac + the pipeline work.
+Expect: `19 passed` (full `jac check`) + `eval_probe.jac PASSED` (parse-only;
+the type-checker crashes on mlx types) + `TOTAL: N/N re-validated` (a **sampled,
+non-destructive** behavioral re-run of stored examples). If that's green, jac +
+the pipeline work. check.sh does **not** mutate the dataset.
 
 ## 2. Confirm the data is in place
 
@@ -30,28 +35,45 @@ Already generated (gitignored under `dataset/`):
 
 | File | What | Count |
 |---|---|---|
+| `dataset/conversion/sft.jsonl` | idiomatic core (hand/agentic) | 116 |
+| `dataset/conversion/sft_auto.jsonl` | transpile volume (py2jac, behaviorally gated) | 1500 |
 | `dataset/mlx/train.jsonl` + `valid.jsonl` | training split (mlx `messages` format, 1:3 idiom:transpile) | 417 / 47 |
 | `dataset/eval_holdout/conversion.jsonl` | unseen, decontaminated eval tasks (behavioral `test_cases`) | 150 |
-| `dataset/conversion/dpo.jsonl` | DPO pairs (later stage) | 85 |
+| `dataset/conversion/dpo.jsonl` | DPO pairs (later stage) | 60 |
 
-Rebuild only if the data changed:
+Total SFT = 1616 (116 idiomatic + 1500 transpile). Confirm any time with
+`jac run srccurrent/jacgen/dataset_stats.jac`.
+
+**Rebuild only if the data changed — ORDER MATTERS** (`seed_conversion` truncates
+`sft.jsonl`; the idiomatic batches append, so they must run *after* it):
 
 ```bash
-jac run srccurrent/jacgen/seed_conversion.jac     # idiomatic core
-jac run srccurrent/jacgen/idiomatic_batch.jac     # + batches 2/3
-jac run srccurrent/jacgen/scale_conversion.jac    # transpile volume (1500)
-jac run srccurrent/jacgen/build_manifest.jac      # 1:3 balanced sft_train.jsonl
-jac run srccurrent/jacgen/build_splits.jac        # -> dataset/mlx/{train,valid}.jsonl
-jac run srccurrent/jacgen/holdout.jac             # eval holdout (decontaminated)
+jac run srccurrent/jacgen/seed_conversion.jac     # sft.jsonl -> 32 (TRUNCATES, + 2 seed DPO)
+jac run srccurrent/jacgen/idiomatic_batch.jac     # -> 62  (append)
+jac run srccurrent/jacgen/idiomatic_batch2.jac    # -> 85
+jac run srccurrent/jacgen/idiomatic_batch3.jac    # -> 116
+jac run srccurrent/jacgen/graph_seeds.jac         # + 8 graph-tier idiomatic (node/edge/walker) -> 124
+jac run srccurrent/jacgen/scale_conversion.jac    # transpile volume -> 1500 (slow: mines+gates)
+jac run srccurrent/jacgen/dpo_conversion.jac      # dpo.jsonl -> ~60
+jac run srccurrent/jacgen/build_manifest.jac      # 1:3 balanced sft_train.jsonl (496)
+jac run srccurrent/jacgen/build_splits.jac        # -> dataset/mlx/{train,valid}.jsonl (446/50)
+jac run srccurrent/jacgen/holdout.jac             # function eval holdout (decontaminated, 150)
+jac run srccurrent/jacgen/graph_holdout.jac       # graph eval holdout (6, real idiom headroom)
 jac run srccurrent/jacgen/dataset_stats.jac       # composition report
 ```
+
+> If `sft.jsonl` shows 32 and `dpo.jsonl` shows 2, the batches got wiped — re-run
+> from `idiomatic_batch` onward. (`scale_conversion` can be skipped if
+> `sft_auto.jsonl` already has 1500 — it's the slow network+transpile step.)
 
 ## 3. Run the probe
 
 ```bash
-./run_probe.sh Qwen/Qwen3-Coder-30B-A3B qwen
+./run_probe.sh Qwen/Qwen3-Coder-30B-A3B-Instruct qwen   # note the -Instruct suffix
 # or:  ./run_probe.sh google/gemma-4-26b-a4b-it gemma
 ```
+
+(The bare `Qwen/Qwen3-Coder-30B-A3B` 401s on HuggingFace — use `-Instruct`.)
 
 What it does, in order:
 1. quantize the model → Q4 (train) + Q8 (eval)
@@ -108,7 +130,7 @@ Tunables (env): `EVAL_EVERY` (dashboard secs), `SUBSET` (tasks/checkpoint),
   <key>ProgramArguments</key>
   <array>
     <string>/bin/bash</string><string>-lc</string>
-    <string>cd /Users/ayush/Downloads/JaseciLabs/DataGeneration && ./run_probe.sh Qwen/Qwen3-Coder-30B-A3B qwen >> results/qwen-autoresume.log 2>&1</string>
+    <string>cd /Users/ayush/Downloads/JaseciLabs/DataGeneration && ./run_probe.sh Qwen/Qwen3-Coder-30B-A3B-Instruct qwen >> results/qwen-autoresume.log 2>&1</string>
   </array>
   <key>RunAtLoad</key><true/>
 </dict></plist>
@@ -132,10 +154,13 @@ Highly variable — dominated by download, training, and 30B-model generation.
 | Fuse + final eval | ~0.3–0.7 hr | |
 | **Total (first run)** | **~3–6 hr** | subsequent runs skip download/quantize → **~2–4 hr** |
 
-**Cut the time:** the per-checkpoint eval on a 30B model is the hidden cost (it
-shares the GPU with training). Run with `SUBSET=20 EVAL_EVERY=300 ./run_probe.sh ...`
-to eval fewer tasks less often, or `EVAL_EVERY=99999` to skip live evals and just
-read base-vs-finetuned at the end.
+**Live eval is OFF by default (and must stay off for 30B on 48 GB).** A
+per-checkpoint holdout eval loads a *second* full model copy in-process; a 30B
+model + the training copy exceeds 48 GB → swap thrash → deadlock (froze the first
+run at iter 150). So `run_probe.sh` gates it behind `LIVE_EVAL=1` (default 0). With
+it off you watch **val loss** in the live dashboard (free, from the train log, same
+model) and read **base-vs-finetuned holdout test-pass%** at the end — the actual
+deliverable. Only use `LIVE_EVAL=1 SUBSET=20` for small models (≲8B) that fit twice.
 
 ## Notes / limits
 

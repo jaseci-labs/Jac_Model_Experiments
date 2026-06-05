@@ -91,7 +91,7 @@ def build_program(jac_code: str, func: str, cases: list) -> tuple[str, str] {
 
 
 with entry {
-    p = Path(HOLDOUT);
+    p = Path(os.environ.get("JAC_HOLDOUT", HOLDOUT));   # override for the graph holdout
     mode: str = eval_mode();
 
     # load the model ONCE for the whole eval (the speed fix) -- adapter optional

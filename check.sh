@@ -4,8 +4,11 @@
 #     (json/subprocess/regex/matplotlib return Any) is handled by str()/list()/
 #     dict()/int() casts at the boundary; a few genuinely-untypeable stdlib calls
 #     (inspect.signature, signal, matplotlib stubs) carry `# jac:ignore[...]`.
-#  2. BEHAVIOR — `jac run`. Every dataset example is re-validated by running it
-#     (seed_conversion.jac reports N/N). The real gate.
+#  2. BEHAVIOR — `jac run`. A sampled audit re-runs stored dataset examples and
+#     confirms their output still matches (verify_dataset.jac, NON-destructive).
+#     This is the real gate. NOTE: do NOT use seed_conversion.jac here — it
+#     TRUNCATES dataset/conversion/sft.jsonl back to the 32 seeds (and dpo.jsonl
+#     to 2), wiping the idiomatic_batch* / dpo_conversion appends. See HANDOFF.md.
 set -euo pipefail
 [ -d "$PWD/.venv/bin" ] && export PATH="$PWD/.venv/bin:$PATH"   # subprocess `jac` resolves
 JAC="${JAC:-.venv/bin/jac}"
@@ -15,11 +18,15 @@ echo "=== type check (jac check) ==="
 # eval_probe imports mlx_lm; jaclang's type-checker CRASHES resolving mlx's model
 # types (internal bug, not our code). Parse-check it (syntax) + rely on jac run;
 # full type-check the other 19.
-CORE=$(ls srccurrent/jacgen/*.jac | grep -v eval_probe.jac)
+# eval_probe.jac + idiom_eval.jac import mlx_lm (lazy); the type-checker crashes on
+# mlx types, so parse-check (-p) those two and full-check the rest.
+CORE=$(ls srccurrent/jacgen/*.jac | grep -vE 'eval_probe.jac|idiom_eval.jac')
 "$JAC" check $CORE
 "$JAC" check -p srccurrent/jacgen/eval_probe.jac
+"$JAC" check -p srccurrent/jacgen/idiom_eval.jac
 
-echo "=== behavior (jac run: re-validate the conversion dataset) ==="
-"$JAC" run srccurrent/jacgen/seed_conversion.jac 2>/dev/null | tail -1
+echo "=== behavior (jac run: sampled re-validation of the conversion dataset) ==="
+# NON-destructive: re-runs every Nth stored example and checks output still matches.
+JAC_SAMPLE_EVERY="${JAC_SAMPLE_EVERY:-40}" "$JAC" run srccurrent/jacgen/verify_dataset.jac 2>/dev/null | tail -1
 
 echo "OK"

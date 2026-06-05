@@ -19,7 +19,11 @@
 | **HumanEval+** | Strong (code-specialized variant) |
 | **MBPP+** | Strong (code-specialized variant) |
 | **LiveCodeBench** | Competitive with similarly-sized code models |
-| **Hugging Face ID** | `Qwen/Qwen3-Coder-30B-A3B` |
+| **Hugging Face ID** | `Qwen/Qwen3-Coder-30B-A3B-Instruct` |
+
+> ⚠️ Use the `-Instruct` suffix. The bare `Qwen/Qwen3-Coder-30B-A3B` returns HTTP
+> 401 on HuggingFace; `Qwen/Qwen3-Coder-30B-A3B-Instruct` resolves (verified 200).
+> The download/convert commands below predate this — append `-Instruct` to the id.
 
 ---
 

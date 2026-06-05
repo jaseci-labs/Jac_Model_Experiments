@@ -55,9 +55,10 @@ compiler gate → cross-compiled tests → idiom judge → sampled manual review
 The model-testing phase is built and runnable. The pipeline (mine + generate +
 dedup + decontaminate + split + train/eval harness) is all in Jac under
 [`srccurrent/jacgen/`](srccurrent/jacgen/). Conversion dataset (gitignored under
-`dataset/`): ~1616 SFT (idiomatic core + py2jac volume), 85 DPO, 150
-decontaminated eval holdout. See `process.md` to run the probe and
-[`docs/modeltesting/`](docs/modeltesting/) for strategy/evaluation/mini-probe.
+`dataset/`): 1616 SFT (116 idiomatic core + 1500 py2jac volume), 60 DPO, 150
+decontaminated eval holdout. See `process.md` to run the probe,
+[`docs/modeltesting/HANDOFF.md`](docs/modeltesting/HANDOFF.md) for the full
+handoff, and [`docs/modeltesting/`](docs/modeltesting/) for strategy/evaluation.
 
 ## Fixed constraints
 

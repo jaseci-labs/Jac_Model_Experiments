@@ -8,8 +8,15 @@
 #
 # Usage: ./run_probe.sh <hf-model-id> <short-name>
 #        ./run_probe.sh Qwen/Qwen3-Coder-30B-A3B qwen
-# Env: EVAL_EVERY (dashboard secs, 60) SUBSET (tasks/checkpoint, 50)
+# Env: EVAL_EVERY (dashboard refresh secs, 60) SUBSET (tasks/checkpoint, 50)
 #      DRY_ITERS (30) SKIP_DRY=1
+#      LIVE_EVAL=1  -> run a holdout eval per checkpoint DURING training. This loads
+#                     a SECOND full copy of the model in-process. On a 48GB box a 30B
+#                     model + the training copy exceeds RAM -> swap thrash -> deadlock.
+#                     DEFAULT 0 (off). Leave off for ~30B models; the live learning
+#                     signal is VAL LOSS from the train log (free, same model). The
+#                     holdout test-pass% is measured at base vs finetuned regardless.
+#                     Only set LIVE_EVAL=1 for small models (≲8B) that fit twice.
 set -euo pipefail
 
 # --- prevent idle sleep while running (lid-close still suspends, then resumes) ---
@@ -33,15 +40,16 @@ for f in dataset/mlx/train.jsonl dataset/mlx/valid.jsonl \
   [ -f "$f" ] || { echo "MISSING: $f  (run build_splits.jac / holdout.jac first)"; exit 1; }
 done
 
-mkdir -p models adapters results
-TRAIN_LOG="results/${NAME}-train.log"
-METRICS="results/${NAME}-metrics.jsonl"
+mkdir -p models adapters "results/${NAME}"   # per-model results dir (no gemma/qwen clash)
+RDIR="results/${NAME}"
+TRAIN_LOG="$RDIR/train.log"
+METRICS="$RDIR/metrics.jsonl"
 ADAPTER="adapters/${NAME}-probe"
 TRAIN_PID=""
 cleanup() { [ -n "$TRAIN_PID" ] && kill "$TRAIN_PID" 2>/dev/null || true; }
 trap cleanup EXIT INT TERM
-done_mark() { touch "results/.${NAME}.$1.done"; }
-is_done() { [ -f "results/.${NAME}.$1.done" ]; }
+done_mark() { touch "$RDIR/.$1.done"; }
+is_done() { [ -f "$RDIR/.$1.done" ]; }
 
 # --- 1. quantize (idempotent + completeness check) ---
 quantize() {  # <out> <bits>
@@ -61,7 +69,7 @@ if is_done base; then
 else
   echo ">>> base eval (pre-finetune)"
   JAC_EVAL_MODE=mlx JAC_EVAL_MODEL="models/${NAME}-q8" \
-    jac run srccurrent/jacgen/eval_probe.jac | tee "results/${NAME}-base.txt"
+    jac run srccurrent/jacgen/eval_probe.jac | tee "$RDIR/base.txt"
   done_mark base
 fi
 
@@ -109,7 +117,9 @@ else
   TRAIN_PID=$!
   while kill -0 "$TRAIN_PID" 2>/dev/null; do
     STEP=$(grep -oE "Iter [0-9]+" "$TRAIN_LOG" 2>/dev/null | tail -1 | grep -oE "[0-9]+" || echo 0)
-    if [ -f "$ADAPTER_FILE" ]; then
+    # OPT-IN ONLY: a per-checkpoint holdout eval loads a SECOND full model in-process.
+    # On 48GB this OOMs/deadlocks a 30B run (swap thrash). Default off — watch val loss.
+    if [ "${LIVE_EVAL:-0}" = "1" ] && [ -f "$ADAPTER_FILE" ]; then
       JAC_EVAL_MODE=mlx JAC_EVAL_MODEL="models/${NAME}-q4" JAC_EVAL_ADAPTER="$ADAPTER" \
         JAC_EVAL_LIMIT="$SUBSET" JAC_EVAL_METRICS_OUT="$METRICS" JAC_EVAL_STEP="$((DONE_STEPS + STEP))" \
         jac run srccurrent/jacgen/eval_probe.jac >/dev/null 2>&1 || true
@@ -117,8 +127,8 @@ else
     clear
     JAC_TRAIN_LOG="$TRAIN_LOG" JAC_METRICS="$METRICS" \
       jac run srccurrent/jacgen/dashboard.jac 2>/dev/null || true
-    # refresh the PNG graphs live too (open results/*.png in Preview to watch them update)
-    JAC_TRAIN_LOG="$TRAIN_LOG" JAC_METRICS="$METRICS" \
+    # refresh the PNG graphs live too (open results/<name>/*.png in Preview to watch them update)
+    JAC_TRAIN_LOG="$TRAIN_LOG" JAC_METRICS="$METRICS" JAC_PLOT_DIR="$RDIR" \
       jac run srccurrent/jacgen/plot_metrics.jac >/dev/null 2>&1 || true
     sleep "$EVAL_EVERY"
   done
@@ -141,22 +151,51 @@ if [ -f "$FUSED/config.json" ]; then echo ">>> fuse: reuse $FUSED"; else
   mlx_lm.fuse --model "models/${NAME}-q8" --adapter-path "$ADAPTER" --save-path "$FUSED"
 fi
 
-# --- 6. finetuned eval (skip if recorded) ---
+# --- 6. learning curve: eval each saved checkpoint SEQUENTIALLY (one model in RAM
+#        at a time -> no OOM, unlike a concurrent live eval). Builds the real curve. ---
+if is_done curve; then
+  echo ">>> learning curve: already done"
+else
+  echo ">>> learning curve: evaluating saved checkpoints on ${SUBSET} holdout tasks"
+  : > "$METRICS"   # fresh curve
+  CFG="$ADAPTER/adapter_config.json"
+  TMPADP="adapters/${NAME}-ckpt-eval"
+  for CK in "$ADAPTER"/*_adapters.safetensors; do
+    [ -e "$CK" ] || continue
+    STEP="$(basename "$CK" | grep -oE '^[0-9]+' | sed 's/^0*//')"; STEP="${STEP:-0}"
+    rm -rf "$TMPADP"; mkdir -p "$TMPADP"
+    cp "$CK" "$TMPADP/adapters.safetensors"
+    [ -f "$CFG" ] && cp "$CFG" "$TMPADP/adapter_config.json"
+    echo "  checkpoint ${STEP}"
+    JAC_EVAL_MODE=mlx JAC_EVAL_MODEL="models/${NAME}-q4" JAC_EVAL_ADAPTER="$TMPADP" \
+      JAC_EVAL_LIMIT="$SUBSET" JAC_EVAL_METRICS_OUT="$METRICS" JAC_EVAL_STEP="$STEP" \
+      jac run srccurrent/jacgen/eval_probe.jac 2>/dev/null | tail -3 || true
+  done
+  rm -rf "$TMPADP"
+  # final point: the end-of-training adapter (adapters.safetensors), step = total iters
+  echo "  checkpoint ${TOTAL_ITERS} (final)"
+  JAC_EVAL_MODE=mlx JAC_EVAL_MODEL="models/${NAME}-q4" JAC_EVAL_ADAPTER="$ADAPTER" \
+    JAC_EVAL_LIMIT="$SUBSET" JAC_EVAL_METRICS_OUT="$METRICS" JAC_EVAL_STEP="$TOTAL_ITERS" \
+    jac run srccurrent/jacgen/eval_probe.jac 2>/dev/null | tail -3 || true
+  done_mark curve
+fi
+
+# --- 7. finetuned eval (skip if recorded) ---
 if is_done finetuned; then
   echo ">>> finetuned eval: already done"
 else
   echo ">>> finetuned eval"
   JAC_EVAL_MODE=mlx JAC_EVAL_MODEL="$FUSED" \
-    jac run srccurrent/jacgen/eval_probe.jac | tee "results/${NAME}-finetuned.txt"
+    jac run srccurrent/jacgen/eval_probe.jac | tee "$RDIR/finetuned.txt"
   done_mark finetuned
 fi
 
-# --- 7. graphs ---
-JAC_TRAIN_LOG="$TRAIN_LOG" JAC_METRICS="$METRICS" \
+# --- 8. graphs ---
+JAC_TRAIN_LOG="$TRAIN_LOG" JAC_METRICS="$METRICS" JAC_PLOT_DIR="$RDIR" \
   jac run srccurrent/jacgen/plot_metrics.jac || echo "(pip install matplotlib for PNGs)"
 
 echo "=== done ==="
-echo "  base:      results/${NAME}-base.txt"
-echo "  finetuned: results/${NAME}-finetuned.txt"
-echo "  graphs:    results/*.png  (learning curve = results/learning_curve.png)"
+echo "  base:      $RDIR/base.txt"
+echo "  finetuned: $RDIR/finetuned.txt"
+echo "  graphs:    $RDIR/*.png  (learning curve = $RDIR/learning_curve.png)"
 echo "  (re-running is safe: finished stages skip, training resumes from last checkpoint)"
