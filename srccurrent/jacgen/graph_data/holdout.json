@@ -1,52 +1,9 @@
 [
  {
-  "name": "min_reachable",
+  "name": "count_ge_threshold",
   "difficulty": "composed",
-  "py": "def min_reachable(spec: dict) -> int:\n    \"\"\"Return the minimum node value reachable from start.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]; start = spec[\"start\"]\n    seen = set(); stack = [start]; best = None\n    while stack:\n        n = stack.pop()\n        if n in seen: continue\n        seen.add(n)\n        if best is None or vals[n] < best: best = vals[n]\n        stack.extend(adj.get(n, []))\n    return best",
-  "jac": "node MnN { has name: str; has val: int; has seen: bool = False; }\n\nwalker Min {\n    has best: int = 2147483647;\n    can step with MnN entry {\n        if not here.seen { here.seen = True; if here.val < self.best { self.best = here.val; } visit [-->]; }\n    }\n}\n\ndef min_reachable(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]); vals: dict = dict(spec[\"vals\"]); start: str = str(spec[\"start\"]);\n    nodes: dict = {};\n    for name in adj.keys() { nodes[name] = MnN(name=str(name), val=int(vals[name])); }\n    for (s, ts) in adj.items() { for t in list(ts) { if t not in nodes { nodes[t] = MnN(name=str(t), val=int(vals[t])); } } }\n    for (s, ts) in adj.items() { for t in list(ts) { nodes[s] ++> nodes[t]; } }\n    w = nodes[start] spawn Min();\n    return w.best;\n}",
-  "cases": [
-   {
-    "input": {
-     "adj": {
-      "a": [
-       "b",
-       "c"
-      ],
-      "b": [],
-      "c": []
-     },
-     "vals": {
-      "a": 7,
-      "b": 2,
-      "c": 9
-     },
-     "start": "a"
-    },
-    "output": "2"
-   },
-   {
-    "input": {
-     "adj": {
-      "a": [
-       "b"
-      ],
-      "b": []
-     },
-     "vals": {
-      "a": 4,
-      "b": 8
-     },
-     "start": "a"
-    },
-    "output": "4"
-   }
-  ]
- },
- {
-  "name": "count_odd_reachable",
-  "difficulty": "composed",
-  "py": "def count_odd_reachable(spec: dict) -> int:\n    \"\"\"Count reachable nodes whose value is odd.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]; start = spec[\"start\"]\n    seen = set(); stack = [start]; cnt = 0\n    while stack:\n        n = stack.pop()\n        if n in seen: continue\n        seen.add(n)\n        if vals[n] % 2 == 1: cnt += 1\n        stack.extend(adj.get(n, []))\n    return cnt",
-  "jac": "node OdN { has name: str; has val: int; has seen: bool = False; }\n\nwalker Odd {\n    has count: int = 0;\n    can step with OdN entry {\n        if not here.seen { here.seen = True; if here.val % 2 == 1 { self.count += 1; } visit [-->]; }\n    }\n}\n\ndef count_odd_reachable(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]); vals: dict = dict(spec[\"vals\"]); start: str = str(spec[\"start\"]);\n    nodes: dict = {};\n    for name in adj.keys() { nodes[name] = OdN(name=str(name), val=int(vals[name])); }\n    for (s, ts) in adj.items() { for t in list(ts) { if t not in nodes { nodes[t] = OdN(name=str(t), val=int(vals[t])); } } }\n    for (s, ts) in adj.items() { for t in list(ts) { nodes[s] ++> nodes[t]; } }\n    w = nodes[start] spawn Odd();\n    return w.count;\n}",
+  "py": "def count_ge_threshold(spec: dict) -> int:\n    \"\"\"Count reachable nodes whose value is >= the threshold.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]; start = spec[\"start\"]; k = spec[\"threshold\"]\n    seen = set(); stack = [start]; acc = 0\n    while stack:\n        n = stack.pop()\n        if n in seen: continue\n        seen.add(n); v = vals[n]\n        if v >= k: acc += 1\n        stack.extend(adj.get(n, []))\n    return acc",
+  "jac": "node GN_count_ge_threshold { has name: str; has val: int; has seen: bool = False; }\n\nwalker W_count_ge_threshold {\n    has k: int;\n    has count: int = 0;\n    can step with GN_count_ge_threshold entry {\n        if not here.seen { here.seen = True; if here.val >= self.k { self.count += 1; } visit [-->]; }\n    }\n}\n\ndef count_ge_threshold(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]); start: str = str(spec[\"start\"]);\n    vals: dict = dict(spec[\"vals\"]);\n    thr: int = int(spec[\"threshold\"]);\n    nodes: dict = {};\n    for nm in adj.keys() { nodes[nm] = GN_count_ge_threshold(name=str(nm), seen=False, val=int(vals[nm])); }\n    for (s, ts) in adj.items() { for t in list(ts) { if t not in nodes { nodes[t] = GN_count_ge_threshold(name=str(t), seen=False, val=int(vals[t])); } } }\n    for (s, ts) in adj.items() { for t in list(ts) { nodes[s] ++> nodes[t]; } }\n    w = nodes[start] spawn W_count_ge_threshold(k=thr);\n    return w.count;\n}",
   "cases": [
    {
     "input": {
@@ -58,18 +15,21 @@
       "b": [
        "d"
       ],
-      "c": [],
+      "c": [
+       "d"
+      ],
       "d": []
      },
+     "start": "a",
      "vals": {
-      "a": 1,
-      "b": 2,
-      "c": 3,
-      "d": 5
+      "a": 5,
+      "b": 8,
+      "c": 2,
+      "d": 10
      },
-     "start": "a"
+     "threshold": 6
     },
-    "output": "3"
+    "output": "2"
    },
    {
     "input": {
@@ -77,24 +37,52 @@
       "a": [
        "b"
       ],
-      "b": []
+      "b": [
+       "c"
+      ],
+      "c": [
+       "d"
+      ],
+      "d": []
      },
+     "start": "a",
      "vals": {
-      "a": 2,
-      "b": 4
+      "a": 3,
+      "b": 6,
+      "c": 9,
+      "d": 12
      },
-     "start": "a"
+     "threshold": 6
     },
-    "output": "0"
-   }
-  ]
- },
- {
-  "name": "sum_above",
-  "difficulty": "composed",
-  "py": "def sum_above(spec: dict) -> int:\n    \"\"\"Sum the values of reachable nodes whose value exceeds the threshold.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]; start = spec[\"start\"]; thr = spec[\"threshold\"]\n    seen = set(); stack = [start]; total = 0\n    while stack:\n        n = stack.pop()\n        if n in seen: continue\n        seen.add(n)\n        if vals[n] > thr: total += vals[n]\n        stack.extend(adj.get(n, []))\n    return total",
-  "jac": "node SaN { has name: str; has val: int; has seen: bool = False; }\n\nwalker SumAbove {\n    has threshold: int;\n    has total: int = 0;\n    can step with SaN entry {\n        if not here.seen { here.seen = True; if here.val > self.threshold { self.total += here.val; } visit [-->]; }\n    }\n}\n\ndef sum_above(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]); vals: dict = dict(spec[\"vals\"]);\n    start: str = str(spec[\"start\"]); thr: int = int(spec[\"threshold\"]);\n    nodes: dict = {};\n    for name in adj.keys() { nodes[name] = SaN(name=str(name), val=int(vals[name])); }\n    for (s, ts) in adj.items() { for t in list(ts) { if t not in nodes { nodes[t] = SaN(name=str(t), val=int(vals[t])); } } }\n    for (s, ts) in adj.items() { for t in list(ts) { nodes[s] ++> nodes[t]; } }\n    w = nodes[start] spawn SumAbove(threshold=thr);\n    return w.total;\n}",
-  "cases": [
+    "output": "3"
+   },
+   {
+    "input": {
+     "adj": {
+      "r": [
+       "x",
+       "y",
+       "z"
+      ],
+      "x": [],
+      "y": [
+       "w"
+      ],
+      "z": [],
+      "w": []
+     },
+     "start": "r",
+     "vals": {
+      "r": 1,
+      "x": 2,
+      "y": 3,
+      "z": 4,
+      "w": 7
+     },
+     "threshold": 6
+    },
+    "output": "1"
+   },
    {
     "input": {
      "adj": {
@@ -105,40 +93,36 @@
       "b": [],
       "c": []
      },
-     "vals": {
-      "a": 5,
-      "b": 10,
-      "c": 3
-     },
      "start": "a",
-     "threshold": 4
+     "vals": {
+      "a": -3,
+      "b": 4,
+      "c": -1
+     },
+     "threshold": 6
     },
-    "output": "15"
+    "output": "0"
    },
    {
     "input": {
      "adj": {
-      "a": [
-       "b"
-      ],
-      "b": []
+      "n": []
      },
+     "start": "n",
      "vals": {
-      "a": 1,
-      "b": 2
+      "n": 0
      },
-     "start": "a",
-     "threshold": 9
+     "threshold": 6
     },
     "output": "0"
    }
   ]
  },
  {
-  "name": "count_branches",
+  "name": "count_le_threshold",
   "difficulty": "composed",
-  "py": "def count_branches(spec: dict) -> int:\n    \"\"\"Count reachable nodes that have two or more children.\"\"\"\n    adj = spec[\"adj\"]; start = spec[\"start\"]\n    seen = set(); stack = [start]; cnt = 0\n    while stack:\n        n = stack.pop()\n        if n in seen: continue\n        seen.add(n)\n        kids = adj.get(n, [])\n        if len(kids) >= 2: cnt += 1\n        stack.extend(kids)\n    return cnt",
-  "jac": "node BrN { has name: str; has nkids: int; has seen: bool = False; }\n\nwalker Branch {\n    has count: int = 0;\n    can step with BrN entry {\n        if not here.seen { here.seen = True; if here.nkids >= 2 { self.count += 1; } visit [-->]; }\n    }\n}\n\ndef count_branches(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]); start: str = str(spec[\"start\"]);\n    nodes: dict = {};\n    for name in adj.keys() { nodes[name] = BrN(name=str(name), nkids=len(list(adj[name]))); }\n    for (s, ts) in adj.items() { for t in list(ts) { if t not in nodes { nodes[t] = BrN(name=str(t), nkids=0); } } }\n    for (s, ts) in adj.items() { for t in list(ts) { nodes[s] ++> nodes[t]; } }\n    w = nodes[start] spawn Branch();\n    return w.count;\n}",
+  "py": "def count_le_threshold(spec: dict) -> int:\n    \"\"\"Count reachable nodes whose value is <= the threshold.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]; start = spec[\"start\"]; k = spec[\"threshold\"]\n    seen = set(); stack = [start]; acc = 0\n    while stack:\n        n = stack.pop()\n        if n in seen: continue\n        seen.add(n); v = vals[n]\n        if v <= k: acc += 1\n        stack.extend(adj.get(n, []))\n    return acc",
+  "jac": "node GN_count_le_threshold { has name: str; has val: int; has seen: bool = False; }\n\nwalker W_count_le_threshold {\n    has k: int;\n    has count: int = 0;\n    can step with GN_count_le_threshold entry {\n        if not here.seen { here.seen = True; if here.val <= self.k { self.count += 1; } visit [-->]; }\n    }\n}\n\ndef count_le_threshold(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]); start: str = str(spec[\"start\"]);\n    vals: dict = dict(spec[\"vals\"]);\n    thr: int = int(spec[\"threshold\"]);\n    nodes: dict = {};\n    for nm in adj.keys() { nodes[nm] = GN_count_le_threshold(name=str(nm), seen=False, val=int(vals[nm])); }\n    for (s, ts) in adj.items() { for t in list(ts) { if t not in nodes { nodes[t] = GN_count_le_threshold(name=str(t), seen=False, val=int(vals[t])); } } }\n    for (s, ts) in adj.items() { for t in list(ts) { nodes[s] ++> nodes[t]; } }\n    w = nodes[start] spawn W_count_le_threshold(k=thr);\n    return w.count;\n}",
   "cases": [
    {
     "input": {
@@ -148,16 +132,23 @@
        "c"
       ],
       "b": [
-       "d",
-       "e"
+       "d"
       ],
-      "c": [],
-      "d": [],
-      "e": []
+      "c": [
+       "d"
+      ],
+      "d": []
      },
-     "start": "a"
+     "start": "a",
+     "vals": {
+      "a": 5,
+      "b": 8,
+      "c": 2,
+      "d": 10
+     },
+     "threshold": 4
     },
-    "output": "2"
+    "output": "1"
    },
    {
     "input": {
@@ -165,19 +156,206 @@
       "a": [
        "b"
       ],
-      "b": []
+      "b": [
+       "c"
+      ],
+      "c": [
+       "d"
+      ],
+      "d": []
      },
-     "start": "a"
+     "start": "a",
+     "vals": {
+      "a": 3,
+      "b": 6,
+      "c": 9,
+      "d": 12
+     },
+     "threshold": 4
+    },
+    "output": "1"
+   },
+   {
+    "input": {
+     "adj": {
+      "r": [
+       "x",
+       "y",
+       "z"
+      ],
+      "x": [],
+      "y": [
+       "w"
+      ],
+      "z": [],
+      "w": []
+     },
+     "start": "r",
+     "vals": {
+      "r": 1,
+      "x": 2,
+      "y": 3,
+      "z": 4,
+      "w": 7
+     },
+     "threshold": 4
+    },
+    "output": "4"
+   },
+   {
+    "input": {
+     "adj": {
+      "a": [
+       "b",
+       "c"
+      ],
+      "b": [],
+      "c": []
+     },
+     "start": "a",
+     "vals": {
+      "a": -3,
+      "b": 4,
+      "c": -1
+     },
+     "threshold": 4
+    },
+    "output": "3"
+   },
+   {
+    "input": {
+     "adj": {
+      "n": []
+     },
+     "start": "n",
+     "vals": {
+      "n": 0
+     },
+     "threshold": 4
+    },
+    "output": "1"
+   }
+  ]
+ },
+ {
+  "name": "sum_odd",
+  "difficulty": "composed",
+  "py": "def sum_odd(spec: dict) -> int:\n    \"\"\"Sum the values of reachable nodes whose value is odd.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]; start = spec[\"start\"]\n    seen = set(); stack = [start]; acc = 0\n    while stack:\n        n = stack.pop()\n        if n in seen: continue\n        seen.add(n); v = vals[n]\n        acc += v if v % 2 == 1 else 0\n        stack.extend(adj.get(n, []))\n    return acc",
+  "jac": "node GN_sum_odd { has name: str; has val: int; has seen: bool = False; }\n\nwalker W_sum_odd {\n    has total: int = 0;\n    can step with GN_sum_odd entry {\n        if not here.seen { here.seen = True; self.total += (here.val if here.val % 2 == 1 else 0); visit [-->]; }\n    }\n}\n\ndef sum_odd(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]); start: str = str(spec[\"start\"]);\n    vals: dict = dict(spec[\"vals\"]);\n    nodes: dict = {};\n    for nm in adj.keys() { nodes[nm] = GN_sum_odd(name=str(nm), seen=False, val=int(vals[nm])); }\n    for (s, ts) in adj.items() { for t in list(ts) { if t not in nodes { nodes[t] = GN_sum_odd(name=str(t), seen=False, val=int(vals[t])); } } }\n    for (s, ts) in adj.items() { for t in list(ts) { nodes[s] ++> nodes[t]; } }\n    w = nodes[start] spawn W_sum_odd();\n    return w.total;\n}",
+  "cases": [
+   {
+    "input": {
+     "adj": {
+      "a": [
+       "b",
+       "c"
+      ],
+      "b": [
+       "d"
+      ],
+      "c": [
+       "d"
+      ],
+      "d": []
+     },
+     "start": "a",
+     "vals": {
+      "a": 5,
+      "b": 8,
+      "c": 2,
+      "d": 10
+     }
+    },
+    "output": "5"
+   },
+   {
+    "input": {
+     "adj": {
+      "a": [
+       "b"
+      ],
+      "b": [
+       "c"
+      ],
+      "c": [
+       "d"
+      ],
+      "d": []
+     },
+     "start": "a",
+     "vals": {
+      "a": 3,
+      "b": 6,
+      "c": 9,
+      "d": 12
+     }
+    },
+    "output": "12"
+   },
+   {
+    "input": {
+     "adj": {
+      "r": [
+       "x",
+       "y",
+       "z"
+      ],
+      "x": [],
+      "y": [
+       "w"
+      ],
+      "z": [],
+      "w": []
+     },
+     "start": "r",
+     "vals": {
+      "r": 1,
+      "x": 2,
+      "y": 3,
+      "z": 4,
+      "w": 7
+     }
+    },
+    "output": "11"
+   },
+   {
+    "input": {
+     "adj": {
+      "a": [
+       "b",
+       "c"
+      ],
+      "b": [],
+      "c": []
+     },
+     "start": "a",
+     "vals": {
+      "a": -3,
+      "b": 4,
+      "c": -1
+     }
+    },
+    "output": "-4"
+   },
+   {
+    "input": {
+     "adj": {
+      "n": []
+     },
+     "start": "n",
+     "vals": {
+      "n": 0
+     }
     },
     "output": "0"
    }
   ]
  },
  {
-  "name": "range_reachable",
+  "name": "count_div2or3",
   "difficulty": "composed",
-  "py": "def range_reachable(spec: dict) -> int:\n    \"\"\"Return max minus min over the values of reachable nodes.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]; start = spec[\"start\"]\n    seen = set(); stack = [start]; lo = None; hi = None\n    while stack:\n        n = stack.pop()\n        if n in seen: continue\n        seen.add(n); v = vals[n]\n        if lo is None or v < lo: lo = v\n        if hi is None or v > hi: hi = v\n        stack.extend(adj.get(n, []))\n    return hi - lo",
-  "jac": "node RaN { has name: str; has val: int; has seen: bool = False; }\n\nwalker Range {\n    has lo: int = 2147483647;\n    has hi: int = -2147483648;\n    can step with RaN entry {\n        if not here.seen {\n            here.seen = True;\n            if here.val < self.lo { self.lo = here.val; }\n            if here.val > self.hi { self.hi = here.val; }\n            visit [-->];\n        }\n    }\n}\n\ndef range_reachable(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]); vals: dict = dict(spec[\"vals\"]); start: str = str(spec[\"start\"]);\n    nodes: dict = {};\n    for name in adj.keys() { nodes[name] = RaN(name=str(name), val=int(vals[name])); }\n    for (s, ts) in adj.items() { for t in list(ts) { if t not in nodes { nodes[t] = RaN(name=str(t), val=int(vals[t])); } } }\n    for (s, ts) in adj.items() { for t in list(ts) { nodes[s] ++> nodes[t]; } }\n    w = nodes[start] spawn Range();\n    return w.hi - w.lo;\n}",
+  "py": "def count_div2or3(spec: dict) -> int:\n    \"\"\"Count reachable nodes divisible by 2 or 3.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]; start = spec[\"start\"]\n    seen = set(); stack = [start]; acc = 0\n    while stack:\n        n = stack.pop()\n        if n in seen: continue\n        seen.add(n); v = vals[n]\n        if v % 2 == 0 or v % 3 == 0: acc += 1\n        stack.extend(adj.get(n, []))\n    return acc",
+  "jac": "node GN_count_div2or3 { has name: str; has val: int; has seen: bool = False; }\n\nwalker W_count_div2or3 {\n    has count: int = 0;\n    can step with GN_count_div2or3 entry {\n        if not here.seen { here.seen = True; if (here.val % 2 == 0 or here.val % 3 == 0) { self.count += 1; } visit [-->]; }\n    }\n}\n\ndef count_div2or3(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]); start: str = str(spec[\"start\"]);\n    vals: dict = dict(spec[\"vals\"]);\n    nodes: dict = {};\n    for nm in adj.keys() { nodes[nm] = GN_count_div2or3(name=str(nm), seen=False, val=int(vals[nm])); }\n    for (s, ts) in adj.items() { for t in list(ts) { if t not in nodes { nodes[t] = GN_count_div2or3(name=str(t), seen=False, val=int(vals[t])); } } }\n    for (s, ts) in adj.items() { for t in list(ts) { nodes[s] ++> nodes[t]; } }\n    w = nodes[start] spawn W_count_div2or3();\n    return w.count;\n}",
   "cases": [
    {
     "input": {
@@ -186,17 +364,23 @@
        "b",
        "c"
       ],
-      "b": [],
-      "c": []
+      "b": [
+       "d"
+      ],
+      "c": [
+       "d"
+      ],
+      "d": []
      },
+     "start": "a",
      "vals": {
       "a": 5,
-      "b": 1,
-      "c": 9
-     },
-     "start": "a"
+      "b": 8,
+      "c": 2,
+      "d": 10
+     }
     },
-    "output": "8"
+    "output": "3"
    },
    {
     "input": {
@@ -204,24 +388,50 @@
       "a": [
        "b"
       ],
-      "b": []
+      "b": [
+       "c"
+      ],
+      "c": [
+       "d"
+      ],
+      "d": []
      },
+     "start": "a",
      "vals": {
       "a": 3,
-      "b": 7
-     },
-     "start": "a"
+      "b": 6,
+      "c": 9,
+      "d": 12
+     }
     },
     "output": "4"
-   }
-  ]
- },
- {
-  "name": "count_negative",
-  "difficulty": "composed",
-  "py": "def count_negative(spec: dict) -> int:\n    \"\"\"Count reachable nodes whose value is negative.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]; start = spec[\"start\"]\n    seen = set(); stack = [start]; cnt = 0\n    while stack:\n        n = stack.pop()\n        if n in seen: continue\n        seen.add(n)\n        if vals[n] < 0: cnt += 1\n        stack.extend(adj.get(n, []))\n    return cnt",
-  "jac": "node NgN { has name: str; has val: int; has seen: bool = False; }\n\nwalker Neg {\n    has count: int = 0;\n    can step with NgN entry {\n        if not here.seen { here.seen = True; if here.val < 0 { self.count += 1; } visit [-->]; }\n    }\n}\n\ndef count_negative(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]); vals: dict = dict(spec[\"vals\"]); start: str = str(spec[\"start\"]);\n    nodes: dict = {};\n    for name in adj.keys() { nodes[name] = NgN(name=str(name), val=int(vals[name])); }\n    for (s, ts) in adj.items() { for t in list(ts) { if t not in nodes { nodes[t] = NgN(name=str(t), val=int(vals[t])); } } }\n    for (s, ts) in adj.items() { for t in list(ts) { nodes[s] ++> nodes[t]; } }\n    w = nodes[start] spawn Neg();\n    return w.count;\n}",
-  "cases": [
+   },
+   {
+    "input": {
+     "adj": {
+      "r": [
+       "x",
+       "y",
+       "z"
+      ],
+      "x": [],
+      "y": [
+       "w"
+      ],
+      "z": [],
+      "w": []
+     },
+     "start": "r",
+     "vals": {
+      "r": 1,
+      "x": 2,
+      "y": 3,
+      "z": 4,
+      "w": 7
+     }
+    },
+    "output": "3"
+   },
    {
     "input": {
      "adj": {
@@ -232,10 +442,396 @@
       "b": [],
       "c": []
      },
+     "start": "a",
      "vals": {
-      "a": -1,
-      "b": 2,
-      "c": -3
+      "a": -3,
+      "b": 4,
+      "c": -1
+     }
+    },
+    "output": "2"
+   },
+   {
+    "input": {
+     "adj": {
+      "n": []
+     },
+     "start": "n",
+     "vals": {
+      "n": 0
+     }
+    },
+    "output": "1"
+   }
+  ]
+ },
+ {
+  "name": "sum_abs",
+  "difficulty": "composed",
+  "py": "def sum_abs(spec: dict) -> int:\n    \"\"\"Sum the absolute values of reachable nodes.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]; start = spec[\"start\"]\n    seen = set(); stack = [start]; acc = 0\n    while stack:\n        n = stack.pop()\n        if n in seen: continue\n        seen.add(n); v = vals[n]\n        acc += abs(v)\n        stack.extend(adj.get(n, []))\n    return acc",
+  "jac": "node GN_sum_abs { has name: str; has val: int; has seen: bool = False; }\n\nwalker W_sum_abs {\n    has total: int = 0;\n    can step with GN_sum_abs entry {\n        if not here.seen { here.seen = True; self.total += (here.val if here.val >= 0 else -here.val); visit [-->]; }\n    }\n}\n\ndef sum_abs(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]); start: str = str(spec[\"start\"]);\n    vals: dict = dict(spec[\"vals\"]);\n    nodes: dict = {};\n    for nm in adj.keys() { nodes[nm] = GN_sum_abs(name=str(nm), seen=False, val=int(vals[nm])); }\n    for (s, ts) in adj.items() { for t in list(ts) { if t not in nodes { nodes[t] = GN_sum_abs(name=str(t), seen=False, val=int(vals[t])); } } }\n    for (s, ts) in adj.items() { for t in list(ts) { nodes[s] ++> nodes[t]; } }\n    w = nodes[start] spawn W_sum_abs();\n    return w.total;\n}",
+  "cases": [
+   {
+    "input": {
+     "adj": {
+      "a": [
+       "b",
+       "c"
+      ],
+      "b": [
+       "d"
+      ],
+      "c": [
+       "d"
+      ],
+      "d": []
+     },
+     "start": "a",
+     "vals": {
+      "a": 5,
+      "b": 8,
+      "c": 2,
+      "d": 10
+     }
+    },
+    "output": "25"
+   },
+   {
+    "input": {
+     "adj": {
+      "a": [
+       "b"
+      ],
+      "b": [
+       "c"
+      ],
+      "c": [
+       "d"
+      ],
+      "d": []
+     },
+     "start": "a",
+     "vals": {
+      "a": 3,
+      "b": 6,
+      "c": 9,
+      "d": 12
+     }
+    },
+    "output": "30"
+   },
+   {
+    "input": {
+     "adj": {
+      "r": [
+       "x",
+       "y",
+       "z"
+      ],
+      "x": [],
+      "y": [
+       "w"
+      ],
+      "z": [],
+      "w": []
+     },
+     "start": "r",
+     "vals": {
+      "r": 1,
+      "x": 2,
+      "y": 3,
+      "z": 4,
+      "w": 7
+     }
+    },
+    "output": "17"
+   },
+   {
+    "input": {
+     "adj": {
+      "a": [
+       "b",
+       "c"
+      ],
+      "b": [],
+      "c": []
+     },
+     "start": "a",
+     "vals": {
+      "a": -3,
+      "b": 4,
+      "c": -1
+     }
+    },
+    "output": "8"
+   },
+   {
+    "input": {
+     "adj": {
+      "n": []
+     },
+     "start": "n",
+     "vals": {
+      "n": 0
+     }
+    },
+    "output": "0"
+   }
+  ]
+ },
+ {
+  "name": "count_in_band",
+  "difficulty": "composed",
+  "py": "def count_in_band(spec: dict) -> int:\n    \"\"\"Count reachable nodes with value strictly between 0 and the threshold.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]; start = spec[\"start\"]; k = spec[\"threshold\"]\n    seen = set(); stack = [start]; acc = 0\n    while stack:\n        n = stack.pop()\n        if n in seen: continue\n        seen.add(n); v = vals[n]\n        if 0 < v < k: acc += 1\n        stack.extend(adj.get(n, []))\n    return acc",
+  "jac": "node GN_count_in_band { has name: str; has val: int; has seen: bool = False; }\n\nwalker W_count_in_band {\n    has k: int;\n    has count: int = 0;\n    can step with GN_count_in_band entry {\n        if not here.seen { here.seen = True; if (here.val > 0 and here.val < self.k) { self.count += 1; } visit [-->]; }\n    }\n}\n\ndef count_in_band(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]); start: str = str(spec[\"start\"]);\n    vals: dict = dict(spec[\"vals\"]);\n    thr: int = int(spec[\"threshold\"]);\n    nodes: dict = {};\n    for nm in adj.keys() { nodes[nm] = GN_count_in_band(name=str(nm), seen=False, val=int(vals[nm])); }\n    for (s, ts) in adj.items() { for t in list(ts) { if t not in nodes { nodes[t] = GN_count_in_band(name=str(t), seen=False, val=int(vals[t])); } } }\n    for (s, ts) in adj.items() { for t in list(ts) { nodes[s] ++> nodes[t]; } }\n    w = nodes[start] spawn W_count_in_band(k=thr);\n    return w.count;\n}",
+  "cases": [
+   {
+    "input": {
+     "adj": {
+      "a": [
+       "b",
+       "c"
+      ],
+      "b": [
+       "d"
+      ],
+      "c": [
+       "d"
+      ],
+      "d": []
+     },
+     "start": "a",
+     "vals": {
+      "a": 5,
+      "b": 8,
+      "c": 2,
+      "d": 10
+     },
+     "threshold": 9
+    },
+    "output": "3"
+   },
+   {
+    "input": {
+     "adj": {
+      "a": [
+       "b"
+      ],
+      "b": [
+       "c"
+      ],
+      "c": [
+       "d"
+      ],
+      "d": []
+     },
+     "start": "a",
+     "vals": {
+      "a": 3,
+      "b": 6,
+      "c": 9,
+      "d": 12
+     },
+     "threshold": 9
+    },
+    "output": "2"
+   },
+   {
+    "input": {
+     "adj": {
+      "r": [
+       "x",
+       "y",
+       "z"
+      ],
+      "x": [],
+      "y": [
+       "w"
+      ],
+      "z": [],
+      "w": []
+     },
+     "start": "r",
+     "vals": {
+      "r": 1,
+      "x": 2,
+      "y": 3,
+      "z": 4,
+      "w": 7
+     },
+     "threshold": 9
+    },
+    "output": "5"
+   },
+   {
+    "input": {
+     "adj": {
+      "a": [
+       "b",
+       "c"
+      ],
+      "b": [],
+      "c": []
+     },
+     "start": "a",
+     "vals": {
+      "a": -3,
+      "b": 4,
+      "c": -1
+     },
+     "threshold": 9
+    },
+    "output": "1"
+   },
+   {
+    "input": {
+     "adj": {
+      "n": []
+     },
+     "start": "n",
+     "vals": {
+      "n": 0
+     },
+     "threshold": 9
+    },
+    "output": "0"
+   }
+  ]
+ },
+ {
+  "name": "max_even",
+  "difficulty": "composed",
+  "py": "def max_even(spec: dict) -> int:\n    \"\"\"Return the maximum even value reachable (or -1 if none).\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]; start = spec[\"start\"]\n    seen = set(); stack = [start]; best = -1\n    while stack:\n        n = stack.pop()\n        if n in seen: continue\n        seen.add(n)\n        if vals[n] % 2 == 0 and vals[n] > best: best = vals[n]\n        stack.extend(adj.get(n, []))\n    return best",
+  "jac": "node GN_max_even { has name: str; has val: int; has seen: bool = False; }\n\nwalker W_max_even {\n    has best: int = -1;\n    can step with GN_max_even entry {\n        if not here.seen { here.seen = True; if here.val % 2 == 0 and here.val > self.best { self.best = here.val; } visit [-->]; }\n    }\n}\n\ndef max_even(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]); start: str = str(spec[\"start\"]);\n    vals: dict = dict(spec[\"vals\"]);\n    nodes: dict = {};\n    for nm in adj.keys() { nodes[nm] = GN_max_even(name=str(nm), seen=False, val=int(vals[nm])); }\n    for (s, ts) in adj.items() { for t in list(ts) { if t not in nodes { nodes[t] = GN_max_even(name=str(t), seen=False, val=int(vals[t])); } } }\n    for (s, ts) in adj.items() { for t in list(ts) { nodes[s] ++> nodes[t]; } }\n    w = nodes[start] spawn W_max_even();\n    return w.best;\n}",
+  "cases": [
+   {
+    "input": {
+     "adj": {
+      "a": [
+       "b",
+       "c"
+      ],
+      "b": [
+       "d"
+      ],
+      "c": [
+       "d"
+      ],
+      "d": []
+     },
+     "start": "a",
+     "vals": {
+      "a": 5,
+      "b": 8,
+      "c": 2,
+      "d": 10
+     }
+    },
+    "output": "10"
+   },
+   {
+    "input": {
+     "adj": {
+      "a": [
+       "b"
+      ],
+      "b": [
+       "c"
+      ],
+      "c": [
+       "d"
+      ],
+      "d": []
+     },
+     "start": "a",
+     "vals": {
+      "a": 3,
+      "b": 6,
+      "c": 9,
+      "d": 12
+     }
+    },
+    "output": "12"
+   },
+   {
+    "input": {
+     "adj": {
+      "r": [
+       "x",
+       "y",
+       "z"
+      ],
+      "x": [],
+      "y": [
+       "w"
+      ],
+      "z": [],
+      "w": []
+     },
+     "start": "r",
+     "vals": {
+      "r": 1,
+      "x": 2,
+      "y": 3,
+      "z": 4,
+      "w": 7
+     }
+    },
+    "output": "4"
+   },
+   {
+    "input": {
+     "adj": {
+      "a": [
+       "b",
+       "c"
+      ],
+      "b": [],
+      "c": []
+     },
+     "start": "a",
+     "vals": {
+      "a": -3,
+      "b": 4,
+      "c": -1
+     }
+    },
+    "output": "4"
+   },
+   {
+    "input": {
+     "adj": {
+      "n": []
+     },
+     "start": "n",
+     "vals": {
+      "n": 0
+     }
+    },
+    "output": "0"
+   }
+  ]
+ },
+ {
+  "name": "count_single_child",
+  "difficulty": "composed",
+  "py": "def count_single_child(spec: dict) -> int:\n    \"\"\"Count reachable nodes that have exactly one child.\"\"\"\n    adj = spec[\"adj\"]; start = spec[\"start\"]\n    seen = set(); stack = [start]; acc = 0\n    while stack:\n        n = stack.pop()\n        if n in seen: continue\n        seen.add(n); kids = adj.get(n, [])\n        if len(kids) == 1: acc += 1\n        stack.extend(kids)\n    return acc",
+  "jac": "node GN_count_single_child { has name: str; has nkids: int; has seen: bool = False; }\n\nwalker W_count_single_child {\n    has count: int = 0;\n    can step with GN_count_single_child entry {\n        if not here.seen { here.seen = True; if here.nkids == 1 { self.count += 1; } visit [-->]; }\n    }\n}\n\ndef count_single_child(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]); start: str = str(spec[\"start\"]);\n    nodes: dict = {};\n    for nm in adj.keys() { nodes[nm] = GN_count_single_child(name=str(nm), seen=False, nkids=len(list(adj[nm]))); }\n    for (s, ts) in adj.items() { for t in list(ts) { if t not in nodes { nodes[t] = GN_count_single_child(name=str(t), seen=False, nkids=0); } } }\n    for (s, ts) in adj.items() { for t in list(ts) { nodes[s] ++> nodes[t]; } }\n    w = nodes[start] spawn W_count_single_child();\n    return w.count;\n}",
+  "cases": [
+   {
+    "input": {
+     "adj": {
+      "a": [
+       "b",
+       "c"
+      ],
+      "b": [
+       "d"
+      ],
+      "c": [
+       "d"
+      ],
+      "d": []
      },
      "start": "a"
     },
@@ -247,13 +843,290 @@
       "a": [
        "b"
       ],
-      "b": []
-     },
-     "vals": {
-      "a": 1,
-      "b": 2
+      "b": [
+       "c"
+      ],
+      "c": [
+       "d"
+      ],
+      "d": []
      },
      "start": "a"
+    },
+    "output": "3"
+   },
+   {
+    "input": {
+     "adj": {
+      "r": [
+       "x",
+       "y",
+       "z"
+      ],
+      "x": [],
+      "y": [
+       "w"
+      ],
+      "z": [],
+      "w": []
+     },
+     "start": "r"
+    },
+    "output": "1"
+   },
+   {
+    "input": {
+     "adj": {
+      "a": [
+       "b",
+       "c"
+      ],
+      "b": [],
+      "c": []
+     },
+     "start": "a"
+    },
+    "output": "0"
+   },
+   {
+    "input": {
+     "adj": {
+      "n": []
+     },
+     "start": "n"
+    },
+    "output": "0"
+   }
+  ]
+ },
+ {
+  "name": "product_positive",
+  "difficulty": "composed",
+  "py": "def product_positive(spec: dict) -> int:\n    \"\"\"Multiply the positive values among reachable nodes (1 if none).\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]; start = spec[\"start\"]\n    seen = set(); stack = [start]; p = 1\n    while stack:\n        n = stack.pop()\n        if n in seen: continue\n        seen.add(n)\n        if vals[n] > 0: p *= vals[n]\n        stack.extend(adj.get(n, []))\n    return p",
+  "jac": "node GN_product_positive { has name: str; has val: int; has seen: bool = False; }\n\nwalker W_product_positive {\n    has result: int = 1;\n    can step with GN_product_positive entry {\n        if not here.seen { here.seen = True; if here.val > 0 { self.result *= here.val; } visit [-->]; }\n    }\n}\n\ndef product_positive(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]); start: str = str(spec[\"start\"]);\n    vals: dict = dict(spec[\"vals\"]);\n    nodes: dict = {};\n    for nm in adj.keys() { nodes[nm] = GN_product_positive(name=str(nm), seen=False, val=int(vals[nm])); }\n    for (s, ts) in adj.items() { for t in list(ts) { if t not in nodes { nodes[t] = GN_product_positive(name=str(t), seen=False, val=int(vals[t])); } } }\n    for (s, ts) in adj.items() { for t in list(ts) { nodes[s] ++> nodes[t]; } }\n    w = nodes[start] spawn W_product_positive();\n    return w.result;\n}",
+  "cases": [
+   {
+    "input": {
+     "adj": {
+      "a": [
+       "b",
+       "c"
+      ],
+      "b": [
+       "d"
+      ],
+      "c": [
+       "d"
+      ],
+      "d": []
+     },
+     "start": "a",
+     "vals": {
+      "a": 5,
+      "b": 8,
+      "c": 2,
+      "d": 10
+     }
+    },
+    "output": "800"
+   },
+   {
+    "input": {
+     "adj": {
+      "a": [
+       "b"
+      ],
+      "b": [
+       "c"
+      ],
+      "c": [
+       "d"
+      ],
+      "d": []
+     },
+     "start": "a",
+     "vals": {
+      "a": 3,
+      "b": 6,
+      "c": 9,
+      "d": 12
+     }
+    },
+    "output": "1944"
+   },
+   {
+    "input": {
+     "adj": {
+      "r": [
+       "x",
+       "y",
+       "z"
+      ],
+      "x": [],
+      "y": [
+       "w"
+      ],
+      "z": [],
+      "w": []
+     },
+     "start": "r",
+     "vals": {
+      "r": 1,
+      "x": 2,
+      "y": 3,
+      "z": 4,
+      "w": 7
+     }
+    },
+    "output": "168"
+   },
+   {
+    "input": {
+     "adj": {
+      "a": [
+       "b",
+       "c"
+      ],
+      "b": [],
+      "c": []
+     },
+     "start": "a",
+     "vals": {
+      "a": -3,
+      "b": 4,
+      "c": -1
+     }
+    },
+    "output": "4"
+   },
+   {
+    "input": {
+     "adj": {
+      "n": []
+     },
+     "start": "n",
+     "vals": {
+      "n": 0
+     }
+    },
+    "output": "1"
+   }
+  ]
+ },
+ {
+  "name": "count_gt_double_threshold",
+  "difficulty": "composed",
+  "py": "def count_gt_double_threshold(spec: dict) -> int:\n    \"\"\"Count reachable nodes whose value exceeds twice the threshold.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]; start = spec[\"start\"]; k = spec[\"threshold\"]\n    seen = set(); stack = [start]; acc = 0\n    while stack:\n        n = stack.pop()\n        if n in seen: continue\n        seen.add(n); v = vals[n]\n        if v > 2 * k: acc += 1\n        stack.extend(adj.get(n, []))\n    return acc",
+  "jac": "node GN_count_gt_double_threshold { has name: str; has val: int; has seen: bool = False; }\n\nwalker W_count_gt_double_threshold {\n    has k: int;\n    has count: int = 0;\n    can step with GN_count_gt_double_threshold entry {\n        if not here.seen { here.seen = True; if here.val > 2 * self.k { self.count += 1; } visit [-->]; }\n    }\n}\n\ndef count_gt_double_threshold(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]); start: str = str(spec[\"start\"]);\n    vals: dict = dict(spec[\"vals\"]);\n    thr: int = int(spec[\"threshold\"]);\n    nodes: dict = {};\n    for nm in adj.keys() { nodes[nm] = GN_count_gt_double_threshold(name=str(nm), seen=False, val=int(vals[nm])); }\n    for (s, ts) in adj.items() { for t in list(ts) { if t not in nodes { nodes[t] = GN_count_gt_double_threshold(name=str(t), seen=False, val=int(vals[t])); } } }\n    for (s, ts) in adj.items() { for t in list(ts) { nodes[s] ++> nodes[t]; } }\n    w = nodes[start] spawn W_count_gt_double_threshold(k=thr);\n    return w.count;\n}",
+  "cases": [
+   {
+    "input": {
+     "adj": {
+      "a": [
+       "b",
+       "c"
+      ],
+      "b": [
+       "d"
+      ],
+      "c": [
+       "d"
+      ],
+      "d": []
+     },
+     "start": "a",
+     "vals": {
+      "a": 5,
+      "b": 8,
+      "c": 2,
+      "d": 10
+     },
+     "threshold": 3
+    },
+    "output": "2"
+   },
+   {
+    "input": {
+     "adj": {
+      "a": [
+       "b"
+      ],
+      "b": [
+       "c"
+      ],
+      "c": [
+       "d"
+      ],
+      "d": []
+     },
+     "start": "a",
+     "vals": {
+      "a": 3,
+      "b": 6,
+      "c": 9,
+      "d": 12
+     },
+     "threshold": 3
+    },
+    "output": "2"
+   },
+   {
+    "input": {
+     "adj": {
+      "r": [
+       "x",
+       "y",
+       "z"
+      ],
+      "x": [],
+      "y": [
+       "w"
+      ],
+      "z": [],
+      "w": []
+     },
+     "start": "r",
+     "vals": {
+      "r": 1,
+      "x": 2,
+      "y": 3,
+      "z": 4,
+      "w": 7
+     },
+     "threshold": 3
+    },
+    "output": "1"
+   },
+   {
+    "input": {
+     "adj": {
+      "a": [
+       "b",
+       "c"
+      ],
+      "b": [],
+      "c": []
+     },
+     "start": "a",
+     "vals": {
+      "a": -3,
+      "b": 4,
+      "c": -1
+     },
+     "threshold": 3
+    },
+    "output": "0"
+   },
+   {
+    "input": {
+     "adj": {
+      "n": []
+     },
+     "start": "n",
+     "vals": {
+      "n": 0
+     },
+     "threshold": 3
     },
     "output": "0"
    }

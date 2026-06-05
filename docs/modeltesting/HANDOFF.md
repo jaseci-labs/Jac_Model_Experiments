@@ -38,16 +38,17 @@ unconfirmed); the DPO pairs are built and waiting.
 
 | Artifact | Path | Count |
 |---|---|---|
-| Idiomatic SFT core (hand/agentic) | `dataset/conversion/sft.jsonl` | **116** |
+| Idiomatic SFT core (hand/agentic + 24 graph) | `dataset/conversion/sft.jsonl` | **140** |
 | Transpile SFT volume (py2jac, behaviorally gated) | `dataset/conversion/sft_auto.jsonl` | **1500** |
-| **Total SFT** | (both above) | **1616** |
+| **Total SFT** | (both above) | **1640** |
 | DPO pairs (idiomatic chosen vs Python-shaped rejected) | `dataset/conversion/dpo.jsonl` | **60** |
-| Balanced manifest (1:3 idiom:transpile) | `dataset/conversion/sft_train.jsonl` | **464** (116 + 348) |
-| mlx-lm train split (messages-only) | `dataset/mlx/train.jsonl` | **417** |
-| mlx-lm valid split (messages-only) | `dataset/mlx/valid.jsonl` | **47** |
-| Decontaminated eval holdout (behavioral `test_cases`) | `dataset/eval_holdout/conversion.jsonl` | **150** |
+| Balanced manifest (1:3 idiom:transpile) | `dataset/conversion/sft_train.jsonl` | **560** (140 + 420) |
+| mlx-lm train split (messages-only) | `dataset/mlx/train.jsonl` | **504** |
+| mlx-lm valid split (messages-only) | `dataset/mlx/valid.jsonl` | **56** |
+| Function eval holdout (behavioral `test_cases`) | `dataset/eval_holdout/conversion.jsonl` | **150** |
+| Graph eval holdout (idiom headroom, §13) | `dataset/eval_holdout/graph_conversion.jsonl` | **10** |
 
-Idiomatic core composition: 24 seed + 84 idiomatic_batch{,2,3} + 8 mined-idiomatic = 116;
+Idiomatic core composition: 24 seed + 84 idiomatic_batch{,2,3} + 8 mined + 24 graph = 140;
 difficulty mix atomic 41 / idiomatic 37 / composed 38.
 
 **Toolchain is green:** `./check.sh` → `19 passed` (full `jac check`) + `eval_probe`
@@ -101,12 +102,12 @@ resolves even without `source`.
         │
         ├──► scale_conversion.jac ──► sft_auto.jsonl   (1500: py2jac transpile, jac-run gated)
         │
-  seed_conversion.jac + idiomatic_batch{,2,3}.jac ──► sft.jsonl  (116 hand/agentic idiomatic)
+  seed + idiomatic_batch{,2,3} + graph_seeds ──► sft.jsonl  (140 idiomatic, incl 24 graph)
         │
         ├──► dpo_conversion.jac ──► dpo.jsonl          (60: idiomatic chosen vs transpile rejected)
         │
-        ├──► build_manifest.jac ──► sft_train.jsonl    (464: 1:3 idiom:transpile, de-skew)
-        │         └──► build_splits.jac ──► dataset/mlx/{train,valid}.jsonl (417/47, messages-only)
+        ├──► build_manifest.jac ──► sft_train.jsonl    (560: 1:3 idiom:transpile, de-skew)
+        │         └──► build_splits.jac ──► dataset/mlx/{train,valid}.jsonl (504/56, messages-only)
         │
         └──► holdout.jac ──► dataset/eval_holdout/conversion.jsonl (150, disjoint offsets + decontam)
 
@@ -158,9 +159,9 @@ just learn "transpile-ese," without starving on the cheap volume.
 - `build_dpo_splits.jac` — `dpo.jsonl` → `dataset/mlx_dpo/{train,valid}.jsonl`
   (`{prompt,chosen,rejected}`, the schema mlx-lm-lora's DPODataset expects; 54/6).
 - `graph_seeds.jac` — **graph tier with real idiom headroom** (see §13). Reads
-  `graph_data/train.json` (8 validated tasks), appends idiomatic graph SFT examples
+  `graph_data/train.json` (24 validated tasks), appends idiomatic graph SFT examples
   (node/edge/walker, single-dict-arg `def`) to `sft.jsonl`, re-validating each by running.
-- `graph_holdout.jac` — reads `graph_data/holdout.json` (6 DISJOINT tasks) → writes
+- `graph_holdout.jac` — reads `graph_data/holdout.json` (10 DISJOINT tasks) → writes
   `dataset/eval_holdout/graph_conversion.jsonl` (same schema as the function holdout).
 - `holdout.jac` — mine from offset 12000+ (disjoint from training's 0–8200) +
   `is_contaminated` 14-gram → `eval_holdout/conversion.jsonl` (150).
@@ -208,8 +209,8 @@ jac run srccurrent/jacgen/idiomatic_batch2.jac  # sft.jsonl -> 85
 jac run srccurrent/jacgen/idiomatic_batch3.jac  # sft.jsonl -> 116
 jac run srccurrent/jacgen/scale_conversion.jac  # sft_auto.jsonl -> 1500  (SLOW: mines+transpiles+gates)
 jac run srccurrent/jacgen/dpo_conversion.jac    # dpo.jsonl -> ~60 (regenerates from sft.jsonl)
-jac run srccurrent/jacgen/build_manifest.jac    # sft_train.jsonl -> 464 (1:3)
-jac run srccurrent/jacgen/build_splits.jac      # dataset/mlx/{train,valid}.jsonl -> 417/47
+jac run srccurrent/jacgen/build_manifest.jac    # sft_train.jsonl -> 560 (1:3)
+jac run srccurrent/jacgen/build_splits.jac      # dataset/mlx/{train,valid}.jsonl -> 504/56
 jac run srccurrent/jacgen/holdout.jac           # eval_holdout/conversion.jsonl -> 150
 jac run srccurrent/jacgen/dataset_stats.jac     # verify composition
 ```
@@ -363,7 +364,7 @@ The eval (`eval_probe.jac`) and dashboards report, per checkpoint and at base/fi
 
 1. `source .venv/bin/activate && ./check.sh` → expect `19 passed` + parse pass +
    `39/39` sampled. Confirms toolchain.
-2. `jac run srccurrent/jacgen/dataset_stats.jac` → expect SFT 1616 (116 + 1500),
+2. `jac run srccurrent/jacgen/dataset_stats.jac` → expect SFT 1640 (140 incl 24 graph + 1500),
    DPO 60. If it shows 32/2, rebuild from section 6.
 3. `./run_probe.sh Qwen/Qwen3-Coder-30B-A3B-Instruct qwen` → first real probe. Watch
    `results/learning_curve.png` (rising = learning Jac; flat-while-loss-drops =
@@ -439,19 +440,19 @@ the behavioral eval harness drives them unchanged. Measured idiomatic-vs-transpi
 similarity **~0.26** (vs 0.97) with **8 graph constructs** each → a large, real idiom axis.
 
 Built + validated (all via `jac run`, the gate):
-- `srccurrent/jacgen/graph_data/{train.json (8), holdout.json (6)}` — authored, committed
+- `srccurrent/jacgen/graph_data/{train.json (24), holdout.json (10)}` — authored, committed
   task sets; every task passes on every test case. Holdout aggregations are DISJOINT from
   training (min/odd/sum-above/branches/range/negative vs count/sum/max/above/path/leaves/
   product/even) → generalization, not memorization.
-- `graph_seeds.jac` → appends 8 idiomatic graph SFT examples to `sft.jsonl` (`source:
-  generated_graph`). `graph_holdout.jac` → `dataset/eval_holdout/graph_conversion.jsonl` (6).
+- `graph_seeds.jac` → appends 24 idiomatic graph SFT examples to `sft.jsonl` (`source:
+  generated_graph`). `graph_holdout.jac` → `dataset/eval_holdout/graph_conversion.jsonl` (10).
 - `eval_probe.jac` / `idiom_eval.jac` take **`JAC_HOLDOUT`** to target the graph holdout:
   `JAC_HOLDOUT=dataset/eval_holdout/graph_conversion.jsonl JAC_EVAL_MODE=mlx ... jac run ...`.
 
 **Empirical proof (the current SFT model, which never saw graph idiom):**
 - function holdout: 94% correct, sim 0.968 (transpiles; no room).
-- **graph holdout: 0% correct (0/6)** — it can't produce runnable graph Jac at all.
-That 0% is the before-picture. The 8 graph seeds are now in `sft.jsonl`, so a **retrain**
+- **graph holdout: 0% correct (0/6 on the initial set; holdout now 10)** — it can't produce runnable graph Jac at all.
+That 0% is the before-picture. The 24 graph seeds are now in `sft.jsonl`, so a **retrain**
 (`./run_probe.sh ...` again) teaches graph idiom; re-eval on the graph holdout should move
 0% → some-% with sim trending toward 0.26. Then graph DPO pairs (real 0.26 divergence,
 unlike the function pairs) have something to push. **Next step = author more graph tasks

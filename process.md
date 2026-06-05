@@ -41,7 +41,7 @@ Already generated (gitignored under `dataset/`):
 | `dataset/eval_holdout/conversion.jsonl` | unseen, decontaminated eval tasks (behavioral `test_cases`) | 150 |
 | `dataset/conversion/dpo.jsonl` | DPO pairs (later stage) | 60 |
 
-Total SFT = 1616 (116 idiomatic + 1500 transpile). Confirm any time with
+Total SFT = 1640 (140 idiomatic incl 24 graph + 1500 transpile). Confirm any time with
 `jac run srccurrent/jacgen/dataset_stats.jac`.
 
 **Rebuild only if the data changed — ORDER MATTERS** (`seed_conversion` truncates
@@ -52,13 +52,15 @@ jac run srccurrent/jacgen/seed_conversion.jac     # sft.jsonl -> 32 (TRUNCATES, 
 jac run srccurrent/jacgen/idiomatic_batch.jac     # -> 62  (append)
 jac run srccurrent/jacgen/idiomatic_batch2.jac    # -> 85
 jac run srccurrent/jacgen/idiomatic_batch3.jac    # -> 116
-jac run srccurrent/jacgen/graph_seeds.jac         # + 8 graph-tier idiomatic (node/edge/walker) -> 124
+jac run srccurrent/jacgen/graph_seeds.jac         # + 24 graph-tier idiomatic (node/edge/walker) -> 140
 jac run srccurrent/jacgen/scale_conversion.jac    # transpile volume -> 1500 (slow: mines+gates)
 jac run srccurrent/jacgen/dpo_conversion.jac      # dpo.jsonl -> ~60
-jac run srccurrent/jacgen/build_manifest.jac      # 1:3 balanced sft_train.jsonl (496)
-jac run srccurrent/jacgen/build_splits.jac        # -> dataset/mlx/{train,valid}.jsonl (446/50)
+jac run srccurrent/jacgen/build_manifest.jac      # 1:3 balanced sft_train.jsonl (560)
+jac run srccurrent/jacgen/build_splits.jac        # -> dataset/mlx/{train,valid}.jsonl (504/56)
 jac run srccurrent/jacgen/holdout.jac             # function eval holdout (decontaminated, 150)
-jac run srccurrent/jacgen/graph_holdout.jac       # graph eval holdout (6, real idiom headroom)
+jac run srccurrent/jacgen/graph_holdout.jac       # graph eval holdout (10, real idiom headroom)
+
+# (graph tasks themselves: regenerate/extend via python3 srccurrent/jacgen/graph_data/gen_graph_tasks.py)
 jac run srccurrent/jacgen/dataset_stats.jac       # composition report
 ```
 
