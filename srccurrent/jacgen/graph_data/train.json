@@ -2646,5 +2646,503 @@
     "output": "0"
    }
   ]
+ },
+ {
+  "name": "sum_edge_weights",
+  "difficulty": "composed",
+  "py": "def sum_edge_weights(spec: dict) -> int:\n    \"\"\"Sum the weights of all edges reachable from start.\"\"\"\n    adj = spec[\"adj\"]; start = spec[\"start\"]\n    seen = set(); stack = [start]; acc = 0\n    while stack:\n        n = stack.pop()\n        if n in seen: continue\n        seen.add(n)\n        for tgt, w in adj.get(n, []):\n            acc += w\n            stack.append(tgt)\n    return acc",
+  "jac": "edge Road { has w: int; }\nnode WC { has name: str; has seen: bool = False; }\n\nwalker SumW {\n    has total: int = 0;\n    can step with WC entry {\n        if not here.seen {\n            here.seen = True;\n            for e in [edge here -->] { self.total += e.w; }\n            visit [-->];\n        }\n    }\n}\n\ndef sum_edge_weights(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]); start: str = str(spec[\"start\"]);\n    nodes: dict = {};\n    for nm in adj.keys() { nodes[nm] = WC(name=str(nm)); }\n    for (s, ts) in adj.items() { for pr in list(ts) { tg = str(pr[0]); if tg not in nodes { nodes[tg] = WC(name=tg); } } }\n    for (s, ts) in adj.items() { for pr in list(ts) { nodes[s] +>:Road(w=int(pr[1])):+> nodes[str(pr[0])]; } }\n    w = nodes[start] spawn SumW();\n    return w.total;\n}",
+  "cases": [
+   {
+    "input": {
+     "adj": {
+      "a": [
+       [
+        "b",
+        5
+       ],
+       [
+        "c",
+        3
+       ]
+      ],
+      "b": [
+       [
+        "c",
+        2
+       ]
+      ],
+      "c": []
+     },
+     "start": "a"
+    },
+    "output": "10"
+   },
+   {
+    "input": {
+     "adj": {
+      "a": [
+       [
+        "b",
+        10
+       ]
+      ],
+      "b": [
+       [
+        "c",
+        1
+       ]
+      ],
+      "c": [
+       [
+        "d",
+        4
+       ]
+      ],
+      "d": []
+     },
+     "start": "a"
+    },
+    "output": "15"
+   },
+   {
+    "input": {
+     "adj": {
+      "r": [
+       [
+        "x",
+        2
+       ],
+       [
+        "y",
+        8
+       ],
+       [
+        "z",
+        6
+       ]
+      ],
+      "x": [],
+      "y": [],
+      "z": []
+     },
+     "start": "r"
+    },
+    "output": "16"
+   },
+   {
+    "input": {
+     "adj": {
+      "a": []
+     },
+     "start": "a"
+    },
+    "output": "0"
+   }
+  ]
+ },
+ {
+  "name": "count_edges",
+  "difficulty": "composed",
+  "py": "def count_edges(spec: dict) -> int:\n    \"\"\"Count the edges reachable from start.\"\"\"\n    adj = spec[\"adj\"]; start = spec[\"start\"]\n    seen = set(); stack = [start]; acc = 0\n    while stack:\n        n = stack.pop()\n        if n in seen: continue\n        seen.add(n)\n        for tgt, w in adj.get(n, []):\n            acc += 1\n            stack.append(tgt)\n    return acc",
+  "jac": "edge Road { has w: int; }\nnode WC { has name: str; has seen: bool = False; }\n\nwalker CntE {\n    has count: int = 0;\n    can step with WC entry {\n        if not here.seen {\n            here.seen = True;\n            for e in [edge here -->] { self.count += 1; }\n            visit [-->];\n        }\n    }\n}\n\ndef count_edges(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]); start: str = str(spec[\"start\"]);\n    nodes: dict = {};\n    for nm in adj.keys() { nodes[nm] = WC(name=str(nm)); }\n    for (s, ts) in adj.items() { for pr in list(ts) { tg = str(pr[0]); if tg not in nodes { nodes[tg] = WC(name=tg); } } }\n    for (s, ts) in adj.items() { for pr in list(ts) { nodes[s] +>:Road(w=int(pr[1])):+> nodes[str(pr[0])]; } }\n    w = nodes[start] spawn CntE();\n    return w.count;\n}",
+  "cases": [
+   {
+    "input": {
+     "adj": {
+      "a": [
+       [
+        "b",
+        5
+       ],
+       [
+        "c",
+        3
+       ]
+      ],
+      "b": [
+       [
+        "c",
+        2
+       ]
+      ],
+      "c": []
+     },
+     "start": "a"
+    },
+    "output": "3"
+   },
+   {
+    "input": {
+     "adj": {
+      "a": [
+       [
+        "b",
+        10
+       ]
+      ],
+      "b": [
+       [
+        "c",
+        1
+       ]
+      ],
+      "c": [
+       [
+        "d",
+        4
+       ]
+      ],
+      "d": []
+     },
+     "start": "a"
+    },
+    "output": "3"
+   },
+   {
+    "input": {
+     "adj": {
+      "r": [
+       [
+        "x",
+        2
+       ],
+       [
+        "y",
+        8
+       ],
+       [
+        "z",
+        6
+       ]
+      ],
+      "x": [],
+      "y": [],
+      "z": []
+     },
+     "start": "r"
+    },
+    "output": "3"
+   },
+   {
+    "input": {
+     "adj": {
+      "a": []
+     },
+     "start": "a"
+    },
+    "output": "0"
+   }
+  ]
+ },
+ {
+  "name": "max_edge_weight",
+  "difficulty": "composed",
+  "py": "def max_edge_weight(spec: dict) -> int:\n    \"\"\"Return the maximum edge weight reachable (0 if none).\"\"\"\n    adj = spec[\"adj\"]; start = spec[\"start\"]\n    seen = set(); stack = [start]; acc = 0\n    while stack:\n        n = stack.pop()\n        if n in seen: continue\n        seen.add(n)\n        for tgt, w in adj.get(n, []):\n            acc = w if w > acc else acc\n            stack.append(tgt)\n    return acc",
+  "jac": "edge Road { has w: int; }\nnode WC { has name: str; has seen: bool = False; }\n\nwalker MaxE {\n    has best: int = 0;\n    can step with WC entry {\n        if not here.seen {\n            here.seen = True;\n            for e in [edge here -->] { if e.w > self.best { self.best = e.w; } }\n            visit [-->];\n        }\n    }\n}\n\ndef max_edge_weight(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]); start: str = str(spec[\"start\"]);\n    nodes: dict = {};\n    for nm in adj.keys() { nodes[nm] = WC(name=str(nm)); }\n    for (s, ts) in adj.items() { for pr in list(ts) { tg = str(pr[0]); if tg not in nodes { nodes[tg] = WC(name=tg); } } }\n    for (s, ts) in adj.items() { for pr in list(ts) { nodes[s] +>:Road(w=int(pr[1])):+> nodes[str(pr[0])]; } }\n    w = nodes[start] spawn MaxE();\n    return w.best;\n}",
+  "cases": [
+   {
+    "input": {
+     "adj": {
+      "a": [
+       [
+        "b",
+        5
+       ],
+       [
+        "c",
+        3
+       ]
+      ],
+      "b": [
+       [
+        "c",
+        2
+       ]
+      ],
+      "c": []
+     },
+     "start": "a"
+    },
+    "output": "5"
+   },
+   {
+    "input": {
+     "adj": {
+      "a": [
+       [
+        "b",
+        10
+       ]
+      ],
+      "b": [
+       [
+        "c",
+        1
+       ]
+      ],
+      "c": [
+       [
+        "d",
+        4
+       ]
+      ],
+      "d": []
+     },
+     "start": "a"
+    },
+    "output": "10"
+   },
+   {
+    "input": {
+     "adj": {
+      "r": [
+       [
+        "x",
+        2
+       ],
+       [
+        "y",
+        8
+       ],
+       [
+        "z",
+        6
+       ]
+      ],
+      "x": [],
+      "y": [],
+      "z": []
+     },
+     "start": "r"
+    },
+    "output": "8"
+   },
+   {
+    "input": {
+     "adj": {
+      "a": []
+     },
+     "start": "a"
+    },
+    "output": "0"
+   }
+  ]
+ },
+ {
+  "name": "sum_chain",
+  "difficulty": "composed",
+  "py": "def sum_chain(spec: dict) -> int:\n    \"\"\"Sum the values in the chain.\"\"\"\n    items = spec[\"items\"]\n    return sum(items) if items else 0",
+  "jac": "node Cell { has val: int; has seen: bool = False; }\n\nwalker SumC {\n    has total: int = 0;\n    can step with Cell entry {\n        if not here.seen { here.seen = True; self.total += here.val; visit [-->]; }\n    }\n}\n\ndef sum_chain(spec: dict) -> int {\n    items: list = list(spec[\"items\"]);\n    if len(items) == 0 { return 0; }\n    cells: list = [];\n    for v in items { cells.append(Cell(val=int(v))); }\n    i: int = 0;\n    while i < len(cells) - 1 { cells[i] ++> cells[i + 1]; i += 1; }\n    w = cells[0] spawn SumC();\n    return w.total;\n}",
+  "cases": [
+   {
+    "input": {
+     "items": [
+      3,
+      1,
+      4,
+      1,
+      5
+     ]
+    },
+    "output": "14"
+   },
+   {
+    "input": {
+     "items": [
+      10,
+      20,
+      30
+     ]
+    },
+    "output": "60"
+   },
+   {
+    "input": {
+     "items": [
+      -2,
+      7,
+      -1
+     ]
+    },
+    "output": "4"
+   },
+   {
+    "input": {
+     "items": [
+      4
+     ]
+    },
+    "output": "4"
+   },
+   {
+    "input": {
+     "items": []
+    },
+    "output": "0"
+   }
+  ]
+ },
+ {
+  "name": "max_chain",
+  "difficulty": "composed",
+  "py": "def max_chain(spec: dict) -> int:\n    \"\"\"Return the maximum value in the chain (0 if empty).\"\"\"\n    items = spec[\"items\"]\n    return max(items) if items else 0",
+  "jac": "node Cell { has val: int; has seen: bool = False; }\n\nwalker MaxC {\n    has best: int = -2147483648;\n    can step with Cell entry {\n        if not here.seen { here.seen = True; if here.val > self.best { self.best = here.val; } visit [-->]; }\n    }\n}\n\ndef max_chain(spec: dict) -> int {\n    items: list = list(spec[\"items\"]);\n    if len(items) == 0 { return 0; }\n    cells: list = [];\n    for v in items { cells.append(Cell(val=int(v))); }\n    i: int = 0;\n    while i < len(cells) - 1 { cells[i] ++> cells[i + 1]; i += 1; }\n    w = cells[0] spawn MaxC();\n    return w.best;\n}",
+  "cases": [
+   {
+    "input": {
+     "items": [
+      3,
+      1,
+      4,
+      1,
+      5
+     ]
+    },
+    "output": "5"
+   },
+   {
+    "input": {
+     "items": [
+      10,
+      20,
+      30
+     ]
+    },
+    "output": "30"
+   },
+   {
+    "input": {
+     "items": [
+      -2,
+      7,
+      -1
+     ]
+    },
+    "output": "7"
+   },
+   {
+    "input": {
+     "items": [
+      4
+     ]
+    },
+    "output": "4"
+   },
+   {
+    "input": {
+     "items": []
+    },
+    "output": "0"
+   }
+  ]
+ },
+ {
+  "name": "count_chain",
+  "difficulty": "composed",
+  "py": "def count_chain(spec: dict) -> int:\n    \"\"\"Count the elements in the chain.\"\"\"\n    items = spec[\"items\"]\n    return len(items)",
+  "jac": "node Cell { has val: int; has seen: bool = False; }\n\nwalker CntC {\n    has count: int = 0;\n    can step with Cell entry {\n        if not here.seen { here.seen = True; self.count += 1; visit [-->]; }\n    }\n}\n\ndef count_chain(spec: dict) -> int {\n    items: list = list(spec[\"items\"]);\n    if len(items) == 0 { return 0; }\n    cells: list = [];\n    for v in items { cells.append(Cell(val=int(v))); }\n    i: int = 0;\n    while i < len(cells) - 1 { cells[i] ++> cells[i + 1]; i += 1; }\n    w = cells[0] spawn CntC();\n    return w.count;\n}",
+  "cases": [
+   {
+    "input": {
+     "items": [
+      3,
+      1,
+      4,
+      1,
+      5
+     ]
+    },
+    "output": "5"
+   },
+   {
+    "input": {
+     "items": [
+      10,
+      20,
+      30
+     ]
+    },
+    "output": "3"
+   },
+   {
+    "input": {
+     "items": [
+      -2,
+      7,
+      -1
+     ]
+    },
+    "output": "3"
+   },
+   {
+    "input": {
+     "items": [
+      4
+     ]
+    },
+    "output": "1"
+   },
+   {
+    "input": {
+     "items": []
+    },
+    "output": "0"
+   }
+  ]
+ },
+ {
+  "name": "count_positive_chain",
+  "difficulty": "composed",
+  "py": "def count_positive_chain(spec: dict) -> int:\n    \"\"\"Count positive values in the chain.\"\"\"\n    items = spec[\"items\"]\n    return sum(1 for v in items if v > 0)",
+  "jac": "node Cell { has val: int; has seen: bool = False; }\n\nwalker PosC {\n    has count: int = 0;\n    can step with Cell entry {\n        if not here.seen { here.seen = True; if here.val > 0 { self.count += 1; } visit [-->]; }\n    }\n}\n\ndef count_positive_chain(spec: dict) -> int {\n    items: list = list(spec[\"items\"]);\n    if len(items) == 0 { return 0; }\n    cells: list = [];\n    for v in items { cells.append(Cell(val=int(v))); }\n    i: int = 0;\n    while i < len(cells) - 1 { cells[i] ++> cells[i + 1]; i += 1; }\n    w = cells[0] spawn PosC();\n    return w.count;\n}",
+  "cases": [
+   {
+    "input": {
+     "items": [
+      3,
+      1,
+      4,
+      1,
+      5
+     ]
+    },
+    "output": "5"
+   },
+   {
+    "input": {
+     "items": [
+      10,
+      20,
+      30
+     ]
+    },
+    "output": "3"
+   },
+   {
+    "input": {
+     "items": [
+      -2,
+      7,
+      -1
+     ]
+    },
+    "output": "1"
+   },
+   {
+    "input": {
+     "items": [
+      4
+     ]
+    },
+    "output": "1"
+   },
+   {
+    "input": {
+     "items": []
+    },
+    "output": "0"
+   }
+  ]
  }
 ]
