@@ -53,10 +53,13 @@ if [ -f "$DPO_ADAPTER/adapters.safetensors" ]; then
   echo ">>> DPO adapter exists ($DPO_ADAPTER) — skipping train (rm it to retrain)"
 else
   echo ">>> DPO training: ${DPO_ITERS} iters, beta=${DPO_BETA}, lr=${DPO_LR}"
+  # --grad-checkpoint: DPO runs 4 forward passes (policy+reference x chosen+rejected);
+  # without checkpointing the activation peak OOMs a 30B on 48GB (Metal). Data maxes
+  # ~370 tokens so 512 max-seq is safe and caps any spike.
   python -m mlx_lm_lora.train \
     --model "$SFT_Q4" --train --data dataset/mlx_dpo --train-mode dpo \
-    --adapter-path "$DPO_ADAPTER" --train-type lora --num-layers 16 \
-    --batch-size 1 --max-seq-length 1024 --iters "$DPO_ITERS" \
+    --adapter-path "$DPO_ADAPTER" --train-type lora --num-layers 16 --grad-checkpoint \
+    --batch-size 1 --max-seq-length 512 --iters "$DPO_ITERS" \
     --learning-rate "$DPO_LR" --beta "$DPO_BETA" --dpo-cpo-loss-type sigmoid \
     --steps-per-report 10 --steps-per-eval 50 --save-every 50 \
     2>&1 | tee "$TRAIN_LOG"
