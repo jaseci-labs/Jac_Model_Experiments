@@ -56,12 +56,17 @@ else
   # --grad-checkpoint: DPO runs 4 forward passes (policy+reference x chosen+rejected);
   # without checkpointing the activation peak OOMs a 30B on 48GB (Metal). Data maxes
   # ~370 tokens so 512 max-seq is safe and caps any spike.
+  # DPO on a 30B is at the 48GB Metal ceiling (policy+reference x chosen+rejected,
+  # 4 forward graphs, memory grows across iters). Minimize: fewer LoRA layers (8),
+  # grad-checkpoint, short max-seq (data maxes ~370), and NO mid-train val
+  # (steps-per-eval high) since the val pass is an extra memory spike.
+  DPO_LAYERS="${DPO_LAYERS:-8}"
   python -m mlx_lm_lora.train \
     --model "$SFT_Q4" --train --data dataset/mlx_dpo --train-mode dpo \
-    --adapter-path "$DPO_ADAPTER" --train-type lora --num-layers 16 --grad-checkpoint \
-    --batch-size 1 --max-seq-length 512 --iters "$DPO_ITERS" \
+    --adapter-path "$DPO_ADAPTER" --train-type lora --num-layers "$DPO_LAYERS" --grad-checkpoint \
+    --batch-size 1 --max-seq-length 384 --iters "$DPO_ITERS" \
     --learning-rate "$DPO_LR" --beta "$DPO_BETA" --dpo-cpo-loss-type sigmoid \
-    --steps-per-report 10 --steps-per-eval 50 --save-every 50 \
+    --steps-per-report 10 --steps-per-eval 100000 --val-batches 1 --save-every 50 \
     2>&1 | tee "$TRAIN_LOG"
   [ -f "$DPO_ADAPTER/adapters.safetensors" ] || { echo "!!! DPO produced no adapter — see $TRAIN_LOG"; exit 1; }
 fi

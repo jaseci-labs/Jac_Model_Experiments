@@ -38,17 +38,17 @@ unconfirmed); the DPO pairs are built and waiting.
 
 | Artifact | Path | Count |
 |---|---|---|
-| Idiomatic SFT core (hand/agentic + 24 graph) | `dataset/conversion/sft.jsonl` | **140** |
+| Idiomatic SFT core (hand/agentic + 31 graph) | `dataset/conversion/sft.jsonl` | **147** |
 | Transpile SFT volume (py2jac, behaviorally gated) | `dataset/conversion/sft_auto.jsonl` | **1500** |
-| **Total SFT** | (both above) | **1640** |
-| DPO pairs (idiomatic chosen vs Python-shaped rejected; 24 graph w/ real divergence) | `dataset/conversion/dpo.jsonl` | **140** |
-| Balanced manifest (1:3 idiom:transpile) | `dataset/conversion/sft_train.jsonl` | **560** (140 + 420) |
-| mlx-lm train split (messages-only) | `dataset/mlx/train.jsonl` | **504** |
-| mlx-lm valid split (messages-only) | `dataset/mlx/valid.jsonl` | **56** |
+| **Total SFT** | (both above) | **1647** |
+| DPO pairs (idiomatic chosen vs Python-shaped rejected; 31 graph w/ real divergence) | `dataset/conversion/dpo.jsonl` | **147** |
+| Balanced manifest (1:3 idiom:transpile) | `dataset/conversion/sft_train.jsonl` | **588** (147 + 441) |
+| mlx-lm train split (messages-only) | `dataset/mlx/train.jsonl` | **529** |
+| mlx-lm valid split (messages-only) | `dataset/mlx/valid.jsonl` | **59** |
 | Function eval holdout (behavioral `test_cases`) | `dataset/eval_holdout/conversion.jsonl` | **150** |
-| Graph eval holdout (idiom headroom, §13) | `dataset/eval_holdout/graph_conversion.jsonl` | **10** |
+| Graph eval holdout (idiom headroom, §13) | `dataset/eval_holdout/graph_conversion.jsonl` | **13** |
 
-Idiomatic core composition: 24 seed + 84 idiomatic_batch{,2,3} + 8 mined + 24 graph = 140;
+Idiomatic core composition: 24 seed + 84 idiomatic_batch{,2,3} + 8 mined + 31 graph = 147;
 difficulty mix atomic 41 / idiomatic 37 / composed 38.
 
 **Toolchain is green:** `./check.sh` → `19 passed` (full `jac check`) + `eval_probe`
@@ -64,9 +64,10 @@ quantized, LoRA-SFT'd (600 iters), fused, evaluated. Results in `results/qwen/`:
   — the model learns Jac almost immediately; more iters don't help.
 - **Idiom judge** (`idiom_eval.jac`): on FUNCTIONS, 141/142 Python-shaped (sim 0.968) —
   idiom ≈ 0 because functions have no idiom headroom (idiomatic ≈ transpile).
-- **GRAPH tier (§13): the model learns idiom.** Retrained with 24 graph seeds → graph
-  holdout **0% → 50% correct, 80% of those idiomatic, sim 0.401, 6.6 graph constructs**
-  (function holdout held 94%). Proves data-with-headroom → measurable idiomatic Jac.
+- **GRAPH tier (§13): the model learns idiom, and DPO sharpens it.** 31 graph seeds →
+  graph holdout (13 tasks) **0% → SFT 46% → DPO 61% correct**, of-correct idiomatic
+  **83% → 100%**, similarity **0.457 → 0.338** (function holdout held ~94%). Proves
+  data-with-headroom → measurable idiomatic Jac, and DPO on real-divergence pairs lifts it.
 The Gemma run has NOT been done; `./run_probe.sh google/gemma-4-26b-a4b-it gemma`
 will produce `results/gemma/` (per-model namespaced, no clash).
 
@@ -376,7 +377,7 @@ The eval (`eval_probe.jac`) and dashboards report, per checkpoint and at base/fi
    idiomatic vs Python-shaped — that tells you how much DPO is needed.
 5. DPO stage (see §12).
 
-## 12. DPO stage — RAN; clean negative result (the task has no idiom headroom)
+## 12. DPO stage — no-op on FUNCTIONS (no headroom), WORKS on GRAPH (real divergence)
 
 **Ran `./run_dpo.sh qwen` (2026-06-05).** DPO trained *perfectly* — `acc 1.000,
 margin 7.4, chosen_r +3.3 / rejected_r −4.7` (it learned to strongly prefer the
@@ -452,21 +453,25 @@ Built + validated (all via `jac run`, the gate):
 - `eval_probe.jac` / `idiom_eval.jac` take **`JAC_HOLDOUT`** to target the graph holdout:
   `JAC_HOLDOUT=dataset/eval_holdout/graph_conversion.jsonl JAC_EVAL_MODE=mlx ... jac run ...`.
 
-**RESULT — retrained with 24 graph seeds in the split (2026-06-05):**
+**RESULT — the full SFT→DPO progression on the graph holdout (2026-06-05):**
 
-| metric (graph holdout) | before (no graph data) | after retrain |
-|---|---|---|
-| correct (runs+matches) | **0%** (0/10) | **50%** (5/10) |
-| of correct → idiomatic | — | **80%** (4/5) |
-| avg transpile-similarity | — | **0.401** (toward the 0.26 reference) |
-| graph constructs / output | 0.0 | **6.6** |
+Graph data scaled to 31 train / 13 holdout tasks across 3 idioms (accumulator-walker over
+adj, typed/weighted edges, linked-list chains). Holdout = 13 tasks.
 
-The model went from *cannot do graph conversion at all* to **producing real walker/node/edge
-idiom** — 6.6 graph constructs/output (was 0), 80% of correct outputs diverging from the
-mechanical transpile. Function holdout **held at 94%** (no regression). From only 24 graph
-examples (~4% of training). Full validation: data with real idiom headroom → the model
-learns idiomatic Jac, measurably (unlike the function tier where idiomatic ≈ transpile).
-Results: `results/qwen/graph-idiom-retrain.txt`.
+| metric (graph holdout, 13 tasks) | base | SFT (31 graph) | **DPO (31 graph pairs)** |
+|---|---|---|---|
+| correct (runs+matches) | **0%** | 46% | **61%** |
+| of correct → idiomatic | — | 83% | **100%** |
+| avg transpile-similarity | — | 0.457 | **0.338** (→ 0.26 ref) |
+| graph constructs / output | 0.0 | 4.5 | **6.75** |
+
+The model went from *cannot do graph conversion at all* → SFT produces it (46%, mostly
+idiomatic) → DPO **lifts correctness to 61% AND makes 100% of correct outputs idiomatic**,
+with similarity dropping toward the 0.26 reference. Function holdout held ~94% throughout.
+Full thesis proven: (1) data with real idiom headroom → the model learns idiomatic Jac
+(unlike the function tier where idiomatic ≈ transpile, so SFT can't and DPO is a no-op);
+(2) DPO on real-divergence graph pairs measurably pushes "runs" → "idiomatic".
+Results: `results/qwen/graph-idiom-retrain2.txt` (SFT), `results/qwen/dpo/graph-idiom.txt` (DPO).
 
 **Next levers (both proven-ready):** (1) scale graph tasks with more STRUCTURAL variety
 (binary trees, linked-list chains, weighted edges), not just predicates, via
