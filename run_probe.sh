@@ -89,17 +89,22 @@ fi
 
 # --- 4. train (resume from checkpoint; remaining iters only) ---
 REMAIN=$(( TOTAL_ITERS - DONE_STEPS ))
-if is_done train || [ "$REMAIN" -le 0 ]; then
+ADAPTER_FILE="$ADAPTER/adapters.safetensors"
+# "done" requires a real adapter on disk — self-heals a stale marker from an interrupt
+if { is_done train || [ "$REMAIN" -le 0 ]; } && [ -f "$ADAPTER_FILE" ]; then
   echo ">>> training: already complete (${DONE_STEPS}/${TOTAL_ITERS})"
+  done_mark train
 else
   echo ">>> training ${REMAIN} more iters (from ${DONE_STEPS}/${TOTAL_ITERS})"
   [ "$DONE_STEPS" -eq 0 ] && : > "$METRICS"   # fresh start clears the learning curve
+  : > "$TRAIN_LOG"
+  # redirect (not pipe): $! is the TRAINER, not tee; the dashboard reads the log live
   mlx_lm.lora --config configs/lora.yaml --model "models/${NAME}-q4" \
-    --adapter-path "$ADAPTER" --iters "$REMAIN" "${RESUME_ARGS[@]}" 2>&1 | tee -a "$TRAIN_LOG" &
+    --adapter-path "$ADAPTER" --iters "$REMAIN" "${RESUME_ARGS[@]}" > "$TRAIN_LOG" 2>&1 &
   TRAIN_PID=$!
   while kill -0 "$TRAIN_PID" 2>/dev/null; do
     STEP=$(grep -oE "Iter [0-9]+" "$TRAIN_LOG" 2>/dev/null | tail -1 | grep -oE "[0-9]+" || echo 0)
-    if [ -d "$ADAPTER" ]; then
+    if [ -f "$ADAPTER_FILE" ]; then
       JAC_EVAL_MODE=mlx JAC_EVAL_MODEL="models/${NAME}-q4" JAC_EVAL_ADAPTER="$ADAPTER" \
         JAC_EVAL_LIMIT="$SUBSET" JAC_EVAL_METRICS_OUT="$METRICS" JAC_EVAL_STEP="$((DONE_STEPS + STEP))" \
         jac run srccurrent/jacgen/eval_probe.jac >/dev/null 2>&1 || true
@@ -112,13 +117,20 @@ else
       jac run srccurrent/jacgen/plot_metrics.jac >/dev/null 2>&1 || true
     sleep "$EVAL_EVERY"
   done
-  wait "$TRAIN_PID" 2>/dev/null || true
+  RC=0; wait "$TRAIN_PID" || RC=$?
   TRAIN_PID=""
+  if [ "$RC" -ne 0 ] || [ ! -f "$ADAPTER_FILE" ]; then
+    echo "!!! training stopped early (exit $RC, no adapter at $ADAPTER_FILE)."
+    echo "    last log lines:"; tail -20 "$TRAIN_LOG"
+    echo "    re-run the same command to resume from the last checkpoint."
+    exit 1
+  fi
   done_mark train
 fi
 
 # --- 5. fuse (skip if present) ---
 FUSED="models/${NAME}-jac-fused-q8"
+[ -f "$ADAPTER_FILE" ] || { echo "!!! no trained adapter at $ADAPTER_FILE — train didn't finish"; exit 1; }
 if [ -f "$FUSED/config.json" ]; then echo ">>> fuse: reuse $FUSED"; else
   echo ">>> fuse"
   mlx_lm.fuse --model "models/${NAME}-q8" --adapter-path "$ADAPTER" --save-path "$FUSED"
