@@ -22,11 +22,15 @@ import from typing { Any }
 
 
 def compiles(jac_code: str) -> bool {
+    # PARSE-only gate (`jac check -p`), not strict `jac check`: aligns with the
+    # project rule "valid/runnable Jac, not type-checker-approved Jac". Strict
+    # check rejects the graph transpile (untyped dict/set Any) even though it
+    # parses+runs fine, which dropped all graph DPO pairs.
     with tempfile.TemporaryDirectory() as d {
         fp = Path(str(d)) / "r.jac";
         fp.write_text(jac_code);
         try {
-            proc = subprocess.run(["jac", "check", str(fp)], capture_output=True, text=True, timeout=30);
+            proc = subprocess.run(["jac", "check", "-p", str(fp)], capture_output=True, text=True, timeout=30);
         } except (subprocess.SubprocessError, OSError) {
             return False;
         }
