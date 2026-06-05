@@ -70,11 +70,9 @@ TOTAL_ITERS="$(grep -E '^[[:space:]]*iters:' configs/lora.yaml | grep -oE '[0-9]
 TOTAL_ITERS="${TOTAL_ITERS:-600}"
 LATEST_CKPT="$(ls "$ADAPTER"/*_adapters.safetensors 2>/dev/null | sort -V | tail -1 || true)"
 DONE_STEPS=0
-RESUME_ARGS=()
 if [ -n "$LATEST_CKPT" ]; then
   DONE_STEPS="$(basename "$LATEST_CKPT" | grep -oE '^[0-9]+' | sed 's/^0*//')"
   DONE_STEPS="${DONE_STEPS:-0}"
-  RESUME_ARGS=(--resume-adapter-file "$LATEST_CKPT")
   echo ">>> found checkpoint at step ${DONE_STEPS} -> resuming"
 fi
 
@@ -98,9 +96,16 @@ else
   echo ">>> training ${REMAIN} more iters (from ${DONE_STEPS}/${TOTAL_ITERS})"
   [ "$DONE_STEPS" -eq 0 ] && : > "$METRICS"   # fresh start clears the learning curve
   : > "$TRAIN_LOG"
-  # redirect (not pipe): $! is the TRAINER, not tee; the dashboard reads the log live
-  mlx_lm.lora --config configs/lora.yaml --model "models/${NAME}-q4" \
-    --adapter-path "$ADAPTER" --iters "$REMAIN" "${RESUME_ARGS[@]}" > "$TRAIN_LOG" 2>&1 &
+  # redirect (not pipe): $! is the TRAINER, not tee; the dashboard reads the log live.
+  # two branches avoid an empty-array expansion (errors under set -u on macOS bash 3.2).
+  if [ -n "$LATEST_CKPT" ]; then
+    mlx_lm.lora --config configs/lora.yaml --model "models/${NAME}-q4" \
+      --adapter-path "$ADAPTER" --iters "$REMAIN" --resume-adapter-file "$LATEST_CKPT" \
+      > "$TRAIN_LOG" 2>&1 &
+  else
+    mlx_lm.lora --config configs/lora.yaml --model "models/${NAME}-q4" \
+      --adapter-path "$ADAPTER" --iters "$REMAIN" > "$TRAIN_LOG" 2>&1 &
+  fi
   TRAIN_PID=$!
   while kill -0 "$TRAIN_PID" 2>/dev/null; do
     STEP=$(grep -oE "Iter [0-9]+" "$TRAIN_LOG" 2>/dev/null | tail -1 | grep -oE "[0-9]+" || echo 0)
