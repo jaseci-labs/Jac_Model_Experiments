@@ -107,6 +107,9 @@ else
     clear
     JAC_TRAIN_LOG="$TRAIN_LOG" JAC_METRICS="$METRICS" \
       jac run srccurrent/jacgen/dashboard.jac 2>/dev/null || true
+    # refresh the PNG graphs live too (open results/*.png in Preview to watch them update)
+    JAC_TRAIN_LOG="$TRAIN_LOG" JAC_METRICS="$METRICS" \
+      jac run srccurrent/jacgen/plot_metrics.jac >/dev/null 2>&1 || true
     sleep "$EVAL_EVERY"
   done
   wait "$TRAIN_PID" 2>/dev/null || true
