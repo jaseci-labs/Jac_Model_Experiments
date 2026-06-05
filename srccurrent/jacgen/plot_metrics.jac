@@ -30,8 +30,14 @@ def parse_train(path: str) -> dict {
     val: list = [];
     lr: list = [];
     tps: list = [];
+    itsec: list = [];
+    trained: list = [];
+    peak: list = [];
     p = Path(path);
-    if not p.exists() { return {"train": train, "val": val, "lr": lr, "tps": tps}; }
+    if not p.exists() {
+        return {"train": train, "val": val, "lr": lr, "tps": tps,
+                "itsec": itsec, "trained": trained, "peak": peak};
+    }
     for line in p.read_text().split("\n") {
         m = re.search("Iter (\\d+)", line);
         if m is None { continue; }
@@ -44,8 +50,15 @@ def parse_train(path: str) -> dict {
         if lv >= 0.0 { lr.append([it, lv]); }
         tv: float = _num(line, "Tokens/sec ([0-9.]+)");
         if tv >= 0.0 { tps.append([it, tv]); }
+        iv: float = _num(line, "It/sec ([0-9.]+)");
+        if iv >= 0.0 { itsec.append([it, iv]); }
+        ttv: float = _num(line, "Trained Tokens ([0-9]+)");
+        if ttv >= 0.0 { trained.append([it, ttv]); }
+        pv: float = _num(line, "Peak mem ([0-9.]+)");
+        if pv >= 0.0 { peak.append([it, pv]); }
     }
-    return {"train": train, "val": val, "lr": lr, "tps": tps};
+    return {"train": train, "val": val, "lr": lr, "tps": tps,
+            "itsec": itsec, "trained": trained, "peak": peak};
 }
 
 
@@ -75,6 +88,9 @@ with entry {
     plot_one(list(t["val"]), "Validation Loss", "loss", "results/val_loss.png");
     plot_one(list(t["lr"]), "Learning Rate", "lr", "results/learning_rate.png");
     plot_one(list(t["tps"]), "Throughput", "tokens/sec", "results/tokens_per_sec.png");
+    plot_one(list(t["itsec"]), "Iterations/sec", "it/sec", "results/iters_per_sec.png");
+    plot_one(list(t["trained"]), "Trained Tokens (cumulative)", "tokens", "results/trained_tokens.png");
+    plot_one(list(t["peak"]), "Peak Memory", "GB", "results/peak_mem.png");
 
     lc: list = [];
     mp = Path(metrics);

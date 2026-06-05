@@ -77,6 +77,28 @@ def detect_func(jac_code: str, fallback: str) -> str {
 }
 
 
+# --- mlx_lm.generate token/throughput stats (verbose stdout footer) ---
+def gen_tokens(out: str) -> int {
+    m = re.search("Generation: ([0-9]+) tokens", out);
+    if m is None { return 0; }
+    return int(str(m.group(1)));
+}
+
+
+def gen_tps(out: str) -> float {
+    m = re.search("Generation: [0-9]+ tokens, ([0-9.]+) tokens-per-sec", out);
+    if m is None { return 0.0; }
+    return float(str(m.group(1)));
+}
+
+
+def strip_stats(out: str) -> str {
+    # drop the mlx verbose footer ("==========\nPrompt..Generation..Peak..") before parsing jac
+    if "tokens-per-sec" not in out { return out; }
+    return out.rsplit("==========", 1)[0];
+}
+
+
 def build_program(jac_code: str, func: str, cases: list) -> tuple[str, str] {
     calls: str = "";
     expected: list[str] = [];
@@ -95,6 +117,10 @@ with entry {
     total: int = 0;
     comp: int = 0;
     passed: int = 0;
+    gen_tok_total: int = 0;       # tokens the model generated across all tasks
+    correct_tokens: int = 0;      # tokens spent on the tasks that passed
+    tps_sum: float = 0.0;         # sum of per-task generation tokens/sec
+    tps_n: int = 0;
     limit: int = int(os.environ.get("JAC_EVAL_LIMIT", "0"));  # 0 = all; e.g. 50 during training
 
     for line in p.read_text().split("\n") {
@@ -108,14 +134,22 @@ with entry {
         total += 1;
 
         out: str = generate(prompt, python);
-        jac: str = extract_jac(out);
+        gtok: int = gen_tokens(out);
+        gtps: float = gen_tps(out);
+        gen_tok_total += gtok;
+        if gtps > 0.0 { tps_sum += gtps; tps_n += 1; }
+
+        jac: str = extract_jac(strip_stats(out));
         name: str = detect_func(jac, func);
         (prog, expected) = build_program(jac, name, cases);
         (code, sout, serr) = run_jac(prog);
         # gate on RUN (execution), not `jac check`: the strict type-checker rejects
         # untyped-but-runnable code, which is not what "the conversion works" means.
         if code == 0 { comp += 1; }
-        if code == 0 and sout.strip() == expected.strip() { passed += 1; }
+        if code == 0 and sout.strip() == expected.strip() {
+            passed += 1;
+            correct_tokens += gtok;
+        }
     }
 
     if total == 0 {
@@ -123,16 +157,24 @@ with entry {
     } else {
         crate: int = comp * 100 // total;
         prate: int = passed * 100 // total;
+        etps: int = 0;
+        if tps_n > 0 { etps = int(tps_sum / float(tps_n)); }
+        ttc: int = 0;
+        if passed > 0 { ttc = correct_tokens // passed; }
+
         print("=== conversion probe (" + eval_mode() + ") on " + str(total) + " holdout tasks ===");
         print("runs (compiles+executes): " + str(crate) + "%  (" + str(comp) + "/" + str(total) + ")");
         print("cross-compiled test pass: " + str(prate) + "%  (" + str(passed) + "/" + str(total) + ")");
+        print("generation:               " + str(gen_tok_total) + " tokens total, ~" + str(etps) + " tok/s avg");
+        print("tokens-to-correct:        " + str(ttc) + " tokens / correct conversion");
 
         # append a metrics line for the learning curve (set by run_probe.sh per checkpoint)
         metrics_out: str = os.environ.get("JAC_EVAL_METRICS_OUT", "");
         if metrics_out != "" {
             step: int = int(os.environ.get("JAC_EVAL_STEP", "0"));
             row: dict = {"step": step, "total": total, "runs": comp, "test_pass": passed,
-                         "runs_pct": crate, "test_pass_pct": prate};
+                         "runs_pct": crate, "test_pass_pct": prate,
+                         "gen_tokens": gen_tok_total, "eval_tps": etps, "tokens_to_correct": ttc};
             with open(metrics_out, "a") as f { f.write(json.dumps(row) + "\n"); }
         }
     }

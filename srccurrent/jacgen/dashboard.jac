@@ -28,8 +28,14 @@ def parse_train(path: str) -> dict {
     val: list = [];
     lr: list = [];
     tps: list = [];
+    itsec: list = [];
+    trained: list = [];
+    peak: list = [];
     p = Path(path);
-    if not p.exists() { return {"train": train, "val": val, "lr": lr, "tps": tps}; }
+    if not p.exists() {
+        return {"train": train, "val": val, "lr": lr, "tps": tps,
+                "itsec": itsec, "trained": trained, "peak": peak};
+    }
     for line in p.read_text().split("\n") {
         m = re.search("Iter (\\d+)", line);
         if m is None { continue; }
@@ -42,8 +48,15 @@ def parse_train(path: str) -> dict {
         if lv >= 0.0 { lr.append([it, lv]); }
         tv: float = _num(line, "Tokens/sec ([0-9.]+)");
         if tv >= 0.0 { tps.append([it, tv]); }
+        iv: float = _num(line, "It/sec ([0-9.]+)");
+        if iv >= 0.0 { itsec.append([it, iv]); }
+        ttv: float = _num(line, "Trained Tokens ([0-9]+)");
+        if ttv >= 0.0 { trained.append([it, ttv]); }
+        pv: float = _num(line, "Peak mem ([0-9.]+)");
+        if pv >= 0.0 { peak.append([it, pv]); }
     }
-    return {"train": train, "val": val, "lr": lr, "tps": tps};
+    return {"train": train, "val": val, "lr": lr, "tps": tps,
+            "itsec": itsec, "trained": trained, "peak": peak};
 }
 
 
@@ -88,6 +101,9 @@ with entry {
     render("val loss", list(t["val"]));
     render("learning rate", list(t["lr"]));
     render("tokens/sec", list(t["tps"]));
+    render("iters/sec", list(t["itsec"]));
+    render("trained tokens (cumulative)", list(t["trained"]));
+    render("peak mem (GB)", list(t["peak"]));
 
     lc: list = [];
     mp = Path(metrics);

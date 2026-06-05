@@ -74,7 +74,15 @@ Tunables (env): `EVAL_EVERY` (dashboard secs), `SUBSET` (tasks/checkpoint),
   did finetuning on our Jac data make the model produce more correct Jac?
 - **`results/learning_curve.png`** — pass-rate per checkpoint. Rising = it's
   learning Jac; flat-while-loss-drops = it's memorizing format, not idiom.
-- Live view during training: the ASCII dashboard (auto-refreshed), or manually
+- **Token efficiency:** the eval also reports **generation tokens**, **eval
+  tokens/sec**, and **tokens-to-correct** (avg tokens to produce a correct
+  conversion) in the base/finetuned txt + metrics jsonl.
+- **Graphs** (`results/*.png`, rendered live): `learning_curve`, `train_loss`,
+  `val_loss`, `learning_rate`, `tokens_per_sec`, `iters_per_sec`,
+  `trained_tokens`, `peak_mem`. Open them with `open results/*.png` (Preview
+  auto-refreshes as they update).
+- Live ASCII view during training: the auto-refreshed dashboard in the run
+  terminal, or manually
   `JAC_TRAIN_LOG=results/qwen-train.log JAC_METRICS=results/qwen-metrics.jsonl jac run srccurrent/jacgen/dashboard.jac`.
 
 ## Pausing / resuming (close the laptop anytime)
