@@ -27,8 +27,8 @@ Candidate base models (narrowed to two — DeepSeek/Kimi dropped):
 - **Qwen** — `Qwen/Qwen3-Coder-30B-A3B-Instruct`  ← note the `-Instruct` suffix (see gotchas)
 - **Gemma** — `google/gemma-4-26b-a4b-it`
 
-First signal target is **SFT-only**. DPO is a later stage (mlx-lm native DPO is
-unconfirmed); the DPO pairs are built and waiting.
+Both candidates have now been run end-to-end (SFT + graph + DPO) — see §14. Qwen3-Coder
+wins on graph idiom; functions are a tie.
 
 ---
 
@@ -484,3 +484,32 @@ dict/set Any) even though it parses+runs, which had dropped all graph DPO pairs 
 function pairs). With the parse gate: **DPO 60 → 140 pairs, 24 graph-sourced**, real 0.26
 divergence. `dataset/mlx_dpo/` rebuilt 126/14. Consistent with "gate = runnable, not
 type-checker-approved Jac".
+
+---
+
+## 14. Model comparison — Qwen vs Gemma (both run, same data/config)
+
+Both finetuned on the identical graph-inclusive dataset (529/56 split) + same eval.
+
+| metric | Qwen3-Coder-30B-A3B | Gemma-4-26B-A4B |
+|---|---|---|
+| function holdout — base | 0% | 0% |
+| function holdout — finetuned | **94%** | **93%** |
+| graph holdout — SFT correct | **46%** | 15% |
+| graph holdout — DPO correct | **61%** | 15% (no change) |
+| graph — of-correct idiomatic | 83% → **100%** (DPO) | 100% (but only 2/13) |
+| graph — transpile-similarity | 0.457 → **0.338** (DPO) | 0.667 (flat) |
+
+**Findings:**
+- **Function conversion: a tie** — both go 0% → ~94%. Either model learns plain Python→Jac
+  equally well from our data.
+- **Graph idiom: Qwen wins decisively** — 46%/61% vs Gemma's 15%. Qwen3-Coder (code-
+  specialized) learns the walker/node/edge structure far better than Gemma.
+- **DPO only pays off where SFT already produces idiom**: Qwen had enough correct graph
+  outputs (46%) for DPO to push (→61%, sim 0.457→0.338, 100% idiomatic). Gemma's graph SFT
+  was too weak (15%, ~2 correct) → DPO had nothing to move (15%, flat). Confirms the §12
+  pattern: DPO sharpens existing idiom, it can't manufacture it.
+- **Pick for Jac graph idiom: Qwen3-Coder-30B-A3B-Instruct.**
+
+Graphs: `results/qwen/*.png` and `results/gemma/*.png` (learning_curve, train_loss,
+val_loss, learning_rate, tokens_per_sec, iters_per_sec, trained_tokens, peak_mem).
