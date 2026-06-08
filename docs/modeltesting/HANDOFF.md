@@ -68,8 +68,10 @@ quantized, LoRA-SFT'd (600 iters), fused, evaluated. Results in `results/qwen/`:
   graph holdout (13 tasks) **0% → SFT 46% → DPO 61% correct**, of-correct idiomatic
   **83% → 100%**, similarity **0.457 → 0.338** (function holdout held ~94%). Proves
   data-with-headroom → measurable idiomatic Jac, and DPO on real-divergence pairs lifts it.
-The Gemma run has NOT been done; `./run_probe.sh google/gemma-4-26b-a4b-it gemma`
-will produce `results/gemma/` (per-model namespaced, no clash).
+**The Gemma run is also done** (`results/gemma/`): function 93%, graph SFT 15% / DPO 15%.
+Full head-to-head in §14 — Qwen wins graph idiom decisively; functions tie. ⚠️ Gemma id is
+gated + case-sensitive: use `google/gemma-4-26B-A4B-it` (capital B/A4B) and accept the
+license + `huggingface-cli login` first; lowercase 307-redirects, no token = 401.
 
 `dataset/` is gitignored — it is **regenerable** from the Jac builders (section 6).
 
