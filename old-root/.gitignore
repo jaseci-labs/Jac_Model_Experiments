@@ -12,3 +12,6 @@ adapters/
 .venv/
 web_app/test/.superpowers/
 web_app/server/data/
+web_app/ui/node_modules/
+web_app/ui/.next/
+web_app/server/.venv/
