@@ -11,3 +11,4 @@ models/
 adapters/
 .venv/
 web_app/test/.superpowers/
+web_app/server/data/
