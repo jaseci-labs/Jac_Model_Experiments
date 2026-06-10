@@ -10,3 +10,4 @@ results/
 models/
 adapters/
 .venv/
+web_app/test/.superpowers/
