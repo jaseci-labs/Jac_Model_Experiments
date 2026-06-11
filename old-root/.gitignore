@@ -15,3 +15,7 @@ web_app/server/data/
 web_app/ui/node_modules/
 web_app/ui/.next/
 web_app/server/.venv/
+jac_ml_studio/ui/node_modules/
+jac_ml_studio/ui/.next/
+jac_ml_studio/server/.venv/
+jac_ml_studio/server/data/
