@@ -18,7 +18,7 @@ rl/drivers/*.jac          deterministic jac-run-able files; the target unit's
 dataset/rl/tasks.jsonl    {prompt, answer} GRPO records   (+ templates/<id>.jac sidecars)
    │ jac run rl/build_rl_splits.jac
 dataset/rl/{train,valid,holdout}.jsonl
-   │ RL_BASE=<model> ./rl/run_grpo.sh <name>      reward = rl/reward.py:jac_behavioral
+   │ RL_BASE=<model> ./rl/run_grpo.sh <name>      reward = rl/reward_logic.jac (jac_behavioral)
    ▼
 adapters/<name>-grpo  +  results/<name>/grpo/
    │ JAC_EVAL_MODEL=<base> JAC_EVAL_ADAPTER=adapters/<name>-grpo jac run rl/eval_rl.jac
@@ -28,7 +28,7 @@ results/<name>/grpo/eval.txt   (run% / behavior-pass% / idiom vs base)
 
 ## Reward
 
-`rl/reward.py:jac_behavioral(prompts, completions, answer)` — for each sampled
+Logic lives in **`rl/reward_logic.jac`** (`jac_behavioral`) — for each sampled
 completion: splice it into the task template (`__HOLE__`), `jac run` it (isolated
 cwd so the persistent `root` graph never accumulates state across runs), score:
 
@@ -36,9 +36,21 @@ cwd so the persistent `root` graph never accumulates state across runs), score:
 0.3*compiles + 0.3*runs + 0.3*output_match + 0.1*idiom_bonus
 ```
 
-Non-running output earns no idiom credit (can't sneak partial credit). Registered
-with `mlx_lm_lora` via `--reward-functions-file rl/reward.py --reward-functions
-jac_behavioral`. Tests: `.venv/bin/python -m pytest rl/tests -q`.
+Non-running output earns no idiom credit (can't sneak partial credit).
+
+**Why a `.py` shim exists.** `mlx_lm_lora` loads the reward via
+`importlib.spec_from_file_location`, which needs a `.py`. `rl/reward.py` is a
+~5-line shim that imports the Jac module (whose `with entry` registers
+`jac_behavioral` into the reward registry). All reward logic is Jac; the shim is
+just the bridge the trainer's loader requires. Wired via
+`--reward-functions-file rl/reward.py --reward-functions jac_behavioral`.
+
+Test (pure Jac, self-checking, exits non-zero on failure):
+
+```bash
+jac run rl/build_tasks.jac      # ensure a task set exists
+jac run rl/test_reward.jac      # perfect / garbage / wrong-output / batch cases
+```
 
 ## Run order
 

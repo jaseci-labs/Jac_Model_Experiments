@@ -116,7 +116,7 @@ Held-out `this_is_jac` tasks (disjoint from train, decontaminated), scored by [`
 
 ## Harness state & remaining work
 
-**Built + validated** (branch `rl-phase`): repo isolated into `sft_dpo/` + `rl/`; reward (`rl/reward.py`, 4 tests green); task pipeline (`build_tasks` / `build_rl_splits`); runner + eval. The full GRPO loop ran on a real 30B (`qwen-q4`, 2 iters): the `jac_behavioral` reward loaded, scored rollouts, frozen reference fit RAM, adapter produced. **No engineering risk remains.**
+**Built + validated** (merged to `main`): repo isolated into `sft_dpo/` + `rl/`; reward logic in Jac (`rl/reward_logic.jac`, behind a ~5-line `.py` shim the trainer's loader requires), tests green (`jac run rl/test_reward.jac`); task pipeline (`build_tasks` / `build_rl_splits`); runner + eval. The full GRPO loop ran on a real 30B (`qwen-q4`, 2 iters): the `jac_behavioral` reward loaded, scored rollouts, frozen reference fit RAM, adapter produced. The whole harness is Jac (`*.jac`) except a `run_grpo.sh` launcher and the unavoidable reward shim. **No engineering risk remains.**
 
 **Remaining (content + compute, not scaffolding):**
 
