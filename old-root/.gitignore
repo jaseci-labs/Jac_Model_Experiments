@@ -10,24 +10,7 @@ results/
 models/
 adapters/
 .venv/
-web_app/test/.superpowers/
-web_app/server/data/
-web_app/ui/node_modules/
-web_app/ui/.next/
-web_app/server/.venv/
 jac_ml_studio/ui/node_modules/
 jac_ml_studio/ui/.next/
 jac_ml_studio/server/.venv/
 jac_ml_studio/server/data/
-
-# LaTeX build artifacts (presentation/) — keep .tex + figs/, drop generated
-presentation/*.aux
-presentation/*.log
-presentation/*.nav
-presentation/*.out
-presentation/*.snm
-presentation/*.toc
-presentation/*.fls
-presentation/*.fdb_latexmk
-presentation/_diagrams.pdf
-presentation/jaseci_deck.pdf

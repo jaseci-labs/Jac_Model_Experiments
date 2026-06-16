@@ -19,7 +19,8 @@ if [ -z "${CAFFEINATED:-}" ] && command -v caffeinate >/dev/null 2>&1; then
   exec caffeinate -dimsu env CAFFEINATED=1 "$0" "$@"
 fi
 SELF_DIR="$(cd "$(dirname "$0")" && pwd)"
-[ -d "$SELF_DIR/.venv/bin" ] && export PATH="$SELF_DIR/.venv/bin:$PATH"
+cd "$(cd "$SELF_DIR/.." && pwd)"   # repo root: dataset/ models/ adapters/ results/ resolve here
+[ -d ".venv/bin" ] && export PATH="$PWD/.venv/bin:$PATH"
 
 NAME="${1:?short name, e.g. qwen}"
 DPO_ITERS="${DPO_ITERS:-200}"; DPO_LR="${DPO_LR:-1e-6}"; DPO_BETA="${DPO_BETA:-0.1}"
@@ -32,7 +33,7 @@ python -c "import mlx_lm_lora" 2>/dev/null || { echo "MISSING: mlx-lm-lora (pip 
 SFT_ADAPTER="adapters/${NAME}-probe"
 [ -f "$SFT_ADAPTER/adapters.safetensors" ] || { echo "MISSING: $SFT_ADAPTER/adapters.safetensors — run run_probe.sh first"; exit 1; }
 for f in dataset/mlx_dpo/train.jsonl dataset/mlx_dpo/valid.jsonl; do
-  [ -f "$f" ] || { echo "MISSING $f — run: jac run srccurrent/jacgen/build_dpo_splits.jac"; exit 1; }
+  [ -f "$f" ] || { echo "MISSING $f — run: jac run sft_dpo/jacgen/build_dpo_splits.jac"; exit 1; }
 done
 
 RDIR="results/${NAME}/dpo"; mkdir -p "$RDIR"
@@ -80,10 +81,10 @@ fi
 # --- 4. eval DPO model: behavior (must hold) + idiom (must improve) ---
 echo ">>> DPO eval: behavior"
 JAC_EVAL_MODE=mlx JAC_EVAL_MODEL="$DPO_FUSED" \
-  jac run srccurrent/jacgen/eval_probe.jac | tee "$RDIR/finetuned.txt"
+  jac run sft_dpo/jacgen/eval_probe.jac | tee "$RDIR/finetuned.txt"
 echo ">>> DPO eval: idiom"
 JAC_EVAL_MODE=mlx JAC_EVAL_MODEL="$DPO_FUSED" JAC_IDIOM_OUT="$RDIR/idiom-metrics.jsonl" \
-  jac run srccurrent/jacgen/idiom_eval.jac | tee "$RDIR/idiom.txt"
+  jac run sft_dpo/jacgen/idiom_eval.jac | tee "$RDIR/idiom.txt"
 
 echo "=== DPO done ==="
 echo "  model:    $DPO_FUSED"

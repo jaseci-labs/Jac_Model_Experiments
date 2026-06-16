@@ -10,7 +10,7 @@ after one LoRA pass on our data it produces **93–94% behaviorally-correct Jac*
 graph-shaped tasks, **100% idiomatic** (nodes/edges/walkers, not Python-shaped) after DPO.
 
 > **Confidential — Jaseci Labs.** Every tool in this repo is itself written in Jac
-> (`srccurrent/jacgen/`) — we dogfood the language we generate data for.
+> (`sft_dpo/jacgen/`) — we dogfood the language we generate data for.
 
 ---
 
@@ -107,8 +107,8 @@ everywhere in the pipeline.
 re-validated. If green, the toolchain and data are healthy. It **does not** mutate the
 dataset.
 
-Full operator runbook (setup, run, pause/resume, timings): **[`process.md`](process.md)**.
-Full architecture handoff (every module, every gotcha): **[`docs/modeltesting/HANDOFF.md`](docs/modeltesting/HANDOFF.md)**.
+Full operator runbook (setup, run, pause/resume, timings): **[`sft_dpo/process.md`](sft_dpo/process.md)**.
+Full architecture handoff (every module, every gotcha): **[`sft_dpo/docs/modeltesting/HANDOFF.md`](sft_dpo/docs/modeltesting/HANDOFF.md)**.
 
 ---
 
@@ -211,7 +211,7 @@ sampled manual review. The 12 generation recipes (R1–R12) are documented in
 
 `dataset/` is **gitignored** but fully **regenerable** from the Jac builders (see
 [Rebuilding](#rebuilding-the-dataset-order-matters)). Confirm any time with
-`jac run srccurrent/jacgen/dataset_stats.jac`.
+`jac run sft_dpo/jacgen/dataset_stats.jac`.
 
 | Artifact | Path | Count |
 |---|---|---|
@@ -268,8 +268,8 @@ generation); subsequent runs skip download/quantize → **~2–4 hr**.
 
 | Path | What |
 |---|---|
-| `srccurrent/jacgen/*.jac` | the all-Jac pipeline: generate, validate, dedup, decontaminate, split, eval harness, dashboards (24 modules) |
-| `srccurrent/jacgen/graph_data/` | authored graph/tree tasks (`train.json` 31, `holdout.json` 13) + the Python generators |
+| `sft_dpo/jacgen/*.jac` | the all-Jac pipeline: generate, validate, dedup, decontaminate, split, eval harness, dashboards (24 modules) |
+| `sft_dpo/jacgen/graph_data/` | authored graph/tree tasks (`train.json` 31, `holdout.json` 13) + the Python generators |
 | `dataset/` *(gitignored)* | generated data — see [the dataset table](#the-dataset-on-disk) |
 | `configs/lora.yaml` | LoRA SFT config (mlx-lm) |
 | `run_probe.sh` / `run_dpo.sh` | SFT probe runner / DPO runner (resumable) |
@@ -278,7 +278,7 @@ generation); subsequent runs skip download/quantize → **~2–4 hr**.
 | `resultsft/` | **committed copies of all results + graphs** → [`RESULTS.md`](resultsft/RESULTS.md) |
 | `models/` / `adapters/` *(gitignored)* | quantized/fused models / LoRA adapters |
 | `docs/` | strategy, model-testing, datagen plans → [map below](#documentation-map) |
-| `process.md` | operator runbook (setup → check → run, pause/resume) |
+| `sft_dpo/process.md` | operator runbook (setup → check → run, pause/resume) |
 | `context.md` | durable project framing |
 | `papers/` | reference papers (MultiPL-T, WizardCoder, Magicoder, SelfCodeAlign, DeepSeek-Coder, CodeDPO, Magpie) |
 
@@ -286,7 +286,7 @@ generation); subsequent runs skip download/quantize → **~2–4 hr**.
 
 ## The all-Jac pipeline (24 modules)
 
-In `srccurrent/jacgen/` (full reference: its [`README.md`](srccurrent/jacgen/README.md)
+In `sft_dpo/jacgen/` (full reference: its [`README.md`](sft_dpo/jacgen/README.md)
 and HANDOFF §5).
 
 **Shared libraries**
@@ -330,20 +330,20 @@ and HANDOFF §5).
 
 ```bash
 source .venv/bin/activate
-jac run srccurrent/jacgen/mine.jac              # (optional) refresh source_pool/mined.jsonl
-jac run srccurrent/jacgen/seed_conversion.jac   # sft.jsonl -> 32 (TRUNCATES), dpo seed -> 2
-jac run srccurrent/jacgen/idiomatic_batch.jac   # -> 62  (appends)
-jac run srccurrent/jacgen/idiomatic_batch2.jac  # -> 85
-jac run srccurrent/jacgen/idiomatic_batch3.jac  # -> 116
-jac run srccurrent/jacgen/graph_seeds.jac       # + graph-tier idiomatic (node/edge/walker) -> 147
-jac run srccurrent/jacgen/scale_conversion.jac  # transpile volume -> 1500 (SLOW: mines+gates)
-jac run srccurrent/jacgen/dpo_conversion.jac    # dpo.jsonl -> 147 (parse-gated, regenerates from sft.jsonl)
-jac run srccurrent/jacgen/build_manifest.jac    # sft_train.jsonl -> 588 (1:3)
-jac run srccurrent/jacgen/build_splits.jac      # dataset/mlx/{train,valid}.jsonl -> 529/59
-jac run srccurrent/jacgen/build_dpo_splits.jac  # dataset/mlx_dpo/{train,valid}.jsonl -> 132/15
-jac run srccurrent/jacgen/holdout.jac           # function eval holdout (decontaminated, 150)
-jac run srccurrent/jacgen/graph_holdout.jac     # graph eval holdout (13)
-jac run srccurrent/jacgen/dataset_stats.jac     # verify composition
+jac run sft_dpo/jacgen/mine.jac              # (optional) refresh source_pool/mined.jsonl
+jac run sft_dpo/jacgen/seed_conversion.jac   # sft.jsonl -> 32 (TRUNCATES), dpo seed -> 2
+jac run sft_dpo/jacgen/idiomatic_batch.jac   # -> 62  (appends)
+jac run sft_dpo/jacgen/idiomatic_batch2.jac  # -> 85
+jac run sft_dpo/jacgen/idiomatic_batch3.jac  # -> 116
+jac run sft_dpo/jacgen/graph_seeds.jac       # + graph-tier idiomatic (node/edge/walker) -> 147
+jac run sft_dpo/jacgen/scale_conversion.jac  # transpile volume -> 1500 (SLOW: mines+gates)
+jac run sft_dpo/jacgen/dpo_conversion.jac    # dpo.jsonl -> 147 (parse-gated, regenerates from sft.jsonl)
+jac run sft_dpo/jacgen/build_manifest.jac    # sft_train.jsonl -> 588 (1:3)
+jac run sft_dpo/jacgen/build_splits.jac      # dataset/mlx/{train,valid}.jsonl -> 529/59
+jac run sft_dpo/jacgen/build_dpo_splits.jac  # dataset/mlx_dpo/{train,valid}.jsonl -> 132/15
+jac run sft_dpo/jacgen/holdout.jac           # function eval holdout (decontaminated, 150)
+jac run sft_dpo/jacgen/graph_holdout.jac     # graph eval holdout (13)
+jac run sft_dpo/jacgen/dataset_stats.jac     # verify composition
 ```
 
 > **If `sft.jsonl` shows 32 and `dpo.jsonl` shows 2**, the idiomatic batches got wiped
@@ -407,14 +407,14 @@ Read before touching anything — these will bite. Full list: HANDOFF §9.
 
 | Doc | What |
 |---|---|
-| **[`process.md`](process.md)** | operator runbook — setup → check → run, pause/resume, launchd, timings |
-| **[`docs/modeltesting/HANDOFF.md`](docs/modeltesting/HANDOFF.md)** | **single source of truth** — architecture, every module, every gotcha, rebuild order |
+| **[`sft_dpo/process.md`](sft_dpo/process.md)** | operator runbook — setup → check → run, pause/resume, launchd, timings |
+| **[`sft_dpo/docs/modeltesting/HANDOFF.md`](sft_dpo/docs/modeltesting/HANDOFF.md)** | **single source of truth** — architecture, every module, every gotcha, rebuild order |
 | **[`resultsft/RESULTS.md`](resultsft/RESULTS.md)** | full measured results + all 16 training graphs, both models, side by side |
 | [`context.md`](context.md) | durable project framing (what Jac is, goal, constraints) |
 | [`docs/datagenstrat/strat.md`](docs/datagenstrat/strat.md) | the 12 data-generation recipes (R1–R12) |
 | [`docs/wholestack/strat.md`](docs/wholestack/strat.md) | whole-stack strategy |
-| [`docs/modeltesting/`](docs/modeltesting/) | strategy, evaluation, conversion-probe, per-model notes (Qwen / Gemma) |
-| [`srccurrent/jacgen/README.md`](srccurrent/jacgen/README.md) | module-by-module pipeline reference |
+| [`sft_dpo/docs/modeltesting/`](sft_dpo/docs/modeltesting/) | strategy, evaluation, conversion-probe, per-model notes (Qwen / Gemma) |
+| [`sft_dpo/jacgen/README.md`](sft_dpo/jacgen/README.md) | module-by-module pipeline reference |
 
 ---
 

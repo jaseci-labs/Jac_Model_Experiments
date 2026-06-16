@@ -10,6 +10,7 @@
 #     TRUNCATES dataset/conversion/sft.jsonl back to the 32 seeds (and dpo.jsonl
 #     to 2), wiping the idiomatic_batch* / dpo_conversion appends. See HANDOFF.md.
 set -euo pipefail
+cd "$(cd "$(dirname "$0")/.." && pwd)"   # repo root, so dataset/ paths resolve
 [ -d "$PWD/.venv/bin" ] && export PATH="$PWD/.venv/bin:$PATH"   # subprocess `jac` resolves
 JAC="${JAC:-.venv/bin/jac}"
 [ -x "$JAC" ] || JAC="jac"   # fall back to PATH (e.g. after `source .venv/bin/activate`)
@@ -20,13 +21,13 @@ echo "=== type check (jac check) ==="
 # full type-check the other 19.
 # eval_probe.jac + idiom_eval.jac import mlx_lm (lazy); the type-checker crashes on
 # mlx types, so parse-check (-p) those two and full-check the rest.
-CORE=$(ls srccurrent/jacgen/*.jac | grep -vE 'eval_probe.jac|idiom_eval.jac')
+CORE=$(ls sft_dpo/jacgen/*.jac | grep -vE 'eval_probe.jac|idiom_eval.jac')
 "$JAC" check $CORE
-"$JAC" check -p srccurrent/jacgen/eval_probe.jac
-"$JAC" check -p srccurrent/jacgen/idiom_eval.jac
+"$JAC" check -p sft_dpo/jacgen/eval_probe.jac
+"$JAC" check -p sft_dpo/jacgen/idiom_eval.jac
 
 echo "=== behavior (jac run: sampled re-validation of the conversion dataset) ==="
 # NON-destructive: re-runs every Nth stored example and checks output still matches.
-JAC_SAMPLE_EVERY="${JAC_SAMPLE_EVERY:-40}" "$JAC" run srccurrent/jacgen/verify_dataset.jac 2>/dev/null | tail -1
+JAC_SAMPLE_EVERY="${JAC_SAMPLE_EVERY:-40}" "$JAC" run sft_dpo/jacgen/verify_dataset.jac 2>/dev/null | tail -1
 
 echo "OK"

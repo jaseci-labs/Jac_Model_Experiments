@@ -9,13 +9,13 @@ python3 -m venv .venv
 
 echo "--- verify ---"
 .venv/bin/jac --version >/dev/null 2>&1 && echo "jac: ok" || echo "jac: MISSING"
-.venv/bin/jac check -p srccurrent/jacgen/*.jac >/dev/null 2>&1 \
+.venv/bin/jac check -p sft_dpo/jacgen/*.jac >/dev/null 2>&1 \
   && echo "syntax check: ok" || echo "syntax check: FAILED"
 echo
 echo "next:"
 echo "  source .venv/bin/activate     # puts jac + mlx_lm on PATH"
-echo "  ./check.sh                     # syntax sweep + behavioral note"
-echo "  ./run_probe.sh <hf-model> <name>"
+echo "  ./sft_dpo/check.sh                     # syntax sweep + behavioral note"
+echo "  ./sft_dpo/run_probe.sh <hf-model> <name>"
 echo
 echo "ML studio (chat + train + data + evals):"
 echo "  ./jac_ml_studio/start.sh                   # API :8400 + UI :3000"
