@@ -25,7 +25,8 @@ if [ -z "${CAFFEINATED:-}" ] && command -v caffeinate >/dev/null 2>&1; then
 fi
 
 SELF_DIR="$(cd "$(dirname "$0")" && pwd)"
-[ -d "$SELF_DIR/.venv/bin" ] && export PATH="$SELF_DIR/.venv/bin:$PATH"
+cd "$(cd "$SELF_DIR/.." && pwd)"   # repo root: dataset/ models/ adapters/ results/ resolve here
+[ -d ".venv/bin" ] && export PATH="$PWD/.venv/bin:$PATH"
 
 HF_MODEL="${1:?hf model id, e.g. Qwen/Qwen3-Coder-30B-A3B}"
 NAME="${2:?short name, e.g. qwen}"
@@ -36,7 +37,7 @@ need() { command -v "$1" >/dev/null 2>&1 || { echo "MISSING: $1  (try: $2)"; exi
 need jac "pip install jaclang"
 for s in convert lora fuse generate; do need "mlx_lm.$s" "pip install mlx-lm"; done
 for f in dataset/mlx/train.jsonl dataset/mlx/valid.jsonl \
-         dataset/eval_holdout/conversion.jsonl configs/lora.yaml; do
+         dataset/eval_holdout/conversion.jsonl sft_dpo/configs/lora.yaml; do
   [ -f "$f" ] || { echo "MISSING: $f  (run build_splits.jac / holdout.jac first)"; exit 1; }
 done
 
@@ -69,12 +70,12 @@ if is_done base; then
 else
   echo ">>> base eval (pre-finetune)"
   JAC_EVAL_MODE=mlx JAC_EVAL_MODEL="models/${NAME}-q8" \
-    jac run srccurrent/jacgen/eval_probe.jac | tee "$RDIR/base.txt"
+    jac run sft_dpo/jacgen/eval_probe.jac | tee "$RDIR/base.txt"
   done_mark base
 fi
 
 # --- discover training progress from saved checkpoints ---
-TOTAL_ITERS="$(grep -E '^[[:space:]]*iters:' configs/lora.yaml | grep -oE '[0-9]+' | head -1)"
+TOTAL_ITERS="$(grep -E '^[[:space:]]*iters:' sft_dpo/configs/lora.yaml | grep -oE '[0-9]+' | head -1)"
 TOTAL_ITERS="${TOTAL_ITERS:-600}"
 LATEST_CKPT="$(ls "$ADAPTER"/*_adapters.safetensors 2>/dev/null | sort -V | tail -1 || true)"
 DONE_STEPS=0
@@ -87,7 +88,7 @@ fi
 # --- 3. dry-run (only on a truly fresh start) ---
 if [ "$DONE_STEPS" -eq 0 ] && ! is_done dry && [ "${SKIP_DRY:-0}" != "1" ]; then
   echo ">>> dry-run (${DRY_ITERS} iters) — bail check"
-  mlx_lm.lora --config configs/lora.yaml --model "models/${NAME}-q4" \
+  mlx_lm.lora --config sft_dpo/configs/lora.yaml --model "models/${NAME}-q4" \
     --iters "$DRY_ITERS" --adapter-path "adapters/${NAME}-dry" 2>&1 | tail -25
   echo ">>> dry-run done — Ctrl-C within 8s to abort"; sleep 8
   done_mark dry
@@ -107,11 +108,11 @@ else
   # redirect (not pipe): $! is the TRAINER, not tee; the dashboard reads the log live.
   # two branches avoid an empty-array expansion (errors under set -u on macOS bash 3.2).
   if [ -n "$LATEST_CKPT" ]; then
-    mlx_lm.lora --config configs/lora.yaml --model "models/${NAME}-q4" \
+    mlx_lm.lora --config sft_dpo/configs/lora.yaml --model "models/${NAME}-q4" \
       --adapter-path "$ADAPTER" --iters "$REMAIN" --resume-adapter-file "$LATEST_CKPT" \
       > "$TRAIN_LOG" 2>&1 &
   else
-    mlx_lm.lora --config configs/lora.yaml --model "models/${NAME}-q4" \
+    mlx_lm.lora --config sft_dpo/configs/lora.yaml --model "models/${NAME}-q4" \
       --adapter-path "$ADAPTER" --iters "$REMAIN" > "$TRAIN_LOG" 2>&1 &
   fi
   TRAIN_PID=$!
@@ -122,14 +123,14 @@ else
     if [ "${LIVE_EVAL:-0}" = "1" ] && [ -f "$ADAPTER_FILE" ]; then
       JAC_EVAL_MODE=mlx JAC_EVAL_MODEL="models/${NAME}-q4" JAC_EVAL_ADAPTER="$ADAPTER" \
         JAC_EVAL_LIMIT="$SUBSET" JAC_EVAL_METRICS_OUT="$METRICS" JAC_EVAL_STEP="$((DONE_STEPS + STEP))" \
-        jac run srccurrent/jacgen/eval_probe.jac >/dev/null 2>&1 || true
+        jac run sft_dpo/jacgen/eval_probe.jac >/dev/null 2>&1 || true
     fi
     clear
     JAC_TRAIN_LOG="$TRAIN_LOG" JAC_METRICS="$METRICS" \
-      jac run srccurrent/jacgen/dashboard.jac 2>/dev/null || true
+      jac run sft_dpo/jacgen/dashboard.jac 2>/dev/null || true
     # refresh the PNG graphs live too (open results/<name>/*.png in Preview to watch them update)
     JAC_TRAIN_LOG="$TRAIN_LOG" JAC_METRICS="$METRICS" JAC_PLOT_DIR="$RDIR" \
-      jac run srccurrent/jacgen/plot_metrics.jac >/dev/null 2>&1 || true
+      jac run sft_dpo/jacgen/plot_metrics.jac >/dev/null 2>&1 || true
     sleep "$EVAL_EVERY"
   done
   RC=0; wait "$TRAIN_PID" || RC=$?
@@ -169,14 +170,14 @@ else
     echo "  checkpoint ${STEP}"
     JAC_EVAL_MODE=mlx JAC_EVAL_MODEL="models/${NAME}-q4" JAC_EVAL_ADAPTER="$TMPADP" \
       JAC_EVAL_LIMIT="$SUBSET" JAC_EVAL_METRICS_OUT="$METRICS" JAC_EVAL_STEP="$STEP" \
-      jac run srccurrent/jacgen/eval_probe.jac 2>/dev/null | tail -3 || true
+      jac run sft_dpo/jacgen/eval_probe.jac 2>/dev/null | tail -3 || true
   done
   rm -rf "$TMPADP"
   # final point: the end-of-training adapter (adapters.safetensors), step = total iters
   echo "  checkpoint ${TOTAL_ITERS} (final)"
   JAC_EVAL_MODE=mlx JAC_EVAL_MODEL="models/${NAME}-q4" JAC_EVAL_ADAPTER="$ADAPTER" \
     JAC_EVAL_LIMIT="$SUBSET" JAC_EVAL_METRICS_OUT="$METRICS" JAC_EVAL_STEP="$TOTAL_ITERS" \
-    jac run srccurrent/jacgen/eval_probe.jac 2>/dev/null | tail -3 || true
+    jac run sft_dpo/jacgen/eval_probe.jac 2>/dev/null | tail -3 || true
   done_mark curve
 fi
 
@@ -186,13 +187,13 @@ if is_done finetuned; then
 else
   echo ">>> finetuned eval"
   JAC_EVAL_MODE=mlx JAC_EVAL_MODEL="$FUSED" \
-    jac run srccurrent/jacgen/eval_probe.jac | tee "$RDIR/finetuned.txt"
+    jac run sft_dpo/jacgen/eval_probe.jac | tee "$RDIR/finetuned.txt"
   done_mark finetuned
 fi
 
 # --- 8. graphs ---
 JAC_TRAIN_LOG="$TRAIN_LOG" JAC_METRICS="$METRICS" JAC_PLOT_DIR="$RDIR" \
-  jac run srccurrent/jacgen/plot_metrics.jac || echo "(pip install matplotlib for PNGs)"
+  jac run sft_dpo/jacgen/plot_metrics.jac || echo "(pip install matplotlib for PNGs)"
 
 echo "=== done ==="
 echo "  base:      $RDIR/base.txt"

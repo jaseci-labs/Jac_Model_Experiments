@@ -1,7 +1,7 @@
 # Jac Coding Agent — Project Context
 
 **Confidential — Jaseci Labs.** Persistent background for AI-assisted sessions.
-Operational detail lives in [`process.md`](process.md) and [`docs/`](docs/); this
+Operational detail lives in [`sft_dpo/process.md`](sft_dpo/process.md) and [`docs/`](docs/); this
 is the durable framing only.
 
 ---
@@ -54,11 +54,11 @@ compiler gate → cross-compiled tests → idiom judge → sampled manual review
 
 The model-testing phase is built and runnable. The pipeline (mine + generate +
 dedup + decontaminate + split + train/eval harness) is all in Jac under
-[`srccurrent/jacgen/`](srccurrent/jacgen/). Conversion dataset (gitignored under
+[`sft_dpo/jacgen/`](sft_dpo/jacgen/). Conversion dataset (gitignored under
 `dataset/`): 1616 SFT (116 idiomatic core + 1500 py2jac volume), 60 DPO, 150
-decontaminated eval holdout. See `process.md` to run the probe,
-[`docs/modeltesting/HANDOFF.md`](docs/modeltesting/HANDOFF.md) for the full
-handoff, and [`docs/modeltesting/`](docs/modeltesting/) for strategy/evaluation.
+decontaminated eval holdout. See `sft_dpo/process.md` to run the probe,
+[`sft_dpo/docs/modeltesting/HANDOFF.md`](sft_dpo/docs/modeltesting/HANDOFF.md) for the full
+handoff, and [`sft_dpo/docs/modeltesting/`](sft_dpo/docs/modeltesting/) for strategy/evaluation.
 
 ## Fixed constraints
 
@@ -72,9 +72,9 @@ handoff, and [`docs/modeltesting/`](docs/modeltesting/) for strategy/evaluation.
 
 | Resource | Location |
 |---|---|
-| Run the probe | `process.md` |
+| Run the probe | `sft_dpo/process.md` |
 | Data generation strategy (12 recipes) | `docs/datagenstrat/strat.md` |
 | Whole-stack strategy | `docs/wholestack/strat.md` |
-| Model testing | `docs/modeltesting/strategy.md`, `evaluation.md`, `mini_probe.md` |
-| Pipeline code | `srccurrent/jacgen/` (+ its `README.md`) |
+| Model testing | `sft_dpo/docs/modeltesting/strategy.md`, `evaluation.md`, `mini_probe.md` |
+| Pipeline code | `sft_dpo/jacgen/` (+ its `README.md`) |
 | Research papers | `papers/` (MultiPL-T, WizardCoder, Magicoder, SelfCodeAlign, DeepSeek-Coder, CodeDPO, Magpie) |
