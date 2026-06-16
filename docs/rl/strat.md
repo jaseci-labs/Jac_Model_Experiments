@@ -10,7 +10,7 @@
 | Models | `qwen3coder` (fresh), `jac-qwen3coder` (SFT+DPO best), `qwen36` (Qwen3.6-27B dense). |
 | Compute | Local MLX, `mlx-lm-lora` 2.1.0 GRPO, frozen-base reference (one weight set in RAM). |
 | Eval | Held-out `this_is_jac` tasks: run% / behavior-pass% / idiom-construct count, base vs RL. |
-| Spec / plan | [`docs/superpowers/specs/2026-06-16-jac-rl-grpo-design.md`](../superpowers/specs/2026-06-16-jac-rl-grpo-design.md), harness in [`rl/`](../../rl/). |
+| See also | [workflow.md](workflow.md) (diagram) · [`rl/README.md`](../../rl/README.md) (how-to) · [spec](../superpowers/specs/2026-06-16-jac-rl-grpo-design.md) · harness [`rl/`](../../rl/). |
 
 ---
 
@@ -50,8 +50,10 @@ Two hard rules make this work:
 
 The corpus splits into two task tiers (used as a curriculum, easy → hard):
 
-- **Pure-lib** (`source_lexer`, `source_index`, pure helpers) — function-shaped, ~8–12 units. Warm-up.
-- **Graph-spatial** (`littlex/social_graph` 65 units, `guestbook` 22) — walkers/nodes/edges/abilities spawned on an in-memory graph. The idiomatic gold and the real target.
+- **Pure-lib** (`source_index._lang_label`, `source_lexer` tokenisation, other pure helpers) — function-shaped, ~8–12 maskable bodies. Warm-up.
+- **Graph-spatial** (`littlex/social_graph`: 32 abilities + 5 defs; `guestbook`: 10 abilities + 4 defs) — walker/node/ability logic spawned on an in-memory graph, ~50 maskable bodies in two files. The idiomatic gold and the real target.
+
+Counts are *maskable bodies* (`can … with` abilities, `def` methods) — the units a driver can hole out — not archetype declarations (`edge {}`/`node` headers have no body). ~50 graph bodies + the pure-lib tier comfortably clears the ≥30-driver target.
 
 ---
 
@@ -102,7 +104,7 @@ python -m mlx_lm_lora.train --train-mode grpo --data dataset/rl \
 
 Knobs (env): `GRPO_ITERS`(300) `GROUP_SIZE`(6) `GRPO_LR`(1e-6) `GRPO_BETA`(0.04) `MAX_COMPLETION`(512) `GRPO_LAYERS`(8). LoRA only; `--grad-checkpoint` to fit 30B activations. Dense `qwen36` is all-active → heaviest rollouts → `GROUP_SIZE=4`, run last.
 
-**Cost shape.** Each step generates `group_size` completions per prompt and scores each with a `jac` subprocess (~1–2 s startup tax × group size). ~8–12 h per 30B model at 300 iters; the dense 27B is longer. If step time hurts, replace the per-completion subprocess with an in-process jaclang runner (optimization, not a blocker).
+**Cost shape.** Per step = `group_size` completions per prompt, each scored by a `jac` subprocess (~1–2 s startup tax × group size). The only measured point is the 2-iter smoke: ~26 s/iter at `GROUP_SIZE=2` including model load. A 300-iter run at `GROUP_SIZE=6` over ~30 tasks is plausibly several hours to ~half a day per 30B — **rough, not yet measured at scale**; the dense 27B is heavier. If step time hurts, replace the per-completion subprocess with an in-process jaclang runner (optimization, not a blocker).
 
 ---
 
@@ -126,23 +128,4 @@ Held-out `this_is_jac` tasks (disjoint from train, decontaminated), scored by [`
 
 ## Run order
 
-```bash
-source .venv/bin/activate
-
-# 1. build the task set (after authoring rl/drivers/*.jac)
-jac run rl/build_tasks.jac
-jac run rl/build_rl_splits.jac
-
-# 2. (fresh bases only) warm-start, then GRPO
-RL_BASE=models/qwen-q4 ./rl/run_grpo.sh qwen3coder
-
-mlx_lm.convert --hf-path models/qwen-jac-dpo-fused-q8 --mlx-path models/jac-qwen3coder-q4 -q --q-bits 4
-RL_BASE=models/jac-qwen3coder-q4 ./rl/run_grpo.sh jac-qwen3coder
-
-mlx_lm.convert --hf-path Qwen/Qwen3.6-27B --mlx-path models/qwen36-q4 -q --q-bits 4
-RL_BASE=models/qwen36-q4 GROUP_SIZE=4 ./rl/run_grpo.sh qwen36
-
-# 3. eval each (baseline then +grpo)
-JAC_EVAL_MODEL=<base> jac run rl/eval_rl.jac
-JAC_EVAL_MODEL=<base> JAC_EVAL_ADAPTER=adapters/<name>-grpo jac run rl/eval_rl.jac
-```
+Sequence: author drivers → `build_tasks` → `build_rl_splits` → (warm-start fresh bases) → `run_grpo.sh` per model → `eval_rl.jac` base-vs-`+grpo`. The exact commands, `RL_BASE` per model, env knobs, and gotchas live in **[`rl/README.md`](../../rl/README.md)** (the operational home — kept there to avoid drift). This doc owns the *why*; the README owns the *how*.
