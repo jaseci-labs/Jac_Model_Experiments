@@ -6,9 +6,6 @@ set -euo pipefail
 python3 -m venv .venv
 .venv/bin/pip install --upgrade pip >/dev/null
 .venv/bin/pip install jaclang mlx-lm matplotlib
-# Training dashboard (dashboard_app/): jac-client pulls the fullstack toolchain
-# (bundles a newer jaclang); jac-desktop adds the PyTauri desktop target.
-.venv/bin/pip install jac-client jac-desktop
 
 echo "--- verify ---"
 .venv/bin/jac --version >/dev/null 2>&1 && echo "jac: ok" || echo "jac: MISSING"
@@ -20,7 +17,6 @@ echo "  source .venv/bin/activate     # puts jac + mlx_lm on PATH"
 echo "  ./check.sh                     # syntax sweep + behavioral note"
 echo "  ./run_probe.sh <hf-model> <name>"
 echo
-echo "training dashboard (live SFT/DPO monitor):"
-echo "  cd dashboard_app && jac install            # one-time: npm deps"
-echo "  jac start --dev main.jac                   # browser: http://localhost:8000"
-echo "  jac start --client desktop main.jac        # native window (PyTauri)"
+echo "ML studio (chat + train + data + evals):"
+echo "  ./jac_ml_studio/start.sh                   # API :8400 + UI :3000"
+echo "  open http://localhost:3000"
