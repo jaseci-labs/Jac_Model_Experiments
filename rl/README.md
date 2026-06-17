@@ -33,10 +33,15 @@ completion: splice it into the task template (`__HOLE__`), `jac run` it (isolate
 cwd so the persistent `root` graph never accumulates state across runs), score:
 
 ```
-0.3*compiles + 0.3*runs + 0.3*output_match + 0.1*idiom_bonus
+0.3*compiles + 0.3*runs + 0.3*output_score + 0.1*idiom_bonus
 ```
 
-Non-running output earns no idiom credit (can't sneak partial credit).
+- `output_score` — 1.0 on exact stdout match; a near-miss earns `0.5 ·
+  difflib ratio` (softer gradient for behaviourally-close code, never rivals exact).
+- `idiom_bonus` — weighted: graph-traversal/object-spatial ops (`visit`, `-->`,
+  `spawn`, `report`, `here`, `root`, …) count more than plain declarations.
+- Non-running output earns no idiom or output credit.
+- Identical rollouts in a group are scored once (dedup cache) — fewer `jac` runs.
 
 **Why a `.py` shim exists.** `mlx_lm_lora` loads the reward via
 `importlib.spec_from_file_location`, which needs a `.py`. `rl/reward.py` is a
@@ -91,3 +96,15 @@ JAC_EVAL_MODEL=<mlx-model> JAC_EVAL_ADAPTER=adapters/<name>-grpo jac run rl/eval
   run it last.
 - **build_tasks.jac** runs fine but only parse-checks (`jac check -p`) — its
   dynamic dict access trips the strict type-checker, same as `eval_probe.jac`.
+
+## Deferred (evaluated, not done — on purpose)
+
+- **In-process jac runner** (replace per-completion subprocess). Rejected: running
+  snippets in-process shares jaclang's `root` graph + archetype namespace across
+  completions (every driver redefines `node Profile`, …) → silent reward
+  corruption. Subprocess isolation is correct; the startup tax is acceptable for
+  LoRA GRPO. The dedup cache recovers most of the win safely.
+- **Curriculum (easy→hard ordering in the split).** Doesn't work: `mlx_lm_lora`
+  GRPO `np.random.permutation`s the train set every epoch, so file order is
+  ignored. A real curriculum needs 2-phase training — deferred (low value at ~40
+  tasks).

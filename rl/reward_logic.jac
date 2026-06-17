@@ -14,6 +14,7 @@ and the idiom markers in sft_dpo/jacgen/idiom_eval.jac.
 
 import os;
 import json;
+import difflib;
 import subprocess;
 import tempfile;
 import from functools { lru_cache }
@@ -24,11 +25,14 @@ glob ROOT: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)));
 glob TEMPLATES: str = os.path.join(ROOT, "dataset", "rl", "templates");
 glob JAC: str = os.path.join(ROOT, ".venv", "bin", "jac") if os.path.exists(os.path.join(ROOT, ".venv", "bin", "jac")) else "jac";
 
-glob IDIOM_MARKERS: list[str] = [
-    "walker ", "node ", "edge ", "with entry", "with exit", "can ",
-    "visit ", "spawn", "disengage", "-->", "<--", "++>", "<++",
-    " obj ", "has ", "report ", " root", " here"
-];
+# Weighted idiom markers: graph-traversal/object-spatial ops (the hard, distinctly
+# Jac constructs) count for more than plain declarations. Rewards genuinely
+# graph-spatial bodies over function-shaped ones.
+glob IDIOM_WEIGHTS: dict[str, int] = {
+    "visit ": 3, "-->": 3, "<--": 3, "++>": 3, "<++": 3, "spawn": 3, "disengage": 3,
+    "report ": 2, " here": 2, " root": 2, "walker ": 2, "node ": 2, "edge ": 2,
+    "with entry": 1, "with exit": 1, "can ": 1, " obj ": 1, "has ": 1
+};
 
 def extract_jac(completion: str) -> str {
     if "```jac" in completion {
@@ -64,8 +68,18 @@ def run_jac(code: str, args: list, timeout: int) -> tuple[int, str, str] {
 }
 
 def idiom_bonus(body: str) -> float {
-    n = sum([body.count(m) for m in IDIOM_MARKERS]);
-    return min(n / 4.0, 1.0);
+    n = sum([body.count(k) * w for (k, w) in IDIOM_WEIGHTS.items()]);
+    return min(n / 8.0, 1.0);
+}
+
+def output_score(out: str, expected: str) -> float {
+    # Exact match dominates (1.0); a near-miss earns half its similarity ratio,
+    # so behaviourally-close code gets a softer gradient without rivalling exact.
+    o = out.strip(); e = expected.strip();
+    if o == e {
+        return 1.0;
+    }
+    return 0.5 * difflib.SequenceMatcher(None, o, e).ratio();
 }
 
 def score_one(completion: str, answer_json: str) -> float {
@@ -93,23 +107,31 @@ def score_one(completion: str, answer_json: str) -> float {
         (c_code, o2, e2) = run_jac(spliced, ["check", "-p"], min(timeout, 15));
         compiles = c_code == 0;
     }
-    output_match = runs and out.strip() == expected.strip();
+    osc = output_score(out, expected) if runs else 0.0;
     idiom = idiom_bonus(body) if runs else 0.0;
 
     return round(
         0.3 * float(compiles) + 0.3 * float(runs)
-        + 0.3 * float(output_match) + 0.1 * idiom,
+        + 0.3 * osc + 0.1 * idiom,
         4
     );
 }
 
 def jac_behavioral(prompts: any = None, completions: any = None, answer: any = None, types: any = None) -> list {
+    # Dedup cache: GRPO samples `group_size` rollouts per prompt; identical
+    # completions (common early in training) are scored once, not re-run. Keyed
+    # by (task_id, extracted body) so it is safe across the whole batch.
     comps = completions or [];
     answers = answer or [];
+    cache: dict[str, float] = {};
     out: list = [];
     for (i, comp) in enumerate(comps) {
         ans = answers[i] if i < len(answers) else (answers[0] if answers else "{}");
-        out.append(score_one(comp, ans));
+        key = ans + "\x00" + extract_jac(comp);
+        if key not in cache {
+            cache[key] = score_one(comp, ans);
+        }
+        out.append(cache[key]);
     }
     return out;
 }
