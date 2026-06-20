@@ -67,10 +67,12 @@ Counts are *maskable bodies* (`can … with` abilities, `def` methods) — the u
 
 **The cold-start problem.** GRPO needs the base to *sometimes* produce compiling Jac, or every rollout scores ~0 → zero advantage → no gradient. The jac-trained base already produces Jac, so it goes straight to GRPO. The two fresh bases have never seen Jac and emit Python-shaped, mostly non-compiling code → sparse reward → GRPO stalls.
 
-**Fix (combine, minimally):** warm-start the fresh bases before GRPO. Two options, cheapest first:
-
-1. **RFT / rejection-sampling FT** — sample N completions per task with the *same* reward oracle, keep the passing ones, SFT on them. Reuses the reward, no new data, bootstraps a non-zero compile rate.
-2. **SFT** on the existing conversion corpus (`sft_dpo/` pipeline, `run_probe.sh`) — heavier but the proven path; the project already has the data and the runner.
+**Fix (combine, minimally):** warm-start the fresh bases before GRPO. Wired as
+**`rl/run_rft.sh`** (RFT): `rft_sample.jac` samples N completions per task from the
+base, keeps the ones that pass the *same* jac reward (`reward_logic.score_one`),
+then LoRA-SFTs on them and fuses → `models/<name>-rft-q4`, a warmed base GRPO can
+climb from. Reuses the reward + the task prompts, no new data. (Alternative: full
+SFT on the conversion corpus via `sft_dpo/run_probe.sh` — heavier, not needed.)
 
 Then GRPO on the warmed base. The jac-trained model needs none of this — it is the control showing GRPO-on-top-of-SFT+DPO, while the fresh models are the ablation showing how far RL alone (after a light warm-start) can reach.
 
@@ -118,11 +120,15 @@ Held-out `this_is_jac` tasks (disjoint from train, decontaminated), scored by [`
 
 **Built + validated** (merged to `main`): repo isolated into `sft_dpo/` + `rl/`; reward logic in Jac (`rl/reward_logic.jac`, behind a ~5-line `.py` shim the trainer's loader requires), tests green (`jac run rl/test_reward.jac`); task pipeline (`build_tasks` / `build_rl_splits`); runner + eval. The full GRPO loop ran on a real 30B (`qwen-q4`, 2 iters): the `jac_behavioral` reward loaded, scored rollouts, frozen reference fit RAM, adapter produced. The whole harness is Jac (`*.jac`) except a `run_grpo.sh` launcher and the unavoidable reward shim. **No engineering risk remains.**
 
-**Remaining (content + compute, not scaffolding):**
+Drivers authored: **31 tasks** (24 train / 7 holdout), all determinism-verified
+(two isolated rebuilds byte-identical). Warm-start (`run_rft.sh`) built and
+smoke-validated on `qwen-q4` (sample → score → keep → SFT-format write).
 
-1. **Author ≥30 drivers.** Three seeds exist; RL on three tasks gives uniform reward (zero gradient). Bulk authoring is the gate before any run is worth the wall-clock. ~3–5 h batched (shared graph fixtures) or ~1.5–2 days solo.
-2. **Warm-start the two fresh bases** (RFT or SFT) — required, else cold-start stall.
-3. **Run the three GRPO jobs**, sequential, ~24–36 h total; eval each; write `RL_RESULTS.md`.
+**Remaining is pure compute (no scaffolding left):**
+
+1. **Warm-start the two fresh bases** — `RL_BASE=models/qwen-q4 ./rl/run_rft.sh qwen3coder` (and `qwen36`).
+2. **Run the three GRPO jobs**, sequential, ~24–36 h total.
+3. **Eval each** base-vs-`+grpo`; write `results/RL_RESULTS.md`.
 
 ---
 

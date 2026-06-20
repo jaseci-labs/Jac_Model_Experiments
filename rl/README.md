@@ -18,7 +18,9 @@ rl/drivers/*.jac          deterministic jac-run-able files; the target unit's
 dataset/rl/tasks.jsonl    {prompt, answer} GRPO records   (+ templates/<id>.jac sidecars)
    │ jac run rl/build_rl_splits.jac
 dataset/rl/{train,valid,holdout}.jsonl
-   │ RL_BASE=<model> ./rl/run_grpo.sh <name>      reward = rl/reward_logic.jac (jac_behavioral)
+   │ (fresh/cold bases only) RL_BASE=<cold> ./rl/run_rft.sh <name>   warm-start
+   ▼                                                                  ↳ models/<name>-rft-q4
+   │ RL_BASE=<model-or-warm> ./rl/run_grpo.sh <name>   reward = rl/reward_logic.jac (jac_behavioral)
    ▼
 adapters/<name>-grpo  +  results/<name>/grpo/
    │ JAC_EVAL_MODEL=<base> JAC_EVAL_ADAPTER=adapters/<name>-grpo jac run rl/eval_rl.jac
@@ -57,22 +59,38 @@ jac run rl/build_tasks.jac      # ensure a task set exists
 jac run rl/test_reward.jac      # perfect / garbage / wrong-output / batch cases
 ```
 
+## Warm-start (RFT) — for cold bases only
+
+Fresh, non-jac-trained bases emit mostly non-compiling Jac, so GRPO sees ~all-zero
+reward and stalls. `rl/run_rft.sh` bootstraps them: sample from the base, keep
+completions that PASS the *same* jac reward (`rft_sample.jac`), LoRA-SFT on them,
+fuse → a warmed base GRPO can climb from. Skip it for the already-jac-trained
+base. Knobs: `RFT_SAMPLES`(8) `RFT_TEMP`(1.0) `RFT_PASS`(0.9; drop to 0.6 if 0
+pass) `RFT_ITERS`(150).
+
 ## Run order
 
 ```bash
 jac run rl/build_tasks.jac          # drivers -> dataset/rl/tasks.jsonl + templates/
 jac run rl/build_rl_splits.jac      # -> train/valid/holdout.jsonl
-RL_BASE=<mlx-model> ./rl/run_grpo.sh <name>
-JAC_EVAL_MODEL=<mlx-model> JAC_EVAL_ADAPTER=adapters/<name>-grpo jac run rl/eval_rl.jac
+
+# fresh bases: warm-start first (produces models/<name>-rft-q4)
+RL_BASE=models/qwen-q4 ./rl/run_rft.sh qwen3coder
+RL_BASE=models/qwen3coder-rft-q4 ./rl/run_grpo.sh qwen3coder
+
+# jac-trained base: GRPO direct (no warm-start)
+RL_BASE=models/jac-qwen3coder-q4 ./rl/run_grpo.sh jac-qwen3coder
+
+JAC_EVAL_MODEL=<base> JAC_EVAL_ADAPTER=adapters/<name>-grpo jac run rl/eval_rl.jac
 ```
 
 ## Model lineup (3 sequential runs)
 
-| name | RL base (`RL_BASE`) | notes |
+| name | RL base (`RL_BASE`) | warm-start? |
 |---|---|---|
-| `qwen-coder` | a Q4 of `models/qwen-jac-dpo-fused-q8` | RL on the current SFT+DPO best |
-| `qwen3` | `models/qwen-q4` (Qwen3-Coder-30B-A3B) | same base, RL-only ablation |
-| `qwen36` | `models/qwen36-q4` (Qwen/Qwen3.6-27B, dense) | dense → slowest; run last, `GROUP_SIZE=4` |
+| `qwen3coder` | `models/qwen-q4` (Qwen3-Coder-30B-A3B, fresh) | yes → `run_rft.sh` |
+| `jac-qwen3coder` | Q4 of `models/qwen-jac-dpo-fused-q8` (SFT+DPO best) | no (already warm) |
+| `qwen36` | `models/qwen36-q4` (Qwen/Qwen3.6-27B, dense, fresh) | yes; `GROUP_SIZE=4`, run last |
 
 ## Env / knobs (`run_grpo.sh`)
 
