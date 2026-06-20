@@ -16,6 +16,7 @@ Env: JAC_EVAL_MODEL (required), JAC_EVAL_ADAPTER (""), JAC_RL_HOLDOUT
 import os;
 import re;
 import json;
+import difflib;
 import tempfile;
 import subprocess;
 import from pathlib { Path }
@@ -94,6 +95,7 @@ with entry {
             lines = lines[:limit];
         }
         total = 0; runs = 0; passed = 0; idiom_sum = 0;
+        osim_sum = 0.0; near_pass = 0;   # continuous progress metrics (detect partial gains)
         for ln in lines {
             rec = json.loads(ln);
             meta = json.loads(rec["answer"]);
@@ -109,31 +111,38 @@ with entry {
             body = extract_jac(gen);
             spliced = template.replace("__HOLE__", body);
             (code, out, err) = run_jac(spliced, int(meta.get("timeout", 20)));
+            osim = 0.0;
             if code == 0 {
                 runs += 1;
                 idiom_sum += idiom_count(body);
-                if out.strip() == expected.strip() {
-                    passed += 1;
-                }
+                osim = difflib.SequenceMatcher(None, out.strip(), expected.strip()).ratio();
+                osim_sum += osim;
+                if osim >= 0.9 { near_pass += 1; }
+                if out.strip() == expected.strip() { passed += 1; }
             }
-            print(tid + ": run=" + str(code == 0) + " pass=" + str(code == 0 and out.strip() == expected.strip()));
+            print(tid + ": run=" + str(code == 0) + " pass=" + str(code == 0 and out.strip() == expected.strip()) + " osim=" + str(round(osim, 2)));
         }
         run_pct = (100.0 * runs / total) if total else 0.0;
         pass_pct = (100.0 * passed / total) if total else 0.0;
+        near_pct = (100.0 * near_pass / total) if total else 0.0;
         avg_idiom = (idiom_sum / runs) if runs else 0.0;
+        avg_osim = (osim_sum / total) if total else 0.0;   # over ALL tasks (0 for non-running)
         print("=== RL holdout eval ===");
-        print("  model:   " + mp + ("  +adapter " + adapter if adapter else "  (base)"));
-        print("  tasks:   " + str(total));
-        print("  runs:    " + str(runs) + "  (" + str(round(run_pct, 1)) + "%)");
-        print("  pass:    " + str(passed) + "  (" + str(round(pass_pct, 1)) + "%)");
-        print("  idiom:   " + str(round(avg_idiom, 2)) + " constructs/correct");
+        print("  model:    " + mp + ("  +adapter " + adapter if adapter else "  (base)"));
+        print("  tasks:    " + str(total));
+        print("  runs:     " + str(runs) + "  (" + str(round(run_pct, 1)) + "%)");
+        print("  pass:     " + str(passed) + "  (" + str(round(pass_pct, 1)) + "%)   exact stdout match");
+        print("  near-pass:" + str(near_pass) + "  (" + str(round(near_pct, 1)) + "%)   output-sim >= 0.9");
+        print("  avg-osim: " + str(round(avg_osim, 3)) + "   continuous output similarity (all tasks)");
+        print("  idiom:    " + str(round(avg_idiom, 2)) + " constructs/correct");
         out_path: str = os.environ.get("JAC_RL_OUT", "");
         if out_path {
             with open(out_path, "a") as fh {
                 fh.write(json.dumps({
                     "model": mp, "adapter": adapter, "tasks": total,
-                    "runs": runs, "pass": passed,
+                    "runs": runs, "pass": passed, "near_pass": near_pass,
                     "run_pct": round(run_pct, 2), "pass_pct": round(pass_pct, 2),
+                    "near_pct": round(near_pct, 2), "avg_osim": round(avg_osim, 4),
                     "avg_idiom": round(avg_idiom, 2)
                 }) + "\n");
             }
