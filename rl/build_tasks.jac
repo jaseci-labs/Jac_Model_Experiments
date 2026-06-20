@@ -117,6 +117,11 @@ with entry {
         );
 
         Path("dataset/rl/templates/" + info["id"] + ".jac").write_text(template);
+        # reference body (between the sentinels) -> sidecar, used by the reward's
+        # dense similarity-shaping term (NOT shown to the model; reward-side only).
+        ref_body = "\n".join(lines[info["start"] + 1:info["end"]]);
+        os.makedirs("dataset/rl/refbodies", exist_ok=True);
+        Path("dataset/rl/refbodies/" + info["id"] + ".txt").write_text(ref_body);
         rec = {
             "prompt": prompt,
             "answer": json.dumps({

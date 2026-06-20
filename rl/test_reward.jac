@@ -52,15 +52,16 @@ with entry {
         }
         comp = "```jac\n" + body + "\n```";
         s = jac_behavioral(prompts=["p"], completions=[comp], answer=[t["answer"]])[0];
-        if s < 0.9 {
-            fails.append("perfect " + tid + " scored " + str(s));
+        if s < 0.85 {
+            fails.append("perfect " + tid + " scored " + str(s) + " (want >=0.85)");
         }
     }
 
-    # 2. noncompiling garbage scores 0.0
+    # 2. noncompiling garbage scores low (only the small dense sim floor, no
+    #    compile/run/output credit). Not 0 by design — the floor gives gradient.
     g = jac_behavioral(prompts=["p"], completions=["```jac\n@@@ not jac !!!\n```"], answer=[tasks[0]["answer"]])[0];
-    if g != 0.0 {
-        fails.append("garbage scored " + str(g));
+    if g >= 0.3 {
+        fails.append("garbage scored " + str(g) + " (want < 0.3)");
     }
 
     # 3. compiles+runs but wrong output -> partial credit, below pass

@@ -23,6 +23,7 @@ import from mlx_lm_lora.trainer.grpo_reward_functions { register_reward_function
 
 glob ROOT: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)));
 glob TEMPLATES: str = os.path.join(ROOT, "dataset", "rl", "templates");
+glob REFBODIES: str = os.path.join(ROOT, "dataset", "rl", "refbodies");
 glob JAC: str = os.path.join(ROOT, ".venv", "bin", "jac") if os.path.exists(os.path.join(ROOT, ".venv", "bin", "jac")) else "jac";
 
 # Weighted idiom markers: graph-traversal/object-spatial ops (the hard, distinctly
@@ -49,6 +50,12 @@ def extract_jac(completion: str) -> str {
 @lru_cache(maxsize=512)
 def template_for(task_id: str) -> str {
     return Path(os.path.join(TEMPLATES, task_id + ".jac")).read_text();
+}
+
+@lru_cache(maxsize=512)
+def refbody_for(task_id: str) -> str {
+    p = os.path.join(REFBODIES, task_id + ".txt");
+    return Path(p).read_text() if os.path.exists(p) else "";
 }
 
 def run_jac(code: str, args: list, timeout: int) -> tuple[int, str, str] {
@@ -109,10 +116,16 @@ def score_one(completion: str, answer_json: str) -> float {
     }
     osc = output_score(out, expected) if runs else 0.0;
     idiom = idiom_bonus(body) if runs else 0.0;
+    # Dense shaping: textual similarity to the reference body. Always defined
+    # (even for non-compiling output), so groups get within-group reward variance
+    # -> non-zero GRPO advantage -> a learnable gradient at cold start. Verifiable
+    # terms still dominate (0.75 of the weight); sim is the tiebreaker.
+    ref = refbody_for(task_id);
+    sim = difflib.SequenceMatcher(None, body, ref).ratio() if ref else 0.0;
 
     return round(
-        0.3 * float(compiles) + 0.3 * float(runs)
-        + 0.3 * osc + 0.1 * idiom,
+        0.25 * float(compiles) + 0.25 * float(runs)
+        + 0.25 * osc + 0.10 * idiom + 0.15 * sim,
         4
     );
 }
