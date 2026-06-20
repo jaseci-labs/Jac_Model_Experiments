@@ -94,8 +94,9 @@ JAC_EVAL_MODEL=<base> JAC_EVAL_ADAPTER=adapters/<name>-grpo jac run rl/eval_rl.j
 
 ## Env / knobs (`run_grpo.sh`)
 
-`GRPO_ITERS`(300) `GRPO_LR`(1e-6) `GRPO_BETA`(0.04) `GROUP_SIZE`(6)
-`MAX_COMPLETION`(512) `MAX_SEQ`(2048) `GRPO_TEMP`(1.0) `GRPO_LAYERS`(8).
+`GRPO_ITERS`(200) `GRPO_LR`(1e-6) `GRPO_BETA`(0.04) `GROUP_SIZE`(4)
+`MAX_COMPLETION`(256) `MAX_SEQ`(1280) `GRPO_TEMP`(1.0) `GRPO_LAYERS`(8).
+Defaults fit a 30B-A3B q4 on 48GB (peak ~38GB); group6/comp512 OOMs Metal.
 
 ## Gotchas
 

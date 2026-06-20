@@ -10,8 +10,10 @@
 #
 # Usage:  RL_BASE=<mlx-model-path> ./rl/run_grpo.sh <short-name>
 #   e.g.  RL_BASE=models/qwen-q4 ./rl/run_grpo.sh qwen3
-# Env: GRPO_ITERS(300) GRPO_LR(1e-6) GRPO_BETA(0.04) GROUP_SIZE(6)
-#      MAX_COMPLETION(512) MAX_SEQ(2048) GRPO_TEMP(1.0) GRPO_LAYERS(8)
+# Env: GRPO_ITERS(200) GRPO_LR(1e-6) GRPO_BETA(0.04) GROUP_SIZE(4)
+#      MAX_COMPLETION(256) MAX_SEQ(1280) GRPO_TEMP(1.0) GRPO_LAYERS(8)
+# Defaults are tuned to FIT a 30B-A3B q4 on a 48GB box (peak ~38GB, no OOM).
+# group6/comp512 OOMs Metal at ~iter 2. Bodies are short so comp256 is ample.
 set -euo pipefail
 
 if [ -z "${CAFFEINATED:-}" ] && command -v caffeinate >/dev/null 2>&1; then
@@ -23,9 +25,9 @@ cd "$(cd "$SELF_DIR/.." && pwd)"   # repo root: dataset/ models/ adapters/ resul
 
 NAME="${1:?short name, e.g. qwen3}"
 RL_BASE="${RL_BASE:?set RL_BASE to an MLX model path, e.g. models/qwen-q4}"
-GRPO_ITERS="${GRPO_ITERS:-300}"; GRPO_LR="${GRPO_LR:-1e-6}"; GRPO_BETA="${GRPO_BETA:-0.04}"
-GROUP_SIZE="${GROUP_SIZE:-6}"; MAX_COMPLETION="${MAX_COMPLETION:-512}"
-MAX_SEQ="${MAX_SEQ:-2048}"; GRPO_TEMP="${GRPO_TEMP:-1.0}"; GRPO_LAYERS="${GRPO_LAYERS:-8}"
+GRPO_ITERS="${GRPO_ITERS:-200}"; GRPO_LR="${GRPO_LR:-1e-6}"; GRPO_BETA="${GRPO_BETA:-0.04}"
+GROUP_SIZE="${GROUP_SIZE:-4}"; MAX_COMPLETION="${MAX_COMPLETION:-256}"
+MAX_SEQ="${MAX_SEQ:-1280}"; GRPO_TEMP="${GRPO_TEMP:-1.0}"; GRPO_LAYERS="${GRPO_LAYERS:-8}"
 
 # --- prereqs ---
 need() { command -v "$1" >/dev/null 2>&1 || { echo "MISSING: $1 ($2)"; exit 1; }; }

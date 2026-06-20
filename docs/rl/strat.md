@@ -101,12 +101,12 @@ GRPO is the right spine: it drops PPO's value network (memory the 48 GB box does
 ```
 python -m mlx_lm_lora.train --train-mode grpo --data dataset/rl \
   --reward-functions-file rl/reward.py --reward-functions jac_behavioral \
-  --group-size 6 --max-completion-length 512 --beta 0.04 ...
+  --group-size 4 --max-completion-length 256 --beta 0.04 ...
 ```
 
-Knobs (env): `GRPO_ITERS`(300) `GROUP_SIZE`(6) `GRPO_LR`(1e-6) `GRPO_BETA`(0.04) `MAX_COMPLETION`(512) `GRPO_LAYERS`(8). LoRA only; `--grad-checkpoint` to fit 30B activations. Dense `qwen36` is all-active → heaviest rollouts → `GROUP_SIZE=4`, run last.
+Knobs (env): `GRPO_ITERS`(200) `GROUP_SIZE`(4) `GRPO_LR`(1e-6) `GRPO_BETA`(0.04) `MAX_COMPLETION`(256) `MAX_SEQ`(1280) `GRPO_LAYERS`(8). LoRA only; `--grad-checkpoint` to fit 30B activations. Defaults fit a 30B-A3B q4 on 48GB (measured peak ~38GB); `group6/comp512` OOMs Metal at ~iter 2. Dense `qwen36` is all-active → run last, keep `GROUP_SIZE=4` (or 3).
 
-**Cost shape.** Per step = `group_size` completions per prompt, each scored by a `jac` subprocess (~1–2 s startup tax × group size). The only measured point is the 2-iter smoke: ~26 s/iter at `GROUP_SIZE=2` including model load. A 300-iter run at `GROUP_SIZE=6` over ~30 tasks is plausibly several hours to ~half a day per 30B — **rough, not yet measured at scale**; the dense 27B is heavier. If step time hurts, replace the per-completion subprocess with an in-process jaclang runner (optimization, not a blocker).
+**Cost shape.** Per step = `group_size` completions per prompt, each scored by a `jac` subprocess (~1–2 s startup tax × group size). Measured: **~17 s/iter** at `GROUP_SIZE=4`, `MAX_COMPLETION=256` on the 30B-A3B q4 — so a 200-iter run is **~1 h** per model (the dedup cache + short completions keep it cheap). The dense 27B is heavier per step. If step time hurts, replace the per-completion subprocess with an in-process jaclang runner (optimization, not a blocker).
 
 ---
 
