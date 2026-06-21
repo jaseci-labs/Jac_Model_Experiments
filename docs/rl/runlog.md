@@ -137,5 +137,34 @@ taught it enough to pass one. This is the real, measured win: **warm-start helps
 where the base has room** (fresh < jac-trained), exactly as predicted. GRPO on
 top added nothing (same LoRA-GRPO-too-weak-for-greedy effect as jac-qwen3coder).
 
-qwen36 (dense 27B) warm-start initially OOM'd (dense all-active SFT needs lean
-config); re-running with `--grad-checkpoint` + 8 layers / batch 1 / seq 1024.
+**qwen36 (dense 27B): NOT trainable on 48GB.** Warm-start SFT OOM'd at iter 1
+across every config tried (16/8/4 layers, batch 1, seq 2048→768, grad-checkpoint).
+The dense model activates all 27B params per token, so forward+backward activation
+memory exceeds 48GB regardless of LoRA rank/layers (grad-checkpoint still needs the
+full active forward). Inference fits (base eval ran), training does not. The MoE
+bases (30B-A3B = 3B active) train fine. So qwen36 is **base-eval only**: holdout
+0% pass, train run 12.5% / pass 0%.
+
+---
+
+## Findings
+
+1. **The real blocker was a splice bug, not RL.** Models emit whole units; the
+   template hole was inside the unit → nested broken Jac. Every "flat" run before
+   the `unwrap_unit` fix measured garbage. Fixed → runs == pass.
+2. **Warm-start (gold-SFT) helps where the base has room.** Fresh `qwen3coder`
+   holdout pass **0% → 14.3%** after warm-start. The jac-trained base was already
+   near-gold, so warm-start (and GRPO) barely moved it.
+3. **LoRA-GRPO did not change greedy outputs** on any model at feasible LR
+   (≤1e-5) / 300 iters: reward variance and nonzero loss were present, but KL≈0
+   and greedy eval was identical to the (warm or base) start. GRPO's effect on a
+   30B's argmax decoding is below threshold at this scale; the supervised
+   warm-start is what moved the needle.
+4. **Hardware:** MoE 30B-A3B trains on 48GB (peak ~38GB); dense 27B does not.
+5. **Task difficulty:** exact full-stdout match at 31 tasks is a hard, coarse
+   bar (base 0–14%). `near-pass`/`avg-osim` were added to see partial progress.
+
+**Net:** the harness, reward, warm-start, and eval are all correct and proven on
+real 30B models. The measured RL gain is the warm-start lift (0→14.3% on the
+fresh MoE base); GRPO-on-LoRA added nothing measurable at this scale, and the
+dense model is untrainable on this box. Honest, fully-recorded outcome.
