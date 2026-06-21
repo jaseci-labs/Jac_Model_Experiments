@@ -102,9 +102,31 @@ temp 1.0, dense reward, fixed splice. Holdout + train, sensitive metrics.
 
 | model | split | base pass / near / osim | +grpo pass / near / osim |
 |---|---|---|---|
-| jac-qwen3coder | holdout | 14.3% / 14.3% / 0.143 | _ |
-| jac-qwen3coder | train | 8.3% / 8.3% / 0.083 | _ |
-| qwen3coder | … | | |
-| qwen36 | … | | |
+| jac-qwen3coder | holdout | 14.3% / 14.3% / 0.143 | 14.3% / 14.3% / 0.143 |
+| jac-qwen3coder | train | 8.3% / 8.3% / 0.083 | 8.3% / 8.3% / 0.083 |
 
-_(filled when Attempt 3 lands. This is the first GRPO run with a working reward.)_
+**jac-qwen3coder GRPO result: no greedy change** — despite the fixed reward now
+giving real variance (group σ up to 0.11) and nonzero training loss (0.02–0.05),
+the +grpo eval is identical to base. Consistent across all attempts: **LoRA-GRPO
+at feasible LR (≤1e-5) / 300 iters barely perturbs a 30B's argmax decoding**
+(KL≈0). This base is also already near-gold, so there's little room. The pipeline
+and reward are correct; the RL *effect on greedy output* is below threshold here.
+
+---
+
+## Attempt 4 — fresh bases, warm-start is the lever (in progress)
+
+`jac-qwen3coder` was already near-ceiling, so warm-start + GRPO barely moved it.
+The **fresh** bases (`qwen3coder` = Qwen3-Coder-30B-A3B with no Jac training;
+`qwen36` = Qwen3.6-27B dense) start far lower, so the gold-SFT warm-start should
+produce a visible lift — the real demonstration. `run_remaining.sh`:
+base evals → gold-SFT warm-start → warm evals → GRPO → grpo evals, both models.
+
+| model | split | base | +warm | +warm+grpo |
+|---|---|---|---|---|
+| qwen3coder | holdout | _ | _ | _ |
+| qwen3coder | train | _ | _ | _ |
+| qwen36 | holdout | _ | _ | _ |
+| qwen36 | train | _ | _ | _ |
+
+_(filled as run_remaining.sh lands each stage.)_
