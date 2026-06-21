@@ -58,20 +58,53 @@ Also, exact-stdout-match eval is blind to partial progress (0→0).
 
 ---
 
-## Attempt 2 — gold-SFT warm-start → GRPO (in progress)
+## Attempt 2 — gold-SFT warm-start → GRPO (revealed the REAL bug)
 
-**Recipe (per model):** gold-SFT warm-start (`run_rft.sh`, 200 it) → eval-warm →
-GRPO on the warmed base (LR 2e-5, 300 it, temp 1.2, dense reward) → eval, with
-the sensitive metrics, on holdout + train.
+Warm-start SFT on the gold bodies converged hard (train loss 2.46 → **0.006**),
+but eval was **still flat and identical to base** (warm pass == base pass). A
+memorized model not reproducing its golds made no sense — so it wasn't the model.
 
-Results table — filled as runs land:
+**THE REAL BUG (root cause of every flat run): broken splice.** Models emit the
+WHOLE unit — `can walk_day with Day entry { <body> }` — but the template hole sits
+*inside* the unit: `can walk_day with Day entry { __HOLE__ }`. Splicing the full
+unit into the inner hole produced **nested, broken Jac**
+(`can … { can … { … } }`) → never ran. So base, warm (loss 0.006!), and all three
+GRPO adapters scored ~identically because the **splice — not the model — was
+broken**. Every "RL is flat" conclusion in Attempt 1 was measuring nested garbage.
 
-| model | metric | base | +warm | +warm+grpo |
-|---|---|---|---|---|
-| jac-qwen3coder | holdout pass / near / osim | 0% / — / — | _ | _ |
-| jac-qwen3coder | train pass / near / osim | 0% / — / — | _ | _ |
-| qwen3coder | … | | | |
-| qwen36 | … | | | |
+Verified: the warm model *does* emit the gold body; unwrapping its single
+enclosing unit to the inner block → splice → **exit 0, output == expected**.
 
-_(updated when Attempt 2 completes; this file is the record of whether the
-changes actually moved the numbers.)_
+**Fix:** `unwrap_unit` in `extract_jac` (reward_logic.jac + eval_rl.jac) — when a
+completion is one wrapped unit, take its inner block before splicing.
+
+### After the fix — the true baseline
+
+With the splice fixed, **runs == pass** (runnable completions are now correct):
+- base: holdout 1/7 (14.3%), train 2/24 (8.3%) exact pass — *real* numbers.
+- base ≈ warm: the jac-trained Qwen3-Coder **already generates near-gold**
+  completions, so warm-start adds ~nothing (only whitespace differs). Model
+  capability is not the bottleneck for this base.
+- Why only ~8% pass: generations are *close* but slip on Jac minutiae —
+  `Missing ';'`, `Missing ']'`, `here.jid` instead of `jid(here)`. Small fixable
+  errors the exact-match bar rejects. **This is exactly what GRPO can target now
+  that the reward gives real signal.**
+
+The 3 Attempt-1 GRPO runs were trained on the broken (nested, all-~0-reward)
+splice → no gradient. Re-running GRPO with the working reward = Attempt 3.
+
+---
+
+## Attempt 3 — GRPO with the FIXED reward (in progress)
+
+`jac-qwen3coder` base (no warm-start; it's redundant here), LR 1e-5, 300 it,
+temp 1.0, dense reward, fixed splice. Holdout + train, sensitive metrics.
+
+| model | split | base pass / near / osim | +grpo pass / near / osim |
+|---|---|---|---|
+| jac-qwen3coder | holdout | 14.3% / 14.3% / 0.143 | _ |
+| jac-qwen3coder | train | 8.3% / 8.3% / 0.083 | _ |
+| qwen3coder | … | | |
+| qwen36 | … | | |
+
+_(filled when Attempt 3 lands. This is the first GRPO run with a working reward.)_
