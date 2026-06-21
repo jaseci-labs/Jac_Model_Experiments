@@ -46,9 +46,13 @@ fi
 if [ -f "$RFT_ADAPTER/adapters.safetensors" ]; then
   echo ">>> RFT adapter exists ($RFT_ADAPTER) — skipping SFT (rm it to retrain)"
 else
-  echo ">>> RFT SFT: ${RFT_ITERS} iters on dataset/rl/rft"
+  echo ">>> RFT SFT: ${RFT_ITERS} iters on dataset/rl/rft (layers=${RFT_LAYERS:-16} batch=${RFT_BATCH:-2} seq=${RFT_MAXSEQ:-2048})"
+  # --grad-checkpoint + lean overrides so a DENSE base (Qwen3.6-27B, all-active)
+  # fits 48GB. MoE bases are fine on defaults; dense needs RFT_LAYERS=8 etc.
   mlx_lm.lora --config sft_dpo/configs/lora.yaml --model "$RL_BASE" \
     --data dataset/rl/rft --adapter-path "$RFT_ADAPTER" --iters "$RFT_ITERS" \
+    --num-layers "${RFT_LAYERS:-16}" --batch-size "${RFT_BATCH:-2}" \
+    --max-seq-length "${RFT_MAXSEQ:-2048}" --grad-checkpoint \
     2>&1 | tee "$RDIR/train.log"
   [ -f "$RFT_ADAPTER/adapters.safetensors" ] || { echo "!!! RFT SFT produced no adapter — see $RDIR/train.log"; exit 1; }
 fi
