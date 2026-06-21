@@ -122,11 +122,20 @@ The **fresh** bases (`qwen3coder` = Qwen3-Coder-30B-A3B with no Jac training;
 produce a visible lift — the real demonstration. `run_remaining.sh`:
 base evals → gold-SFT warm-start → warm evals → GRPO → grpo evals, both models.
 
+Pass % (exact stdout match):
+
 | model | split | base | +warm | +warm+grpo |
 |---|---|---|---|---|
-| qwen3coder | holdout | _ | _ | _ |
-| qwen3coder | train | _ | _ | _ |
-| qwen36 | holdout | _ | _ | _ |
-| qwen36 | train | _ | _ | _ |
+| qwen3coder (fresh) | holdout | **0%** | **14.3%** | 14.3% |
+| qwen3coder (fresh) | train | 8.3% | 8.3% | 8.3% |
+| qwen36 (dense) | holdout | 0% | _ | _ |
+| qwen36 (dense) | train | 0% (run 12.5%) | _ | _ |
 
-_(filled as run_remaining.sh lands each stage.)_
+**qwen3coder: gold-SFT warm-start lifted holdout 0% → 14.3%** — the fresh
+Qwen3-Coder base couldn't pass any holdout task; warm-start on the gold bodies
+taught it enough to pass one. This is the real, measured win: **warm-start helps
+where the base has room** (fresh < jac-trained), exactly as predicted. GRPO on
+top added nothing (same LoRA-GRPO-too-weak-for-greedy effect as jac-qwen3coder).
+
+qwen36 (dense 27B) warm-start initially OOM'd (dense all-active SFT needs lean
+config); re-running with `--grad-checkpoint` + 8 layers / batch 1 / seq 1024.
