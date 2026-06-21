@@ -52,6 +52,7 @@ with entry {
     temp: float = float(os.environ.get("RFT_TEMP", "1.0"));
     thresh: float = float(os.environ.get("RFT_PASS", "0.9"));
     src: str = os.environ.get("RFT_SRC", "dataset/rl/train.jsonl");
+    outdir: str = os.environ.get("RFT_OUT", "dataset/rl/rft");   # STaR uses distinct dirs per round
     if not mp {
         print("set JAC_EVAL_MODEL");
     } else {
@@ -83,7 +84,7 @@ with entry {
             print(str(tid) + ": " + ("KEPT" if got else "none passed"));
         }
 
-        os.makedirs("dataset/rl/rft", exist_ok=True);
+        os.makedirs(outdir, exist_ok=True);
         # hold ~1 in 6 out for the SFT validation set (>=1 when any kept)
         train: list = [];
         valid: list = [];
@@ -97,8 +98,8 @@ with entry {
         if kept and not valid {
             valid.append(train.pop() if len(train) > 1 else train[0]);
         }
-        Path("dataset/rl/rft/train.jsonl").write_text("\n".join([json.dumps(e) for e in train]) + ("\n" if train else ""));
-        Path("dataset/rl/rft/valid.jsonl").write_text("\n".join([json.dumps(e) for e in valid]) + ("\n" if valid else ""));
+        Path(outdir + "/train.jsonl").write_text("\n".join([json.dumps(e) for e in train]) + ("\n" if train else ""));
+        Path(outdir + "/valid.jsonl").write_text("\n".join([json.dumps(e) for e in valid]) + ("\n" if valid else ""));
         print("=== RFT sample ===");
         print("  tasks covered: " + str(covered) + " / " + str(len(lines)));
         print("  SFT examples:  " + str(len(kept)) + "  (train " + str(len(train)) + " / valid " + str(len(valid)) + ")");
