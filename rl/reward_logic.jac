@@ -13,6 +13,7 @@ and the idiom markers in sft_dpo/jacgen/idiom_eval.jac.
 """
 
 import os;
+import re;
 import json;
 import difflib;
 import subprocess;
@@ -35,16 +36,28 @@ glob IDIOM_WEIGHTS: dict[str, int] = {
     "with entry": 1, "with exit": 1, "can ": 1, " obj ": 1, "has ": 1
 };
 
+def unwrap_unit(body: str) -> str {
+    # The template hole sits INSIDE a unit (`can X { __HOLE__ }`), but models
+    # usually emit the WHOLE unit (`can X { ... }`). Splicing that raw nests it
+    # -> broken jac. When the completion is one wrapped unit, return its inner
+    # block so it splices cleanly. Leave bare statement bodies untouched.
+    s = body.strip();
+    if re.match(r"^(can|def|walker|node|obj|edge|with)\b", s) and "{" in s and "}" in s {
+        return s[s.index("{") + 1 : s.rindex("}")].strip();
+    }
+    return s;
+}
+
 def extract_jac(completion: str) -> str {
     if "```jac" in completion {
         part = completion.split("```jac", 1)[1];
-        return part.split("```", 1)[0].strip();
+        return unwrap_unit(part.split("```", 1)[0]);
     }
     if "```" in completion {
         part = completion.split("```", 1)[1];
-        return part.split("```", 1)[0].strip();
+        return unwrap_unit(part.split("```", 1)[0]);
     }
-    return completion.strip();
+    return unwrap_unit(completion);
 }
 
 @lru_cache(maxsize=512)

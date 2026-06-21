@@ -46,16 +46,27 @@ def gen_mlx(model: any, tok: any, prompt: str) -> str {
     return out;
 }
 
+def unwrap_unit(body: str) -> str {
+    # Model usually emits the whole unit (`can X { ... }`) but the template hole
+    # is INSIDE the unit -> nesting breaks it. Return the inner block when the
+    # completion is one wrapped unit; leave bare statement bodies untouched.
+    s = body.strip();
+    if re.match(r"^(can|def|walker|node|obj|edge|with)\b", s) and "{" in s and "}" in s {
+        return s[s.index("{") + 1 : s.rindex("}")].strip();
+    }
+    return s;
+}
+
 def extract_jac(output: str) -> str {
     if "```jac" in output {
         part = output.split("```jac", 1)[1];
-        return part.split("```", 1)[0].strip();
+        return unwrap_unit(part.split("```", 1)[0]);
     }
     if "```" in output {
         part = output.split("```", 1)[1];
-        return part.split("```", 1)[0].strip();
+        return unwrap_unit(part.split("```", 1)[0]);
     }
-    return output.strip();
+    return unwrap_unit(output);
 }
 
 def run_jac(code: str, timeout: int = 20) -> tuple[int, str, str] {
