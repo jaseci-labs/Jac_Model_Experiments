@@ -143,5 +143,39 @@ The honest results point at specific fixes. In order:
 Then run all 3 with pass@1 + pass@8 + tiers, and decide on heavier RL
 (full-finetune, GRPO variants) only after seeing that data — not before.
 
-*This document and [`../rl/runlog.md`](../rl/runlog.md) are updated with the new
-numbers as Phase 2.5 runs land.*
+---
+
+## Phase 2.5 results (what the fixes showed)
+
+**pass@8 re-measure of the existing adapters** (the high-insight test): for
+`jac-qwen3coder` base/grpo and `qwen3coder` warm/grpo, **pass@1 == pass@8 ==
+14.3%** across all four. Even 8 sampled tries unlock nothing beyond greedy →
+**GRPO's null result is real, not a greedy blind spot.** GRPO is a dead end here.
+
+**Model swap:** dense Qwen3.6-27B → **`Qwen/Qwen3.6-35B-A3B`** (MoE, 256 experts,
+8/token ≈ 3B active). Converts to q4 (~18 GB) and trains on 48 GB, unlike the dense.
+
+**Tasks grown 31 → 51** (holdout 7 → 12, better resolution).
+
+**STaR loop** (iterate the warm-start; holdout 12, pass@1 greedy / pass@4 sampled):
+
+| model | round 0 | round 1 | round 2 |
+|---|---|---|---|
+| qwen3coder | 16.7% / 16.7% | 16.7% / **25.0%** | 16.7% / 16.7% |
+| jac-qwen3coder | 16.7% / 16.7% | 16.7% / 16.7% | 16.7% / 16.7% |
+| qwen36 (35B-A3B) | _running_ | | |
+
+STaR added 2–4 exact-correct samples per round (the loop works), and qwen3coder
+round 1 flickered to **pass@4 = 25%** (3/12) — a faint, real bump in the sampled
+distribution — but it didn't hold and greedy (pass@1) never moved off the ~16.7%
+SFT floor.
+
+**Honest standing conclusion:** SFT / warm-start sets a floor (~14–17% on these
+holdouts); **GRPO adds nothing robustly (confirmed by pass@8)** and **STaR adds
+only a faint, noisy flicker**. The lever that moves models in this project remains
+**supervised** (SFT, DPO, gold warm-start), not RL, at this task difficulty / scale
+/ LoRA budget. The harness, reward, eval (now pass@k), warm-start, STaR, and the
+35B-A3B swap are all built and proven; the science result is that LoRA-RL on a 30B
+doesn't beat supervised here.
+
+*Updated as the qwen36 (35B-A3B) STaR run lands.*
