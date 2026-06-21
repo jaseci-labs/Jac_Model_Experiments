@@ -163,12 +163,20 @@ Then run all 3 with pass@1 + pass@8 + tiers, and decide on heavier RL
 |---|---|---|---|
 | qwen3coder | 16.7% / 16.7% | 16.7% / **25.0%** | 16.7% / 16.7% |
 | jac-qwen3coder | 16.7% / 16.7% | 16.7% / 16.7% | 16.7% / 16.7% |
-| qwen36 (35B-A3B) | _running_ | | |
+| qwen36 (35B-A3B) | base 8.3% — **untrainable** | | |
 
 STaR added 2–4 exact-correct samples per round (the loop works), and qwen3coder
 round 1 flickered to **pass@4 = 25%** (3/12) — a faint, real bump in the sampled
 distribution — but it didn't hold and greedy (pass@1) never moved off the ~16.7%
 SFT floor.
+
+**qwen36 / the whole Qwen3.6 line is inference-only on 48 GB.** The dense 27B and
+the MoE 35B-A3B (256 experts) BOTH OOM SFT at iter 1, even at 8 layers / batch 1 /
+seq 1024 / grad-checkpoint. The 256-expert MoE keeps all experts resident (~18 GB
+q4) and training backward through them exceeds 48 GB. Inference fits (base
+eval 8.3%); training does not. Only the fewer-expert 30B-A3B (Qwen3-Coder) trains
+on this box. So the 35B-A3B swap fixed nothing for *training* — it's the same wall
+as the dense, for a different reason (expert count vs all-active).
 
 **Honest standing conclusion:** SFT / warm-start sets a floor (~14–17% on these
 holdouts); **GRPO adds nothing robustly (confirmed by pass@8)** and **STaR adds

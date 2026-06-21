@@ -168,3 +168,19 @@ bases (30B-A3B = 3B active) train fine. So qwen36 is **base-eval only**: holdout
 real 30B models. The measured RL gain is the warm-start lift (0→14.3% on the
 fresh MoE base); GRPO-on-LoRA added nothing measurable at this scale, and the
 dense model is untrainable on this box. Honest, fully-recorded outcome.
+
+---
+
+## Phase 2.5 (the fixes — full record in [`../documentation/00-rl-phase.md`](../documentation/00-rl-phase.md))
+
+Built: pass@k sampled eval, 51 tasks (holdout 12), STaR loop (`run_star.sh`),
+35B-A3B swap. Results:
+- **pass@8 re-measure:** pass@1 == pass@8 across all configs → **GRPO null is real,
+  not a greedy artifact.**
+- **STaR:** loop works (adds 2–4 correct samples/round); qwen3coder round 1
+  flickered to pass@4 **25%** but didn't hold; greedy stuck at the ~16.7% SFT floor.
+- **qwen36 → 35B-A3B (MoE 256 experts):** still **OOMs SFT** on 48 GB even lean.
+  Both Qwen3.6 variants are inference-only here; only the 30B-A3B trains.
+- **Conclusion:** supervised moves models in this project; LoRA-RL (GRPO, STaR) does
+  not, at this difficulty/scale/hardware. In-process jac runner: kept subprocess
+  (jaclang reset API fragile, silent-corruption risk).

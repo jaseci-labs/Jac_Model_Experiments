@@ -63,7 +63,7 @@ Counts are *maskable bodies* (`can … with` abilities, `def` methods) — the u
 |---|---|---|---|
 | `qwen3coder` | `models/qwen-q4` (Qwen3-Coder-30B-A3B) | no | **warm-start → GRPO** |
 | `jac-qwen3coder` | `models/qwen-jac-dpo-fused-q8` → q4 | yes (SFT+DPO) | **GRPO direct** |
-| `qwen36` | `Qwen/Qwen3.6-27B` (dense) → q4 | no | **warm-start → GRPO** |
+| `qwen36` | `Qwen/Qwen3.6-35B-A3B` (MoE; inference-only on 48GB) → q4 | no | **warm-start → GRPO** |
 
 **The cold-start problem.** GRPO needs the base to *sometimes* produce compiling Jac, or every rollout scores ~0 → zero advantage → no gradient. The jac-trained base already produces Jac, so it goes straight to GRPO. The two fresh bases have never seen Jac and emit Python-shaped, mostly non-compiling code → sparse reward → GRPO stalls.
 
