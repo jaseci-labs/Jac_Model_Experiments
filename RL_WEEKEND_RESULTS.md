@@ -37,6 +37,68 @@ STaR (iterate warm-start; pass@1 greedy / pass@4 sampled):
 | jac-qwen3coder | 16.7% / 16.7% | 16.7% / 16.7% | 16.7% / 16.7% |
 | qwen36 (35B-A3B) | base 8.3% — untrainable | — | — |
 
+## Reward systems tried
+
+All in `rl/reward_logic.jac` (Jac; `rl/reward.py` is a 2-line shim the
+`mlx-lm-lora` loader needs). Every variant is a **verifiable reward** — splice
+completion into the task template at `__HOLE__`, `jac run` it in an isolated cwd,
+score the result. No learned reward model. Evolution, in order:
+
+### v0 — pure verifiable gate (binary)
+`0.3·compiles + 0.3·runs + 0.3·output_match + 0.1·idiom`. output_match and idiom
+both binary (exact stdout / has-idiom-markers).
+- **Why:** the obvious RLVR reward — compiler + runtime grade for free.
+- **Didn't work:** at ~0% base pass, every rollout in a group scored the same low
+  value → group **σ = 0** → GRPO advantage `(r−mean)/σ = 0` → zero gradient at any
+  LR (the zero-advantage trap, failure #2). Binary all-or-nothing gives no
+  within-group variance to learn from when nothing passes.
+
+### v1 — soft output + weighted idiom + dedup cache
+Made two terms continuous instead of binary:
+- **Soft output** (`output_score`): exact = 1.0, else `0.5 · difflib ratio(out,
+  expected)` — behaviorally-close stdout earns partial credit without rivaling exact.
+- **Weighted idiom** (`idiom_bonus`): graph/object-spatial ops weighted heavier
+  (`visit`/`-->`/`spawn`/`disengage` = 3, `report`/`here`/`walker`/`node`/`edge` =
+  2, plain `can`/`has`/`obj` = 1), normalized `min(n/8, 1)`. Rewards genuinely
+  graph-spatial bodies over function-shaped ones. Non-running code earns no idiom
+  credit.
+- **Group dedup cache:** identical rollouts (common early) scored once, not re-run
+  — cuts subprocess cost, not a reward-quality change.
+- **Partial fix:** added variance *when code runs*, but at ~0% pass almost nothing
+  ran → output and idiom both gated behind `runs`, so still mostly σ=0. Not enough.
+
+### v2 — dense body-similarity shaping (current)
+`0.25·compiles + 0.25·runs + 0.25·output + 0.10·idiom + 0.15·sim`, where **sim =
+`difflib ratio(body, gold refbody)`** is computed for EVERY completion — even
+non-compiling ones (the only term not gated behind `runs`).
+- **Why:** sim is *always defined*, so even a group where nothing compiles gets
+  within-group reward variance → nonzero advantage → a learnable gradient at cold
+  start. Verifiable terms still dominate (0.75 of weight); sim is the tiebreaker.
+  Needs sidecar gold bodies in `dataset/rl/refbodies/` (51 of them).
+- **Worked, partially:** broke the σ=0 trap — σ rose to 0.01–0.15, training loss
+  became nonzero (0.02–0.05), real gradient flowed. **This is what the reward was
+  supposed to do, and it did it.**
+- **Didn't translate to results:** even with a real gradient, +grpo greedy eval
+  stayed byte-identical (KL≈0) — see failure #4. The reward was no longer the
+  bottleneck; LoRA-GRPO's effect on a 30B's argmax was. A correct, well-shaped
+  reward is necessary but not sufficient.
+
+### Graded scoring tiers (STaR / sensitive eval)
+For eval (`eval_rl.jac`), not GRPO loss: added `near-pass` (osim ≥ 0.9) and
+`avg-osim` (continuous output similarity over all tasks) alongside exact pass, so
+partial progress is visible where exact-match stays 0→0. Diagnostic only — exposed
+that misses are tiny Jac slips (`Missing ';'`, `here.jid` vs `jid(here)`), not
+wholesale wrong code.
+
+### Reward verdict
+The reward engineering **succeeded at its own job** — v2 produces real, non-zero,
+well-shaped gradient signal on real 30B rollouts, and the soft/dense terms killed
+the σ=0 trap that faked Attempt 1. The reward is *not* why RL underperformed. The
+splice bug (failure #3) faked the early flat runs, and once fixed, the wall became
+LoRA-GRPO being too weak to move greedy decoding (failure #4) — a model/training
+limit, not a reward-design limit. A reward can only amplify a success signal the
+base produces; at ~8–17% exact-pass on hard tasks there's little to amplify.
+
 ## Failures and why
 
 1. **OOM at iter 2 (Metal).** First GRPO config group6/comp512 blew 48 GB.
