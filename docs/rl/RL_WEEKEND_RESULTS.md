@@ -3,8 +3,7 @@
 Local MLX, 48 GB. Jun 20–21 2026. Goal: RL-with-verifiable-rewards on Jac
 body-completion — Jac compiler/runtime grades each generation (compile + run +
 output-match + idiom + body-similarity); optimize the model against it. No learned
-reward model. Method: GRPO (LoRA, `mlx-lm-lora`). Full detail in
-`docs/rl/runlog.md`, `docs/rl/RL_RESULTS.md`, `docs/documentation/00-rl-phase.md`.
+reward model. Method: GRPO (LoRA, `mlx-lm-lora`). Full detail and the redesigned workflow live in docs/rl/00-overview.md and docs/rl/01-design.md.
 
 Pass = exact stdout match after splicing model completion into task template.
 
