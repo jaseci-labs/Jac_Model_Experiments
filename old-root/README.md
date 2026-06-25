@@ -203,7 +203,7 @@ learn "transpile-ese," without starving on the cheap volume.
 
 **Verification order:** compiler gate → cross-compiled behavioral tests → idiom judge →
 sampled manual review. The 12 generation recipes (R1–R12) are documented in
-[`docs/datagenstrat/strat.md`](docs/datagenstrat/strat.md).
+[`docs/initmodelchoice/strat.md`](docs/initmodelchoice/strat.md).
 
 ---
 
@@ -411,7 +411,7 @@ Read before touching anything — these will bite. Full list: HANDOFF §9.
 | **[`sft_dpo/docs/modeltesting/HANDOFF.md`](sft_dpo/docs/modeltesting/HANDOFF.md)** | **single source of truth** — architecture, every module, every gotcha, rebuild order |
 | **[`resultsft/RESULTS.md`](resultsft/RESULTS.md)** | full measured results + all 16 training graphs, both models, side by side |
 | [`context.md`](context.md) | durable project framing (what Jac is, goal, constraints) |
-| [`docs/datagenstrat/strat.md`](docs/datagenstrat/strat.md) | the 12 data-generation recipes (R1–R12) |
+| [`docs/initmodelchoice/strat.md`](docs/initmodelchoice/strat.md) | the 12 data-generation recipes (R1–R12) |
 | [`docs/wholestack/strat.md`](docs/wholestack/strat.md) | whole-stack strategy |
 | [`sft_dpo/docs/modeltesting/`](sft_dpo/docs/modeltesting/) | strategy, evaluation, conversion-probe, per-model notes (Qwen / Gemma) |
 | [`sft_dpo/jacgen/README.md`](sft_dpo/jacgen/README.md) | module-by-module pipeline reference |

@@ -47,7 +47,7 @@ No real Jac corpus exists. Three anchors substitute for real-data distribution:
 Generation recipes (R1–R12: coverage matrix, Python↔Jac parallel corpus,
 adversarial DPO negatives, bug-synthesis, persona/evol-instruct, self-distill,
 multi-turn, reasoning traces, doc-grounded, OSS-Instruct, Magpie) are documented
-in [`docs/datagenstrat/strat.md`](docs/datagenstrat/strat.md). Verification order:
+in [`docs/initmodelchoice/strat.md`](docs/initmodelchoice/strat.md). Verification order:
 compiler gate → cross-compiled tests → idiom judge → sampled manual review.
 
 ## Current state
@@ -73,7 +73,7 @@ handoff, and [`sft_dpo/docs/modeltesting/`](sft_dpo/docs/modeltesting/) for stra
 | Resource | Location |
 |---|---|
 | Run the probe | `sft_dpo/process.md` |
-| Data generation strategy (12 recipes) | `docs/datagenstrat/strat.md` |
+| Data generation strategy (12 recipes) | `docs/initmodelchoice/strat.md` |
 | Whole-stack strategy | `docs/wholestack/strat.md` |
 | Model testing | `sft_dpo/docs/modeltesting/strategy.md`, `evaluation.md`, `mini_probe.md` |
 | Pipeline code | `sft_dpo/jacgen/` (+ its `README.md`) |

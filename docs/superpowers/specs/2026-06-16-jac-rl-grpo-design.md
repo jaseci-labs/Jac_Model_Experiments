@@ -57,7 +57,7 @@ ROOT after:
   models/   adapters/    stay at root (gitignored runtime, shared)
   dataset/               stays at root; NEW dataset/rl/ subtree
   results/               stays at root, phase-namespaced: results/$NAME/{sft,dpo,grpo}
-  this_is_jac/  papers/  docs/{datagenstrat,wholestack,superpowers}/
+  this_is_jac/  papers/  docs/{initmodelchoice,wholestack,superpowers}/
   context.md  README.md  setup_env.sh  .gitignore
   DELETED: presentation/
 ```

@@ -20,8 +20,8 @@ flowchart TD
     subgraph Generators["Generator Fleet"]
         CL["Claude Max\n(quality + orchestration)"]
         CH["DeepSeek / Qwen API\n(cheap bulk)"]
-        BG["Base Gemma 4\n(free negatives)"]
-        FG["Finetuned Gemma vN\n(self-distill)"]
+        BG["Base model\n(free negatives)"]
+        FG["Finetuned model vN\n(self-distill)"]
         CU["Cursor / Codex\n(diversity checks)"]
         TC["Python-to-Jac\nTest Compiler\n(deterministic)"]
     end
@@ -88,7 +88,7 @@ flowchart TD
 
     DD --> SFT & CONV & DBG & MT & RSN & DPO & EXP
 
-    SFT & CONV & DBG & MT & RSN & DPO & EXP --> FT["LoRA / QLoRA finetune\nGemma 4 26B A4B\n(single A100)"]
+    SFT & CONV & DBG & MT & RSN & DPO & EXP --> FT["LoRA / QLoRA finetune\nbake-off-selected base model\n(MLX 48GB / single A100)"]
 
     FT --> FG
     FG -.->|"v0→v1→v2 bootstrap"| R7

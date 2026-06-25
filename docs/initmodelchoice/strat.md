@@ -1,12 +1,12 @@
 # Data Generation Strategy
 
-*100% synthetic Jac training data for finetuning a coding model (Gemma 4 26B A4B Instruct, MoE 3.8B active; Qwen3-Coder-30B-A3B as fallback).*
+*100% synthetic Jac training data for finetuning a coding model. The base model is **not assumed** here — it is selected empirically by the SFT+DPO bake-off ([`../superpowers/specs/2026-06-25-sft-dpo-model-bakeoff-design.md`](../superpowers/specs/2026-06-25-sft-dpo-model-bakeoff-design.md)), current incumbent Qwen3-Coder-30B-A3B. Every recipe below is model-agnostic; only the finetune target changes once the bake-off concludes.*
 
 | | |
 |---|---|
 | Constraint | No real Jac corpus exists — fully synthetic. |
 | Verification | Jac compiler (hard gate), cross-compiled tests (hard gate for deterministic categories), idiom judge, sampled manual review. |
-| Generators | Claude Code (Max) for quality, DeepSeek/Qwen APIs for bulk, base Gemma for free negatives, finetuned Gemma vN for self-distillation, Cursor/Codex for diversity checks. |
+| Generators | Claude Code (Max) for quality, DeepSeek/Qwen APIs for bulk, the **base model** (pre-finetune) for free negatives, the **finetuned model vN** for self-distillation, Cursor/Codex for diversity checks. |
 
 ---
 
@@ -68,10 +68,10 @@ One pipeline → three datasets: (NL→Jac), (Python→Jac), (Python, Jac, NL) e
 | Claude Code (Max) | R1 orchestration, R4 debugging trajectories, R8 conversations, R9 reasoning, final refinement on cheaper outputs. | Quality bar setter. |
 | DeepSeek / Qwen API | R2 bulk Python + translation, R4 mutations, R5 persona rewrites, R6 evolutions. Heavy rejection-sampling workloads. | Cheap; failures filtered by compiler+tests. |
 | Cursor / Codex | Diversity sampling + judge-comparison only. | Limited budget — reserve for verification. |
-| Base Gemma 4 (local) | Negative half of DPO pairs in R3 (and the Python-style negatives in R2). | Pre-finetune, its outputs ARE the failure mode. Free, unlimited. |
-| Finetuned Gemma vN | R7 self-distillation, R12 zero-seed extraction. | Only generator with native Jac priors after v0. |
+| Base model (local, bake-off winner) | Negative half of DPO pairs in R3 (and the Python-style negatives in R2). | Pre-finetune, its outputs ARE the failure mode. Free, unlimited. |
+| Finetuned model vN | R7 self-distillation, R12 zero-seed extraction. | Only generator with native Jac priors after v0. |
 
-Mental model: Claude = quality + orchestration. Cheap APIs = volume. Base Gemma = free negatives. Finetuned Gemma = bootstrap.
+Mental model: Claude = quality + orchestration. Cheap APIs = volume. Base model (pre-finetune) = free negatives. Finetuned model = bootstrap.
 
 ---
 

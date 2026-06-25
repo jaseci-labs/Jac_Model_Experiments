@@ -12,7 +12,7 @@
 | Data regime | 100% synthetic |
 | Scope | Data generation -> Finetuning -> Evaluation |
 
-The pipeline runs Phase 0 (prereqs) -> Phase 1 (context) -> Phase 2 (generation, 12 recipes) -> Phase 3 (verification) -> Phase 4 (quality controls) -> Phase 5 (dataset assembly) -> Phase 6 (finetuning) -> Phase 7 (evaluation). Recipe-level detail lives in `docs/datagenstrat/strat.md`; the end-to-end diagram lives in `docs/wholestack/workflow.md`.
+The pipeline runs Phase 0 (prereqs) -> Phase 1 (context) -> Phase 2 (generation, 12 recipes) -> Phase 3 (verification) -> Phase 4 (quality controls) -> Phase 5 (dataset assembly) -> Phase 6 (finetuning) -> Phase 7 (evaluation). Recipe-level detail lives in `docs/initmodelchoice/strat.md`; the end-to-end diagram lives in `docs/wholestack/workflow.md`.
 
 ---
 
@@ -101,7 +101,7 @@ From the eval holdout, extract task-description text, reference-solution code, a
 
 ## Phase 2: Data generation
 
-The twelve generation recipes (R1-R12), with per-recipe goals, inputs, processes, expected yields, and failure modes, live in `docs/datagenstrat/strat.md`. This phase covers only the wholestack-specific concerns: generator allocation across providers, repo-level packing, and weekly batch sequencing.
+The twelve generation recipes (R1-R12), with per-recipe goals, inputs, processes, expected yields, and failure modes, live in `docs/initmodelchoice/strat.md`. This phase covers only the wholestack-specific concerns: generator allocation across providers, repo-level packing, and weekly batch sequencing.
 
 ### Generator allocation
 

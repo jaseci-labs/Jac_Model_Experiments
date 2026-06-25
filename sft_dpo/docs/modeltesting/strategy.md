@@ -228,6 +228,6 @@ If both models score within 0.5 weighted points of each other, the decision is l
 
 ## Relationship to full-scale generation
 
-The model testing phase does not change the data generation strategy described in [`../datagenstrat/strat.md`](../datagenstrat/strat.md). The ten generation recipes, the verification pipeline, the volume targets, and the quality controls all remain the same regardless of which base model is selected. The only thing that changes is the target model name in the finetuning configuration.
+The model testing phase does not change the data generation strategy described in [`../initmodelchoice/strat.md`](../initmodelchoice/strat.md). The ten generation recipes, the verification pipeline, the volume targets, and the quality controls all remain the same regardless of which base model is selected. The only thing that changes is the target model name in the finetuning configuration.
 
 This is by design. The data pipeline was built to be model-agnostic: it generates high-quality Jac training data that any capable base model should benefit from. The 5,000-example test dataset should include conversion examples validated with cross-compiled tests to ensure the selected model can learn from test-validated translations, which form the backbone of Recipe 2 at scale. The model testing phase answers the question of which base model benefits the most.
