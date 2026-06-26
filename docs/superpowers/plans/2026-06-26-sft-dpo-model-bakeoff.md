@@ -4,7 +4,7 @@
 
 **Goal:** Run the exact SFT+DPO treatment Qwen3-Coder already got on 5 same-size candidate base models, then rank all 6 to decide whether anything displaces Qwen3-Coder as the Jac base model.
 
-**Architecture:** This is an experiment runbook, not new software. The pipeline already exists: `sft_dpo/run_probe.sh <hf-id> <name>` (quantize → base eval → LoRA SFT → fuse → learning curve → finetuned eval) and `sft_dpo/run_dpo.sh <name>` (fuse SFT → LoRA-DPO → behavior re-eval → idiom eval). One controlled variable: the base model. Each candidate runs sequentially (each saturates 48GB RAM), produces a `results/<name>/` dir, and contributes one row to a comparison matrix. The only code written is a parser extension to `make_comparison.py` and the final report.
+**Architecture:** This is an experiment runbook, not new software. The pipeline already exists: `sft_dpo/run_probe.sh <hf-id> <name>` (quantize → base eval → LoRA SFT → fuse → learning curve → finetuned eval) and `sft_dpo/run_dpo.sh <name>` (fuse SFT → LoRA-DPO → behavior re-eval → idiom eval). One controlled variable: the base model. Each candidate runs sequentially (each saturates 48GB RAM), produces a `results/<name>/` dir, and contributes one row to a comparison matrix. Every model records its full data during the run (per-checkpoint `metrics.jsonl`, `train.log`, idiom metrics); all graphs are generated **after** all runs from that recorded data — no live per-checkpoint accuracy eval. The only code written is a rewrite of `make_comparison.py` (data-driven, all 6 models) plus the final report.
 
 **Tech Stack:** MLX (`mlx_lm`, `mlx_lm_lora`), Jac (`jac run` eval scripts), Python 3, bash. Mac M5 Pro, 48GB unified RAM.
 
@@ -16,6 +16,7 @@ These apply to every task. Copied verbatim from `docs/superpowers/specs/2026-06-
 - **One variable only.** Identical `sft_dpo/configs/lora.yaml` for all models (rank 16, scale 2.0, 600 iters, lr 2e-5, batch 2, max-seq 2048). Identical DPO params (8 layers, beta 0.1, lr 1e-6, 200 iters, grad-checkpoint, max-seq 384). Identical data: `dataset/mlx` (SFT) + `dataset/mlx_dpo` (DPO). `num_layers` may be lowered **only** if MLX rejects 16 on a shallow model — log any such deviation.
 - **Gate: none.** Full SFT+DPO on every surviving candidate regardless of SFT result. The user wants the complete matrix, not an early-drop screen. (Exception: gpt-oss may be dropped if its MXFP4 conversion path is broken — see Task 2.)
 - **Sequential only.** No parallel runs — each model saturates RAM.
+- **Record all data; graph after.** Every model must finish the `run_probe.sh` learning-curve stage (`.curve.done`) so `results/<name>/metrics.jsonl` holds one accuracy row per checkpoint, plus `train.log` and idiom metrics. Do NOT enable `LIVE_EVAL` (live per-checkpoint accuracy loads a second model copy → OOMs the 30B, violates the NO-OOM gate). The loss/throughput dashboards still refresh live during training; the accuracy curve is computed post-hoc. All cross-model comparison graphs are generated after every run completes, in Task 7.
 - **Never delete adapters, datasets, or results.** Cleanup between runs deletes only re-derivable `models/` (quantized weights), never `adapters/<name>-*` or `results/<name>/`. See [[feedback-never-delete-models]].
 - **Decision rule.** A candidate displaces Qwen3-Coder (94% behavioral / idiom avg-sim baseline) only if it beats it on finetuned behavioral test-pass-% by more than run-to-run noise AND matches/beats idiom gain (DPO avg-sim drops while behavior holds). Ties → keep Qwen3-Coder (incumbent, Apache-2.0, proven).
 
@@ -54,7 +55,7 @@ python -c "import mlx_lm_lora; print(mlx_lm_lora.__file__)"   # DPO trainer pres
 jac --version                          # eval runner present
 python -c "import matplotlib, numpy, scipy; print('plot deps ok')"
 ```
-Expected: each prints without error. If `mlx_lm_lora` is missing: `pip install mlx-lm-lora`. If `scipy` missing (needed by `make_comparison.py` pchip): `pip install scipy`.
+Expected: each prints without error. If `mlx_lm_lora` is missing: `pip install mlx-lm-lora`. (`make_comparison.py` uses a hand-rolled `pchip` — only `matplotlib` + `numpy` needed, no scipy.)
 
 - [ ] **Step 2: Confirm the fixed inputs exist**
 
@@ -363,25 +364,29 @@ git commit -m "results: qwen25c SFT+DPO bake-off run"
 
 ---
 
-### Task 7: Extend `make_comparison.py` to tabulate all 6 models from result files
+### Task 7: Rewrite `make_comparison.py` — all-6 graphs + matrix, post-hoc from recorded data
 
-The current `make_comparison.py` hardcodes accuracy/idiom numbers for `qwen`/`gemma` (lines 101–107, 121–122) — error-prone to hand-extend to 6 models. Add a parser that reads the numbers straight from the result files and emits the comparison matrix. Leave the existing PNG-plotting code untouched (it still works for the qwen/gemma curves).
+The current `make_comparison.py` is hardcoded to two models (`COL`/`LBL` lines 19–20) with hand-entered accuracy/idiom numbers (`ACC` lines 101–107, `SIM`/`COR` 121–122). Rewrite it to be data-driven across all 6 bake-off models, reading every number from the recorded result files. Keep the reusable helpers (`pchip`, `read_metrics`, `parse_log`) unchanged. Drop the out-of-scope graph-tier bars (the bake-off evals function tasks only — graph_holdout is out of scope per spec). Run this only **after** all model runs finish.
 
 **Files:**
-- Modify: `sft_dpo/make_comparison.py` (append the matrix block + `__main__` call)
+- Overwrite: `sft_dpo/make_comparison.py`
 - Create: `sft_dpo/test_matrix.py` (parser self-check)
-- Output: `results/comparison/matrix.md`
+- Output: `results/comparison/{learning_curve_compare,train_loss_compare,val_loss_compare,accuracy_compare,idiom_compare}.png` + `matrix.md`
 
 **Interfaces:**
-- Consumes: each `results/<name>/{base.txt,finetuned.txt,idiom-metrics.jsonl}` and `results/<name>/dpo/{finetuned.txt,idiom-metrics.jsonl}`.
-- Produces: `results/comparison/matrix.md` and stdout matrix; functions `pass_pct(path)->int|None`, `avg_sim(path)->float|None`, `build_matrix()->list[tuple]`, `write_matrix()->None`.
+- Consumes per model: `results/<name>/metrics.jsonl` (per-checkpoint accuracy curve), `results/<name>/train.log` (loss curves), `results/<name>/{base,finetuned}.txt`, `results/<name>/idiom-metrics.jsonl`, `results/<name>/dpo/{finetuned.txt,idiom-metrics.jsonl}`.
+- Produces: functions `pass_pct(path)->int|None`, `avg_sim(path)->float|None`, `build_matrix()->list[tuple]`, `write_matrix()->str`, `main()->None`; 5 comparison PNGs + `matrix.md`.
 
 - [ ] **Step 1: Write the failing parser self-check**
 
 Create `sft_dpo/test_matrix.py`:
 
 ```python
-"""Self-check for the bake-off matrix parser (ponytail: asserts, no framework)."""
+"""Self-check for the bake-off parsers (ponytail: asserts, no framework).
+
+Imports make_comparison for its functions only — plotting is guarded under
+main(), so importing has no side effects.
+"""
 import make_comparison as mc
 
 def test_pass_pct(tmp):
@@ -389,14 +394,14 @@ def test_pass_pct(tmp):
     p.write_text("=== conversion probe (mlx) on 150 holdout tasks ===\n"
                  "runs (compiles+executes): 96%  (145/150)\n"
                  "cross-compiled test pass: 93%  (140/150)\n")
-    assert mc.pass_pct(p) == 93
-    assert mc.pass_pct(tmp / "missing.txt") is None
+    assert mc.pass_pct(str(p)) == 93
+    assert mc.pass_pct(str(tmp / "missing.txt")) is None
 
 def test_avg_sim(tmp):
     p = tmp / "idiom-metrics.jsonl"
     p.write_text('{"total":150,"avg_sim":0.968}\n{"total":150,"avg_sim":0.338}\n')
-    assert mc.avg_sim(p) == 0.338          # last row wins
-    assert mc.avg_sim(tmp / "missing.jsonl") is None
+    assert mc.avg_sim(str(p)) == 0.338          # last row wins
+    assert mc.avg_sim(str(tmp / "missing.jsonl")) is None
 
 if __name__ == "__main__":
     import tempfile, pathlib
@@ -406,20 +411,40 @@ if __name__ == "__main__":
     print("matrix parser self-check: PASS")
 ```
 
-- [ ] **Step 2: Run it to confirm it fails (functions don't exist yet)**
+- [ ] **Step 2: Run it to confirm it fails (module not yet rewritten)**
 
 Run: `cd sft_dpo && python test_matrix.py`
-Expected: FAIL with `AttributeError: module 'make_comparison' has no attribute 'pass_pct'`.
+Expected: FAIL — either `AttributeError: module 'make_comparison' has no attribute 'pass_pct'`, or the import runs the old module-level plotting (also a failure to fix in Step 3 by guarding plotting under `main()`).
 
-- [ ] **Step 3: Append the matrix parser to `make_comparison.py`**
-
-Add at the end of `sft_dpo/make_comparison.py`, before any existing `if __name__ == "__main__":` block (if none exists, this introduces one):
+- [ ] **Step 3: Overwrite `sft_dpo/make_comparison.py` with the data-driven version**
 
 ```python
-# --- bake-off matrix (6 models, parsed from result files) ---
-import json as _json, re as _re, pathlib as _pl
+"""6-model SFT+DPO bake-off comparison -> results/comparison/*.png + matrix.md.
 
-BAKEOFF = {
+Post-hoc: run AFTER all bake-off runs finish. Reads each results/<name>/ dir and
+plots all models together. No live eval — data is recorded during the runs
+(metrics.jsonl per checkpoint from run_probe's curve stage, train.log, idiom-metrics).
+
+    python3 sft_dpo/make_comparison.py
+"""
+import json, os, re
+import numpy as np
+import matplotlib
+matplotlib.use("Agg")
+from matplotlib import pyplot as plt
+
+OUT = "results/comparison"
+
+# All bake-off models. qwen = incumbent (parsed, not re-run). Dict order = legend order.
+COL = {
+    "qwen":    "#1f77b4",
+    "gptoss":  "#ff7f0e",
+    "qwen3i":  "#2ca02c",
+    "dscoder": "#d62728",
+    "ling":    "#9467bd",
+    "qwen25c": "#8c564b",
+}
+LBL = {
     "qwen":    "Qwen3-Coder-30B-A3B (incumbent)",
     "gptoss":  "gpt-oss-20b",
     "qwen3i":  "Qwen3-30B-A3B-Instruct",
@@ -427,74 +452,187 @@ BAKEOFF = {
     "ling":    "Ling-Coder-lite",
     "qwen25c": "Qwen2.5-Coder-14B",
 }
-_RES = _pl.Path("results")
-_PASS_RE = _re.compile(r"cross-compiled test pass:\s*(\d+)%")
+PASS_RE = re.compile(r"cross-compiled test pass:\s*(\d+)%")
+
+
+def pchip(x, y, xs):
+    """Fritsch-Carlson monotone cubic Hermite — smooth, no overshoot."""
+    x = np.asarray(x, float); y = np.asarray(y, float)
+    h = np.diff(x); d = np.diff(y) / h
+    m = np.zeros_like(y)
+    for i in range(1, len(y) - 1):
+        if d[i - 1] * d[i] > 0:
+            m[i] = 2.0 / (1.0 / d[i - 1] + 1.0 / d[i])
+    m[0], m[-1] = d[0], d[-1]
+    xs = np.asarray(xs, float); out = np.empty_like(xs)
+    for i, xv in enumerate(xs):
+        k = min(max(np.searchsorted(x, xv) - 1, 0), len(x) - 2)
+        t = (xv - x[k]) / h[k]
+        h00 = 2 * t**3 - 3 * t**2 + 1; h10 = t**3 - 2 * t**2 + t
+        h01 = -2 * t**3 + 3 * t**2; h11 = t**3 - t**2
+        out[i] = h00 * y[k] + h10 * h[k] * m[k] + h01 * y[k + 1] + h11 * h[k] * m[k + 1]
+    return out
+
+
+def read_metrics(m):
+    pts = []
+    p = f"results/{m}/metrics.jsonl"
+    if not os.path.exists(p): return pts
+    seen = set()
+    for l in open(p):
+        if not l.strip(): continue
+        d = json.loads(l)
+        if d["step"] in seen: continue
+        seen.add(d["step"]); pts.append((d["step"], d["test_pass_pct"], d.get("eval_tps", 0)))
+    return sorted(pts)
+
+
+def parse_log(m, pat):
+    out = []
+    p = f"results/{m}/train.log"
+    if not os.path.exists(p): return out
+    for line in open(p):
+        mi = re.search(r"Iter (\d+)", line)
+        if not mi: continue
+        mv = re.search(pat, line)
+        if mv: out.append((int(mi.group(1)), float(mv.group(1))))
+    return out
+
 
 def pass_pct(path):
     """Behavioral test-pass % from an eval_probe stdout dump, or None if absent."""
     try:
-        m = _PASS_RE.search(_pl.Path(path).read_text())
+        m = PASS_RE.search(open(path).read())
         return int(m.group(1)) if m else None
     except FileNotFoundError:
         return None
 
+
 def avg_sim(path):
     """Last-row avg transpile-similarity from an idiom-metrics jsonl, or None."""
     try:
-        rows = [_json.loads(l) for l in _pl.Path(path).read_text().splitlines() if l.strip()]
+        rows = [json.loads(l) for l in open(path) if l.strip()]
         return rows[-1].get("avg_sim") if rows else None
     except FileNotFoundError:
         return None
 
+
 def build_matrix():
+    """One row per model: (name, label, base%, sft%, dpo%, sft_sim, dpo_sim)."""
     rows = []
-    for name, label in BAKEOFF.items():
-        d = _RES / name
-        rows.append((
-            label,
-            pass_pct(d / "base.txt"),
-            pass_pct(d / "finetuned.txt"),
-            pass_pct(d / "dpo" / "finetuned.txt"),
-            avg_sim(d / "idiom-metrics.jsonl"),
-            avg_sim(d / "dpo" / "idiom-metrics.jsonl"),
-        ))
+    for name, label in LBL.items():
+        d = f"results/{name}"
+        rows.append((name, label,
+                     pass_pct(f"{d}/base.txt"),
+                     pass_pct(f"{d}/finetuned.txt"),
+                     pass_pct(f"{d}/dpo/finetuned.txt"),
+                     avg_sim(f"{d}/idiom-metrics.jsonl"),
+                     avg_sim(f"{d}/dpo/idiom-metrics.jsonl")))
     return rows
+
 
 def write_matrix():
     pct = lambda v: "—" if v is None else f"{v}%"
     sim = lambda v: "—" if v is None else f"{v:.3f}"
     out = ["| model | base | SFT | DPO | SFT sim | DPO sim | idiom gain |",
            "|---|---|---|---|---|---|---|"]
-    for label, base, sft, dpo, ss, sd in build_matrix():
+    for name, label, base, sft, dpo, ss, sd in build_matrix():
         gain = f"{ss - sd:+.3f}" if (ss is not None and sd is not None) else "—"
         out.append(f"| {label} | {pct(base)} | {pct(sft)} | {pct(dpo)} | "
                    f"{sim(ss)} | {sim(sd)} | {gain} |")
     text = "\n".join(out)
-    (_RES / "comparison").mkdir(exist_ok=True)
-    (_RES / "comparison" / "matrix.md").write_text(text + "\n")
-    print(text)
+    open(f"{OUT}/matrix.md", "w").write(text + "\n")
+    return text
+
+
+def main():
+    os.makedirs(OUT, exist_ok=True)
+
+    # 1. learning curve (all models, smoothed)
+    plt.figure(figsize=(9, 5.5))
+    for m in COL:
+        pts = read_metrics(m)
+        if not pts: continue
+        xs = [p[0] for p in pts]; ys = [p[1] for p in pts]
+        grid = np.linspace(min(xs), max(xs), 300)
+        plt.plot(grid, pchip(xs, ys, grid), "-", color=COL[m], lw=2.2, label=LBL[m])
+        plt.plot(xs, ys, "o", color=COL[m], ms=5)
+    plt.title("Holdout test-pass % per checkpoint — bake-off")
+    plt.xlabel("training iteration"); plt.ylabel("function holdout test-pass %")
+    plt.grid(True, alpha=0.3); plt.legend(fontsize=8); plt.tight_layout()
+    plt.savefig(f"{OUT}/learning_curve_compare.png", dpi=120); plt.close()
+
+    # 2. train loss (all models, dense)
+    plt.figure(figsize=(9, 5.5))
+    for m in COL:
+        tl = parse_log(m, r"Train loss ([0-9.]+)")
+        if tl: plt.plot([p[0] for p in tl], [p[1] for p in tl], "-", color=COL[m], lw=1.6, label=LBL[m])
+    plt.title("Training loss — bake-off"); plt.xlabel("iteration"); plt.ylabel("train loss")
+    plt.grid(True, alpha=0.3); plt.legend(fontsize=8); plt.tight_layout()
+    plt.savefig(f"{OUT}/train_loss_compare.png", dpi=120); plt.close()
+
+    # 3. val loss (all models)
+    plt.figure(figsize=(9, 5.5))
+    for m in COL:
+        vl = parse_log(m, r"Val loss ([0-9.]+)")
+        if vl: plt.plot([p[0] for p in vl], [p[1] for p in vl], "-o", color=COL[m], lw=1.8, ms=3, label=LBL[m])
+    plt.title("Validation loss — bake-off"); plt.xlabel("iteration"); plt.ylabel("val loss")
+    plt.grid(True, alpha=0.3); plt.legend(fontsize=8); plt.tight_layout()
+    plt.savefig(f"{OUT}/val_loss_compare.png", dpi=120); plt.close()
+
+    mat = build_matrix()
+
+    # 4. behavioral accuracy: base / SFT / DPO (grouped bars, all models with data)
+    stages = ["base", "SFT", "DPO"]
+    present = [r for r in mat if any(v is not None for v in r[2:5])]
+    x = np.arange(len(stages)); n = max(len(present), 1); w = 0.8 / n
+    plt.figure(figsize=(10, 5.5))
+    for i, (name, label, base, sft, dpo, _ss, _sd) in enumerate(present):
+        vals = [v if v is not None else 0 for v in (base, sft, dpo)]
+        plt.bar(x + (i - (n - 1) / 2) * w, vals, w, color=COL[name], label=label)
+    plt.title("Function holdout test-pass % — base / SFT / DPO")
+    plt.xticks(x, stages); plt.ylabel("test-pass %"); plt.ylim(0, 105)
+    plt.grid(True, axis="y", alpha=0.3); plt.legend(fontsize=8); plt.tight_layout()
+    plt.savefig(f"{OUT}/accuracy_compare.png", dpi=120); plt.close()
+
+    # 5. idiom transpile-similarity: SFT vs DPO (lower = more idiomatic)
+    sim_present = [r for r in mat if r[5] is not None or r[6] is not None]
+    x = np.arange(2); n = max(len(sim_present), 1); w = 0.8 / n
+    plt.figure(figsize=(10, 5.5))
+    for i, (name, label, _b, _s, _d, ssft, sdpo) in enumerate(sim_present):
+        vals = [ssft if ssft is not None else 0, sdpo if sdpo is not None else 0]
+        plt.bar(x + (i - (n - 1) / 2) * w, vals, w, color=COL[name], label=label)
+    plt.axhline(0.26, ls=":", color="green", alpha=0.7)
+    plt.text(1.3, 0.27, "idiomatic ref 0.26", color="green", fontsize=8)
+    plt.title("Idiom transpile-similarity — SFT vs DPO (lower = more idiomatic)")
+    plt.xticks(x, ["SFT", "DPO"]); plt.ylabel("avg transpile-similarity"); plt.ylim(0, 1.0)
+    plt.grid(True, axis="y", alpha=0.3); plt.legend(fontsize=8); plt.tight_layout()
+    plt.savefig(f"{OUT}/idiom_compare.png", dpi=120); plt.close()
+
+    # 6. matrix table
+    print(write_matrix())
+    print("wrote:", ", ".join(sorted(os.listdir(OUT))))
+
 
 if __name__ == "__main__":
-    write_matrix()
+    main()
 ```
-
-Note: if `make_comparison.py` already ends with a top-level call to its plotting routine (not guarded by `__main__`), leave that call where it is — the new `__main__` block only adds the matrix step when the file is run directly.
 
 - [ ] **Step 4: Run the self-check to confirm it passes**
 
 Run: `cd sft_dpo && python test_matrix.py`
-Expected: `matrix parser self-check: PASS`
+Expected: `matrix parser self-check: PASS` (and no plotting side effects on import).
 
-- [ ] **Step 5: Generate the real matrix from completed runs**
+- [ ] **Step 5: Generate all comparison graphs + matrix from completed runs**
 
 Run: `cd sft_dpo && python make_comparison.py`
-Expected: prints a 6-row markdown table (rows with no results yet show `—`) and writes `results/comparison/matrix.md`. Spot-check the `qwen` row against the known incumbent (94% behavioral).
+Expected: prints the 6-row markdown table (rows with no results yet show `—`) and `wrote: accuracy_compare.png, idiom_compare.png, learning_curve_compare.png, matrix.md, train_loss_compare.png, val_loss_compare.png`. Spot-check: the `qwen` row matches the known incumbent (~94% behavioral), and `results/comparison/learning_curve_compare.png` shows one line per model that has a `metrics.jsonl`.
 
 - [ ] **Step 6: Commit**
 
 ```bash
-git add sft_dpo/make_comparison.py sft_dpo/test_matrix.py results/comparison/matrix.md
-git commit -m "feat: tabulate 6-model bake-off matrix from result files"
+git add sft_dpo/make_comparison.py sft_dpo/test_matrix.py results/comparison
+git commit -m "feat: data-driven 6-model bake-off graphs + matrix"
 ```
 
 ---
@@ -521,6 +659,7 @@ For each of the 6 models, pull from the result files:
 
 Create `docs/initmodelchoice/2026-06-26-sft-dpo-bakeoff-results.md` with:
 - The 6-row matrix (paste `results/comparison/matrix.md`) plus columns for train-stability, tok/s, license.
+- The 5 comparison graphs from `results/comparison/` (learning_curve, train_loss, val_loss, accuracy, idiom) embedded or linked.
 - One paragraph per candidate: did SFT move it, did DPO improve idiom while holding behavior, any anomalies.
 - If `gptoss` was dropped at the Task 2 gate, a line stating the exact MXFP4 error and that it is excluded.
 - Any `num_layers` deviation logged in Tasks 4–6.
