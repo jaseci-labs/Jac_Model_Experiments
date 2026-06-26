@@ -4,6 +4,10 @@ Post-hoc: run AFTER all bake-off runs finish. Reads each results/<name>/ dir and
 plots all models together. No live eval — data is recorded during the runs
 (metrics.jsonl per checkpoint from run_probe's curve stage, train.log, idiom-metrics).
 
+Two holdout tiers, both parsed from files (prefix ""=function, "graph-"=graph):
+  function: base.txt / finetuned.txt / dpo/finetuned.txt + idiom-metrics.jsonl
+  graph:    graph-base.txt / graph-finetuned.txt / dpo/graph-finetuned.txt + graph-idiom-metrics.jsonl
+
     python3 sft_dpo/make_comparison.py
 """
 import json, os, re
@@ -99,72 +103,42 @@ def avg_sim(path):
         return None
 
 
-def build_matrix():
-    """One row per model: (name, label, base%, sft%, dpo%, sft_sim, dpo_sim)."""
+def build_matrix(prefix=""):
+    """One row per model: (name, label, base%, sft%, dpo%, sft_sim, dpo_sim).
+    prefix="" reads the function holdout; prefix="graph-" reads the graph holdout."""
     rows = []
     for name, label in LBL.items():
         d = f"{RES}/{name}"
         rows.append((name, label,
-                     pass_pct(f"{d}/base.txt"),
-                     pass_pct(f"{d}/finetuned.txt"),
-                     pass_pct(f"{d}/dpo/finetuned.txt"),
-                     avg_sim(f"{d}/idiom-metrics.jsonl"),
-                     avg_sim(f"{d}/dpo/idiom-metrics.jsonl")))
+                     pass_pct(f"{d}/{prefix}base.txt"),
+                     pass_pct(f"{d}/{prefix}finetuned.txt"),
+                     pass_pct(f"{d}/dpo/{prefix}finetuned.txt"),
+                     avg_sim(f"{d}/{prefix}idiom-metrics.jsonl"),
+                     avg_sim(f"{d}/dpo/{prefix}idiom-metrics.jsonl")))
     return rows
 
 
-def write_matrix():
+def _table(mat, heading):
     pct = lambda v: "—" if v is None else f"{v}%"
     sim = lambda v: "—" if v is None else f"{v:.3f}"
-    out = ["| model | base | SFT | DPO | SFT sim | DPO sim | idiom gain |",
+    out = [f"### {heading}",
+           "| model | base | SFT | DPO | SFT sim | DPO sim | idiom gain |",
            "|---|---|---|---|---|---|---|"]
-    for name, label, base, sft, dpo, ss, sd in build_matrix():
+    for name, label, base, sft, dpo, ss, sd in mat:
         gain = f"{ss - sd:+.3f}" if (ss is not None and sd is not None) else "—"
         out.append(f"| {label} | {pct(base)} | {pct(sft)} | {pct(dpo)} | "
                    f"{sim(ss)} | {sim(sd)} | {gain} |")
-    text = "\n".join(out)
-    open(f"{OUT}/matrix.md", "w").write(text + "\n")
+    return "\n".join(out)
+
+
+def write_matrix():
+    text = (_table(build_matrix(""), "Function holdout (150 tasks)") + "\n\n"
+            + _table(build_matrix("graph-"), "Graph holdout (13 tasks — node/edge/walker idiom)") + "\n")
+    open(f"{OUT}/matrix.md", "w").write(text)
     return text
 
 
-def main():
-    os.makedirs(OUT, exist_ok=True)
-
-    # 1. learning curve (all models, smoothed)
-    plt.figure(figsize=(9, 5.5))
-    for m in COL:
-        pts = read_metrics(m)
-        if not pts: continue
-        xs = [p[0] for p in pts]; ys = [p[1] for p in pts]
-        grid = np.linspace(min(xs), max(xs), 300)
-        plt.plot(grid, pchip(xs, ys, grid), "-", color=COL[m], lw=2.2, label=LBL[m])
-        plt.plot(xs, ys, "o", color=COL[m], ms=5)
-    plt.title("Holdout test-pass % per checkpoint — bake-off")
-    plt.xlabel("training iteration"); plt.ylabel("function holdout test-pass %")
-    plt.grid(True, alpha=0.3); plt.legend(fontsize=8); plt.tight_layout()
-    plt.savefig(f"{OUT}/learning_curve_compare.png", dpi=120); plt.close()
-
-    # 2. train loss (all models, dense)
-    plt.figure(figsize=(9, 5.5))
-    for m in COL:
-        tl = parse_log(m, r"Train loss ([0-9.]+)")
-        if tl: plt.plot([p[0] for p in tl], [p[1] for p in tl], "-", color=COL[m], lw=1.6, label=LBL[m])
-    plt.title("Training loss — bake-off"); plt.xlabel("iteration"); plt.ylabel("train loss")
-    plt.grid(True, alpha=0.3); plt.legend(fontsize=8); plt.tight_layout()
-    plt.savefig(f"{OUT}/train_loss_compare.png", dpi=120); plt.close()
-
-    # 3. val loss (all models)
-    plt.figure(figsize=(9, 5.5))
-    for m in COL:
-        vl = parse_log(m, r"Val loss ([0-9.]+)")
-        if vl: plt.plot([p[0] for p in vl], [p[1] for p in vl], "-o", color=COL[m], lw=1.8, ms=3, label=LBL[m])
-    plt.title("Validation loss — bake-off"); plt.xlabel("iteration"); plt.ylabel("val loss")
-    plt.grid(True, alpha=0.3); plt.legend(fontsize=8); plt.tight_layout()
-    plt.savefig(f"{OUT}/val_loss_compare.png", dpi=120); plt.close()
-
-    mat = build_matrix()
-
-    # 4. behavioral accuracy: base / SFT / DPO (grouped bars, all models with data)
+def _acc_bars(mat, title, fname):
     stages = ["base", "SFT", "DPO"]
     present = [r for r in mat if any(v is not None for v in r[2:5])]
     x = np.arange(len(stages)); n = max(len(present), 1); w = 0.8 / n
@@ -172,12 +146,13 @@ def main():
     for i, (name, label, base, sft, dpo, _ss, _sd) in enumerate(present):
         vals = [v if v is not None else 0 for v in (base, sft, dpo)]
         plt.bar(x + (i - (n - 1) / 2) * w, vals, w, color=COL[name], label=label)
-    plt.title("Function holdout test-pass % — base / SFT / DPO")
-    plt.xticks(x, stages); plt.ylabel("test-pass %"); plt.ylim(0, 105)
-    plt.grid(True, axis="y", alpha=0.3); plt.legend(fontsize=8); plt.tight_layout()
-    plt.savefig(f"{OUT}/accuracy_compare.png", dpi=120); plt.close()
+    plt.title(title); plt.xticks(x, stages); plt.ylabel("test-pass %"); plt.ylim(0, 105)
+    plt.grid(True, axis="y", alpha=0.3)
+    if present: plt.legend(fontsize=8)
+    plt.tight_layout(); plt.savefig(f"{OUT}/{fname}", dpi=120); plt.close()
 
-    # 5. idiom transpile-similarity: SFT vs DPO (lower = more idiomatic)
+
+def _idiom_bars(mat, title, fname):
     sim_present = [r for r in mat if r[5] is not None or r[6] is not None]
     x = np.arange(2); n = max(len(sim_present), 1); w = 0.8 / n
     plt.figure(figsize=(10, 5.5))
@@ -186,12 +161,56 @@ def main():
         plt.bar(x + (i - (n - 1) / 2) * w, vals, w, color=COL[name], label=label)
     plt.axhline(0.26, ls=":", color="green", alpha=0.7)
     plt.text(1.3, 0.27, "idiomatic ref 0.26", color="green", fontsize=8)
-    plt.title("Idiom transpile-similarity — SFT vs DPO (lower = more idiomatic)")
-    plt.xticks(x, ["SFT", "DPO"]); plt.ylabel("avg transpile-similarity"); plt.ylim(0, 1.0)
-    plt.grid(True, axis="y", alpha=0.3); plt.legend(fontsize=8); plt.tight_layout()
-    plt.savefig(f"{OUT}/idiom_compare.png", dpi=120); plt.close()
+    plt.title(title); plt.xticks(x, ["SFT", "DPO"])
+    plt.ylabel("avg transpile-similarity (lower = more idiomatic)"); plt.ylim(0, 1.0)
+    plt.grid(True, axis="y", alpha=0.3)
+    if sim_present: plt.legend(fontsize=8)
+    plt.tight_layout(); plt.savefig(f"{OUT}/{fname}", dpi=120); plt.close()
 
-    # 6. matrix table
+
+def main():
+    os.makedirs(OUT, exist_ok=True)
+
+    # 1. learning curve (all models, smoothed) — function holdout subset per checkpoint
+    plt.figure(figsize=(9, 5.5))
+    any_curve = False
+    for m in COL:
+        pts = read_metrics(m)
+        if not pts: continue
+        any_curve = True
+        xs = [p[0] for p in pts]; ys = [p[1] for p in pts]
+        grid = np.linspace(min(xs), max(xs), 300)
+        plt.plot(grid, pchip(xs, ys, grid), "-", color=COL[m], lw=2.2, label=LBL[m])
+        plt.plot(xs, ys, "o", color=COL[m], ms=5)
+    plt.title("Holdout test-pass % per checkpoint — bake-off")
+    plt.xlabel("training iteration"); plt.ylabel("function holdout test-pass %")
+    plt.grid(True, alpha=0.3)
+    if any_curve: plt.legend(fontsize=8)
+    plt.tight_layout(); plt.savefig(f"{OUT}/learning_curve_compare.png", dpi=120); plt.close()
+
+    # 2. train loss / 3. val loss (all models)
+    for fname, pat, title, ylab, style in [
+        ("train_loss_compare.png", r"Train loss ([0-9.]+)", "Training loss — bake-off", "train loss", "-"),
+        ("val_loss_compare.png",   r"Val loss ([0-9.]+)",   "Validation loss — bake-off", "val loss", "-o"),
+    ]:
+        plt.figure(figsize=(9, 5.5)); has = False
+        for m in COL:
+            d = parse_log(m, pat)
+            if d:
+                has = True
+                plt.plot([p[0] for p in d], [p[1] for p in d], style, color=COL[m], lw=1.7, ms=3, label=LBL[m])
+        plt.title(title); plt.xlabel("iteration"); plt.ylabel(ylab); plt.grid(True, alpha=0.3)
+        if has: plt.legend(fontsize=8)
+        plt.tight_layout(); plt.savefig(f"{OUT}/{fname}", dpi=120); plt.close()
+
+    # 4-7. accuracy + idiom bars, function and graph tiers
+    fn = build_matrix(""); gr = build_matrix("graph-")
+    _acc_bars(fn, "Function holdout test-pass % — base / SFT / DPO", "accuracy_compare.png")
+    _idiom_bars(fn, "Function idiom similarity — SFT vs DPO", "idiom_compare.png")
+    _acc_bars(gr, "Graph holdout test-pass % — base / SFT / DPO", "graph_accuracy_compare.png")
+    _idiom_bars(gr, "Graph idiom similarity — SFT vs DPO", "graph_idiom_compare.png")
+
+    # 8. matrix tables
     print(write_matrix())
     print("wrote:", ", ".join(sorted(os.listdir(OUT))))
 
