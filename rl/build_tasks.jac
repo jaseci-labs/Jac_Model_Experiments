@@ -99,6 +99,17 @@ with entry {
             failed += 1;
             continue;
         }
+        # determinism guard: a task whose stdout varies run-to-run is unusable as
+        # an exact-match RL target (jid()/time/unseeded-rng leak). Re-run once.
+        (code2, out2, err2) = run_jac(text);
+        if out2 != out {
+            print("FAIL (NONDETERMINISTIC stdout): " + path);
+            failed += 1;
+            continue;
+        }
+        # origin source file (for file-disjoint holdout in build_rl_splits.jac)
+        src_m = re.search(r"Origin:\s*(this_is_jac/\S+?\.jac)", text);
+        source = str(src_m.group(1)) if src_m else "unknown";
 
         lines = info["lines"];
         indent = info["indent"];
@@ -126,6 +137,7 @@ with entry {
             "prompt": prompt,
             "answer": json.dumps({
                 "id": info["id"],
+                "source": source,
                 "expected_output": out,
                 "timeout": 20
             })
