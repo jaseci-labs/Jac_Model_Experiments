@@ -99,6 +99,7 @@ jac run rl/test_ladder.jac           # self-check: disjoint splits, family sprea
 
 jac run rl/run_ladder.jac            # DRY: print the full command plan, run nothing heavy
 JAC_LADDER_GO=1 jac run rl/run_ladder.jac   # execute (sequential; hours per cell)
+jac run rl/show_ladder.jac           # Phase 3: pivot results/rl_ladder.jsonl -> curve table
 
 # scope it while iterating:
 JAC_LADDER_RUNGS=1,3 JAC_LADDER_MODELS=qwen3coder:models/qwen-q4:4 \
