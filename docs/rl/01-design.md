@@ -52,5 +52,5 @@ Dense v2, every term defined so within-group variance is never zero:
 - **Two reads per rung:** memorize-score (re-eval the rung's train tasks) and generalize-score (the fixed holdout pool).
 
 ## 6. Open items
-1. Confirm the exact fresh `qwen3coder` HF repo at build time (assumed `Qwen/Qwen3-Coder-30B-A3B-Instruct`).
+1. ✅ Fresh `qwen3coder` HF repo = **`Qwen/Qwen3-Coder-30B-A3B-Instruct`** (128 experts / 8 active; confirmed against the local `models/qwen-q4` config). Already downloaded + quantized.
 2. Type B AST-equivalence grader — design when the whole-file track starts.
