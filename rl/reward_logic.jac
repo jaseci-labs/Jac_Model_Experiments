@@ -4,12 +4,24 @@ All reward logic lives here. `rl/reward.py` is a 2-line shim that imports this
 module so `mlx_lm_lora`'s Python loader (`spec_from_file_location`, which needs a
 `.py`) triggers the registration below. For each sampled completion: splice it
 into the task template (`__HOLE__`), run it with `jac` (isolated cwd so the
-persistent `root` graph never accumulates), and score:
+persistent `root` graph never accumulates), and score MONOTONICALLY by tier:
 
-    0.3*compiles + 0.3*runs + 0.3*output_match + 0.1*idiom_bonus
+    exact stdout match          -> 1.0                 (the only way to score 1.0)
+    runs, wrong stdout          -> 0.40 + 0.25*line_frac + 0.15*sim   (<= 0.80)
+    compiles, doesn't run       -> 0.20 + 0.15*sim                    (<= 0.35)
+    neither                     -> 0.15*sim                           (<= 0.15)
 
-Non-running output earns no idiom credit. Mirrors sft_dpo/jacgen/writer.jac:run_jac
-and the idiom markers in sft_dpo/jacgen/idiom_eval.jac.
+`sim` (difflib ratio to the stripped gold body) is present in EVERY tier including
+non-compiling, so a group of all-failing rollouts still has within-group variance
+-> non-zero GRPO advantage (breaks the sigma=0 cold-start trap). Each tier's ceiling
+is strictly below the next tier's floor, so reward is monotone with the headline:
+an exact pass always beats any non-exact completion (the old additive formula let a
+wrong-output completion with high idiom/sim outscore a correct terse one).
+
+The idiom term was REMOVED from the reward: it is trivially gamed (stuff `-->`
+tokens), anti-correlates with terse gold bodies, and the headline metric never
+rewards idioms. `idiom_bonus`/eval still REPORT idiom density as a descriptive stat.
+Mirrors sft_dpo/jacgen/writer.jac:run_jac.
 """
 
 import os;
@@ -93,13 +105,14 @@ def idiom_bonus(body: str) -> float {
 }
 
 def output_score(out: str, expected: str) -> float {
-    # Exact match dominates (1.0); a near-miss earns half its similarity ratio,
-    # so behaviourally-close code gets a softer gradient without rivalling exact.
-    o = out.strip(); e = expected.strip();
-    if o == e {
-        return 1.0;
-    }
-    return 0.5 * difflib.SequenceMatcher(None, o, e).ratio();
+    # Line-aligned partial credit: fraction of expected stdout lines reproduced
+    # exactly at the same position. Sharper than char-difflib for the multi-line
+    # stdout these tasks emit, and a real gradient toward correctness. Returns
+    # <1.0 here (exact match is handled in the tier above, before this is called).
+    o = out.strip().split("\n"); e = expected.strip().split("\n");
+    if not e { return 0.0; }
+    matched = sum([1 for i in range(len(e)) if i < len(o) and o[i] == e[i]]);
+    return matched / len(e);
 }
 
 def score_one(completion: str, answer_json: str) -> float {
@@ -127,20 +140,24 @@ def score_one(completion: str, answer_json: str) -> float {
         (c_code, o2, e2) = run_jac(spliced, ["check", "-p"], min(timeout, 15));
         compiles = c_code == 0;
     }
-    osc = output_score(out, expected) if runs else 0.0;
-    idiom = idiom_bonus(body) if runs else 0.0;
-    # Dense shaping: textual similarity to the reference body. Always defined
-    # (even for non-compiling output), so groups get within-group reward variance
-    # -> non-zero GRPO advantage -> a learnable gradient at cold start. Verifiable
-    # terms still dominate (0.75 of the weight); sim is the tiebreaker.
-    ref = refbody_for(task_id);
+    # sim: difflib ratio to the STRIPPED gold body (refbody_for stores it with its
+    # leading indentation, but extract_jac strips the completion -> strip both so
+    # the canonical body scores ~1.0 against itself). Present in every tier so a
+    # group of all-failing rollouts still has variance -> breaks the sigma=0 trap.
+    ref = refbody_for(task_id).strip();
     sim = difflib.SequenceMatcher(None, body, ref).ratio() if ref else 0.0;
 
-    return round(
-        0.25 * float(compiles) + 0.25 * float(runs)
-        + 0.25 * osc + 0.10 * idiom + 0.15 * sim,
-        4
-    );
+    # Monotone tiers: exact pass dominates everything; each tier ceiling < next floor.
+    if runs and out.strip() == expected.strip() {
+        return 1.0;
+    }
+    if runs {
+        return round(0.40 + 0.25 * output_score(out, expected) + 0.15 * sim, 4);  # <= 0.80
+    }
+    if compiles {
+        return round(0.20 + 0.15 * sim, 4);                                       # <= 0.35
+    }
+    return round(0.15 * sim, 4);                                                   # <= 0.15
 }
 
 def jac_behavioral(prompts: any = None, completions: any = None, answer: any = None, types: any = None) -> list {
