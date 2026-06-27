@@ -1,7 +1,7 @@
 # SFT+DPO Model Bake-off: Qwen3-Coder vs Same-Size MoE Coders
 
 **Date:** 2026-06-25
-**Status:** design — awaiting review
+**Status:** complete — incumbent confirmed. Results + recommendation: `docs/initmodelchoice/2026-06-26-sft-dpo-bakeoff-results.md`
 
 ## Objective
 
