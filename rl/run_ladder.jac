@@ -23,6 +23,12 @@ Env:
   JAC_LADDER_RUNGS   default "1,3,5,10,20,all"
   JAC_LADDER_MODELS  "name:base_q4_path:group_size" csv,
                      default "qwen3coder:models/qwen-q4:4,jac-qwen3coder:models/jac-qwen3coder-q4:4"
+  JAC_LADDER_CONDITIONS  csv subset of base,sft,sft_grpo,raw_grpo (default all). Run
+                     the cheap SFT curve first ("base,sft") to find the elbow, THEN
+                     "sft_grpo" at just that rung — saves ~half the GPU-hours. Note
+                     sft_grpo needs the warm model from a prior sft run on that rung.
+  GRPO_LR/GRPO_ITERS/...  flow through to run_grpo.sh (env inherited). For a tuned-
+                     GRPO arm set e.g. GRPO_LR=1e-5 GRPO_ITERS=500 before launching.
   JAC_LADDER_GO      "1" to execute; anything else = dry plan only
 
 # ponytail: shell=True launcher over the existing scripts. Internal tool, paths
@@ -72,6 +78,7 @@ with entry {
         "qwen3coder:models/qwen-q4:4,jac-qwen3coder:models/jac-qwen3coder-q4:4"
     );
     models = [s.split(":") for s in spec.split(",") if s.strip()];
+    conds: set = set([c.strip() for c in os.environ.get("JAC_LADDER_CONDITIONS", "base,sft,sft_grpo,raw_grpo").split(",") if c.strip()]);
 
     if not Path("dataset/rl/trainpool.jsonl").exists() {
         print("MISSING dataset/rl/trainpool.jsonl — run: jac run rl/build_rl_splits.jac first");
@@ -97,23 +104,28 @@ with entry {
             print("---- " + tag + "  (base=" + base + " group=" + gs + ") ----");
 
             # rung-0 floor
-            ev(base, "", "gen", tag + "/base");
-            ev(base, "", "mem", tag + "/base");
-
+            if "base" in conds {
+                ev(base, "", "gen", tag + "/base");
+                ev(base, "", "mem", tag + "/base");
+            }
             # A) gold-SFT -> fused warm model
-            sh("RL_BASE=" + base + " RFT_ITERS=200 ./rl/run_rft.sh " + name + "-r" + rung);
-            ev(warm, "", "gen", tag + "/sft");
-            ev(warm, "", "mem", tag + "/sft");
-
-            # B) SFT + GRPO
-            sh("RL_BASE=" + warm + " GROUP_SIZE=" + gs + " ./rl/run_grpo.sh " + name + "-r" + rung + "-sg");
-            ev(warm, sg_adapter, "gen", tag + "/sft_grpo");
-            ev(warm, sg_adapter, "mem", tag + "/sft_grpo");
-
-            # C) raw-base GRPO control (expect sigma=0 stall)
-            sh("RL_BASE=" + base + " GROUP_SIZE=" + gs + " ./rl/run_grpo.sh " + name + "-r" + rung + "-raw");
-            ev(base, raw_adapter, "gen", tag + "/raw_grpo");
-            ev(base, raw_adapter, "mem", tag + "/raw_grpo");
+            if "sft" in conds {
+                sh("RL_BASE=" + base + " RFT_ITERS=200 ./rl/run_rft.sh " + name + "-r" + rung);
+                ev(warm, "", "gen", tag + "/sft");
+                ev(warm, "", "mem", tag + "/sft");
+            }
+            # B) SFT + GRPO  (needs the warm model from condition A on this rung)
+            if "sft_grpo" in conds {
+                sh("RL_BASE=" + warm + " GROUP_SIZE=" + gs + " ./rl/run_grpo.sh " + name + "-r" + rung + "-sg");
+                ev(warm, sg_adapter, "gen", tag + "/sft_grpo");
+                ev(warm, sg_adapter, "mem", tag + "/sft_grpo");
+            }
+            # C) raw-base GRPO control (nonzero gradient via sim, expect no greedy shift)
+            if "raw_grpo" in conds {
+                sh("RL_BASE=" + base + " GROUP_SIZE=" + gs + " ./rl/run_grpo.sh " + name + "-r" + rung + "-raw");
+                ev(base, raw_adapter, "gen", tag + "/raw_grpo");
+                ev(base, raw_adapter, "mem", tag + "/raw_grpo");
+            }
         }
     }
     print("\n=== ladder " + ("done" if GO else "plan printed — set JAC_LADDER_GO=1 to run") + " ===");
