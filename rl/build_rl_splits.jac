@@ -64,17 +64,32 @@ with entry {
     }
     cap = max(1, int(n_hold * 0.5) + 1);   # no single file may exceed ~half the holdout
 
-    # --- file-disjoint holdout: add WHOLE small files until ~n_hold ---
-    sized: list = [(len(by_src[s]), str(s)) for s in by_src.keys()];
-    sized.sort();                           # small files first -> big idiom files stay in train
-    hold_files: list = [];
-    held = 0;
-    for pair in sized {
-        (sz, s) = (pair[0], pair[1]);
-        if sz > cap { continue; }            # too big to hold whole -> trains
-        if held >= n_hold { break; }
-        hold_files.append(s);
-        held += sz;
+    # --- file-disjoint holdout, FAMILY-COVERAGE greedy ---
+    # Hold out whole files, repeatedly picking the eligible file that adds the most
+    # NEW families to the holdout (tiebreak: smaller), so the holdout spans as many
+    # idiom classes as the corpus allows instead of grabbing all the trivial lib
+    # files. (sg can't be held out — its one file > cap — so sg generalization stays
+    # unmeasurable until the corpus is less sg-concentrated; the WARN flags it.)
+    src_size: dict = {}; src_fams: dict = {}; elig_srcs: list = [];
+    for s in by_src.keys() {
+        grp: list = by_src[s];
+        if len(grp) > cap { continue; }      # too big to hold whole -> trains
+        src_size[s] = len(grp);
+        src_fams[s] = sorted(set([family_of(x) for x in grp]));
+        elig_srcs.append(str(s));
+    }
+    hold_files: list = []; held = 0; covered: set = set(); chosen: set = set();
+    while held < n_hold {
+        best = ""; best_new = -1; best_sz = 0;
+        for s in elig_srcs {
+            if s in chosen { continue; }
+            nf = len([f for f in src_fams[s] if f not in covered]);
+            better = nf > best_new or (nf == best_new and (best == "" or src_size[s] < best_sz));
+            if better { best = str(s); best_new = nf; best_sz = src_size[s]; }
+        }
+        if best == "" { break; }             # no eligible files left
+        chosen.add(best); hold_files.append(best); held += src_size[best];
+        for f in src_fams[best] { covered.add(f); }
     }
     holdout_raw: list = [];
     for s in hold_files { holdout_raw += by_src[s]; }
