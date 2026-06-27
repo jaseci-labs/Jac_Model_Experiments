@@ -106,6 +106,37 @@ JAC_LADDER_RUNGS=1,3 JAC_LADDER_MODELS=qwen3coder:models/qwen-q4:4 \
   JAC_LADDER_GO=1 jac run rl/run_ladder.jac
 ```
 
+### Recommended execution (compute-smart, ~½ the GPU-hours)
+
+Don't run the blind 36-cell grid — ~80% re-tests the weekend's known null.
+
+```bash
+# 0. plumbing smoke test — must hit ~100% mem on rung 1 or STOP
+JAC_LADDER_CONDITIONS=sft JAC_LADDER_RUNGS=1 \
+  JAC_LADDER_MODELS=qwen3coder:models/qwen-q4:4 JAC_LADDER_GO=1 jac run rl/run_ladder.jac
+# 1. cheap SFT curve first (both models, all rungs) — find the elbow
+JAC_LADDER_CONDITIONS=base,sft JAC_LADDER_GO=1 jac run rl/run_ladder.jac
+jac run rl/show_ladder.jac          # read the curve + CIs; pick the elbow rung E
+# 2. GRPO only at the elbow (+ a tuned arm), and ONE raw control
+JAC_LADDER_CONDITIONS=sft_grpo JAC_LADDER_RUNGS=<E> \
+  GRPO_LR=1e-5 GRPO_ITERS=500 JAC_LADDER_GO=1 jac run rl/run_ladder.jac
+JAC_LADDER_CONDITIONS=raw_grpo JAC_LADDER_RUNGS=1 JAC_LADDER_GO=1 jac run rl/run_ladder.jac
+```
+
+### Known limitations (design review, 2026-06-27)
+
+- **Corpus is sg-dominated** (social_graph.jac = 57% of tasks, one file). File-disjoint
+  holdout therefore can't put the core OSP-walker idiom in BOTH train and holdout — on
+  the 56-task corpus the holdout is sg-light. **Fix: mine to ~120–150 tasks** (more
+  this_is_jac files) before trusting the generalization number. `build_rl_splits` WARNs.
+- **Power floor:** n≈15–30 holdout, binary exact-stdout → ~CI of ±15pp. Read `show_ladder`'s
+  Wilson CI + pass@k, never the bare pass@1; a rung "plateaus" only when CIs overlap.
+- **Before launch (runtime, not code):** raise the Metal wired-memory limit —
+  `sudo sysctl iogpu.wired_limit_mb=44000` (peaks hit 38.2GB on the ~36GB default cap).
+- **Deferred:** `extract_jac`/`unwrap_unit` pick first/last unit; on a multi-unit completion
+  they can mis-extract → condition-correlated false fails. Match by the hole's signature if
+  you see anomalous base-vs-RL deltas.
+
 ## Manual single-run path
 
 ```bash
