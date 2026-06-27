@@ -130,6 +130,7 @@ with entry {
         }
         total = 0; runs = 0; passed = 0; passed_k = 0; idiom_sum = 0;
         osim_sum = 0.0; near_pass = 0;   # continuous progress metrics (detect partial gains)
+        fam_total: dict = {}; fam_pass: dict = {};   # per-family pass@1 (premise is graph idioms)
         for ln in lines {
             rec = json.loads(ln);
             meta = json.loads(rec["answer"]);
@@ -166,6 +167,9 @@ with entry {
                 }
             }
             if kp { passed_k += 1; }
+            fam = tid.split("_")[0];
+            fam_total[fam] = fam_total.get(fam, 0) + 1;
+            if p1 { fam_pass[fam] = fam_pass.get(fam, 0) + 1; }
             print(tid + ": pass@1=" + str(p1) + " pass@" + str(k) + "=" + str(kp) + " osim=" + str(round(osim, 2)));
         }
         run_pct = (100.0 * runs / total) if total else 0.0;
@@ -183,6 +187,14 @@ with entry {
         print("  near-pass:" + str(near_pass) + "  (" + str(round(near_pct, 1)) + "%)   output-sim >= 0.9");
         print("  avg-osim: " + str(round(avg_osim, 3)) + "   continuous output similarity (all tasks)");
         print("  idiom:    " + str(round(avg_idiom, 2)) + " constructs/correct");
+        byf: dict = {};
+        print("  by family (pass@1):");
+        for fam in sorted(fam_total.keys()) {
+            ft = fam_total[fam]; fp = fam_pass.get(fam, 0);
+            byf[fam] = [fp, ft];
+            tag_n = "  (n=" + str(ft) + ", anecdote)" if ft <= 2 else "";
+            print("    " + str(fam) + ": " + str(fp) + "/" + str(ft) + "  (" + str(round(100.0 * fp / ft, 1)) + "%)" + tag_n);
+        }
         out_path: str = os.environ.get("JAC_RL_OUT", "");
         if out_path {
             with open(out_path, "a") as fh {
@@ -192,7 +204,8 @@ with entry {
                     "runs": runs, "pass1": passed, "passk": passed_k, "near_pass": near_pass,
                     "run_pct": round(run_pct, 2), "pass1_pct": round(pass_pct, 2),
                     "passk_pct": round(passk_pct, 2), "near_pct": round(near_pct, 2),
-                    "avg_osim": round(avg_osim, 4), "avg_idiom": round(avg_idiom, 2)
+                    "avg_osim": round(avg_osim, 4), "avg_idiom": round(avg_idiom, 2),
+                    "by_family": byf
                 }) + "\n");
             }
         }

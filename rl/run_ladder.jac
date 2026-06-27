@@ -49,12 +49,17 @@ def sh(cmd: str) -> int {
     return p.returncode;
 }
 
+glob K: str = os.environ.get("JAC_LADDER_K", "8");   # pass@k on gen evals (Yue 2504.13837: read pass@k)
+
 def ev(model: str, adapter: str, kind: str, tag: str) -> None {
-    # kind = "gen" (holdout) or "mem" (this rung's train set)
+    # kind = "gen" (holdout, greedy pass@1 + sampled pass@K) or "mem" (train recall, greedy only)
     hold = "dataset/rl/holdout.jsonl" if kind == "gen" else "dataset/rl/train.jsonl";
     env = "JAC_EVAL_MODEL=" + model + " ";
     if adapter {
         env += "JAC_EVAL_ADAPTER=" + adapter + " ";
+    }
+    if kind == "gen" {
+        env += "JAC_EVAL_K=" + K + " JAC_EVAL_TEMP=1.0 ";   # sampled pass@K reveals RL distribution shifts greedy hides
     }
     env += "JAC_RL_HOLDOUT=" + hold + " JAC_RL_OUT=" + OUT + " JAC_RL_TAG=" + tag + "/" + kind + " ";
     sh(env + "jac run rl/eval_rl.jac");

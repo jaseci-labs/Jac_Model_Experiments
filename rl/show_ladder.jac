@@ -17,6 +17,7 @@ Paste the output under the matching section of docs/rl/02-results.md.
 
 import os;
 import json;
+import math;
 import from pathlib { Path }
 
 glob RUNG_ORDER: list = ["1", "3", "5", "10", "20", "all"];
@@ -30,6 +31,22 @@ def pct(rec: dict, field: str) -> str {
     # rec is an eval row (or {} when that kind is missing); fields are 0-100 floats
     if field in rec { return str(rec[field]) + "%"; }
     return "·";
+}
+
+def wilson_ci(rec: dict) -> str {
+    # Wilson 95% CI on the gen pass@1 proportion — closed form, right for n~15-30.
+    # Needs raw count (pass1) and n (tasks); falls back to '·' if absent.
+    if "pass1" not in rec or "tasks" not in rec { return "·"; }
+    n = int(rec["tasks"]);
+    if n == 0 { return "·"; }
+    p = float(rec["pass1"]) / n;
+    z = 1.96; z2 = z * z;
+    denom = 1.0 + z2 / n;
+    center = (p + z2 / (2.0 * n)) / denom;
+    half = (z * math.sqrt(p * (1.0 - p) / n + z2 / (4.0 * n * n))) / denom;
+    lo = max(0.0, center - half) * 100.0;
+    hi = min(1.0, center + half) * 100.0;
+    return str(round(lo, 0)) + "-" + str(round(hi, 0)) + "%";
 }
 
 with entry {
@@ -63,8 +80,8 @@ with entry {
             }
             sortable.sort();
 
-            print("| model | rung | cond | gen pass@1 | mem pass@1 | gen near | gen osim |");
-            print("|---|---|---|---|---|---|---|");
+            print("| model | rung | cond | gen pass@1 | gen 95%CI | gen pass@k | mem recall | gen near | osim |");
+            print("|---|---|---|---|---|---|---|---|---|");
             for pair in sortable {
                 k = pair[1];
                 bits = str(k).split("|");
@@ -73,9 +90,10 @@ with entry {
                 m: dict = slot.get("mem", {});
                 osim = str(g["avg_osim"]) if ("avg_osim" in g) else "·";
                 print("| " + bits[0] + " | " + bits[1] + " | " + bits[2] + " | "
-                    + pct(g, "pass1_pct") + " | " + pct(m, "pass1_pct") + " | "
-                    + pct(g, "near_pct") + " | " + osim + " |");
+                    + pct(g, "pass1_pct") + " | " + wilson_ci(g) + " | " + pct(g, "passk_pct") + " | "
+                    + pct(m, "pass1_pct") + " | " + pct(g, "near_pct") + " | " + osim + " |");
             }
+            print("\n_gen=holdout (generalization), mem=train recall (overfit gauge). Read pass@k + CI, not bare pass@1 (Yue 2504.13837). A rung 'plateaus' only when consecutive CIs overlap._");
         }
     }
 }
