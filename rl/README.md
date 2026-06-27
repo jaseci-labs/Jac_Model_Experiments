@@ -16,32 +16,48 @@ rl/drivers/*.jac          deterministic jac-run-able files; the target unit's
    │                      body is wrapped in  # >>>HOLE id=.. instruction=..  /  # <<<HOLE
    ▼ jac run rl/build_tasks.jac
 dataset/rl/tasks.jsonl    {prompt, answer} GRPO records   (+ templates/<id>.jac sidecars)
-   │ jac run rl/build_rl_splits.jac
-dataset/rl/{train,valid,holdout}.jsonl
-   │ (fresh/cold bases only) RL_BASE=<cold> ./rl/run_rft.sh <name>   warm-start
-   ▼                                                                  ↳ models/<name>-rft-q4
-   │ RL_BASE=<model-or-warm> ./rl/run_grpo.sh <name>   reward = rl/reward_logic.jac (jac_behavioral)
+   │ jac run rl/build_rl_splits.jac      (fixed ~15 holdout, spread across families)
+dataset/rl/{holdout,trainpool,train,valid}.jsonl
+   │ jac run rl/run_ladder.jac           THE LADDER: loops rungs × models × conditions
+   ▼                                     (dry by default; JAC_LADDER_GO=1 to execute)
+results/rl_ladder.jsonl   one row per eval, tagged r<N>/<model>/<cond>/<gen|mem>
+```
+
+The ladder driver (`rl/run_ladder.jac`) reuses every primitive below; the manual
+single-run path still works if you want one cell by hand:
+
+```
+   │ RUNG=<N> jac run rl/pick_rung.jac           train.jsonl = first N of trainpool (superset-grow)
+   │ jac run rl/build_sft_gold.jac               gold SFT set for those N tasks
+   │ RL_BASE=<base> ./rl/run_rft.sh <name>       A) gold-SFT (LoRA + fuse) → models/<name>-rft-q4
+   │ RL_BASE=<warm-or-base> ./rl/run_grpo.sh <n> B/C) GRPO   reward = rl/reward_logic.jac
    ▼
 adapters/<name>-grpo  +  results/<name>/grpo/
    │ JAC_EVAL_MODEL=<base> JAC_EVAL_ADAPTER=adapters/<name>-grpo jac run rl/eval_rl.jac
    ▼
-results/<name>/grpo/eval.txt   (run% / behavior-pass% / idiom vs base)
+results/<name>/grpo/eval.txt   (run% / pass@1 / pass@k / near-pass / idiom vs base)
 ```
 
 ## Reward
 
 Logic lives in **`rl/reward_logic.jac`** (`jac_behavioral`) — for each sampled
 completion: splice it into the task template (`__HOLE__`), `jac run` it (isolated
-cwd so the persistent `root` graph never accumulates state across runs), score:
+cwd so the persistent `root` graph never accumulates state across runs), score
+(dense v2):
 
 ```
-0.3*compiles + 0.3*runs + 0.3*output_score + 0.1*idiom_bonus
+0.25*compiles + 0.25*runs + 0.25*output + 0.10*idiom + 0.15*body_sim
 ```
 
-- `output_score` — 1.0 on exact stdout match; a near-miss earns `0.5 ·
-  difflib ratio` (softer gradient for behaviourally-close code, never rivals exact).
-- `idiom_bonus` — weighted: graph-traversal/object-spatial ops (`visit`, `-->`,
-  `spawn`, `report`, `here`, `root`, …) count more than plain declarations.
+- `output` — 1.0 on exact stdout match; a near-miss earns `0.5 · difflib ratio`
+  (softer gradient for behaviourally-close code, never rivals exact).
+- `idiom` — weighted: graph-traversal/object-spatial ops (`visit`, `-->`,
+  `spawn`, `report`, `here`, `root`, …) count more than plain declarations; gated
+  behind `runs`.
+- `body_sim` — `difflib ratio(body, gold refbody)`, scored for **every** completion
+  including non-compiling ones. The ONLY term not gated behind `runs`, so a group of
+  all-failing rollouts still has within-group variance → non-zero GRPO advantage.
+  This is what kills the σ=0 zero-gradient trap (see `docs/rl/strat.md` scar #2).
 - Non-running output earns no idiom or output credit.
 - Identical rollouts in a group are scored once (dedup cache) — fewer `jac` runs.
 
@@ -68,11 +84,33 @@ fuse → a warmed base GRPO can climb from. Skip it for the already-jac-trained
 base. Knobs: `RFT_SAMPLES`(8) `RFT_TEMP`(1.0) `RFT_PASS`(0.9; drop to 0.6 if 0
 pass) `RFT_ITERS`(150).
 
-## Run order
+## The ladder (default path)
+
+`rl/run_ladder.jac` is the whole experiment in one command: for each rung
+(train-N ∈ 1,3,5,10,20,all) and each model it runs the three design conditions —
+**base**, **A) gold-SFT**, **B) SFT+GRPO**, **C) raw-base GRPO control** — and evals
+each on the fixed holdout (gen) and the rung's own train tasks (mem). Rows append to
+`results/rl_ladder.jsonl` tagged `r<N>/<model>/<cond>/<gen|mem>`.
+
+```bash
+jac run rl/build_tasks.jac           # drivers -> dataset/rl/tasks.jsonl + templates/
+jac run rl/build_rl_splits.jac       # fixed ~15 holdout + trainpool (JAC_RL_HOLDOUT_N=15)
+jac run rl/test_ladder.jac           # self-check: disjoint splits, family spread, nested rungs
+
+jac run rl/run_ladder.jac            # DRY: print the full command plan, run nothing heavy
+JAC_LADDER_GO=1 jac run rl/run_ladder.jac   # execute (sequential; hours per cell)
+
+# scope it while iterating:
+JAC_LADDER_RUNGS=1,3 JAC_LADDER_MODELS=qwen3coder:models/qwen-q4:4 \
+  JAC_LADDER_GO=1 jac run rl/run_ladder.jac
+```
+
+## Manual single-run path
 
 ```bash
 jac run rl/build_tasks.jac          # drivers -> dataset/rl/tasks.jsonl + templates/
-jac run rl/build_rl_splits.jac      # -> train/valid/holdout.jsonl
+jac run rl/build_rl_splits.jac      # -> holdout/trainpool/train/valid.jsonl
+RUNG=5 jac run rl/pick_rung.jac     # optional: train.jsonl = first 5 tasks (else "all")
 
 # fresh bases: warm-start first (produces models/<name>-rft-q4)
 RL_BASE=models/qwen-q4 ./rl/run_rft.sh qwen3coder

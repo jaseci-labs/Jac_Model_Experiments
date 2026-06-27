@@ -21,7 +21,7 @@ Every Type A task ships a gold `refbodies/<id>.txt` sidecar (the real body) for 
 Regenerate an entire small `.jac` from its docstring/spec. Graded by AST-equivalence + run + stdout (stdout alone may legitimately vary). Built only after the hole-fill ladder is mapped; AST grader design is deferred to that track. This is the bridge toward the "generate new codebases" goal.
 
 ### Task extraction
-Build **all** extractable hole-fill tasks from `this_is_jac/` (estimate ~50–80). Reserve the holdout pool (below) before assigning any task to training.
+Build **all** extractable hole-fill tasks from `this_is_jac/`. **51 built** so far (`rl/build_tasks.jac` → `dataset/rl/tasks.jsonl`); ~10–15 more deterministic seams are minable (see [project notes]). Reserve the holdout pool (below) before assigning any task to training.
 
 ## 2. Holdout
 - **Fixed pool, ~15 tasks, never trained.** The same pool is evaluated at every rung, so generalization numbers are comparable rung-to-rung.

@@ -187,6 +187,7 @@ with entry {
         if out_path {
             with open(out_path, "a") as fh {
                 fh.write(json.dumps({
+                    "tag": os.environ.get("JAC_RL_TAG", ""),
                     "model": mp, "adapter": adapter, "tasks": total, "k": k,
                     "runs": runs, "pass1": passed, "passk": passed_k, "near_pass": near_pass,
                     "run_pct": round(run_pct, 2), "pass1_pct": round(pass_pct, 2),

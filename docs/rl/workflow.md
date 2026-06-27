@@ -44,9 +44,15 @@ flowchart TD
 
 ---
 
+**Runner:** Phases 1–2 below are driven by one command — `jac run rl/run_ladder.jac`
+(dry by default; `JAC_LADDER_GO=1` to execute). It loops rungs × models × conditions,
+reusing `pick_rung.jac` / `build_sft_gold.jac` / `run_rft.sh` / `run_grpo.sh` /
+`eval_rl.jac`, and appends rows to `results/rl_ladder.jsonl`. The phases below are the
+manual breakdown of what it runs.
+
 ## Phase 0 — Build (once)
 
-1. **Extract hole-fill tasks** from every `this_is_jac/*.jac`: wrap one unit body in `# >>>HOLE id="..." instruction="..."` / `# <<<HOLE`. Each task is a complete, deterministic `jac run`-able file. Estimate ~50–80 tasks.
+1. **Extract hole-fill tasks** from every `this_is_jac/*.jac`: wrap one unit body in `# >>>HOLE id="..." instruction="..."` / `# <<<HOLE`. Each task is a complete, deterministic `jac run`-able file. **51 built** (`jac run rl/build_tasks.jac`); ~10–15 more minable.
 2. **Capture ground truth:** run each driver as-authored, store its stdout as the expected output.
 3. **Emit gold `refbodies/<id>.txt`** (the real body) for the sim reward term.
 4. **Reserve the holdout:** pick a **fixed ~15-task pool**, never trained, stratified across the source files (graph / lib / littlex / etc.) so generalization isn't measured on one family. Everything else is the train candidate pool.
