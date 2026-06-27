@@ -98,14 +98,14 @@ everywhere in the pipeline.
 ## Quickstart
 
 ```bash
-./setup_env.sh && source .venv/bin/activate   # venv + jaclang + mlx-lm + matplotlib (NO anaconda)
-./check.sh                                     # 19× jac check + parse-check + non-destructive behavioral re-validation
-./run_probe.sh Qwen/Qwen3-Coder-30B-A3B-Instruct qwen   # quantize → base eval → train → fuse → finetuned eval → graphs
+./setup_env.sh && source .venv/bin/activate              # venv + jaclang + mlx-lm + matplotlib (NO anaconda)
+./sft_dpo/check.sh                                       # jac check + parse-check + non-destructive behavioral re-validation
+./sft_dpo/run_probe.sh Qwen/Qwen3-Coder-30B-A3B-Instruct qwen   # quantize → base eval → train → fuse → finetuned eval → graphs
 ```
 
-`./check.sh` should print `19 passed` + `eval_probe PASSED` (parse-only) + `39/39`
-re-validated. If green, the toolchain and data are healthy. It **does not** mutate the
-dataset.
+`./sft_dpo/check.sh` reports the `jacgen` modules passing `jac check` + `eval_probe`
+parse-checked + the sampled behavioral re-validation green. If clean, the toolchain and
+data are healthy. It **does not** mutate the dataset.
 
 Full operator runbook (setup, run, pause/resume, timings): **[`sft_dpo/process.md`](sft_dpo/process.md)**.
 Full architecture handoff (every module, every gotcha): **[`sft_dpo/docs/modeltesting/HANDOFF.md`](sft_dpo/docs/modeltesting/HANDOFF.md)**.
@@ -116,7 +116,7 @@ Full architecture handoff (every module, every gotcha): **[`sft_dpo/docs/modelte
 
 Two base models run end-to-end. Primary metric = **cross-compiled test-pass %** on
 unseen, decontaminated holdouts (compiles + runs + output matches behavioral cases).
-**Full results, all 16 training graphs, side-by-side analysis → [`resultsft/RESULTS.md`](resultsft/RESULTS.md).**
+**Full results, all 16 training graphs, side-by-side analysis → [`sft_dpo/resultsft/RESULTS.md`](sft_dpo/resultsft/RESULTS.md).**
 
 ### Function tier — 150 unseen function tasks (correctness)
 
@@ -159,6 +159,27 @@ weakly** (15%, 0 detected constructs) — idiom acquisition is **model-dependent
 **What this proves:** (1) synthetic compiler-validated data → correct Jac (0→94%);
 (2) data *with* idiom headroom + DPO on real-divergence pairs → measurably *idiomatic*
 Jac. The DPO machinery is proven and reusable.
+
+### Base-model bake-off — incumbent confirmed
+
+Before committing the full generation budget to Qwen3-Coder, the same SFT+DPO treatment
+(plus the graph-holdout tier) was run on **five same-size candidates** to prove none does
+better. One controlled variable: the base model. **Verdict: keep Qwen3-Coder.** No
+candidate beats it on behavioral pass-% beyond run-to-run noise, and on the graph holdout
+its DPO behavioral score (61%) is the best of any DPO-capable model.
+
+| candidate | func SFT/DPO | graph SFT/DPO | graph idiom SFT→DPO | note |
+|---|---|---|---|---|
+| **Qwen3-Coder-30B-A3B** (incumbent) | 94 / 93 | 46 / **61** | 0.457 → 0.338 | kept |
+| Qwen3-30B-A3B-Instruct | 95 / 94 | 53 / 53 | 0.558 → **0.223** | closest — ties behavior, best graph idiom; tie keeps incumbent |
+| gpt-oss-20b | 92 / — | 61 / — | 0.21 / — | SFT-only: MXFP4 Q8/`mlx_lm.fuse` broken → no DPO |
+| DeepSeek-Coder-V2-Lite | 94 / 94 | 15 / 23 | 0.707 → 0.546 | strong functions, weak graph |
+| Qwen2.5-Coder-14B (dense) | 94 / 93 | 38 / 23 | 0.444 → 0.232 | dense → ~4× slower (16 tok/s) |
+| Ling-Coder-lite | dropped | — | — | BailingMoE unusable in this mlx_lm |
+
+Full matrix, per-candidate analysis, comparison graphs, and deviations →
+**[`docs/initmodelchoice/2026-06-26-sft-dpo-bakeoff-results.md`](docs/initmodelchoice/2026-06-26-sft-dpo-bakeoff-results.md)**
+(publishable copies under [`resultspub/initmodelchoice/`](resultspub/initmodelchoice/)).
 
 ---
 
@@ -232,12 +253,12 @@ difficulty mix atomic 41 / idiomatic 37 / composed 69.
 
 ## The probe
 
-`./run_probe.sh <model-id> <name>` runs, in order (each stage **skippable + resumable**):
+`./sft_dpo/run_probe.sh <model-id> <name>` runs, in order (each stage **skippable + resumable**):
 
 1. **Quantize** the model → Q4 (train) + Q8 (eval).
 2. **Base eval** on the 150 holdout → `results/<name>/base.txt`.
 3. **30-iter dry-run** — bail check (loss drops, no NaN/OOM); Ctrl-C within 8s to abort.
-4. **LoRA train** (`configs/lora.yaml`, 600 iters) with a live ASCII dashboard + PNG
+4. **LoRA train** (`sft_dpo/configs/lora.yaml`, 600 iters) with a live ASCII dashboard + PNG
    graphs refreshed per checkpoint.
 5. **Fuse** adapter → Q8.
 6. **Finetuned eval** on the 150 holdout → `results/<name>/finetuned.txt`.
@@ -255,7 +276,7 @@ wake). Kill/shutdown/crash → re-run the **same command**: finished stages skip
 `results/<name>/.<stage>.done` markers, and LoRA training resumes from the last saved
 checkpoint (mlx saves every 100 steps to `adapters/<name>-probe/`).
 
-**DPO stage:** `./run_dpo.sh <name>` (needs `mlx-lm-lora`; mlx-lm has no native DPO).
+**DPO stage:** `./sft_dpo/run_dpo.sh <name>` (needs `mlx-lm-lora`; mlx-lm has no native DPO).
 Fuses the SFT adapter, runs `--train-mode dpo`, fuses onto Q8, evals with both
 `eval_probe` (behavior must hold) and `idiom_eval` (similarity should drop).
 
@@ -271,13 +292,16 @@ generation); subsequent runs skip download/quantize → **~2–4 hr**.
 | `sft_dpo/jacgen/*.jac` | the all-Jac pipeline: generate, validate, dedup, decontaminate, split, eval harness, dashboards (24 modules) |
 | `sft_dpo/jacgen/graph_data/` | authored graph/tree tasks (`train.json` 31, `holdout.json` 13) + the Python generators |
 | `dataset/` *(gitignored)* | generated data — see [the dataset table](#the-dataset-on-disk) |
-| `configs/lora.yaml` | LoRA SFT config (mlx-lm) |
-| `run_probe.sh` / `run_dpo.sh` | SFT probe runner / DPO runner (resumable) |
-| `setup_env.sh` / `check.sh` | venv + installs / type + behavior gate (non-destructive) |
-| `results/` *(gitignored)* | per-model run outputs (`base.txt`, `finetuned.txt`, `*.png`, `metrics.jsonl`) |
-| `resultsft/` | **committed copies of all results + graphs** → [`RESULTS.md`](resultsft/RESULTS.md) |
+| `sft_dpo/configs/lora.yaml` | LoRA SFT config (mlx-lm) |
+| `sft_dpo/run_probe.sh` / `sft_dpo/run_dpo.sh` | SFT probe runner / DPO runner (resumable) |
+| `sft_dpo/bakeoff_postprobe.sh` | per-model bake-off helper: SFT idiom baseline + graph holdout + DPO + graph DPO |
+| `sft_dpo/make_comparison.py` / `sft_dpo/make_pub_graphs.py` | cross-model comparison graphs + matrix (parses `results/<name>/`) |
+| `setup_env.sh` / `sft_dpo/check.sh` | venv + installs / type + behavior gate (non-destructive) |
+| `results/` *(gitignored)* | per-model run outputs (`base.txt`, `finetuned.txt`, `graph-*.txt`, `*.png`, `metrics.jsonl`) |
+| `resultspub/` | **publishable copies** — `initmodelchoice/` (bake-off, all models + comparison graphs) + `other/` |
+| `sft_dpo/resultsft/` | committed Qwen-vs-Gemma results + graphs → [`RESULTS.md`](sft_dpo/resultsft/RESULTS.md) |
 | `models/` / `adapters/` *(gitignored)* | quantized/fused models / LoRA adapters |
-| `docs/` | strategy, model-testing, datagen plans → [map below](#documentation-map) |
+| `docs/` | strategy, model-testing, datagen plans, the bake-off result → [map below](#documentation-map) |
 | `sft_dpo/process.md` | operator runbook (setup → check → run, pause/resume) |
 | `context.md` | durable project framing |
 | `papers/` | reference papers (MultiPL-T, WizardCoder, Magicoder, SelfCodeAlign, DeepSeek-Coder, CodeDPO, Magpie) |
@@ -409,7 +433,8 @@ Read before touching anything — these will bite. Full list: HANDOFF §9.
 |---|---|
 | **[`sft_dpo/process.md`](sft_dpo/process.md)** | operator runbook — setup → check → run, pause/resume, launchd, timings |
 | **[`sft_dpo/docs/modeltesting/HANDOFF.md`](sft_dpo/docs/modeltesting/HANDOFF.md)** | **single source of truth** — architecture, every module, every gotcha, rebuild order |
-| **[`resultsft/RESULTS.md`](resultsft/RESULTS.md)** | full measured results + all 16 training graphs, both models, side by side |
+| **[`docs/initmodelchoice/2026-06-26-sft-dpo-bakeoff-results.md`](docs/initmodelchoice/2026-06-26-sft-dpo-bakeoff-results.md)** | **base-model bake-off** — 6 models, function + graph holdout, the keep-Qwen3-Coder verdict |
+| **[`sft_dpo/resultsft/RESULTS.md`](sft_dpo/resultsft/RESULTS.md)** | full measured results + all 16 training graphs, both models, side by side |
 | [`context.md`](context.md) | durable project framing (what Jac is, goal, constraints) |
 | [`docs/initmodelchoice/strat.md`](docs/initmodelchoice/strat.md) | the 12 data-generation recipes (R1–R12) |
 | [`docs/wholestack/strat.md`](docs/wholestack/strat.md) | whole-stack strategy |

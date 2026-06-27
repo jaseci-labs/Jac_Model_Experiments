@@ -123,13 +123,12 @@ RL_BASE=models/jac-qwen3coder-q4 ./rl/run_grpo.sh jac-qwen3coder
 JAC_EVAL_MODEL=<base> JAC_EVAL_ADAPTER=adapters/<name>-grpo jac run rl/eval_rl.jac
 ```
 
-## Model lineup (3 sequential runs)
+## Model lineup (2 sequential runs)
 
 | name | RL base (`RL_BASE`) | warm-start? |
 |---|---|---|
 | `qwen3coder` | `models/qwen-q4` (Qwen3-Coder-30B-A3B, fresh) | yes → `run_rft.sh` |
 | `jac-qwen3coder` | Q4 of `models/qwen-jac-dpo-fused-q8` (SFT+DPO best) | no (already warm) |
-| `qwen36` | `models/qwen36-q4` (Qwen/Qwen3.6-27B, dense, fresh) | yes; `GROUP_SIZE=4`, run last |
 
 ## Env / knobs (`run_grpo.sh`)
 
@@ -150,8 +149,6 @@ Defaults fit a 30B-A3B q4 on 48GB (peak ~38GB); group6/comp512 OOMs Metal.
 - **jac startup tax:** the reward spawns `jac` per completion (~1–2 s each ×
   group size). Acceptable for LoRA GRPO; optimize to an in-process runner if
   step time hurts.
-- **Dense-27B:** `qwen36` is all-active → heaviest rollouts; lower `GROUP_SIZE`,
-  run it last.
 - **build_tasks.jac** runs fine but only parse-checks (`jac check -p`) — its
   dynamic dict access trips the strict type-checker, same as `eval_probe.jac`.
 

@@ -12,7 +12,7 @@ Slow, ground-up redesign of the Jac RL workflow. Read in order:
 
 **One-line status:** restarting from scratch on a measurable ladder; SFT is the proven lever, GRPO re-tested as a controlled challenger; dataset is `this_is_jac` only; Qwen3.6 removed.
 
-**Harness:** built and scaffolded (`rl/`). 51 hole-fill tasks (`build_tasks.jac`),
+**Harness:** built and scaffolded (`rl/`). 56 hole-fill tasks (`build_tasks.jac`),
 dense v2 reward + `unwrap_unit` scar (`reward_logic.jac`), fixed stratified holdout
 (`build_rl_splits.jac`), rung picker (`pick_rung.jac`), and the one-command ladder
 driver (`run_ladder.jac`, dry by default). Self-check: `jac run rl/test_ladder.jac`.
