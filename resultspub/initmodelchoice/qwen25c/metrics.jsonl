@@ -1,0 +1,7 @@
+{"step": 100, "total": 50, "runs": 42, "test_pass": 40, "runs_pct": 84, "test_pass_pct": 80, "gen_tokens": 6400, "eval_tps": 27, "tokens_to_correct": 129}
+{"step": 200, "total": 50, "runs": 48, "test_pass": 46, "runs_pct": 96, "test_pass_pct": 92, "gen_tokens": 5386, "eval_tps": 27, "tokens_to_correct": 105}
+{"step": 300, "total": 50, "runs": 48, "test_pass": 46, "runs_pct": 96, "test_pass_pct": 92, "gen_tokens": 5262, "eval_tps": 26, "tokens_to_correct": 104}
+{"step": 400, "total": 50, "runs": 48, "test_pass": 46, "runs_pct": 96, "test_pass_pct": 92, "gen_tokens": 5275, "eval_tps": 27, "tokens_to_correct": 104}
+{"step": 500, "total": 50, "runs": 49, "test_pass": 46, "runs_pct": 98, "test_pass_pct": 92, "gen_tokens": 5280, "eval_tps": 25, "tokens_to_correct": 103}
+{"step": 600, "total": 50, "runs": 49, "test_pass": 46, "runs_pct": 98, "test_pass_pct": 92, "gen_tokens": 5345, "eval_tps": 23, "tokens_to_correct": 105}
+{"step": 600, "total": 50, "runs": 49, "test_pass": 46, "runs_pct": 98, "test_pass_pct": 92, "gen_tokens": 5345, "eval_tps": 26, "tokens_to_correct": 105}

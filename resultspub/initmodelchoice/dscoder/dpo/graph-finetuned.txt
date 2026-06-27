@@ -1,0 +1,5 @@
+=== conversion probe (mlx) on 13 holdout tasks ===
+runs (compiles+executes): 30%  (4/13)
+cross-compiled test pass: 23%  (3/13)
+generation:               3537 tokens total, ~87 tok/s avg
+tokens-to-correct:        193 tokens / correct conversion

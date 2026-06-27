@@ -1,0 +1,9 @@
+=== RL holdout eval ===
+  model:    models/jac-qwen3coder-star1-rft-q4  (base)
+  tasks:    12   (k=4 temp=1.0)
+  runs:     2  (16.7%)   compiles+executes
+  pass@1:   2  (16.7%)   greedy exact match
+  pass@4:   2  (16.7%)   any of k sampled
+  near-pass:2  (16.7%)   output-sim >= 0.9
+  avg-osim: 0.167   continuous output similarity (all tasks)
+  idiom:    5.0 constructs/correct

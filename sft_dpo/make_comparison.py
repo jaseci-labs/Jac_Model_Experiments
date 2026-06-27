@@ -29,6 +29,7 @@ COL = {
     "dscoder": "#d62728",
     "ling":    "#9467bd",
     "qwen25c": "#8c564b",
+    "gemma":   "#17becf",
 }
 LBL = {
     "qwen":    "Qwen3-Coder-30B-A3B (incumbent)",
@@ -37,6 +38,7 @@ LBL = {
     "dscoder": "DeepSeek-Coder-V2-Lite",
     "ling":    "Ling-Coder-lite",
     "qwen25c": "Qwen2.5-Coder-14B",
+    "gemma":   "Gemma-3-26B-A4B (prior)",
 }
 PASS_RE = re.compile(r"cross-compiled test pass:\s*(\d+)%")
 
@@ -138,33 +140,48 @@ def write_matrix():
     return text
 
 
+def draw_group(pos, values, width, color, label, top, pct=True):
+    """Draw one model's bars across a set of x positions.
+    Real value -> colored bar + numeric label (e.g. "94%" / "0.223").
+    None        -> full-height empty bar, black border + jail-bar hatch + "N/A".
+    Colored bars are one plt.bar call (vector) so the legend gets one entry."""
+    pos = np.atleast_1d(np.asarray(pos, float))
+    heights = [v if v is not None else 0 for v in values]
+    plt.bar(pos, heights, width, color=color, label=label)
+    for xi, v in zip(pos, values):
+        if v is None:
+            plt.bar(xi, top, width, facecolor="none", edgecolor="black",
+                    hatch="||||", linewidth=1.2, zorder=3)
+            plt.text(xi, top * 0.5, "N/A", ha="center", va="center",
+                     fontsize=7, fontweight="bold", rotation=90, zorder=4,
+                     bbox=dict(boxstyle="round,pad=0.1", fc="white", ec="none", alpha=0.7))
+        else:
+            lbl = f"{v}%" if pct else f"{v:.3f}"
+            plt.text(xi, v + top * 0.015, lbl, ha="center", va="bottom",
+                     fontsize=6, zorder=4)
+
+
 def _acc_bars(mat, title, fname):
     stages = ["base", "SFT", "DPO"]
-    present = [r for r in mat if any(v is not None for v in r[2:5])]
-    x = np.arange(len(stages)); n = max(len(present), 1); w = 0.8 / n
-    plt.figure(figsize=(10, 5.5))
-    for i, (name, label, base, sft, dpo, _ss, _sd) in enumerate(present):
-        vals = [v if v is not None else 0 for v in (base, sft, dpo)]
-        plt.bar(x + (i - (n - 1) / 2) * w, vals, w, color=COL[name], label=label)
-    plt.title(title); plt.xticks(x, stages); plt.ylabel("test-pass %"); plt.ylim(0, 105)
-    plt.grid(True, axis="y", alpha=0.3)
-    if present: plt.legend(fontsize=8)
+    x = np.arange(len(stages)); n = len(mat); w = 0.8 / n
+    plt.figure(figsize=(11, 6))
+    for i, (name, label, base, sft, dpo, _ss, _sd) in enumerate(mat):
+        draw_group(x + (i - (n - 1) / 2) * w, [base, sft, dpo], w, COL[name], label, 100, pct=True)
+    plt.title(title); plt.xticks(x, stages); plt.ylabel("test-pass %"); plt.ylim(0, 108)
+    plt.grid(True, axis="y", alpha=0.3); plt.legend(fontsize=8)
     plt.tight_layout(); plt.savefig(f"{OUT}/{fname}", dpi=120); plt.close()
 
 
 def _idiom_bars(mat, title, fname):
-    sim_present = [r for r in mat if r[5] is not None or r[6] is not None]
-    x = np.arange(2); n = max(len(sim_present), 1); w = 0.8 / n
-    plt.figure(figsize=(10, 5.5))
-    for i, (name, label, _b, _s, _d, ssft, sdpo) in enumerate(sim_present):
-        vals = [ssft if ssft is not None else 0, sdpo if sdpo is not None else 0]
-        plt.bar(x + (i - (n - 1) / 2) * w, vals, w, color=COL[name], label=label)
+    x = np.arange(2); n = len(mat); w = 0.8 / n
+    plt.figure(figsize=(11, 6))
+    for i, (name, label, _b, _s, _d, ssft, sdpo) in enumerate(mat):
+        draw_group(x + (i - (n - 1) / 2) * w, [ssft, sdpo], w, COL[name], label, 1.0, pct=False)
     plt.axhline(0.26, ls=":", color="green", alpha=0.7)
     plt.text(1.3, 0.27, "idiomatic ref 0.26", color="green", fontsize=8)
     plt.title(title); plt.xticks(x, ["SFT", "DPO"])
-    plt.ylabel("avg transpile-similarity (lower = more idiomatic)"); plt.ylim(0, 1.0)
-    plt.grid(True, axis="y", alpha=0.3)
-    if sim_present: plt.legend(fontsize=8)
+    plt.ylabel("avg transpile-similarity (lower = more idiomatic)"); plt.ylim(0, 1.08)
+    plt.grid(True, axis="y", alpha=0.3); plt.legend(fontsize=8)
     plt.tight_layout(); plt.savefig(f"{OUT}/{fname}", dpi=120); plt.close()
 
 

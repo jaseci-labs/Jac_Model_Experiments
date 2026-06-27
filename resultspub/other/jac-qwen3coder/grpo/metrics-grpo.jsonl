@@ -1,0 +1,1 @@
+{"model": "models/jac-qwen3coder-q4", "adapter": "adapters/jac-qwen3coder-grpo", "tasks": 7, "runs": 1, "pass": 0, "run_pct": 14.29, "pass_pct": 0.0, "avg_idiom": 1.0}
