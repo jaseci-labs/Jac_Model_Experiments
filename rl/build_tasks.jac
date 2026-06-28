@@ -75,6 +75,17 @@ def replace_region(lines: list, start: int, end: int, repl_lines: list) -> str {
     return "\n".join(out);
 }
 
+def sg_bucket(tid: str) -> str {
+    # social_graph.jac is one 32-task file (~half the corpus) — too big to hold out
+    # whole, so its OSP-walker idiom can never sit in a file-disjoint holdout. Split
+    # it into 4 feature buckets so build_rl_splits can reserve a coherent sg slice
+    # (e.g. all 'tweet' walkers) and measure sg-idiom generalization.
+    if "channel" in tid { return "channel"; }
+    if ("tweet" in tid) or ("comment" in tid) or ("like" in tid) { return "tweet"; }
+    if "profile" in tid { return "profile"; }
+    return "feed";   # feed / follow / trending / user / etc.
+}
+
 with entry {
     drivers = sorted(glob.glob("rl/drivers/*.jac"));
     os.makedirs("dataset/rl/templates", exist_ok=True);
@@ -110,6 +121,13 @@ with entry {
         # origin source file (for file-disjoint holdout in build_rl_splits.jac)
         src_m = re.search(r"Origin:\s*(this_is_jac/\S+?\.jac)", text);
         source = str(src_m.group(1)) if src_m else "unknown";
+        # OPT-IN (JAC_RL_SG_BUCKETS=1): bucket the one big social_graph.jac into
+        # feature sub-sources so its idiom can be held out file-disjoint. Off by
+        # default so the established gb+lib-holdout ladder stays reproducible; the
+        # step-7 sg-generalization run turns it on (+ its own results file).
+        if ("social_graph.jac" in source) and (os.environ.get("JAC_RL_SG_BUCKETS", "") == "1") {
+            source = source + "::" + sg_bucket(info["id"]);
+        }
 
         lines = info["lines"];
         indent = info["indent"];
