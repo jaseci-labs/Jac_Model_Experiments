@@ -39,7 +39,7 @@ import os;
 import subprocess;
 import from pathlib { Path }
 
-glob OUT: str = "results/rl_ladder.jsonl";
+glob OUT: str = os.environ.get("JAC_LADDER_OUT", "results/rl_ladder.jsonl");   # step 7 uses a separate file
 glob GO: bool = os.environ.get("JAC_LADDER_GO", "") == "1";
 
 def sh(cmd: str) -> int {
