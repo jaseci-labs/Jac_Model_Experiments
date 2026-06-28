@@ -6,8 +6,7 @@ src/data_generation/__pycache__/
 __pycache__/
 *.pyc
 
-results/*
-!results/pub/
+results/
 models/
 adapters/
 .venv/
