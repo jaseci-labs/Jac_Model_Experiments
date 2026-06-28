@@ -42,14 +42,16 @@ The ladder exists to answer these, in order:
 
 ---
 
-## Hypotheses (to be falsified)
+## Hypotheses — VERDICTS (run complete, 2026-06-28)
 
-- **H1:** Rung 1 reaches 100% memorize for both models. *(If false, harness bug — stop and fix.)*
-- **H2:** Fixed-holdout pass rises with train-N then plateaus well below 100% (coarse exact-match ceiling).
-- **H3:** SFT+GRPO ≈ SFT on holdout (weekend null reproduces); raw-base GRPO stalls at σ=0.
-- **H4:** `jac-qwen3coder` starts higher but the two curves converge as train-N grows.
+- **H1 — CONFIRMED.** Rung-1 SFT mem-recall = 100% for both models. Plumbing sound; every downstream number is trustworthy.
+- **H2 — REFUTED (saturated holdout) / weak (hard holdout).** On the gb+lib holdout, greedy pass@1 is **flat at 26.67% across all train-N** — no rising curve. Only on the harder sg-inclusive holdout (step 7) does fresh `qwen3coder` SFT rise (14.3%→28.6% at rung-all, sg slice 0→1/5). There is no clean "rises-then-plateaus" curve; SFT moves greedy only where there's headroom (hard, unsaturated tasks) and even then barely.
+- **H3 — CONFIRMED, and strengthened.** SFT+GRPO ≈ SFT ≈ base on greedy pass@1 (26.67%); the **tuned** arm (500it/1e-5) is identical; raw-base GRPO ≈ base. GRPO adds nothing at any rung, model, or tuning. **The σ=0 mechanism was REFUTED** — the dense body-sim reward gave real variance (σ=0.09–0.21) yet GRPO still moved nothing, so the null is *not* a cold-start artifact: LoRA-GRPO is genuinely inert here.
+- **H4 — PARTIAL / no convergence.** `jac-qwen3coder` starts higher (mem-recall; base gen on the sg holdout 21% vs 14%) but the curves do **not** converge — both stay flat on greedy generalization; the fresh model is the only one that moves (on the hard holdout). Prior jac SFT/DPO buys a higher floor, not a different ceiling.
 
-Each rung's row in [02-results.md](02-results.md) either supports or kills one of these.
+## CONCLUSION
+
+**At 30B-A3B / LoRA / 48GB on file-disjoint this_is_jac: neither SFT nor GRPO — even tuned — moves greedy holdout generalization, except a faint SFT bump on the hardest unsaturated idiom (sg walkers, 0→1/5).** What training *does* move: **pass@k mean** (SFT +7pp, sampling efficiency — but the boundary/max pass@k is unchanged, base already reaches it) and **train-recall**. GRPO ≈ SFT on every metric. This is the weekend null, now leak-free, properly powered-honest (n=15, wide CIs), and with the "GRPO undertrained" and "σ=0 artifact" escape hatches both closed. **RL is not the lever at this scale — SFT+DPO + dataset quality is.** RL thread closed; see [02-results.md](02-results.md) for all 32 cells across both holdouts.
 
 ---
 

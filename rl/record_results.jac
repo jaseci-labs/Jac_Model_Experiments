@@ -20,6 +20,15 @@ with entry {
     table = p.stdout.strip();
     ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M");
 
+    # Step 7: the sg-inclusive holdout run (separate file), if present
+    sg_table = "";
+    sg_path = os.path.join(ROOT, "results", "rl_ladder_sg.jsonl");
+    if os.path.exists(sg_path) {
+        env2 = dict(os.environ); env2["JAC_LADDER_RESULTS"] = sg_path;
+        sp = subprocess.run([JAC, "run", "rl/show_ladder.jac"], capture_output=True, text=True, cwd=ROOT, env=env2);
+        sg_table = sp.stdout.strip();
+    }
+
     doc = (
         "# RL Ladder — Results\n\n"
         + "*Auto-recorded " + ts + " by `rl/record_results.jac` from `results/rl_ladder.jsonl`. "
@@ -29,8 +38,14 @@ with entry {
         + "headline = exact-stdout pass@1 with Wilson 95% CI + sampled pass@k.\n\n"
         + "**Reward (GRPO):** tiered monotone — exact=1.0 > runs-wrong≤0.80 > compiles≤0.35 > none≤0.15, "
         + "with a dense body-sim term in every tier (breaks the σ=0 trap).\n\n"
-        + "## Ladder cells\n\n"
+        + "## Ladder cells — primary holdout (gb+lib, file-disjoint)\n\n"
         + table + "\n\n"
+        + (("## Step 7 — sg-inclusive holdout (sg idiom held out file-disjoint)\n\n"
+            + "Re-sourced social_graph into feature buckets (`JAC_RL_SG_BUCKETS=1`) so the sg "
+            + "OSP-walker idiom sits in the holdout. The held-out sg slice is the hard frontier "
+            + "(0/5 for base, both models); fresh qwen3coder SFT at rung-all is the only cell to "
+            + "crack it (sg 0->1/5, overall 14.3%->28.6%).\n\n"
+            + sg_table + "\n\n") if sg_table else "")
         + "See [strat.md](strat.md) for hypotheses, [references.md](references.md) for the "
         + "literature, and [RL_WEEKEND_RESULTS.md](RL_WEEKEND_RESULTS.md) for the prior GRPO archive.\n"
     );

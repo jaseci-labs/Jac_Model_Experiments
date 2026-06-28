@@ -10,10 +10,10 @@ Slow, ground-up redesign of the Jac RL workflow. Read in order:
 6. [references.md](references.md) — literature on whether GRPO/RLVR moves a Qwen-class base (it mostly doesn't, at our scale).
 7. [RL_WEEKEND_RESULTS.md](RL_WEEKEND_RESULTS.md) — archive: what the first GRPO run found and why it failed.
 
-**One-line status:** restarting from scratch on a measurable ladder; SFT is the proven lever, GRPO re-tested as a controlled challenger; dataset is `this_is_jac` only; Qwen3.6 removed.
+**One-line status (CLOSED 2026-06-28):** ladder run complete (32 cells, 2 holdouts). **Neither SFT nor GRPO — even tuned — moves greedy holdout generalization** at 30B/LoRA/48GB; faint SFT bump only on the hardest unsaturated idiom (sg 0→1/5). pass@k mean + train-recall move; GRPO ≈ SFT everywhere; σ=0 and undertrained escape hatches both closed. RL is not the lever — SFT+DPO is. See [strat.md](strat.md) CONCLUSION + [02-results.md](02-results.md).
 
 **Harness:** built and scaffolded (`rl/`). 56 hole-fill tasks (`build_tasks.jac`),
 dense v2 reward + `unwrap_unit` scar (`reward_logic.jac`), fixed stratified holdout
 (`build_rl_splits.jac`), rung picker (`pick_rung.jac`), and the one-command ladder
 driver (`run_ladder.jac`, dry by default). Self-check: `jac run rl/test_ladder.jac`.
-Pending: more hole-fill tasks (~10–15 minable), then launch the ladder.
+Status: RUN COMPLETE. 66 tasks, full ladder + tuned-GRPO arm + sg-generalization run all done and recorded (docs + live Studio RL graph).
