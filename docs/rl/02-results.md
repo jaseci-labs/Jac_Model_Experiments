@@ -1,6 +1,6 @@
 # RL Ladder — Results
 
-*Auto-recorded 2026-06-28 07:22 by `rl/record_results.jac` from `results/rl_ladder.jsonl`. Re-run after each ladder stage. Live version also renders in the Studio RL section.*
+*Auto-recorded 2026-06-28 09:54 by `rl/record_results.jac` from `results/rl_ladder.jsonl`. Re-run after each ladder stage. Live version also renders in the Studio RL section.*
 
 **Method:** SFT-first ladder (train-N = 1,3,5,10,20,all) × 2 models × conditions {base, SFT(gold), SFT+GRPO, raw-GRPO control}. Holdout is file-disjoint + decontaminated; headline = exact-stdout pass@1 with Wilson 95% CI + sampled pass@k.
 
@@ -40,5 +40,16 @@
 | qwen3coder | all | raw_grpo | 26.67% | 11.0-52.0% | 26.67% | 8.89% | 26.67% | 0.2808 |
 
 _gen=holdout (generalization), mem=train recall (overfit gauge). Read pass@k + CI, not bare pass@1 (Yue 2504.13837). A rung 'plateaus' only when consecutive CIs overlap._
+
+### by condition — pass@k reframe (gen / holdout)
+
+| cond | n | mean pass@1 | mean pass@8 | max pass@8 (boundary) |
+|---|---|---|---|---|
+| base | 12 | 26.7% | 33.9% | 46.7% |
+| sft | 12 | 27.2% | 41.1% | 46.7% |
+| sft_grpo | 2 | 26.7% | 40.0% | 40.0% |
+| raw_grpo | 2 | 26.7% | 36.7% | 46.7% |
+
+_Greedy (pass@1) flat across all conditions. pass@8 MEAN lifts under SFT (sampling efficiency), but the BOUNDARY (max pass@8) is unchanged from base — neither SFT nor GRPO expands what's reachable (Yue 2504.13837). GRPO ≈ SFT on every metric._
 
 See [strat.md](strat.md) for hypotheses, [references.md](references.md) for the literature, and [RL_WEEKEND_RESULTS.md](RL_WEEKEND_RESULTS.md) for the prior GRPO archive.

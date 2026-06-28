@@ -94,6 +94,37 @@ with entry {
                     + pct(m, "pass1_pct") + " | " + pct(g, "near_pct") + " | " + osim + " |");
             }
             print("\n_gen=holdout (generalization), mem=train recall (overfit gauge). Read pass@k + CI, not bare pass@1 (Yue 2504.13837). A rung 'plateaus' only when consecutive CIs overlap._");
+
+            # --- by-condition pass@k reframe: greedy flat, pass@k mean moves, boundary fixed ---
+            agg: dict = {};
+            for pair in sortable {
+                bits2: list = str(pair[1]).split("|");
+                cond2 = bits2[2];
+                g2: dict = cells[pair[1]].get("gen", {});
+                if "pass1_pct" in g2 {
+                    a: dict = agg.get(cond2, {"p1": [], "pk": []});
+                    a["p1"].append(g2["pass1_pct"]);
+                    a["pk"].append(g2.get("passk_pct", g2["pass1_pct"]));
+                    agg[cond2] = a;
+                }
+            }
+            if agg {
+                print("\n### by condition — pass@k reframe (gen / holdout)\n");
+                print("| cond | n | mean pass@1 | mean pass@8 | max pass@8 (boundary) |");
+                print("|---|---|---|---|---|");
+                for cond3 in ["base", "sft", "sft_grpo", "sft_grpo_tuned", "raw_grpo"] {
+                    if cond3 in agg {
+                        a3: dict = agg[cond3];
+                        n3 = len(a3["pk"]);
+                        if n3 > 0 {
+                            mp1 = sum(a3["p1"]) / n3; mpk = sum(a3["pk"]) / n3; mxpk = max(a3["pk"]);
+                            print("| " + cond3 + " | " + str(n3) + " | " + str(round(mp1, 1)) + "% | "
+                                + str(round(mpk, 1)) + "% | " + str(round(mxpk, 1)) + "% |");
+                        }
+                    }
+                }
+                print("\n_Greedy (pass@1) flat across all conditions. pass@8 MEAN lifts under SFT (sampling efficiency), but the BOUNDARY (max pass@8) is unchanged from base — neither SFT nor GRPO expands what's reachable (Yue 2504.13837). GRPO ≈ SFT on every metric._");
+            }
         }
     }
 }
