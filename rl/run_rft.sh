@@ -46,12 +46,14 @@ fi
 if [ -f "$RFT_ADAPTER/adapters.safetensors" ]; then
   echo ">>> RFT adapter exists ($RFT_ADAPTER) — skipping SFT (rm it to retrain)"
 else
-  # mlx_lm.lora needs >= batch_size examples; the low ladder rungs (rung 1 = a single
-  # gold task) have fewer than the default 2. Clamp batch to the dataset size so the
-  # memorize rung trains instead of crashing.
+  # mlx_lm.lora needs >= batch_size examples in BOTH train AND valid; low ladder
+  # rungs have a tiny gold valid (build_sft_gold carves 1) and crash validation at
+  # the default batch 2. Clamp batch to the smaller of train/valid so any rung trains.
   NTRAIN=$(grep -cve '^[[:space:]]*$' dataset/rl/rft/train.jsonl)
+  NVALID=$(grep -cve '^[[:space:]]*$' dataset/rl/rft/valid.jsonl)
+  NMIN=$NTRAIN; [ "$NVALID" -lt "$NMIN" ] && NMIN=$NVALID
   BATCH="${RFT_BATCH:-2}"
-  [ "$NTRAIN" -lt "$BATCH" ] && { BATCH="$NTRAIN"; echo ">>> small rung: batch -> $BATCH ($NTRAIN gold examples)"; }
+  [ "$NMIN" -lt "$BATCH" ] && { BATCH="$NMIN"; echo ">>> small rung: batch -> $BATCH (train=$NTRAIN valid=$NVALID)"; }
   echo ">>> RFT SFT: ${RFT_ITERS} iters on dataset/rl/rft (layers=${RFT_LAYERS:-16} batch=$BATCH seq=${RFT_MAXSEQ:-2048})"
   # --grad-checkpoint + lean overrides so a DENSE base (Qwen3.6-27B, all-active)
   # fits 48GB. MoE bases are fine on defaults; dense needs RFT_LAYERS=8 etc.
