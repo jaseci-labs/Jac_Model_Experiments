@@ -1,33 +1,18 @@
-# Jac RL — Results (living)
+# RL Ladder — Results
 
-Filled in as each rung runs. Pass = exact stdout (Type A). Empty cells = not yet run. See [01-design.md](01-design.md) for the ladder definition.
+*Auto-recorded 2026-06-28 01:06 by `rl/record_results.jac` from `results/rl_ladder.jsonl`. Re-run after each ladder stage. Live version also renders in the Studio RL section.*
 
-## Hole-fill ladder
+**Method:** SFT-first ladder (train-N = 1,3,5,10,20,all) × 2 models × conditions {base, SFT(gold), SFT+GRPO, raw-GRPO control}. Holdout is file-disjoint + decontaminated; headline = exact-stdout pass@1 with Wilson 95% CI + sampled pass@k.
 
-Holdout = fixed ~15-task pool (same every rung). `mem` = trained-tasks re-eval, `gen` = holdout.
+**Reward (GRPO):** tiered monotone — exact=1.0 > runs-wrong≤0.80 > compiles≤0.35 > none≤0.15, with a dense body-sim term in every tier (breaks the σ=0 trap).
 
-| rung (train N) | model | base | SFT mem | SFT gen | SFT+GRPO gen | raw-GRPO gen |
-|---|---|---|---|---|---|---|
-| 1 | jac-qwen3coder | | (target 100%) | n/a | | |
-| 1 | qwen3coder | | (target 100%) | n/a | | |
-| 3 | jac-qwen3coder | | | | | |
-| 3 | qwen3coder | | | | | |
-| 5 | jac-qwen3coder | | | | | |
-| 5 | qwen3coder | | | | | |
-| 10 | jac-qwen3coder | | | | | |
-| 10 | qwen3coder | | | | | |
-| 20 | jac-qwen3coder | | | | | |
-| 20 | qwen3coder | | | | | |
-| all | jac-qwen3coder | | | | | |
-| all | qwen3coder | | | | | |
+## Ladder cells
 
-> Rung 1 `gen` is `n/a` — the memorize rung evaluates the trained task itself (mem column).
+| model | rung | cond | gen pass@1 | gen 95%CI | gen pass@k | mem recall | gen near | osim |
+|---|---|---|---|---|---|---|---|---|
+| qwen3coder | 1 | base | 26.67% | 11.0-52.0% | 26.67% | 0.0% | 26.67% | 0.2808 |
+| qwen3coder | 1 | sft | 26.67% | 11.0-52.0% | 33.33% | 100.0% | 26.67% | 0.2667 |
 
-## Diagnostics log
-Per run, also record: graded score, near-pass (osim≥0.9), avg-osim. Append notes here as the curve develops.
+_gen=holdout (generalization), mem=train recall (overfit gauge). Read pass@k + CI, not bare pass@1 (Yue 2504.13837). A rung 'plateaus' only when consecutive CIs overlap._
 
-## Sweet spot
-_To be read off the curve once the ladder is run: the train-N where fixed-holdout pass plateaus._
-
-## Whole-file track
-_Started after the hole-fill ladder is mapped. Table TBD with the AST grader design._
+See [strat.md](strat.md) for hypotheses, [references.md](references.md) for the literature, and [RL_WEEKEND_RESULTS.md](RL_WEEKEND_RESULTS.md) for the prior GRPO archive.
