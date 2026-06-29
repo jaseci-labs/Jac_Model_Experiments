@@ -110,14 +110,19 @@ def sg_perfamily(cells, fname):
 
 prim = load(os.path.join(ROOT, "results", "rl_ladder.jsonl"))
 sg = load(os.path.join(ROOT, "results", "rl_ladder_sg.jsonl"))
+v84 = load(os.path.join(ROOT, "results", "rl_ladder_v84.jsonl"))
 assert prim, "no primary results — run the ladder first"
-curve(prim, "pass1_pct", "Primary holdout (gb+lib) — greedy pass@1 by rung: FLAT (the null)",
+curve(prim, "pass1_pct", "Primary holdout (66-task corpus) — greedy pass@1 by rung: FLAT (the null)",
       "gen pass@1 %", "ladder_pass1.png")
 passk_bars(prim, "ladder_passk.png")
 if sg:
     curve(sg, "pass1_pct", "sg-inclusive holdout — greedy pass@1 by rung (fresh SFT moves it)",
           "gen pass@1 %", "sg_pass1.png")
     sg_perfamily(sg, "sg_perfamily.png")
+if v84:
+    curve(v84, "pass1_pct", "84-task corpus (62 trainpool, harder holdout) — greedy pass@1: STILL FLAT",
+          "gen pass@1 %", "ladder84_pass1.png")
+    passk_bars(v84, "ladder84_passk.png")
 
 # copy the live Studio screenshots alongside the generated charts
 for s in ["studio-rl-full.png", "studio-rl-ladder.png"]:

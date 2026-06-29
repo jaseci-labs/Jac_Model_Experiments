@@ -28,6 +28,14 @@ with entry {
         sp = subprocess.run([JAC, "run", "rl/show_ladder.jac"], capture_output=True, text=True, cwd=ROOT, env=env2);
         sg_table = sp.stdout.strip();
     }
+    # The 84-task higher-power re-run (62 trainpool, harder holdout), if present
+    v84_table = "";
+    v84_path = os.path.join(ROOT, "results", "rl_ladder_v84.jsonl");
+    if os.path.exists(v84_path) {
+        env3 = dict(os.environ); env3["JAC_LADDER_RESULTS"] = v84_path;
+        vp = subprocess.run([JAC, "run", "rl/show_ladder.jac"], capture_output=True, text=True, cwd=ROOT, env=env3);
+        v84_table = vp.stdout.strip();
+    }
 
     doc = (
         "# RL Ladder — Results\n\n"
@@ -46,6 +54,13 @@ with entry {
             + "(0/5 for base, both models); fresh qwen3coder SFT at rung-all is the only cell to "
             + "crack it (sg 0->1/5, overall 14.3%->28.6%).\n\n"
             + sg_table + "\n\n") if sg_table else "")
+        + (("## Higher-power re-run — 84-task corpus (62 trainpool, harder holdout)\n\n"
+            + "Re-ran the full ladder after squeezing the corpus to 84 tasks (social_graph "
+            + "48.5%->38.1%). Holdout is harder (base ~11% vs 27%), giving more headroom — yet the "
+            + "result REPRODUCES: greedy pass@1 flat (~11%, SFT +1.4pp = noise), pass@8 mean lifts "
+            + "under SFT/GRPO but base's max-pass@8 (38.9%) is still the highest. The null holds on "
+            + "two independent corpora.\n\n"
+            + v84_table + "\n\n") if v84_table else "")
         + "See [strat.md](strat.md) for hypotheses, [references.md](references.md) for the "
         + "literature, and [RL_WEEKEND_RESULTS.md](RL_WEEKEND_RESULTS.md) for the prior GRPO archive.\n"
     );
