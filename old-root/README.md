@@ -9,8 +9,6 @@ held-out, decontaminated test set.
 after one LoRA pass on our data it produces **93–94% behaviorally-correct Jac** — and on
 graph-shaped tasks, **100% idiomatic** (nodes/edges/walkers, not Python-shaped) after DPO.
 
-> **Confidential — Jaseci Labs.** Every tool in this repo is itself written in Jac
-> (`sft_dpo/jacgen/`) — we dogfood the language we generate data for.
 
 ---
 
