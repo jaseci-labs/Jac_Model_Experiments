@@ -16,4 +16,4 @@ Slow, ground-up redesign of the Jac RL workflow. Read in order:
 dense v2 reward + `unwrap_unit` scar (`reward_logic.jac`), fixed stratified holdout
 (`build_rl_splits.jac`), rung picker (`pick_rung.jac`), and the one-command ladder
 driver (`run_ladder.jac`, dry by default). Self-check: `jac run rl/test_ladder.jac`.
-Status: RUN COMPLETE. 66 tasks, full ladder + tuned-GRPO arm + sg-generalization run all done and recorded (docs + live Studio RL graph).
+Status: RUN COMPLETE (on the 66-task corpus). Full ladder + tuned-GRPO arm + sg-generalization run all done and recorded (docs + live Studio RL graph). Corpus since squeezed to **84 tasks** (`rl/drivers/`, near the this_is_jac ceiling) — available for a higher-power re-run; the recorded results are from the 66-task split.
