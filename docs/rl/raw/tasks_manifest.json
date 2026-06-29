@@ -1,0 +1,422 @@
+[
+{
+"id": "gb_count_signatures",
+"source": "this_is_jac/guestbook.jac",
+"expected_output": "6\n"
+},
+{
+"id": "gb_explore_graph_deliver",
+"source": "this_is_jac/guestbook.jac",
+"expected_output": "GraphSnapshot(nodes=[GraphNodeView(id='r0', label='root', kind='root'), GraphNodeView(id='d0', label='2026-01-01', kind='day'), GraphNodeView(id='v0', label='visitor', kind='visitor')], edges=[['r0', 'd0'], ['d0', 'v0']], path=['r0', 'd0', 'v0'], log=['walker spawned at the shared root', 'entered 2026-01-01', 'traversal complete: 3 nodes'])\nwalker spawned at the shared root | entered 2026-01-01 | traversal complete: 3 nodes\n"
+},
+{
+"id": "gb_explore_graph_walk_day",
+"source": "this_is_jac/guestbook.jac",
+"expected_output": "GraphSnapshot(nodes=[GraphNodeView(id='root', label='root', kind='root'), GraphNodeView(id='2020-01-01', label='2020-01-01', kind='day'), GraphNodeView(id='alice', label='alice', kind='visitor'), GraphNodeView(id='bob', label='bob', kind='visitor')], edges=[['root', '2020-01-01'], ['2020-01-01', 'alice'], ['2020-01-01', 'bob']], path=['root', '2020-01-01', 'alice', 'bob'], log=['walker spawned at the shared root', 'entered 2020-01-01', 'visited alice', 'visited bob', 'traversal complete: 4 nodes'])\nnode_count: 4\nedge_count: 3\npath_len: 4\nkinds: ['root', 'day', 'visitor', 'visitor']\nlabels: ['root', '2020-01-01', 'alice', 'bob']\nlog: ['walker spawned at the shared root', 'entered 2020-01-01', 'visited alice', 'visited bob', 'traversal complete: 4 nodes']\n"
+},
+{
+"id": "gb_get_guestbook_deliver",
+"source": "this_is_jac/guestbook.jac",
+"expected_output": "[GuestEntry(id='g2', name='carol', message='', created_at='2026-01-03T09:00:00Z'), GuestEntry(id='g3', name='bob', message='', created_at='2026-01-02T09:00:00Z'), GuestEntry(id='g1', name='alice', message='', created_at='2026-01-01T09:00:00Z')]\ncarol,bob,alice\n"
+},
+{
+"id": "gb_get_guestbook_descend",
+"source": "this_is_jac/guestbook.jac",
+"expected_output": "alice,bob\n"
+},
+{
+"id": "gb_get_guestbook_gather",
+"source": "this_is_jac/guestbook.jac",
+"expected_output": "[GuestEntry(id='', name='carol', message='third', created_at='2020-01-01T03:00:00Z'), GuestEntry(id='', name='bob', message='second', created_at='2020-01-01T02:00:00Z'), GuestEntry(id='', name='alice', message='first', created_at='2020-01-01T01:00:00Z')]\ncount: 3\nnames_by_recency: ['carol', 'bob', 'alice']\nmessages_by_recency: ['third', 'second', 'first']\nnames_sorted: ['alice', 'bob', 'carol']\n"
+},
+{
+"id": "gb_sign_guestbook_sign",
+"source": "this_is_jac/guestbook.jac",
+"expected_output": "GuestEntry(id='', name='Alice', message='hello world', created_at='2020-01-01T00:00:00Z')\nname: Alice\nmessage: hello world\ncreated_at: 2020-01-01T00:00:00Z\nGuestEntry(id='', name='anonymous', message='second', created_at='2020-01-01T00:00:00Z')\nanon_name: anonymous\nday_count: 1\nvisitor_count: 2\n"
+},
+{
+"id": "graph_like_tweet_act",
+"source": "this_is_jac/littlex/social_graph.jac",
+"expected_output": "{'liked': True, 'likes': ['alice']}\n{'liked': False, 'likes': []}\nlike: {'liked': True, 'likes': ['alice']}\nunlike: {'liked': False, 'likes': []}\n"
+},
+{
+"id": "graph_trending_tally",
+"source": "this_is_jac/littlex/social_graph.jac",
+"expected_output": "[TrendingTag(tag='#jac', count=3), TrendingTag(tag='#rl', count=2)]\n[('#jac', 3), ('#rl', 2)]\n"
+},
+{
+"id": "lib_analyse_text",
+"source": "this_is_jac/source_lexer.jac",
+"expected_output": "True\nTrue\nFalse\n"
+},
+{
+"id": "lib_analyze_score",
+"source": "this_is_jac/analytics.jac",
+"expected_output": "0.0 analytics\n1.5 analytics\n3.0 analytics\n6.0 analytics\n15.0 analytics\n"
+},
+{
+"id": "lib_bench_output_tail",
+"source": "this_is_jac/capture.jac",
+"expected_output": "===\none\ntwo\nthree\n===\nsingle\n===\n\n===\nline4\nline5\nline6\nline7\nline8\nline9\nline10\nline11\n"
+},
+{
+"id": "lib_blank_payload",
+"source": "this_is_jac/source_index.jac",
+"expected_output": "a/b.jac|File not found.||0|False\n|Invalid path.||0|False\nx.py|Could not read file.||0|False\n"
+},
+{
+"id": "lib_capture_mark",
+"source": "this_is_jac/capture.jac",
+"expected_output": "[ok  ] ok\n[skip] skip\n[FAIL] fail\n[FAIL] error\n[FAIL] OK\n[FAIL] \n"
+},
+{
+"id": "lib_capture_ok_count",
+"source": "this_is_jac/capture.jac",
+"expected_output": "2\n"
+},
+{
+"id": "lib_capture_record_line",
+"source": "this_is_jac/capture.jac",
+"expected_output": "  [ok  ] benchmark: Jac 120 / Zig 130\n  [skip] shooter_jac.png: no display\n  [FAIL] shooter_zig.png: crashed\n[{\"detail\": \"Jac 120 / Zig 130\", \"status\": \"ok\", \"step\": \"benchmark\"}, {\"detail\": \"no display\", \"status\": \"skip\", \"step\": \"shooter_jac.png\"}, {\"detail\": \"crashed\", \"status\": \"fail\", \"step\": \"shooter_zig.png\"}]\n"
+},
+{
+"id": "lib_capture_summary_code",
+"source": "this_is_jac/capture.jac",
+"expected_output": "1\n1\n0\n0\n"
+},
+{
+"id": "lib_cur_matrix",
+"source": "this_is_jac/raylib_shim.cl.jac",
+"expected_output": "[1.0, 2.0]\n[3.0, 4.0]\n"
+},
+{
+"id": "lib_display_username",
+"source": "this_is_jac/littlex/frontend.cl.jac",
+"expected_output": "[alice@example.com]->alice [bob@littlex]->bob [plainname]->plainname []-> [x@y@z]->x\n"
+},
+{
+"id": "lib_feed_search",
+"source": "this_is_jac/littlex/social_graph.jac",
+"expected_output": "['Hello Jac', 'jac is fun']\n['Graph DB rocks']\n[]\n['Hello Jac', 'Graph DB rocks', 'jac is fun', 'Python here']\n"
+},
+{
+"id": "lib_fire_bullet",
+"source": "this_is_jac/raylib_shooter/web/main.jac",
+"expected_output": "1.0 2.0 3.0 -19.318517 10.352762 -33.460652 2.0\n"
+},
+{
+"id": "lib_fmt_row",
+"source": "this_is_jac/raylib_shooter/bench.jac",
+"expected_output": "  cpu             12.3          20.0         480\n  gpu              4.0           8.5         512\n  io               n/a           n/a         n/a\n"
+},
+{
+"id": "lib_fstring_rules",
+"source": "this_is_jac/source_lexer.jac",
+"expected_output": "4\n\\}\n\\{\n[^\\\\\\'\"{}\\n]+\n[\\'\"\\\\]\n"
+},
+{
+"id": "lib_get_file_normalize",
+"source": "this_is_jac/source_index.jac",
+"expected_output": "/a/b.jac -> a/b.jac\n//x.py -> x.py\nwin\\path\\file.py -> win/path/file.py\nno/change.css -> no/change.css\n\\\\a\\b -> //a/b\n -> \n"
+},
+{
+"id": "lib_get_file_truncate",
+"source": "this_is_jac/source_index.jac",
+"expected_output": "False|'hello world'\nTrue|'abcd\\n... (truncated)'\nFalse|'trailing'\nFalse|'exactlyten'\n"
+},
+{
+"id": "lib_git_files_skip",
+"source": "this_is_jac/source_index.jac",
+"expected_output": "src/main.jac -> False\na/__pycache__/x.pyc -> True\ndir/.hidden -> True\nlogo.PNG -> True\nbuild/app.wasm -> True\nreadme.md -> False\nnested/.gitignore -> True\n"
+},
+{
+"id": "lib_hashtag_norm",
+"source": "this_is_jac/littlex/social_graph.jac",
+"expected_output": "#jac\n#graph\n#hello\n#code\n#wow\n"
+},
+{
+"id": "lib_innerstring_rules",
+"source": "this_is_jac/source_lexer.jac",
+"expected_output": "5\n%(\\(\\w+\\))?[-#0 +]*([0-9]+|[*])?(\\.([0-9]+|[*]))?[hlL]?[E-GXc-giorsaux%]\n\\{((\\w+)((\\.\\w+)|(\\[[^\\]]+\\]))*)?(\\![sra])?(\\:(.?[<>=\\^])?[-+ ]?#?0?(\\d+)?,?(\\.\\d+)?[E-GXb-gnosx%]?)?\\}\n[^\\\\\\'\"%{\\n]+\n[\\'\"\\\\]\n%|(\\{{1,2})\n"
+},
+{
+"id": "lib_is_lib",
+"source": "this_is_jac/raylib_shooter/bench.jac",
+"expected_output": "True\nTrue\nFalse\nTrue\nFalse\n"
+},
+{
+"id": "lib_jcos_taylor",
+"source": "this_is_jac/main.jac",
+"expected_output": "1.0\n0.0\n-0.9999\n-0.9999\n1.0\n0.540302\n-0.416147\n"
+},
+{
+"id": "lib_jsin_from_cos",
+"source": "this_is_jac/main.jac",
+"expected_output": "0.0\n1.0\n0.0\n-0.9999\n0.841471\n-0.909284\n"
+},
+{
+"id": "lib_keymap",
+"source": "this_is_jac/raylib_shooter/web/raylib_shim.cl.jac",
+"expected_output": "87 265 32 0\n"
+},
+{
+"id": "lib_lang_label",
+"source": "this_is_jac/source_index.jac",
+"expected_output": "a/b/main.jac -> Jac\nx.py -> Python\nstyle.css -> CSS\ndeep/nested.TS -> TypeScript\nREADME -> Text\ndata.unknown -> UNKNOWN\nMakefile.toml -> TOML\n"
+},
+{
+"id": "lib_lcg_rand01",
+"source": "this_is_jac/main.jac",
+"expected_output": "0.488241385\n0.297409188\n0.449803473\n0.181636682\n0.90955557\n0.91513344\n"
+},
+{
+"id": "lib_list_file_meta",
+"source": "this_is_jac/source_index.jac",
+"expected_output": "src/main.jac|main.jac|src|Jac|1234\na/b/style.css|style.css|a/b|CSS|88\nREADME|README||Text|12\nx.py|x.py||Python|5\n"
+},
+{
+"id": "lib_log",
+"source": "this_is_jac/raylib_shooter/bench.jac",
+"expected_output": ">> compiling shooter\n>> staged raylib shared library set\n"
+},
+{
+"id": "lib_m_frustum",
+"source": "this_is_jac/raylib_shooter/web/raylib_shim.cl.jac",
+"expected_output": "1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 -1.020202 -1.0 0.0 0.0 -2.020202 0.0\n"
+},
+{
+"id": "lib_m_ident",
+"source": "this_is_jac/raylib_shooter/web/raylib_shim.cl.jac",
+"expected_output": "[1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0]\n"
+},
+{
+"id": "lib_m_mul",
+"source": "this_is_jac/raylib_shooter/web/raylib_shim.cl.jac",
+"expected_output": "2.0 0.0 0.0 0.0 0.0 2.0 0.0 0.0 0.0 0.0 2.0 0.0 2.0 3.0 4.0 1.0\n"
+},
+{
+"id": "lib_m_ortho",
+"source": "this_is_jac/raylib_shooter/web/raylib_shim.cl.jac",
+"expected_output": "0.002083 0.0 0.0 0.0 0.0 -0.003333 0.0 0.0 0.0 0.0 -1.0 0.0 -1.0 1.0 -0.0 1.0\n"
+},
+{
+"id": "lib_m_rotate",
+"source": "this_is_jac/raylib_shim.cl.jac",
+"expected_output": "0.0\n1.0\n0.0\n0.0\n-1.0\n0.0\n0.0\n0.0\n0.0\n0.0\n1.0\n0.0\n0.0\n0.0\n0.0\n1.0\n"
+},
+{
+"id": "lib_m_translate",
+"source": "this_is_jac/raylib_shooter/web/raylib_shim.cl.jac",
+"expected_output": "1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 0.0 2.0 -3.0 5.0 1.0\n"
+},
+{
+"id": "lib_narrate_plural",
+"source": "this_is_jac/analytics.jac",
+"expected_output": "0 signatures\n1 signature\n2 signatures\n5 signatures\n-1 signatures\n"
+},
+{
+"id": "lib_one_dp",
+"source": "this_is_jac/raylib_shooter/bench.jac",
+"expected_output": "0.0\n1.0\n1.1\n2.3\n10.0\n12.5\n"
+},
+{
+"id": "lib_parse_bench_json",
+"source": "this_is_jac/capture.jac",
+"expected_output": "{'jac': {'avg': 120}, 'zig': {'avg': 240}}\n[1, 2, 3]\nNone\nNone\n42\n"
+},
+{
+"id": "lib_rand_range",
+"source": "this_is_jac/main.jac",
+"expected_output": "-0.329241\n2.189637\n-7.903537\n1.140678\n"
+},
+{
+"id": "lib_respawn_target",
+"source": "this_is_jac/raylib_shooter/web/main.jac",
+"expected_output": "-0.329241 2.189637 -7.903537 1.140678 2.189637 True\n"
+},
+{
+"id": "lib_setcur_matrix",
+"source": "this_is_jac/raylib_shim.cl.jac",
+"expected_output": "[9.0, 8.0] []\n[] [7.0, 6.0]\n"
+},
+{
+"id": "lib_shade_channel",
+"source": "this_is_jac/main.jac",
+"expected_output": "235x100 -> 235\n235x85 -> 199\n80x70 -> 56\n60x45 -> 27\n250x100 -> 250\n255x100 -> 255\n300x100 -> 255\n0x85 -> 0\n"
+},
+{
+"id": "lib_tab_name",
+"source": "this_is_jac/littlex/frontend.cl.jac",
+"expected_output": "feed=Home explore=Explore channels=Channels profile=Profile unknown=Profile\n"
+},
+{
+"id": "lib_target_hover_bob",
+"source": "this_is_jac/main.jac",
+"expected_output": "2.0\n3.277474\n0.887011\n4.739402\n"
+},
+{
+"id": "lib_to_follow_filter",
+"source": "this_is_jac/littlex/frontend.cl.jac",
+"expected_output": "suggest=a,c count=2\n"
+},
+{
+"id": "lib_update_bullets_score",
+"source": "this_is_jac/raylib_shooter/web/main.jac",
+"expected_output": "1 -0.329241 -7.903537 0.0 True\n"
+},
+{
+"id": "lib_visitor_message_norm",
+"source": "this_is_jac/guestbook.jac",
+"expected_output": "11|'hello world'\n0|''\n7|'trimmed'\n200|'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'\n"
+},
+{
+"id": "lib_visitor_name_norm",
+"source": "this_is_jac/guestbook.jac",
+"expected_output": "'Ada Lovelace'\n'anonymous'\n'anonymous'\n'ThisIsAVeryLongNameThatDefinitelyExceeds'\n'x'\n"
+},
+{
+"id": "lib_yaw_basis_xz",
+"source": "this_is_jac/main.jac",
+"expected_output": "-0.0\n-1.0\n1.0\n-0.0\n-0.707107\n-0.707107\n0.707107\n-0.707107\n-1.0\n-0.0\n0.0\n-1.0\n-0.707107\n0.707105\n-0.707105\n-0.707107\n-0.0\n0.9999\n-0.9999\n-0.0\n0.9999\n-0.0\n0.0\n0.9999\n"
+},
+{
+"id": "sg_add_comment_act",
+"source": "this_is_jac/littlex/social_graph.jac",
+"expected_output": "{'success': True, 'comment': {'username': 'alice', 'content': 'nice post', 'created_at': '2020-01-01T00:00:00Z'}}\nsuccess: True\ncomment_username: alice\ncomment_content: nice post\ncomment_count: 1\n"
+},
+{
+"id": "sg_channel_to_view",
+"source": "this_is_jac/littlex/social_graph.jac",
+"expected_output": "ChannelView(id='', name='jacdevs', description='hub', creator_username='alice', created_at='2020-01-01T00:00:00Z', member_count=1, is_member=True, posts=[TweetView(id='', content='newer', author_username='alice', created_at='2020-03-01T00:00:00Z', likes=[], comments=[], is_mine=True), TweetView(id='', content='older', author_username='alice', created_at='2020-02-01T00:00:00Z', likes=[], comments=[], is_mine=True)])\nname: jacdevs\ndescription: hub\ncreator: alice\nmember_count: 1\nis_member: True\npost_count: 2\nposts_by_recency: ['newer', 'older']\n"
+},
+{
+"id": "sg_create_channel_make",
+"source": "this_is_jac/littlex/social_graph.jac",
+"expected_output": "ChannelView(id='', name='jacdevs', description='all things jac', creator_username='alice', created_at='2020-01-01T00:00:00Z', member_count=1, is_member=True, posts=[])\nname: jacdevs\ndescription: all things jac\ncreator: alice\nmember_count: 1\nis_member: True\npost_count: 0\n"
+},
+{
+"id": "sg_create_channel_tweet_act",
+"source": "this_is_jac/littlex/social_graph.jac",
+"expected_output": "TweetView(id='', content='hello channel', author_username='alice', created_at='2020-01-01T00:00:00Z', likes=[], comments=[], is_mine=True)\ncontent: hello channel\nauthor: alice\nis_mine: True\nlikes: []\nchannel_post_count: 1\n"
+},
+{
+"id": "sg_create_tweet_make",
+"source": "this_is_jac/littlex/social_graph.jac",
+"expected_output": "TweetView(id='', content='hello jac', author_username='alice', created_at='2020-01-01T00:00:00Z', likes=[], comments=[], is_mine=True)\ncontent: hello jac\nauthor: alice\ncreated_at: 2020-01-01T00:00:00Z\nis_mine: True\nlikes: []\n"
+},
+{
+"id": "sg_delete_tweet_act",
+"source": "this_is_jac/littlex/social_graph.jac",
+"expected_output": "{'success': True}\nresult: {'success': True}\n['second']\nremaining: ['second']\nremaining_count: 1\n"
+},
+{
+"id": "sg_find_channel_run",
+"source": "this_is_jac/littlex/social_graph.jac",
+"expected_output": "channel_landed: True\nchannel_name: jacdevs\nprofile_landed: False\nempty_landed: False\n"
+},
+{
+"id": "sg_find_profile_run",
+"source": "this_is_jac/littlex/social_graph.jac",
+"expected_output": "profile_landed: True\nprofile_username: alice\ntweet_landed: False\nempty_landed: False\n"
+},
+{
+"id": "sg_find_tweet_run",
+"source": "this_is_jac/littlex/social_graph.jac",
+"expected_output": "tweet_landed: True\ntweet_content: hello world\nactor: alice\nprofile_landed: False\nprofile_actor: alice\nempty_landed: False\n"
+},
+{
+"id": "sg_follow_user_act",
+"source": "this_is_jac/littlex/social_graph.jac",
+"expected_output": "{'success': True}\nresult: {'success': True}\n['bob']\nalice_following: ['bob']\n"
+},
+{
+"id": "sg_get_all_profiles_deliver",
+"source": "this_is_jac/littlex/social_graph.jac",
+"expected_output": "[UserView(id='', username='alice', bio='a'), UserView(id='', username='bob', bio='b')]\nusernames: ['alice', 'bob']\ncount: 2\n"
+},
+{
+"id": "sg_get_all_profiles_gather",
+"source": "this_is_jac/littlex/social_graph.jac",
+"expected_output": "[UserView(id='', username='alice', bio='')]\nusernames: ['alice']\n"
+},
+{
+"id": "sg_get_channel_detail_act",
+"source": "this_is_jac/littlex/social_graph.jac",
+"expected_output": "ChannelView(id='', name='jacdevs', description='hub', creator_username='alice', created_at='2020-01-01T00:00:00Z', member_count=1, is_member=True, posts=[TweetView(id='', content='newer', author_username='alice', created_at='2020-03-01T00:00:00Z', likes=[], comments=[], is_mine=True), TweetView(id='', content='older', author_username='alice', created_at='2020-02-01T00:00:00Z', likes=[], comments=[], is_mine=True)])\nname: jacdevs\ndescription: hub\ncreator: alice\nmember_count: 1\nis_member: True\npost_count: 2\nposts_by_recency: ['newer', 'older']\n"
+},
+{
+"id": "sg_get_channels_deliver",
+"source": "this_is_jac/littlex/social_graph.jac",
+"expected_output": "[ChannelView(id='', name='late', description='', creator_username='alice', created_at='2020-02-01T00:00:00Z', member_count=1, is_member=True, posts=[]), ChannelView(id='', name='early', description='', creator_username='alice', created_at='2020-01-01T00:00:00Z', member_count=1, is_member=True, posts=[])]\nnames_desc_by_date: ['late', 'early']\ncount: 2\n"
+},
+{
+"id": "sg_get_channels_gather",
+"source": "this_is_jac/littlex/social_graph.jac",
+"expected_output": "[ChannelView(id='', name='alpha', description='', creator_username='alice', created_at='2020-02-01T00:00:00Z', member_count=1, is_member=True, posts=[]), ChannelView(id='', name='zeta', description='', creator_username='alice', created_at='2020-01-01T00:00:00Z', member_count=1, is_member=True, posts=[])]\ncount: 2\nnames_by_recency: ['alpha', 'zeta']\ncreators: ['alice', 'alice']\n"
+},
+{
+"id": "sg_get_profile_give",
+"source": "this_is_jac/littlex/social_graph.jac",
+"expected_output": "ProfileView(id='', username='alice', bio='me', followers=[], following=[], tweets=[TweetView(id='', content='hi', author_username='alice', created_at='2020-01-01T00:00:00Z', likes=[], comments=[], is_mine=True)])\nusername: alice\nbio: me\ntweet_contents: ['hi']\ntweet_count: 1\n"
+},
+{
+"id": "sg_get_trending_deliver",
+"source": "this_is_jac/littlex/social_graph.jac",
+"expected_output": "[TrendingTag(tag='#jac', count=3), TrendingTag(tag='#rl', count=2)]\n[('#jac', 3), ('#rl', 2)]\n"
+},
+{
+"id": "sg_join_channel_act",
+"source": "this_is_jac/littlex/social_graph.jac",
+"expected_output": "{'success': True}\n{'success': True}\njoin1: {'success': True}\njoin2_idempotent: {'success': True}\nmember_count: 1\nis_member: True\n"
+},
+{
+"id": "sg_leave_channel_act",
+"source": "this_is_jac/littlex/social_graph.jac",
+"expected_output": "before_member_count: 1\n{'success': True}\nleave: {'success': True}\nafter_member_count: 0\nis_member: False\n"
+},
+{
+"id": "sg_load_feed_deliver",
+"source": "this_is_jac/littlex/social_graph.jac",
+"expected_output": "[TweetView(id='', content='jac scaling well', author_username='alice', created_at='2020-01-03T00:00:00Z', likes=[], comments=[], is_mine=True), TweetView(id='', content='loving jac today', author_username='alice', created_at='2020-01-01T00:00:00Z', likes=[], comments=[], is_mine=True)]\nfiltered_by_recency: ['jac scaling well', 'loving jac today']\ncount: 2\n"
+},
+{
+"id": "sg_load_feed_gather",
+"source": "this_is_jac/littlex/social_graph.jac",
+"expected_output": "[TweetView(id='', content='second', author_username='alice', created_at='2020-02-01T00:00:00Z', likes=[], comments=[], is_mine=True), TweetView(id='', content='first', author_username='alice', created_at='2020-01-01T00:00:00Z', likes=[], comments=[], is_mine=True)]\ncontents_desc_by_date: ['second', 'first']\ncount: 2\n"
+},
+{
+"id": "sg_load_feed_run",
+"source": "this_is_jac/littlex/social_graph.jac",
+"expected_output": "[TweetView(id='', content='bob post', author_username='bob', created_at='2020-02-01T00:00:00Z', likes=[], comments=[], is_mine=False), TweetView(id='', content='my own post', author_username='alice', created_at='2020-01-01T00:00:00Z', likes=[], comments=[], is_mine=True)]\ncontents_desc_by_date: ['bob post', 'my own post']\ncount: 2\n"
+},
+{
+"id": "sg_profile_to_profile_view",
+"source": "this_is_jac/littlex/social_graph.jac",
+"expected_output": "ProfileView(id='', username='alice', bio='me', followers=[UserView(id='', username='bob', bio='')], following=[UserView(id='', username='carol', bio='')], tweets=[TweetView(id='', content='newer', author_username='alice', created_at='2020-02-01T00:00:00Z', likes=[], comments=[], is_mine=True), TweetView(id='', content='older', author_username='alice', created_at='2020-01-01T00:00:00Z', likes=[], comments=[], is_mine=True)])\nusername: alice\nfollowers: ['bob']\nfollowing: ['carol']\ntweets_desc_by_date: ['newer', 'older']\n"
+},
+{
+"id": "sg_profile_to_user_view",
+"source": "this_is_jac/littlex/social_graph.jac",
+"expected_output": "UserView(id='', username='alice', bio='hello there')\nid: \nusername: alice\nbio: hello there\n"
+},
+{
+"id": "sg_setup_profile_apply",
+"source": "this_is_jac/littlex/social_graph.jac",
+"expected_output": "ProfileView(id='', username='alice', bio='hello world', followers=[], following=[], tweets=[])\nusername: alice\nbio: hello world\nfollowers: []\nfollowing: []\ntweet_count: 0\n"
+},
+{
+"id": "sg_setup_profile_run",
+"source": "this_is_jac/littlex/social_graph.jac",
+"expected_output": "ProfileView(id='', username='alice', bio='hello there', followers=[], following=[], tweets=[])\nusername: alice\nbio: hello there\nprofile_count: 1\ntweet_count: 0\n"
+},
+{
+"id": "sg_tweet_to_view",
+"source": "this_is_jac/littlex/social_graph.jac",
+"expected_output": "TweetView(id='', content='hello', author_username='alice', created_at='2020-01-01T00:00:00Z', likes=['bob', 'carol'], comments=[], is_mine=True)\ncontent: hello\nauthor: alice\ncreated_at: 2020-01-01T00:00:00Z\nlikes: ['bob', 'carol']\nis_mine: True\n"
+},
+{
+"id": "sg_unfollow_user_act",
+"source": "this_is_jac/littlex/social_graph.jac",
+"expected_output": "{'success': True}\nresult: {'success': True}\n[]\nalice_following: []\n"
+}
+]
