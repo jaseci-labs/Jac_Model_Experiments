@@ -49,10 +49,7 @@ glob IDIOM_WEIGHTS: dict[str, int] = {
 };
 
 def unwrap_unit(body: str) -> str {
-    # The template hole sits INSIDE a unit (`can X { __HOLE__ }`), but models
-    # usually emit the WHOLE unit (`can X { ... }`). Splicing that raw nests it
-    # -> broken jac. When the completion is one wrapped unit, return its inner
-    # block so it splices cleanly. Leave bare statement bodies untouched.
+    # Fallback: inner block of a single wrapped unit; bare bodies untouched.
     s = body.strip();
     if re.match(r"^(can|def|walker|node|obj|edge|with)\b", s) and "{" in s and "}" in s {
         return s[s.index("{") + 1 : s.rindex("}")].strip();
@@ -60,16 +57,51 @@ def unwrap_unit(body: str) -> str {
     return s;
 }
 
-def extract_jac(completion: str) -> str {
+def hole_unit_name(template: str) -> str {
+    m = re.search(r"(?:def|can|walker|node|obj|edge)\s+(\w+)\b[^{]*\{\s*__HOLE__", template);
+    return str(m.group(1)) if m else "";
+}
+
+def unit_body(code: str, name: str) -> str {
+    # Brace-match the body of unit `name` out of `code` (may be the whole echoed
+    # driver). "" if not found. Models reproduce the full driver, so we must pull
+    # THIS unit's body — blindly unwrapping the first/last brace grabbed the
+    # docstring and corrupted the reward (~4x undercount) as well as the eval.
+    if not name {
+        return "";
+    }
+    m = re.search(r"(?:def|can|walker|node|obj|edge)\s+" + re.escape(name) + r"\b[^{]*\{", code);
+    if not m {
+        return "";
+    }
+    start = m.end() - 1;
+    depth = 0; i = start;
+    while i < len(code) {
+        ch = code[i];
+        if ch == "{" { depth += 1; }
+        elif ch == "}" {
+            depth -= 1;
+            if depth == 0 {
+                return code[start + 1 : i].strip();
+            }
+        }
+        i += 1;
+    }
+    return "";
+}
+
+def extract_jac(completion: str, template: str = "") -> str {
+    code = completion;
     if "```jac" in completion {
-        part = completion.split("```jac", 1)[1];
-        return unwrap_unit(part.split("```", 1)[0]);
+        code = completion.split("```jac", 1)[1].split("```", 1)[0];
+    } elif "```" in completion {
+        code = completion.split("```", 1)[1].split("```", 1)[0];
     }
-    if "```" in completion {
-        part = completion.split("```", 1)[1];
-        return unwrap_unit(part.split("```", 1)[0]);
+    body = unit_body(code, hole_unit_name(template)) if template else "";
+    if body {
+        return body;
     }
-    return unwrap_unit(completion);
+    return unwrap_unit(code);
 }
 
 @lru_cache(maxsize=512)
@@ -126,7 +158,7 @@ def score_one(completion: str, answer_json: str) -> float {
         return 0.0;
     }
 
-    body = extract_jac(completion);
+    body = extract_jac(completion, template);
     if not body or "__HOLE__" not in template {
         return 0.0;
     }
@@ -170,7 +202,7 @@ def jac_behavioral(prompts: any = None, completions: any = None, answer: any = N
     out: list = [];
     for (i, comp) in enumerate(comps) {
         ans = answers[i] if i < len(answers) else (answers[0] if answers else "{}");
-        key = ans + "\x00" + extract_jac(comp);
+        key = ans + "\x00" + str(comp);   # dedup by raw completion (template not needed for the key)
         if key not in cache {
             cache[key] = score_one(comp, ans);
         }

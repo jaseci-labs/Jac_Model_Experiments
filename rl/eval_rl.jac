@@ -62,15 +62,13 @@ def gen_mlx_sampled(model: any, tok: any, prompt: str, temp: float) -> str {
 }
 
 def passes(template: str, gen: str, expected: str, timeout: int) -> bool {
-    body = extract_jac(gen);
+    body = extract_jac(gen, template);
     (code, out, err) = run_jac(template.replace("__HOLE__", body), timeout);
     return code == 0 and out.strip() == expected.strip();
 }
 
 def unwrap_unit(body: str) -> str {
-    # Model usually emits the whole unit (`can X { ... }`) but the template hole
-    # is INSIDE the unit -> nesting breaks it. Return the inner block when the
-    # completion is one wrapped unit; leave bare statement bodies untouched.
+    # Fallback: return the inner block when the completion is one wrapped unit.
     s = body.strip();
     if re.match(r"^(can|def|walker|node|obj|edge|with)\b", s) and "{" in s and "}" in s {
         return s[s.index("{") + 1 : s.rindex("}")].strip();
@@ -78,16 +76,53 @@ def unwrap_unit(body: str) -> str {
     return s;
 }
 
-def extract_jac(output: str) -> str {
+def hole_unit_name(template: str) -> str {
+    # Name of the unit whose body is the __HOLE__ (e.g. `def _one_dp(..) { __HOLE__ }`).
+    m = re.search(r"(?:def|can|walker|node|obj|edge)\s+(\w+)\b[^{]*\{\s*__HOLE__", template);
+    return str(m.group(1)) if m else "";
+}
+
+def unit_body(code: str, name: str) -> str {
+    # Brace-match the body of unit `name` out of `code` (which may be the whole
+    # echoed driver). Returns "" if not found. This is the real extractor: the model
+    # reproduces the entire driver, so we must pull THIS unit's body, not blindly
+    # unwrap the first/last brace pair (which grabbed the docstring -> ~4x undercount).
+    if not name {
+        return "";
+    }
+    m = re.search(r"(?:def|can|walker|node|obj|edge)\s+" + re.escape(name) + r"\b[^{]*\{", code);
+    if not m {
+        return "";
+    }
+    start = m.end() - 1;   # index of the opening {
+    depth = 0; i = start;
+    while i < len(code) {
+        ch = code[i];
+        if ch == "{" { depth += 1; }
+        elif ch == "}" {
+            depth -= 1;
+            if depth == 0 {
+                return code[start + 1 : i].strip();
+            }
+        }
+        i += 1;
+    }
+    return "";
+}
+
+def extract_jac(output: str, template: str) -> str {
+    # code fence -> jac block; else whole output
+    code = output;
     if "```jac" in output {
-        part = output.split("```jac", 1)[1];
-        return unwrap_unit(part.split("```", 1)[0]);
+        code = output.split("```jac", 1)[1].split("```", 1)[0];
+    } elif "```" in output {
+        code = output.split("```", 1)[1].split("```", 1)[0];
     }
-    if "```" in output {
-        part = output.split("```", 1)[1];
-        return unwrap_unit(part.split("```", 1)[0]);
+    body = unit_body(code, hole_unit_name(template));
+    if body {
+        return body;
     }
-    return unwrap_unit(output);
+    return unwrap_unit(code);   # fallback: bare body or single wrapped unit
 }
 
 def run_jac(code: str, timeout: int = 20) -> tuple[int, str, str] {
@@ -145,7 +180,7 @@ with entry {
             total += 1;
             # pass@1 (greedy) + continuous metrics
             gen = gen_mlx(model, tok, str(rec["prompt"]));
-            body = extract_jac(gen);
+            body = extract_jac(gen, template);
             (code, out, err) = run_jac(template.replace("__HOLE__", body), timeout);
             osim = 0.0; p1 = False;
             if code == 0 {
