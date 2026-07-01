@@ -1,3 +1,18 @@
+> # ⚠️ CORRECTION (2026-07-01) — the numbers below are INVALIDATED
+> A measurement bug was found *after* this doc was written. The eval's body
+> extractor (`extract_jac`/`unwrap_unit`) grabbed the driver docstring instead of
+> the model's answer when the model echoed the whole driver — **undercounting
+> accuracy ~3.5×**. Re-measured with the fixed extractor, base holdout accuracy is
+> **33–39%, not the ~11–27%** reported throughout this doc. Worse, `reward_logic.jac`
+> used the **same** broken extractor, so **GRPO was trained on corrupted reward** —
+> its "adds nothing" result is unreliable, not just mis-measured.
+> **Everything below (findings F1–F8, the "RL is a dead end" verdict) must be
+> re-evaluated with the fixed pipeline** (commit `8164ee2`). What survives so far:
+> the models are far more capable than measured; the python→jac conversion framing
+> beats hole-fill (+11pp) once the eval works; grading brittleness is real. What does
+> NOT survive: any absolute number, and the RL-vs-SFT conclusion. A corrected re-run
+> is pending. Read the rest as *what we thought before the eval bug was found.*
+
 # RL Findings — Idiomatic Jac Code Generation
 
 **Question:** can reinforcement learning (GRPO) make a 30B coder model write better, idiomatic, compiler-correct Jac — beyond what supervised fine-tuning already gives?
