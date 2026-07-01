@@ -129,7 +129,7 @@ with entry {
             lines = lines[:limit];
         }
         total = 0; runs = 0; passed = 0; passed_k = 0; idiom_sum = 0;
-        osim_sum = 0.0; near_pass = 0;   # continuous progress metrics (detect partial gains)
+        osim_sum = 0.0; near_pass = 0; norm_pass = 0;   # continuous progress metrics (detect partial gains)
         fam_total: dict = {}; fam_pass: dict = {};   # per-family pass@1 (premise is graph idioms)
         for ln in lines {
             rec = json.loads(ln);
@@ -155,6 +155,8 @@ with entry {
                 osim_sum += osim;
                 if osim >= 0.9 { near_pass += 1; }
                 if out.strip() == expected.strip() { passed += 1; p1 = True; }
+                # F4 diagnostic: whitespace-collapsed match (would a less-brittle grader pass it?)
+                if " ".join(out.split()) == " ".join(expected.split()) { norm_pass += 1; }
             }
             # pass@k (sampled): any of k tries passes (greedy counts as one try)
             kp = p1;
@@ -183,6 +185,7 @@ with entry {
         print("  tasks:    " + str(total) + "   (k=" + str(k) + " temp=" + str(temp) + ")");
         print("  runs:     " + str(runs) + "  (" + str(round(run_pct, 1)) + "%)   compiles+executes");
         print("  pass@1:   " + str(passed) + "  (" + str(round(pass_pct, 1)) + "%)   greedy exact match");
+        print("  norm@1:   " + str(norm_pass) + "  (" + str(round(100.0 * norm_pass / total, 1) if total else 0.0) + "%)   whitespace-normalized match (F4 probe)");
         print("  pass@" + str(k) + ":   " + str(passed_k) + "  (" + str(round(passk_pct, 1)) + "%)   any of k sampled");
         print("  near-pass:" + str(near_pass) + "  (" + str(round(near_pct, 1)) + "%)   output-sim >= 0.9");
         print("  avg-osim: " + str(round(avg_osim, 3)) + "   continuous output similarity (all tasks)");
@@ -201,7 +204,7 @@ with entry {
                 fh.write(json.dumps({
                     "tag": os.environ.get("JAC_RL_TAG", ""),
                     "model": mp, "adapter": adapter, "tasks": total, "k": k,
-                    "runs": runs, "pass1": passed, "passk": passed_k, "near_pass": near_pass,
+                    "runs": runs, "pass1": passed, "passk": passed_k, "near_pass": near_pass, "norm_pass": norm_pass,
                     "run_pct": round(run_pct, 2), "pass1_pct": round(pass_pct, 2),
                     "passk_pct": round(passk_pct, 2), "near_pct": round(near_pct, 2),
                     "avg_osim": round(avg_osim, 4), "avg_idiom": round(avg_idiom, 2),
