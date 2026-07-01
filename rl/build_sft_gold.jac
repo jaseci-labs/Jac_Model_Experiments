@@ -18,7 +18,7 @@ import json;
 import from pathlib { Path }
 
 with entry {
-    src = "dataset/rl/train.jsonl";
+    src = os.environ.get("JAC_RL_TRAIN", "dataset/rl/train.jsonl");   # override for the conversion POC
     if not Path(src).exists() {
         print("MISSING " + src + " — run build_tasks + build_rl_splits first");
         import sys;
