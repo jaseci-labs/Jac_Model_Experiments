@@ -1,0 +1,5 @@
+# Method of CaptureRunner (has results: list[dict] = []).
+def record(self, name: str, status: str, detail: str) -> None:
+    self.results.append({"step": name, "status": status, "detail": detail})
+    mark = "ok  " if status == "ok" else ("skip" if status == "skip" else "FAIL")
+    print(f"  [{mark}] {name}: {detail}")
