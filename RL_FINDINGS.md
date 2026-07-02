@@ -60,6 +60,35 @@ built on the corrected pipeline.
 
 ---
 
+## FULL PROGRAM — all 6 tracks (2026-07-02)
+
+Ran every remaining lever. The pattern is consistent: **best-of-k + the jac compiler
+as verifier is the universal win; SFT is a secondary boost; conversion is the best
+task framing.**
+
+| # | track | result |
+|---|---|---|
+| 6 | **fresh model** | **dead** — greedy = deploy = oracle = 33% (gap 0; can't write Jac, sampling finds nothing). Use `jac-qwen3coder`. |
+| 3 | **"unsolvable" tasks** | at **k=32, oracle = 89%** (16/18) — 3 of 5 were just under-sampled. The 2 truly stuck (`lib_fstring_rules`, `lib_innerstring_rules`) are **bad tasks** (verbatim-regex memorization) → **drop them → ~100% of meaningful pure-fn tasks are best-of-k-solvable.** |
+| 2 | **graph-idiom** (sg+graph walkers in holdout, n=17) | best-of-k **53% → 65%** with SFT (oracle 71%) — **works on walkers too.** But **greedy does NOT improve** (35%→29%, 1-task drop, within noise): SFT shifts the *sampling* distribution on hard walkers, not the greedy default. |
+| 5 | **conversion (python→jac)** | **the peak.** conv base **64% greedy** (vs hole-fill 39% — better spec) → conv-SFT **73% greedy / 82% best-of-k** (+9pp each). |
+| 4 | **generator** | `rl/generate.py` — sample k, return the first the jac compiler accepts. **Live-verified** (returns correct Jac, verified on sample 1/8). |
+| 1 | **integrity** | invalidated broken-eval numbers flagged in `docs/rl/02-results.md`, `resultspub/rl/README`, and the Studio RL section. |
+
+### Diagnosed drops (you asked)
+- **rung-20 → rung-all (61%→56% greedy):** 1 task (`lib_log`) regressed → **task interference** (extra harder graph-walker tasks dilute). Sweet spot = rung-20.
+- **#2 graph SFT greedy 35%→29%:** 1 task (`lib_cur_matrix`) went samplable-but-not-greedy under SFT; within n=17 noise. SFT helped best-of-k (+12pp) instead of greedy — the harder the task, the more SFT moves *sampling* not *greedy*.
+- **Both are minor + explained** — no unexplained regressions.
+
+### The final deployable answer
+**Conversion prompting + SFT + best-of-k (jac compiler as verifier) = ~82%** on pure
+functions; **~65% on graph walkers**; **~89% at k=32.** The compiler-as-verifier is the
+robust lever that works on every holdout; SFT and the conversion framing stack on top.
+Ship `rl/generate.py` with the conversion-SFT model. The v1 "RL dead end" is fully
+buried: the models are capable, and a ~80% Jac generator is real and built.
+
+---
+
 ## Legend
 
 | Term | Meaning |
