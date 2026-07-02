@@ -23,6 +23,40 @@ syntax gap, not a capability wall.**
   a real limit.
 - The old verdict — *"RL is a dead end, models can't do Jac"* — was a **measurement
   artifact.**
+- **Corrected full run (2026-07-02) confirms it: SFT WORKS** — greedy **39% → 61%**
+  (+22pp, peak at rung-20), best-of-k deploy **72% → 78%**. GRPO ≈ SFT (no extra lift,
+  but reward now valid); raw-GRPO from base = nothing. v1's "SFT does nothing" is
+  reversed.
+
+---
+
+## RESULTS — corrected full run (jac-qwen3coder, fixed eval+reward, 2026-07-02)
+
+| cell | greedy pass@1 | oracle pass@8 | best-of-k deploy |
+|---|---|---|---|
+| base | 38.9% | 72.2% | **72.2%** |
+| SFT rung-5 | 55.6% | **83.3%** | — |
+| **SFT rung-20** | **61.1%** ← peak greedy | 72.2% | — |
+| SFT rung-all | 55.6% | 72.2% | **77.8%** |
+| SFT + GRPO (rall) | 55.6% | 77.8% | 77.8% |
+| raw-GRPO control | 38.9% | 72.2% | — |
+
+**What the numbers say:**
+- **SFT closes the greedy gap** — 39%→61% at the sweet spot (rung-20). The knowledge
+  was reachable (67% sampled); SFT makes it greedy-default, exactly as C2/C4 predicted.
+- **best-of-k deploy 72%→78%** after SFT; deploy == oracle throughout (compiler is a
+  perfect picker — C4).
+- **GRPO adds nothing over SFT** (55.6% greedy either way) — but this is a *valid* null
+  now (fixed reward, real variance), at 55%+, not the broken-eval 11%. And **raw-GRPO
+  from base = base** (38.9%) — GRPO needs the SFT warm-start; it can't bootstrap alone.
+- **Diagnosed drop (rung-20 → rung-all, 61%→56%):** exactly one task regressed
+  (`lib_log`), zero gains → **task interference** — the extra 42 tasks (harder graph
+  walkers) pulled the model off an easy pure-fn. **Sweet spot is rung-20; more tasks ≠
+  better.** Fix path: curriculum / quality-filter the train pool, or just train to ~20.
+
+**The deployable recommendation:** SFT to rung-20 (61% greedy) **+ best-of-k with the
+jac compiler as verifier → ~78% accuracy.** That is a real, shippable Jac generator,
+built on the corrected pipeline.
 
 ---
 
