@@ -1,6 +1,9 @@
 # RL Ladder — Results
 
-*Auto-recorded 2026-06-29 03:54 by `rl/record_results.jac` from `results/rl_ladder.jsonl`. Re-run after each ladder stage. Live version also renders in the Studio RL section.*
+> ## ⚠️ INVALIDATED — do not trust the numbers below
+> These ladder numbers were produced by a **broken eval+reward** that undercounted accuracy ~3.5–4× (the body extractor grabbed the driver docstring). The corrected results are in the root **`RL_FINDINGS.md`** (SFT actually lifts greedy 39%→61%, best-of-k ships ~78%). Kept only as a record of the broken run.
+
+*Auto-recorded 2026-07-02 11:07 by `rl/record_results.jac` from `results/rl_ladder.jsonl`. Re-run after each ladder stage. Live version also renders in the Studio RL section.*
 
 **Method:** SFT-first ladder (train-N = 1,3,5,10,20,all) × 2 models × conditions {base, SFT(gold), SFT+GRPO, raw-GRPO control}. Holdout is file-disjoint + decontaminated; headline = exact-stdout pass@1 with Wilson 95% CI + sampled pass@k.
 

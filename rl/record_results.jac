@@ -39,6 +39,12 @@ with entry {
 
     doc = (
         "# RL Ladder — Results\n\n"
+        + "> ## ⚠️ INVALIDATED — do not trust the numbers below\n"
+        + "> These ladder numbers were produced by a **broken eval+reward** that "
+        + "undercounted accuracy ~3.5–4× (the body extractor grabbed the driver "
+        + "docstring). The corrected results are in the root **`RL_FINDINGS.md`** "
+        + "(SFT actually lifts greedy 39%→61%, best-of-k ships ~78%). Kept only as a "
+        + "record of the broken run.\n\n"
         + "*Auto-recorded " + ts + " by `rl/record_results.jac` from `results/rl_ladder.jsonl`. "
         + "Re-run after each ladder stage. Live version also renders in the Studio RL section.*\n\n"
         + "**Method:** SFT-first ladder (train-N = 1,3,5,10,20,all) × 2 models × conditions "
