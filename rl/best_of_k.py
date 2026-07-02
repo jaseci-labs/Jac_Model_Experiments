@@ -6,8 +6,8 @@ import json, os, re, sys, tempfile, subprocess
 import mlx_lm
 from mlx_lm.sample_utils import make_sampler
 MP=os.environ["JAC_EVAL_MODEL"]; H=os.environ.get("JAC_RL_HOLDOUT","dataset/rl/holdout.jsonl")
-K=int(os.environ.get("K","8")); TEMP=float(os.environ.get("TEMP","0.8"))
-model,tok=mlx_lm.load(MP)
+AD=os.environ.get("JAC_EVAL_ADAPTER",""); K=int(os.environ.get("K","8")); TEMP=float(os.environ.get("TEMP","0.8"))
+model,tok=mlx_lm.load(MP, adapter_path=AD) if AD else mlx_lm.load(MP)
 def gen(prompt,temp):
     text=tok.apply_chat_template([{"role":"user","content":prompt}],add_generation_prompt=True,tokenize=False)
     s=make_sampler(temp=temp); o=""
