@@ -1,0 +1,70 @@
+{
+ "model": "jac-qwen3coder",
+ "ladder": [
+  {
+   "cell": "base",
+   "greedy": 38.89,
+   "passk": 72.22
+  },
+  {
+   "cell": "SFT r5",
+   "greedy": 55.56,
+   "passk": 83.33
+  },
+  {
+   "cell": "SFT r20",
+   "greedy": 61.11,
+   "passk": 72.22
+  },
+  {
+   "cell": "SFT all",
+   "greedy": 55.56,
+   "passk": 72.22
+  },
+  {
+   "cell": "SFT+GRPO",
+   "greedy": 55.56,
+   "passk": 77.78
+  },
+  {
+   "cell": "raw-GRPO",
+   "greedy": 38.89,
+   "passk": 72.22
+  }
+ ],
+ "holdouts": [
+  {
+   "name": "pure-fn",
+   "n": 18,
+   "greedy_base": 38.89,
+   "greedy_sft": 61.11,
+   "bok_base": 72.2,
+   "bok_sft": 77.8
+  },
+  {
+   "name": "graph-idiom",
+   "n": 17,
+   "greedy_base": 35.29,
+   "greedy_sft": 29.41,
+   "bok_base": 52.9,
+   "bok_sft": 64.7
+  },
+  {
+   "name": "conversion",
+   "n": 11,
+   "greedy_base": 63.64,
+   "greedy_sft": 72.73,
+   "bok_base": 72.7,
+   "bok_sft": 81.8
+  }
+ ],
+ "headline": {
+  "greedy_base": 38.9,
+  "greedy_sft": 61.1,
+  "bok_base": 72.2,
+  "bok_sft": 77.8,
+  "conv_peak": 81.8,
+  "k32": 88.9
+ },
+ "note": "CORRECTED (fixed eval+reward). SFT lifts greedy 39->61%; best-of-k+compiler-verifier ships ~78%; conversion+SFT peaks 82%; k=32 reaches 89%. GRPO~=SFT."
+}
