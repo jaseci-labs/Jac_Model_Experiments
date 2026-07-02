@@ -42,7 +42,7 @@
    "bok_sft": 77.8
   },
   {
-   "name": "graph-idiom",
+   "name": "graph",
    "n": 17,
    "greedy_base": 35.29,
    "greedy_sft": 29.41,
@@ -56,6 +56,58 @@
    "greedy_sft": 72.73,
    "bok_base": 72.7,
    "bok_sft": 81.8
+  },
+  {
+   "name": "clean",
+   "n": 16,
+   "greedy_base": 43.75,
+   "greedy_sft": 68.75,
+   "bok_base": 93.8,
+   "bok_sft": 87.5
+  },
+  {
+   "name": "big+fresh",
+   "n": 32,
+   "greedy_base": 34.38,
+   "greedy_sft": 43.75,
+   "bok_base": 62.5,
+   "bok_sft": 71.9
+  }
+ ],
+ "journey": [
+  {
+   "stage": "v1 (broken eval)",
+   "acc": 11.1
+  },
+  {
+   "stage": "eval fixed \u00b7 base greedy",
+   "acc": 38.9
+  },
+  {
+   "stage": "+ SFT \u00b7 greedy",
+   "acc": 61.1
+  },
+  {
+   "stage": "+ best-of-k",
+   "acc": 77.8
+  },
+  {
+   "stage": "+ drop junk tasks",
+   "acc": 93.8
+  }
+ ],
+ "kscale": [
+  {
+   "k": "greedy",
+   "acc": 38.9
+  },
+  {
+   "k": "k=8",
+   "acc": 72.2
+  },
+  {
+   "k": "k=32",
+   "acc": 88.9
   }
  ],
  "headline": {
@@ -63,8 +115,9 @@
   "greedy_sft": 61.1,
   "bok_base": 72.2,
   "bok_sft": 77.8,
+  "clean_ceiling": 93.8,
   "conv_peak": 81.8,
   "k32": 88.9
  },
- "note": "CORRECTED (fixed eval+reward). SFT lifts greedy 39->61%; best-of-k+compiler-verifier ships ~78%; conversion+SFT peaks 82%; k=32 reaches 89%. GRPO~=SFT."
+ "note": "CORRECTED (fixed eval+reward). SFT lifts greedy 39->61%; best-of-k+compiler-verifier ships ~78% (94% on clean tasks); conversion+SFT peaks 82%; k=32 reaches 89%. GRPO~=SFT. SFT lift holds at n=32."
 }

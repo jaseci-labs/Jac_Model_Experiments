@@ -1,16 +1,17 @@
 # RL — published graphs (CORRECTED)
 
-All graphs here are from the **corrected** pipeline (fixed eval+reward). The old
-broken-eval graphs were deleted — they undercounted accuracy ~3.5× (the body extractor
-grabbed the driver docstring). Full analysis: root `RL_FINDINGS.md`.
+All corrected (fixed eval+reward). Old broken-eval graphs deleted (~3.5× undercount).
+Full write-up: root `RL_FINDINGS.md`. Regenerate: `python3 rl/make_summary.py && python3 rl/make_graphs.py`.
 
 | graph | what it shows |
 |---|---|
-| `corrected_ladder.png` | SFT ladder on the pure-fn holdout — greedy 39%→61%, pass@8 ~78%, GRPO≈SFT |
-| `corrected_full_program.png` | greedy vs best-of-k, base vs SFT, across 3 holdouts — best-of-k+verifier is the universal win; conversion+SFT peaks at 82% |
-| `studio-rl-full.png` | the live Studio RL section — invalidation banner + the shipped GENERATE JAC (best-of-k) panel |
+| `corrected_journey.png` | **the story** — a measurement bug hid an 11%→94% Jac generator |
+| `corrected_ladder.png` | SFT ladder, pure-fn holdout — greedy 39→61%, GRPO≈SFT |
+| `corrected_all_holdouts.png` | greedy vs best-of-k, base vs SFT, across **5 holdouts** (pure-fn/graph/conversion/clean/big+fresh) |
+| `corrected_kscale.png` | sampling budget → accuracy (greedy 39 → k=8 72 → k=32 89%) |
+| `corrected_followup.png` | clean n=16 (94% ceiling) + bigger n=32 (SFT lift holds) |
+| `studio-rl-full.png` | the live Studio RL section (all corrected charts + GENERATE panel) |
 
-**Headline:** the model is capable; **best-of-k + the jac compiler as verifier** ships
-~78% (pure-fn) / 65% (graph) / 89% (k=32); SFT and the conversion framing stack on top
-(peak 82%). Regenerate: `python3 rl/make_graphs.py`. Deployable generator: `rl/generate.py`
-(shipped into the Studio RL section).
+**Headline:** best-of-k + jac-compiler-verifier ships **~94% on meaningful tasks**;
+SFT lifts greedy 39→61% (holds at n=32, generalizes to fresh tasks); conversion peaks 82%;
+free-form NL is the one real gap. Deployable generator: `rl/generate.py`.
