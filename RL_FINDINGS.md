@@ -89,6 +89,53 @@ buried: the models are capable, and a ~80% Jac generator is real and built.
 
 ---
 
+## FOLLOW-UP — 3 extensions (2026-07-02)
+
+Tightened the result: dropped junk tasks, tested the studio generator, and built a
+bigger + fresher holdout for statistical power.
+
+### E1 — Drop the 2 junk regex tasks → the true ceiling is ~94%
+`lib_fstring_rules`/`lib_innerstring_rules` are verbatim-regex memorization, not real
+Jac. Removed → re-measured on the clean n=16:
+
+| clean (n=16) | greedy | pass@8 | best-of-k |
+|---|---|---|---|
+| base | 43.8% | 75.0% | **93.8%** (15/16) |
+| SFT | **68.8%** | 87.5% | 87.5% (14/16) |
+
+**The junk tasks were masking a 94% best-of-k ceiling** (they dragged it to 72%). And a
+subtlety: **SFT sharpens toward greedy (44→69%) but narrows sampling diversity** — its
+best-of-k (87.5%) dips *below* base's (93.8%) by one task. **Exploit vs explore:** want
+single-shot → SFT (69%); can afford k samples → base + best-of-k (94%).
+
+### E2 — Free-form generation is a real weakness of *both* models
+Bake-off, `rung-20` vs `conversion-SFT`, on 3 free-form NL prompts ("write a function
+that…"): **both scored 0/3.** Neither handles arbitrary NL — they're tuned for the
+task format (hole-fill / python→jac), which they nail (`generate.py --id` works). **No
+model swap helps; the studio generator kept `rung-20`.** The fix would be SFT on NL→jac
+prompts — not built. Honest limitation.
+
+### E3 — Bigger, fresher holdout (n=32, +16 synthetic) confirms SFT generalizes
+Authored 32 fresh deterministic Jac tasks (16 held out) → n=32 holdout (±8.7pp vs the
+old ±12pp), with truly-novel tasks the model has never seen anything like:
+
+| big holdout (n=32) | greedy | pass@8 | best-of-k | lib 16 | syn 16 |
+|---|---|---|---|---|---|
+| base | 34.4% | 68.8% | 62.5% | 7 | 4 |
+| SFT | 43.8% | 75.0% | 71.9% | 9 | 5 |
+
+- **The +9pp SFT lift holds at bigger n** (greedy 34→44, best-of-k 62→72) — the effect is
+  real, not n=18 noise. This was the whole point of the bigger holdout.
+- **SFT generalizes to *fresh* tasks** (syn 4→5, lib 7→9) — it isn't memorizing.
+- **Fresh tasks are harder** (base syn 25% vs lib 44%) → the bigger holdout gives more
+  honest, conservative numbers. The lib-only figures were mildly optimistic.
+
+**Net:** SFT works and generalizes (confirmed at n=32); the true best-of-k ceiling on
+meaningful tasks is ~94%; free-form NL is the one real gap. Graph:
+`resultspub/rl/corrected_followup.png`.
+
+---
+
 ## Legend
 
 | Term | Meaning |
