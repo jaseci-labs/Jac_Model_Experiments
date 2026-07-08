@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Homebrew) (preloaded format=pdflatex 2026.3.4)  7 JUL 2026 20:18
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Homebrew) (preloaded format=pdflatex 2026.3.4)  8 JUL 2026 02:16
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -909,153 +909,8 @@ Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
 \@lastruleclass=\count370
 \@thisrulewidth=\dimen327
 )
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/pgfplots/pgfp
-lots.sty
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgfplots/pg
-fplots.revision.tex)
-Package: pgfplots 2025/08/14 v1.18.2 Data Visualization (1.18.2)
-
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgfplots/pg
-fplots.code.tex
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgfplots/pg
-fplotscore.code.tex
-\t@pgfplots@toka=\toks48
-\t@pgfplots@tokb=\toks49
-\t@pgfplots@tokc=\toks50
-\pgfplots@tmpa=\dimen328
-\c@pgfplots@coordindex=\count371
-\c@pgfplots@scanlineindex=\count372
-
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgfplots/sy
-s/pgfplotssysgeneric.code.tex))
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgfplots/li
-bs/pgfplotslibrary.code.tex)
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgfplots/ol
-dpgfcompatib/pgfplotsoldpgfsupp_loader.code.tex
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/librari
-es/pgflibraryfpu.code.tex)
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgfplots/ol
-dpgfcompatib/pgfplotsoldpgfsupp_pgfutil-common-lists.tex))
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgfplots/ut
-il/pgfplotsutil.code.tex
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgfplots/li
-ststructure/pgfplotsliststructure.code.tex)
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgfplots/li
-ststructure/pgfplotsliststructureext.code.tex)
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgfplots/li
-ststructure/pgfplotsarray.code.tex
-\c@pgfplotsarray@tmp=\count373
-)
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgfplots/li
-ststructure/pgfplotsmatrix.code.tex)
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgfplots/nu
-mtable/pgfplotstableshared.code.tex
-\c@pgfplotstable@counta=\count374
-\t@pgfplotstable@a=\toks51
-)
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgfplots/li
-ststructure/pgfplotsdeque.code.tex)
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgfplots/ut
-il/pgfplotsbinary.code.tex
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgfplots/ut
-il/pgfplotsbinary.data.code.tex))
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgfplots/ut
-il/pgfplotsutil.verb.code.tex)
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgfplots/li
-bs/pgflibrarypgfplots.surfshading.code.tex
-\c@pgfplotslibrarysurf@no=\count375
-
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgfplots/sy
-s/pgflibrarypgfplots.surfshading.pgfsys-pdftex.def)))
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgfplots/ut
-il/pgfplotscolormap.code.tex
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgfplots/ut
-il/pgfplotscolor.code.tex))
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgfplots/pg
-fplotsstackedplots.code.tex)
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgfplots/pg
-fplotsplothandlers.code.tex
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgfplots/pg
-fplotsmeshplothandler.code.tex
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgfplots/pg
-fplotsmeshplotimage.code.tex)))
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgfplots/pg
-fplots.scaling.code.tex)
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgfplots/pg
-fplotscoordprocessing.code.tex)
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgfplots/pg
-fplots.errorbars.code.tex)
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgfplots/pg
-fplots.markers.code.tex)
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgfplots/pg
-fplotsticks.code.tex)
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgfplots/pg
-fplots.paths.code.tex)
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/fronten
-dlayer/tikz/libraries/tikzlibrarydecorations.code.tex
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/modules
-/pgfmoduledecorations.code.tex
-\pgfdecoratedcompleteddistance=\dimen329
-\pgfdecoratedremainingdistance=\dimen330
-\pgfdecoratedinputsegmentcompleteddistance=\dimen331
-\pgfdecoratedinputsegmentremainingdistance=\dimen332
-\pgf@decorate@distancetomove=\dimen333
-\pgf@decorate@repeatstate=\count376
-\pgfdecorationsegmentamplitude=\dimen334
-\pgfdecorationsegmentlength=\dimen335
-)
-\tikz@lib@dec@box=\box83
-)
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/fronten
-dlayer/tikz/libraries/tikzlibrarydecorations.pathmorphing.code.tex
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/librari
-es/decorations/pgflibrarydecorations.pathmorphing.code.tex))
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/fronten
-dlayer/tikz/libraries/tikzlibrarydecorations.pathreplacing.code.tex
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/librari
-es/decorations/pgflibrarydecorations.pathreplacing.code.tex))
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgfplots/li
-bs/tikzlibrarypgfplots.contourlua.code.tex)
-\pgfplots@numplots=\count377
-\pgfplots@xmin@reg=\dimen336
-\pgfplots@xmax@reg=\dimen337
-\pgfplots@ymin@reg=\dimen338
-\pgfplots@ymax@reg=\dimen339
-\pgfplots@zmin@reg=\dimen340
-\pgfplots@zmax@reg=\dimen341
-)
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/fronten
-dlayer/tikz/libraries/tikzlibraryplotmarks.code.tex
-File: tikzlibraryplotmarks.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/librari
-es/pgflibraryplotmarks.code.tex
-File: pgflibraryplotmarks.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-)))
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgfplots/li
-bs/tikzlibrarypgfplots.groupplots.code.tex
-\pgfplots@group@current@plot=\count378
-\pgfplots@group@current@row=\count379
-\pgfplots@group@current@column=\count380
-
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/fronten
-dlayer/tikz/libraries/tikzlibrarycalc.code.tex
-File: tikzlibrarycalc.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-))
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/librari
-es/pgflibraryarrows.meta.code.tex
-File: pgflibraryarrows.meta.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgfarrowinset=\dimen342
-\pgfarrowlength=\dimen343
-\pgfarrowwidth=\dimen344
-\pgfarrowlinewidth=\dimen345
-)
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/pgf/fronten
-dlayer/tikz/libraries/tikzlibrarypositioning.code.tex
-File: tikzlibrarypositioning.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-)
-LaTeX Font Info:    Trying to load font information for OT1+phv on input line 2
-7.
+LaTeX Font Info:    Trying to load font information for OT1+phv on input line 1
+0.
 
 (/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/psnfss/ot1phv
 .fd
@@ -1064,28 +919,28 @@ File: ot1phv.fd 2020/03/25 scalable font definitions for OT1/phv.
 (/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/l3backend/l3b
 ackend-pdftex.def
 File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count381
+\l__color_backend_stack_int=\count371
 ) (./main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -1125,17 +980,17 @@ LaTeX Font Info:    ... okay on input line 27.
 (/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/context/base/mkii/s
 upp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count382
-\scratchdimen=\dimen346
-\scratchbox=\box84
-\nofMPsegments=\count383
-\nofMParguments=\count384
-\everyMPshowfont=\toks52
-\MPscratchCnt=\count385
-\MPscratchDim=\dimen347
-\MPnumerator=\count386
-\makeMPintoPDFobject=\count387
-\everyMPtoPDFconversion=\toks53
+\scratchcounter=\count372
+\scratchdimen=\dimen328
+\scratchbox=\box83
+\nofMPsegments=\count373
+\nofMParguments=\count374
+\everyMPshowfont=\toks48
+\MPscratchCnt=\count375
+\MPscratchDim=\dimen329
+\MPnumerator=\count376
+\makeMPintoPDFobject=\count377
+\everyMPtoPDFconversion=\toks49
 )
 (/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/epstopdf-pkg/
 epstopdf-base.sty
@@ -1148,7 +1003,7 @@ pstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-Package hyperref Info: Link coloring OFF on input line 27.
+Package hyperref Info: Link coloring OFF on input line 10.
  (./main.out) (./main.out)
 \@outlinefile=\write5
 \openout5 = `main.out'.
@@ -1177,198 +1032,211 @@ Dictionary: translator-numbers-dictionary, Language: English
 (/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/translator/tr
 anslator-theorem-dictionary-English.dict
 Dictionary: translator-theorem-dictionary, Language: English 
-)
-Package pgfplots notification 'compat/show suggested version=true': document ha
-s been generated with the most recent feature set (\pgfplotsset{compat=1.18}).
-
-(./main.nav)
+) (./main.nav)
 <assets/titlepage-1.png, id=13, 722.7pt x 406.6392pt>
 File: assets/titlepage-1.png Graphic file (type png)
 <use assets/titlepage-1.png>
-Package pdftex.def Info: assets/titlepage-1.png  used on input line 37.
+Package pdftex.def Info: assets/titlepage-1.png  used on input line 20.
 (pdftex.def)             Requested size: 455.24826pt x 256.07857pt.
  [1
 
 {/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/map/pdftex/updmap
 /pdftex.map}{/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/enc/d
 vips/base/8r.enc} <./assets/titlepage-1.png (PNG copy)>]
-LaTeX Font Info:    Trying to load font information for U+msa on input line 65.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 48.
 
 
 (/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/amsfonts/umsa
 .fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 65.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 48.
 
 
 (/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/amsfonts/umsb
 .fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <10> not available
-(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 65.
 <assets/img-005.png, id=21, 634.37pt x 673.51625pt>
 File: assets/img-005.png Graphic file (type png)
 <use assets/img-005.png>
-Package pdftex.def Info: assets/img-005.png  used on input line 65.
+Package pdftex.def Info: assets/img-005.png  used on input line 48.
 (pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
  [2
 
  <./assets/img-005.png (PNG copy)>]
 LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <9> not available
-(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 87.
+(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 79.
 File: assets/img-005.png Graphic file (type png)
 <use assets/img-005.png>
-Package pdftex.def Info: assets/img-005.png  used on input line 87.
+Package pdftex.def Info: assets/img-005.png  used on input line 79.
 (pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
  [3
 
 ]
 LaTeX Font Info:    Trying to load font information for OMS+cmtt on input line 
-122.
-LaTeX Font Info:    No file OMScmtt.fd. on input line 122.
+114.
+LaTeX Font Info:    No file OMScmtt.fd. on input line 114.
 
 
 LaTeX Font Warning: Font shape `OMS/cmtt/m/n' undefined
 (Font)              using `OMS/cmsy/m/n' instead
-(Font)              for symbol `textbraceleft' on input line 122.
+(Font)              for symbol `textbraceleft' on input line 114.
 
 LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <8> not available
-(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 122.
+(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 114.
 File: assets/img-005.png Graphic file (type png)
 <use assets/img-005.png>
-Package pdftex.def Info: assets/img-005.png  used on input line 122.
+Package pdftex.def Info: assets/img-005.png  used on input line 114.
 (pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
 [4
 
 ]
+<assets/charts/era1_interventions.pdf, id=49, 403.33311pt x 205.02159pt>
+File: assets/charts/era1_interventions.pdf Graphic file (type pdf)
+<use assets/charts/era1_interventions.pdf>
+Package pdftex.def Info: assets/charts/era1_interventions.pdf  used on input li
+ne 124.
+(pdftex.def)             Requested size: 294.77274pt x 149.84282pt.
 File: assets/img-005.png Graphic file (type png)
 <use assets/img-005.png>
-Package pdftex.def Info: assets/img-005.png  used on input line 153.
+Package pdftex.def Info: assets/img-005.png  used on input line 124.
 (pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
  [5
 
-]
+ <./assets/charts/era1_interventions.pdf>]
 File: assets/img-005.png Graphic file (type png)
 <use assets/img-005.png>
-Package pdftex.def Info: assets/img-005.png  used on input line 187.
+Package pdftex.def Info: assets/img-005.png  used on input line 144.
 (pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
  [6
 
 ]
-Package pgfplots info on input line 211: Using 'lua backend=false' for axis: x 
-coord trafo unsupported.
+<assets/charts/era2_flat_ladder.pdf, id=71, 420.24567pt x 136.48013pt>
+File: assets/charts/era2_flat_ladder.pdf Graphic file (type pdf)
+<use assets/charts/era2_flat_ladder.pdf>
+Package pdftex.def Info: assets/charts/era2_flat_ladder.pdf  used on input line
+ 158.
+(pdftex.def)             Requested size: 378.42044pt x 122.90385pt.
 File: assets/img-005.png Graphic file (type png)
 <use assets/img-005.png>
-Package pdftex.def Info: assets/img-005.png  used on input line 211.
+Package pdftex.def Info: assets/img-005.png  used on input line 158.
 (pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
  [7
 
-]
-Package pgfplots info on input line 239: Using 'lua backend=false' for axis: xm
-ode=log unsupported (yet).
+ <./assets/charts/era2_flat_ladder.pdf>]
 File: assets/img-005.png Graphic file (type png)
 <use assets/img-005.png>
-Package pdftex.def Info: assets/img-005.png  used on input line 239.
+Package pdftex.def Info: assets/img-005.png  used on input line 174.
 (pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
  [8
 
 ]
-Package pgfplots info on input line 268: Using 'lua backend=false' for axis: x 
-coord trafo unsupported.
-LaTeX Font Info:    Calculating math sizes for size <4.5> on input line 268.
-
-
-LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <4.5> not available
-(Font)              size <4> substituted on input line 268.
-
-
-LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <2.25> not available
-(Font)              size <3> substituted on input line 268.
-
-
-LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <4.5> not available
-(Font)              size <5> substituted on input line 268.
-
-
-LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <3.14998> not available
-(Font)              size <5> substituted on input line 268.
-
-
-LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <2.25> not available
-(Font)              size <5> substituted on input line 268.
-
-
-LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <4.5> not available
-(Font)              size <5> substituted on input line 268.
-
-
-LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <3.14998> not available
-(Font)              size <5> substituted on input line 268.
-
-
-LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <2.25> not available
-(Font)              size <5> substituted on input line 268.
-
-Package pgfplots info on input line 268: Using 'lua backend=false' for axis: x 
-coord trafo unsupported.
-LaTeX Font Info:    Trying to load font information for TS1+phv on input line 2
-68.
-
-(/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/psnfss/ts1phv
-.fd
-File: ts1phv.fd 2020/03/25 scalable font definitions for TS1/phv.
-)
+<assets/charts/era3_undercount.pdf, id=91, 274.6216pt x 167.36214pt>
+File: assets/charts/era3_undercount.pdf Graphic file (type pdf)
+<use assets/charts/era3_undercount.pdf>
+Package pdftex.def Info: assets/charts/era3_undercount.pdf  used on input line 
+184.
+(pdftex.def)             Requested size: 278.83578pt x 169.9461pt.
 File: assets/img-005.png Graphic file (type png)
 <use assets/img-005.png>
-Package pdftex.def Info: assets/img-005.png  used on input line 268.
+Package pdftex.def Info: assets/img-005.png  used on input line 184.
 (pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
  [9
 
-]
+ <./assets/charts/era3_undercount.pdf>]
+<assets/charts/corrected_ladder.pdf, id=105, 420.24567pt x 164.3041pt>
+File: assets/charts/corrected_ladder.pdf Graphic file (type pdf)
+<use assets/charts/corrected_ladder.pdf>
+Package pdftex.def Info: assets/charts/corrected_ladder.pdf  used on input line
+ 198.
+(pdftex.def)             Requested size: 378.42044pt x 147.96005pt.
 File: assets/img-005.png Graphic file (type png)
 <use assets/img-005.png>
-Package pdftex.def Info: assets/img-005.png  used on input line 296.
+Package pdftex.def Info: assets/img-005.png  used on input line 198.
 (pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
  [10
 
-]
-LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <7> not available
-(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 333.
+ <./assets/charts/corrected_ladder.pdf>]
+<assets/charts/kscale.pdf, id=121, 252.20633pt x 184.91861pt>
+File: assets/charts/kscale.pdf Graphic file (type pdf)
+<use assets/charts/kscale.pdf>
+Package pdftex.def Info: assets/charts/kscale.pdf  used on input line 217.
+(pdftex.def)             Requested size: 199.1693pt x 146.03047pt.
 File: assets/img-005.png Graphic file (type png)
 <use assets/img-005.png>
-Package pdftex.def Info: assets/img-005.png  used on input line 333.
+Package pdftex.def Info: assets/img-005.png  used on input line 217.
 (pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
  [11
 
-]
+ <./assets/charts/kscale.pdf>]
+<assets/charts/holdouts.pdf, id=136, 523.90671pt x 197.68141pt>
+File: assets/charts/holdouts.pdf Graphic file (type pdf)
+<use assets/charts/holdouts.pdf>
+Package pdftex.def Info: assets/charts/holdouts.pdf  used on input line 230.
+(pdftex.def)             Requested size: 398.3386pt x 150.3088pt.
 File: assets/img-005.png Graphic file (type png)
 <use assets/img-005.png>
-Package pdftex.def Info: assets/img-005.png  used on input line 361.
+Package pdftex.def Info: assets/img-005.png  used on input line 230.
 (pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
  [12
 
-]
+ <./assets/charts/holdouts.pdf>]
 File: assets/img-005.png Graphic file (type png)
 <use assets/img-005.png>
-Package pdftex.def Info: assets/img-005.png  used on input line 374.
+Package pdftex.def Info: assets/img-005.png  used on input line 258.
 (pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
  [13
 
 ]
 File: assets/img-005.png Graphic file (type png)
 <use assets/img-005.png>
-Package pdftex.def Info: assets/img-005.png  used on input line 409.
+Package pdftex.def Info: assets/img-005.png  used on input line 283.
 (pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
  [14
 
 ]
+<assets/charts/journey.pdf, id=163, 441.39278pt x 149.69225pt>
+File: assets/charts/journey.pdf Graphic file (type pdf)
+<use assets/charts/journey.pdf>
+Package pdftex.def Info: assets/charts/journey.pdf  used on input line 308.
+(pdftex.def)             Requested size: 398.3386pt x 135.09407pt.
+LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <7> not available
+(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 308.
 File: assets/img-005.png Graphic file (type png)
 <use assets/img-005.png>
-Package pdftex.def Info: assets/img-005.png  used on input line 456.
+Package pdftex.def Info: assets/img-005.png  used on input line 308.
 (pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
  [15
+
+ <./assets/charts/journey.pdf>]
+File: assets/img-005.png Graphic file (type png)
+<use assets/img-005.png>
+Package pdftex.def Info: assets/img-005.png  used on input line 336.
+(pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
+ [16
+
+]
+File: assets/img-005.png Graphic file (type png)
+<use assets/img-005.png>
+Package pdftex.def Info: assets/img-005.png  used on input line 349.
+(pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
+ [17
+
+]
+File: assets/img-005.png Graphic file (type png)
+<use assets/img-005.png>
+Package pdftex.def Info: assets/img-005.png  used on input line 384.
+(pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
+
+[18
+
+]
+File: assets/img-005.png Graphic file (type png)
+<use assets/img-005.png>
+Package pdftex.def Info: assets/img-005.png  used on input line 431.
+(pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
+ [19
 
 ]
 \tf@nav=\write6
@@ -1387,23 +1255,19 @@ L3 programming layer <2026-01-19>
  ***********
 
 
-LaTeX Font Warning: Size substitutions with differences
-(Font)              up to 2.75pt have occurred.
-
-
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 36033 strings out of 467525
- 873440 string characters out of 5408440
- 1392354 words of memory out of 5000000
- 64242 multiletter control sequences out of 15000+600000
- 678073 words of font info for 140 fonts, out of 8000000 for 9000
+ 24908 strings out of 467525
+ 500461 string characters out of 5408440
+ 887402 words of memory out of 5000000
+ 53270 multiletter control sequences out of 15000+600000
+ 662347 words of font info for 111 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 128i,18n,123p,4798b,2647s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 128i,13n,123p,404b,891s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/type1/public/am
 sfonts/cm/cmmi12.pfb></opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fo
 nts/type1/public/amsfonts/cm/cmmi5.pfb></opt/homebrew/Cellar/texlive/20260301/s
@@ -1431,10 +1295,10 @@ blic/amsfonts/symbols/msam7.pfb></opt/homebrew/Cellar/texlive/20260301/share/te
 xmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></opt/homebrew/Cellar/texlive/2026
 0301/share/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></opt/homebrew/Cellar
 /texlive/20260301/share/texmf-dist/fonts/type1/urw/helvetic/uhvro8a.pfb>
-Output written on main.pdf (15 pages, 1907881 bytes).
+Output written on main.pdf (19 pages, 1991652 bytes).
 PDF statistics:
- 218 PDF objects out of 1000 (max. 8388607)
- 147 compressed objects within 2 object streams
- 32 named destinations out of 1000 (max. 500000)
- 53 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 306 PDF objects out of 1000 (max. 8388607)
+ 200 compressed objects within 2 object streams
+ 39 named destinations out of 1000 (max. 500000)
+ 88 words of extra memory for PDF output out of 10000 (max. 10000000)
 

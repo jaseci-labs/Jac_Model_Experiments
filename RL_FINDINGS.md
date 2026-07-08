@@ -100,7 +100,7 @@ alphabetical, so related ideas sit together.
 - **Studio** — this repo's app (Jac ML Studio); ships the GENERATE panel and the
   full RL data pipeline live.
 - **the two models** — `qwen3coder` (fresh, never seen Jac) vs. `jac-qwen3coder`
-  (already SFT+DPO'd on Jac — the capable one, and the only one used past Era 0).
+  (already SFT+DPO'd on Jac — the capable one, and the only one used past Era 1).
 
 ---
 
@@ -133,9 +133,9 @@ of those things was true.**
 The headline number went 14% → 11% → 39% → 61% → 78% → 94% over about two weeks.
 Most of that motion had nothing to do with the model getting better — it was three
 successive rounds of fixing how we were *measuring* it. This section is the causal
-chain; the corrected, trustworthy numbers start at "Era 2."
+chain; the corrected, trustworthy numbers start at "Era 3."
 
-### Era 0 — weekend GRPO (Jun 20–21): built right, still flat at 14.3%
+### Era 1 — weekend GRPO (Jun 20–21): built right, still flat at 14.3%
 
 First full attempt: GRPO with a real compiler/runtime-verified reward (`0.3·compiles
 + 0.3·runs + 0.3·output_match + 0.1·idiom`), LoRA on MLX, warm-start + STaR as
@@ -168,7 +168,11 @@ Five things went wrong, each with a distinct cause:
    actual code was right. Base, warm-started (SFT loss 0.006 — genuinely converged),
    and every GRPO adapter scored identically **because the splice, not the model,
    was broken.** Every "RL changed nothing" reading from Attempts 1–2 was measuring
-   nested garbage. Fixed by `unwrap_unit`: strip one enclosing unit before splicing.
+   nested garbage. Fixed by adding `unwrap_unit` inside the shared `extract_jac`
+   helper: strip one enclosing unit before splicing. This fixed the nesting problem
+   — but `extract_jac`/`unwrap_unit` is the *same* helper that Era 3 later finds has
+   a second, unrelated flaw (grabbing the driver docstring on an echoed driver) that
+   survives this fix and isn't caught until then.
 4. **The real null, after the splice was fixed.** With correct splicing and real
    reward variance (σ up to 0.11, training loss 0.02–0.05 — a live, working gradient
    descent), GRPO's output was still byte-identical to its warm-start, KL≈0. At a
@@ -192,9 +196,9 @@ levers (SFT, DPO, warm-start) move the model here; RL does not." That conclusion
 about *this specific attempt* was correct — the σ=0 trap and splice bug were real,
 found, and fixed, and the resulting null (#4) held up under a pass@8 re-check. What
 it got wrong was assuming this generalized to "RL can't work on Jac at all," which
-Era 2 would show rested on a different, still-undiscovered bug.
+Era 3 would show rested on a different, still-undiscovered bug.
 
-### Era 1 — the SFT ladder, and a false verdict (Jun 25–28)
+### Era 2 — the SFT ladder, and a false verdict (Jun 25–28)
 
 A properly leak-free ladder was built to settle the question at scale: train-N ∈
 {1,3,5,10,20,all}, conditions {base, SFT, SFT+GRPO, raw-GRPO control, tuned-GRPO},
@@ -202,37 +206,42 @@ A properly leak-free ladder was built to settle the question at scale: train-N �
 train/holdout splits, monotone reward, Wilson CIs throughout.
 
 **Result, on the (still-broken) eval:** greedy pass@1 came back **flat** in every
-single cell — ~26.7% on the 66-task corpus, 11.1% on the 84-task corpus — no matter
-which condition. The Jac specialist model was frozen at the exact same number
-(26.67 / 11.11 / 21.43%) across every row of the ladder. Nothing — not more SFT
-data, not GRPO, not tuning GRPO's hyperparameters — moved the needle at all.
+single cell, on every corpus tried — 26.67% on an earlier 66-task corpus, 11.11% on
+the 84-task corpus used going forward, 21.43% on a separate sg-inclusive holdout
+(social-graph/OSP-walker idiom deliberately held out, ~14 tasks). Three different
+corpora, three different numbers — but *within* each corpus, the Jac specialist was
+frozen at the exact same number across every rung and every condition. Nothing —
+not more SFT data, not GRPO, not tuning GRPO's hyperparameters — moved the needle
+at all, on any of the three.
 
 **Why this looked so convincing:** a real signal (even a weak one) usually varies
 at least a little between conditions. A number that's *exactly* flat across 30 cells
 built with real training runs is a strong prior that you're not measuring the
 model — you're measuring some fixed artifact of the harness. That's what it was
-(Era 2), but at the time it read as definitive evidence.
+(Era 3), but at the time it read as definitive evidence.
 
 **v1 verdict (Jun 28):** "RL is a dead end." Declared done. Every number behind
 that sentence rested on one shared piece of code.
 
-### Era 2 — the correction (Jul 1–2): why the flat numbers were a broken ruler
+### Era 3 — the correction (Jul 1–2): why the flat numbers were a broken ruler
 
 The eval script and the GRPO reward function shared one helper —
-`extract_jac`/`unwrap_unit` — to pull the model's answer out of its raw output.
-When the model echoed back the *entire* driver file around its answer (a common,
+`extract_jac`/`unwrap_unit`, the same helper Era 1 had already patched once to fix
+the nesting/splice bug (item 3 above). That fix was correct as far as it went; it
+didn't touch this second, independent flaw. When the model echoed back the
+*entire* driver file around its answer (a common,
 otherwise-harmless habit), that extractor's boundary logic grabbed the driver's
 docstring instead of the model's actual completion. The docstring, spliced into the
 grading harness, auto-failed every time — a clean, structural, ~3.5–4× undercount
 that had **nothing to do with model capability.**
 
-**Why this explains both eras' nulls:** in Era 1, this bug silently caps every
+**Why this explains both eras' nulls:** in Era 2, this bug silently caps every
 cell's ceiling regardless of training condition — SFT, GRPO, more data, none of it
 matters if the grader auto-fails a fixed fraction of genuinely correct answers, so
 of course the ladder looked flat. And because the *GRPO reward* used the same
-extractor, Era 0's and Era 1's RL runs weren't just being scored wrong — they were
+extractor, Era 1's and Era 2's RL runs weren't just being scored wrong — they were
 being **trained** against a partially garbage reward signal the entire time,
-independent of Era 0's already-confirmed LoRA-GRPO-is-weak result. Two real
+independent of Era 1's already-confirmed LoRA-GRPO-is-weak result. Two real
 problems (a weak RL method, and a broken grader) were stacked on top of each other
 and looked like one bigger problem than either was alone.
 
@@ -259,9 +268,16 @@ looking null can be a broken ruler, not a finding.
 | base | 38.9% | 72.2% | 72.2% | true capability once measured correctly — the fresh model's real floor for Jac, not zero |
 | SFT rung-5 | 55.6% | **83.3%** | — | a small, low-conflict sample already teaches most of the syntax fast |
 | **SFT rung-20** | **61.1%** (peak) | 72.2% | — | sweet spot: enough coverage to generalize, not yet enough to introduce cross-task conflict |
-| SFT rung-all | 55.6% | 72.2% | 77.8% | **task interference** — the larger pool pulls in harder graph-walker examples that compete with pure-fn skills for the same limited LoRA capacity, regressing one already-learned task (`lib_log`) |
-| SFT + GRPO (rung-all) | 55.6% | 77.8% | 77.8% | flat vs. SFT alone — consistent with Era 0's finding that LoRA-GRPO barely perturbs a 30B's argmax once a strong policy already exists to perturb |
+| SFT rung-all | 55.6% | 77.8% | 77.8% | **task interference** — the larger pool pulls in harder graph-walker examples that compete with pure-fn skills for the same limited LoRA capacity, regressing one already-learned task (`lib_log`) |
+| SFT + GRPO (rung-all) | 55.6% | 77.8% | 77.8% | flat vs. SFT alone — consistent with Era 1's finding that LoRA-GRPO barely perturbs a 30B's argmax once a strong policy already exists to perturb |
 | raw-GRPO control | 38.9% | 72.2% | — | equals base exactly — confirms GRPO alone cannot manufacture syntax knowledge the base doesn't have; it needs an SFT warm-start providing correct samples to reinforce in the first place |
+
+Oracle and deploy are each drawn from the same $k{=}8$ sampling run per row, so
+deploy == oracle holds *within* a row as claimed — but comparing pass@8 figures
+*across* separate sampling runs (e.g. base measured twice) shows real resampling
+noise, about 1 task (≈5.6pp) at $n{=}18$. Small enough not to change any
+conclusion here, large enough that a single pass@8 number shouldn't be read as
+more precise than the Wilson CI it comes with.
 
 **Why SFT works but "more SFT" doesn't:** the model isn't missing programming
 logic — it's missing exposure to Jac's specific surface syntax. A small, curated
@@ -274,9 +290,12 @@ conflicting with what's already been learned.
 
 ## Why the syntax gap exists, and why the compiler closes it for free
 
-- jac-qwen3coder: pass@1 38.9% vs. pass@8 66.7% — a **+27.8pp gap**. The correct Jac
+- jac-qwen3coder: pass@1 38.9% vs. pass@8 72.2% — a **+33.3pp gap**. The correct Jac
   is *reachable*; the model produces it inside 8 samples. Greedy decoding just
-  doesn't default there.
+  doesn't default there. (pass@8 at $k{=}8$ carries real resampling noise —
+  independent 18-task samplings of this same base config read 66.7–72.2% run to
+  run, about 1 task of variance; 72.2% is the figure corroborated by three separate
+  measurement runs, so it's the one used throughout this document.)
 - Failures are consistently **compile-fails, not wrong answers** — a missing `;`,
   `here.jid` vs. `jid(here)`. Output similarity, "runs," and "exact" all move
   together: when the model's Jac runs at all, it's almost always exactly right.

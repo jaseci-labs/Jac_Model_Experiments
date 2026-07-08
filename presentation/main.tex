@@ -1,25 +1,8 @@
 \documentclass[aspectratio=169,10pt]{beamer}
 \usepackage{jaseci-theme}
 \usepackage{booktabs}
-\usepackage{pgfplots}
-\usepgfplotslibrary{groupplots}
-\pgfplotsset{compat=1.18}
-\usetikzlibrary{arrows.meta,positioning}
 
-% shared chart style (dataviz: recessive grid/axes, thin marks, muted tick ink)
-\pgfplotsset{jchart/.style={
-  axis line style={gridgray},
-  axis x line*=bottom, axis y line*=left,
-  tick style={draw=none},
-  ymajorgrids, grid style={gridgray,line width=0.3pt},
-  ticklabel style={font=\scriptsize\sffamily,color=inkmuted},
-  label style={font=\scriptsize\sffamily,color=inkmuted},
-  legend style={font=\scriptsize\sffamily,draw=none,fill=none},
-  ymin=0, ymax=100,
-}}
-
-\newcommand{\vlabel}[0]{\scriptsize\color{ink}}
-\newcommand{\term}[1]{\textbf{\textcolor{jasecidark}{#1}}}
+\newcommand{\term}[1]{\textcolor{jasecidark}{#1}}
 
 \title{Progress Report}
 \author{Ayush Madhav Kumar}
@@ -42,10 +25,10 @@
   \begin{columns}[T]
     \begin{column}{0.56\textwidth}
       \begin{itemize}\itemsep0.6em
-        \item \textbf{Goal:} a local model that writes correct Jac --- compiles \emph{and} prints the exact expected output.
-        \item \textbf{Hardware:} Apple M5 Pro, 48\,GB unified memory, MLX LoRA. Trains the 30B-A3B MoE ($\sim$3B active); every dense $\geq$14B and larger MoE OOMs.
-        \item \textbf{Models:} fresh \texttt{Qwen3-Coder-30B-A3B} vs.\ \texttt{jac-qwen3coder} (same base, already SFT+DPO'd on Jac).
-        \item \textbf{Grader:} Jac compiler + runtime, \alert{exact-stdout = pass}. No learned reward model anywhere.
+        \item Goal: a local model that writes correct Jac, compiles and prints the exact expected output.
+        \item Hardware: Apple M5 Pro, 48\,GB unified memory, MLX LoRA. Trains the 30B-A3B MoE ($\sim$3B active); every dense $\geq$14B and larger MoE OOMs.
+        \item Models: fresh \texttt{Qwen3-Coder-30B-A3B} vs.\ \texttt{jac-qwen3coder} (same base, already SFT+DPO'd on Jac).
+        \item Grader: Jac compiler + runtime, \alert{exact-stdout = pass}. No learned reward model anywhere.
       \end{itemize}
     \end{column}
     \begin{column}{0.40\textwidth}
@@ -54,10 +37,10 @@
       \begin{block}{Task families}
         \small
         \begin{itemize}
-          \item \textbf{Hole-fill} --- 84 deterministic tasks mined from \texttt{this\_is\_jac}
-          \item \textbf{Conversion} --- python$\rightarrow$jac
-          \item \textbf{Graph walkers} --- node/edge/walker (OSP) idiom
-          \item \textbf{Synthetic} --- 32 fresh deterministic tasks
+          \item Hole-fill: 84 deterministic tasks mined from \texttt{this\_is\_jac}
+          \item Conversion: python$\rightarrow$jac
+          \item Graph walkers: node/edge/walker (OSP) idiom
+          \item Synthetic: 32 fresh deterministic tasks
         \end{itemize}
       \end{block}
     \end{column}
@@ -66,44 +49,53 @@
 
 % ---------------- 3 · EXPERIMENT ARC ----------------------------------------------
 \begin{frame}{Three eras of experiments}
-  \centering
-  \vspace{-1.5mm}
-  \begin{tikzpicture}[scale=0.78,transform shape,
-      era/.style={draw=gridgray,rounded corners=1mm,align=left,inner sep=3mm,text width=38mm,font=\small},
-      lbl/.style={font=\scriptsize\color{inkmuted}}]
-    \draw[-{Stealth[length=3mm]},line width=1pt,jaseciorange] (-0.4,0) -- (13.6,0);
-    \node[era,anchor=south] (e0) at (1.9,0.5)  {\textbf{Era 0 --- weekend GRPO}\\[1mm]GRPO on both models, STaR loop.\\[1mm]\emph{``Supervised levers move models; RL does not.''}};
-    \node[era,anchor=north] (e1) at (6.7,-0.5) {\textbf{Era 1 --- SFT ladder}\\[1mm]Leak-free harness, 30-cell ladder, tuned-GRPO arm.\\[1mm]\emph{``RL is a dead end.''} (v1)};
-    \node[era,anchor=south] (e2) at (11.5,0.5) {\textbf{Era 2 --- the correction}\\[1mm]Eval \emph{and} reward shared a broken extractor.\\[1mm]\emph{Everything re-measured.}};
-    \node[lbl,below=0.5mm of e0.south] {Jun 20--21};
-    \node[lbl,above=0.5mm of e1.north] {Jun 25--28};
-    \node[lbl,below=0.5mm of e2.south] {Jul 1--2};
-  \end{tikzpicture}
+  \small
+  \begin{columns}[T]
+    \begin{column}{0.32\textwidth}
+      \term{Era 1: weekend GRPO}\\[1mm]
+      \textit{Jun 20--21}\\[2mm]
+      GRPO on both models, STaR loop.\\[2mm]
+      \emph{``Supervised levers move models; RL does not.''}
+    \end{column}
+    \begin{column}{0.32\textwidth}
+      \term{Era 2: SFT ladder}\\[1mm]
+      \textit{Jun 25--28}\\[2mm]
+      Leak-free harness, 30-cell ladder, tuned-GRPO arm.\\[2mm]
+      \emph{``RL is a dead end.'' (v1)}
+    \end{column}
+    \begin{column}{0.32\textwidth}
+      \term{Era 3: the correction}\\[1mm]
+      \textit{Jul 1--2}\\[2mm]
+      Eval \emph{and} reward shared a broken extractor.\\[2mm]
+      \emph{Everything re-measured.}
+    \end{column}
+  \end{columns}
 
-  \vspace{2mm}
+  \vspace{6mm}
+  \centering
   \begin{beamercolorbox}[rounded=true,sep=1.5mm,wd=0.92\textwidth]{banner}
-    \centering\textbf{Every headline number from Eras 0--1 was measured wrong --- a $\sim$3.5--4$\times$ undercount.}
+    \centering Every headline number from Eras 1--2 was measured wrong: a $\sim$3.5--4$\times$ undercount.
   \end{beamercolorbox}
 \end{frame}
 
-% ---------------- 4 · ERA 0 FAILURES ----------------------------------------------
-\begin{frame}{Era 0 --- weekend GRPO: everything at 14.3\%}
+% ---------------- 4 · ERA 1 FAILURES ----------------------------------------------
+\begin{frame}{Era 1: weekend GRPO, everything at 14.3\%}
   \begin{columns}[T]
     \begin{column}{0.55\textwidth}
       \footnotesize
       \begin{enumerate}\itemsep0.4em
-        \item \textbf{Metal OOM} --- group\,6 / completion\,512 blew 48\,GB at iter 2; survived at group\,4 / comp\,256 ($\sim$38\,GB peak).
-        \item \textbf{$\sigma=0$ trap} --- at 0\% base pass every rollout scores the same $\Rightarrow$ advantage $(r-\bar r)/\sigma = 0$, KL $=0.0$ forever. \alert{RL cannot bootstrap a skill the base has none of.}
-        \item \textbf{Splice bug} --- models emit the whole \texttt{can \ldots\ \{\}} unit; the hole sat \emph{inside} it $\Rightarrow$ nested broken Jac. Base, warm (SFT loss 0.006!), and GRPO scored identically --- the splice was broken, not the models.
-        \item \textbf{Dense wall} --- Qwen3.6-27B SFT OOM'd at iter 1 in every config; the whole line is inference-only on 48\,GB.
-        \item \textbf{LoRA-GRPO null} --- splice fixed, real reward variance ($\sigma$ up to 0.11): +GRPO output \alert{byte-identical} to its start point, KL${}\approx{}$0.
+        \item Metal OOM: group\,6 / completion\,512 blew 48\,GB at iter 2; survived at group\,4 / comp\,256 ($\sim$38\,GB peak).
+        \item $\sigma=0$ trap: at 0\% base pass every rollout scores the same, so advantage $(r-\bar r)/\sigma = 0$, KL $=0.0$ forever. \alert{RL cannot bootstrap a skill the base has none of.}
+        \item Splice bug: models emit the whole \texttt{can \ldots\ \{\}} unit; the hole sat \emph{inside} it, so the result was nested broken Jac. Base, warm (SFT loss 0.006!), and GRPO scored identically: the splice was broken, not the models.
+        \item Dense wall: Qwen3.6-27B SFT OOM'd at iter 1 in every config; the whole line is inference-only on 48\,GB.
+        \item LoRA-GRPO null: splice fixed, real reward variance ($\sigma$ up to 0.11), and +GRPO output was still \alert{byte-identical} to its start point, KL${}\approx{}$0.
       \end{enumerate}
     \end{column}
     \begin{column}{0.41\textwidth}
       \small\centering
       \begin{tabular}{@{}lc@{}}
         \toprule
-        \textbf{Phase 1} (31 tasks, holdout 7) & pass \\
+        Phase 1 (31 tasks, holdout 7) & pass \\
         \midrule
         jac-qwen3coder base & 14.3\% \\
         \quad + GRPO & 14.3\% \\
@@ -121,233 +113,216 @@
   \end{columns}
 \end{frame}
 
-% ---------------- 5 · ERA 1: LADDER + FALSE VERDICT -------------------------------
-\begin{frame}{Era 1 --- the SFT ladder, and a false verdict}
-  \begin{columns}[T]
-    \begin{column}{0.5\textwidth}
-      \textbf{Design (leak-free rebuild)}
-      \small
-      \begin{itemize}\itemsep0.4em
-        \item Rungs: train-$N \in \{1,3,5,10,20,\text{all}\}$
-        \item Conditions: base, SFT, SFT+GRPO, raw-GRPO control, tuned-GRPO (500 iters, 10$\times$ LR)
-        \item 2 models $\times$ 30 cells; corpus mined 51$\rightarrow$84 deterministic tasks
-        \item Sound splits, monotone reward, Wilson CIs
-      \end{itemize}
-    \end{column}
-    \begin{column}{0.46\textwidth}
-      \textbf{Result (on the broken eval)}
-      \small
-      \begin{itemize}\itemsep0.4em
-        \item Greedy pass@1 \alert{flat} in every cell: $\sim$26.7\% (66-corpus), 11.1\% (84-corpus)
-        \item The Jac specialist \alert{frozen}: literally the same number in every row --- 26.67 / 11.11 / 21.43\%
-        \item Tuned-GRPO $=$ default GRPO, even with real variance ($\sigma$ 0.09--0.21)
-        \item SFT lifted pass@8 mean +5--7pp, never beat base's max
-      \end{itemize}
-    \end{column}
-  \end{columns}
+% ---------------- 5 · ERA 1 PROOF CHART -----------------------------------------
+\begin{frame}{Era 1, in one chart: four interventions, one number}
+  \centering
+  \includegraphics[width=0.74\textwidth]{assets/charts/era1_interventions.pdf}
+  \vspace{0.5mm}\\
+  \footnotesize The dense 27B never produced a number, it OOM'd before either
+  intervention finished. Of the two models that did run: four interventions, three
+  identical readings. \alert{A tell, in hindsight, that the splice bug (\#3) was capping the score, not the models.}
+\end{frame}
+
+% ---------------- 6 · ERA 2: LADDER + FALSE VERDICT -------------------------------
+\begin{frame}{Era 2: the SFT ladder, built to settle it}
+  \small
+  \begin{itemize}\itemsep0.6em
+    \item Design (leak-free rebuild): rungs train-$N \in \{1,3,5,10,20,\text{all}\}$; conditions base, SFT, SFT+GRPO, raw-GRPO control, tuned-GRPO (500 iters, 10$\times$ LR).
+    \item 2 models $\times$ 30 cells; corpus grown 51$\rightarrow$84 deterministic tasks.
+    \item Sound train/holdout splits, monotone reward, Wilson CIs throughout, built to be trustworthy this time.
+  \end{itemize}
   \vspace{4mm}
   \centering
-  \begin{beamercolorbox}[rounded=true,sep=2mm,wd=0.9\textwidth]{banner}
-    \centering\textbf{v1 verdict (Jun 28): ``RL is a dead end'' --- declared done.\quad All of it rested on the eval.}
+  \setbeamercolor{block title}{bg=jaseciorange,fg=white}
+  \setbeamercolor{block body}{bg=jaseciorange!8,fg=ink}
+  \begin{block}{Why a flat result is a strong prior something's wrong}
+    \small A real signal usually varies at least a little between conditions. A
+    number that's \emph{exactly} flat across 30 cells of real training runs says
+    you're not measuring the model. You're measuring a fixed artifact of the
+    harness. That's what the next slide shows, and at the time it read as proof.
+  \end{block}
+\end{frame}
+
+% ---------------- 7 · ERA 2 PROOF CHART -----------------------------------------
+\begin{frame}{Era 2, in one chart: the same shape, wrong story}
+  \centering
+  \includegraphics[width=0.95\textwidth]{assets/charts/era2_flat_ladder.pdf}
+  \vspace{1mm}\\
+  \small Every condition \alert{pinned at 11.1\%}: the Jac specialist frozen at
+  literally the same number whether trained on 5 tasks or all 84, with or without
+  GRPO, tuned or not. (Compare this shape to the corrected version two slides on.)
+  \vspace{2mm}
+  \begin{beamercolorbox}[rounded=true,sep=1.5mm,wd=0.9\textwidth]{banner}
+    \centering v1 verdict (Jun 28): ``RL is a dead end,'' declared done. All of it rested on this chart.
   \end{beamercolorbox}
 \end{frame}
 
-% ---------------- 6 · THE MEASUREMENT BUG -----------------------------------------
+% ---------------- 8 · THE MEASUREMENT BUG -----------------------------------------
 \begin{frame}{The measurement bug that faked the dead end}
-  \begin{columns}[T]
-    \begin{column}{0.55\textwidth}
-      \small
-      \begin{itemize}\itemsep0.6em
-        \item \texttt{extract\_jac}/\texttt{unwrap\_unit} grabbed the \alert{driver docstring} instead of the model's answer whenever the model echoed the whole driver $\Rightarrow$ auto-fail.
-        \item The GRPO reward used the \alert{same extractor} $\Rightarrow$ GRPO was trained \emph{and} scored on garbage.
-        \item Fixed in \texttt{8164ee2}: brace-matched, name-targeted body extraction --- then everything re-run.
-      \end{itemize}
-      \vspace{2mm}
-      \setbeamercolor{block title}{bg=jasecidark,fg=white}
-      \setbeamercolor{block body}{bg=jasecidark!8,fg=ink}
-      \begin{block}{Lesson}
-        \small Verify the grader before trusting a null result. One shared helper silently capped three weeks of experiments.
-      \end{block}
-    \end{column}
-    \begin{column}{0.41\textwidth}
-      \small\centering
-      \textbf{Same models, same holdout ($n=18$)}\\[2mm]
-      \begin{tabular}{@{}lcc@{}}
-        \toprule
-        greedy pass@1 & broken & fixed \\
-        \midrule
-        fresh qwen3coder & 11.1\% & \textbf{33.3\%} \\
-        jac-qwen3coder & 11.1\% & \textbf{38.9\%} \\
-        \bottomrule
-      \end{tabular}
-      \\[3mm]
-      {\Large$\approx$ \textbf{3.5$\times$} undercount}
-    \end{column}
-  \end{columns}
+  \small
+  \begin{itemize}\itemsep0.6em
+    \item \texttt{extract\_jac}/\texttt{unwrap\_unit} grabbed the \alert{driver docstring} instead of the model's answer whenever the model echoed the whole driver, so it auto-failed.
+    \item The GRPO reward used the \alert{same extractor}, so GRPO was trained \emph{and} scored on garbage. Era 1's real LoRA-GRPO null and this eval bug were two separate problems stacked on top of each other.
+    \item Fixed in \texttt{8164ee2}: brace-matched, name-targeted body extraction, then everything re-run.
+  \end{itemize}
+  \vspace{3mm}
+  \setbeamercolor{block title}{bg=jasecidark,fg=white}
+  \setbeamercolor{block body}{bg=jasecidark!8,fg=ink}
+  \begin{block}{Lesson}
+    \small Verify the grader before trusting a null result. One shared helper silently capped three weeks of experiments.
+  \end{block}
 \end{frame}
 
-% ---------------- 7 · CORRECTED LADDER: SFT WORKS ---------------------------------
-\begin{frame}{Corrected ladder --- SFT works (pure-fn holdout, $n=18$)}
+% ---------------- 9 · ERA 3 PROOF CHART -----------------------------------------
+\begin{frame}{Era 3, in one chart: the $\sim$3.5$\times$ undercount}
   \centering
-  \begin{tikzpicture}
-    \begin{axis}[jchart, width=128mm, height=52mm, ybar=0pt, bar width=9mm,
-        symbolic x coords={base,SFT r5,SFT r20,SFT all,SFT+GRPO,raw-GRPO},
-        xtick={base,SFT r5,SFT r20,SFT all,SFT+GRPO,raw-GRPO}, enlarge x limits=0.11,
-        ylabel={greedy pass@1 (\%)},
-        nodes near coords, nodes near coords style={font=\scriptsize\sffamily,color=ink},
-        legend columns=2, legend pos=north east]
-      \addplot[fill=chartblue,draw=none] coordinates {(base,38.9) (raw-GRPO,38.9)};
-      \addplot[fill=jaseciorange,draw=none] coordinates {(SFT r5,55.6) (SFT r20,61.1) (SFT all,55.6) (SFT+GRPO,55.6)};
-      \legend{no SFT, SFT'd}
-    \end{axis}
-  \end{tikzpicture}
+  \includegraphics[width=0.7\textwidth]{assets/charts/era3_undercount.pdf}
+  \vspace{1mm}\\
+  \small Same models, same holdout ($n{=}18$): about a {\Large$\sim$3.5$\times$}
+  undercount, uniformly. Everything from this point on is measured with the fixed
+  extractor.
+\end{frame}
+
+% ---------------- 10 · CORRECTED LADDER: SFT WORKS ---------------------------------
+\begin{frame}{Corrected ladder: SFT works (pure-fn holdout, $n=18$)}
+  \centering
+  \includegraphics[width=0.95\textwidth]{assets/charts/corrected_ladder.pdf}
 
   \vspace{1mm}
   \small
-  SFT lifts greedy \textbf{38.9\,$\rightarrow$\,61.1\%} (+22pp, sweet spot at rung-20; rung-all drops to 55.6 --- one task regressed, task interference).\quad
-  GRPO $\approx$ SFT (55.6 either way, a \emph{valid} null now).\quad
-  raw-GRPO from base $=$ base --- \alert{GRPO can't bootstrap}.\quad
-  Best-of-$k$ deploy: 72.2\,$\rightarrow$\,77.8\%.
+  SFT lifts greedy 38.9 to 61.1\% (+22pp, sweet spot at rung-20; rung-all drops to
+  55.6, one task regressed from task interference).\quad
+  GRPO is about equal to SFT (55.6 either way, a \emph{valid} null now).\quad
+  raw-GRPO from base equals base: \alert{GRPO can't bootstrap}.\quad
+  Best-of-$k$ deploy: 72.2 to 77.8\%.
 \end{frame}
 
-% ---------------- 8 · SYNTAX GAP + COMPILER AS VERIFIER ---------------------------
+% ---------------- 11 · SYNTAX GAP + COMPILER AS VERIFIER ---------------------------
 \begin{frame}{The gap is syntax, and the compiler closes it for free}
   \begin{columns}[T]
     \begin{column}{0.46\textwidth}
       \small
       \begin{itemize}\itemsep0.6em
-        \item jac-qwen3coder: pass@1 38.9\% vs pass@8 66.7\% --- \alert{+27.8pp gap}. The right Jac is \emph{reachable}; greedy lands on a near-valid variant that won't compile.
-        \item Failures are \textbf{compile-fails, not wrong answers} (missing `;', \texttt{here.jid} vs \texttt{jid(here)}).
-        \item Fresh model: pass@1 $=$ pass@8 $=$ 33.3\% --- gap 0, a real dead end.
-        \item The Jac compiler is a \textbf{free, perfect verifier}: sample $k$, keep the first that compiles. Deploy $=$ oracle throughout.
+        \item jac-qwen3coder: pass@1 38.9\% vs pass@8 72.2\%, \alert{a +33.3pp gap}. The right Jac is \emph{reachable}; greedy lands on a near-valid variant that won't compile.
+        \item Failures are compile-fails, not wrong answers (missing `;', \texttt{here.jid} vs \texttt{jid(here)}).
+        \item Fresh model: pass@1 $=$ pass@8 $=$ 33.3\%, gap 0, a real dead end.
+        \item The Jac compiler is a free, perfect verifier: sample $k$, keep the first that compiles. Deploy $=$ oracle throughout.
       \end{itemize}
     \end{column}
     \begin{column}{0.5\textwidth}
       \centering
-      \begin{tikzpicture}
-        \begin{axis}[jchart, width=72mm, height=52mm,
-            xmode=log, log basis x=2, xtick={1,8,32},
-            xticklabels={greedy,$k=8$,$k=32$},
-            ylabel={pass rate (\%)}, title={\scriptsize\color{inkmuted} base model, sampling budget only --- zero training}]
-          \addplot[color=jaseciorange,line width=1.2pt,mark=*,mark size=2.4pt,
-                   nodes near coords, nodes near coords style={font=\scriptsize\sffamily,color=ink,anchor=south east}]
-            coordinates {(1,38.9) (8,72.2) (32,88.9)};
-        \end{axis}
-      \end{tikzpicture}
+      \includegraphics[width=\textwidth]{assets/charts/kscale.pdf}
     \end{column}
   \end{columns}
 \end{frame}
 
-% ---------------- 9 · ALL 5 HOLDOUTS ----------------------------------------------
+% ---------------- 12 · ALL 5 HOLDOUTS ----------------------------------------------
 \begin{frame}{Across all five holdouts}
   \centering
-  \begin{tikzpicture}
-    \begin{groupplot}[group style={group size=2 by 1,horizontal sep=14mm},
-        jchart, width=72mm, height=48mm, ybar=1pt, /pgf/bar width=2.6mm,
-        symbolic x coords={pure-fn,graph,conv,clean,big},
-        xtick=data, enlarge x limits=0.13,
-        x tick label style={font=\tiny,color=inkmuted}]
-      \nextgroupplot[title={\scriptsize greedy pass@1 (\%)}, legend to name=holdoutleg, legend columns=2]
-        \addplot[fill=chartblue,draw=none] coordinates {(pure-fn,38.9) (graph,35.3) (conv,63.6) (clean,43.8) (big,34.4)};
-        \addplot[fill=jaseciorange,draw=none,nodes near coords,
-                 nodes near coords style={font=\fontsize{4.5}{4.5}\selectfont\sffamily,color=ink,rotate=90,anchor=west}]
-          coordinates {(pure-fn,61.1) (graph,29.4) (conv,72.7) (clean,68.8) (big,43.8)};
-        \legend{base, SFT}
-      \nextgroupplot[title={\scriptsize best-of-$k$ deploy (\%)}]
-        \addplot[fill=chartblue,draw=none] coordinates {(pure-fn,72.2) (graph,52.9) (conv,72.7) (clean,93.8) (big,62.5)};
-        \addplot[fill=jaseciorange,draw=none,nodes near coords,
-                 nodes near coords style={font=\fontsize{4.5}{4.5}\selectfont\sffamily,color=ink,rotate=90,anchor=west}]
-          coordinates {(pure-fn,77.8) (graph,64.7) (conv,81.8) (clean,87.5) (big,71.9)};
-    \end{groupplot}
-  \end{tikzpicture}
-  \\[0.5mm]\ref{holdoutleg}\\[1.5mm]
+  \includegraphics[width=\textwidth]{assets/charts/holdouts.pdf}
+  \\[1mm]
   \small
-  Conversion is the peak: \textbf{72.7\% greedy / 81.8\% best-of-$k$} --- richer spec beats hole-fill by +9--11pp.\quad
-  Graph walkers: greedy dips under SFT (noise) but best-of-$k$ gains \textbf{52.9\,$\rightarrow$\,64.7\%}.
-  \\ {\scriptsize\color{inkmuted} $n$: pure-fn 18 · graph 17 · conversion 11 · clean 16 · big+fresh 32}
+  Conversion is the peak: 72.7\% greedy, 81.8\% best-of-$k$. Richer spec beats
+  hole-fill by +9--11pp.\quad
+  Graph walkers: greedy dips under SFT (noise), but best-of-$k$ still gains, 52.9
+  to 64.7\%.
+  \\ {\scriptsize\color{inkmuted} $n$: pure-fn 18 $\cdot$ graph 17 $\cdot$ conversion 11 $\cdot$ clean 16 $\cdot$ big+fresh 32}
 \end{frame}
 
-% ---------------- 10 · FOLLOW-UPS E1-E3 -------------------------------------------
+% ---------------- 13 · FOLLOW-UPS E1-E3 -------------------------------------------
 \begin{frame}{Follow-ups: ceiling, honest gap, generalization}
   \small
   \setbeamercolor{block title}{bg=jaseciorange,fg=white}
   \setbeamercolor{block body}{bg=jaseciorange!8,fg=ink}
   \begin{columns}[T]
     \begin{column}{0.32\textwidth}
-      \begin{block}{E1 · true ceiling $\sim$94\%}
-        Drop 2 junk regex tasks ($n=16$): base best-of-$k$ \textbf{93.8\%}.
-        SFT sharpens greedy (43.8\,$\rightarrow$\,68.8\%) but \emph{narrows} sampling --- its best-of-$k$ (87.5\%) dips one task below base.
+      \begin{block}{E1 $\cdot$ true ceiling $\sim$94\%}
+        Drop 2 junk regex tasks ($n=16$): base best-of-$k$ 93.8\%.
+        SFT sharpens greedy (43.8\,$\rightarrow$\,68.8\%) but \emph{narrows} sampling: its best-of-$k$ (87.5\%) dips one task below base.
         \\[1mm]\alert{Exploit vs explore:} single-shot $\rightarrow$ SFT; $k$-budget $\rightarrow$ base + best-of-$k$.
       \end{block}
     \end{column}
     \begin{column}{0.32\textwidth}
-      \begin{block}{E2 · the honest gap}
-        Free-form NL\,$\rightarrow$\,Jac: \textbf{0/3 for both} the hole-fill--SFT and conversion--SFT models.
-        \\[1mm]Not fixed by model choice --- needs its own dataset. The one real remaining weakness.
+      \begin{block}{E2 $\cdot$ the honest gap}
+        Free-form NL\,$\rightarrow$\,Jac: 0/3 for both the hole-fill-SFT and conversion-SFT models.
+        \\[1mm]Not fixed by model choice, needs its own dataset. The one real remaining weakness.
       \end{block}
     \end{column}
     \begin{column}{0.32\textwidth}
-      \begin{block}{E3 · SFT generalizes}
-        Bigger, fresher holdout ($n=32$, +16 synthetic): greedy 34.4\,$\rightarrow$\,\textbf{43.8\%}, best-of-$k$ 62.5\,$\rightarrow$\,\textbf{71.9\%}.
-        \\[1mm]Lift holds on tasks that didn't exist at training time (synthetic 4\,$\rightarrow$\,5, library 7\,$\rightarrow$\,9) --- not memorization.
+      \begin{block}{E3 $\cdot$ SFT generalizes}
+        Bigger, fresher holdout ($n=32$, +16 synthetic): greedy 34.4\,$\rightarrow$\,43.8\%, best-of-$k$ 62.5\,$\rightarrow$\,71.9\%.
+        \\[1mm]Lift holds on tasks that didn't exist at training time (synthetic 4\,$\rightarrow$\,5, library 7\,$\rightarrow$\,9), not memorization.
       \end{block}
     \end{column}
   \end{columns}
 \end{frame}
 
-% ---------------- 11 · JOURNEY + LESSONS ------------------------------------------
+% ---------------- 14 · WHY GRPO ~= SFT --------------------------------------------
+\begin{frame}{Why GRPO $\approx$ SFT, and why that's a real result}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \small
+      \begin{itemize}\itemsep0.6em
+        \item Every measurement here agrees: GRPO on top of SFT adds nothing beyond SFT alone; raw GRPO from the base moves nothing. This is Era 1's LoRA-GRPO null (KL$\approx$0, byte-identical output) showing up again at scale.
+        \item Matches Yue et al.\ 2504.13837: RL sharpens a model's \emph{sampling distribution} around capability it already has. It doesn't expand the underlying boundary.
+        \item Once SFT already moves greedy close to the model's own pass@$k$ ceiling, there's little room left to sharpen further, and LoRA's limited capacity (same constraint behind task interference) leaves even less room to search past it.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      \setbeamercolor{block title}{bg=jaseciorange,fg=white}
+      \setbeamercolor{block body}{bg=jaseciorange!8,fg=ink}
+      \begin{block}{What would actually expand it}
+        \small
+        \begin{itemize}\itemsep0.4em
+          \item Full fine-tune: removes LoRA's capacity ceiling entirely. Untested here; needs $>$48\,GB.
+          \item Distillation / expert iteration: train on a stronger teacher's, or the model's own compiler-verified best, outputs. Injects capability from \emph{outside} rather than re-weighting what's already there.
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ---------------- 15 · JOURNEY + LESSONS ------------------------------------------
 \begin{frame}{The journey: a bug hid an 11\,$\rightarrow$\,94\% generator}
   \centering
-  \begin{tikzpicture}
-    \begin{axis}[jchart, width=130mm, height=42mm,
-        xtick={1,2,3,4,5},
-        xticklabels={v1 (broken eval),eval fixed · base,+ SFT,+ best-of-$k$,+ drop junk tasks},
-        x tick label style={font=\tiny,color=inkmuted},
-        enlarge x limits=0.07]
-      \addplot[color=jaseciorange,line width=1.2pt,mark=*,mark size=2.2pt,
-               nodes near coords, nodes near coords style={font=\scriptsize\sffamily,color=ink,anchor=south east}]
-        coordinates {(1,11.1) (2,38.9) (3,61.1) (4,77.8) (5,93.8)};
-      \addplot[only marks,mark=*,mark size=2.2pt,color=chartblue] coordinates {(1,11.1)};
-      \node[font=\tiny,color=chartblue,anchor=west] at (axis cs:1.12,11.1) {measured wrong};
-    \end{axis}
-  \end{tikzpicture}
+  \includegraphics[width=\textwidth]{assets/charts/journey.pdf}
 
   \vspace{1mm}
   \scriptsize
   \begin{columns}[T]
     \begin{column}{0.48\textwidth}
       \begin{itemize}\itemsep0.25em
-        \item \textbf{Verify the grader} before trusting a null --- eval \emph{and} reward shared the bug.
-        \item The gap is \textbf{syntax, not capability} --- compiled Jac is almost always exactly right.
-        \item \textbf{Compiler = free perfect verifier} --- best-of-$k$ ships 78--94\% with zero training.
+        \item Verify the grader before trusting a null: eval \emph{and} reward shared the bug.
+        \item The gap is syntax, not capability: compiled Jac is almost always exactly right.
+        \item Compiler equals a free, perfect verifier: best-of-$k$ ships 78--94\% with zero training.
       \end{itemize}
     \end{column}
     \begin{column}{0.48\textwidth}
       \begin{itemize}\itemsep0.25em
-        \item \textbf{SFT works \& generalizes}; sweet spot $\sim$20 tasks --- more causes interference.
-        \item \textbf{LoRA-GRPO can't bootstrap} and $\approx$ SFT after warm-start (matches Yue et al.\ 2504.13837).
-        \item \textbf{Conversion beats hole-fill} +9--11pp --- richer, unambiguous spec.
+        \item SFT works and generalizes; sweet spot $\sim$20 tasks, more causes interference.
+        \item LoRA-GRPO can't bootstrap and lands $\approx$ SFT after warm-start (matches Yue et al.\ 2504.13837).
+        \item Conversion beats hole-fill by +9--11pp: richer, unambiguous spec.
       \end{itemize}
     \end{column}
   \end{columns}
 \end{frame}
 
-% ---------------- 12 · SHIPPED -----------------------------------------------------
+% ---------------- 16 · SHIPPED -----------------------------------------------------
 \begin{frame}{Shipped}
   \begin{columns}[T]
     \begin{column}{0.52\textwidth}
       \small
       \begin{itemize}\itemsep0.7em
-        \item \texttt{rl/generate.py} --- best-of-$k$ generator: sample $k$ at $T{=}0.8$, return the first candidate the Jac compiler accepts. Live-verified; deploy $=$ oracle.
-        \item Studio \textbf{GENERATE panel} + all corrected result charts.
-        \item Studio \textbf{RL data pipeline} --- SFT / GRPO / conversion / synthetic datasets and splits, browsable end-to-end.
+        \item \texttt{rl/generate.py}: best-of-$k$ generator, sample $k$ at $T{=}0.8$, return the first candidate the Jac compiler accepts. Live-verified; deploy $=$ oracle.
+        \item Studio GENERATE panel, plus all corrected result charts.
+        \item Studio RL data pipeline: SFT / GRPO / conversion / synthetic datasets and splits, browsable end-to-end.
         \item Broken-eval numbers flagged with banners across all docs.
       \end{itemize}
     \end{column}
     \begin{column}{0.44\textwidth}
       \setbeamercolor{block title}{bg=jasecidark,fg=white}
       \setbeamercolor{block body}{bg=jasecidark!8,fg=ink}
-      \begin{block}{Deployable today --- no further training}
+      \begin{block}{Deployable today, no further training}
         \small
         \begin{tabular}{@{}lr@{}}
           pure functions (best-of-$k$) & $\sim$78\% \\
@@ -360,96 +335,96 @@
   \end{columns}
 \end{frame}
 
-% ---------------- 13 · NEXT STEPS ---------------------------------------------------
+% ---------------- 17 · NEXT STEPS ---------------------------------------------------
 \begin{frame}{Next steps}
   \small
   \begin{itemize}\itemsep0.7em
-    \item \textbf{Close the E2 gap:} SFT on free-form NL\,$\rightarrow$\,Jac prompts --- the one measured weakness.
-    \item \textbf{Spec\,$\rightarrow$\,Jac dataset for the graph-walker idiom} --- conversion can't source it (no Python equivalent of OSP).
-    \item \textbf{Curriculum / quality-filter the train pool} --- kill the rung-all task interference (or keep training at $\sim$20).
-    \item \textbf{Distillation / expert iteration} --- the one method that can expand the capability boundary, not just sharpen it.
-    \item \textbf{Whole-file generation track} --- bridge from hole-fill to generating full Jac programs; gets its own ladder.
-    \item \textbf{Guardrails:} partial-credit grading; Wilson CIs on every claim --- ``gap closed'' means SFT pass@1 CI reaches base pass@8.
+    \item Close the E2 gap: SFT on free-form NL\,$\rightarrow$\,Jac prompts, the one measured weakness.
+    \item Spec\,$\rightarrow$\,Jac dataset for the graph-walker idiom: conversion can't source it (no Python equivalent of OSP).
+    \item Curriculum / quality-filter the train pool: kill the rung-all task interference (or keep training at $\sim$20).
+    \item Distillation / expert iteration: the one method that can expand the capability boundary, not just sharpen it.
+    \item Whole-file generation track: bridge from hole-fill to generating full Jac programs; gets its own ladder.
+    \item Guardrails: partial-credit grading; Wilson CIs on every claim. ``Gap closed'' means SFT pass@1 CI reaches base pass@8.
   \end{itemize}
 \end{frame}
 
-% ---------------- 14 · GRAPH-WALKER FIX PLAN --------------------------------------
+% ---------------- 18 · GRAPH-WALKER FIX PLAN --------------------------------------
 \begin{frame}{Fixing the graph-walker weak spot}
   \begin{columns}[T]
     \begin{column}{0.4\textwidth}
       \small\centering
-      \textbf{Graph holdout ($n=17$)}\\[2mm]
+      Graph holdout ($n=17$)\\[2mm]
       \begin{tabular}{@{}lcc@{}}
         \toprule
         & base & +SFT \\
         \midrule
         greedy pass@1 & 35.3\% & \alert{29.4\%} \\
-        best-of-$k$ & 52.9\% & \textbf{64.7\%} \\
+        best-of-$k$ & 52.9\% & 64.7\% \\
         \bottomrule
       \end{tabular}
       \\[3mm]
       \raggedright\footnotesize
-      Only family where SFT \alert{hurts} greedy --- the tell for \textbf{task interference}: the SFT mix is dominated by hole-fill/conversion, graph examples get outvoted.
+      Only family where SFT \alert{hurts} greedy: the tell for task interference. The SFT mix is dominated by hole-fill/conversion, graph examples get outvoted.
     \end{column}
     \begin{column}{0.56\textwidth}
       \small
-      \textbf{Fix plan, priority order}
+      Fix plan, priority order
       \begin{enumerate}\itemsep0.5em
-        \item \textbf{Dedicated graph-walker dataset} --- spec$\rightarrow$jac synthetic set for the OSP idiom (\texttt{walker}/\texttt{node}/\texttt{edge}/\texttt{visit}). Conversion structurally can't source this: Python has no walker equivalent.
-        \item \textbf{Curriculum-weighted SFT / per-family adapter} --- fix the interference itself, not just add data; graph examples get proportional gradient signal instead of being outvoted by volume.
-        \item \textbf{Stopgap, zero training, ships today} --- detect task type in \texttt{rl/generate.py}, bump $k\to32$ specifically for graph-walker prompts.
+        \item Dedicated graph-walker dataset: spec$\rightarrow$jac synthetic set for the OSP idiom (\texttt{walker}/\texttt{node}/\texttt{edge}/\texttt{visit}). Conversion structurally can't source this, Python has no walker equivalent.
+        \item Curriculum-weighted SFT / per-family adapter: fix the interference itself, not just add data; graph examples get proportional gradient signal instead of being outvoted by volume.
+        \item Stopgap, zero training, ships today: detect task type in \texttt{rl/generate.py}, bump $k\to32$ specifically for graph-walker prompts.
       \end{enumerate}
     \end{column}
   \end{columns}
   \vspace{3mm}
   \centering
   \begin{beamercolorbox}[rounded=true,sep=1.5mm,wd=0.92\textwidth]{banner}
-    \centering\textbf{\#1 + \#2 are the actual fix --- \#3 is a band-aid you can flip on right now.}
+    \centering \#1 and \#2 are the actual fix. \#3 is a band-aid you can flip on right now.
   \end{beamercolorbox}
 \end{frame}
 
-% ---------------- 15 · GLOSSARY ----------------------------------------------------
-\begin{frame}[t]{Glossary --- terms \& context}
+% ---------------- 19 · GLOSSARY ----------------------------------------------------
+\begin{frame}[t]{Glossary: terms \& context}
   \tiny
   \begin{columns}[T]
     \begin{column}{0.32\textwidth}
       \begin{itemize}\itemsep0.15em
-        \item \term{Jac} --- Jaseci's language; supersets Python, adds graph-native OSP constructs.
-        \item \term{OSP / walkers} --- \texttt{node}/\texttt{edge}/\texttt{walker} idiom; no Python equivalent.
-        \item \term{SFT} --- supervised fine-tuning on prompt$\rightarrow$answer pairs.
-        \item \term{DPO} --- preference optimization on chosen-vs-rejected pairs.
-        \item \term{GRPO} --- RL: sample rollout groups, advantage $=(r-\bar r)/\sigma$.
-        \item \term{tuned-GRPO} --- GRPO variant: 500 iters, 10$\times$ LR; rules out ``just needs more training.''
-        \item \term{LoRA} --- low-rank adapters; only small matrices train.
-        \item \term{MoE / 30B-A3B} --- 30B params, $\sim$3B active/token.
-        \item \term{MLX} --- Apple's on-device ML framework; runs the LoRA training here.
-        \item \term{Metal} --- Apple's GPU compute API; where the OOMs actually happen.
+        \item \term{Jac}: Jaseci's language; supersets Python, adds graph-native OSP constructs.
+        \item \term{OSP / walkers}: \texttt{node}/\texttt{edge}/\texttt{walker} idiom; no Python equivalent.
+        \item \term{SFT}: supervised fine-tuning on prompt$\rightarrow$answer pairs.
+        \item \term{DPO}: preference optimization on chosen-vs-rejected pairs.
+        \item \term{GRPO}: RL, sample rollout groups, advantage $=(r-\bar r)/\sigma$.
+        \item \term{tuned-GRPO}: GRPO variant, 500 iters, 10$\times$ LR; rules out ``just needs more training.''
+        \item \term{LoRA}: low-rank adapters; only small matrices train.
+        \item \term{MoE / 30B-A3B}: 30B params, $\sim$3B active/token.
+        \item \term{MLX}: Apple's on-device ML framework; runs the LoRA training here.
+        \item \term{Metal}: Apple's GPU compute API; where the OOMs actually happen.
       \end{itemize}
     \end{column}
     \begin{column}{0.32\textwidth}
       \begin{itemize}\itemsep0.15em
-        \item \term{unified memory} --- Apple silicon's shared CPU/GPU RAM; 48\,GB hard ceiling here.
-        \item \term{warm-start} --- brief SFT before RL so rollouts aren't all-fail.
-        \item \term{STaR} --- sample, keep verified wins, SFT on them, repeat.
-        \item \term{$\sigma=0$ trap} --- equal rollout rewards $\Rightarrow$ zero gradient; can't bootstrap from 0\% skill.
-        \item \term{KL} --- divergence from start policy; $\approx$0 $=$ model didn't move.
-        \item \term{this\_is\_jac} --- real Jac codebase mined for hole-fill tasks; ground-truth source.
-        \item \term{exact-stdout} --- grading rule: output must byte-match; no partial credit.
-        \item \term{Studio} --- this repo's app; ships the GENERATE panel + RL data pipeline live.
-        \item \term{holdout} --- eval tasks never trained on; five sets ($n{=}18/17/11/16/32$).
+        \item \term{unified memory}: Apple silicon's shared CPU/GPU RAM; 48\,GB hard ceiling here.
+        \item \term{warm-start}: brief SFT before RL so rollouts aren't all-fail.
+        \item \term{STaR}: sample, keep verified wins, SFT on them, repeat.
+        \item \term{$\sigma=0$ trap}: equal rollout rewards, so zero gradient; can't bootstrap from 0\% skill.
+        \item \term{KL}: divergence from start policy; $\approx$0 means the model didn't move.
+        \item \term{this\_is\_jac}: real Jac codebase mined for hole-fill tasks; ground-truth source.
+        \item \term{exact-stdout}: grading rule, output must byte-match; no partial credit.
+        \item \term{Studio}: this repo's app; ships the GENERATE panel + RL data pipeline live.
+        \item \term{holdout}: eval tasks never trained on; five sets ($n{=}18/17/11/16/32$).
       \end{itemize}
     \end{column}
     \begin{column}{0.32\textwidth}
       \begin{itemize}\itemsep0.15em
-        \item \term{hole-fill} --- one function body blanked from a working Jac file.
-        \item \term{conversion} --- python$\rightarrow$jac translation; richest spec, best scores.
-        \item \term{ladder / rung-$N$} --- train on $N$ tasks, eval on holdout.
-        \item \term{task interference} --- harder train tasks regress ones already learned.
-        \item \term{greedy / pass@1} --- one deterministic (temp-0) answer; the headline metric.
-        \item \term{pass@$k$ (oracle)} --- any of $k$ samples correct; ceiling if perfectly picked.
-        \item \term{best-of-$k$ (deploy)} --- sample $k$, return first the compiler accepts.
-        \item \term{Wilson CI} --- binomial confidence interval; the noise bar on every rate.
-        \item \term{expert iteration / distillation} --- train on a stronger model's verified outputs.
+        \item \term{hole-fill}: one function body blanked from a working Jac file.
+        \item \term{conversion}: python$\rightarrow$jac translation; richest spec, best scores.
+        \item \term{ladder / rung-$N$}: train on $N$ tasks, eval on holdout.
+        \item \term{task interference}: harder train tasks regress ones already learned.
+        \item \term{greedy / pass@1}: one deterministic (temp-0) answer; the headline metric.
+        \item \term{pass@$k$ (oracle)}: any of $k$ samples correct; ceiling if perfectly picked.
+        \item \term{best-of-$k$ (deploy)}: sample $k$, return first the compiler accepts.
+        \item \term{Wilson CI}: binomial confidence interval; the noise bar on every rate.
+        \item \term{expert iteration / distillation}: train on a stronger model's verified outputs.
       \end{itemize}
     \end{column}
   \end{columns}
