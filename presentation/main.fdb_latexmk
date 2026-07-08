@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1783281715.19756 "main.tex" "main.pdf" "main" 1783281717.91688 0
+["pdflatex"] 1783466717.1504 "main.tex" "main.pdf" "main" 1783466719.02863 0
   "/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/enc/dvips/base/8r.enc" 1772380719 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/map/fontname/texfonts.map" 1772380719 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/map/pdftex/updmap/pdftex.map" 1772380719 5541360 f183aac233c4cd1e5ef882fcbe8e7096 ""
@@ -285,10 +285,10 @@
   "assets/img-005.png" 1783277286.9052 131847 30899d674ac1b452b5d259bb6f7c7d2f ""
   "assets/titlepage-1.png" 1783277290.45982 1536254 aebc35483d7a223bf9f179274d98cfbf ""
   "jaseci-theme.sty" 1783277785.87241 3236 740ac1096214c9c46631bcf67f36d67d ""
-  "main.aux" 1783281717.73312 7673 3d34f384b8bb3100cc383c6584e91c7a "pdflatex"
-  "main.nav" 1783281717.73449 1481 4dff29d63ced408af8d13a7957e2a731 "pdflatex"
-  "main.out" 1783281716.25209 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "main.tex" 1783281699.80777 22085 be2a545931f8e5aa9ba2f62fa095f366 ""
+  "main.aux" 1783466718.90168 7840 02faf5130fe92c7df73ffa768a372f46 "pdflatex"
+  "main.nav" 1783466718.90304 1574 f5abf7444d939a8c2cd188b6df8c9c87 "pdflatex"
+  "main.out" 1783466717.87161 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "main.tex" 1783466712.28611 23847 37f0a574b35305d6d32cc2e147f71c8f ""
   (generated)
   "main.aux"
   "main.log"

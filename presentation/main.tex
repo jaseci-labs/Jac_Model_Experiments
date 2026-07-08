@@ -373,7 +373,42 @@
   \end{itemize}
 \end{frame}
 
-% ---------------- 14 · GLOSSARY ----------------------------------------------------
+% ---------------- 14 · GRAPH-WALKER FIX PLAN --------------------------------------
+\begin{frame}{Fixing the graph-walker weak spot}
+  \begin{columns}[T]
+    \begin{column}{0.4\textwidth}
+      \small\centering
+      \textbf{Graph holdout ($n=17$)}\\[2mm]
+      \begin{tabular}{@{}lcc@{}}
+        \toprule
+        & base & +SFT \\
+        \midrule
+        greedy pass@1 & 35.3\% & \alert{29.4\%} \\
+        best-of-$k$ & 52.9\% & \textbf{64.7\%} \\
+        \bottomrule
+      \end{tabular}
+      \\[3mm]
+      \raggedright\footnotesize
+      Only family where SFT \alert{hurts} greedy --- the tell for \textbf{task interference}: the SFT mix is dominated by hole-fill/conversion, graph examples get outvoted.
+    \end{column}
+    \begin{column}{0.56\textwidth}
+      \small
+      \textbf{Fix plan, priority order}
+      \begin{enumerate}\itemsep0.5em
+        \item \textbf{Dedicated graph-walker dataset} --- spec$\rightarrow$jac synthetic set for the OSP idiom (\texttt{walker}/\texttt{node}/\texttt{edge}/\texttt{visit}). Conversion structurally can't source this: Python has no walker equivalent.
+        \item \textbf{Curriculum-weighted SFT / per-family adapter} --- fix the interference itself, not just add data; graph examples get proportional gradient signal instead of being outvoted by volume.
+        \item \textbf{Stopgap, zero training, ships today} --- detect task type in \texttt{rl/generate.py}, bump $k\to32$ specifically for graph-walker prompts.
+      \end{enumerate}
+    \end{column}
+  \end{columns}
+  \vspace{3mm}
+  \centering
+  \begin{beamercolorbox}[rounded=true,sep=1.5mm,wd=0.92\textwidth]{banner}
+    \centering\textbf{\#1 + \#2 are the actual fix --- \#3 is a band-aid you can flip on right now.}
+  \end{beamercolorbox}
+\end{frame}
+
+% ---------------- 15 · GLOSSARY ----------------------------------------------------
 \begin{frame}[t]{Glossary --- terms \& context}
   \scriptsize
   \begin{columns}[T]

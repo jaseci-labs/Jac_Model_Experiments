@@ -4,6 +4,32 @@ Everything we know about making a 30B coder model write idiomatic, compiler-corr
 Jac — the definitions, the findings, the deployable answer. Model under study:
 `jac-qwen3coder` (Qwen3-Coder-30B-A3B, already SFT+DPO'd on Jac), MLX on 48GB.
 
+## Legend
+
+Read this first — everything below assumes these terms.
+
+| Term | Meaning |
+|---|---|
+| **pass@1 / greedy** | one deterministic best guess; % of holdout that is byte-exact correct. The headline. |
+| **pass@8 / sampled** | 8 sampled tries; pass if **any** compiles+runs+matches. The *reachable ceiling*. |
+| **best-of-k (deploy)** | sample k, return the first that the jac **compiler** accepts — no gold peek. The shippable number. |
+| **syntax gap** | pass@8 − pass@1. Correct-but-not-greedy capability the model already has. |
+| **holdout** | fixed tasks never trained on; the generalization set (n=16–32 across runs). |
+| **mem** | train-recall — eval on the rung's own training tasks. Gauges overfitting. |
+| **rung** | how many tasks we trained on in one ladder step: 5, 20, all. Each is a superset of the last. |
+| **hole-fill task** | a real `this_is_jac` program with one function body blanked; the model fills it. |
+| **conversion task** | "translate this Python function to Jac" — same grader, richer/unambiguous spec. |
+| **synthetic task** | a fresh, authored deterministic Jac function (not from `this_is_jac`) — for holdout power + novelty. |
+| **osim** | output similarity (`difflib` ratio) between produced and gold stdout (0–1). |
+| **SFT / GRPO / DPO / LoRA** | supervised FT / the RL method / preference-tuning / low-rank (48GB-forced) adapter. |
+| **task interference** | adding more/harder train tasks regresses a task the model already had (rung-20→all: 61%→56%). |
+| **clean set** | the 16-task pure-fn holdout with 2 junk regex-memorization tasks removed; the true best-of-k ceiling. |
+| **distillation / expert-iteration** | train on a stronger teacher's / compiler-verified correct answers — adds capability the student can't self-produce. |
+| **boundary** | the best the model can do *with* sampling (pass@k ceiling). |
+| **the two models** | `qwen3coder` (fresh) · `jac-qwen3coder` (SFT+DPO'd on Jac — the capable one). |
+
+---
+
 ## TL;DR
 
 **The model is capable; the real problem is a closeable *syntax* gap, not a capability wall.**
@@ -21,28 +47,6 @@ Jac — the definitions, the findings, the deployable answer. Model under study:
   (non-Jac) model is a dead end.
 - **The one real gap: free-form NL generation** — both models are tuned for the task
   format and fail arbitrary "write a function that…" prompts.
-
----
-
-## Legend
-
-| Term | Meaning |
-|---|---|
-| **pass@1 / greedy** | one deterministic best guess; % of holdout that is byte-exact correct. The headline. |
-| **pass@8 / sampled** | 8 sampled tries; pass if **any** compiles+runs+matches. The *reachable ceiling*. |
-| **best-of-k (deploy)** | sample k, return the first that the jac **compiler** accepts — no gold peek. The shippable number. |
-| **syntax gap** | pass@8 − pass@1. Correct-but-not-greedy capability the model already has. |
-| **holdout** | fixed tasks never trained on; the generalization set (n=16–32 across runs). |
-| **mem** | train-recall — eval on the rung's own training tasks. Gauges overfitting. |
-| **rung** | how many tasks we trained on in one ladder step: 5, 20, all. Each is a superset of the last. |
-| **hole-fill task** | a real `this_is_jac` program with one function body blanked; the model fills it. |
-| **conversion task** | "translate this Python function to Jac" — same grader, richer/unambiguous spec. |
-| **synthetic task** | a fresh, authored deterministic Jac function (not from `this_is_jac`) — for holdout power + novelty. |
-| **osim** | output similarity (`difflib` ratio) between produced and gold stdout (0–1). |
-| **SFT / GRPO / DPO / LoRA** | supervised FT / the RL method / preference-tuning / low-rank (48GB-forced) adapter. |
-| **distillation / expert-iteration** | train on a stronger teacher's / compiler-verified correct answers — adds capability the student can't self-produce. |
-| **boundary** | the best the model can do *with* sampling (pass@k ceiling). |
-| **the two models** | `qwen3coder` (fresh) · `jac-qwen3coder` (SFT+DPO'd on Jac — the capable one). |
 
 ---
 
@@ -146,6 +150,15 @@ jac compiler as verifier → ~82% on pure functions, ~94% on the clean set.** Sh
 ## Open leads (not yet done)
 
 - **NL→jac SFT** — close the free-form gap (the one real weakness).
+- **Graph-walker fix plan** — SFT is the only lever that *hurts* this family's greedy
+  score (35.3%→29.4%; every other family goes up). Root cause: the SFT mix is dominated
+  by hole-fill/conversion, so graph-walker examples get outvoted — task interference,
+  not a capability gap (best-of-k still climbs 52.9%→64.7%). Fix, in priority order:
+  (1) a dedicated spec→jac synthetic dataset for the OSP idiom — conversion can't
+  source it, Python has no `walker`/`node`/`edge`; (2) curriculum-weighted SFT or a
+  separate per-family adapter so graph examples aren't drowned out by volume — the
+  actual fix, not just more data; (3) stopgap already shippable with zero training —
+  bump `k` specifically for graph-walker tasks in `rl/generate.py` (k=32 vs default).
 - **Bigger generated dataset** — n is still small (±8–12pp noise); synthetic families +
   distillation would tighten every number and give more headroom.
 - **Full fine-tune** (cloud / >48GB) — the only untested way to check if GRPO can beat SFT
