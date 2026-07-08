@@ -410,35 +410,46 @@
 
 % ---------------- 15 · GLOSSARY ----------------------------------------------------
 \begin{frame}[t]{Glossary --- terms \& context}
-  \scriptsize
+  \tiny
   \begin{columns}[T]
-    \begin{column}{0.48\textwidth}
-      \begin{itemize}\itemsep0.25em
+    \begin{column}{0.32\textwidth}
+      \begin{itemize}\itemsep0.15em
         \item \term{Jac} --- Jaseci's language; supersets Python, adds graph-native OSP constructs.
-        \item \term{OSP / graph walkers} --- Object-Spatial Programming: \texttt{node}/\texttt{edge}/\texttt{walker} idiom; no Python equivalent.
+        \item \term{OSP / walkers} --- \texttt{node}/\texttt{edge}/\texttt{walker} idiom; no Python equivalent.
         \item \term{SFT} --- supervised fine-tuning on prompt$\rightarrow$answer pairs.
-        \item \term{DPO} --- direct preference optimization; trains on chosen-vs-rejected pairs.
-        \item \term{GRPO} --- group-relative policy optimization (RL): sample rollout groups, advantage $=(r-\bar r)/\sigma$.
-        \item \term{LoRA} --- low-rank adapters; only small matrices train. Whole pipeline: LoRA on MLX (Apple-silicon ML).
-        \item \term{MoE / 30B-A3B} --- mixture-of-experts, 30B params, $\sim$3B active per token --- why it trains on 48\,GB.
-        \item \term{warm-start} --- brief SFT before RL so rollouts aren't all-fail.
-        \item \term{STaR} --- self-taught reasoner loop: sample, keep verified wins, SFT on them, repeat.
-        \item \term{$\sigma=0$ trap} --- all rollouts score equal $\Rightarrow$ advantage 0 $\Rightarrow$ zero gradient; RL can't start from 0\% skill.
-        \item \term{KL} --- divergence from start policy during RL; $\approx$0 $=$ model didn't move.
+        \item \term{DPO} --- preference optimization on chosen-vs-rejected pairs.
+        \item \term{GRPO} --- RL: sample rollout groups, advantage $=(r-\bar r)/\sigma$.
+        \item \term{tuned-GRPO} --- GRPO variant: 500 iters, 10$\times$ LR; rules out ``just needs more training.''
+        \item \term{LoRA} --- low-rank adapters; only small matrices train.
+        \item \term{MoE / 30B-A3B} --- 30B params, $\sim$3B active/token.
+        \item \term{MLX} --- Apple's on-device ML framework; runs the LoRA training here.
+        \item \term{Metal} --- Apple's GPU compute API; where the OOMs actually happen.
       \end{itemize}
     \end{column}
-    \begin{column}{0.48\textwidth}
-      \begin{itemize}\itemsep0.25em
-        \item \term{greedy / pass@1} --- one deterministic (temp-0) answer; the single-shot metric.
-        \item \term{pass@$k$ (oracle)} --- any of $k$ samples correct; ceiling if a perfect verifier picked.
-        \item \term{best-of-$k$ (deploy)} --- sample $k$, return first the compiler accepts; $=$ oracle here.
-        \item \term{holdout} --- eval tasks never trained on; five sets ($n=18/17/11/16/32$).
-        \item \term{hole-fill} --- task format: one function body blanked out of a working Jac file; exact-stdout grading.
-        \item \term{conversion} --- python$\rightarrow$jac translation tasks; richest spec, best scores.
-        \item \term{ladder / rung-$N$} --- train on $N$ tasks, eval on holdout; rungs 1$\rightarrow$all isolate data-size effects.
-        \item \term{task interference} --- adding harder train tasks regresses learned ones (rung-20 $\rightarrow$ all: 61$\rightarrow$56\%).
-        \item \term{Wilson CI} --- binomial confidence interval; the noise bar on every pass rate.
-        \item \term{expert iteration / distillation} --- train on a stronger model's verified outputs; expands ability.
+    \begin{column}{0.32\textwidth}
+      \begin{itemize}\itemsep0.15em
+        \item \term{unified memory} --- Apple silicon's shared CPU/GPU RAM; 48\,GB hard ceiling here.
+        \item \term{warm-start} --- brief SFT before RL so rollouts aren't all-fail.
+        \item \term{STaR} --- sample, keep verified wins, SFT on them, repeat.
+        \item \term{$\sigma=0$ trap} --- equal rollout rewards $\Rightarrow$ zero gradient; can't bootstrap from 0\% skill.
+        \item \term{KL} --- divergence from start policy; $\approx$0 $=$ model didn't move.
+        \item \term{this\_is\_jac} --- real Jac codebase mined for hole-fill tasks; ground-truth source.
+        \item \term{exact-stdout} --- grading rule: output must byte-match; no partial credit.
+        \item \term{Studio} --- this repo's app; ships the GENERATE panel + RL data pipeline live.
+        \item \term{holdout} --- eval tasks never trained on; five sets ($n{=}18/17/11/16/32$).
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.32\textwidth}
+      \begin{itemize}\itemsep0.15em
+        \item \term{hole-fill} --- one function body blanked from a working Jac file.
+        \item \term{conversion} --- python$\rightarrow$jac translation; richest spec, best scores.
+        \item \term{ladder / rung-$N$} --- train on $N$ tasks, eval on holdout.
+        \item \term{task interference} --- harder train tasks regress ones already learned.
+        \item \term{greedy / pass@1} --- one deterministic (temp-0) answer; the headline metric.
+        \item \term{pass@$k$ (oracle)} --- any of $k$ samples correct; ceiling if perfectly picked.
+        \item \term{best-of-$k$ (deploy)} --- sample $k$, return first the compiler accepts.
+        \item \term{Wilson CI} --- binomial confidence interval; the noise bar on every rate.
+        \item \term{expert iteration / distillation} --- train on a stronger model's verified outputs.
       \end{itemize}
     \end{column}
   \end{columns}

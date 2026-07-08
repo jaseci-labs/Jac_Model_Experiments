@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1783466717.1504 "main.tex" "main.pdf" "main" 1783466719.02863 0
+["pdflatex"] 1783469928.11314 "main.tex" "main.pdf" "main" 1783469930.06858 0
   "/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/enc/dvips/base/8r.enc" 1772380719 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/map/fontname/texfonts.map" 1772380719 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/map/pdftex/updmap/pdftex.map" 1772380719 5541360 f183aac233c4cd1e5ef882fcbe8e7096 ""
@@ -48,6 +48,7 @@
   "/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb" 1772380719 32726 0a1aea6fcd6468ee2cf64d891f5c43c8 ""
   "/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb" 1772380719 33993 9b89b85fd2d9df0482bd47194d1d3bf3 ""
   "/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb" 1772380719 32569 5e5ddc8df908dea60932f3c484a54c0d ""
+  "/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb" 1772380719 32915 7bf7720c61a5b3a7ff25b0964421c9b6 ""
   "/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb" 1772380719 32716 08e384dc442464e7285e891af9f45947 ""
   "/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb" 1772380719 32626 4f5c1b83753b1dd3a97d1b399a005b4b ""
   "/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb" 1772380719 32442 c975af247b6702f7ca0c299af3616b80 ""
@@ -285,10 +286,10 @@
   "assets/img-005.png" 1783277286.9052 131847 30899d674ac1b452b5d259bb6f7c7d2f ""
   "assets/titlepage-1.png" 1783277290.45982 1536254 aebc35483d7a223bf9f179274d98cfbf ""
   "jaseci-theme.sty" 1783277785.87241 3236 740ac1096214c9c46631bcf67f36d67d ""
-  "main.aux" 1783466718.90168 7840 02faf5130fe92c7df73ffa768a372f46 "pdflatex"
-  "main.nav" 1783466718.90304 1574 f5abf7444d939a8c2cd188b6df8c9c87 "pdflatex"
-  "main.out" 1783466717.87161 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "main.tex" 1783466712.28611 23847 37f0a574b35305d6d32cc2e147f71c8f ""
+  "main.aux" 1783469929.93019 7840 02faf5130fe92c7df73ffa768a372f46 "pdflatex"
+  "main.nav" 1783469929.93144 1574 f5abf7444d939a8c2cd188b6df8c9c87 "pdflatex"
+  "main.out" 1783469928.8108 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "main.tex" 1783469921.96606 24200 40678e711d69eac7626025612bb6e090 ""
   (generated)
   "main.aux"
   "main.log"
