@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Homebrew) (preloaded format=pdflatex 2026.3.4)  8 JUL 2026 02:16
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Homebrew) (preloaded format=pdflatex 2026.3.4)  8 JUL 2026 03:29
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1066,28 +1066,28 @@ Package pdftex.def Info: assets/img-005.png  used on input line 48.
 
  <./assets/img-005.png (PNG copy)>]
 LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <9> not available
-(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 79.
+(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 76.
 File: assets/img-005.png Graphic file (type png)
 <use assets/img-005.png>
-Package pdftex.def Info: assets/img-005.png  used on input line 79.
+Package pdftex.def Info: assets/img-005.png  used on input line 76.
 (pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
  [3
 
 ]
 LaTeX Font Info:    Trying to load font information for OMS+cmtt on input line 
-114.
-LaTeX Font Info:    No file OMScmtt.fd. on input line 114.
+111.
+LaTeX Font Info:    No file OMScmtt.fd. on input line 111.
 
 
 LaTeX Font Warning: Font shape `OMS/cmtt/m/n' undefined
 (Font)              using `OMS/cmsy/m/n' instead
-(Font)              for symbol `textbraceleft' on input line 114.
+(Font)              for symbol `textbraceleft' on input line 111.
 
 LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <8> not available
-(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 114.
+(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 111.
 File: assets/img-005.png Graphic file (type png)
 <use assets/img-005.png>
-Package pdftex.def Info: assets/img-005.png  used on input line 114.
+Package pdftex.def Info: assets/img-005.png  used on input line 111.
 (pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
 [4
 
@@ -1096,18 +1096,18 @@ Package pdftex.def Info: assets/img-005.png  used on input line 114.
 File: assets/charts/era1_interventions.pdf Graphic file (type pdf)
 <use assets/charts/era1_interventions.pdf>
 Package pdftex.def Info: assets/charts/era1_interventions.pdf  used on input li
-ne 124.
+ne 121.
 (pdftex.def)             Requested size: 294.77274pt x 149.84282pt.
 File: assets/img-005.png Graphic file (type png)
 <use assets/img-005.png>
-Package pdftex.def Info: assets/img-005.png  used on input line 124.
+Package pdftex.def Info: assets/img-005.png  used on input line 121.
 (pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
  [5
 
  <./assets/charts/era1_interventions.pdf>]
 File: assets/img-005.png Graphic file (type png)
 <use assets/img-005.png>
-Package pdftex.def Info: assets/img-005.png  used on input line 144.
+Package pdftex.def Info: assets/img-005.png  used on input line 141.
 (pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
  [6
 
@@ -1116,18 +1116,18 @@ Package pdftex.def Info: assets/img-005.png  used on input line 144.
 File: assets/charts/era2_flat_ladder.pdf Graphic file (type pdf)
 <use assets/charts/era2_flat_ladder.pdf>
 Package pdftex.def Info: assets/charts/era2_flat_ladder.pdf  used on input line
- 158.
+ 155.
 (pdftex.def)             Requested size: 378.42044pt x 122.90385pt.
 File: assets/img-005.png Graphic file (type png)
 <use assets/img-005.png>
-Package pdftex.def Info: assets/img-005.png  used on input line 158.
+Package pdftex.def Info: assets/img-005.png  used on input line 155.
 (pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
  [7
 
  <./assets/charts/era2_flat_ladder.pdf>]
 File: assets/img-005.png Graphic file (type png)
 <use assets/img-005.png>
-Package pdftex.def Info: assets/img-005.png  used on input line 174.
+Package pdftex.def Info: assets/img-005.png  used on input line 171.
 (pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
  [8
 
@@ -1136,11 +1136,11 @@ Package pdftex.def Info: assets/img-005.png  used on input line 174.
 File: assets/charts/era3_undercount.pdf Graphic file (type pdf)
 <use assets/charts/era3_undercount.pdf>
 Package pdftex.def Info: assets/charts/era3_undercount.pdf  used on input line 
-184.
+181.
 (pdftex.def)             Requested size: 278.83578pt x 169.9461pt.
 File: assets/img-005.png Graphic file (type png)
 <use assets/img-005.png>
-Package pdftex.def Info: assets/img-005.png  used on input line 184.
+Package pdftex.def Info: assets/img-005.png  used on input line 181.
 (pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
  [9
 
@@ -1149,11 +1149,11 @@ Package pdftex.def Info: assets/img-005.png  used on input line 184.
 File: assets/charts/corrected_ladder.pdf Graphic file (type pdf)
 <use assets/charts/corrected_ladder.pdf>
 Package pdftex.def Info: assets/charts/corrected_ladder.pdf  used on input line
- 198.
+ 195.
 (pdftex.def)             Requested size: 378.42044pt x 147.96005pt.
 File: assets/img-005.png Graphic file (type png)
 <use assets/img-005.png>
-Package pdftex.def Info: assets/img-005.png  used on input line 198.
+Package pdftex.def Info: assets/img-005.png  used on input line 195.
 (pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
  [10
 
@@ -1161,11 +1161,11 @@ Package pdftex.def Info: assets/img-005.png  used on input line 198.
 <assets/charts/kscale.pdf, id=121, 252.20633pt x 184.91861pt>
 File: assets/charts/kscale.pdf Graphic file (type pdf)
 <use assets/charts/kscale.pdf>
-Package pdftex.def Info: assets/charts/kscale.pdf  used on input line 217.
+Package pdftex.def Info: assets/charts/kscale.pdf  used on input line 214.
 (pdftex.def)             Requested size: 199.1693pt x 146.03047pt.
 File: assets/img-005.png Graphic file (type png)
 <use assets/img-005.png>
-Package pdftex.def Info: assets/img-005.png  used on input line 217.
+Package pdftex.def Info: assets/img-005.png  used on input line 214.
 (pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
  [11
 
@@ -1173,25 +1173,25 @@ Package pdftex.def Info: assets/img-005.png  used on input line 217.
 <assets/charts/holdouts.pdf, id=136, 523.90671pt x 197.68141pt>
 File: assets/charts/holdouts.pdf Graphic file (type pdf)
 <use assets/charts/holdouts.pdf>
-Package pdftex.def Info: assets/charts/holdouts.pdf  used on input line 230.
+Package pdftex.def Info: assets/charts/holdouts.pdf  used on input line 227.
 (pdftex.def)             Requested size: 398.3386pt x 150.3088pt.
 File: assets/img-005.png Graphic file (type png)
 <use assets/img-005.png>
-Package pdftex.def Info: assets/img-005.png  used on input line 230.
+Package pdftex.def Info: assets/img-005.png  used on input line 227.
 (pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
  [12
 
  <./assets/charts/holdouts.pdf>]
 File: assets/img-005.png Graphic file (type png)
 <use assets/img-005.png>
-Package pdftex.def Info: assets/img-005.png  used on input line 258.
+Package pdftex.def Info: assets/img-005.png  used on input line 255.
 (pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
  [13
 
 ]
 File: assets/img-005.png Graphic file (type png)
 <use assets/img-005.png>
-Package pdftex.def Info: assets/img-005.png  used on input line 283.
+Package pdftex.def Info: assets/img-005.png  used on input line 280.
 (pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
  [14
 
@@ -1199,34 +1199,34 @@ Package pdftex.def Info: assets/img-005.png  used on input line 283.
 <assets/charts/journey.pdf, id=163, 441.39278pt x 149.69225pt>
 File: assets/charts/journey.pdf Graphic file (type pdf)
 <use assets/charts/journey.pdf>
-Package pdftex.def Info: assets/charts/journey.pdf  used on input line 308.
+Package pdftex.def Info: assets/charts/journey.pdf  used on input line 305.
 (pdftex.def)             Requested size: 398.3386pt x 135.09407pt.
 LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <7> not available
-(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 308.
+(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 305.
 File: assets/img-005.png Graphic file (type png)
 <use assets/img-005.png>
-Package pdftex.def Info: assets/img-005.png  used on input line 308.
+Package pdftex.def Info: assets/img-005.png  used on input line 305.
 (pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
  [15
 
  <./assets/charts/journey.pdf>]
 File: assets/img-005.png Graphic file (type png)
 <use assets/img-005.png>
-Package pdftex.def Info: assets/img-005.png  used on input line 336.
+Package pdftex.def Info: assets/img-005.png  used on input line 333.
 (pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
  [16
 
 ]
 File: assets/img-005.png Graphic file (type png)
 <use assets/img-005.png>
-Package pdftex.def Info: assets/img-005.png  used on input line 349.
+Package pdftex.def Info: assets/img-005.png  used on input line 346.
 (pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
  [17
 
 ]
 File: assets/img-005.png Graphic file (type png)
 <use assets/img-005.png>
-Package pdftex.def Info: assets/img-005.png  used on input line 384.
+Package pdftex.def Info: assets/img-005.png  used on input line 381.
 (pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
 
 [18
@@ -1234,7 +1234,7 @@ Package pdftex.def Info: assets/img-005.png  used on input line 384.
 ]
 File: assets/img-005.png Graphic file (type png)
 <use assets/img-005.png>
-Package pdftex.def Info: assets/img-005.png  used on input line 431.
+Package pdftex.def Info: assets/img-005.png  used on input line 428.
 (pdftex.def)             Requested size: 19.15611pt x 20.34369pt.
  [19
 
@@ -1295,7 +1295,7 @@ blic/amsfonts/symbols/msam7.pfb></opt/homebrew/Cellar/texlive/20260301/share/te
 xmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></opt/homebrew/Cellar/texlive/2026
 0301/share/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></opt/homebrew/Cellar
 /texlive/20260301/share/texmf-dist/fonts/type1/urw/helvetic/uhvro8a.pfb>
-Output written on main.pdf (19 pages, 1991652 bytes).
+Output written on main.pdf (19 pages, 1990737 bytes).
 PDF statistics:
  306 PDF objects out of 1000 (max. 8388607)
  200 compressed objects within 2 object streams

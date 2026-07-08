@@ -15,7 +15,7 @@
 \begin{frame}[plain]
   \begin{tikzpicture}[remember picture,overlay]
     \node[anchor=west,text=white] at ([xshift=15.5mm,yshift=-62mm]current page.north west)
-      {\normalsize RL for Jac Code Generation \;\textcolor{jaseciorange}{\rule[0.12em]{1.6em}{0.18em}}\; July 2026};
+      {\normalsize RL for Jac Code Generation};
   \end{tikzpicture}
 \end{frame}
 }
@@ -52,20 +52,17 @@
   \small
   \begin{columns}[T]
     \begin{column}{0.32\textwidth}
-      \term{Era 1: weekend GRPO}\\[1mm]
-      \textit{Jun 20--21}\\[2mm]
+      \term{Era 1: weekend GRPO}\\[2mm]
       GRPO on both models, STaR loop.\\[2mm]
       \emph{``Supervised levers move models; RL does not.''}
     \end{column}
     \begin{column}{0.32\textwidth}
-      \term{Era 2: SFT ladder}\\[1mm]
-      \textit{Jun 25--28}\\[2mm]
+      \term{Era 2: SFT ladder}\\[2mm]
       Leak-free harness, 30-cell ladder, tuned-GRPO arm.\\[2mm]
       \emph{``RL is a dead end.'' (v1)}
     \end{column}
     \begin{column}{0.32\textwidth}
-      \term{Era 3: the correction}\\[1mm]
-      \textit{Jul 1--2}\\[2mm]
+      \term{Era 3: the correction}\\[2mm]
       Eval \emph{and} reward shared a broken extractor.\\[2mm]
       \emph{Everything re-measured.}
     \end{column}
@@ -153,7 +150,7 @@
   GRPO, tuned or not. (Compare this shape to the corrected version two slides on.)
   \vspace{2mm}
   \begin{beamercolorbox}[rounded=true,sep=1.5mm,wd=0.9\textwidth]{banner}
-    \centering v1 verdict (Jun 28): ``RL is a dead end,'' declared done. All of it rested on this chart.
+    \centering v1 verdict: ``RL is a dead end,'' declared done. All of it rested on this chart.
   \end{beamercolorbox}
 \end{frame}
 
