@@ -1,0 +1,17 @@
+    counts = {};
+    order = [];
+    for w in s.split() {
+        if w in counts {
+            counts[w] += 1;
+        } else {
+            counts[w] = 1;
+            order.append(w);
+        }
+    }
+    best = order[0];
+    for w in order {
+        if counts[w] > counts[best] {
+            best = w;
+        }
+    }
+    return best;

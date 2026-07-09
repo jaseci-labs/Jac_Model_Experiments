@@ -1,0 +1,5 @@
+    return [
+        u
+        for u in allProfiles
+        if u.id not in followingIds and u.id != myProfileId
+    ];

@@ -1,0 +1,6 @@
+=== RL holdout eval ===
+  model:   models/jac-qwen3coder-q4  +adapter adapters/jac-qwen3coder-grpo
+  tasks:   7
+  runs:    1  (14.3%)
+  pass:    0  (0.0%)
+  idiom:   1.0 constructs/correct

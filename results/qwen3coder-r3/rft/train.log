@@ -1,0 +1,39 @@
+Loading configuration file sft_dpo/configs/lora.yaml
+Loading pretrained model
+Loading datasets
+Training
+Trainable parameters: 0.923% (281.838M/30532.123M)
+Starting training..., iters: 200
+Calculating loss...:   0%|          | 0/1 [00:00<?, ?it/s]Calculating loss...: 100%|██████████| 1/1 [00:00<00:00,  1.73it/s]Calculating loss...: 100%|██████████| 1/1 [00:00<00:00,  1.73it/s]
+Iter 1: Val loss 2.437, Val took 0.592s
+Iter 10: Train loss 2.812, Learning Rate 3.000e-06, It/sec 1.041, Tokens/sec 502.971, Trained Tokens 4830, Peak mem 22.013 GB
+Iter 20: Train loss 2.457, Learning Rate 6.333e-06, It/sec 1.034, Tokens/sec 525.212, Trained Tokens 9910, Peak mem 22.013 GB
+Iter 30: Train loss 1.833, Learning Rate 9.667e-06, It/sec 1.026, Tokens/sec 527.554, Trained Tokens 15050, Peak mem 22.013 GB
+Iter 40: Train loss 1.207, Learning Rate 1.300e-05, It/sec 1.037, Tokens/sec 526.967, Trained Tokens 20130, Peak mem 22.013 GB
+Calculating loss...:   0%|          | 0/1 [00:00<?, ?it/s]Calculating loss...: 100%|██████████| 1/1 [00:00<00:00,  2.33it/s]Calculating loss...: 100%|██████████| 1/1 [00:00<00:00,  2.33it/s]
+Iter 50: Val loss 0.212, Val took 0.432s
+Iter 50: Train loss 0.444, Learning Rate 1.633e-05, It/sec 1.075, Tokens/sec 519.035, Trained Tokens 24960, Peak mem 22.013 GB
+Iter 60: Train loss 0.069, Learning Rate 1.967e-05, It/sec 1.027, Tokens/sec 528.063, Trained Tokens 30100, Peak mem 22.013 GB
+Iter 70: Train loss 0.006, Learning Rate 1.999e-05, It/sec 1.075, Tokens/sec 519.381, Trained Tokens 34930, Peak mem 22.013 GB
+Iter 80: Train loss 0.003, Learning Rate 1.996e-05, It/sec 0.992, Tokens/sec 534.640, Trained Tokens 40320, Peak mem 22.013 GB
+Iter 90: Train loss 0.003, Learning Rate 1.990e-05, It/sec 1.075, Tokens/sec 519.381, Trained Tokens 45150, Peak mem 22.013 GB
+Calculating loss...:   0%|          | 0/1 [00:00<?, ?it/s]Calculating loss...: 100%|██████████| 1/1 [00:00<00:00,  2.32it/s]Calculating loss...: 100%|██████████| 1/1 [00:00<00:00,  2.32it/s]
+Iter 100: Val loss 0.002, Val took 0.434s
+Iter 100: Train loss 0.002, Learning Rate 1.981e-05, It/sec 1.037, Tokens/sec 526.820, Trained Tokens 50230, Peak mem 22.013 GB
+Iter 100: Saved adapter weights to adapters/qwen3coder-r3-rft/adapters.safetensors and adapters/qwen3coder-r3-rft/0000100_adapters.safetensors.
+Iter 110: Train loss 0.002, Learning Rate 1.970e-05, It/sec 1.009, Tokens/sec 518.671, Trained Tokens 55370, Peak mem 23.140 GB
+Iter 120: Train loss 0.003, Learning Rate 1.957e-05, It/sec 1.074, Tokens/sec 518.597, Trained Tokens 60200, Peak mem 23.140 GB
+Iter 130: Train loss 0.002, Learning Rate 1.940e-05, It/sec 1.037, Tokens/sec 526.649, Trained Tokens 65280, Peak mem 23.140 GB
+Iter 140: Train loss 0.002, Learning Rate 1.922e-05, It/sec 1.022, Tokens/sec 525.086, Trained Tokens 70420, Peak mem 23.140 GB
+Calculating loss...:   0%|          | 0/1 [00:00<?, ?it/s]Calculating loss...: 100%|██████████| 1/1 [00:00<00:00,  2.27it/s]Calculating loss...: 100%|██████████| 1/1 [00:00<00:00,  2.27it/s]
+Iter 150: Val loss 0.002, Val took 0.444s
+Iter 150: Train loss 0.002, Learning Rate 1.901e-05, It/sec 1.058, Tokens/sec 510.835, Trained Tokens 75250, Peak mem 23.140 GB
+Iter 160: Train loss 0.002, Learning Rate 1.878e-05, It/sec 1.004, Tokens/sec 516.285, Trained Tokens 80390, Peak mem 23.140 GB
+Iter 170: Train loss 0.002, Learning Rate 1.852e-05, It/sec 1.043, Tokens/sec 503.679, Trained Tokens 85220, Peak mem 23.140 GB
+Iter 180: Train loss 0.002, Learning Rate 1.824e-05, It/sec 1.002, Tokens/sec 508.984, Trained Tokens 90300, Peak mem 23.140 GB
+Iter 190: Train loss 0.002, Learning Rate 1.795e-05, It/sec 1.036, Tokens/sec 500.415, Trained Tokens 95130, Peak mem 23.140 GB
+Calculating loss...:   0%|          | 0/1 [00:00<?, ?it/s]Calculating loss...: 100%|██████████| 1/1 [00:00<00:00,  2.22it/s]Calculating loss...: 100%|██████████| 1/1 [00:00<00:00,  2.22it/s]
+Iter 200: Val loss 0.002, Val took 0.453s
+Iter 200: Train loss 0.002, Learning Rate 1.763e-05, It/sec 0.990, Tokens/sec 508.850, Trained Tokens 100270, Peak mem 23.140 GB
+Iter 200: Saved adapter weights to adapters/qwen3coder-r3-rft/adapters.safetensors and adapters/qwen3coder-r3-rft/0000200_adapters.safetensors.
+Saved final weights to adapters/qwen3coder-r3-rft/adapters.safetensors.

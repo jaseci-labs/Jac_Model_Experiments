@@ -1,0 +1,5 @@
+        visit [-->[?:Profile]] else {
+            fresh = here ++> Profile(created_at="2020-01-01T00:00:00Z");
+            grant(fresh[0], level=ConnectPerm);
+            visit fresh;
+        }

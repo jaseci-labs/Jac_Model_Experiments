@@ -1,0 +1,8 @@
+=== RL holdout eval ===
+  model:    models/jac-qwen3coder-q4  +adapter adapters/jac-qwen3coder-grpo
+  tasks:    24
+  runs:     2  (8.3%)
+  pass:     2  (8.3%)   exact stdout match
+  near-pass:2  (8.3%)   output-sim >= 0.9
+  avg-osim: 0.083   continuous output similarity (all tasks)
+  idiom:    2.0 constructs/correct

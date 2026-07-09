@@ -1,12 +1,11 @@
 .env
 tests/__pycache__/
-dataset/
 src/data_generation/__pycache__/
 .jac/
 __pycache__/
 *.pyc
+.DS_Store
 
-results/
 models/
 adapters/
 .venv/

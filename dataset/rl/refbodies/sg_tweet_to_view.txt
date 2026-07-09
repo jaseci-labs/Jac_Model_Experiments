@@ -1,0 +1,6 @@
+        mine = [root-->[?:Profile]];
+        is_mine: bool = len(mine) > 0 and self.author_username == mine[0].username;
+        return TweetView(
+            id="", content=self.content, author_username=self.author_username,
+            created_at=self.created_at, likes=self.likes, comments=self.comments, is_mine=is_mine
+        );

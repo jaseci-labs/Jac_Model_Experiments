@@ -1,0 +1,7 @@
+        if self.username {
+            here.username = self.username;
+        }
+        if self.bio {
+            here.bio = self.bio;
+        }
+        report here.to_profile_view();

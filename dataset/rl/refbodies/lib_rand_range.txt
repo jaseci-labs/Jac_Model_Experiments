@@ -1,0 +1,1 @@
+    return lo + rand01() * (hi - lo);

@@ -1,0 +1,63 @@
+### FIXED-EVAL conversion (jac model) Wed Jul  1 18:23:51 EDT 2026
+lib_bench_output_tail: pass@1=False pass@1=False osim=0.0
+lib_capture_ok_count: pass@1=True pass@1=True osim=1.0
+lib_display_username: pass@1=True pass@1=True osim=1.0
+lib_hashtag_norm: pass@1=False pass@1=False osim=0.0
+lib_is_lib: pass@1=True pass@1=True osim=1.0
+lib_jcos_taylor: pass@1=False pass@1=False osim=0.0
+lib_keymap: pass@1=True pass@1=True osim=1.0
+lib_lang_label: pass@1=False pass@1=False osim=0.0
+lib_m_ident: pass@1=False pass@1=False osim=0.0
+lib_m_mul: pass@1=True pass@1=True osim=1.0
+lib_m_translate: pass@1=True pass@1=True osim=1.0
+lib_narrate_plural: pass@1=True pass@1=True osim=1.0
+lib_one_dp: pass@1=False pass@1=False osim=0.0
+lib_rand_range: pass@1=True pass@1=True osim=1.0
+lib_shade_channel: pass@1=True pass@1=True osim=1.0
+lib_tab_name: pass@1=False pass@1=False osim=0.0
+lib_visitor_message_norm: pass@1=True pass@1=True osim=1.0
+lib_visitor_name_norm: pass@1=False pass@1=False osim=0.0
+=== RL holdout eval ===
+  model:    models/jac-qwen3coder-q4  (base)
+  tasks:    18   (k=1 temp=1.0)
+  runs:     10  (55.6%)   compiles+executes
+  pass@1:   10  (55.6%)   greedy exact match
+  norm@1:   10  (55.6%)   whitespace-normalized match (F4 probe)
+  pass@1:   10  (55.6%)   any of k sampled
+  near-pass:10  (55.6%)   output-sim >= 0.9
+  avg-osim: 0.556   continuous output similarity (all tasks)
+  idiom:    0.0 constructs/correct
+  by family (pass@1):
+    lib: 10/18  (55.6%)
+### FIXED-EVAL hole-fill same-18 (jac model) Wed Jul  1 18:25:07 EDT 2026
+lib_bench_output_tail: pass@1=False pass@1=False osim=0.0
+lib_capture_ok_count: pass@1=False pass@1=False osim=0.0
+lib_display_username: pass@1=True pass@1=True osim=1.0
+lib_hashtag_norm: pass@1=False pass@1=False osim=0.0
+lib_is_lib: pass@1=True pass@1=True osim=1.0
+lib_jcos_taylor: pass@1=False pass@1=False osim=0.0
+lib_keymap: pass@1=True pass@1=True osim=1.0
+lib_lang_label: pass@1=False pass@1=False osim=0.0
+lib_m_ident: pass@1=False pass@1=False osim=0.0
+lib_m_mul: pass@1=False pass@1=False osim=0.0
+lib_m_translate: pass@1=True pass@1=True osim=1.0
+lib_narrate_plural: pass@1=False pass@1=False osim=0.0
+lib_one_dp: pass@1=False pass@1=False osim=0.0
+lib_rand_range: pass@1=True pass@1=True osim=1.0
+lib_shade_channel: pass@1=True pass@1=True osim=1.0
+lib_tab_name: pass@1=True pass@1=True osim=1.0
+lib_visitor_message_norm: pass@1=False pass@1=False osim=0.0
+lib_visitor_name_norm: pass@1=True pass@1=True osim=1.0
+=== RL holdout eval ===
+  model:    models/jac-qwen3coder-q4  (base)
+  tasks:    18   (k=1 temp=1.0)
+  runs:     8  (44.4%)   compiles+executes
+  pass@1:   8  (44.4%)   greedy exact match
+  norm@1:   8  (44.4%)   whitespace-normalized match (F4 probe)
+  pass@1:   8  (44.4%)   any of k sampled
+  near-pass:8  (44.4%)   output-sim >= 0.9
+  avg-osim: 0.444   continuous output similarity (all tasks)
+  idiom:    0.0 constructs/correct
+  by family (pass@1):
+    lib: 8/18  (44.4%)
+### REFIXED DONE Wed Jul  1 18:26:44 EDT 2026

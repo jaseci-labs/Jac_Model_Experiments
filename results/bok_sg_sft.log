@@ -1,0 +1,23 @@
+graph_like_tweet_act       greedy=True deploy=True oracle=True
+sg_add_comment_act         greedy=True deploy=True oracle=True
+sg_create_tweet_make       greedy=False deploy=None oracle=False
+sg_delete_tweet_act        greedy=False deploy=None oracle=False
+sg_find_tweet_run          greedy=False deploy=None oracle=False
+sg_tweet_to_view           greedy=False deploy=True oracle=True
+lib_analyze_score          greedy=False deploy=True oracle=True
+lib_narrate_plural         greedy=False deploy=True oracle=True
+lib_analyse_text           greedy=False deploy=True oracle=True
+lib_fstring_rules          greedy=False deploy=None oracle=False
+lib_innerstring_rules      greedy=False deploy=None oracle=False
+lib_cur_matrix             greedy=False deploy=True oracle=True
+lib_m_rotate               greedy=False deploy=False oracle=False
+lib_setcur_matrix          greedy=False deploy=True oracle=True
+lib_display_username       greedy=True deploy=True oracle=True
+lib_tab_name               greedy=True deploy=True oracle=True
+lib_to_follow_filter       greedy=True deploy=True oracle=True
+
+=== jac-sg-r20-rft-q4  (K=8 temp=0.8, n=17) ===
+greedy pass@1          : 5/17 (29.4%)
+best-of-k DEPLOY (pick 1st running, no peek): 11/17 (64.7%)
+  coverage (>=1 running available)          : 12/17 (70.6%)
+oracle pass@k (any sample correct)          : 11/17 (64.7%)

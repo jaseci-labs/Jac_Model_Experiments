@@ -1,0 +1,8 @@
+        if jid(here) == self.channel_id {
+            me = [root-->[?:Profile]][0];
+            if not [edge me->:Member:->here] {
+                me +>: Member() :+> here;
+            }
+            report {"success": True};
+            disengage;
+        }

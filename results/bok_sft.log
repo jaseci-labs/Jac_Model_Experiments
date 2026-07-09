@@ -1,0 +1,24 @@
+lib_analyze_score          greedy=False deploy=True oracle=True
+lib_narrate_plural         greedy=True deploy=True oracle=True
+lib_analyse_text           greedy=False deploy=True oracle=True
+lib_fstring_rules          greedy=False deploy=None oracle=False
+lib_innerstring_rules      greedy=False deploy=None oracle=False
+lib_cur_matrix             greedy=True deploy=True oracle=True
+lib_m_rotate               greedy=False deploy=False oracle=False
+lib_setcur_matrix          greedy=True deploy=True oracle=True
+lib_display_username       greedy=True deploy=True oracle=True
+lib_tab_name               greedy=True deploy=True oracle=True
+lib_to_follow_filter       greedy=True deploy=True oracle=True
+lib_fire_bullet            greedy=True deploy=True oracle=True
+lib_respawn_target         greedy=True deploy=True oracle=True
+lib_update_bullets_score   greedy=False deploy=None oracle=False
+lib_fmt_row                greedy=False deploy=True oracle=True
+lib_is_lib                 greedy=True deploy=True oracle=True
+lib_log                    greedy=False deploy=True oracle=True
+lib_one_dp                 greedy=True deploy=True oracle=True
+
+=== jac-qwen3coder-rall-rft-q4  (K=8 temp=0.8, n=18) ===
+greedy pass@1          : 10/18 (55.6%)
+best-of-k DEPLOY (pick 1st running, no peek): 14/18 (77.8%)
+  coverage (>=1 running available)          : 15/18 (83.3%)
+oracle pass@k (any sample correct)          : 14/18 (77.8%)

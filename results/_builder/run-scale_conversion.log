@@ -1,0 +1,22 @@
+<string>:3: SyntaxWarning: "\s" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\s"? A raw string is also an option.
+<string>:5: SyntaxWarning: "\s" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\s"? A raw string is also an option.
+<string>:6: SyntaxWarning: "\s" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\s"? A raw string is also an option.
+generating up to 1500 conversion examples from Vezora/Tested-22k-Python-Alpaca ...
+kept 100/1500  (scanned offset 400, candidates 100, transpile_fail 0, behave_fail 0)
+kept 200/1500  (scanned offset 1000, candidates 206, transpile_fail 0, behave_fail 6)
+kept 300/1500  (scanned offset 1600, candidates 311, transpile_fail 0, behave_fail 11)
+kept 400/1500  (scanned offset 2200, candidates 412, transpile_fail 0, behave_fail 12)
+kept 500/1500  (scanned offset 2700, candidates 514, transpile_fail 0, behave_fail 14)
+kept 600/1500  (scanned offset 3300, candidates 615, transpile_fail 0, behave_fail 15)
+kept 700/1500  (scanned offset 3900, candidates 717, transpile_fail 0, behave_fail 17)
+kept 800/1500  (scanned offset 4500, candidates 818, transpile_fail 0, behave_fail 18)
+kept 900/1500  (scanned offset 5100, candidates 925, transpile_fail 0, behave_fail 25)
+kept 1000/1500  (scanned offset 5600, candidates 1029, transpile_fail 0, behave_fail 29)
+kept 1100/1500  (scanned offset 6000, candidates 1129, transpile_fail 0, behave_fail 29)
+kept 1200/1500  (scanned offset 6600, candidates 1230, transpile_fail 0, behave_fail 30)
+kept 1300/1500  (scanned offset 7000, candidates 1331, transpile_fail 0, behave_fail 31)
+kept 1400/1500  (scanned offset 7500, candidates 1431, transpile_fail 0, behave_fail 31)
+kept 1500/1500  (scanned offset 8000, candidates 1532, transpile_fail 0, behave_fail 32)
+DONE: kept 1500 -> dataset/conversion/sft_auto.jsonl
+  scanned to offset 8000, unique candidates 1532, transpile_fail 0, behave_fail 32
+__EXIT__ 0

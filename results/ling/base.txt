@@ -1,0 +1,9 @@
+The repository models/ling-q8 contains custom code which must be executed to correctly load the model. You can inspect the repository content at /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/models/ling-q8 .
+ You can inspect the repository content at https://hf.co/models/ling-q8.
+You can avoid this prompt in future by passing the argument `trust_remote_code=True`.
+
+Do you wish to run the custom code? [y/N] === conversion probe (mlx) on 150 holdout tasks ===
+runs (compiles+executes): 0%  (0/150)
+cross-compiled test pass: 0%  (0/150)
+generation:               76800 tokens total, ~89 tok/s avg
+tokens-to-correct:        0 tokens / correct conversion

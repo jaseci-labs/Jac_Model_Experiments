@@ -1,0 +1,2 @@
+{"mode": "mlx", "total": 150, "runs": 141, "idiomatic": 1, "python_shaped": 140, "avg_sim": 0.9677, "avg_feat": 0.0}
+{"mode": "mlx", "total": 150, "runs": 140, "idiomatic": 2, "python_shaped": 138, "avg_sim": 0.9594, "avg_feat": 0.0}

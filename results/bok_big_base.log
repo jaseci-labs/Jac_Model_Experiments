@@ -1,0 +1,38 @@
+lib_analyse_text           greedy=False deploy=True oracle=True
+lib_analyze_score          greedy=False deploy=None oracle=False
+lib_cur_matrix             greedy=True deploy=True oracle=True
+lib_display_username       greedy=True deploy=True oracle=True
+lib_fire_bullet            greedy=True deploy=True oracle=True
+lib_fmt_row                greedy=False deploy=None oracle=False
+lib_is_lib                 greedy=True deploy=True oracle=True
+lib_log                    greedy=False deploy=None oracle=False
+lib_m_rotate               greedy=False deploy=False oracle=False
+lib_narrate_plural         greedy=False deploy=True oracle=True
+lib_one_dp                 greedy=False deploy=True oracle=True
+lib_respawn_target         greedy=True deploy=True oracle=True
+lib_setcur_matrix          greedy=False deploy=True oracle=True
+lib_tab_name               greedy=True deploy=True oracle=True
+lib_to_follow_filter       greedy=True deploy=True oracle=True
+lib_update_bullets_score   greedy=False deploy=None oracle=False
+syn_abs_val                greedy=True deploy=True oracle=True
+syn_celsius_to_fahrenheit  greedy=True deploy=True oracle=True
+syn_collatz_steps          greedy=False deploy=True oracle=True
+syn_csv_second_field       greedy=False deploy=None oracle=False
+syn_digit_sum              greedy=True deploy=True oracle=True
+syn_fibonacci              greedy=False deploy=None oracle=False
+syn_gcd                    greedy=False deploy=True oracle=True
+syn_is_even                greedy=False deploy=None oracle=False
+syn_letter_counts          greedy=False deploy=True oracle=True
+syn_max_in_list            greedy=False deploy=True oracle=True
+syn_most_common_word       greedy=True deploy=True oracle=True
+syn_reverse_words          greedy=False deploy=None oracle=False
+syn_run_length_encode      greedy=False deploy=True oracle=True
+syn_sign                   greedy=False deploy=None oracle=False
+syn_swapcase               greedy=False deploy=None oracle=False
+syn_vowel_count            greedy=False deploy=None oracle=False
+
+=== jac-qwen3coder-q4  (K=8 temp=0.8, n=32) ===
+greedy pass@1          : 11/32 (34.4%)
+best-of-k DEPLOY (pick 1st running, no peek): 20/32 (62.5%)
+  coverage (>=1 running available)          : 21/32 (65.6%)
+oracle pass@k (any sample correct)          : 20/32 (62.5%)

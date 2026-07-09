@@ -1,0 +1,62 @@
+### FIXED pass@1 + pass@8 on real holdout Wed Jul  1 19:10:11 EDT 2026
+lib_analyze_score: pass@1=False pass@8=False osim=0.0
+lib_narrate_plural: pass@1=False pass@8=False osim=0.0
+lib_analyse_text: pass@1=False pass@8=False osim=0.0
+lib_fstring_rules: pass@1=False pass@8=False osim=0.0
+lib_innerstring_rules: pass@1=False pass@8=False osim=0.0
+lib_cur_matrix: pass@1=False pass@8=False osim=0.0
+lib_m_rotate: pass@1=False pass@8=False osim=0.0
+lib_setcur_matrix: pass@1=False pass@8=False osim=0.0
+lib_display_username: pass@1=True pass@8=True osim=1.0
+lib_tab_name: pass@1=True pass@8=True osim=1.0
+lib_to_follow_filter: pass@1=True pass@8=True osim=1.0
+lib_fire_bullet: pass@1=True pass@8=True osim=1.0
+lib_respawn_target: pass@1=True pass@8=True osim=1.0
+lib_update_bullets_score: pass@1=False pass@8=False osim=0.0
+lib_fmt_row: pass@1=False pass@8=False osim=0.0
+lib_is_lib: pass@1=True pass@8=True osim=1.0
+lib_log: pass@1=False pass@8=False osim=0.0
+lib_one_dp: pass@1=False pass@8=False osim=0.0
+=== RL holdout eval ===
+  model:    models/qwen-q4  (base)
+  tasks:    18   (k=8 temp=0.8)
+  runs:     6  (33.3%)   compiles+executes
+  pass@1:   6  (33.3%)   greedy exact match
+  norm@1:   6  (33.3%)   whitespace-normalized match (F4 probe)
+  pass@8:   6  (33.3%)   any of k sampled
+  near-pass:6  (33.3%)   output-sim >= 0.9
+  avg-osim: 0.333   continuous output similarity (all tasks)
+  idiom:    0.0 constructs/correct
+  by family (pass@1):
+    lib: 6/18  (33.3%)
+lib_analyze_score: pass@1=False pass@8=False osim=0.0
+lib_narrate_plural: pass@1=False pass@8=True osim=0.0
+lib_analyse_text: pass@1=False pass@8=False osim=0.0
+lib_fstring_rules: pass@1=False pass@8=False osim=0.0
+lib_innerstring_rules: pass@1=False pass@8=False osim=0.0
+lib_cur_matrix: pass@1=True pass@8=True osim=1.0
+lib_m_rotate: pass@1=False pass@8=False osim=0.98
+lib_setcur_matrix: pass@1=False pass@8=True osim=0.0
+lib_display_username: pass@1=True pass@8=True osim=1.0
+lib_tab_name: pass@1=True pass@8=True osim=1.0
+lib_to_follow_filter: pass@1=True pass@8=True osim=1.0
+lib_fire_bullet: pass@1=True pass@8=True osim=1.0
+lib_respawn_target: pass@1=True pass@8=True osim=1.0
+lib_update_bullets_score: pass@1=False pass@8=True osim=0.0
+lib_fmt_row: pass@1=False pass@8=True osim=0.0
+lib_is_lib: pass@1=True pass@8=True osim=1.0
+lib_log: pass@1=False pass@8=False osim=0.0
+lib_one_dp: pass@1=False pass@8=True osim=0.0
+=== RL holdout eval ===
+  model:    models/jac-qwen3coder-q4  (base)
+  tasks:    18   (k=8 temp=0.8)
+  runs:     8  (44.4%)   compiles+executes
+  pass@1:   7  (38.9%)   greedy exact match
+  norm@1:   7  (38.9%)   whitespace-normalized match (F4 probe)
+  pass@8:   12  (66.7%)   any of k sampled
+  near-pass:8  (44.4%)   output-sim >= 0.9
+  avg-osim: 0.444   continuous output similarity (all tasks)
+  idiom:    0.0 constructs/correct
+  by family (pass@1):
+    lib: 7/18  (38.9%)
+### PASSK DONE Wed Jul  1 19:20:04 EDT 2026

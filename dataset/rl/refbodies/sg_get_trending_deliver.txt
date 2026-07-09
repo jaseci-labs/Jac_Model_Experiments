@@ -1,0 +1,3 @@
+        tags = [TrendingTag(tag=t, count=self.counts[t]) for t in self.counts];
+        tags.sort(key=lambda x: TrendingTag : x.count, reverse=True);
+        report tags[:8];

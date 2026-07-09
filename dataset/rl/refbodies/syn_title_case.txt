@@ -1,0 +1,5 @@
+    out = [];
+    for w in s.split() {
+        out.append(w[0].upper() + w[1:].lower());
+    }
+    return " ".join(out);

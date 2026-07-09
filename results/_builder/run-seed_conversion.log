@@ -1,0 +1,38 @@
+by difficulty (pre-dedup): {'atomic': 14, 'idiomatic': 10, 'composed': 8}
+wrote 32 SFT -> dataset/conversion/sft.jsonl
+wrote 2 DPO -> dataset/conversion/dpo.jsonl
+re-validating SFT examples through `jac run`...
+  [PASS] #0  ok
+  [PASS] #1  ok
+  [PASS] #2  ok
+  [PASS] #3  ok
+  [PASS] #4  ok
+  [PASS] #5  ok
+  [PASS] #6  ok
+  [PASS] #7  ok
+  [PASS] #8  ok
+  [PASS] #9  ok
+  [PASS] #10  ok
+  [PASS] #11  ok
+  [PASS] #12  ok
+  [PASS] #13  ok
+  [PASS] #14  ok
+  [PASS] #15  ok
+  [PASS] #16  ok
+  [PASS] #17  ok
+  [PASS] #18  ok
+  [PASS] #19  ok
+  [PASS] #20  ok
+  [PASS] #21  ok
+  [PASS] #22  ok
+  [PASS] #23  ok
+  [PASS] #24  ok
+  [PASS] #25  ok
+  [PASS] #26  ok
+  [PASS] #27  ok
+  [PASS] #28  ok
+  [PASS] #29  ok
+  [PASS] #30  ok
+  [PASS] #31  ok
+32/32 re-validated, 0 failed
+__EXIT__ 0

@@ -1,0 +1,610 @@
+[chain 12:05] waiting for tuned arm (step 5)...
+[chain 13:53] step 5 done. recording tuned cells -> docs
+wrote docs/rl/02-results.md (3482 chars of table)
+[chain 13:53] STEP 7: rebuild with sg buckets + split
+=== built 66 tasks, 0 failed -> dataset/rl/tasks.jsonl ===
+  holdout:        14   files=["this_is_jac/analytics.jac", "this_is_jac/guestbook.jac", "this_is_jac/littlex/social_graph.jac::tweet"]
+    by family:    {"graph": 1, "sg": 5, "gb": 4, "lib": 4}
+[chain 13:54] STEP 7: base,sft ladder on sg-inclusive holdout (rungs 5,all, both models) -> rl_ladder_sg.jsonl
+=== rung 5 ===
+  train.jsonl: 5 / 46 pool tasks
+=== gold SFT warm-start set ===
+  from 5 train tasks -> 5 gold pairs (0 skipped)
+  train 5 / valid 1 -> dataset/rl/rft/
+graph_like_tweet_act: pass@1=False pass@8=True osim=0.0
+sg_add_comment_act: pass@1=False pass@8=False osim=0.0
+sg_create_tweet_make: pass@1=False pass@8=False osim=0.0
+sg_delete_tweet_act: pass@1=False pass@8=False osim=0.0
+sg_find_tweet_run: pass@1=False pass@8=False osim=0.0
+sg_tweet_to_view: pass@1=False pass@8=True osim=0.0
+gb_explore_graph_deliver: pass@1=False pass@8=False osim=0.21
+gb_explore_graph_walk_day: pass@1=True pass@8=True osim=1.0
+gb_get_guestbook_descend: pass@1=True pass@8=True osim=1.0
+gb_sign_guestbook_sign: pass@1=False pass@8=False osim=0.0
+lib_visitor_message_norm: pass@1=False pass@8=False osim=0.0
+lib_visitor_name_norm: pass@1=False pass@8=False osim=0.0
+lib_analyze_score: pass@1=False pass@8=False osim=0.0
+lib_narrate_plural: pass@1=False pass@8=False osim=0.0
+=== RL holdout eval ===
+  model:    models/qwen-q4  (base)
+  tasks:    14   (k=8 temp=1.0)
+  runs:     3  (21.4%)   compiles+executes
+  pass@1:   2  (14.3%)   greedy exact match
+  pass@8:   4  (28.6%)   any of k sampled
+  near-pass:2  (14.3%)   output-sim >= 0.9
+  avg-osim: 0.158   continuous output similarity (all tasks)
+  idiom:    2.67 constructs/correct
+  by family (pass@1):
+    gb: 2/4  (50.0%)
+    graph: 0/1  (0.0%)  (n=1, anecdote)
+    lib: 0/4  (0.0%)
+    sg: 0/5  (0.0%)
+graph_trending_tally: pass@1=False pass@1=False osim=0.0
+lib_bench_output_tail: pass@1=False pass@1=False osim=0.0
+sg_channel_to_view: pass@1=False pass@1=False osim=0.0
+lib_blank_payload: pass@1=False pass@1=False osim=0.0
+sg_create_channel_make: pass@1=False pass@1=False osim=0.0
+=== RL holdout eval ===
+  model:    models/qwen-q4  (base)
+  tasks:    5   (k=1 temp=1.0)
+  runs:     0  (0.0%)   compiles+executes
+  pass@1:   0  (0.0%)   greedy exact match
+  pass@1:   0  (0.0%)   any of k sampled
+  near-pass:0  (0.0%)   output-sim >= 0.9
+  avg-osim: 0.0   continuous output similarity (all tasks)
+  idiom:    0.0 constructs/correct
+  by family (pass@1):
+    graph: 0/1  (0.0%)  (n=1, anecdote)
+    lib: 0/2  (0.0%)  (n=2, anecdote)
+    sg: 0/2  (0.0%)  (n=2, anecdote)
+>>> reuse existing dataset/rl/rft (FORCE_SAMPLE=1 to resample)
+>>> RFT adapter exists (adapters/qwen3coder-r5-rft) — skipping SFT (rm it to retrain)
+>>> reuse models/qwen3coder-r5-rft-q4
+=== RFT warm-start done -> models/qwen3coder-r5-rft-q4 ===
+  next:  RL_BASE=models/qwen3coder-r5-rft-q4 ./rl/run_grpo.sh qwen3coder-r5
+graph_like_tweet_act: pass@1=True pass@8=True osim=1.0
+sg_add_comment_act: pass@1=False pass@8=True osim=0.0
+sg_create_tweet_make: pass@1=False pass@8=False osim=0.0
+sg_delete_tweet_act: pass@1=False pass@8=False osim=0.0
+sg_find_tweet_run: pass@1=False pass@8=False osim=0.0
+sg_tweet_to_view: pass@1=False pass@8=False osim=0.0
+gb_explore_graph_deliver: pass@1=False pass@8=False osim=0.0
+gb_explore_graph_walk_day: pass@1=True pass@8=True osim=1.0
+gb_get_guestbook_descend: pass@1=False pass@8=True osim=0.0
+gb_sign_guestbook_sign: pass@1=False pass@8=False osim=0.0
+lib_visitor_message_norm: pass@1=False pass@8=False osim=0.0
+lib_visitor_name_norm: pass@1=False pass@8=False osim=0.0
+lib_analyze_score: pass@1=False pass@8=False osim=0.0
+lib_narrate_plural: pass@1=False pass@8=False osim=0.0
+=== RL holdout eval ===
+  model:    models/qwen3coder-r5-rft-q4  (base)
+  tasks:    14   (k=8 temp=1.0)
+  runs:     2  (14.3%)   compiles+executes
+  pass@1:   2  (14.3%)   greedy exact match
+  pass@8:   4  (28.6%)   any of k sampled
+  near-pass:2  (14.3%)   output-sim >= 0.9
+  avg-osim: 0.143   continuous output similarity (all tasks)
+  idiom:    7.0 constructs/correct
+  by family (pass@1):
+    gb: 1/4  (25.0%)
+    graph: 1/1  (100.0%)  (n=1, anecdote)
+    lib: 0/4  (0.0%)
+    sg: 0/5  (0.0%)
+graph_trending_tally: pass@1=False pass@1=False osim=0.0
+lib_bench_output_tail: pass@1=False pass@1=False osim=0.0
+sg_channel_to_view: pass@1=False pass@1=False osim=0.0
+lib_blank_payload: pass@1=False pass@1=False osim=0.0
+sg_create_channel_make: pass@1=False pass@1=False osim=0.0
+=== RL holdout eval ===
+  model:    models/qwen3coder-r5-rft-q4  (base)
+  tasks:    5   (k=1 temp=1.0)
+  runs:     0  (0.0%)   compiles+executes
+  pass@1:   0  (0.0%)   greedy exact match
+  pass@1:   0  (0.0%)   any of k sampled
+  near-pass:0  (0.0%)   output-sim >= 0.9
+  avg-osim: 0.0   continuous output similarity (all tasks)
+  idiom:    0.0 constructs/correct
+  by family (pass@1):
+    graph: 0/1  (0.0%)  (n=1, anecdote)
+    lib: 0/2  (0.0%)  (n=2, anecdote)
+    sg: 0/2  (0.0%)  (n=2, anecdote)
+graph_like_tweet_act: pass@1=True pass@8=True osim=1.0
+sg_add_comment_act: pass@1=False pass@8=False osim=0.0
+sg_create_tweet_make: pass@1=False pass@8=False osim=0.0
+sg_delete_tweet_act: pass@1=False pass@8=False osim=0.0
+sg_find_tweet_run: pass@1=False pass@8=False osim=0.0
+sg_tweet_to_view: pass@1=False pass@8=False osim=0.0
+gb_explore_graph_deliver: pass@1=False pass@8=True osim=0.21
+gb_explore_graph_walk_day: pass@1=True pass@8=True osim=1.0
+gb_get_guestbook_descend: pass@1=True pass@8=True osim=1.0
+gb_sign_guestbook_sign: pass@1=False pass@8=False osim=0.0
+lib_visitor_message_norm: pass@1=False pass@8=False osim=0.0
+lib_visitor_name_norm: pass@1=False pass@8=False osim=0.0
+lib_analyze_score: pass@1=False pass@8=False osim=0.0
+lib_narrate_plural: pass@1=False pass@8=False osim=0.0
+=== RL holdout eval ===
+  model:    models/jac-qwen3coder-q4  (base)
+  tasks:    14   (k=8 temp=1.0)
+  runs:     4  (28.6%)   compiles+executes
+  pass@1:   3  (21.4%)   greedy exact match
+  pass@8:   4  (28.6%)   any of k sampled
+  near-pass:3  (21.4%)   output-sim >= 0.9
+  avg-osim: 0.229   continuous output similarity (all tasks)
+  idiom:    4.5 constructs/correct
+  by family (pass@1):
+    gb: 2/4  (50.0%)
+    graph: 1/1  (100.0%)  (n=1, anecdote)
+    lib: 0/4  (0.0%)
+    sg: 0/5  (0.0%)
+graph_trending_tally: pass@1=False pass@1=False osim=0.0
+lib_bench_output_tail: pass@1=False pass@1=False osim=0.0
+sg_channel_to_view: pass@1=False pass@1=False osim=0.0
+lib_blank_payload: pass@1=False pass@1=False osim=0.0
+sg_create_channel_make: pass@1=False pass@1=False osim=0.0
+=== RL holdout eval ===
+  model:    models/jac-qwen3coder-q4  (base)
+  tasks:    5   (k=1 temp=1.0)
+  runs:     0  (0.0%)   compiles+executes
+  pass@1:   0  (0.0%)   greedy exact match
+  pass@1:   0  (0.0%)   any of k sampled
+  near-pass:0  (0.0%)   output-sim >= 0.9
+  avg-osim: 0.0   continuous output similarity (all tasks)
+  idiom:    0.0 constructs/correct
+  by family (pass@1):
+    graph: 0/1  (0.0%)  (n=1, anecdote)
+    lib: 0/2  (0.0%)  (n=2, anecdote)
+    sg: 0/2  (0.0%)  (n=2, anecdote)
+>>> reuse existing dataset/rl/rft (FORCE_SAMPLE=1 to resample)
+>>> RFT adapter exists (adapters/jac-qwen3coder-r5-rft) — skipping SFT (rm it to retrain)
+>>> reuse models/jac-qwen3coder-r5-rft-q4
+=== RFT warm-start done -> models/jac-qwen3coder-r5-rft-q4 ===
+  next:  RL_BASE=models/jac-qwen3coder-r5-rft-q4 ./rl/run_grpo.sh jac-qwen3coder-r5
+graph_like_tweet_act: pass@1=True pass@8=True osim=1.0
+sg_add_comment_act: pass@1=False pass@8=False osim=0.0
+sg_create_tweet_make: pass@1=False pass@8=False osim=0.0
+sg_delete_tweet_act: pass@1=False pass@8=False osim=0.0
+sg_find_tweet_run: pass@1=False pass@8=False osim=0.0
+sg_tweet_to_view: pass@1=False pass@8=True osim=0.0
+gb_explore_graph_deliver: pass@1=False pass@8=False osim=0.21
+gb_explore_graph_walk_day: pass@1=True pass@8=True osim=1.0
+gb_get_guestbook_descend: pass@1=True pass@8=True osim=1.0
+gb_sign_guestbook_sign: pass@1=False pass@8=False osim=0.0
+lib_visitor_message_norm: pass@1=False pass@8=False osim=0.0
+lib_visitor_name_norm: pass@1=False pass@8=False osim=0.0
+lib_analyze_score: pass@1=False pass@8=True osim=0.0
+lib_narrate_plural: pass@1=False pass@8=False osim=0.0
+=== RL holdout eval ===
+  model:    models/jac-qwen3coder-r5-rft-q4  (base)
+  tasks:    14   (k=8 temp=1.0)
+  runs:     4  (28.6%)   compiles+executes
+  pass@1:   3  (21.4%)   greedy exact match
+  pass@8:   5  (35.7%)   any of k sampled
+  near-pass:3  (21.4%)   output-sim >= 0.9
+  avg-osim: 0.229   continuous output similarity (all tasks)
+  idiom:    4.5 constructs/correct
+  by family (pass@1):
+    gb: 2/4  (50.0%)
+    graph: 1/1  (100.0%)  (n=1, anecdote)
+    lib: 0/4  (0.0%)
+    sg: 0/5  (0.0%)
+graph_trending_tally: pass@1=False pass@1=False osim=0.0
+lib_bench_output_tail: pass@1=False pass@1=False osim=0.0
+sg_channel_to_view: pass@1=False pass@1=False osim=0.0
+lib_blank_payload: pass@1=False pass@1=False osim=0.0
+sg_create_channel_make: pass@1=False pass@1=False osim=0.0
+=== RL holdout eval ===
+  model:    models/jac-qwen3coder-r5-rft-q4  (base)
+  tasks:    5   (k=1 temp=1.0)
+  runs:     0  (0.0%)   compiles+executes
+  pass@1:   0  (0.0%)   greedy exact match
+  pass@1:   0  (0.0%)   any of k sampled
+  near-pass:0  (0.0%)   output-sim >= 0.9
+  avg-osim: 0.0   continuous output similarity (all tasks)
+  idiom:    0.0 constructs/correct
+  by family (pass@1):
+    graph: 0/1  (0.0%)  (n=1, anecdote)
+    lib: 0/2  (0.0%)  (n=2, anecdote)
+    sg: 0/2  (0.0%)  (n=2, anecdote)
+=== rung all ===
+  train.jsonl: 46 / 46 pool tasks
+=== gold SFT warm-start set ===
+  from 46 train tasks -> 46 gold pairs (0 skipped)
+  train 39 / valid 7 -> dataset/rl/rft/
+graph_like_tweet_act: pass@1=False pass@8=True osim=0.0
+sg_add_comment_act: pass@1=False pass@8=False osim=0.0
+sg_create_tweet_make: pass@1=False pass@8=False osim=0.0
+sg_delete_tweet_act: pass@1=False pass@8=False osim=0.0
+sg_find_tweet_run: pass@1=False pass@8=False osim=0.0
+sg_tweet_to_view: pass@1=False pass@8=True osim=0.0
+gb_explore_graph_deliver: pass@1=False pass@8=False osim=0.21
+gb_explore_graph_walk_day: pass@1=True pass@8=True osim=1.0
+gb_get_guestbook_descend: pass@1=True pass@8=True osim=1.0
+gb_sign_guestbook_sign: pass@1=False pass@8=False osim=0.0
+lib_visitor_message_norm: pass@1=False pass@8=False osim=0.0
+lib_visitor_name_norm: pass@1=False pass@8=False osim=0.0
+lib_analyze_score: pass@1=False pass@8=False osim=0.0
+lib_narrate_plural: pass@1=False pass@8=False osim=0.0
+=== RL holdout eval ===
+  model:    models/qwen-q4  (base)
+  tasks:    14   (k=8 temp=1.0)
+  runs:     3  (21.4%)   compiles+executes
+  pass@1:   2  (14.3%)   greedy exact match
+  pass@8:   4  (28.6%)   any of k sampled
+  near-pass:2  (14.3%)   output-sim >= 0.9
+  avg-osim: 0.158   continuous output similarity (all tasks)
+  idiom:    2.67 constructs/correct
+  by family (pass@1):
+    gb: 2/4  (50.0%)
+    graph: 0/1  (0.0%)  (n=1, anecdote)
+    lib: 0/4  (0.0%)
+    sg: 0/5  (0.0%)
+graph_trending_tally: pass@1=False pass@1=False osim=0.0
+lib_bench_output_tail: pass@1=False pass@1=False osim=0.0
+sg_channel_to_view: pass@1=False pass@1=False osim=0.0
+lib_blank_payload: pass@1=False pass@1=False osim=0.0
+sg_create_channel_make: pass@1=False pass@1=False osim=0.0
+lib_capture_mark: pass@1=False pass@1=False osim=0.0
+sg_create_channel_tweet_act: pass@1=False pass@1=False osim=0.0
+lib_capture_ok_count: pass@1=False pass@1=False osim=0.0
+sg_find_channel_run: pass@1=False pass@1=False osim=0.0
+lib_capture_record_line: pass@1=False pass@1=False osim=0.0
+sg_find_profile_run: pass@1=False pass@1=False osim=0.0
+lib_capture_summary_code: pass@1=False pass@1=False osim=0.0
+sg_follow_user_act: pass@1=False pass@1=False osim=0.0
+lib_feed_search: pass@1=False pass@1=False osim=0.0
+sg_get_all_profiles_deliver: pass@1=False pass@1=False osim=0.45
+lib_fire_bullet: pass@1=True pass@1=True osim=1.0
+sg_get_all_profiles_gather: pass@1=False pass@1=False osim=0.0
+lib_fmt_row: pass@1=False pass@1=False osim=0.0
+sg_get_channel_detail_act: pass@1=False pass@1=False osim=0.0
+lib_get_file_normalize: pass@1=False pass@1=False osim=0.0
+sg_get_channels_deliver: pass@1=True pass@1=True osim=1.0
+lib_get_file_truncate: pass@1=False pass@1=False osim=0.0
+sg_get_channels_gather: pass@1=False pass@1=False osim=0.0
+lib_git_files_skip: pass@1=False pass@1=False osim=0.0
+sg_get_profile_give: pass@1=False pass@1=False osim=0.0
+lib_hashtag_norm: pass@1=False pass@1=False osim=0.0
+sg_get_trending_deliver: pass@1=False pass@1=False osim=0.0
+lib_is_lib: pass@1=False pass@1=False osim=0.0
+sg_join_channel_act: pass@1=False pass@1=False osim=0.0
+lib_jcos_taylor: pass@1=False pass@1=False osim=0.0
+sg_leave_channel_act: pass@1=False pass@1=False osim=0.0
+lib_jsin_from_cos: pass@1=True pass@1=True osim=1.0
+sg_load_feed_deliver: pass@1=False pass@1=False osim=0.0
+lib_lang_label: pass@1=False pass@1=False osim=0.0
+sg_load_feed_gather: pass@1=False pass@1=False osim=0.0
+lib_lcg_rand01: pass@1=False pass@1=False osim=0.0
+sg_load_feed_run: pass@1=False pass@1=False osim=0.0
+lib_list_file_meta: pass@1=True pass@1=True osim=1.0
+sg_profile_to_profile_view: pass@1=False pass@1=False osim=0.0
+lib_log: pass@1=False pass@1=False osim=0.0
+sg_profile_to_user_view: pass@1=False pass@1=False osim=0.0
+lib_one_dp: pass@1=False pass@1=False osim=0.0
+sg_setup_profile_apply: pass@1=False pass@1=False osim=0.0
+lib_parse_bench_json: pass@1=False pass@1=False osim=0.0
+sg_setup_profile_run: pass@1=False pass@1=False osim=0.0
+lib_rand_range: pass@1=True pass@1=True osim=1.0
+=== RL holdout eval ===
+  model:    models/qwen-q4  (base)
+  tasks:    46   (k=1 temp=1.0)
+  runs:     6  (13.0%)   compiles+executes
+  pass@1:   5  (10.9%)   greedy exact match
+  pass@1:   5  (10.9%)   any of k sampled
+  near-pass:5  (10.9%)   output-sim >= 0.9
+  avg-osim: 0.119   continuous output similarity (all tasks)
+  idiom:    0.17 constructs/correct
+  by family (pass@1):
+    graph: 0/1  (0.0%)  (n=1, anecdote)
+    lib: 4/23  (17.4%)
+    sg: 1/22  (4.5%)
+>>> reuse existing dataset/rl/rft (FORCE_SAMPLE=1 to resample)
+>>> RFT adapter exists (adapters/qwen3coder-rall-rft) — skipping SFT (rm it to retrain)
+>>> reuse models/qwen3coder-rall-rft-q4
+=== RFT warm-start done -> models/qwen3coder-rall-rft-q4 ===
+  next:  RL_BASE=models/qwen3coder-rall-rft-q4 ./rl/run_grpo.sh qwen3coder-rall
+graph_like_tweet_act: pass@1=True pass@8=True osim=1.0
+sg_add_comment_act: pass@1=False pass@8=False osim=0.0
+sg_create_tweet_make: pass@1=False pass@8=False osim=0.0
+sg_delete_tweet_act: pass@1=False pass@8=False osim=0.0
+sg_find_tweet_run: pass@1=True pass@8=True osim=1.0
+sg_tweet_to_view: pass@1=False pass@8=False osim=0.0
+gb_explore_graph_deliver: pass@1=False pass@8=True osim=0.0
+gb_explore_graph_walk_day: pass@1=True pass@8=True osim=1.0
+gb_get_guestbook_descend: pass@1=True pass@8=True osim=1.0
+gb_sign_guestbook_sign: pass@1=False pass@8=False osim=0.0
+lib_visitor_message_norm: pass@1=False pass@8=False osim=0.0
+lib_visitor_name_norm: pass@1=False pass@8=False osim=0.0
+lib_analyze_score: pass@1=False pass@8=True osim=0.0
+lib_narrate_plural: pass@1=False pass@8=False osim=0.0
+=== RL holdout eval ===
+  model:    models/qwen3coder-rall-rft-q4  (base)
+  tasks:    14   (k=8 temp=1.0)
+  runs:     4  (28.6%)   compiles+executes
+  pass@1:   4  (28.6%)   greedy exact match
+  pass@8:   6  (42.9%)   any of k sampled
+  near-pass:4  (28.6%)   output-sim >= 0.9
+  avg-osim: 0.286   continuous output similarity (all tasks)
+  idiom:    4.5 constructs/correct
+  by family (pass@1):
+    gb: 2/4  (50.0%)
+    graph: 1/1  (100.0%)  (n=1, anecdote)
+    lib: 0/4  (0.0%)
+    sg: 1/5  (20.0%)
+graph_trending_tally: pass@1=False pass@1=False osim=0.0
+lib_bench_output_tail: pass@1=False pass@1=False osim=0.0
+sg_channel_to_view: pass@1=False pass@1=False osim=0.0
+lib_blank_payload: pass@1=False pass@1=False osim=0.0
+sg_create_channel_make: pass@1=False pass@1=False osim=0.0
+lib_capture_mark: pass@1=False pass@1=False osim=0.0
+sg_create_channel_tweet_act: pass@1=False pass@1=False osim=0.0
+lib_capture_ok_count: pass@1=False pass@1=False osim=0.0
+sg_find_channel_run: pass@1=False pass@1=False osim=0.0
+lib_capture_record_line: pass@1=False pass@1=False osim=0.0
+sg_find_profile_run: pass@1=False pass@1=False osim=0.0
+lib_capture_summary_code: pass@1=False pass@1=False osim=0.0
+sg_follow_user_act: pass@1=False pass@1=False osim=0.0
+lib_feed_search: pass@1=False pass@1=False osim=0.0
+sg_get_all_profiles_deliver: pass@1=True pass@1=True osim=1.0
+lib_fire_bullet: pass@1=True pass@1=True osim=1.0
+sg_get_all_profiles_gather: pass@1=False pass@1=False osim=0.0
+lib_fmt_row: pass@1=False pass@1=False osim=0.0
+sg_get_channel_detail_act: pass@1=False pass@1=False osim=0.0
+lib_get_file_normalize: pass@1=False pass@1=False osim=0.0
+sg_get_channels_deliver: pass@1=True pass@1=True osim=1.0
+lib_get_file_truncate: pass@1=False pass@1=False osim=0.0
+sg_get_channels_gather: pass@1=False pass@1=False osim=0.0
+lib_git_files_skip: pass@1=False pass@1=False osim=0.0
+sg_get_profile_give: pass@1=False pass@1=False osim=0.0
+lib_hashtag_norm: pass@1=False pass@1=False osim=0.0
+sg_get_trending_deliver: pass@1=False pass@1=False osim=0.0
+lib_is_lib: pass@1=False pass@1=False osim=0.0
+sg_join_channel_act: pass@1=False pass@1=False osim=0.0
+lib_jcos_taylor: pass@1=False pass@1=False osim=0.0
+sg_leave_channel_act: pass@1=False pass@1=False osim=0.0
+lib_jsin_from_cos: pass@1=True pass@1=True osim=1.0
+sg_load_feed_deliver: pass@1=False pass@1=False osim=0.0
+lib_lang_label: pass@1=False pass@1=False osim=0.0
+sg_load_feed_gather: pass@1=False pass@1=False osim=0.0
+lib_lcg_rand01: pass@1=False pass@1=False osim=0.0
+sg_load_feed_run: pass@1=False pass@1=False osim=0.0
+lib_list_file_meta: pass@1=True pass@1=True osim=1.0
+sg_profile_to_profile_view: pass@1=False pass@1=False osim=0.0
+lib_log: pass@1=False pass@1=False osim=0.0
+sg_profile_to_user_view: pass@1=False pass@1=False osim=0.0
+lib_one_dp: pass@1=False pass@1=False osim=0.0
+sg_setup_profile_apply: pass@1=False pass@1=False osim=0.0
+lib_parse_bench_json: pass@1=False pass@1=False osim=0.0
+sg_setup_profile_run: pass@1=False pass@1=False osim=0.0
+lib_rand_range: pass@1=True pass@1=True osim=1.0
+=== RL holdout eval ===
+  model:    models/qwen3coder-rall-rft-q4  (base)
+  tasks:    46   (k=1 temp=1.0)
+  runs:     6  (13.0%)   compiles+executes
+  pass@1:   6  (13.0%)   greedy exact match
+  pass@1:   6  (13.0%)   any of k sampled
+  near-pass:6  (13.0%)   output-sim >= 0.9
+  avg-osim: 0.13   continuous output similarity (all tasks)
+  idiom:    0.33 constructs/correct
+  by family (pass@1):
+    graph: 0/1  (0.0%)  (n=1, anecdote)
+    lib: 4/23  (17.4%)
+    sg: 2/22  (9.1%)
+graph_like_tweet_act: pass@1=True pass@8=True osim=1.0
+sg_add_comment_act: pass@1=False pass@8=False osim=0.0
+sg_create_tweet_make: pass@1=False pass@8=False osim=0.0
+sg_delete_tweet_act: pass@1=False pass@8=False osim=0.0
+sg_find_tweet_run: pass@1=False pass@8=False osim=0.0
+sg_tweet_to_view: pass@1=False pass@8=True osim=0.0
+gb_explore_graph_deliver: pass@1=False pass@8=False osim=0.21
+gb_explore_graph_walk_day: pass@1=True pass@8=True osim=1.0
+gb_get_guestbook_descend: pass@1=True pass@8=True osim=1.0
+gb_sign_guestbook_sign: pass@1=False pass@8=False osim=0.0
+lib_visitor_message_norm: pass@1=False pass@8=False osim=0.0
+lib_visitor_name_norm: pass@1=False pass@8=False osim=0.0
+lib_analyze_score: pass@1=False pass@8=False osim=0.0
+lib_narrate_plural: pass@1=False pass@8=False osim=0.0
+=== RL holdout eval ===
+  model:    models/jac-qwen3coder-q4  (base)
+  tasks:    14   (k=8 temp=1.0)
+  runs:     4  (28.6%)   compiles+executes
+  pass@1:   3  (21.4%)   greedy exact match
+  pass@8:   4  (28.6%)   any of k sampled
+  near-pass:3  (21.4%)   output-sim >= 0.9
+  avg-osim: 0.229   continuous output similarity (all tasks)
+  idiom:    4.5 constructs/correct
+  by family (pass@1):
+    gb: 2/4  (50.0%)
+    graph: 1/1  (100.0%)  (n=1, anecdote)
+    lib: 0/4  (0.0%)
+    sg: 0/5  (0.0%)
+graph_trending_tally: pass@1=False pass@1=False osim=0.0
+lib_bench_output_tail: pass@1=False pass@1=False osim=0.0
+sg_channel_to_view: pass@1=False pass@1=False osim=0.0
+lib_blank_payload: pass@1=False pass@1=False osim=0.0
+sg_create_channel_make: pass@1=False pass@1=False osim=0.0
+lib_capture_mark: pass@1=False pass@1=False osim=0.0
+sg_create_channel_tweet_act: pass@1=False pass@1=False osim=0.0
+lib_capture_ok_count: pass@1=False pass@1=False osim=0.0
+sg_find_channel_run: pass@1=False pass@1=False osim=0.0
+lib_capture_record_line: pass@1=False pass@1=False osim=0.0
+sg_find_profile_run: pass@1=False pass@1=False osim=0.0
+lib_capture_summary_code: pass@1=False pass@1=False osim=0.0
+sg_follow_user_act: pass@1=False pass@1=False osim=0.0
+lib_feed_search: pass@1=False pass@1=False osim=0.0
+sg_get_all_profiles_deliver: pass@1=True pass@1=True osim=1.0
+lib_fire_bullet: pass@1=True pass@1=True osim=1.0
+sg_get_all_profiles_gather: pass@1=False pass@1=False osim=0.0
+lib_fmt_row: pass@1=False pass@1=False osim=0.0
+sg_get_channel_detail_act: pass@1=False pass@1=False osim=0.0
+lib_get_file_normalize: pass@1=False pass@1=False osim=0.0
+sg_get_channels_deliver: pass@1=True pass@1=True osim=1.0
+lib_get_file_truncate: pass@1=False pass@1=False osim=0.0
+sg_get_channels_gather: pass@1=False pass@1=False osim=0.0
+lib_git_files_skip: pass@1=False pass@1=False osim=0.0
+sg_get_profile_give: pass@1=False pass@1=False osim=0.0
+lib_hashtag_norm: pass@1=False pass@1=False osim=0.0
+sg_get_trending_deliver: pass@1=False pass@1=False osim=0.0
+lib_is_lib: pass@1=False pass@1=False osim=0.0
+sg_join_channel_act: pass@1=False pass@1=False osim=0.0
+lib_jcos_taylor: pass@1=False pass@1=False osim=0.0
+sg_leave_channel_act: pass@1=False pass@1=False osim=0.0
+lib_jsin_from_cos: pass@1=True pass@1=True osim=1.0
+sg_load_feed_deliver: pass@1=False pass@1=False osim=0.0
+lib_lang_label: pass@1=False pass@1=False osim=0.0
+sg_load_feed_gather: pass@1=False pass@1=False osim=0.0
+lib_lcg_rand01: pass@1=False pass@1=False osim=0.0
+sg_load_feed_run: pass@1=False pass@1=False osim=0.0
+lib_list_file_meta: pass@1=True pass@1=True osim=1.0
+sg_profile_to_profile_view: pass@1=False pass@1=False osim=0.0
+lib_log: pass@1=False pass@1=False osim=0.0
+sg_profile_to_user_view: pass@1=False pass@1=False osim=0.0
+lib_one_dp: pass@1=False pass@1=False osim=0.0
+sg_setup_profile_apply: pass@1=False pass@1=False osim=0.0
+lib_parse_bench_json: pass@1=False pass@1=False osim=0.0
+sg_setup_profile_run: pass@1=False pass@1=False osim=0.0
+lib_rand_range: pass@1=True pass@1=True osim=1.0
+=== RL holdout eval ===
+  model:    models/jac-qwen3coder-q4  (base)
+  tasks:    46   (k=1 temp=1.0)
+  runs:     6  (13.0%)   compiles+executes
+  pass@1:   6  (13.0%)   greedy exact match
+  pass@1:   6  (13.0%)   any of k sampled
+  near-pass:6  (13.0%)   output-sim >= 0.9
+  avg-osim: 0.13   continuous output similarity (all tasks)
+  idiom:    0.33 constructs/correct
+  by family (pass@1):
+    graph: 0/1  (0.0%)  (n=1, anecdote)
+    lib: 4/23  (17.4%)
+    sg: 2/22  (9.1%)
+>>> reuse existing dataset/rl/rft (FORCE_SAMPLE=1 to resample)
+>>> RFT adapter exists (adapters/jac-qwen3coder-rall-rft) — skipping SFT (rm it to retrain)
+>>> reuse models/jac-qwen3coder-rall-rft-q4
+=== RFT warm-start done -> models/jac-qwen3coder-rall-rft-q4 ===
+  next:  RL_BASE=models/jac-qwen3coder-rall-rft-q4 ./rl/run_grpo.sh jac-qwen3coder-rall
+graph_like_tweet_act: pass@1=True pass@8=True osim=1.0
+sg_add_comment_act: pass@1=False pass@8=False osim=0.0
+sg_create_tweet_make: pass@1=False pass@8=False osim=0.0
+sg_delete_tweet_act: pass@1=False pass@8=False osim=0.0
+sg_find_tweet_run: pass@1=False pass@8=False osim=0.0
+sg_tweet_to_view: pass@1=False pass@8=True osim=0.0
+gb_explore_graph_deliver: pass@1=False pass@8=False osim=0.21
+gb_explore_graph_walk_day: pass@1=True pass@8=True osim=1.0
+gb_get_guestbook_descend: pass@1=True pass@8=True osim=1.0
+gb_sign_guestbook_sign: pass@1=False pass@8=False osim=0.0
+lib_visitor_message_norm: pass@1=False pass@8=False osim=0.0
+lib_visitor_name_norm: pass@1=False pass@8=False osim=0.0
+lib_analyze_score: pass@1=False pass@8=True osim=0.0
+lib_narrate_plural: pass@1=False pass@8=False osim=0.0
+=== RL holdout eval ===
+  model:    models/jac-qwen3coder-rall-rft-q4  (base)
+  tasks:    14   (k=8 temp=1.0)
+  runs:     4  (28.6%)   compiles+executes
+  pass@1:   3  (21.4%)   greedy exact match
+  pass@8:   5  (35.7%)   any of k sampled
+  near-pass:3  (21.4%)   output-sim >= 0.9
+  avg-osim: 0.229   continuous output similarity (all tasks)
+  idiom:    4.5 constructs/correct
+  by family (pass@1):
+    gb: 2/4  (50.0%)
+    graph: 1/1  (100.0%)  (n=1, anecdote)
+    lib: 0/4  (0.0%)
+    sg: 0/5  (0.0%)
+graph_trending_tally: pass@1=False pass@1=False osim=0.0
+lib_bench_output_tail: pass@1=False pass@1=False osim=0.0
+sg_channel_to_view: pass@1=False pass@1=False osim=0.0
+lib_blank_payload: pass@1=False pass@1=False osim=0.0
+sg_create_channel_make: pass@1=False pass@1=False osim=0.0
+lib_capture_mark: pass@1=False pass@1=False osim=0.0
+sg_create_channel_tweet_act: pass@1=False pass@1=False osim=0.0
+lib_capture_ok_count: pass@1=False pass@1=False osim=0.0
+sg_find_channel_run: pass@1=False pass@1=False osim=0.0
+lib_capture_record_line: pass@1=False pass@1=False osim=0.0
+sg_find_profile_run: pass@1=False pass@1=False osim=0.0
+lib_capture_summary_code: pass@1=False pass@1=False osim=0.0
+sg_follow_user_act: pass@1=False pass@1=False osim=0.0
+lib_feed_search: pass@1=False pass@1=False osim=0.0
+sg_get_all_profiles_deliver: pass@1=True pass@1=True osim=1.0
+lib_fire_bullet: pass@1=True pass@1=True osim=1.0
+sg_get_all_profiles_gather: pass@1=False pass@1=False osim=0.0
+lib_fmt_row: pass@1=False pass@1=False osim=0.0
+sg_get_channel_detail_act: pass@1=False pass@1=False osim=0.0
+lib_get_file_normalize: pass@1=False pass@1=False osim=0.0
+sg_get_channels_deliver: pass@1=True pass@1=True osim=1.0
+lib_get_file_truncate: pass@1=False pass@1=False osim=0.0
+sg_get_channels_gather: pass@1=False pass@1=False osim=0.0
+lib_git_files_skip: pass@1=False pass@1=False osim=0.0
+sg_get_profile_give: pass@1=False pass@1=False osim=0.0
+lib_hashtag_norm: pass@1=False pass@1=False osim=0.0
+sg_get_trending_deliver: pass@1=False pass@1=False osim=0.0
+lib_is_lib: pass@1=False pass@1=False osim=0.0
+sg_join_channel_act: pass@1=False pass@1=False osim=0.0
+lib_jcos_taylor: pass@1=False pass@1=False osim=0.0
+sg_leave_channel_act: pass@1=False pass@1=False osim=0.0
+lib_jsin_from_cos: pass@1=True pass@1=True osim=1.0
+sg_load_feed_deliver: pass@1=False pass@1=False osim=0.0
+lib_lang_label: pass@1=False pass@1=False osim=0.0
+sg_load_feed_gather: pass@1=False pass@1=False osim=0.0
+lib_lcg_rand01: pass@1=False pass@1=False osim=0.0
+sg_load_feed_run: pass@1=False pass@1=False osim=0.0
+lib_list_file_meta: pass@1=True pass@1=True osim=1.0
+sg_profile_to_profile_view: pass@1=False pass@1=False osim=0.0
+lib_log: pass@1=False pass@1=False osim=0.0
+sg_profile_to_user_view: pass@1=False pass@1=False osim=0.0
+lib_one_dp: pass@1=False pass@1=False osim=0.0
+sg_setup_profile_apply: pass@1=False pass@1=False osim=0.0
+lib_parse_bench_json: pass@1=False pass@1=False osim=0.0
+sg_setup_profile_run: pass@1=False pass@1=False osim=0.0
+lib_rand_range: pass@1=True pass@1=True osim=1.0
+=== RL holdout eval ===
+  model:    models/jac-qwen3coder-rall-rft-q4  (base)
+  tasks:    46   (k=1 temp=1.0)
+  runs:     6  (13.0%)   compiles+executes
+  pass@1:   6  (13.0%)   greedy exact match
+  pass@1:   6  (13.0%)   any of k sampled
+  near-pass:6  (13.0%)   output-sim >= 0.9
+  avg-osim: 0.13   continuous output similarity (all tasks)
+  idiom:    0.33 constructs/correct
+  by family (pass@1):
+    graph: 0/1  (0.0%)  (n=1, anecdote)
+    lib: 4/23  (17.4%)
+    sg: 2/22  (9.1%)
+=== ladder EXECUTE ===
+  rungs:  ['5', 'all']
+  models: ['qwen3coder', 'jac-qwen3coder']
+  rows -> results/rl_ladder_sg.jsonl   (tag = r<N>/<model>/<cond>/<gen|mem>)
+
+######## RUNG 5 ########
+RUN RUNG=5 jac run rl/pick_rung.jac
+RUN jac run rl/build_sft_gold.jac
+---- r5/qwen3coder  (base=models/qwen-q4 group=4) ----
+RUN JAC_EVAL_MODEL=models/qwen-q4 JAC_EVAL_K=8 JAC_EVAL_TEMP=1.0 JAC_RL_HOLDOUT=dataset/rl/holdout.jsonl JAC_RL_OUT=results/rl_ladder_sg.jsonl JAC_RL_TAG=r5/qwen3coder/base/gen jac run rl/eval_rl.jac
+RUN JAC_EVAL_MODEL=models/qwen-q4 JAC_RL_HOLDOUT=dataset/rl/train.jsonl JAC_RL_OUT=results/rl_ladder_sg.jsonl JAC_RL_TAG=r5/qwen3coder/base/mem jac run rl/eval_rl.jac
+RUN RL_BASE=models/qwen-q4 RFT_ITERS=200 ./rl/run_rft.sh qwen3coder-r5
+RUN JAC_EVAL_MODEL=models/qwen3coder-r5-rft-q4 JAC_EVAL_K=8 JAC_EVAL_TEMP=1.0 JAC_RL_HOLDOUT=dataset/rl/holdout.jsonl JAC_RL_OUT=results/rl_ladder_sg.jsonl JAC_RL_TAG=r5/qwen3coder/sft/gen jac run rl/eval_rl.jac
+RUN JAC_EVAL_MODEL=models/qwen3coder-r5-rft-q4 JAC_RL_HOLDOUT=dataset/rl/train.jsonl JAC_RL_OUT=results/rl_ladder_sg.jsonl JAC_RL_TAG=r5/qwen3coder/sft/mem jac run rl/eval_rl.jac
+---- r5/jac-qwen3coder  (base=models/jac-qwen3coder-q4 group=4) ----
+RUN JAC_EVAL_MODEL=models/jac-qwen3coder-q4 JAC_EVAL_K=8 JAC_EVAL_TEMP=1.0 JAC_RL_HOLDOUT=dataset/rl/holdout.jsonl JAC_RL_OUT=results/rl_ladder_sg.jsonl JAC_RL_TAG=r5/jac-qwen3coder/base/gen jac run rl/eval_rl.jac
+RUN JAC_EVAL_MODEL=models/jac-qwen3coder-q4 JAC_RL_HOLDOUT=dataset/rl/train.jsonl JAC_RL_OUT=results/rl_ladder_sg.jsonl JAC_RL_TAG=r5/jac-qwen3coder/base/mem jac run rl/eval_rl.jac
+RUN RL_BASE=models/jac-qwen3coder-q4 RFT_ITERS=200 ./rl/run_rft.sh jac-qwen3coder-r5
+RUN JAC_EVAL_MODEL=models/jac-qwen3coder-r5-rft-q4 JAC_EVAL_K=8 JAC_EVAL_TEMP=1.0 JAC_RL_HOLDOUT=dataset/rl/holdout.jsonl JAC_RL_OUT=results/rl_ladder_sg.jsonl JAC_RL_TAG=r5/jac-qwen3coder/sft/gen jac run rl/eval_rl.jac
+RUN JAC_EVAL_MODEL=models/jac-qwen3coder-r5-rft-q4 JAC_RL_HOLDOUT=dataset/rl/train.jsonl JAC_RL_OUT=results/rl_ladder_sg.jsonl JAC_RL_TAG=r5/jac-qwen3coder/sft/mem jac run rl/eval_rl.jac
+######## RUNG all ########
+RUN RUNG=all jac run rl/pick_rung.jac
+RUN jac run rl/build_sft_gold.jac
+---- rall/qwen3coder  (base=models/qwen-q4 group=4) ----
+RUN JAC_EVAL_MODEL=models/qwen-q4 JAC_EVAL_K=8 JAC_EVAL_TEMP=1.0 JAC_RL_HOLDOUT=dataset/rl/holdout.jsonl JAC_RL_OUT=results/rl_ladder_sg.jsonl JAC_RL_TAG=rall/qwen3coder/base/gen jac run rl/eval_rl.jac
+RUN JAC_EVAL_MODEL=models/qwen-q4 JAC_RL_HOLDOUT=dataset/rl/train.jsonl JAC_RL_OUT=results/rl_ladder_sg.jsonl JAC_RL_TAG=rall/qwen3coder/base/mem jac run rl/eval_rl.jac
+RUN RL_BASE=models/qwen-q4 RFT_ITERS=200 ./rl/run_rft.sh qwen3coder-rall
+RUN JAC_EVAL_MODEL=models/qwen3coder-rall-rft-q4 JAC_EVAL_K=8 JAC_EVAL_TEMP=1.0 JAC_RL_HOLDOUT=dataset/rl/holdout.jsonl JAC_RL_OUT=results/rl_ladder_sg.jsonl JAC_RL_TAG=rall/qwen3coder/sft/gen jac run rl/eval_rl.jac
+RUN JAC_EVAL_MODEL=models/qwen3coder-rall-rft-q4 JAC_RL_HOLDOUT=dataset/rl/train.jsonl JAC_RL_OUT=results/rl_ladder_sg.jsonl JAC_RL_TAG=rall/qwen3coder/sft/mem jac run rl/eval_rl.jac
+---- rall/jac-qwen3coder  (base=models/jac-qwen3coder-q4 group=4) ----
+RUN JAC_EVAL_MODEL=models/jac-qwen3coder-q4 JAC_EVAL_K=8 JAC_EVAL_TEMP=1.0 JAC_RL_HOLDOUT=dataset/rl/holdout.jsonl JAC_RL_OUT=results/rl_ladder_sg.jsonl JAC_RL_TAG=rall/jac-qwen3coder/base/gen jac run rl/eval_rl.jac
+RUN JAC_EVAL_MODEL=models/jac-qwen3coder-q4 JAC_RL_HOLDOUT=dataset/rl/train.jsonl JAC_RL_OUT=results/rl_ladder_sg.jsonl JAC_RL_TAG=rall/jac-qwen3coder/base/mem jac run rl/eval_rl.jac
+RUN RL_BASE=models/jac-qwen3coder-q4 RFT_ITERS=200 ./rl/run_rft.sh jac-qwen3coder-rall
+RUN JAC_EVAL_MODEL=models/jac-qwen3coder-rall-rft-q4 JAC_EVAL_K=8 JAC_EVAL_TEMP=1.0 JAC_RL_HOLDOUT=dataset/rl/holdout.jsonl JAC_RL_OUT=results/rl_ladder_sg.jsonl JAC_RL_TAG=rall/jac-qwen3coder/sft/gen jac run rl/eval_rl.jac
+RUN JAC_EVAL_MODEL=models/jac-qwen3coder-rall-rft-q4 JAC_RL_HOLDOUT=dataset/rl/train.jsonl JAC_RL_OUT=results/rl_ladder_sg.jsonl JAC_RL_TAG=rall/jac-qwen3coder/sft/mem jac run rl/eval_rl.jac
+
+=== ladder done ===
+[chain 14:34] STEP 7 run complete
+[chain 14:34] restoring default split
+[chain 14:34] SCIENCE CHAIN DONE

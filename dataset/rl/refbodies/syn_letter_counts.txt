@@ -1,0 +1,15 @@
+    counts = {};
+    order = [];
+    for c in s {
+        if c in counts {
+            counts[c] += 1;
+        } else {
+            counts[c] = 1;
+            order.append(c);
+        }
+    }
+    parts = [];
+    for c in order {
+        parts.append(f"{c}:{counts[c]}");
+    }
+    return ",".join(parts);

@@ -1,0 +1,5 @@
+    if sh.mode == 0x1701 {
+        sh.proj = m;
+    } else {
+        sh.mv = m;
+    }

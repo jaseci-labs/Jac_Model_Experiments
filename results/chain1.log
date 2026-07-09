@@ -1,0 +1,127 @@
+############ CHAIN1 START Thu Jul  2 11:04:06 EDT 2026 ############
+### #6 fresh best-of-k Thu Jul  2 11:04:06 EDT 2026
+### #3 k=32 best-of-k (jac base, unsolvable probe) Thu Jul  2 11:12:41 EDT 2026
+### #2 sg-inclusive split Thu Jul  2 11:43:49 EDT 2026
+=== splits (file-disjoint holdout, interleaved pool) ===
+  tasks:          84
+  holdout:        17   files=["this_is_jac/analytics.jac", "this_is_jac/littlex/frontend.cl.jac", "this_is_jac/littlex/social_graph.jac::tweet", "this_is_jac/raylib_shim.cl.jac", "this_is_jac/source_lexer.jac"]
+    by family:    {"graph": 1, "sg": 5, "lib": 11}
+    by source:    {"this_is_jac/littlex/social_graph.jac::tweet": 6, "this_is_jac/analytics.jac": 2, "this_is_jac/source_lexer.jac": 3, "this_is_jac/raylib_shim.cl.jac": 3, "this_is_jac/littlex/frontend.cl.jac": 3}
+  decontam dropped:0   (>= 0.85 difflib to a train body)
+  trainpool:      63   (pick_rung slices this)
+  valid:          4   (trainer val; disjoint from holdout)
+graph_like_tweet_act: pass@1=True pass@8=True osim=1.0
+sg_add_comment_act: pass@1=True pass@8=True osim=1.0
+sg_create_tweet_make: pass@1=False pass@8=False osim=0.0
+sg_delete_tweet_act: pass@1=False pass@8=False osim=0.0
+sg_find_tweet_run: pass@1=False pass@8=False osim=0.0
+sg_tweet_to_view: pass@1=False pass@8=False osim=0.0
+lib_analyze_score: pass@1=False pass@8=True osim=0.0
+lib_narrate_plural: pass@1=False pass@8=True osim=0.0
+lib_analyse_text: pass@1=False pass@8=True osim=0.0
+lib_fstring_rules: pass@1=False pass@8=False osim=0.0
+lib_innerstring_rules: pass@1=False pass@8=False osim=0.0
+lib_cur_matrix: pass@1=True pass@8=True osim=1.0
+lib_m_rotate: pass@1=False pass@8=False osim=0.98
+lib_setcur_matrix: pass@1=False pass@8=True osim=0.0
+lib_display_username: pass@1=True pass@8=True osim=1.0
+lib_tab_name: pass@1=True pass@8=True osim=1.0
+lib_to_follow_filter: pass@1=True pass@8=True osim=1.0
+=== RL holdout eval ===
+  model:    models/jac-qwen3coder-q4  (base)
+  tasks:    17   (k=8 temp=0.8)
+  runs:     7  (41.2%)   compiles+executes
+  pass@1:   6  (35.3%)   greedy exact match
+  norm@1:   6  (35.3%)   whitespace-normalized match (F4 probe)
+  pass@8:   10  (58.8%)   any of k sampled
+  near-pass:7  (41.2%)   output-sim >= 0.9
+  avg-osim: 0.411   continuous output similarity (all tasks)
+  idiom:    2.0 constructs/correct
+  by family (pass@1):
+    graph: 1/1  (100.0%)  (n=1, anecdote)
+    lib: 4/11  (36.4%)
+    sg: 1/5  (20.0%)
+### #2 SFT rung-20 on sg-inclusive train Thu Jul  2 11:49:30 EDT 2026
+=== rung 20 ===
+  train.jsonl: 20 / 63 pool tasks
+=== gold SFT warm-start set ===
+  from 20 train tasks -> 20 gold pairs (0 skipped)
+  train 17 / valid 3 -> dataset/rl/rft/
+>>> reuse existing dataset/rl/rft (FORCE_SAMPLE=1 to resample)
+>>> RFT SFT: 200 iters on dataset/rl/rft (layers=16 batch=2 seq=2048)
+Loading configuration file sft_dpo/configs/lora.yaml
+Loading pretrained model
+Loading datasets
+Training
+Trainable parameters: 0.923% (281.838M/30532.123M)
+Starting training..., iters: 200
+Calculating loss...:   0%|          | 0/1 [00:00<?, ?it/s]Calculating loss...: 100%|██████████| 1/1 [00:01<00:00,  1.20s/it]Calculating loss...: 100%|██████████| 1/1 [00:01<00:00,  1.20s/it]
+Iter 1: Val loss 2.829, Val took 1.223s
+Iter 10: Train loss 2.407, Learning Rate 3.000e-06, It/sec 0.366, Tokens/sec 442.895, Trained Tokens 12102, Peak mem 23.747 GB
+Iter 20: Train loss 2.250, Learning Rate 6.333e-06, It/sec 0.341, Tokens/sec 410.020, Trained Tokens 24130, Peak mem 24.219 GB
+Iter 30: Train loss 1.902, Learning Rate 9.667e-06, It/sec 0.367, Tokens/sec 445.859, Trained Tokens 36289, Peak mem 24.219 GB
+Iter 40: Train loss 1.468, Learning Rate 1.300e-05, It/sec 0.326, Tokens/sec 401.250, Trained Tokens 48580, Peak mem 24.219 GB
+Calculating loss...:   0%|          | 0/1 [00:00<?, ?it/s]Calculating loss...: 100%|██████████| 1/1 [00:00<00:00,  1.63it/s]Calculating loss...: 100%|██████████| 1/1 [00:00<00:00,  1.63it/s]
+Iter 50: Val loss 1.430, Val took 0.617s
+Iter 50: Train loss 1.049, Learning Rate 1.633e-05, It/sec 0.341, Tokens/sec 411.213, Trained Tokens 60635, Peak mem 24.219 GB
+Iter 60: Train loss 0.663, Learning Rate 1.967e-05, It/sec 0.351, Tokens/sec 435.263, Trained Tokens 73030, Peak mem 24.219 GB
+Iter 70: Train loss 0.338, Learning Rate 1.999e-05, It/sec 0.348, Tokens/sec 414.143, Trained Tokens 84914, Peak mem 24.219 GB
+Iter 80: Train loss 0.111, Learning Rate 1.996e-05, It/sec 0.339, Tokens/sec 415.739, Trained Tokens 97160, Peak mem 24.219 GB
+Iter 90: Train loss 0.025, Learning Rate 1.990e-05, It/sec 0.346, Tokens/sec 427.642, Trained Tokens 109512, Peak mem 24.219 GB
+Calculating loss...:   0%|          | 0/1 [00:00<?, ?it/s]Calculating loss...: 100%|██████████| 1/1 [00:00<00:00,  1.63it/s]Calculating loss...: 100%|██████████| 1/1 [00:00<00:00,  1.63it/s]
+Iter 100: Val loss 1.820, Val took 0.618s
+Iter 100: Train loss 0.010, Learning Rate 1.981e-05, It/sec 0.327, Tokens/sec 408.643, Trained Tokens 121991, Peak mem 24.219 GB
+Iter 100: Saved adapter weights to adapters/jac-sg-r20-rft/adapters.safetensors and adapters/jac-sg-r20-rft/0000100_adapters.safetensors.
+Iter 110: Train loss 0.008, Learning Rate 1.970e-05, It/sec 0.374, Tokens/sec 428.977, Trained Tokens 133450, Peak mem 25.346 GB
+Iter 120: Train loss 0.007, Learning Rate 1.957e-05, It/sec 0.341, Tokens/sec 419.547, Trained Tokens 145740, Peak mem 25.346 GB
+Iter 130: Train loss 0.006, Learning Rate 1.940e-05, It/sec 0.325, Tokens/sec 399.193, Trained Tokens 158031, Peak mem 25.346 GB
+Iter 140: Train loss 0.006, Learning Rate 1.922e-05, It/sec 0.381, Tokens/sec 436.741, Trained Tokens 169489, Peak mem 25.346 GB
+Calculating loss...:   0%|          | 0/1 [00:00<?, ?it/s]Calculating loss...: 100%|██████████| 1/1 [00:00<00:00,  1.61it/s]Calculating loss...: 100%|██████████| 1/1 [00:00<00:00,  1.61it/s]
+Iter 150: Val loss 1.873, Val took 0.624s
+Iter 150: Train loss 0.005, Learning Rate 1.901e-05, It/sec 0.313, Tokens/sec 405.844, Trained Tokens 182436, Peak mem 25.346 GB
+Iter 160: Train loss 0.006, Learning Rate 1.878e-05, It/sec 0.347, Tokens/sec 412.828, Trained Tokens 194320, Peak mem 25.346 GB
+Iter 170: Train loss 0.005, Learning Rate 1.852e-05, It/sec 0.345, Tokens/sec 409.824, Trained Tokens 206203, Peak mem 25.347 GB
+Iter 180: Train loss 0.005, Learning Rate 1.824e-05, It/sec 0.356, Tokens/sec 431.377, Trained Tokens 218319, Peak mem 25.347 GB
+Iter 190: Train loss 0.005, Learning Rate 1.795e-05, It/sec 0.306, Tokens/sec 390.058, Trained Tokens 231061, Peak mem 25.347 GB
+Calculating loss...:   0%|          | 0/1 [00:00<?, ?it/s]Calculating loss...: 100%|██████████| 1/1 [00:00<00:00,  1.62it/s]Calculating loss...: 100%|██████████| 1/1 [00:00<00:00,  1.62it/s]
+Iter 200: Val loss 1.876, Val took 0.619s
+Iter 200: Train loss 0.005, Learning Rate 1.763e-05, It/sec 0.362, Tokens/sec 428.051, Trained Tokens 242900, Peak mem 25.347 GB
+Iter 200: Saved adapter weights to adapters/jac-sg-r20-rft/adapters.safetensors and adapters/jac-sg-r20-rft/0000200_adapters.safetensors.
+Saved final weights to adapters/jac-sg-r20-rft/adapters.safetensors.
+>>> fusing RFT adapter -> models/jac-sg-r20-rft-q4
+Loading pretrained model
+=== RFT warm-start done -> models/jac-sg-r20-rft-q4 ===
+  next:  RL_BASE=models/jac-sg-r20-rft-q4 ./rl/run_grpo.sh jac-sg-r20
+graph_like_tweet_act: pass@1=True pass@8=True osim=1.0
+sg_add_comment_act: pass@1=True pass@8=True osim=1.0
+sg_create_tweet_make: pass@1=False pass@8=False osim=0.0
+sg_delete_tweet_act: pass@1=False pass@8=False osim=0.0
+sg_find_tweet_run: pass@1=False pass@8=True osim=0.0
+sg_tweet_to_view: pass@1=False pass@8=True osim=0.0
+lib_analyze_score: pass@1=False pass@8=True osim=0.0
+lib_narrate_plural: pass@1=False pass@8=True osim=0.0
+lib_analyse_text: pass@1=False pass@8=True osim=0.0
+lib_fstring_rules: pass@1=False pass@8=False osim=0.0
+lib_innerstring_rules: pass@1=False pass@8=False osim=0.0
+lib_cur_matrix: pass@1=False pass@8=True osim=0.0
+lib_m_rotate: pass@1=False pass@8=False osim=0.0
+lib_setcur_matrix: pass@1=False pass@8=True osim=0.0
+lib_display_username: pass@1=True pass@8=True osim=1.0
+lib_tab_name: pass@1=True pass@8=True osim=1.0
+lib_to_follow_filter: pass@1=True pass@8=True osim=1.0
+=== RL holdout eval ===
+  model:    models/jac-sg-r20-rft-q4  (base)
+  tasks:    17   (k=8 temp=0.8)
+  runs:     5  (29.4%)   compiles+executes
+  pass@1:   5  (29.4%)   greedy exact match
+  norm@1:   5  (29.4%)   whitespace-normalized match (F4 probe)
+  pass@8:   12  (70.6%)   any of k sampled
+  near-pass:5  (29.4%)   output-sim >= 0.9
+  avg-osim: 0.294   continuous output similarity (all tasks)
+  idiom:    2.8 constructs/correct
+  by family (pass@1):
+    graph: 1/1  (100.0%)  (n=1, anecdote)
+    lib: 3/11  (27.3%)
+    sg: 1/5  (20.0%)
+### #2 best-of-k on sg holdout (base + sft) Thu Jul  2 12:04:40 EDT 2026
+############ CHAIN1 DONE Thu Jul  2 12:20:56 EDT 2026 ############

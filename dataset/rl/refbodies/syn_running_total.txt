@@ -1,0 +1,7 @@
+    out = [];
+    s = 0;
+    for v in nums {
+        s += v;
+        out.append(s);
+    }
+    return out;

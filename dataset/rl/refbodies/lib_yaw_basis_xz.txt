@@ -1,0 +1,4 @@
+    fwd_x = -jsin(yaw_r);
+    fwd_z = -jcos(yaw_r);
+    rgt_x = jcos(yaw_r);
+    rgt_z = -jsin(yaw_r);

@@ -1,0 +1,6 @@
+        if self.target_id {
+            target = jobj(self.target_id);
+            if isinstance(target, Profile) {
+                visit [target];
+            }
+        }

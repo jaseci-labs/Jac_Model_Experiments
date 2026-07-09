@@ -1,0 +1,17 @@
+lib_blank_payload          greedy=False deploy=None oracle=False
+lib_capture_summary_code   greedy=True deploy=True oracle=True
+lib_fire_bullet            greedy=True deploy=True oracle=True
+lib_get_file_truncate      greedy=True deploy=True oracle=True
+lib_is_lib                 greedy=True deploy=True oracle=True
+lib_lang_label             greedy=True deploy=True oracle=True
+lib_m_frustum              greedy=False deploy=True oracle=True
+lib_m_rotate               greedy=True deploy=True oracle=True
+lib_parse_bench_json       greedy=False deploy=None oracle=False
+lib_shade_channel          greedy=True deploy=True oracle=True
+lib_update_bullets_score   greedy=True deploy=True oracle=True
+
+=== jac-convfull-rft-q4  (K=8 temp=0.8, n=11) ===
+greedy pass@1          : 8/11 (72.7%)
+best-of-k DEPLOY (pick 1st running, no peek): 9/11 (81.8%)
+  coverage (>=1 running available)          : 9/11 (81.8%)
+oracle pass@k (any sample correct)          : 9/11 (81.8%)

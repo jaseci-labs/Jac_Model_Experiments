@@ -1,0 +1,10 @@
+        mine = [-->[?:Profile]];
+        if mine {
+            self.actor = mine[0].username;
+        }
+        if self.tweet_id {
+            target = jobj(self.tweet_id);
+            if isinstance(target, Tweet) {
+                visit [target];
+            }
+        }

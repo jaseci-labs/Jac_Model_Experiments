@@ -1,0 +1,13 @@
+graph_like_tweet_act: run=False pass=False
+lib_capture_summary_code: run=False pass=False
+lib_lang_label: run=False pass=False
+sg_channel_to_view: run=False pass=False
+sg_delete_tweet_act: run=False pass=False
+sg_get_channels_gather: run=True pass=False
+sg_load_feed_deliver: run=False pass=False
+=== RL holdout eval ===
+  model:   models/jac-qwen3coder-q4  (base)
+  tasks:   7
+  runs:    1  (14.3%)
+  pass:    0  (0.0%)
+  idiom:   1.0 constructs/correct

@@ -1,0 +1,5 @@
+        if jid(here) == self.tweet_id and here.author_username == self.actor {
+            del here;
+            report {"success": True};
+            disengage;
+        }

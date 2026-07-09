@@ -1,0 +1,1 @@
+    return base_y + 0.4 * jsin(world_t * 1.5 + phase);

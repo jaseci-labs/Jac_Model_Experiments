@@ -1,0 +1,11 @@
+        tid = jid(here);
+        if tid in self.seen {
+            return;
+        }
+        self.seen[tid] = True;
+        for word in here.content.split() {
+            if word.startswith("#") and len(word) > 1 {
+                tag = word.lower().rstrip(".,!?;:");
+                self.counts[tag] = self.counts.get(tag, 0) + 1;
+            }
+        }

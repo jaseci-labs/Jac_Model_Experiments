@@ -1,0 +1,1 @@
+    return row.split(",")[1].strip();

@@ -1,0 +1,46 @@
+  reuse models/qwen-q4
+  reuse models/qwen-q8
+>>> base eval: already done
+>>> found checkpoint at step 500 -> resuming
+>>> training: already complete (500/600)
+>>> fuse: reuse models/qwen-jac-fused-q8
+>>> learning curve: evaluating saved checkpoints on 30 holdout tasks
+  checkpoint 100
+cross-compiled test pass: 96%  (29/30)
+generation:               3299 tokens total, ~73 tok/s avg
+tokens-to-correct:        110 tokens / correct conversion
+  checkpoint 200
+cross-compiled test pass: 93%  (28/30)
+generation:               3304 tokens total, ~74 tok/s avg
+tokens-to-correct:        108 tokens / correct conversion
+  checkpoint 300
+cross-compiled test pass: 90%  (27/30)
+generation:               3391 tokens total, ~73 tok/s avg
+tokens-to-correct:        112 tokens / correct conversion
+  checkpoint 400
+cross-compiled test pass: 96%  (29/30)
+generation:               3326 tokens total, ~72 tok/s avg
+tokens-to-correct:        111 tokens / correct conversion
+  checkpoint 500
+cross-compiled test pass: 96%  (29/30)
+generation:               3300 tokens total, ~60 tok/s avg
+tokens-to-correct:        111 tokens / correct conversion
+  checkpoint 600 (final)
+cross-compiled test pass: 96%  (29/30)
+generation:               3300 tokens total, ~47 tok/s avg
+tokens-to-correct:        111 tokens / correct conversion
+>>> finetuned eval: already done
+  wrote results/qwen/train_loss.png
+  wrote results/qwen/val_loss.png
+  wrote results/qwen/learning_rate.png
+  wrote results/qwen/tokens_per_sec.png
+  wrote results/qwen/iters_per_sec.png
+  wrote results/qwen/trained_tokens.png
+  wrote results/qwen/peak_mem.png
+  wrote results/qwen/learning_curve.png
+graphs in results/qwen/
+=== done ===
+  base:      results/qwen/base.txt
+  finetuned: results/qwen/finetuned.txt
+  graphs:    results/qwen/*.png  (learning curve = results/qwen/learning_curve.png)
+  (re-running is safe: finished stages skip, training resumes from last checkpoint)

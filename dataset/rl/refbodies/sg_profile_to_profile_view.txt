@@ -1,0 +1,8 @@
+        followers = [p.to_user_view() for p in [self<-:Follow:<-[?:Profile]]];
+        following = [p.to_user_view() for p in [self->:Follow:->[?:Profile]]];
+        tweets = [t.to_view() for t in [self-->[?:Tweet]]];
+        tweets.sort(key=lambda t: TweetView : t.created_at, reverse=True);
+        return ProfileView(
+            id="", username=self.username, bio=self.bio,
+            followers=followers, following=following, tweets=tweets
+        );

@@ -1,0 +1,9 @@
+        if jid(here) == self.channel_id {
+            me = [root-->[?:Profile]][0];
+            edges = [edge me->:Member:->here];
+            if edges {
+                del edges[0];
+            }
+            report {"success": True};
+            disengage;
+        }

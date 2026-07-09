@@ -1,0 +1,4 @@
+appended 30 idiomatic examples -> dataset/conversion/sft.jsonl
+re-validating through `jac run`...
+30/30 re-validated, 0 failed
+__EXIT__ 0

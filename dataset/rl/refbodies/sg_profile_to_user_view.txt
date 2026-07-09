@@ -1,0 +1,1 @@
+        return UserView(id="", username=self.username, bio=self.bio);

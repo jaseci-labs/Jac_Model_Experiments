@@ -1,0 +1,1 @@
+    return AnalyticsReport(pid=os.getpid(), score=float(signatures) * 1.5);

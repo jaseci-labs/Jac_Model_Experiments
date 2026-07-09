@@ -1,0 +1,6 @@
+        mine = [-->[?:Profile]];
+        if mine {
+            me = mine[0];
+            visit [me-->[?:Tweet]];
+            visit [me->:Follow:->[?:Profile]-->[?:Tweet]];
+        }

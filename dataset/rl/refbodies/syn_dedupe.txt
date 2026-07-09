@@ -1,0 +1,9 @@
+    seen = [];
+    out = [];
+    for x in items {
+        if x not in seen {
+            seen.append(x);
+            out.append(x);
+        }
+    }
+    return out;

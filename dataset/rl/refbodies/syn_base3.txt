@@ -1,0 +1,9 @@
+    if n == 0 {
+        return "0";
+    }
+    s = "";
+    while n > 0 {
+        s = str(n % 3) + s;
+        n = n // 3;
+    }
+    return s;

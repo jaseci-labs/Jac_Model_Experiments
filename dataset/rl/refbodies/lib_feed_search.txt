@@ -1,0 +1,2 @@
+    q = query.lower().strip();
+    return [c for c in contents if q in c.lower()];

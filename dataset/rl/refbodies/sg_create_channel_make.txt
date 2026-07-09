@@ -1,0 +1,8 @@
+        new = here +>: Member() :+> Channel(
+            name=self.name,
+            description=self.description,
+            creator_username=here.username,
+            created_at="2020-01-01T00:00:00Z"
+        );
+        grant(new[0], level=ConnectPerm);
+        report new[0].to_view(False);

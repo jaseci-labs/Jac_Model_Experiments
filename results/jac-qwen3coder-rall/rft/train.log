@@ -1,0 +1,39 @@
+Loading configuration file sft_dpo/configs/lora.yaml
+Loading pretrained model
+Loading datasets
+Training
+Trainable parameters: 0.923% (281.838M/30532.123M)
+Starting training..., iters: 200
+Calculating loss...:   0%|          | 0/5 [00:00<?, ?it/s]Calculating loss...:  20%|██        | 1/5 [00:00<00:02,  1.37it/s]Calculating loss...:  40%|████      | 2/5 [00:01<00:02,  1.36it/s]Calculating loss...:  60%|██████    | 3/5 [00:02<00:01,  1.23it/s]Calculating loss...:  80%|████████  | 4/5 [00:03<00:00,  1.16it/s]Calculating loss...: 100%|██████████| 5/5 [00:04<00:00,  1.08it/s]Calculating loss...: 100%|██████████| 5/5 [00:04<00:00,  1.15it/s]
+Iter 1: Val loss 2.327, Val took 4.373s
+Iter 10: Train loss 2.405, Learning Rate 3.000e-06, It/sec 0.381, Tokens/sec 421.962, Trained Tokens 11083, Peak mem 23.974 GB
+Iter 20: Train loss 2.162, Learning Rate 6.333e-06, It/sec 0.347, Tokens/sec 446.022, Trained Tokens 23939, Peak mem 24.219 GB
+Iter 30: Train loss 1.986, Learning Rate 9.667e-06, It/sec 0.425, Tokens/sec 441.898, Trained Tokens 34328, Peak mem 24.219 GB
+Iter 40: Train loss 1.495, Learning Rate 1.300e-05, It/sec 0.360, Tokens/sec 463.819, Trained Tokens 47229, Peak mem 24.219 GB
+Calculating loss...:   0%|          | 0/5 [00:00<?, ?it/s]Calculating loss...:  20%|██        | 1/5 [00:00<00:03,  1.22it/s]Calculating loss...:  40%|████      | 2/5 [00:01<00:02,  1.05it/s]Calculating loss...:  60%|██████    | 3/5 [00:02<00:01,  1.19it/s]Calculating loss...:  80%|████████  | 4/5 [00:03<00:00,  1.16it/s]Calculating loss...: 100%|██████████| 5/5 [00:04<00:00,  1.16it/s]Calculating loss...: 100%|██████████| 5/5 [00:04<00:00,  1.15it/s]
+Iter 50: Val loss 1.124, Val took 4.342s
+Iter 50: Train loss 1.133, Learning Rate 1.633e-05, It/sec 0.364, Tokens/sec 421.883, Trained Tokens 58827, Peak mem 24.219 GB
+Iter 60: Train loss 0.865, Learning Rate 1.967e-05, It/sec 0.367, Tokens/sec 436.076, Trained Tokens 70708, Peak mem 24.219 GB
+Iter 70: Train loss 0.649, Learning Rate 1.999e-05, It/sec 0.392, Tokens/sec 431.521, Trained Tokens 81713, Peak mem 24.219 GB
+Iter 80: Train loss 0.580, Learning Rate 1.996e-05, It/sec 0.349, Tokens/sec 429.029, Trained Tokens 94003, Peak mem 24.219 GB
+Iter 90: Train loss 0.405, Learning Rate 1.990e-05, It/sec 0.388, Tokens/sec 444.167, Trained Tokens 105463, Peak mem 24.219 GB
+Calculating loss...:   0%|          | 0/5 [00:00<?, ?it/s]Calculating loss...:  20%|██        | 1/5 [00:00<00:03,  1.11it/s]Calculating loss...:  40%|████      | 2/5 [00:01<00:02,  1.01it/s]Calculating loss...:  60%|██████    | 3/5 [00:02<00:01,  1.06it/s]Calculating loss...:  80%|████████  | 4/5 [00:03<00:00,  1.10it/s]Calculating loss...: 100%|██████████| 5/5 [00:04<00:00,  1.19it/s]Calculating loss...: 100%|██████████| 5/5 [00:04<00:00,  1.13it/s]
+Iter 100: Val loss 0.761, Val took 4.421s
+Iter 100: Train loss 0.299, Learning Rate 1.981e-05, It/sec 0.385, Tokens/sec 425.643, Trained Tokens 116509, Peak mem 24.219 GB
+Iter 100: Saved adapter weights to adapters/jac-qwen3coder-rall-rft/adapters.safetensors and adapters/jac-qwen3coder-rall-rft/0000100_adapters.safetensors.
+Iter 110: Train loss 0.224, Learning Rate 1.970e-05, It/sec 0.323, Tokens/sec 447.083, Trained Tokens 130349, Peak mem 25.346 GB
+Iter 120: Train loss 0.132, Learning Rate 1.957e-05, It/sec 0.371, Tokens/sec 419.263, Trained Tokens 141663, Peak mem 25.346 GB
+Iter 130: Train loss 0.137, Learning Rate 1.940e-05, It/sec 0.387, Tokens/sec 438.333, Trained Tokens 152990, Peak mem 25.346 GB
+Iter 140: Train loss 0.051, Learning Rate 1.922e-05, It/sec 0.379, Tokens/sec 415.765, Trained Tokens 163970, Peak mem 25.346 GB
+Calculating loss...:   0%|          | 0/5 [00:00<?, ?it/s]Calculating loss...:  20%|██        | 1/5 [00:00<00:03,  1.19it/s]Calculating loss...:  40%|████      | 2/5 [00:01<00:02,  1.03it/s]Calculating loss...:  60%|██████    | 3/5 [00:02<00:01,  1.05it/s]Calculating loss...:  80%|████████  | 4/5 [00:03<00:00,  1.08it/s]Calculating loss...: 100%|██████████| 5/5 [00:04<00:00,  1.17it/s]Calculating loss...: 100%|██████████| 5/5 [00:04<00:00,  1.12it/s]
+Iter 150: Val loss 0.956, Val took 4.450s
+Iter 150: Train loss 0.050, Learning Rate 1.901e-05, It/sec 0.351, Tokens/sec 441.331, Trained Tokens 176559, Peak mem 25.346 GB
+Iter 160: Train loss 0.037, Learning Rate 1.878e-05, It/sec 0.374, Tokens/sec 417.207, Trained Tokens 187725, Peak mem 25.346 GB
+Iter 170: Train loss 0.022, Learning Rate 1.852e-05, It/sec 0.343, Tokens/sec 432.327, Trained Tokens 200330, Peak mem 25.346 GB
+Iter 180: Train loss 0.022, Learning Rate 1.824e-05, It/sec 0.370, Tokens/sec 447.769, Trained Tokens 212443, Peak mem 25.346 GB
+Iter 190: Train loss 0.012, Learning Rate 1.795e-05, It/sec 0.359, Tokens/sec 436.690, Trained Tokens 224614, Peak mem 25.346 GB
+Calculating loss...:   0%|          | 0/5 [00:00<?, ?it/s]Calculating loss...:  20%|██        | 1/5 [00:00<00:03,  1.14it/s]Calculating loss...:  40%|████      | 2/5 [00:01<00:02,  1.15it/s]Calculating loss...:  60%|██████    | 3/5 [00:02<00:01,  1.04it/s]Calculating loss...:  80%|████████  | 4/5 [00:03<00:00,  1.06it/s]Calculating loss...: 100%|██████████| 5/5 [00:04<00:00,  1.15it/s]Calculating loss...: 100%|██████████| 5/5 [00:04<00:00,  1.12it/s]
+Iter 200: Val loss 1.065, Val took 4.460s
+Iter 200: Train loss 0.014, Learning Rate 1.763e-05, It/sec 0.389, Tokens/sec 408.716, Trained Tokens 235120, Peak mem 25.346 GB
+Iter 200: Saved adapter weights to adapters/jac-qwen3coder-rall-rft/adapters.safetensors and adapters/jac-qwen3coder-rall-rft/0000200_adapters.safetensors.
+Saved final weights to adapters/jac-qwen3coder-rall-rft/adapters.safetensors.

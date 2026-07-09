@@ -1,0 +1,100 @@
+############ CHAIN2 (#5b conversion SFT) START Thu Jul  2 12:22:15 EDT 2026 ############
+conv split: train 36 / holdout 11
+### base eval on conv holdout Thu Jul  2 12:22:15 EDT 2026
+lib_blank_payload: pass@1=False pass@8=False osim=0.0
+lib_capture_summary_code: pass@1=True pass@8=True osim=1.0
+lib_fire_bullet: pass@1=True pass@8=True osim=1.0
+lib_get_file_truncate: pass@1=True pass@8=True osim=1.0
+lib_is_lib: pass@1=True pass@8=True osim=1.0
+lib_lang_label: pass@1=False pass@8=True osim=0.0
+lib_m_frustum: pass@1=False pass@8=False osim=0.0
+lib_m_rotate: pass@1=True pass@8=True osim=1.0
+lib_parse_bench_json: pass@1=False pass@8=False osim=0.0
+lib_shade_channel: pass@1=True pass@8=True osim=1.0
+lib_update_bullets_score: pass@1=True pass@8=True osim=1.0
+=== RL holdout eval ===
+  model:    models/jac-qwen3coder-q4  (base)
+  tasks:    11   (k=8 temp=0.8)
+  runs:     7  (63.6%)   compiles+executes
+  pass@1:   7  (63.6%)   greedy exact match
+  norm@1:   7  (63.6%)   whitespace-normalized match (F4 probe)
+  pass@8:   8  (72.7%)   any of k sampled
+  near-pass:7  (63.6%)   output-sim >= 0.9
+  avg-osim: 0.636   continuous output similarity (all tasks)
+  idiom:    0.14 constructs/correct
+  by family (pass@1):
+    lib: 7/11  (63.6%)
+### SFT jac model on conversion train Thu Jul  2 12:24:42 EDT 2026
+=== gold SFT warm-start set ===
+  from 36 train tasks -> 36 gold pairs (0 skipped)
+  train 30 / valid 6 -> dataset/rl/rft/
+>>> reuse existing dataset/rl/rft (FORCE_SAMPLE=1 to resample)
+>>> RFT SFT: 200 iters on dataset/rl/rft (layers=16 batch=2 seq=2048)
+Loading configuration file sft_dpo/configs/lora.yaml
+Loading pretrained model
+Loading datasets
+Training
+Trainable parameters: 0.923% (281.838M/30532.123M)
+Starting training..., iters: 200
+Calculating loss...:   0%|          | 0/3 [00:00<?, ?it/s]Calculating loss...:  33%|███▎      | 1/3 [00:00<00:01,  1.33it/s]Calculating loss...:  67%|██████▋   | 2/3 [00:01<00:00,  1.42it/s]Calculating loss...: 100%|██████████| 3/3 [00:02<00:00,  1.34it/s]Calculating loss...: 100%|██████████| 3/3 [00:02<00:00,  1.35it/s]
+Iter 1: Val loss 2.122, Val took 2.235s
+Iter 10: Train loss 2.485, Learning Rate 3.000e-06, It/sec 0.524, Tokens/sec 461.705, Trained Tokens 8817, Peak mem 23.033 GB
+Iter 20: Train loss 2.016, Learning Rate 6.333e-06, It/sec 0.413, Tokens/sec 426.316, Trained Tokens 19132, Peak mem 23.519 GB
+Iter 30: Train loss 1.768, Learning Rate 9.667e-06, It/sec 0.466, Tokens/sec 413.840, Trained Tokens 28008, Peak mem 23.519 GB
+Iter 40: Train loss 1.275, Learning Rate 1.300e-05, It/sec 0.439, Tokens/sec 431.223, Trained Tokens 37832, Peak mem 23.519 GB
+Calculating loss...:   0%|          | 0/3 [00:00<?, ?it/s]Calculating loss...:  33%|███▎      | 1/3 [00:00<00:01,  1.33it/s]Calculating loss...:  67%|██████▋   | 2/3 [00:01<00:00,  1.14it/s]Calculating loss...: 100%|██████████| 3/3 [00:02<00:00,  1.03it/s]Calculating loss...: 100%|██████████| 3/3 [00:02<00:00,  1.07it/s]
+Iter 50: Val loss 0.795, Val took 2.811s
+Iter 50: Train loss 0.906, Learning Rate 1.633e-05, It/sec 0.493, Tokens/sec 415.666, Trained Tokens 46268, Peak mem 23.519 GB
+Iter 60: Train loss 0.596, Learning Rate 1.967e-05, It/sec 0.428, Tokens/sec 417.208, Trained Tokens 56016, Peak mem 23.519 GB
+Iter 70: Train loss 0.430, Learning Rate 1.999e-05, It/sec 0.418, Tokens/sec 408.131, Trained Tokens 65771, Peak mem 23.519 GB
+Iter 80: Train loss 0.356, Learning Rate 1.996e-05, It/sec 0.475, Tokens/sec 409.994, Trained Tokens 74408, Peak mem 23.519 GB
+Iter 90: Train loss 0.166, Learning Rate 1.990e-05, It/sec 0.427, Tokens/sec 410.295, Trained Tokens 84024, Peak mem 23.519 GB
+Calculating loss...:   0%|          | 0/3 [00:00<?, ?it/s]Calculating loss...:  33%|███▎      | 1/3 [00:00<00:01,  1.10it/s]Calculating loss...:  67%|██████▋   | 2/3 [00:02<00:01,  1.03s/it]Calculating loss...: 100%|██████████| 3/3 [00:02<00:00,  1.10it/s]Calculating loss...: 100%|██████████| 3/3 [00:02<00:00,  1.08it/s]
+Iter 100: Val loss 0.690, Val took 2.789s
+Iter 100: Train loss 0.084, Learning Rate 1.981e-05, It/sec 0.424, Tokens/sec 402.033, Trained Tokens 93501, Peak mem 23.519 GB
+Iter 100: Saved adapter weights to adapters/jac-convfull-rft/adapters.safetensors and adapters/jac-convfull-rft/0000100_adapters.safetensors.
+Iter 110: Train loss 0.057, Learning Rate 1.970e-05, It/sec 0.475, Tokens/sec 410.932, Trained Tokens 102158, Peak mem 24.269 GB
+Iter 120: Train loss 0.033, Learning Rate 1.957e-05, It/sec 0.408, Tokens/sec 402.937, Trained Tokens 112032, Peak mem 24.647 GB
+Iter 130: Train loss 0.015, Learning Rate 1.940e-05, It/sec 0.462, Tokens/sec 387.949, Trained Tokens 120422, Peak mem 24.647 GB
+Iter 140: Train loss 0.012, Learning Rate 1.922e-05, It/sec 0.355, Tokens/sec 342.106, Trained Tokens 130054, Peak mem 24.647 GB
+Calculating loss...:   0%|          | 0/3 [00:00<?, ?it/s]Calculating loss...:  33%|███▎      | 1/3 [00:01<00:02,  1.19s/it]Calculating loss...:  67%|██████▋   | 2/3 [00:02<00:01,  1.07s/it]Calculating loss...: 100%|██████████| 3/3 [00:03<00:00,  1.23s/it]Calculating loss...: 100%|██████████| 3/3 [00:03<00:00,  1.20s/it]
+Iter 150: Val loss 0.720, Val took 3.596s
+Iter 150: Train loss 0.011, Learning Rate 1.901e-05, It/sec 0.314, Tokens/sec 313.659, Trained Tokens 140040, Peak mem 24.647 GB
+Iter 160: Train loss 0.010, Learning Rate 1.878e-05, It/sec 0.375, Tokens/sec 302.733, Trained Tokens 148112, Peak mem 24.647 GB
+Iter 170: Train loss 0.008, Learning Rate 1.852e-05, It/sec 0.277, Tokens/sec 308.294, Trained Tokens 159228, Peak mem 24.647 GB
+Iter 180: Train loss 0.010, Learning Rate 1.824e-05, It/sec 0.341, Tokens/sec 300.720, Trained Tokens 168048, Peak mem 24.647 GB
+Iter 190: Train loss 0.008, Learning Rate 1.795e-05, It/sec 0.317, Tokens/sec 300.346, Trained Tokens 177537, Peak mem 24.647 GB
+Calculating loss...:   0%|          | 0/3 [00:00<?, ?it/s]Calculating loss...:  33%|███▎      | 1/3 [00:01<00:02,  1.20s/it]Calculating loss...:  67%|██████▋   | 2/3 [00:02<00:01,  1.07s/it]Calculating loss...: 100%|██████████| 3/3 [00:03<00:00,  1.23s/it]Calculating loss...: 100%|██████████| 3/3 [00:03<00:00,  1.20s/it]
+Iter 200: Val loss 0.748, Val took 3.608s
+Iter 200: Train loss 0.009, Learning Rate 1.763e-05, It/sec 0.322, Tokens/sec 302.403, Trained Tokens 186932, Peak mem 24.647 GB
+Iter 200: Saved adapter weights to adapters/jac-convfull-rft/adapters.safetensors and adapters/jac-convfull-rft/0000200_adapters.safetensors.
+Saved final weights to adapters/jac-convfull-rft/adapters.safetensors.
+>>> fusing RFT adapter -> models/jac-convfull-rft-q4
+Loading pretrained model
+=== RFT warm-start done -> models/jac-convfull-rft-q4 ===
+  next:  RL_BASE=models/jac-convfull-rft-q4 ./rl/run_grpo.sh jac-convfull
+lib_blank_payload: pass@1=False pass@8=False osim=0.0
+lib_capture_summary_code: pass@1=True pass@8=True osim=1.0
+lib_fire_bullet: pass@1=True pass@8=True osim=1.0
+lib_get_file_truncate: pass@1=True pass@8=True osim=1.0
+lib_is_lib: pass@1=True pass@8=True osim=1.0
+lib_lang_label: pass@1=True pass@8=True osim=1.0
+lib_m_frustum: pass@1=False pass@8=False osim=0.0
+lib_m_rotate: pass@1=True pass@8=True osim=1.0
+lib_parse_bench_json: pass@1=False pass@8=False osim=0.0
+lib_shade_channel: pass@1=True pass@8=True osim=1.0
+lib_update_bullets_score: pass@1=True pass@8=True osim=1.0
+=== RL holdout eval ===
+  model:    models/jac-convfull-rft-q4  (base)
+  tasks:    11   (k=8 temp=0.8)
+  runs:     8  (72.7%)   compiles+executes
+  pass@1:   8  (72.7%)   greedy exact match
+  norm@1:   8  (72.7%)   whitespace-normalized match (F4 probe)
+  pass@8:   8  (72.7%)   any of k sampled
+  near-pass:8  (72.7%)   output-sim >= 0.9
+  avg-osim: 0.727   continuous output similarity (all tasks)
+  idiom:    0.12 constructs/correct
+  by family (pass@1):
+    lib: 8/11  (72.7%)
+### best-of-k on conv holdout (base + sft) Thu Jul  2 12:38:09 EDT 2026
+############ CHAIN2 DONE Thu Jul  2 12:50:46 EDT 2026 ############

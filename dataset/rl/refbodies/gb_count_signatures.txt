@@ -1,0 +1,5 @@
+    signatures = 0;
+    for day in [hub-->[?:Day]] {
+        signatures += len([day-->[?:Visitor]]);
+    }
+    return signatures;

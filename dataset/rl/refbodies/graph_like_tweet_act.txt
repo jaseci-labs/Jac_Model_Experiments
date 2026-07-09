@@ -1,0 +1,10 @@
+        if jid(here) == self.tweet_id {
+            if self.actor in here.likes {
+                here.likes = [u for u in here.likes if u != self.actor];
+                report {"liked": False, "likes": here.likes};
+            } else {
+                here.likes = here.likes + [self.actor];
+                report {"liked": True, "likes": here.likes};
+            }
+            disengage;
+        }

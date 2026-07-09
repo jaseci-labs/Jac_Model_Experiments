@@ -1,0 +1,43 @@
+"""RL driver (pure-lib): raylib_shim._m_translate (column-major 4x4 translation matrix).
+
+Origin: this_is_jac/raylib_shooter/web/raylib_shim.cl.jac (the _m_translate logic,
+isolated from io/time/graph/render machinery). The _m_ident helper it needs is inlined
+outside the hole. Deterministic: pure list construction plus three assignments on fixed
+inputs, with no Math/GL/IO/time/random, so stdout is byte-identical every run. The marked
+body is the unit the policy must regenerate; the with entry block exercises it on fixed
+inputs and prints a deterministic projection (floats rounded to 6 dp).
+"""
+
+def _m_ident() -> list {
+    return [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+    ];
+}
+
+def _m_translate(x: float, y: float, z: float) -> list {
+    __HOLE__
+}
+
+with entry {
+    res = _m_translate(2.0, -3.0, 5.0);
+    parts = [];
+    for v in res {
+        parts.append(str(round(v, 6)));
+    }
+    print(" ".join(parts));
+}

@@ -1,0 +1,7 @@
+    m = nums[0];
+    for v in nums {
+        if v < m {
+            m = v;
+        }
+    }
+    return m;

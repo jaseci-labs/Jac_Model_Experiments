@@ -1,0 +1,6 @@
+        did = here.date;
+        self.nodes.append(GraphNodeView(id=did, label=here.date, kind="day"));
+        self.edges.append([self.rid, did]);
+        self.path.append(did);
+        self.log.append("entered " + here.date);
+        visit [-->[?:Visitor]];

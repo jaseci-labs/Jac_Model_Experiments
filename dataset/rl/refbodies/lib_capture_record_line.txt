@@ -1,0 +1,3 @@
+        self.results.append({"step": name, "status": status, "detail": detail});
+        mark = "ok  " if status == "ok" else ("skip" if status == "skip" else "FAIL");
+        print(f"  [{mark}] {name}: {detail}");

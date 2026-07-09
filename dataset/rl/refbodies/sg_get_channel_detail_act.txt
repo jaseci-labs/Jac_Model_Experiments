@@ -1,0 +1,4 @@
+        if jid(here) == self.channel_id {
+            report here.to_view(True);
+            disengage;
+        }

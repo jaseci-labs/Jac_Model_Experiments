@@ -1,0 +1,6 @@
+        if jid(here) == self.target_id {
+            me = [root-->[?:Profile]][0];
+            me +>: Follow() :+> here;
+            report {"success": True};
+            disengage;
+        }

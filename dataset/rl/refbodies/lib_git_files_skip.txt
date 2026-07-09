@@ -1,0 +1,8 @@
+    if "__pycache__" in rel or os.path.basename(rel).startswith(".") {
+        return True;
+    }
+    ext = os.path.splitext(rel)[1].lower();
+    if ext in _BINARY_EXTS {
+        return True;
+    }
+    return False;

@@ -1,0 +1,2 @@
+        self.results.sort(key=lambda c: ChannelView : c.created_at, reverse=True);
+        report self.results;

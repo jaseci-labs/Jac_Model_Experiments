@@ -1,0 +1,4 @@
+    return {
+        "path": rel, "lang": "", "html": "", "lines": 0,
+        "raw": "", "truncated": False, "error": err
+    };

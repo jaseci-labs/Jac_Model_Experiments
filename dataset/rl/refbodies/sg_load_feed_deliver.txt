@@ -1,0 +1,7 @@
+        result = self.feed;
+        if self.search_query {
+            q = self.search_query.lower().strip();
+            result = [t for t in result if q in t.content.lower()];
+        }
+        result.sort(key=lambda t: TweetView : t.created_at, reverse=True);
+        report result;

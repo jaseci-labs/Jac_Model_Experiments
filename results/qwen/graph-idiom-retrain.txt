@@ -1,0 +1,6 @@
+=== idiom judge (mlx) on 10 holdout tasks ===
+correct (runs+matches):   50%  (5/10)
+  of those -> idiomatic:  80%  (4)  [diverged from transpile, sim<0.7]
+  of those -> py-shaped:  20%  (1)  [reproduced the transpile, sim>=0.7]
+avg transpile-similarity: 0.401  (1.0 = identical to py2jac; lower = more rewritten)
+avg idiom-construct count:6.6  (graph-spatial/Jac-native markers per output)

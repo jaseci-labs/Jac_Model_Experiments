@@ -1,0 +1,24 @@
+lib_analyze_score          greedy=False deploy=None oracle=False
+lib_narrate_plural         greedy=False deploy=None oracle=False
+lib_analyse_text           greedy=False deploy=None oracle=False
+lib_fstring_rules          greedy=False deploy=None oracle=False
+lib_innerstring_rules      greedy=False deploy=None oracle=False
+lib_cur_matrix             greedy=False deploy=None oracle=False
+lib_m_rotate               greedy=False deploy=False oracle=False
+lib_setcur_matrix          greedy=False deploy=None oracle=False
+lib_display_username       greedy=True deploy=True oracle=True
+lib_tab_name               greedy=True deploy=True oracle=True
+lib_to_follow_filter       greedy=True deploy=True oracle=True
+lib_fire_bullet            greedy=True deploy=True oracle=True
+lib_respawn_target         greedy=True deploy=True oracle=True
+lib_update_bullets_score   greedy=False deploy=None oracle=False
+lib_fmt_row                greedy=False deploy=None oracle=False
+lib_is_lib                 greedy=True deploy=True oracle=True
+lib_log                    greedy=False deploy=None oracle=False
+lib_one_dp                 greedy=False deploy=None oracle=False
+
+=== qwen-q4  (K=8 temp=0.8, n=18) ===
+greedy pass@1          : 6/18 (33.3%)
+best-of-k DEPLOY (pick 1st running, no peek): 6/18 (33.3%)
+  coverage (>=1 running available)          : 7/18 (38.9%)
+oracle pass@k (any sample correct)          : 6/18 (33.3%)
