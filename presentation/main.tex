@@ -194,7 +194,43 @@
   Best-of-$k$ deploy: 72.2 to 77.8\%.
 \end{frame}
 
-% ---------------- 11 · SYNTAX GAP + COMPILER AS VERIFIER ---------------------------
+% ---------------- 11 · THE RUNG LADDER, CORRECTED END TO END ----------------------
+\begin{frame}{The rung ladder, corrected end to end}
+  \centering
+  \includegraphics[width=0.82\textwidth]{assets/charts/rungs.pdf}
+  \vspace{0.5mm}\\
+  \footnotesize A rung: train SFT on $N$ curated tasks, eval on the same holdout
+  every time. Rungs 1, 3, and 10 were re-evaluated after the rest of this deck,
+  same fixed extractor, same $n{=}18$ holdout, same $k{=}8$. Checkpoints already
+  existed on disk, so it was a re-eval, not a retrain: all 7 points are now
+  corrected.
+\end{frame}
+
+% ---------------- 12 · WHAT THE CURVE SAYS -----------------------------------------
+\begin{frame}{What the curve says, and what it doesn't}
+  \small
+  \begin{itemize}\itemsep0.55em
+    \item Rises, not smoothly: r1 barely moves the needle (38.9\%, identical to
+    base, one example isn't enough to generalize). r10 dips slightly below r5
+    (50.0\% vs 55.6\%), most likely resampling noise at $n{=}18$ (1 task $=$
+    5.6pp), not a real second regression.
+    \item Falls at rung-all: that pool adds the harder graph-walker tasks,
+    competing with pure-fn skills for the same small LoRA adapter ($\sim$0.23\%
+    of the model trains). One already-learned task regresses,
+    \alert{task interference}.
+    \item Nuance: rung-5's sampled ceiling (oracle pass@8) is 83.3\%, higher
+    than rung-20's 72.2\%. More SFT sharpens the greedy default but narrows the
+    sampled spread, same tradeoff as base vs SFT best-of-$k$ elsewhere in this
+    deck. One shot, one call: rung-20. Sampling budget available: rung-5 is
+    worth a second look.
+    \item \alert{20 is not a universal constant.} It's where interference starts
+    for \emph{this} 84-task mix and \emph{this} LoRA rank. A more homogeneous
+    pool, a bigger adapter, or the curriculum fix already planned for the
+    graph-walker weak spot could all move it.
+  \end{itemize}
+\end{frame}
+
+% ---------------- 13 · SYNTAX GAP + COMPILER AS VERIFIER ---------------------------
 \begin{frame}{The gap is syntax, and the compiler closes it for free}
   \begin{columns}[T]
     \begin{column}{0.46\textwidth}
@@ -213,7 +249,7 @@
   \end{columns}
 \end{frame}
 
-% ---------------- 12 · ALL 5 HOLDOUTS ----------------------------------------------
+% ---------------- 14 · ALL 5 HOLDOUTS ----------------------------------------------
 \begin{frame}{Across all five holdouts}
   \centering
   \includegraphics[width=\textwidth]{assets/charts/holdouts.pdf}
@@ -226,7 +262,7 @@
   \\ {\scriptsize\color{inkmuted} $n$: pure-fn 18 $\cdot$ graph 17 $\cdot$ conversion 11 $\cdot$ clean 16 $\cdot$ big+fresh 32}
 \end{frame}
 
-% ---------------- 13 · FOLLOW-UPS E1-E3 -------------------------------------------
+% ---------------- 15 · FOLLOW-UPS E1-E3 -------------------------------------------
 \begin{frame}{Follow-ups: ceiling, honest gap, generalization}
   \small
   \setbeamercolor{block title}{bg=jaseciorange,fg=white}
@@ -254,7 +290,7 @@
   \end{columns}
 \end{frame}
 
-% ---------------- 14 · WHY GRPO ~= SFT --------------------------------------------
+% ---------------- 16 · WHY GRPO ~= SFT --------------------------------------------
 \begin{frame}{Why GRPO $\approx$ SFT, and why that's a real result}
   \begin{columns}[T]
     \begin{column}{0.5\textwidth}
@@ -279,7 +315,7 @@
   \end{columns}
 \end{frame}
 
-% ---------------- 15 · JOURNEY + LESSONS ------------------------------------------
+% ---------------- 17 · JOURNEY + LESSONS ------------------------------------------
 \begin{frame}{The journey: a bug hid an 11\,$\rightarrow$\,94\% generator}
   \centering
   \includegraphics[width=\textwidth]{assets/charts/journey.pdf}
@@ -304,7 +340,7 @@
   \end{columns}
 \end{frame}
 
-% ---------------- 16 · SHIPPED -----------------------------------------------------
+% ---------------- 18 · SHIPPED -----------------------------------------------------
 \begin{frame}{Shipped}
   \begin{columns}[T]
     \begin{column}{0.52\textwidth}
@@ -332,7 +368,7 @@
   \end{columns}
 \end{frame}
 
-% ---------------- 17 · NEXT STEPS ---------------------------------------------------
+% ---------------- 19 · NEXT STEPS ---------------------------------------------------
 \begin{frame}{Next steps}
   \small
   \begin{itemize}\itemsep0.7em
@@ -345,7 +381,7 @@
   \end{itemize}
 \end{frame}
 
-% ---------------- 18 · GRAPH-WALKER FIX PLAN --------------------------------------
+% ---------------- 20 · GRAPH-WALKER FIX PLAN --------------------------------------
 \begin{frame}{Fixing the graph-walker weak spot}
   \begin{columns}[T]
     \begin{column}{0.4\textwidth}
@@ -380,7 +416,7 @@
   \end{beamercolorbox}
 \end{frame}
 
-% ---------------- 19 · GLOSSARY ----------------------------------------------------
+% ---------------- 21 · GLOSSARY ----------------------------------------------------
 \begin{frame}[t]{Glossary: terms \& context}
   \tiny
   \begin{columns}[T]

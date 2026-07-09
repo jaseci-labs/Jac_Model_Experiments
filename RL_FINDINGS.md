@@ -266,11 +266,19 @@ looking null can be a broken ruler, not a finding.
 | cell | greedy pass@1 | oracle pass@8 | best-of-k deploy | why |
 |---|---|---|---|---|
 | base | 38.9% | 72.2% | 72.2% | true capability once measured correctly — the fresh model's real floor for Jac, not zero |
+| SFT rung-1 | 38.9% | 77.8% | — | one example isn't enough to generalize; greedy is unchanged from base |
+| SFT rung-3 | 50.0% | 72.2% | — | a few examples already move greedy well past base |
 | SFT rung-5 | 55.6% | **83.3%** | — | a small, low-conflict sample already teaches most of the syntax fast |
+| SFT rung-10 | 50.0% | 72.2% | — | dips slightly below rung-5; most likely resampling noise (1 task ≈ 5.6pp at n=18), not a real regression |
 | **SFT rung-20** | **61.1%** (peak) | 72.2% | — | sweet spot: enough coverage to generalize, not yet enough to introduce cross-task conflict |
 | SFT rung-all | 55.6% | 77.8% | 77.8% | **task interference** — the larger pool pulls in harder graph-walker examples that compete with pure-fn skills for the same limited LoRA capacity, regressing one already-learned task (`lib_log`) |
 | SFT + GRPO (rung-all) | 55.6% | 77.8% | 77.8% | flat vs. SFT alone — consistent with Era 1's finding that LoRA-GRPO barely perturbs a 30B's argmax once a strong policy already exists to perturb |
 | raw-GRPO control | 38.9% | 72.2% | — | equals base exactly — confirms GRPO alone cannot manufacture syntax knowledge the base doesn't have; it needs an SFT warm-start providing correct samples to reinforce in the first place |
+
+Rungs 1/3/10 were measured later than the rest (same fixed extractor, same n=18
+holdout, same `JAC_EVAL_K=8`) — checkpoints already existed from the original
+ladder build, so this was a re-eval, not a retrain. Full ladder is now
+corrected end to end, not just the 4 cells the story leans on.
 
 Oracle and deploy are each drawn from the same $k{=}8$ sampling run per row, so
 deploy == oracle holds *within* a row as claimed — but comparing pass@8 figures

@@ -228,6 +228,37 @@ def chart_journey():
     save(fig, "journey")
 
 
+# ---------------------------------------------------------------- chart 8
+# The rung ladder: greedy pass@1 vs number of tasks trained on, real x-scale
+def chart_rungs():
+    fig, ax = plt.subplots(figsize=(7.4, 2.9))
+    xs = list(range(7))  # evenly spaced positions, real counts in the labels
+    ys = [38.9, 38.9, 50.0, 55.6, 50.0, 61.1, 55.6]
+    labels = ["base\n(0)", "r1\n(1)", "r3\n(3)", "r5\n(5)", "r10\n(10)", "r20\n(20)", "all\n(84)"]
+    peak_i = 5
+    ax.plot(xs, ys, color=INKMUTED, linewidth=1.3, zorder=2, linestyle="--")
+    colors = [BLUE] + [ORANGE] * 6
+    for x, y, c in zip(xs, ys, colors):
+        ax.scatter([x], [y], color=c, s=55, zorder=3, edgecolor="white", linewidth=0.8)
+    # highlight the peak
+    ax.scatter([peak_i], [ys[peak_i]], color=DARK, s=130, zorder=4, facecolor="none",
+               edgecolor=DARK, linewidth=1.6)
+    ax.annotate("peak", (peak_i, ys[peak_i]), textcoords="offset points", xytext=(0, 15),
+                fontsize=8.5, color=DARK, ha="center", fontweight="medium")
+    for x, y in zip(xs, ys):
+        dy = -16 if y > 45 else 10
+        ax.annotate(f"{y:.1f}", (x, y), textcoords="offset points", xytext=(0, dy),
+                    fontsize=7.5, color=INK, ha="center")
+    clean_axes(ax)
+    ax.set_xticks(xs)
+    ax.set_xticklabels(labels, fontsize=7.5)
+    ax.set_xlim(-0.4, 6.4)
+    ax.set_ylim(25, 70)
+    ax.set_ylabel("greedy pass@1 (%)")
+    ax.set_xlabel("tasks trained on (rung size)", fontsize=8, labelpad=6)
+    save(fig, "rungs")
+
+
 if __name__ == "__main__":
     chart_era1()
     chart_era2_flat()
@@ -236,4 +267,5 @@ if __name__ == "__main__":
     chart_kscale()
     chart_holdouts()
     chart_journey()
+    chart_rungs()
     print("done")
