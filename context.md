@@ -30,10 +30,10 @@ compiles + runs + idiomatic.
 
 ## Base model
 
-Finetune target candidates (model-testing phase): **Gemma 4 26B A4B** (primary)
-and **Qwen3-Coder-30B-A3B** (fallback). Both small-MoE (~3B active), Q4-fit the
-48 GB M5 Pro for local MLX LoRA. DeepSeek-V3-Lite was dropped; Kimi K2.x is too
-large for the hardware. LoRA via MLX (Apple Silicon) / Unsloth (cloud A100).
+**Qwen3-Coder-30B-A3B-Instruct** — selected empirically by the 7-model SFT+DPO
+bake-off (see `docs/initmodelchoice/2026-06-26-sft-dpo-bakeoff-results.md`; no
+candidate beat it above noise). Small-MoE (~3B active), Q4-fits the 48 GB M5
+Pro for local MLX LoRA.
 
 ## Data strategy (100% synthetic)
 
@@ -52,13 +52,16 @@ compiler gate → cross-compiled tests → idiom judge → sampled manual review
 
 ## Current state
 
-The model-testing phase is built and runnable. The pipeline (mine + generate +
-dedup + decontaminate + split + train/eval harness) is all in Jac under
-[`sft_dpo/jacgen/`](sft_dpo/jacgen/). Conversion dataset (gitignored under
-`dataset/`): 1616 SFT (116 idiomatic core + 1500 py2jac volume), 60 DPO, 150
-decontaminated eval holdout. See `sft_dpo/process.md` to run the probe,
-[`sft_dpo/docs/modeltesting/HANDOFF.md`](sft_dpo/docs/modeltesting/HANDOFF.md) for the full
-handoff, and [`sft_dpo/docs/modeltesting/`](sft_dpo/docs/modeltesting/) for strategy/evaluation.
+SFT+DPO phase done: 1647 SFT / 147 DPO examples (git-tracked under `dataset/`),
+fn conversion 0%→94%, graph conversion 46%→61% (see `README.md` for the full
+tables). RL/GRPO phase done and written up in `RL_FINDINGS.md` — SFT moves
+greedy accuracy (39%→61% at rung-20), GRPO adds nothing; deployable recipe =
+SFT + best-of-k with the Jac compiler as verifier (`rl/generate.py`, ~78–82%).
+The pipeline (mine + generate + dedup + decontaminate + split + train/eval
+harness) is all in Jac under [`sft_dpo/jacgen/`](sft_dpo/jacgen/). See
+`sft_dpo/process.md` to run the probe,
+[`docs/sft_dpo/modeltesting/HANDOFF.md`](docs/sft_dpo/modeltesting/HANDOFF.md) for the full
+handoff, and [`docs/sft_dpo/modeltesting/`](docs/sft_dpo/modeltesting/) for strategy/evaluation.
 
 ## Fixed constraints
 
@@ -75,6 +78,7 @@ handoff, and [`sft_dpo/docs/modeltesting/`](sft_dpo/docs/modeltesting/) for stra
 | Run the probe | `sft_dpo/process.md` |
 | Data generation strategy (12 recipes) | `docs/initmodelchoice/strat.md` |
 | Whole-stack strategy | `docs/wholestack/strat.md` |
-| Model testing | `sft_dpo/docs/modeltesting/strategy.md`, `evaluation.md`, `mini_probe.md` |
+| Model testing | `docs/sft_dpo/modeltesting/strategy.md`, `evaluation.md`, `mini_probe.md` |
+| RL findings | `RL_FINDINGS.md` (authoritative), artifacts in `docs/ARTIFACT_LOG.md` |
 | Pipeline code | `sft_dpo/jacgen/` (+ its `README.md`) |
 | Research papers | `papers/` (MultiPL-T, WizardCoder, Magicoder, SelfCodeAlign, DeepSeek-Coder, CodeDPO, Magpie) |

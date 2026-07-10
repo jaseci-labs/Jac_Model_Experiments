@@ -26,5 +26,5 @@ The comparison answers: **does prior jac knowledge help the memorize→generaliz
 
 ## Where things live
 - [01-design.md](01-design.md) — task formats, holdout, ladder, reward, eval (the "how").
-- [02-results.md](02-results.md) — living results table, filled per rung.
+- Root [`RL_FINDINGS.md`](../../RL_FINDINGS.md) — **authoritative corrected results** (the old `02-results.md` table was invalidated by the extractor bug and removed).
 - [RL_WEEKEND_RESULTS.md](RL_WEEKEND_RESULTS.md) — archive of what failed and why (prior art).

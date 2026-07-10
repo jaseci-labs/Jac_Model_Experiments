@@ -37,7 +37,7 @@ Base HF models (re-downloadable):
 | qwen25c-q8 / qwen25c-q4 | 15G/7.7G | Qwen/Qwen2.5-Coder-14B-Instruct |
 | gptoss-q4 | 10G | openai/gpt-oss-20b (MXFP4-broken for finetuning, see bakeoff notes) |
 
-Fused SFT/DPO bakeoff models (losers; eval tables in README.md + sft_dpo/resultsft/):
+Fused SFT/DPO bakeoff models (losers; eval tables in README.md + resultspub/initmodelchoice/):
 
 | Dir(s) | Size |
 |---|---|

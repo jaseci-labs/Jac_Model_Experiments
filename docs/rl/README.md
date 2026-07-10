@@ -1,16 +1,25 @@
 # docs/rl
 
+> **⚠️ CORRECTION (2026-07): the conclusions below predate the extractor-bug fix.**
+> The "RL is not the lever / SFT doesn't move greedy" verdict was measured on a
+> broken eval that undercounted ~3.5–4×. The corrected numbers (root
+> [`RL_FINDINGS.md`](../../RL_FINDINGS.md), authoritative): **SFT lifts greedy
+> 38.9%→61.1% (rung-20 peak); GRPO ≈ SFT (valid null); deployable = SFT +
+> best-of-k with the Jac compiler as verifier (~78–82%).** These docs remain as
+> the design/runbook record; read results from RL_FINDINGS.md only.
+
 Slow, ground-up redesign of the Jac RL workflow. Read in order:
 
 1. [00-overview.md](00-overview.md) — goal, north star, the two models, principles.
 2. [strat.md](strat.md) — the *why*: anchors, research questions, hypotheses, scope discipline.
 3. [01-design.md](01-design.md) — task formats, holdout, training ladder, reward, eval.
 4. [workflow.md](workflow.md) — the *how*: end-to-end runbook for one ladder run.
-5. [02-results.md](02-results.md) — living results table, filled per rung.
-6. [references.md](references.md) — literature on whether GRPO/RLVR moves a Qwen-class base (it mostly doesn't, at our scale).
-7. [RL_WEEKEND_RESULTS.md](RL_WEEKEND_RESULTS.md) — archive: what the first GRPO run found and why it failed.
+5. [references.md](references.md) — literature on whether GRPO/RLVR moves a Qwen-class base (it mostly doesn't, at our scale).
+6. [RL_WEEKEND_RESULTS.md](RL_WEEKEND_RESULTS.md) — archive: what the first GRPO run found and why it failed.
 
-**One-line status (CLOSED 2026-06-28):** ladder run complete (32 cells, 2 holdouts). **Neither SFT nor GRPO — even tuned — moves greedy holdout generalization** at 30B/LoRA/48GB; faint SFT bump only on the hardest unsaturated idiom (sg 0→1/5). pass@k mean + train-recall move; GRPO ≈ SFT everywhere; σ=0 and undertrained escape hatches both closed. RL is not the lever — SFT+DPO is. See [strat.md](strat.md) CONCLUSION + [02-results.md](02-results.md).
+(The old `02-results.md` living table was invalidated by the extractor bug and removed; raw corrected data lives in [`raw/`](raw/) and `results/`.)
+
+**Pre-correction status (2026-06-28, superseded — see banner):** ladder run complete (32 cells, 2 holdouts); neither SFT nor GRPO appeared to move greedy holdout generalization at 30B/LoRA/48GB. See [strat.md](strat.md) CONCLUSION.
 
 **Harness:** built and scaffolded (`rl/`). 56 hole-fill tasks (`build_tasks.jac`),
 dense v2 reward + `unwrap_unit` scar (`reward_logic.jac`), fixed stratified holdout

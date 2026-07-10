@@ -1,6 +1,6 @@
 # Data Generation Strategy
 
-*100% synthetic Jac training data for finetuning a coding model. The base model is **not assumed** here — it is selected empirically by the SFT+DPO bake-off ([`../superpowers/specs/2026-06-25-sft-dpo-model-bakeoff-design.md`](../superpowers/specs/2026-06-25-sft-dpo-model-bakeoff-design.md)), current incumbent Qwen3-Coder-30B-A3B. Every recipe below is model-agnostic; only the finetune target changes once the bake-off concludes.*
+*100% synthetic Jac training data for finetuning a coding model. The base model is **not assumed** here — it is selected empirically by the SFT+DPO bake-off ([`../archive/superpowers/specs/2026-06-25-sft-dpo-model-bakeoff-design.md`](../archive/superpowers/specs/2026-06-25-sft-dpo-model-bakeoff-design.md)), current incumbent Qwen3-Coder-30B-A3B. Every recipe below is model-agnostic; only the finetune target changes once the bake-off concludes.*
 
 | | |
 |---|---|

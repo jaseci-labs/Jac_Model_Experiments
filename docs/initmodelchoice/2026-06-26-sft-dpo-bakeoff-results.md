@@ -1,8 +1,8 @@
 # SFT+DPO Model Bake-off — Results & Recommendation
 
 **Date:** 2026-06-26
-**Spec:** `docs/superpowers/specs/2026-06-25-sft-dpo-model-bakeoff-design.md`
-**Plan:** `docs/superpowers/plans/2026-06-26-sft-dpo-model-bakeoff.md`
+**Spec:** `docs/archive/superpowers/specs/2026-06-25-sft-dpo-model-bakeoff-design.md`
+**Plan:** `docs/archive/superpowers/plans/2026-06-26-sft-dpo-model-bakeoff.md`
 **Status:** complete
 
 ## TL;DR

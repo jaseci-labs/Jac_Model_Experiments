@@ -2,7 +2,7 @@
 
 *The complete record of the first finetuning phase: teaching small open models to
 write idiomatic, compiler-correct Jac from 100% synthetic data, on a single 48 GB
-Apple-Silicon Mac. This worked. Sourced from `sft_dpo/docs/modeltesting/`,
+Apple-Silicon Mac. This worked. Sourced from `docs/sft_dpo/modeltesting/`,
 `sft_dpo/process.md`, `docs/initmodelchoice/`, `results/RESULTS.md`.*
 
 ---
@@ -96,9 +96,9 @@ was meant to build on.
 ## Artifacts
 
 - Pipeline: `sft_dpo/jacgen/` (~24 Jac modules). Runbook: `sft_dpo/process.md`.
-  Handoff: `sft_dpo/docs/modeltesting/HANDOFF.md`.
+  Handoff: `docs/sft_dpo/modeltesting/HANDOFF.md`.
 - Adapters: `adapters/{qwen,gemma}-{probe,dpo}`. Models:
-  `models/{qwen,gemma}-jac-{fused,dpo-fused}-q8`. Charts: `sft_dpo/resultsft/`.
+  `models/{qwen,gemma}-jac-{fused,dpo-fused}-q8`. Charts: `resultspub/initmodelchoice/`.
 
 **Bottom line:** the SFT+DPO phase succeeded — a model that had never seen Jac
 reached 94% function conversion and 61% idiomatic graph-task correctness, all from

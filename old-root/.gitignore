@@ -1,6 +1,4 @@
 .env
-tests/__pycache__/
-src/data_generation/__pycache__/
 .jac/
 __pycache__/
 *.pyc
@@ -9,7 +7,14 @@ __pycache__/
 models/
 adapters/
 .venv/
-jac_ml_studio/ui/node_modules/
-jac_ml_studio/ui/.next/
-jac_ml_studio/server/.venv/
-jac_ml_studio/server/data/
+
+# LaTeX build output (rebuild via presentation/build.sh)
+presentation/main.pdf
+presentation/main.aux
+presentation/main.fdb_latexmk
+presentation/main.fls
+presentation/main.log
+presentation/main.nav
+presentation/main.out
+presentation/main.snm
+presentation/main.toc

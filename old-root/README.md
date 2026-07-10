@@ -106,7 +106,7 @@ parse-checked + the sampled behavioral re-validation green. If clean, the toolch
 data are healthy. It **does not** mutate the dataset.
 
 Full operator runbook (setup, run, pause/resume, timings): **[`sft_dpo/process.md`](sft_dpo/process.md)**.
-Full architecture handoff (every module, every gotcha): **[`sft_dpo/docs/modeltesting/HANDOFF.md`](sft_dpo/docs/modeltesting/HANDOFF.md)**.
+Full architecture handoff (every module, every gotcha): **[`docs/sft_dpo/modeltesting/HANDOFF.md`](docs/sft_dpo/modeltesting/HANDOFF.md)**.
 
 ---
 
@@ -114,7 +114,7 @@ Full architecture handoff (every module, every gotcha): **[`sft_dpo/docs/modelte
 
 Two base models run end-to-end. Primary metric = **cross-compiled test-pass %** on
 unseen, decontaminated holdouts (compiles + runs + output matches behavioral cases).
-**Full results, all 16 training graphs, side-by-side analysis → [`sft_dpo/resultsft/RESULTS.md`](sft_dpo/resultsft/RESULTS.md).**
+**Full results, all 16 training graphs, side-by-side analysis → [`resultspub/initmodelchoice/RESULTS.md`](resultspub/initmodelchoice/RESULTS.md).**
 
 ### Function tier — 150 unseen function tasks (correctness)
 
@@ -297,7 +297,7 @@ generation); subsequent runs skip download/quantize → **~2–4 hr**.
 | `setup_env.sh` / `sft_dpo/check.sh` | venv + installs / type + behavior gate (non-destructive) |
 | `results/` *(gitignored)* | per-model run outputs (`base.txt`, `finetuned.txt`, `graph-*.txt`, `*.png`, `metrics.jsonl`) |
 | `resultspub/` | **publishable copies** — `initmodelchoice/` (bake-off, all models + comparison graphs) + `other/` |
-| `sft_dpo/resultsft/` | committed Qwen-vs-Gemma results + graphs → [`RESULTS.md`](sft_dpo/resultsft/RESULTS.md) |
+| `resultspub/initmodelchoice/` | committed Qwen-vs-Gemma results + graphs → [`RESULTS.md`](resultspub/initmodelchoice/RESULTS.md) |
 | `models/` / `adapters/` *(gitignored)* | quantized/fused models / LoRA adapters |
 | `docs/` | strategy, model-testing, datagen plans, the bake-off result → [map below](#documentation-map) |
 | `sft_dpo/process.md` | operator runbook (setup → check → run, pause/resume) |
@@ -430,13 +430,13 @@ Read before touching anything — these will bite. Full list: HANDOFF §9.
 | Doc | What |
 |---|---|
 | **[`sft_dpo/process.md`](sft_dpo/process.md)** | operator runbook — setup → check → run, pause/resume, launchd, timings |
-| **[`sft_dpo/docs/modeltesting/HANDOFF.md`](sft_dpo/docs/modeltesting/HANDOFF.md)** | **single source of truth** — architecture, every module, every gotcha, rebuild order |
+| **[`docs/sft_dpo/modeltesting/HANDOFF.md`](docs/sft_dpo/modeltesting/HANDOFF.md)** | **single source of truth** — architecture, every module, every gotcha, rebuild order |
 | **[`docs/initmodelchoice/2026-06-26-sft-dpo-bakeoff-results.md`](docs/initmodelchoice/2026-06-26-sft-dpo-bakeoff-results.md)** | **base-model bake-off** — 6 models, function + graph holdout, the keep-Qwen3-Coder verdict |
-| **[`sft_dpo/resultsft/RESULTS.md`](sft_dpo/resultsft/RESULTS.md)** | full measured results + all 16 training graphs, both models, side by side |
+| **[`resultspub/initmodelchoice/RESULTS.md`](resultspub/initmodelchoice/RESULTS.md)** | full measured results + all 16 training graphs, both models, side by side |
 | [`context.md`](context.md) | durable project framing (what Jac is, goal, constraints) |
 | [`docs/initmodelchoice/strat.md`](docs/initmodelchoice/strat.md) | the 12 data-generation recipes (R1–R12) |
 | [`docs/wholestack/strat.md`](docs/wholestack/strat.md) | whole-stack strategy |
-| [`sft_dpo/docs/modeltesting/`](sft_dpo/docs/modeltesting/) | strategy, evaluation, conversion-probe, per-model notes (Qwen / Gemma) |
+| [`docs/sft_dpo/modeltesting/`](docs/sft_dpo/modeltesting/) | strategy, evaluation, conversion-probe, per-model notes (Qwen / Gemma) |
 | [`sft_dpo/jacgen/README.md`](sft_dpo/jacgen/README.md) | module-by-module pipeline reference |
 
 ---
