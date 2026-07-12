@@ -1,60 +1,46 @@
-# Jac Data Generation — Synthetic Python→Jac Training Data + Finetune Probe
+# Jac Coding Agent — Attempts at a Model That's Really Good at Jac
 
-Build **100% synthetic, compiler-validated Python→Jac conversion training data**, then
-prove it works: LoRA-finetune a small open base model on that data on a single
-Apple-Silicon Mac (48 GB, MLX) and measure **base-vs-finetuned** correctness on a
-held-out, decontaminated test set.
+The goal: a coding agent for **Jac** (Jaseci Labs) — what Claude Code is for Python.
+Generate, debug, explain, and convert to **idiomatic, compiler-correct Jac**, deployed
+via the Jac MCP inside coding assistants. Quality bar: **compiles + runs + idiomatic**,
+not "Jac-looking." No real Jac corpus exists to scrape, so every attempt below trains on
+**100% synthetic, compiler-validated data**.
 
-**The result, in one line:** a stock 30B / 26B model produces **0% runnable Jac**;
-after one LoRA pass on our data it produces **93–94% behaviorally-correct Jac** — and on
-graph-shaped tasks, **100% idiomatic** (nodes/edges/walkers, not Python-shaped) after DPO.
+This repo is organized as a series of **attempts**, each in its own folder, each building
+on what the last one learned:
 
+| Attempt | Method | Status | Headline result |
+|---|---|---|---|
+| **[`01-sft-dpo/`](01-sft-dpo/)** | Supervised finetuning + DPO | done | stock model **0%** runnable Jac → **94%** after one LoRA pass |
+| **[`02-rl-grpo/`](02-rl-grpo/)** | RL (GRPO) on top of attempt 1's model | done | best-of-k + compiler-as-verifier ships **~94%**; GRPO ≈ SFT, no extra lift |
+| **[`03-new/`](03-new/)** | TBD | just started | seeded with [`03-new/rui.md`](03-new/rui.md) |
+
+Shared across all attempts, at repo root: `models/` (base + merged checkpoints,
+gitignored), `docs/` (repo-wide strategy + the adapter-hyperparameter registry),
+`studio/` (the Jac ML Studio app, which reads results from every attempt),
+`this_is_jac/` (the real Jac codebase RL mines tasks from), `papers/` (reference papers).
 
 ---
 
 ## Table of contents
 
-- [Why this exists](#why-this-exists)
 - [What Jac is (and why models fail at it)](#what-jac-is-and-why-models-fail-at-it)
-- [The core idea](#the-core-idea)
-- [Quickstart](#quickstart)
-- [Results](#results)
-- [How the data is built](#how-the-data-is-built)
-- [The dataset on disk](#the-dataset-on-disk)
-- [The probe](#the-probe)
+- [Attempt 1 — SFT + DPO](#attempt-1--sft--dpo)
+- [Attempt 2 — RL / GRPO](#attempt-2--rl--grpo)
+- [Attempt 3 — next](#attempt-3--next)
 - [Repository layout](#repository-layout)
-- [The all-Jac pipeline (24 modules)](#the-all-jac-pipeline-24-modules)
-- [Rebuilding the dataset (order matters)](#rebuilding-the-dataset-order-matters)
 - [Environment](#environment)
-- [Gotchas](#gotchas)
 - [Documentation map](#documentation-map)
 - [Glossary](#glossary)
 
 ---
 
-## Why this exists
-
-The goal is a **coding agent for Jac** — what Claude Code is for Python: generate,
-debug, explain, and convert to **idiomatic, compiler-correct Jac**. Deployed via the
-Jac MCP inside coding assistants. The quality bar is **compiles + runs + idiomatic**,
-not "Jac-looking."
-
-The blocker: **no real Jac corpus exists.** You cannot scrape your way to a Jac
-dataset. So all training data is synthesized — and the entire value of this repo is the
-machinery that makes synthetic Jac data *trustworthy* (compiler- and behavior-gated)
-plus a probe that **measures** whether finetuning on it actually works.
-
-This repo is the **model-testing phase**: data pipeline + a runnable finetune probe +
-measured results on two candidate base models.
-
----
-
 ## What Jac is (and why models fail at it)
 
-Jac (Jaseci Labs) is a programming language built **on top of Python** with a
-**data-spatial / object-spatial** model: computation is expressed with **nodes, edges,
-walkers, and abilities** instead of plain functions and classes. It compiles to Python
-and interops with the ecosystem, but its idioms are distinct enough that a model trained
+Jac is a programming language built **on top of Python** with a **data-spatial /
+object-spatial** model (OSP): computation is expressed with **nodes, edges, walkers,
+and abilities** instead of plain functions and classes. It compiles to Python and
+interops with the ecosystem, but its idioms are distinct enough that a model trained
 on Python/JS/C has a **very weak prior** on correct Jac.
 
 | Jac construct | Role | Python analogue |
@@ -69,313 +55,215 @@ on Python/JS/C has a **very weak prior** on correct Jac.
 | `has` | typed field declaration | typed attribute |
 
 A non-finetuned model produces Python-shaped code that *looks* plausible but is
-syntactically or semantically wrong Jac. Closing that gap — cheaply, verifiably — is the
-entire project.
+syntactically or semantically wrong Jac. Closing that gap — cheaply, verifiably — is
+the whole project. Every attempt shares one non-negotiable rule: **the gate is `jac
+run`, never `jac check`** — "correct" means compiles, executes, and its output matches
+recorded behavioral test cases, not just that the type-checker is happy (idiomatic
+Jac is often untyped-but-runnable, and `jac check` over-rejects it).
 
 ---
 
-## The core idea
+## Attempt 1 — SFT + DPO
 
-**Three anchors substitute for a real-data distribution:**
+**[`01-sft-dpo/`](01-sft-dpo/)** — the first attempt: prove that supervised finetuning
+on synthetic, compiler-validated data can take a model from zero to mostly-correct
+Jac, then use DPO to push the *idiomatic* (not just correct) style on top.
 
-1. **Jac grammar** = the distribution anchor (every construct must appear in the data).
-2. **Jac compiler + cross-compiled tests** = an unlimited oracle. Rejection sampling is
-   free; a **behavioral test pass** is the real gate, not mere compilation.
-3. **Python** = the proxy distribution. Translate validated Python → idiomatic Jac
+### The idea
+
+Three anchors substitute for a real-data distribution:
+
+1. **Jac grammar** = the distribution anchor — every construct must appear in the data.
+2. **Jac compiler + cross-compiled tests** = an unlimited oracle — rejection sampling
+   is free, and a **behavioral test pass** is the real gate, not mere compilation.
+3. **Python** = the proxy distribution — translate validated Python → idiomatic Jac
    (the **MultiPL-T** methodology).
 
-**One load-bearing rule — the gate is `jac run`, never `jac check`.** "The conversion
-works" means it **compiles, executes, and its output matches** the recorded behavioral
-cases — behavioral equivalence. The strict type-checker (`jac check`) *rejects
-untyped-but-runnable Jac*, which is correct Jac we want to keep. Switching the gate from
-`jac check` to `jac run` moved a smoke-eval score from **26% → 96%**. This rule is
-everywhere in the pipeline.
+Data pipeline: mine runnable functions from `Vezora/Tested-22k-Python-Alpaca` →
+transpile (`jac py2jac`) with a jac-run gate for volume (`sft_auto.jsonl`, 1500) → hand
+/ agentically-written idiomatic examples including graph-tier node/edge/walker tasks
+(`sft.jsonl`, 147) → DPO pairs of idiomatic (chosen) vs. transpiled Python-shaped
+(rejected) versions of the same function (`dpo.jsonl`, 147). Everything is written in
+Jac itself — see [`01-sft-dpo/sft_dpo/jacgen/`](01-sft-dpo/sft_dpo/jacgen/) (24
+modules: generate, validate, dedup, decontaminate, split, eval harness).
 
----
+### Results
 
-## Quickstart
+Base model: **Qwen3-Coder-30B-A3B-Instruct** (chosen after a 6-model bake-off — see
+below). Measured on a decontaminated, disjoint holdout.
+
+| stage | function-tier test-pass (n=150) | graph-tier correct (n=13) |
+|---|---|---|
+| **base** (stock model) | **0%** | **0%** |
+| **SFT** | **94%** | 46% |
+| **DPO** | 93% | **61%**, 100% of correct outputs idiomatic |
+
+- **Function tier:** a stock model produces essentially zero runnable Jac; one LoRA-SFT
+  pass takes it to 93–94% behaviorally correct. On pure functions the model learns to
+  **transpile** (Python-shaped but correct) — there's no idiom headroom to push on;
+  `factorial` written idiomatically *is* the mechanical transpile.
+- **Graph tier** is where idiom actually diverges from transpile. SFT gets Qwen to 46%
+  correct (mostly already idiomatic); **DPO lifts correctness to 61% and makes 100% of
+  correct outputs idiomatic**, pulling transpile-similarity down from 0.457 toward the
+  0.26 idiomatic reference.
+- **Base-model bake-off:** before committing the full generation budget, the same
+  SFT+DPO treatment ran on 5 more same-size candidates (Qwen3-30B-Instruct, gpt-oss-20b,
+  DeepSeek-Coder-V2-Lite, Qwen2.5-Coder-14B, Ling-Coder-lite) to confirm Qwen3-Coder was
+  the right base to invest in. **Verdict: kept Qwen3-Coder** — no candidate beat it on
+  behavioral pass-% beyond run-to-run noise, and its DPO graph score (61%) was the best
+  of any DPO-capable model. Full matrix →
+  [`01-sft-dpo/docs/initmodelchoice/2026-06-26-sft-dpo-bakeoff-results.md`](01-sft-dpo/docs/initmodelchoice/2026-06-26-sft-dpo-bakeoff-results.md).
+
+Full results, all 16 training graphs, side-by-side model comparison →
+**[`01-sft-dpo/resultspub/initmodelchoice/RESULTS.md`](01-sft-dpo/resultspub/initmodelchoice/RESULTS.md)**.
+
+### Run it
 
 ```bash
-./setup_env.sh && source .venv/bin/activate              # venv + jaclang + mlx-lm + matplotlib (NO anaconda)
-./01-sft-dpo/sft_dpo/check.sh                                       # jac check + parse-check + non-destructive behavioral re-validation
-./01-sft-dpo/sft_dpo/run_probe.sh Qwen/Qwen3-Coder-30B-A3B-Instruct qwen   # quantize → base eval → train → fuse → finetuned eval → graphs
+./setup_env.sh && source .venv/bin/activate
+./01-sft-dpo/sft_dpo/check.sh                                                # type + behavioral gate, non-destructive
+./01-sft-dpo/sft_dpo/run_probe.sh Qwen/Qwen3-Coder-30B-A3B-Instruct qwen      # quantize → base eval → train → fuse → finetuned eval
+./01-sft-dpo/sft_dpo/run_dpo.sh qwen                                          # DPO stage on top of the SFT adapter
 ```
 
-`./01-sft-dpo/sft_dpo/check.sh` reports the `jacgen` modules passing `jac check` + `eval_probe`
-parse-checked + the sampled behavioral re-validation green. If clean, the toolchain and
-data are healthy. It **does not** mutate the dataset.
-
-Full operator runbook (setup, run, pause/resume, timings): **[`01-sft-dpo/sft_dpo/process.md`](01-sft-dpo/sft_dpo/process.md)**.
-Full architecture handoff (every module, every gotcha): **[`01-sft-dpo/docs/sft_dpo/modeltesting/HANDOFF.md`](01-sft-dpo/docs/sft_dpo/modeltesting/HANDOFF.md)**.
+Full docs → operator runbook
+[`01-sft-dpo/sft_dpo/process.md`](01-sft-dpo/sft_dpo/process.md), architecture handoff
+[`01-sft-dpo/docs/sft_dpo/modeltesting/HANDOFF.md`](01-sft-dpo/docs/sft_dpo/modeltesting/HANDOFF.md),
+pipeline reference [`01-sft-dpo/sft_dpo/jacgen/README.md`](01-sft-dpo/sft_dpo/jacgen/README.md).
 
 ---
 
-## Results
+## Attempt 2 — RL / GRPO
 
-Two base models run end-to-end. Primary metric = **cross-compiled test-pass %** on
-unseen, decontaminated holdouts (compiles + runs + output matches behavioral cases).
-**Full results, all 16 training graphs, side-by-side analysis → [`01-sft-dpo/resultspub/initmodelchoice/RESULTS.md`](01-sft-dpo/resultspub/initmodelchoice/RESULTS.md).**
+**[`02-rl-grpo/`](02-rl-grpo/)** — starting from attempt 1's SFT+DPO'd model
+(`jac-qwen3coder`), the second attempt asked whether **RL (GRPO)** could push
+correctness further, using the Jac compiler itself as a free, verifiable reward (no
+learned reward model). Full story with every number and every bug:
+**[`02-rl-grpo/RL_FINDINGS.md`](02-rl-grpo/RL_FINDINGS.md)**.
 
-### Function tier — 150 unseen function tasks (correctness)
+### The headline
 
-| stage | Qwen test-pass | Gemma test-pass |
-|---|---|---|
-| **base** (stock model) | **0%** (0/150) | **0%** (0/150) |
-| **SFT** (after finetune) | **94%** (141/150) | **93%** (140/150) |
-| **DPO** | 93% (140/150) | 93% (140/150) |
+> **The model was already capable; the real problem was a closeable *syntax* gap, not
+> a capability wall — and for three weeks a measurement bug made it look like neither
+> of those things was true.**
 
-Both stock models produce essentially **zero** runnable Jac → confirming the premise.
-One LoRA-SFT pass takes both above **90% behaviorally correct**, converging to ~96% by
-checkpoint 200. Generation also gets **leaner**: Qwen 34.7k→16.3k tokens (−53%), Gemma
-76.8k→19.2k (−75%).
+- **best-of-k + the Jac compiler as verifier ships ~94%** on meaningful pure-function
+  tasks, **today, zero extra training** — sample k completions, keep the first one
+  that compiles and runs; the compiler is a perfect picker since compiles ⟹ almost
+  always exactly right.
+- **SFT works:** greedy pass@1 **39% → 61%** (peak at 20 training examples), and the
+  lift holds on a bigger, fresher holdout and generalizes to unseen tasks.
+- **GRPO ≈ SFT** — adds no measurable lift once SFT has already moved greedy decoding
+  close to the model's own sampling ceiling. Raw GRPO from a fresh (non-Jac-trained)
+  base moves nothing at all — RL can't bootstrap a skill the base model has zero of.
+- **The one real gap:** free-form natural-language prompts (no starter code) — both
+  models score 0/3, since neither was trained on that input distribution.
 
-### Function tier — idiom judge (the honest caveat)
+### Why the numbers moved so much: three eras
 
-On standalone functions the model learns to **transpile** — outputs stay Python-shaped
-(transpile-similarity **0.968**), and DPO doesn't move it. This is **not a defect**:
-pure functions have **no idiom headroom** (for `factorial`, idiomatic Jac *is* the
-mechanical transpile). The idiom axis only exists for **graph-shaped** problems →
+The measured headline number went **14% → 11% → 39% → 61% → 78% → 94%** over about
+two weeks. Most of that motion was not the model improving — it was three rounds of
+fixing *how the eval measured it*.
 
-### Graph tier — 13 unseen graph/tree tasks (idiom)
+1. **Era 1 (Jun 20–21) — weekend GRPO, flat at 14.3%.** Built a real
+   compiler/runtime-verified GRPO reward on MLX LoRA. Hit and fixed three real bugs
+   along the way: a Metal OOM (config, not fundamental), the **σ=0 trap** (a GRPO
+   group with 0% pass rate has zero reward variance → zero gradient at any learning
+   rate — fixed with a similarity-based reward term that's non-zero even for failing
+   completions), and a **splice bug** (the model's output was being nested inside an
+   already-enclosing unit before compiling, so *everything* looked broken regardless
+   of the model). After fixing all three, the real result was: LoRA-GRPO barely moves
+   a 30B model's greedy output at a feasible learning rate. Verdict at the time
+   (correct, for this attempt): "supervised levers move the model; RL doesn't — yet."
+2. **Era 2 (Jun 25–28) — a proper 30-cell SFT/GRPO ladder, still flat.** A leak-free
+   ladder (train-N ∈ {1,3,5,10,20,all} × {base, SFT, SFT+GRPO, raw-GRPO, tuned-GRPO} ×
+   2 models) came back **exactly flat** in every cell, on three different corpora.
+   Declared "RL is a dead end" (v1 verdict, Jun 28) — a suspiciously clean flat line
+   that was actually the tell something was wrong with the measurement, not the model.
+3. **Era 3 (Jul 1–2) — the correction.** The eval script and the GRPO reward shared
+   one extraction helper. When the model echoed back its entire surrounding driver
+   file (common, otherwise harmless), that helper grabbed the driver's **docstring**
+   instead of the model's actual answer — an auto-fail baked into every measurement,
+   a clean **~3.5× undercount** with nothing to do with model capability. Worse: since
+   the *reward* used the same buggy helper, Era 1 and 2's RL runs had also been
+   **trained** against a partially garbage signal the whole time. Fixed in one commit;
+   re-measured on the same holdout: 11.1% → **38.9%** for the SFT+DPO'd model.
 
-Idiomatic Jac here means **nodes + edges + a walker**, diverging hard from a naive
-dict+stack transpile. This is where DPO can work.
+**Takeaway carried forward:** verify the grader before trusting a null result. A flat,
+convincing-looking null can be a broken ruler, not a finding.
 
-| metric (13 graph tasks) | base | Qwen SFT | **Qwen DPO** | Gemma SFT | Gemma DPO |
-|---|---|---|---|---|---|
-| correct | **0%** | 46% | **61%** | 15% | 15% |
-| of-correct idiomatic | — | 83% | **100%** | 100% | 100% |
-| transpile-similarity | — | 0.457 | **0.338** | 0.667 | 0.667 |
-| idiom constructs / output | 0 | 4.5 | **6.75** | 0.0 | 0.0 |
+### Corrected results (post-fix, trustworthy)
 
-Qwen goes from *cannot do graph conversion at all* → SFT (46%, mostly idiomatic) →
-**DPO lifts correctness to 61% and makes 100% of correct outputs idiomatic**, similarity
-falling toward the 0.26 idiomatic reference. **Gemma learns the graph idiom far more
-weakly** (15%, 0 detected constructs) — idiom acquisition is **model-dependent**, and
-**Qwen3-Coder is the stronger base** for the idiom-sensitive agent.
+Pure-function holdout, `jac-qwen3coder` (already SFT+DPO'd from attempt 1):
 
-**What this proves:** (1) synthetic compiler-validated data → correct Jac (0→94%);
-(2) data *with* idiom headroom + DPO on real-divergence pairs → measurably *idiomatic*
-Jac. The DPO machinery is proven and reusable.
+| cell | greedy pass@1 | oracle pass@8 | note |
+|---|---|---|---|
+| base | 38.9% | 72.2% | true floor once measured correctly, not zero |
+| SFT rung-5 | 55.6% | **83.3%** | a small, low-conflict sample already teaches most of the syntax |
+| **SFT rung-20** | **61.1%** (peak) | 72.2% | sweet spot — enough coverage, not yet enough cross-task conflict |
+| SFT rung-all | 55.6% | 77.8% | **task interference** — a bigger, more varied mix regresses an already-learned task |
+| SFT + GRPO | 55.6% | 77.8% | flat vs. SFT alone |
+| raw-GRPO (fresh base) | 38.9% | 72.2% | equals base exactly — GRPO alone can't manufacture syntax the base doesn't have |
 
-### Base-model bake-off — incumbent confirmed
+Deployable numbers, no further training needed — sample k, return the first the
+compiler accepts:
 
-Before committing the full generation budget to Qwen3-Coder, the same SFT+DPO treatment
-(plus the graph-holdout tier) was run on **five same-size candidates** to prove none does
-better. One controlled variable: the base model. **Verdict: keep Qwen3-Coder.** No
-candidate beats it on behavioral pass-% beyond run-to-run noise, and on the graph holdout
-its DPO behavioral score (61%) is the best of any DPO-capable model.
+| task family | best-of-k accuracy |
+|---|---|
+| conversion tasks | **82%** (peak) |
+| pure functions | ~78% (94% on the cleanest subset) |
+| graph-walker (OSP idiom) | 65% — the acknowledged weak spot |
+| free-form NL prompts | 0% — untested gap, don't ship this path |
 
-| candidate | func SFT/DPO | graph SFT/DPO | graph idiom SFT→DPO | note |
-|---|---|---|---|---|
-| **Qwen3-Coder-30B-A3B** (incumbent) | 94 / 93 | 46 / **61** | 0.457 → 0.338 | kept |
-| Qwen3-30B-A3B-Instruct | 95 / 94 | 53 / 53 | 0.558 → **0.223** | closest — ties behavior, best graph idiom; tie keeps incumbent |
-| gpt-oss-20b | 92 / — | 61 / — | 0.21 / — | SFT-only: MXFP4 Q8/`mlx_lm.fuse` broken → no DPO |
-| DeepSeek-Coder-V2-Lite | 94 / 94 | 15 / 23 | 0.707 → 0.546 | strong functions, weak graph |
-| Qwen2.5-Coder-14B (dense) | 94 / 93 | 38 / 23 | 0.444 → 0.232 | dense → ~4× slower (16 tok/s) |
-| Ling-Coder-lite | dropped | — | — | BailingMoE unusable in this mlx_lm |
+**Why the syntax gap is closeable for free:** failures are almost always
+*compile*-fails (a missing `;`, `here.jid` vs `jid(here)`), not wrong logic — when the
+model's Jac runs at all, it's almost always exactly right. That tight coupling is what
+makes the compiler a perfect, zero-cost verifier: no learned reward model or ground
+truth needed at inference time, just sample-and-check.
 
-Full matrix, per-candidate analysis, comparison graphs, and deviations →
-**[`01-sft-dpo/docs/initmodelchoice/2026-06-26-sft-dpo-bakeoff-results.md`](01-sft-dpo/docs/initmodelchoice/2026-06-26-sft-dpo-bakeoff-results.md)**
-(publishable copies under [`01-sft-dpo/resultspub/initmodelchoice/`](01-sft-dpo/resultspub/initmodelchoice/)).
+Shipped: **[`02-rl-grpo/rl/generate.py`](02-rl-grpo/rl/generate.py)** — the best-of-k
+generator; the live Studio RL section (11%→94% journey, ladder, k-scaling, a GENERATE
+JAC panel), backed by
+[`02-rl-grpo/resultspub/rl/corrected_summary.json`](02-rl-grpo/resultspub/rl/corrected_summary.json).
+Graphs → [`02-rl-grpo/resultspub/rl/`](02-rl-grpo/resultspub/rl/).
 
----
+### Run it
 
-## How the data is built
-
+```bash
+jac run 02-rl-grpo/rl/build_tasks.jac           # this_is_jac/ drivers -> tasks + templates
+jac run 02-rl-grpo/rl/build_rl_splits.jac       # fixed holdout + trainpool
+jac run 02-rl-grpo/rl/run_ladder.jac            # DRY: prints the plan, runs nothing heavy
+JAC_LADDER_GO=1 jac run 02-rl-grpo/rl/run_ladder.jac   # execute the ladder (hours per cell)
+jac run 02-rl-grpo/rl/show_ladder.jac           # pivot results into a curve table
 ```
-  HF corpus (Vezora/Tested-22k-Python-Alpaca, via datasets-server rows API)
-        │  corpus.jac: fetch → is_clean filter → first_func → py_cases (exec, SIGALRM 2s)
-        ▼
-  mine.jac ──► 01-sft-dpo/dataset/source_pool/mined.jsonl        (cleaned Python + behavioral cases)
-        │
-        ├──► scale_conversion.jac ──► sft_auto.jsonl   (1500: py2jac transpile, jac-run gated)
-        │
-  seed + idiomatic_batch{,2,3} + graph_seeds ──► sft.jsonl  (147 idiomatic, incl 31 graph)
-        │
-        ├──► dpo_conversion.jac ──► dpo.jsonl          (147: idiomatic chosen vs transpile rejected)
-        │
-        ├──► build_manifest.jac ──► sft_train.jsonl    (588: 1:3 idiom:transpile, de-skew)
-        │         └──► build_splits.jac ──► 01-sft-dpo/dataset/mlx/{train,valid}.jsonl (529/59, messages-only)
-        │
-        ├──► holdout.jac ──► eval_holdout/conversion.jsonl       (150 function, decontaminated)
-        └──► graph_holdout.jac ──► eval_holdout/graph_conversion.jsonl (13 graph, disjoint)
 
-  RUN: run_probe.sh ──► quantize Q4+Q8 ──► base eval ──► dry-run ──► LoRA train
-        │                                    (eval_probe.jac: load model ONCE, jac-run gate)
-        ├──► live: dashboard.jac (ASCII) + plot_metrics.jac (PNG) per checkpoint
-        └──► fuse ──► finetuned eval ──► graphs
-```
-
-**Two data tiers, on purpose:**
-
-- **Idiomatic core** (`sft.jsonl`, 147) — hand-written / agentically-written Jac using
-  walkers, nodes, edges, abilities, `with entry`, typed edges. *Jac-shaped.* Includes
-  **31 graph-tier** examples with real idiom headroom.
-- **Transpile volume** (`sft_auto.jsonl`, 1500) — `jac py2jac` of mined Python,
-  behaviorally gated. Correct but *Python-shaped*. Cheap volume.
-- **DPO pairs** (`dpo.jsonl`, 147) — teach **de-Python-ification**: `chosen` =
-  idiomatic, `rejected` = the transpiled Python-shaped version of the same function.
-
-The manifest mixes idiom:transpile at **1:3** — enough idiom that the model doesn't just
-learn "transpile-ese," without starving on the cheap volume.
-
-**Verification order:** compiler gate → cross-compiled behavioral tests → idiom judge →
-sampled manual review. The 12 generation recipes (R1–R12) are documented in
-[`01-sft-dpo/docs/initmodelchoice/strat.md`](01-sft-dpo/docs/initmodelchoice/strat.md).
+Full pipeline reference (reward design, warm-start, the recommended
+compute-smart execution order, gotchas) → **[`02-rl-grpo/rl/README.md`](02-rl-grpo/rl/README.md)**.
 
 ---
 
-## The dataset on disk
+## Attempt 3 — next
 
-`01-sft-dpo/dataset/` is **git-tracked** and also fully **regenerable** from the Jac builders (see
-[Rebuilding](#rebuilding-the-dataset-order-matters)). Confirm any time with
-`jac run 01-sft-dpo/sft_dpo/jacgen/dataset_stats.jac`.
-
-| Artifact | Path | Count |
-|---|---|---|
-| Idiomatic SFT core (hand/agentic + 31 graph) | `01-sft-dpo/dataset/conversion/sft.jsonl` | **147** |
-| Transpile SFT volume (py2jac, behaviorally gated) | `01-sft-dpo/dataset/conversion/sft_auto.jsonl` | **1500** |
-| **Total SFT** | both above | **1647** |
-| DPO pairs (idiomatic vs Python-shaped; 24 graph) | `01-sft-dpo/dataset/conversion/dpo.jsonl` | **147** |
-| Balanced manifest (1:3 idiom:transpile) | `01-sft-dpo/dataset/conversion/sft_train.jsonl` | **588** |
-| mlx-lm SFT split (messages-only) | `01-sft-dpo/dataset/mlx/{train,valid}.jsonl` | **529 / 59** |
-| mlx-lm DPO split (`{prompt,chosen,rejected}`) | `01-sft-dpo/dataset/mlx_dpo/{train,valid}.jsonl` | **132 / 15** |
-| Function eval holdout (behavioral `test_cases`) | `01-sft-dpo/dataset/eval_holdout/conversion.jsonl` | **150** |
-| Graph eval holdout (idiom headroom) | `01-sft-dpo/dataset/eval_holdout/graph_conversion.jsonl` | **13** |
-
-Idiomatic core composition: 24 seed + 84 idiomatic batches + 8 mined + 31 graph = 147;
-difficulty mix atomic 41 / idiomatic 37 / composed 69.
-
----
-
-## The probe
-
-`./01-sft-dpo/sft_dpo/run_probe.sh <model-id> <name>` runs, in order (each stage **skippable + resumable**):
-
-1. **Quantize** the model → Q4 (train) + Q8 (eval).
-2. **Base eval** on the 150 holdout → `01-sft-dpo/results/<name>/base.txt`.
-3. **30-iter dry-run** — bail check (loss drops, no NaN/OOM); Ctrl-C within 8s to abort.
-4. **LoRA train** (`01-sft-dpo/sft_dpo/configs/lora.yaml`, 600 iters) with a live ASCII dashboard + PNG
-   graphs refreshed per checkpoint.
-5. **Fuse** adapter → Q8.
-6. **Finetuned eval** on the 150 holdout → `01-sft-dpo/results/<name>/finetuned.txt`.
-7. **Graphs** → `01-sft-dpo/results/<name>/*.png` (8 series + learning curve).
-
-Per-model namespaced (`01-sft-dpo/results/qwen/`, `01-sft-dpo/results/gemma/`) — two models never clash.
-
-**Metrics measured** (per checkpoint + base/finetuned): runs% (compiles+executes),
-**cross-compiled test-pass%** (primary), generation tokens, eval tok/s,
-tokens-to-correct, plus training-log series (train/val loss, LR, tok/s, it/s, trained
-tokens, peak mem).
-
-**Resumability:** runs under `caffeinate` (no idle sleep; lid-close suspends, resumes on
-wake). Kill/shutdown/crash → re-run the **same command**: finished stages skip via
-`01-sft-dpo/results/<name>/.<stage>.done` markers, and LoRA training resumes from the last saved
-checkpoint (mlx saves every 100 steps to `01-sft-dpo/adapters/<name>-probe/`).
-
-**DPO stage:** `./01-sft-dpo/sft_dpo/run_dpo.sh <name>` (needs `mlx-lm-lora`; mlx-lm has no native DPO).
-Fuses the SFT adapter, runs `--train-mode dpo`, fuses onto Q8, evals with both
-`eval_probe` (behavior must hold) and `idiom_eval` (similarity should drop).
-
-Rough time on M-series, first run: **~3–6 hr** (dominated by download + train + 30B
-generation); subsequent runs skip download/quantize → **~2–4 hr**.
+**[`03-new/`](03-new/)** — not started yet. Seeded with
+[`03-new/rui.md`](03-new/rui.md).
 
 ---
 
 ## Repository layout
 
-The repo is organized by **attempt**: `01-sft-dpo/` (this README's story — supervised
-SFT + DPO + the base-model bake-off), `02-rl-grpo/` (the RL/GRPO phase — see
-[`02-rl-grpo/RL_FINDINGS.md`](02-rl-grpo/RL_FINDINGS.md)), and `03-new/` (the next
-attempt). Shared at root: `models/` (base + merged checkpoints), `results/` (studio
-scratch only), `docs/` (repo-wide), `studio/` (the ML Studio app).
-
 | Path | What |
 |---|---|
-| `01-sft-dpo/sft_dpo/jacgen/*.jac` | the all-Jac pipeline: generate, validate, dedup, decontaminate, split, eval harness, dashboards (24 modules) |
-| `01-sft-dpo/sft_dpo/jacgen/graph_data/` | authored graph/tree tasks (`train.json` 31, `holdout.json` 13) + the Python generators |
-| `01-sft-dpo/dataset/` | generated data (git-tracked) — see [the dataset table](#the-dataset-on-disk) |
-| `01-sft-dpo/sft_dpo/configs/lora.yaml` | LoRA SFT config (mlx-lm) |
-| `01-sft-dpo/sft_dpo/run_probe.sh` / `01-sft-dpo/sft_dpo/run_dpo.sh` | SFT probe runner / DPO runner (resumable) |
-| `01-sft-dpo/sft_dpo/bakeoff_postprobe.sh` | per-model bake-off helper: SFT idiom baseline + graph holdout + DPO + graph DPO |
-| `01-sft-dpo/sft_dpo/make_comparison.py` / `01-sft-dpo/sft_dpo/make_pub_graphs.py` | cross-model comparison graphs + matrix (parses `01-sft-dpo/results/<name>/`) |
-| `setup_env.sh` / `01-sft-dpo/sft_dpo/check.sh` | venv + installs / type + behavior gate (non-destructive) |
-| `01-sft-dpo/results/` | per-model run outputs (`base.txt`, `finetuned.txt`, `graph-*.txt`, `*.png`, `metrics.jsonl`) |
-| `01-sft-dpo/resultspub/initmodelchoice/` | **publishable copies** — committed bake-off results + comparison graphs → [`RESULTS.md`](01-sft-dpo/resultspub/initmodelchoice/RESULTS.md) |
-| `models/` *(gitignored)* / `01-sft-dpo/adapters/` *(gitignored)* | quantized/fused models / SFT+DPO LoRA adapters |
-| `docs/` | repo-wide: `training_configs/` (adapter hyperparams registry), `wholestack/`, `ARTIFACT_LOG.md` → [map below](#documentation-map) |
-| `01-sft-dpo/sft_dpo/process.md` | operator runbook (setup → check → run, pause/resume) |
-| `context.md` | durable project framing |
+| `01-sft-dpo/` | attempt 1 — code, dataset, adapters, results, docs (see [above](#attempt-1--sft--dpo)) |
+| `02-rl-grpo/` | attempt 2 — code, dataset, adapters, results, docs, the RL slide deck (see [above](#attempt-2--rl--grpo)) |
+| `03-new/` | attempt 3 — just `rui.md` so far |
+| `models/` *(gitignored)* | base + merged/fused checkpoints, shared across attempts — attempt 2 finetunes attempt 1's output |
+| `results/` | studio scratch space only (`_builder`, `_evals`) — per-attempt run outputs live inside `01-sft-dpo/results/` and `02-rl-grpo/results/` |
+| `docs/` | repo-wide: `training_configs/` (hyperparameter registry for every adapter, incl. deleted ones — see `docs/ARTIFACT_LOG.md`), `wholestack/` (end-to-end strategy spanning both attempts) |
+| `studio/` | **Jac ML Studio** — the app that visualizes/drives all of this (dataset browser, GENERATE panel, RL section, builder jobs) |
+| `this_is_jac/` | the real open-source Jac codebase attempt 2 mines RL tasks from |
+| `context.md` | durable project framing (what Jac is, the goal, fixed constraints) |
 | `papers/` | reference papers (MultiPL-T, WizardCoder, Magicoder, SelfCodeAlign, DeepSeek-Coder, CodeDPO, Magpie) |
-
----
-
-## The all-Jac pipeline (24 modules)
-
-In `01-sft-dpo/sft_dpo/jacgen/` (full reference: its [`README.md`](01-sft-dpo/sft_dpo/jacgen/README.md)
-and HANDOFF §5).
-
-**Shared libraries**
-- `writer.jac` — dataset I/O + **the behavioral gate**: `run_jac(code) -> (rc, out, err)`
-  (subprocess `jac run` on a tempfile), `make_sft_example`, `append_jsonl`, `extract_jac`.
-- `corpus.jac` — HF mining + transpile: `fetch_rows` (curl+retry), `is_clean`,
-  `first_func`, `py_cases` (exec in builtins-only ns, **SIGALRM 2s** timeout, ≤3
-  distinct-output cases), `transpile` (`jac py2jac`), `sanitize_transpile`.
-- `decontam.jac` — 14-token shingles, `is_contaminated` (≥0.5 overlap). Keeps the
-  holdout honest.
-- `dedup.jac` — ROUGE-L (LCS) near-duplicate filter.
-
-**Generators / builders** *(run order matters)*
-- `mine.jac` — corpus → `source_pool/mined.jsonl`.
-- `seed_conversion.jac` — ⚠️ **TRUNCATES** `sft.jsonl` → 32 seeds + 2 seed DPO pairs.
-- `idiomatic_batch{,2,3}.jac` — **APPEND** +30/+23/+31 idiomatic examples.
-- `scale_conversion.jac` — mine → py2jac → **jac-run gate** → 1500 → `sft_auto.jsonl` (slow).
-- `dpo_conversion.jac` — chosen=idiomatic, rejected=transpile, **parse-gated** → `dpo.jsonl`.
-- `build_manifest.jac` — all idiomatic + stride-sampled transpile at 1:3 → `sft_train.jsonl`.
-- `build_splits.jac` / `build_dpo_splits.jac` — → `01-sft-dpo/dataset/mlx/` / `01-sft-dpo/dataset/mlx_dpo/`.
-- `graph_seeds.jac` — reads `graph_data/train.json`, appends idiomatic graph SFT (node/edge/walker).
-- `graph_holdout.jac` — reads `graph_data/holdout.json` (disjoint) → graph eval holdout.
-- `holdout.jac` — mine from disjoint offsets + decontam → 150 function holdout.
-
-**Eval + instrumentation**
-- `eval_probe.jac` — **the harness.** Loads the model **once** in-process
-  (`mlx_lm.load` + `stream_generate`), scores the holdout via the `jac run` gate.
-- `idiom_eval.jac` — **idiom judge.** Per correct output, `rouge_l(output, py2jac(python))`:
-  high = Python-shaped, low+runs = idiomatic. Buckets idiomatic vs python_shaped + counts
-  graph constructs.
-- `dashboard.jac` — zero-dep ASCII live view. `plot_metrics.jac` — 8 matplotlib PNGs.
-- `dataset_stats.jac` — composition report. `verify_dataset.jac` — non-destructive
-  sampled re-validation (check.sh's behavior gate). `decontam_report.jac` — holdout audit.
-
----
-
-## Rebuilding the dataset (order matters)
-
-`01-sft-dpo/dataset/` is regenerable from scratch. If needed, run in **this exact order**
-(`seed_conversion` truncates; the batches append, so they must follow it):
-
-```bash
-source .venv/bin/activate
-jac run 01-sft-dpo/sft_dpo/jacgen/mine.jac              # (optional) refresh source_pool/mined.jsonl
-jac run 01-sft-dpo/sft_dpo/jacgen/seed_conversion.jac   # sft.jsonl -> 32 (TRUNCATES), dpo seed -> 2
-jac run 01-sft-dpo/sft_dpo/jacgen/idiomatic_batch.jac   # -> 62  (appends)
-jac run 01-sft-dpo/sft_dpo/jacgen/idiomatic_batch2.jac  # -> 85
-jac run 01-sft-dpo/sft_dpo/jacgen/idiomatic_batch3.jac  # -> 116
-jac run 01-sft-dpo/sft_dpo/jacgen/graph_seeds.jac       # + graph-tier idiomatic (node/edge/walker) -> 147
-jac run 01-sft-dpo/sft_dpo/jacgen/scale_conversion.jac  # transpile volume -> 1500 (SLOW: mines+gates)
-jac run 01-sft-dpo/sft_dpo/jacgen/dpo_conversion.jac    # dpo.jsonl -> 147 (parse-gated, regenerates from sft.jsonl)
-jac run 01-sft-dpo/sft_dpo/jacgen/build_manifest.jac    # sft_train.jsonl -> 588 (1:3)
-jac run 01-sft-dpo/sft_dpo/jacgen/build_splits.jac      # 01-sft-dpo/dataset/mlx/{train,valid}.jsonl -> 529/59
-jac run 01-sft-dpo/sft_dpo/jacgen/build_dpo_splits.jac  # 01-sft-dpo/dataset/mlx_dpo/{train,valid}.jsonl -> 132/15
-jac run 01-sft-dpo/sft_dpo/jacgen/holdout.jac           # function eval holdout (decontaminated, 150)
-jac run 01-sft-dpo/sft_dpo/jacgen/graph_holdout.jac     # graph eval holdout (13)
-jac run 01-sft-dpo/sft_dpo/jacgen/dataset_stats.jac     # verify composition
-```
-
-> **If `sft.jsonl` shows 32 and `dpo.jsonl` shows 2**, the idiomatic batches got wiped
-> (something ran `seed_conversion` last). Re-run from `idiomatic_batch` onward. Skip
-> `scale_conversion` if `sft_auto.jsonl` already has 1500 (it's the slow network step).
+| `setup_env.sh` | one-time venv + toolchain install (jaclang, mlx-lm, mlx-lm-lora, matplotlib) |
 
 ---
 
@@ -385,64 +273,52 @@ jac run 01-sft-dpo/sft_dpo/jacgen/dataset_stats.jac     # verify composition
 over Homebrew `python3.14`:
 
 ```bash
-./setup_env.sh                 # python3 -m venv .venv + pip install jaclang mlx-lm matplotlib
+./setup_env.sh                 # python3 -m venv .venv + pip install jaclang mlx-lm mlx-lm-lora matplotlib
 source .venv/bin/activate      # puts jac + mlx_lm.* on PATH
 ```
 
-- `jaclang` **0.16.0** (strict `Any` handling — see gotchas).
-- `mlx-lm` (`mlx_lm.convert` / `lora` / `fuse` / `generate` + Python API).
-- `mlx-lm-lora` **2.1.0** (DPO only; mlx-lm has no native DPO).
-- `matplotlib` (PNG graphs), `caffeinate` (macOS built-in; keeps runs awake).
+- `jaclang` **0.16.0** (strict `Any` handling — Python-interop calls return `Any`,
+  rejected in typed positions; cast at the boundary).
+- `mlx-lm` (`mlx_lm.convert` / `lora` / `fuse` / `generate`).
+- `mlx-lm-lora` **2.1.0** (DPO + GRPO — mlx-lm has no native support for either).
+- `matplotlib` (PNG graphs), `caffeinate` (macOS built-in; keeps long runs awake).
 
-`check.sh` and `run_probe.sh` prepend `.venv/bin` to `PATH` so subprocess `jac` resolves
-even without `source`. You need **~50–60 GB free disk per model** (download + quantize).
-
----
-
-## Gotchas
-
-Read before touching anything — these will bite. Full list: HANDOFF §9.
-
-1. **`seed_conversion.jac` truncates the dataset** → `sft.jsonl` to 32, `dpo.jsonl` to 2.
-   The idiomatic batches *append*, so any later run of `seed_conversion` silently wipes
-   them. `check.sh` is now **non-destructive** (runs `verify_dataset.jac`, not seed).
-2. **jaclang 0.16.0 is strict about `Any`.** Python-interop calls return `Any`, rejected
-   in typed positions. Fix: cast at the boundary — `str(...)`, `list(...)`, `int(...)`,
-   `Path(str(d))`; a few untypeable stdlib calls carry `# jac:ignore[E10xx]`. Don't chase
-   `--disable-error-code` (flaky in this version).
-3. **The type-checker CRASHES on `mlx_lm`.** So `eval_probe.jac` / `idiom_eval.jac`
-   **lazy-import `mlx_lm` inside functions** (never top-level) and are **parse-checked
-   only** (`jac check -p`) in check.sh, while the other modules get full `jac check`.
-4. **The gate is `jac run`, never `jac check`.** Idiomatic Jac is often
-   untyped-but-runnable. Every behavioral path runs the code and compares stdout.
-5. **Model id needs `-Instruct`:** `Qwen/Qwen3-Coder-30B-A3B` 401s on HF;
-   `Qwen/Qwen3-Coder-30B-A3B-Instruct` is correct.
-6. **bash 3.2 (macOS) errors on empty-array expansion under `set -u`.** `run_probe.sh`
-   avoids `"${ARR[@]}"` — the resume launch is two explicit branches. Don't "simplify."
-7. **Eval loads the model ONCE** (in-process, reused across the whole holdout). An earlier
-   per-task reload was unusably slow.
-8. **No `timeout` on stock macOS.** Use the Python SIGALRM pattern (`corpus.py_cases`) or
-   `gtimeout` from coreutils.
-9. **Live per-checkpoint eval OOM-deadlocks a 30B run on 48 GB → off by default.** It loads
-   a *second* full model copy; 30B + training copy exceeds 48 GB → swap thrash → both wedge.
-   Gated behind `LIVE_EVAL=1` (default 0). With it off, watch **val loss** (free, same
-   model); test-pass% is measured at base-vs-finetuned. Only enable for models ≲8B.
+You need **~50–60 GB free disk per model** (download + quantize). Everything runs on a
+single Apple-Silicon Mac, 48 GB unified memory — the hard ceiling every experiment
+design in both attempts had to respect.
 
 ---
 
 ## Documentation map
 
+**Repo-wide**
 | Doc | What |
 |---|---|
-| **[`01-sft-dpo/sft_dpo/process.md`](01-sft-dpo/sft_dpo/process.md)** | operator runbook — setup → check → run, pause/resume, launchd, timings |
-| **[`01-sft-dpo/docs/sft_dpo/modeltesting/HANDOFF.md`](01-sft-dpo/docs/sft_dpo/modeltesting/HANDOFF.md)** | **single source of truth** — architecture, every module, every gotcha, rebuild order |
-| **[`01-sft-dpo/docs/initmodelchoice/2026-06-26-sft-dpo-bakeoff-results.md`](01-sft-dpo/docs/initmodelchoice/2026-06-26-sft-dpo-bakeoff-results.md)** | **base-model bake-off** — 6 models, function + graph holdout, the keep-Qwen3-Coder verdict |
-| **[`01-sft-dpo/resultspub/initmodelchoice/RESULTS.md`](01-sft-dpo/resultspub/initmodelchoice/RESULTS.md)** | full measured results + all 16 training graphs, both models, side by side |
-| [`context.md`](context.md) | durable project framing (what Jac is, goal, constraints) |
+| [`context.md`](context.md) | durable project framing — what Jac is, the goal, fixed constraints |
+| [`docs/wholestack/strat.md`](docs/wholestack/strat.md) | end-to-end strategy spanning data gen → finetune → eval |
+| [`docs/ARTIFACT_LOG.md`](docs/ARTIFACT_LOG.md) | record of every model/adapter, how to recreate any deleted one |
+| [`docs/training_configs/`](docs/training_configs/) | hyperparameter JSON for every adapter trained across both attempts |
+
+**Attempt 1 — SFT + DPO**
+| Doc | What |
+|---|---|
+| [`01-sft-dpo/sft_dpo/process.md`](01-sft-dpo/sft_dpo/process.md) | operator runbook — setup → check → run, pause/resume, timings |
+| [`01-sft-dpo/docs/sft_dpo/modeltesting/HANDOFF.md`](01-sft-dpo/docs/sft_dpo/modeltesting/HANDOFF.md) | single source of truth — architecture, every module, every gotcha |
+| [`01-sft-dpo/docs/initmodelchoice/2026-06-26-sft-dpo-bakeoff-results.md`](01-sft-dpo/docs/initmodelchoice/2026-06-26-sft-dpo-bakeoff-results.md) | 6-model base bake-off, the keep-Qwen3-Coder verdict |
 | [`01-sft-dpo/docs/initmodelchoice/strat.md`](01-sft-dpo/docs/initmodelchoice/strat.md) | the 12 data-generation recipes (R1–R12) |
-| [`docs/wholestack/strat.md`](docs/wholestack/strat.md) | whole-stack strategy |
-| [`01-sft-dpo/docs/sft_dpo/modeltesting/`](01-sft-dpo/docs/sft_dpo/modeltesting/) | strategy, evaluation, conversion-probe, per-model notes (Qwen / Gemma) |
-| [`01-sft-dpo/sft_dpo/jacgen/README.md`](01-sft-dpo/sft_dpo/jacgen/README.md) | module-by-module pipeline reference |
+| [`01-sft-dpo/resultspub/initmodelchoice/RESULTS.md`](01-sft-dpo/resultspub/initmodelchoice/RESULTS.md) | full measured results + all 16 training graphs |
+| [`01-sft-dpo/sft_dpo/jacgen/README.md`](01-sft-dpo/sft_dpo/jacgen/README.md) | module-by-module pipeline reference (24 modules) |
+
+**Attempt 2 — RL / GRPO**
+| Doc | What |
+|---|---|
+| [`02-rl-grpo/RL_FINDINGS.md`](02-rl-grpo/RL_FINDINGS.md) | the full story — every era, every bug, every corrected number |
+| [`02-rl-grpo/rl/README.md`](02-rl-grpo/rl/README.md) | pipeline reference — reward design, warm-start, ladder execution, gotchas |
+| [`02-rl-grpo/docs/rl/00-overview.md`](02-rl-grpo/docs/rl/00-overview.md) / [`01-design.md`](02-rl-grpo/docs/rl/01-design.md) | design docs written before the ladder was built |
+| [`02-rl-grpo/docs/rl/RL_WEEKEND_RESULTS.md`](02-rl-grpo/docs/rl/RL_WEEKEND_RESULTS.md) | original Era-1 write-up, verbatim |
+| [`02-rl-grpo/docs/rl/references.md`](02-rl-grpo/docs/rl/references.md) | cited RL literature (Yue et al., ProRL, Spurious Rewards) |
+| [`02-rl-grpo/resultspub/rl/README.md`](02-rl-grpo/resultspub/rl/README.md) | index of the published (corrected) graphs |
+| [`02-rl-grpo/presentation/main.pdf`](02-rl-grpo/presentation/main.pdf) | slide deck ([source](02-rl-grpo/presentation/main.tex)) |
 
 ---
 
@@ -451,11 +327,18 @@ Read before touching anything — these will bite. Full list: HANDOFF §9.
 | Term | Meaning |
 |---|---|
 | **SFT** | supervised finetuning — train on input→output pairs |
-| **DPO** | direct preference optimization — train on (chosen vs rejected) pairs to push toward the preferred style |
-| **LoRA** | low-rank adapter finetuning — cheap, small, fusable into the base weights |
-| **MLX** | Apple's array/ML framework for Apple Silicon; `mlx-lm` runs LLM train/infer locally |
+| **DPO** | direct preference optimization — train on (chosen vs rejected) pairs to push toward a preferred style |
+| **GRPO** | group-relative policy optimization — the RL method used in attempt 2; sample a group of rollouts per prompt, advantage = `(reward − group mean) / group σ` |
+| **LoRA** | low-rank adapter finetuning — cheap, small, fusable into the base weights; the only way a 30B model trains at all on 48GB |
+| **MLX** | Apple's array/ML framework for Apple Silicon; `mlx-lm` / `mlx-lm-lora` run train/infer locally |
 | **py2jac** | `jac` subcommand that mechanically transpiles Python → Jac (Python-shaped output) |
-| **transpile-similarity** | ROUGE-L of model output vs `py2jac` of the same Python: high = Python-shaped, low = rewritten/idiomatic |
-| **idiom headroom** | how much an idiomatic answer can diverge from a mechanical transpile (large for graphs, ~zero for pure functions) |
-| **cross-compiled test-pass** | the primary metric: converted Jac compiles, runs, and output matches the recorded behavioral cases |
-| **holdout** | unseen, decontaminated eval set (150 function + 13 graph tasks) |
+| **transpile-similarity** | ROUGE-L of model output vs `py2jac` of the same Python — high = Python-shaped, low = rewritten/idiomatic |
+| **idiom headroom** | how much an idiomatic answer can diverge from a mechanical transpile (large for graph/OSP tasks, ~zero for pure functions) |
+| **cross-compiled test-pass** | the primary metric throughout: converted Jac compiles, runs, and its output matches the recorded behavioral cases |
+| **holdout** | unseen, decontaminated eval set the model never trained on |
+| **pass@1 / greedy** | one deterministic (temperature-0) answer — the headline "what does the model default to" number |
+| **pass@k / oracle** | sample k times, pass if *any* sample is correct — the reachable ceiling with an oracle picking the best sample |
+| **best-of-k (deploy)** | sample k, return the first candidate the **Jac compiler** accepts — no gold answer peeked at; the number you'd actually ship |
+| **σ=0 trap** | when every rollout in a GRPO group scores identically, the advantage divides by zero variance → zero gradient regardless of learning rate; RL can't bootstrap a skill the base model has none of |
+| **task interference** | adding more/harder/more-varied training data regresses a task already learned — a small LoRA adapter running out of capacity to hold multiple skills at once |
+| **OSP** | object-spatial programming — Jac's node/edge/walker/visit model, with no Python equivalent |
