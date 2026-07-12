@@ -9,6 +9,10 @@ models/
 02-rl-grpo/adapters/
 .venv/
 
+# root results/ is studio scratch (builder job logs, eval runs) — not repo output
+results/_builder/
+results/_evals/
+
 # LaTeX build output (rebuild via 02-rl-grpo/presentation/build.sh)
 02-rl-grpo/presentation/main.pdf
 02-rl-grpo/presentation/main.aux
