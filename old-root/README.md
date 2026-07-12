@@ -97,11 +97,11 @@ everywhere in the pipeline.
 
 ```bash
 ./setup_env.sh && source .venv/bin/activate              # venv + jaclang + mlx-lm + matplotlib (NO anaconda)
-./sft_dpo/check.sh                                       # jac check + parse-check + non-destructive behavioral re-validation
-./sft_dpo/run_probe.sh Qwen/Qwen3-Coder-30B-A3B-Instruct qwen   # quantize → base eval → train → fuse → finetuned eval → graphs
+./01-sft-dpo/sft_dpo/check.sh                                       # jac check + parse-check + non-destructive behavioral re-validation
+./01-sft-dpo/sft_dpo/run_probe.sh Qwen/Qwen3-Coder-30B-A3B-Instruct qwen   # quantize → base eval → train → fuse → finetuned eval → graphs
 ```
 
-`./sft_dpo/check.sh` reports the `jacgen` modules passing `jac check` + `eval_probe`
+`./01-sft-dpo/sft_dpo/check.sh` reports the `jacgen` modules passing `jac check` + `eval_probe`
 parse-checked + the sampled behavioral re-validation green. If clean, the toolchain and
 data are healthy. It **does not** mutate the dataset.
 
@@ -228,7 +228,7 @@ sampled manual review. The 12 generation recipes (R1–R12) are documented in
 
 ## The dataset on disk
 
-`01-sft-dpo/dataset/` is **gitignored** but fully **regenerable** from the Jac builders (see
+`01-sft-dpo/dataset/` is **git-tracked** and also fully **regenerable** from the Jac builders (see
 [Rebuilding](#rebuilding-the-dataset-order-matters)). Confirm any time with
 `jac run 01-sft-dpo/sft_dpo/jacgen/dataset_stats.jac`.
 
@@ -251,7 +251,7 @@ difficulty mix atomic 41 / idiomatic 37 / composed 69.
 
 ## The probe
 
-`./sft_dpo/run_probe.sh <model-id> <name>` runs, in order (each stage **skippable + resumable**):
+`./01-sft-dpo/sft_dpo/run_probe.sh <model-id> <name>` runs, in order (each stage **skippable + resumable**):
 
 1. **Quantize** the model → Q4 (train) + Q8 (eval).
 2. **Base eval** on the 150 holdout → `01-sft-dpo/results/<name>/base.txt`.
@@ -272,9 +272,9 @@ tokens, peak mem).
 **Resumability:** runs under `caffeinate` (no idle sleep; lid-close suspends, resumes on
 wake). Kill/shutdown/crash → re-run the **same command**: finished stages skip via
 `01-sft-dpo/results/<name>/.<stage>.done` markers, and LoRA training resumes from the last saved
-checkpoint (mlx saves every 100 steps to `adapters/<name>-probe/`).
+checkpoint (mlx saves every 100 steps to `01-sft-dpo/adapters/<name>-probe/`).
 
-**DPO stage:** `./sft_dpo/run_dpo.sh <name>` (needs `mlx-lm-lora`; mlx-lm has no native DPO).
+**DPO stage:** `./01-sft-dpo/sft_dpo/run_dpo.sh <name>` (needs `mlx-lm-lora`; mlx-lm has no native DPO).
 Fuses the SFT adapter, runs `--train-mode dpo`, fuses onto Q8, evals with both
 `eval_probe` (behavior must hold) and `idiom_eval` (similarity should drop).
 
@@ -285,21 +285,26 @@ generation); subsequent runs skip download/quantize → **~2–4 hr**.
 
 ## Repository layout
 
+The repo is organized by **attempt**: `01-sft-dpo/` (this README's story — supervised
+SFT + DPO + the base-model bake-off), `02-rl-grpo/` (the RL/GRPO phase — see
+[`02-rl-grpo/RL_FINDINGS.md`](02-rl-grpo/RL_FINDINGS.md)), and `03-new/` (the next
+attempt). Shared at root: `models/` (base + merged checkpoints), `results/` (studio
+scratch only), `docs/` (repo-wide), `studio/` (the ML Studio app).
+
 | Path | What |
 |---|---|
 | `01-sft-dpo/sft_dpo/jacgen/*.jac` | the all-Jac pipeline: generate, validate, dedup, decontaminate, split, eval harness, dashboards (24 modules) |
 | `01-sft-dpo/sft_dpo/jacgen/graph_data/` | authored graph/tree tasks (`train.json` 31, `holdout.json` 13) + the Python generators |
-| `01-sft-dpo/dataset/` *(gitignored)* | generated data — see [the dataset table](#the-dataset-on-disk) |
+| `01-sft-dpo/dataset/` | generated data (git-tracked) — see [the dataset table](#the-dataset-on-disk) |
 | `01-sft-dpo/sft_dpo/configs/lora.yaml` | LoRA SFT config (mlx-lm) |
 | `01-sft-dpo/sft_dpo/run_probe.sh` / `01-sft-dpo/sft_dpo/run_dpo.sh` | SFT probe runner / DPO runner (resumable) |
 | `01-sft-dpo/sft_dpo/bakeoff_postprobe.sh` | per-model bake-off helper: SFT idiom baseline + graph holdout + DPO + graph DPO |
 | `01-sft-dpo/sft_dpo/make_comparison.py` / `01-sft-dpo/sft_dpo/make_pub_graphs.py` | cross-model comparison graphs + matrix (parses `01-sft-dpo/results/<name>/`) |
 | `setup_env.sh` / `01-sft-dpo/sft_dpo/check.sh` | venv + installs / type + behavior gate (non-destructive) |
-| `01-sft-dpo/results/` *(gitignored)* | per-model run outputs (`base.txt`, `finetuned.txt`, `graph-*.txt`, `*.png`, `metrics.jsonl`) |
-| `resultspub/` | **publishable copies** — `initmodelchoice/` (bake-off, all models + comparison graphs) + `other/` |
-| `01-sft-dpo/resultspub/initmodelchoice/` | committed Qwen-vs-Gemma results + graphs → [`RESULTS.md`](01-sft-dpo/resultspub/initmodelchoice/RESULTS.md) |
-| `models/` / `adapters/` *(gitignored)* | quantized/fused models / LoRA adapters |
-| `docs/` | strategy, model-testing, datagen plans, the bake-off result → [map below](#documentation-map) |
+| `01-sft-dpo/results/` | per-model run outputs (`base.txt`, `finetuned.txt`, `graph-*.txt`, `*.png`, `metrics.jsonl`) |
+| `01-sft-dpo/resultspub/initmodelchoice/` | **publishable copies** — committed bake-off results + comparison graphs → [`RESULTS.md`](01-sft-dpo/resultspub/initmodelchoice/RESULTS.md) |
+| `models/` *(gitignored)* / `01-sft-dpo/adapters/` *(gitignored)* | quantized/fused models / SFT+DPO LoRA adapters |
+| `docs/` | repo-wide: `training_configs/` (adapter hyperparams registry), `wholestack/`, `ARTIFACT_LOG.md` → [map below](#documentation-map) |
 | `01-sft-dpo/sft_dpo/process.md` | operator runbook (setup → check → run, pause/resume) |
 | `context.md` | durable project framing |
 | `papers/` | reference papers (MultiPL-T, WizardCoder, Magicoder, SelfCodeAlign, DeepSeek-Coder, CodeDPO, Magpie) |
@@ -347,7 +352,7 @@ and HANDOFF §5).
 
 ## Rebuilding the dataset (order matters)
 
-`01-sft-dpo/dataset/` is gitignored. To regenerate from scratch, run in **this exact order**
+`01-sft-dpo/dataset/` is regenerable from scratch. If needed, run in **this exact order**
 (`seed_conversion` truncates; the batches append, so they must follow it):
 
 ```bash
