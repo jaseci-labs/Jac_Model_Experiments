@@ -13,8 +13,8 @@ Every number below was produced by the all‑Jac harness in `srccurrent/jacgen/`
 "correct" only if it **compiles, executes, and its output matches** the recorded
 behavioral test cases. No human grading, no `jac check` leniency.
 
-> Graph images in this folder are copies of `results/<model>/*.png` (the live
-> `results/` tree is gitignored; these copies are committed so they're visible here).
+> Graph images in this folder are copies of `01-sft-dpo/results/<model>/*.png` (the live
+> `01-sft-dpo/results/` tree is gitignored; these copies are committed so they're visible here).
 
 ---
 
@@ -273,12 +273,12 @@ DPO further on top of SFT; expand the graph holdout for tighter idiom statistics
 ./run_dpo.sh gemma
 
 # Graph‑tier idiom eval (target the graph holdout via JAC_HOLDOUT):
-JAC_HOLDOUT=dataset/eval_holdout/graph_conversion.jsonl \
+JAC_HOLDOUT=01-sft-dpo/dataset/eval_holdout/graph_conversion.jsonl \
 JAC_EVAL_MODE=mlx JAC_EVAL_MODEL=models/qwen-jac-fused-q8 \
 jac run srccurrent/jacgen/idiom_eval.jac
 ```
 
-Outputs land in `results/<model>/` (gitignored). The committed copies of the graphs
+Outputs land in `01-sft-dpo/results/<model>/` (gitignored). The committed copies of the graphs
 live in this folder (`resultsft/<model>/`). Full architecture, every module, and all
 gotchas: [`../docs/modeltesting/HANDOFF.md`](../docs/modeltesting/HANDOFF.md).
 
@@ -288,11 +288,11 @@ gotchas: [`../docs/modeltesting/HANDOFF.md`](../docs/modeltesting/HANDOFF.md).
 
 | File | Contents |
 |---|---|
-| `results/qwen/base.txt` · `finetuned.txt` | Qwen function base / SFT behavioral |
-| `results/qwen/idiom-finetuned.txt` | Qwen function idiom judge (sim 0.968) |
-| `results/qwen/graph-idiom-retrain2.txt` | Qwen graph SFT (46 %) |
-| `results/qwen/dpo/finetuned.txt` · `graph-idiom.txt` | Qwen DPO function (93 %) / graph (61 %) |
-| `results/gemma/base.txt` · `finetuned.txt` | Gemma function base / SFT behavioral |
-| `results/gemma/graph-idiom-sft.txt` | Gemma graph SFT (15 %) |
-| `results/gemma/dpo/finetuned.txt` · `graph-idiom.txt` | Gemma DPO function / graph |
-| `results/<model>/metrics.jsonl` | per‑checkpoint learning curve |
+| `01-sft-dpo/results/qwen/base.txt` · `finetuned.txt` | Qwen function base / SFT behavioral |
+| `01-sft-dpo/results/qwen/idiom-finetuned.txt` | Qwen function idiom judge (sim 0.968) |
+| `01-sft-dpo/results/qwen/graph-idiom-retrain2.txt` | Qwen graph SFT (46 %) |
+| `01-sft-dpo/results/qwen/dpo/finetuned.txt` · `graph-idiom.txt` | Qwen DPO function (93 %) / graph (61 %) |
+| `01-sft-dpo/results/gemma/base.txt` · `finetuned.txt` | Gemma function base / SFT behavioral |
+| `01-sft-dpo/results/gemma/graph-idiom-sft.txt` | Gemma graph SFT (15 %) |
+| `01-sft-dpo/results/gemma/dpo/finetuned.txt` · `graph-idiom.txt` | Gemma DPO function / graph |
+| `01-sft-dpo/results/<model>/metrics.jsonl` | per‑checkpoint learning curve |

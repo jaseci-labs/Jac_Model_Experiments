@@ -477,11 +477,11 @@ The script:
 ### Output format
 
 The evaluation produces:
-- `results/comparison_table.md` — the filled decision matrix
-- `results/{model_name}/scores.json` — per-task scores for each model
-- `results/{model_name}/outputs/` — raw model outputs for manual inspection
-- `results/statistical_tests.md` — confidence intervals and significance tests
-- `results/per_dimension_breakdown.md` — detailed per-dimension analysis
+- `01-sft-dpo/results/comparison_table.md` — the filled decision matrix
+- `01-sft-dpo/results/{model_name}/scores.json` — per-task scores for each model
+- `01-sft-dpo/results/{model_name}/outputs/` — raw model outputs for manual inspection
+- `01-sft-dpo/results/statistical_tests.md` — confidence intervals and significance tests
+- `01-sft-dpo/results/per_dimension_breakdown.md` — detailed per-dimension analysis
 
 ---
 

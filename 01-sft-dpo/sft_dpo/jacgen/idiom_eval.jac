@@ -34,7 +34,7 @@ import from dedup { rouge_l }
 import from pathlib { Path }
 import from typing { Any }
 
-glob HOLDOUT: str = "dataset/eval_holdout/conversion.jsonl";
+glob HOLDOUT: str = "01-sft-dpo/dataset/eval_holdout/conversion.jsonl";
 
 # Jac-native / graph-spatial constructs. Presence => the output leans on Jac idiom
 # rather than plain imperative Python-in-Jac.

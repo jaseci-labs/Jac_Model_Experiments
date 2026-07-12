@@ -17,7 +17,7 @@ Slow, ground-up redesign of the Jac RL workflow. Read in order:
 5. [references.md](references.md) — literature on whether GRPO/RLVR moves a Qwen-class base (it mostly doesn't, at our scale).
 6. [RL_WEEKEND_RESULTS.md](RL_WEEKEND_RESULTS.md) — archive: what the first GRPO run found and why it failed.
 
-(The old `02-results.md` living table was invalidated by the extractor bug and removed; raw corrected data lives in [`raw/`](raw/) and `results/`.)
+(The old `02-results.md` living table was invalidated by the extractor bug and removed; raw corrected data lives in [`raw/`](raw/) and `02-rl-grpo/results/`.)
 
 **Pre-correction status (2026-06-28, superseded — see banner):** ladder run complete (32 cells, 2 holdouts); neither SFT nor GRPO appeared to move greedy holdout generalization at 30B/LoRA/48GB. See [strat.md](strat.md) CONCLUSION.
 

@@ -20,7 +20,7 @@ if [ -z "${CAFFEINATED:-}" ] && command -v caffeinate >/dev/null 2>&1; then
   exec caffeinate -dimsu env CAFFEINATED=1 "$0" "$@"
 fi
 SELF_DIR="$(cd "$(dirname "$0")" && pwd)"
-cd "$(cd "$SELF_DIR/../.." && pwd)"   # repo root: dataset/ models/ 02-rl-grpo/adapters/ results/ resolve here
+cd "$(cd "$SELF_DIR/../.." && pwd)"   # repo root: models/ 02-rl-grpo/adapters/ 02-rl-grpo/results/ resolve here
 [ -d ".venv/bin" ] && export PATH="$PWD/.venv/bin:$PATH"
 
 NAME="${1:?short name, e.g. qwen3}"
@@ -40,7 +40,7 @@ for f in 02-rl-grpo/dataset/rl/train.jsonl 02-rl-grpo/dataset/rl/valid.jsonl; do
   [ -f "$f" ] || { echo "MISSING $f — run: jac run 02-rl-grpo/rl/build_tasks.jac && jac run 02-rl-grpo/rl/build_rl_splits.jac"; exit 1; }
 done
 
-RDIR="results/${NAME}/grpo"; mkdir -p "$RDIR"
+RDIR="02-rl-grpo/results/${NAME}/grpo"; mkdir -p "$RDIR"
 GRPO_ADAPTER="02-rl-grpo/adapters/${NAME}-grpo"
 TRAIN_LOG="$RDIR/train.log"
 

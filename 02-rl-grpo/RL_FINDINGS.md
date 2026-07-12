@@ -477,7 +477,7 @@ Shipped as `02-rl-grpo/rl/generate.py`.
   tasks · conversion · synthetic · splits.
 - **Graphs** — `02-rl-grpo/resultspub/rl/` (journey, ladder, all-holdouts, k-scale, follow-up).
 - **32 synthetic tasks** — `02-rl-grpo/rl/drivers/syn_*.jac`, ingested by `02-rl-grpo/rl/build_tasks.jac`.
-- **Raw record** — `02-rl-grpo/docs/rl/raw/`, `results/corrected_*.jsonl`.
+- **Raw record** — `02-rl-grpo/docs/rl/raw/`, `02-rl-grpo/results/corrected_*.jsonl`.
 
 ---
 

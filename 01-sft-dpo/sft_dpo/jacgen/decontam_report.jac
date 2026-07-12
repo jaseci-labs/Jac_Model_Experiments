@@ -13,7 +13,7 @@ import from pathlib { Path }
 import from typing { Any }
 
 glob TRAIN: list[str] = ["01-sft-dpo/dataset/conversion/sft.jsonl", "01-sft-dpo/dataset/conversion/sft_auto.jsonl"];
-glob HOLDOUT: str = "dataset/eval_holdout/conversion.jsonl";
+glob HOLDOUT: str = "01-sft-dpo/dataset/eval_holdout/conversion.jsonl";
 
 
 with entry {

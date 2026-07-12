@@ -22,7 +22,7 @@ with entry {
 
     # Step 7: the sg-inclusive holdout run (separate file), if present
     sg_table = "";
-    sg_path = os.path.join(ROOT, "results", "rl_ladder_sg.jsonl");
+    sg_path = os.path.join(ROOT, "02-rl-grpo", "results", "rl_ladder_sg.jsonl");
     if os.path.exists(sg_path) {
         env2 = dict(os.environ); env2["JAC_LADDER_RESULTS"] = sg_path;
         sp = subprocess.run([JAC, "run", "02-rl-grpo/rl/show_ladder.jac"], capture_output=True, text=True, cwd=ROOT, env=env2);
@@ -30,7 +30,7 @@ with entry {
     }
     # The 84-task higher-power re-run (62 trainpool, harder holdout), if present
     v84_table = "";
-    v84_path = os.path.join(ROOT, "results", "rl_ladder_v84.jsonl");
+    v84_path = os.path.join(ROOT, "02-rl-grpo", "results", "rl_ladder_v84.jsonl");
     if os.path.exists(v84_path) {
         env3 = dict(os.environ); env3["JAC_LADDER_RESULTS"] = v84_path;
         vp = subprocess.run([JAC, "run", "02-rl-grpo/rl/show_ladder.jac"], capture_output=True, text=True, cwd=ROOT, env=env3);
@@ -45,7 +45,7 @@ with entry {
         + "docstring). The corrected results are in the root **`RL_FINDINGS.md`** "
         + "(SFT actually lifts greedy 39%→61%, best-of-k ships ~78%). Kept only as a "
         + "record of the broken run.\n\n"
-        + "*Auto-recorded " + ts + " by `02-rl-grpo/rl/record_results.jac` from `results/rl_ladder.jsonl`. "
+        + "*Auto-recorded " + ts + " by `02-rl-grpo/rl/record_results.jac` from `02-rl-grpo/results/rl_ladder.jsonl`. "
         + "Re-run after each ladder stage. Live version also renders in the Studio RL section.*\n\n"
         + "**Method:** SFT-first ladder (train-N = 1,3,5,10,20,all) × 2 models × conditions "
         + "{base, SFT(gold), SFT+GRPO, raw-GRPO control}. Holdout is file-disjoint + decontaminated; "

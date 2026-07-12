@@ -31,7 +31,7 @@ for s in lora fuse; do need "mlx_lm.$s" "pip install mlx-lm"; done
 
 RFT_ADAPTER="02-rl-grpo/adapters/${NAME}-rft"
 WARM="models/${NAME}-rft-q4"
-RDIR="results/${NAME}/rft"; mkdir -p "$RDIR"
+RDIR="02-rl-grpo/results/${NAME}/rft"; mkdir -p "$RDIR"
 
 # --- 1. sample passing completions from the base (the rejection-sampling step) ---
 if [ "${FORCE_SAMPLE:-0}" != "1" ] && [ -s 02-rl-grpo/dataset/rl/rft/train.jsonl ]; then

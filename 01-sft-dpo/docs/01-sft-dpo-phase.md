@@ -3,7 +3,7 @@
 *The complete record of the first finetuning phase: teaching small open models to
 write idiomatic, compiler-correct Jac from 100% synthetic data, on a single 48 GB
 Apple-Silicon Mac. This worked. Sourced from `01-sft-dpo/docs/sft_dpo/modeltesting/`,
-`01-sft-dpo/sft_dpo/process.md`, `01-sft-dpo/docs/initmodelchoice/`, `results/RESULTS.md`.*
+`01-sft-dpo/sft_dpo/process.md`, `01-sft-dpo/docs/initmodelchoice/`, `01-sft-dpo/results/RESULTS.md`.*
 
 ---
 

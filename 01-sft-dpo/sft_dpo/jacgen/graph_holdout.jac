@@ -4,7 +4,7 @@ Companion to graph_seeds.jac. These 6 tasks are DIFFERENT aggregations than the 
 training tasks (min/odd/sum-above/branches/range/negative vs count/sum/max/...), so
 scoring measures generalization of graph idiom, not memorization. Same schema as the
 function holdout (func_name, python, prompt, test_cases, source) so eval_probe.jac /
-idiom_eval.jac drive it via JAC_HOLDOUT=dataset/eval_holdout/graph_conversion.jsonl.
+idiom_eval.jac drive it via JAC_HOLDOUT=01-sft-dpo/dataset/eval_holdout/graph_conversion.jsonl.
 
 Idiom headroom is real here (idiomatic-vs-transpile similarity ~0.26 vs ~0.97 for the
 function tasks): a model that learns the walker idiom diverges from the transpile; one
@@ -18,7 +18,7 @@ import from pathlib { Path }
 import from typing { Any }
 
 glob TASKS: str = "srccurrent/jacgen/graph_data/holdout.json";
-glob OUT_PATH: str = "dataset/eval_holdout/graph_conversion.jsonl";
+glob OUT_PATH: str = "01-sft-dpo/dataset/eval_holdout/graph_conversion.jsonl";
 glob SOURCE: str = "generated_graph_holdout";
 
 

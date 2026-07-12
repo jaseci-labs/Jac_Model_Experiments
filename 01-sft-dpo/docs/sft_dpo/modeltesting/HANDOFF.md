@@ -45,8 +45,8 @@ wins on graph idiom; functions are a tie.
 | Balanced manifest (1:3 idiom:transpile) | `01-sft-dpo/dataset/conversion/sft_train.jsonl` | **588** (147 + 441) |
 | mlx-lm train split (messages-only) | `01-sft-dpo/dataset/mlx/train.jsonl` | **529** |
 | mlx-lm valid split (messages-only) | `01-sft-dpo/dataset/mlx/valid.jsonl` | **59** |
-| Function eval holdout (behavioral `test_cases`) | `dataset/eval_holdout/conversion.jsonl` | **150** |
-| Graph eval holdout (idiom headroom, §13) | `dataset/eval_holdout/graph_conversion.jsonl` | **13** |
+| Function eval holdout (behavioral `test_cases`) | `01-sft-dpo/dataset/eval_holdout/conversion.jsonl` | **150** |
+| Graph eval holdout (idiom headroom, §13) | `01-sft-dpo/dataset/eval_holdout/graph_conversion.jsonl` | **13** |
 
 Idiomatic core composition: 24 seed + 84 idiomatic_batch{,2,3} + 8 mined + 31 graph = 147;
 difficulty mix atomic 41 / idiomatic 37 / composed 38.
@@ -56,11 +56,11 @@ parse-check passed + `39/39` sampled behavioral re-validation, and it is now
 **non-destructive** (it no longer truncates the dataset — see gotcha #1).
 
 **The Qwen SFT probe HAS been run (success).** `Qwen/Qwen3-Coder-30B-A3B-Instruct`
-quantized, LoRA-SFT'd (600 iters), fused, evaluated. Results in `results/qwen/`:
+quantized, LoRA-SFT'd (600 iters), fused, evaluated. Results in `01-sft-dpo/results/qwen/`:
 - **base 0% → finetuned 94%** cross-compiled test-pass on the 150 holdout (stock Qwen
   produces zero runnable Jac; finetuned is behaviorally correct). Generation also
   halved (34.7k→15.7k tokens) — less rambling.
-- **Learning curve** (`results/qwen/learning_curve.png`): ~96% by iter 100, then flat
+- **Learning curve** (`01-sft-dpo/results/qwen/learning_curve.png`): ~96% by iter 100, then flat
   — the model learns Jac almost immediately; more iters don't help.
 - **Idiom judge** (`idiom_eval.jac`): on FUNCTIONS, 141/142 Python-shaped (sim 0.968) —
   idiom ≈ 0 because functions have no idiom headroom (idiomatic ≈ transpile).
@@ -68,12 +68,12 @@ quantized, LoRA-SFT'd (600 iters), fused, evaluated. Results in `results/qwen/`:
   graph holdout (13 tasks) **0% → SFT 46% → DPO 61% correct**, of-correct idiomatic
   **83% → 100%**, similarity **0.457 → 0.338** (function holdout held ~94%). Proves
   data-with-headroom → measurable idiomatic Jac, and DPO on real-divergence pairs lifts it.
-**The Gemma run is also done** (`results/gemma/`): function 93%, graph SFT 15% / DPO 15%.
+**The Gemma run is also done** (`01-sft-dpo/results/gemma/`): function 93%, graph SFT 15% / DPO 15%.
 Full head-to-head in §14 — Qwen wins graph idiom decisively; functions tie. ⚠️ Gemma id is
 gated + case-sensitive: use `google/gemma-4-26B-A4B-it` (capital B/A4B) and accept the
 license + `huggingface-cli login` first; lowercase 307-redirects, no token = 401.
 
-`dataset/` is gitignored — it is **regenerable** from the Jac builders (section 6).
+`01-sft-dpo/dataset/` is gitignored — it is **regenerable** from the Jac builders (section 6).
 
 ---
 
@@ -104,7 +104,7 @@ resolves even without `source`.
   HF corpus (Vezora/Tested-22k-Python-Alpaca, via datasets-server rows API)
         │  corpus.jac: fetch → is_clean filter → first_func → py_cases (exec, SIGALRM 2s)
         ▼
-  mine.jac ──► dataset/source_pool/mined.jsonl        (cleaned Python + behavioral cases)
+  mine.jac ──► 01-sft-dpo/dataset/source_pool/mined.jsonl        (cleaned Python + behavioral cases)
         │
         ├──► scale_conversion.jac ──► sft_auto.jsonl   (1500: py2jac transpile, jac-run gated)
         │
@@ -115,7 +115,7 @@ resolves even without `source`.
         ├──► build_manifest.jac ──► sft_train.jsonl    (560: 1:3 idiom:transpile, de-skew)
         │         └──► build_splits.jac ──► 01-sft-dpo/dataset/mlx/{train,valid}.jsonl (504/56, messages-only)
         │
-        └──► holdout.jac ──► dataset/eval_holdout/conversion.jsonl (150, disjoint offsets + decontam)
+        └──► holdout.jac ──► 01-sft-dpo/dataset/eval_holdout/conversion.jsonl (150, disjoint offsets + decontam)
 
   RUN: run_probe.sh ──► quantize Q4+Q8 ──► base eval ──► dry-run ──► LoRA train
         │                                    (eval_probe.jac: load model ONCE, jac-run gate)
@@ -168,7 +168,7 @@ just learn "transpile-ese," without starving on the cheap volume.
   `graph_data/train.json` (24 validated tasks), appends idiomatic graph SFT examples
   (node/edge/walker, single-dict-arg `def`) to `sft.jsonl`, re-validating each by running.
 - `graph_holdout.jac` — reads `graph_data/holdout.json` (10 DISJOINT tasks) → writes
-  `dataset/eval_holdout/graph_conversion.jsonl` (same schema as the function holdout).
+  `01-sft-dpo/dataset/eval_holdout/graph_conversion.jsonl` (same schema as the function holdout).
 - `holdout.jac` — mine from offset 12000+ (disjoint from training's 0–8200) +
   `is_contaminated` 14-gram → `eval_holdout/conversion.jsonl` (150).
 
@@ -203,7 +203,7 @@ just learn "transpile-ese," without starving on the cheap volume.
 
 ## 6. Rebuilding the dataset (order is load-bearing)
 
-`dataset/` is gitignored. To regenerate the **full** dataset from scratch, run in
+`01-sft-dpo/dataset/` is gitignored. To regenerate the **full** dataset from scratch, run in
 **this exact order** (because `seed_conversion` truncates and the batches append):
 
 ```bash
@@ -240,7 +240,7 @@ Stages (each skippable/resumable): quantize Q4 (train) + Q8 (eval) → **base ev
 150 holdout → 30-iter **dry-run** bail check → **LoRA train** (`configs/lora.yaml`)
 with a **live ASCII dashboard + PNG graphs** refreshed per checkpoint (per-checkpoint
 holdout eval = the learning curve) → **fuse** adapter into Q8 → **finetuned eval** →
-graphs. Outputs in `results/`:
+graphs. Outputs in `01-sft-dpo/results/`:
 - `*-base.txt` / `*-finetuned.txt` — the headline base-vs-finetuned comparison.
 - `*-metrics.jsonl` — per-checkpoint learning curve + token metrics.
 - `*.png` — `learning_curve`, `train_loss`, `val_loss`, `learning_rate`,
@@ -254,7 +254,7 @@ graphs. Outputs in `results/`:
 
 **Resumability:** runs under `caffeinate` (no idle sleep; lid-close suspends and
 continues on wake). Kill/shutdown/crash → re-run the **same command**: finished stages
-skip via `results/.<name>.*.done` markers, and LoRA training **resumes from the last
+skip via `01-sft-dpo/results/.<name>.*.done` markers, and LoRA training **resumes from the last
 saved checkpoint** (mlx saves every 100 steps to `adapters/<name>-probe/`), training
 only the remaining iters; the learning-curve metrics append rather than reset.
 `process.md` has an optional launchd plist for auto-resume after a full shutdown.
@@ -266,8 +266,8 @@ generation; subsequent runs skip download/quantize → ~2–4 hr.
 
 ## 7b. Results layout + learning curve (per model)
 
-`run_probe.sh` namespaces everything under **`results/<name>/`** (e.g. `results/qwen/`,
-`results/gemma/`) so two models never clash: `base.txt`, `finetuned.txt`, `train.log`,
+`run_probe.sh` namespaces everything under **`01-sft-dpo/results/<name>/`** (e.g. `01-sft-dpo/results/qwen/`,
+`01-sft-dpo/results/gemma/`) so two models never clash: `base.txt`, `finetuned.txt`, `train.log`,
 `metrics.jsonl`, all `*.png`, and `.<stage>.done` markers live there. `plot_metrics.jac`
 honors `JAC_PLOT_DIR`.
 
@@ -276,7 +276,7 @@ in run_probe.sh), NOT a concurrent live eval (that OOMs — gotcha #10). After t
 it evaluates each saved adapter checkpoint (`adapters/<name>-probe/NNNN_adapters.safetensors`
 + the final `adapters.safetensors`) on `SUBSET` holdout tasks **sequentially** — one
 model in RAM at a time — writing a `metrics.jsonl` row per checkpoint, then
-`plot_metrics.jac` renders `results/<name>/learning_curve.png`. Safe on 48 GB; the
+`plot_metrics.jac` renders `01-sft-dpo/results/<name>/learning_curve.png`. Safe on 48 GB; the
 x-axis is iters (100, 200, …, final), y is holdout test-pass%.
 
 ## 8. Metrics measured
@@ -346,7 +346,7 @@ The eval (`eval_probe.jac`) and dashboards report, per checkpoint and at base/fi
 
 ## 10. Files outside `srccurrent/jacgen/`
 
-- `run_probe.sh` — the resumable SFT runner (section 7); per-model `results/<name>/`.
+- `run_probe.sh` — the resumable SFT runner (section 7); per-model `01-sft-dpo/results/<name>/`.
 - `run_dpo.sh` — the DPO runner (section 12); needs `mlx-lm-lora`.
 - `check.sh` — type + behavior gate (non-destructive; full-checks 20, parse-checks the
   2 mlx-importing modules `eval_probe`/`idiom_eval`).
@@ -373,7 +373,7 @@ The eval (`eval_probe.jac`) and dashboards report, per checkpoint and at base/fi
 2. `jac run srccurrent/jacgen/dataset_stats.jac` → expect SFT 1640 (140 incl 24 graph + 1500),
    DPO 60. If it shows 32/2, rebuild from section 6.
 3. `./run_probe.sh Qwen/Qwen3-Coder-30B-A3B-Instruct qwen` → first real probe. Watch
-   `results/learning_curve.png` (rising = learning Jac; flat-while-loss-drops =
+   `01-sft-dpo/results/learning_curve.png` (rising = learning Jac; flat-while-loss-drops =
    memorizing format, not idiom).
 4. After SFT signal: run the idiom judge (§5 `idiom_eval.jac`) to split the 94% into
    idiomatic vs Python-shaped — that tells you how much DPO is needed.
@@ -406,7 +406,7 @@ machinery is proven working and reusable once such data exists.
 
 Artifacts: `models/qwen-jac-dpo-fused-q8` (DPO model ≈ SFT, kept), `01-sft-dpo/adapters/qwen-dpo/`
 (adapter; the auto-fused 57 GB duplicate was deleted to reclaim disk). Results in
-`results/qwen/dpo/`.
+`01-sft-dpo/results/qwen/dpo/`.
 
 ### How it was set up (reusable)
 
@@ -428,7 +428,7 @@ Fully scaffolded:
   runs `mlx_lm_lora.train --train-mode dpo` (LoRA, **reference left unset = base frozen**,
   so only ONE 30B weight set in RAM → fits 48 GB), fuses onto the Q8 SFT model, then evals
   the DPO model with **both** `eval_probe.jac` (behavior must hold) and `idiom_eval.jac`
-  (avg_sim must drop). Outputs namespaced under `results/<name>/dpo/`.
+  (avg_sim must drop). Outputs namespaced under `01-sft-dpo/results/<name>/dpo/`.
   Env: `DPO_ITERS`(200) `DPO_LR`(1e-6) `DPO_BETA`(0.1) `SUBSET`(50).
 - **Win condition:** behavior stays ~94% AND avg transpile-similarity drops below 0.968
   (model rewrites toward idiom instead of reproducing the transpile).
@@ -451,9 +451,9 @@ Built + validated (all via `jac run`, the gate):
   training (min/odd/sum-above/branches/range/negative vs count/sum/max/above/path/leaves/
   product/even) → generalization, not memorization.
 - `graph_seeds.jac` → appends 24 idiomatic graph SFT examples to `sft.jsonl` (`source:
-  generated_graph`). `graph_holdout.jac` → `dataset/eval_holdout/graph_conversion.jsonl` (10).
+  generated_graph`). `graph_holdout.jac` → `01-sft-dpo/dataset/eval_holdout/graph_conversion.jsonl` (10).
 - `eval_probe.jac` / `idiom_eval.jac` take **`JAC_HOLDOUT`** to target the graph holdout:
-  `JAC_HOLDOUT=dataset/eval_holdout/graph_conversion.jsonl JAC_EVAL_MODE=mlx ... jac run ...`.
+  `JAC_HOLDOUT=01-sft-dpo/dataset/eval_holdout/graph_conversion.jsonl JAC_EVAL_MODE=mlx ... jac run ...`.
 
 **RESULT — the full SFT→DPO progression on the graph holdout (2026-06-05):**
 
@@ -473,7 +473,7 @@ with similarity dropping toward the 0.26 reference. Function holdout held ~94% t
 Full thesis proven: (1) data with real idiom headroom → the model learns idiomatic Jac
 (unlike the function tier where idiomatic ≈ transpile, so SFT can't and DPO is a no-op);
 (2) DPO on real-divergence graph pairs measurably pushes "runs" → "idiomatic".
-Results: `results/qwen/graph-idiom-retrain2.txt` (SFT), `results/qwen/dpo/graph-idiom.txt` (DPO).
+Results: `01-sft-dpo/results/qwen/graph-idiom-retrain2.txt` (SFT), `01-sft-dpo/results/qwen/dpo/graph-idiom.txt` (DPO).
 
 **Next levers (both proven-ready):** (1) scale graph tasks with more STRUCTURAL variety
 (binary trees, linked-list chains, weighted edges), not just predicates, via
@@ -513,5 +513,5 @@ Both finetuned on the identical graph-inclusive dataset (529/56 split) + same ev
   pattern: DPO sharpens existing idiom, it can't manufacture it.
 - **Pick for Jac graph idiom: Qwen3-Coder-30B-A3B-Instruct.**
 
-Graphs: `results/qwen/*.png` and `results/gemma/*.png` (learning_curve, train_loss,
+Graphs: `01-sft-dpo/results/qwen/*.png` and `01-sft-dpo/results/gemma/*.png` (learning_curve, train_loss,
 val_loss, learning_rate, tokens_per_sec, iters_per_sec, trained_tokens, peak_mem).

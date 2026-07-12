@@ -2,10 +2,10 @@
 
 SCAFFOLD — needs `pip install matplotlib` in your jac Python env. Parses the
 mlx_lm.lora training log + the per-checkpoint learning-curve metrics and writes
-results/*.png: train loss, val loss, learning rate, tokens/sec, and the holdout
+01-sft-dpo/results/*.png: train loss, val loss, learning rate, tokens/sec, and the holdout
 test-pass learning curve. The zero-dep ASCII view is dashboard.jac.
 
-    JAC_TRAIN_LOG=results/x-train.log JAC_METRICS=results/x-metrics.jsonl \
+    JAC_TRAIN_LOG=01-sft-dpo/results/x-train.log JAC_METRICS=01-sft-dpo/results/x-metrics.jsonl \
         jac run srccurrent/jacgen/plot_metrics.jac
 """
 
@@ -80,9 +80,9 @@ def plot_one(points: list, title: str, ylabel: str, outpath: str) {
 
 with entry {
     matplotlib.use("Agg");
-    train_log: str = os.environ.get("JAC_TRAIN_LOG", "results/train.log");
-    metrics: str = os.environ.get("JAC_METRICS", "results/metrics.jsonl");
-    d: str = os.environ.get("JAC_PLOT_DIR", "results");   # per-model output dir (e.g. results/qwen)
+    train_log: str = os.environ.get("JAC_TRAIN_LOG", "01-sft-dpo/results/train.log");
+    metrics: str = os.environ.get("JAC_METRICS", "01-sft-dpo/results/metrics.jsonl");
+    d: str = os.environ.get("JAC_PLOT_DIR", "results");   # per-model output dir (e.g. 01-sft-dpo/results/qwen)
 
     t: dict = parse_train(train_log);
     plot_one(list(t["train"]), "Train Loss", "loss", d + "/train_loss.png");

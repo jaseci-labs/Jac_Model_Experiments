@@ -187,7 +187,7 @@ Full matrix, per-candidate analysis, comparison graphs, and deviations →
   HF corpus (Vezora/Tested-22k-Python-Alpaca, via datasets-server rows API)
         │  corpus.jac: fetch → is_clean filter → first_func → py_cases (exec, SIGALRM 2s)
         ▼
-  mine.jac ──► dataset/source_pool/mined.jsonl        (cleaned Python + behavioral cases)
+  mine.jac ──► 01-sft-dpo/dataset/source_pool/mined.jsonl        (cleaned Python + behavioral cases)
         │
         ├──► scale_conversion.jac ──► sft_auto.jsonl   (1500: py2jac transpile, jac-run gated)
         │
@@ -228,7 +228,7 @@ sampled manual review. The 12 generation recipes (R1–R12) are documented in
 
 ## The dataset on disk
 
-`dataset/` is **gitignored** but fully **regenerable** from the Jac builders (see
+`01-sft-dpo/dataset/` is **gitignored** but fully **regenerable** from the Jac builders (see
 [Rebuilding](#rebuilding-the-dataset-order-matters)). Confirm any time with
 `jac run 01-sft-dpo/sft_dpo/jacgen/dataset_stats.jac`.
 
@@ -241,8 +241,8 @@ sampled manual review. The 12 generation recipes (R1–R12) are documented in
 | Balanced manifest (1:3 idiom:transpile) | `01-sft-dpo/dataset/conversion/sft_train.jsonl` | **588** |
 | mlx-lm SFT split (messages-only) | `01-sft-dpo/dataset/mlx/{train,valid}.jsonl` | **529 / 59** |
 | mlx-lm DPO split (`{prompt,chosen,rejected}`) | `01-sft-dpo/dataset/mlx_dpo/{train,valid}.jsonl` | **132 / 15** |
-| Function eval holdout (behavioral `test_cases`) | `dataset/eval_holdout/conversion.jsonl` | **150** |
-| Graph eval holdout (idiom headroom) | `dataset/eval_holdout/graph_conversion.jsonl` | **13** |
+| Function eval holdout (behavioral `test_cases`) | `01-sft-dpo/dataset/eval_holdout/conversion.jsonl` | **150** |
+| Graph eval holdout (idiom headroom) | `01-sft-dpo/dataset/eval_holdout/graph_conversion.jsonl` | **13** |
 
 Idiomatic core composition: 24 seed + 84 idiomatic batches + 8 mined + 31 graph = 147;
 difficulty mix atomic 41 / idiomatic 37 / composed 69.
@@ -254,15 +254,15 @@ difficulty mix atomic 41 / idiomatic 37 / composed 69.
 `./sft_dpo/run_probe.sh <model-id> <name>` runs, in order (each stage **skippable + resumable**):
 
 1. **Quantize** the model → Q4 (train) + Q8 (eval).
-2. **Base eval** on the 150 holdout → `results/<name>/base.txt`.
+2. **Base eval** on the 150 holdout → `01-sft-dpo/results/<name>/base.txt`.
 3. **30-iter dry-run** — bail check (loss drops, no NaN/OOM); Ctrl-C within 8s to abort.
 4. **LoRA train** (`01-sft-dpo/sft_dpo/configs/lora.yaml`, 600 iters) with a live ASCII dashboard + PNG
    graphs refreshed per checkpoint.
 5. **Fuse** adapter → Q8.
-6. **Finetuned eval** on the 150 holdout → `results/<name>/finetuned.txt`.
-7. **Graphs** → `results/<name>/*.png` (8 series + learning curve).
+6. **Finetuned eval** on the 150 holdout → `01-sft-dpo/results/<name>/finetuned.txt`.
+7. **Graphs** → `01-sft-dpo/results/<name>/*.png` (8 series + learning curve).
 
-Per-model namespaced (`results/qwen/`, `results/gemma/`) — two models never clash.
+Per-model namespaced (`01-sft-dpo/results/qwen/`, `01-sft-dpo/results/gemma/`) — two models never clash.
 
 **Metrics measured** (per checkpoint + base/finetuned): runs% (compiles+executes),
 **cross-compiled test-pass%** (primary), generation tokens, eval tok/s,
@@ -271,7 +271,7 @@ tokens, peak mem).
 
 **Resumability:** runs under `caffeinate` (no idle sleep; lid-close suspends, resumes on
 wake). Kill/shutdown/crash → re-run the **same command**: finished stages skip via
-`results/<name>/.<stage>.done` markers, and LoRA training resumes from the last saved
+`01-sft-dpo/results/<name>/.<stage>.done` markers, and LoRA training resumes from the last saved
 checkpoint (mlx saves every 100 steps to `adapters/<name>-probe/`).
 
 **DPO stage:** `./sft_dpo/run_dpo.sh <name>` (needs `mlx-lm-lora`; mlx-lm has no native DPO).
@@ -289,13 +289,13 @@ generation); subsequent runs skip download/quantize → **~2–4 hr**.
 |---|---|
 | `01-sft-dpo/sft_dpo/jacgen/*.jac` | the all-Jac pipeline: generate, validate, dedup, decontaminate, split, eval harness, dashboards (24 modules) |
 | `01-sft-dpo/sft_dpo/jacgen/graph_data/` | authored graph/tree tasks (`train.json` 31, `holdout.json` 13) + the Python generators |
-| `dataset/` *(gitignored)* | generated data — see [the dataset table](#the-dataset-on-disk) |
+| `01-sft-dpo/dataset/` *(gitignored)* | generated data — see [the dataset table](#the-dataset-on-disk) |
 | `01-sft-dpo/sft_dpo/configs/lora.yaml` | LoRA SFT config (mlx-lm) |
 | `01-sft-dpo/sft_dpo/run_probe.sh` / `01-sft-dpo/sft_dpo/run_dpo.sh` | SFT probe runner / DPO runner (resumable) |
 | `01-sft-dpo/sft_dpo/bakeoff_postprobe.sh` | per-model bake-off helper: SFT idiom baseline + graph holdout + DPO + graph DPO |
-| `01-sft-dpo/sft_dpo/make_comparison.py` / `01-sft-dpo/sft_dpo/make_pub_graphs.py` | cross-model comparison graphs + matrix (parses `results/<name>/`) |
+| `01-sft-dpo/sft_dpo/make_comparison.py` / `01-sft-dpo/sft_dpo/make_pub_graphs.py` | cross-model comparison graphs + matrix (parses `01-sft-dpo/results/<name>/`) |
 | `setup_env.sh` / `01-sft-dpo/sft_dpo/check.sh` | venv + installs / type + behavior gate (non-destructive) |
-| `results/` *(gitignored)* | per-model run outputs (`base.txt`, `finetuned.txt`, `graph-*.txt`, `*.png`, `metrics.jsonl`) |
+| `01-sft-dpo/results/` *(gitignored)* | per-model run outputs (`base.txt`, `finetuned.txt`, `graph-*.txt`, `*.png`, `metrics.jsonl`) |
 | `resultspub/` | **publishable copies** — `initmodelchoice/` (bake-off, all models + comparison graphs) + `other/` |
 | `01-sft-dpo/resultspub/initmodelchoice/` | committed Qwen-vs-Gemma results + graphs → [`RESULTS.md`](01-sft-dpo/resultspub/initmodelchoice/RESULTS.md) |
 | `models/` / `adapters/` *(gitignored)* | quantized/fused models / LoRA adapters |
@@ -347,7 +347,7 @@ and HANDOFF §5).
 
 ## Rebuilding the dataset (order matters)
 
-`dataset/` is gitignored. To regenerate from scratch, run in **this exact order**
+`01-sft-dpo/dataset/` is gitignored. To regenerate from scratch, run in **this exact order**
 (`seed_conversion` truncates; the batches append, so they must follow it):
 
 ```bash

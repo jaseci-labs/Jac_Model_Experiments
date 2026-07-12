@@ -1,6 +1,6 @@
 """Comprehensive bake-off comparison graphs for 01-sft-dpo/resultspub/initmodelchoice.
 
-Reuses make_comparison's parsers (reads live results/<name>/ files) and adds two
+Reuses make_comparison's parsers (reads live 01-sft-dpo/results/<name>/ files) and adds two
 all-in-one charts: every model, every stage, distinct color + legend.
   - combined_accuracy.png : function + graph holdout, base/SFT/DPO test-pass %
   - combined_idiom.png    : function + graph idiom similarity, SFT/DPO (lower=better)

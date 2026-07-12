@@ -11,7 +11,7 @@ set (mem):
 
 Every step REUSES the existing primitives (pick_rung / build_sft_gold / run_rft.sh
 / run_grpo.sh / eval_rl.jac) — this file only loops and threads paths. Eval rows
-append to results/rl_ladder.jsonl tagged JAC_RL_TAG=r<N>/<model>/<cond>/<gen|mem>.
+append to 02-rl-grpo/results/rl_ladder.jsonl tagged JAC_RL_TAG=r<N>/<model>/<cond>/<gen|mem>.
 
 DRY by default: prints the exact command plan and writes nothing heavy. Each cell
 is hours of MLX compute, so launching is opt-in:
@@ -39,7 +39,7 @@ import os;
 import subprocess;
 import from pathlib { Path }
 
-glob OUT: str = os.environ.get("JAC_LADDER_OUT", "results/rl_ladder.jsonl");   # step 7 uses a separate file
+glob OUT: str = os.environ.get("JAC_LADDER_OUT", "02-rl-grpo/results/rl_ladder.jsonl");   # step 7 uses a separate file
 glob GO: bool = os.environ.get("JAC_LADDER_GO", "") == "1";
 
 def sh(cmd: str) -> int {

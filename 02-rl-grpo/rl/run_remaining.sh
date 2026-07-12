@@ -23,7 +23,7 @@ ev() {
 # full pipeline for one model. args: NAME BASE_Q4 GROUP_SIZE
 run_model() {
   local NAME="$1" BASE="$2" GS="$3"
-  local R="results/${NAME}/final"; mkdir -p "$R"
+  local R="02-rl-grpo/results/${NAME}/final"; mkdir -p "$R"
   echo "############ $NAME  (base=$BASE)  $(date) ############"
 
   echo ">>> [$NAME] base evals"

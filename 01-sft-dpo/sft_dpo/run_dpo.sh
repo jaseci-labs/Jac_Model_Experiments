@@ -19,7 +19,7 @@ if [ -z "${CAFFEINATED:-}" ] && command -v caffeinate >/dev/null 2>&1; then
   exec caffeinate -dimsu env CAFFEINATED=1 "$0" "$@"
 fi
 SELF_DIR="$(cd "$(dirname "$0")" && pwd)"
-cd "$(cd "$SELF_DIR/../.." && pwd)"   # repo root: dataset/ models/ 01-sft-dpo/adapters/ results/ resolve here
+cd "$(cd "$SELF_DIR/../.." && pwd)"   # repo root: 01-sft-dpo/dataset/ models/ 01-sft-dpo/adapters/ 01-sft-dpo/results/ resolve here
 [ -d ".venv/bin" ] && export PATH="$PWD/.venv/bin:$PATH"
 
 NAME="${1:?short name, e.g. qwen}"
@@ -36,7 +36,7 @@ for f in 01-sft-dpo/dataset/mlx_dpo/train.jsonl 01-sft-dpo/dataset/mlx_dpo/valid
   [ -f "$f" ] || { echo "MISSING $f — run: jac run 01-sft-dpo/sft_dpo/jacgen/build_dpo_splits.jac"; exit 1; }
 done
 
-RDIR="results/${NAME}/dpo"; mkdir -p "$RDIR"
+RDIR="01-sft-dpo/results/${NAME}/dpo"; mkdir -p "$RDIR"
 DPO_ADAPTER="01-sft-dpo/adapters/${NAME}-dpo"
 SFT_Q4="models/${NAME}-jac-fused-q4"     # DPO trains on the SFT model (Q4 = lighter)
 SFT_Q8="models/${NAME}-jac-fused-q8"     # already built by run_probe.sh (fuse stage)
@@ -88,6 +88,6 @@ JAC_EVAL_MODE=mlx JAC_EVAL_MODEL="$DPO_FUSED" JAC_IDIOM_OUT="$RDIR/idiom-metrics
 
 echo "=== DPO done ==="
 echo "  model:    $DPO_FUSED"
-echo "  behavior: $RDIR/finetuned.txt   (compare to results/${NAME}/finetuned.txt)"
-echo "  idiom:    $RDIR/idiom.txt        (compare avg_sim to the SFT idiom: results/${NAME}/idiom-finetuned.txt)"
+echo "  behavior: $RDIR/finetuned.txt   (compare to 01-sft-dpo/results/${NAME}/finetuned.txt)"
+echo "  idiom:    $RDIR/idiom.txt        (compare avg_sim to the SFT idiom: 01-sft-dpo/results/${NAME}/idiom-finetuned.txt)"
 echo "  WIN = behavior holds AND avg transpile-similarity drops (more idiomatic, less transpile-shaped)."

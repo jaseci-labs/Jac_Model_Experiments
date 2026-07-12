@@ -10,7 +10,7 @@
 #     TRUNCATES 01-sft-dpo/dataset/conversion/sft.jsonl back to the 32 seeds (and dpo.jsonl
 #     to 2), wiping the idiomatic_batch* / dpo_conversion appends. See HANDOFF.md.
 set -euo pipefail
-cd "$(cd "$(dirname "$0")/../.." && pwd)"   # repo root, so dataset/ paths resolve
+cd "$(cd "$(dirname "$0")/../.." && pwd)"   # repo root, so 01-sft-dpo/dataset/ paths resolve
 [ -d "$PWD/.venv/bin" ] && export PATH="$PWD/.venv/bin:$PATH"   # subprocess `jac` resolves
 JAC="${JAC:-.venv/bin/jac}"
 [ -x "$JAC" ] || JAC="jac"   # fall back to PATH (e.g. after `source .venv/bin/activate`)

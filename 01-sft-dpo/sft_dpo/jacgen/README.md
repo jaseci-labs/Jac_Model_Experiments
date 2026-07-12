@@ -24,7 +24,7 @@ behavioral gate (MultiPL-T style). **All tooling is written in Jac.**
 
 | File | Role |
 |---|---|
-| `mine.jac` | Cleaned runnable functions → `dataset/source_pool/mined.jsonl`. |
+| `mine.jac` | Cleaned runnable functions → `01-sft-dpo/dataset/source_pool/mined.jsonl`. |
 | `seed_conversion.jac` | ⚠️ **TRUNCATES** `sft.jsonl` → 32 idiomatic seeds + 2 seed DPO pairs. |
 | `idiomatic_batch.jac` / `…batch2.jac` / `…batch3.jac` | **APPEND** +30 / +23 / +31 idiomatic examples (`source: generated_idiomatic`). |
 | `scale_conversion.jac` | Mine Vezora → `jac py2jac` → **jac-run gate** → 1500 → `sft_auto.jsonl`. |
@@ -88,4 +88,4 @@ jac run 01-sft-dpo/sft_dpo/jacgen/dataset_stats.jac       # report
 jac run 01-sft-dpo/sft_dpo/jacgen/verify_dataset.jac      # non-destructive audit (JAC_SAMPLE_EVERY=40)
 ```
 
-Generated data lands in gitignored `dataset/`.
+Generated data lands in gitignored `01-sft-dpo/dataset/`.

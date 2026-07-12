@@ -17,18 +17,18 @@ def cells(p):
 
 
 def bok(f):
-    p = os.path.join(ROOT, "results", f)
+    p = os.path.join(ROOT, "02-rl-grpo", "results", f)
     if not os.path.exists(p):
         return None
     m = re.search(r"DEPLOY.*?\((\d+\.?\d*)%\)", open(p).read())
     return round(float(m.group(1)), 1) if m else None
 
 
-c = cells("results/corrected_ladder.jsonl")
-sg = cells("results/corrected_sg.jsonl")
-cv = cells("results/conv_full.jsonl")
-cl = cells("results/clean_measure.jsonl")
-bg = cells("results/big_holdout.jsonl")
+c = cells("02-rl-grpo/results/corrected_ladder.jsonl")
+sg = cells("02-rl-grpo/results/corrected_sg.jsonl")
+cv = cells("02-rl-grpo/results/conv_full.jsonl")
+cl = cells("02-rl-grpo/results/clean_measure.jsonl")
+bg = cells("02-rl-grpo/results/big_holdout.jsonl")
 def g(t, f): return c.get("corr/jac-qwen3coder/" + t, {}).get(f)
 
 ladder = [{"cell": lbl, "greedy": g(t, "pass1_pct"), "passk": g(t, "passk_pct")} for lbl, t in

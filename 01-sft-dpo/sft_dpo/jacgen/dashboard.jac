@@ -1,8 +1,8 @@
 """Zero-dependency ASCII training dashboard (no matplotlib needed).
 
-Parses the mlx_lm.lora training log (results/<name>-train.log) for train/val
+Parses the mlx_lm.lora training log (01-sft-dpo/results/<name>-train.log) for train/val
 loss, learning rate, tokens/sec, and the per-checkpoint learning-curve metrics
-(results/<name>-metrics.jsonl from eval_probe), and renders terminal charts.
+(01-sft-dpo/results/<name>-metrics.jsonl from eval_probe), and renders terminal charts.
 run_probe.sh re-runs this on a timer for a live view.
 
     jac run srccurrent/jacgen/dashboard.jac
@@ -92,8 +92,8 @@ def render(label: str, points: list) {
 
 
 with entry {
-    train_log: str = os.environ.get("JAC_TRAIN_LOG", "results/train.log");
-    metrics: str = os.environ.get("JAC_METRICS", "results/metrics.jsonl");
+    train_log: str = os.environ.get("JAC_TRAIN_LOG", "01-sft-dpo/results/train.log");
+    metrics: str = os.environ.get("JAC_METRICS", "01-sft-dpo/results/metrics.jsonl");
 
     t: dict = parse_train(train_log);
     print("==================== TRAINING DASHBOARD ====================");

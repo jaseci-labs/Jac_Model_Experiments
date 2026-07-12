@@ -1,6 +1,6 @@
-"""6-model SFT+DPO bake-off comparison -> results/comparison/*.png + matrix.md.
+"""6-model SFT+DPO bake-off comparison -> 01-sft-dpo/results/comparison/*.png + matrix.md.
 
-Post-hoc: run AFTER all bake-off runs finish. Reads each results/<name>/ dir and
+Post-hoc: run AFTER all bake-off runs finish. Reads each 01-sft-dpo/results/<name>/ dir and
 plots all models together. No live eval — data is recorded during the runs
 (metrics.jsonl per checkpoint from run_probe's curve stage, train.log, idiom-metrics).
 
@@ -18,7 +18,7 @@ from matplotlib import pyplot as plt
 
 # Anchor to repo root so result paths resolve regardless of cwd.
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-RES = os.path.join(ROOT, "results")
+RES = os.path.join(ROOT, "01-sft-dpo", "results")
 OUT = os.path.join(RES, "comparison")
 
 # All bake-off models. qwen = incumbent (parsed, not re-run). Dict order = legend order.

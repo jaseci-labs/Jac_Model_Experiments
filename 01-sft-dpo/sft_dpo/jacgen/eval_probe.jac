@@ -22,7 +22,7 @@ import from writer { run_jac }
 import from pathlib { Path }
 import from typing { Any }
 
-glob HOLDOUT: str = "dataset/eval_holdout/conversion.jsonl";
+glob HOLDOUT: str = "01-sft-dpo/dataset/eval_holdout/conversion.jsonl";
 glob GEN_MODE: str = "py2jac";   # default; override with env JAC_EVAL_MODE = py2jac | mlx
 glob MLX_MODEL: str = "";        # default; override with env JAC_EVAL_MODEL = <model path>
 

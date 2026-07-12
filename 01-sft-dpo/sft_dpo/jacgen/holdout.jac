@@ -17,7 +17,7 @@ import from pathlib { Path }
 import from typing { Any }
 
 glob TRAIN_FILES: list[str] = ["01-sft-dpo/dataset/conversion/sft.jsonl", "01-sft-dpo/dataset/conversion/sft_auto.jsonl"];
-glob OUT_PATH: str = "dataset/eval_holdout/conversion.jsonl";
+glob OUT_PATH: str = "01-sft-dpo/dataset/eval_holdout/conversion.jsonl";
 glob SOURCE: str = "Vezora/Tested-22k-Python-Alpaca";
 glob START_OFFSET: int = 12000;
 glob TARGET: int = 150;

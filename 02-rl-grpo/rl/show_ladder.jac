@@ -1,4 +1,4 @@
-"""Phase 3 — read the curve. Pivot results/rl_ladder.jsonl into a markdown table.
+"""Phase 3 — read the curve. Pivot 02-rl-grpo/results/rl_ladder.jsonl into a markdown table.
 
 run_ladder.jac appends one row per eval, tagged r<N>/<model>/<cond>/<gen|mem>.
 This collapses those into one line per (model, rung, condition) showing the
@@ -6,7 +6,7 @@ headline numbers side by side: holdout (gen) pass@1 vs the rung's own train (mem
 pass@1, plus near-pass and avg-osim diagnostics. Read the sweet spot off the gen
 column — the rung where it plateaus.
 
-  jac run 02-rl-grpo/rl/show_ladder.jac                 # default results/rl_ladder.jsonl
+  jac run 02-rl-grpo/rl/show_ladder.jac                 # default 02-rl-grpo/results/rl_ladder.jsonl
   JAC_LADDER_RESULTS=path jac run 02-rl-grpo/rl/show_ladder.jac
 
 Paste the output under the matching section of 02-rl-grpo/docs/rl/02-results.md.
@@ -50,7 +50,7 @@ def wilson_ci(rec: dict) -> str {
 }
 
 with entry {
-    path = os.environ.get("JAC_LADDER_RESULTS", "results/rl_ladder.jsonl");
+    path = os.environ.get("JAC_LADDER_RESULTS", "02-rl-grpo/results/rl_ladder.jsonl");
     if not Path(path).exists() {
         print("no rows yet at " + path + " — run the ladder first (JAC_LADDER_GO=1 jac run 02-rl-grpo/rl/run_ladder.jac)");
     } else {

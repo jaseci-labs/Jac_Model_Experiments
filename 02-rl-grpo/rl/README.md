@@ -20,7 +20,7 @@ this_is_jac/*.jac
 02-rl-grpo/dataset/rl/{holdout,trainpool,train,valid}.jsonl
    │ jac run 02-rl-grpo/rl/run_ladder.jac           THE LADDER: loops rungs × models × conditions
    ▼                                     (dry by default; JAC_LADDER_GO=1 to execute)
-results/rl_ladder.jsonl   one row per eval, tagged r<N>/<model>/<cond>/<gen|mem>
+02-rl-grpo/results/rl_ladder.jsonl   one row per eval, tagged r<N>/<model>/<cond>/<gen|mem>
 ```
 
 The ladder driver (`02-rl-grpo/rl/run_ladder.jac`) reuses every primitive below; the manual
@@ -32,10 +32,10 @@ single-run path still works if you want one cell by hand:
    │ RL_BASE=<base> ./rl/run_rft.sh <name>       A) gold-SFT (LoRA + fuse) → models/<name>-rft-q4
    │ RL_BASE=<warm-or-base> ./rl/run_grpo.sh <n> B/C) GRPO   reward = 02-rl-grpo/rl/reward_logic.jac
    ▼
-adapters/<name>-grpo  +  results/<name>/grpo/
+adapters/<name>-grpo  +  02-rl-grpo/results/<name>/grpo/
    │ JAC_EVAL_MODEL=<base> JAC_EVAL_ADAPTER=adapters/<name>-grpo jac run 02-rl-grpo/rl/eval_rl.jac
    ▼
-results/<name>/grpo/eval.txt   (run% / pass@1 / pass@k / near-pass / idiom vs base)
+02-rl-grpo/results/<name>/grpo/eval.txt   (run% / pass@1 / pass@k / near-pass / idiom vs base)
 ```
 
 ## Reward
@@ -90,7 +90,7 @@ pass) `RFT_ITERS`(150).
 (train-N ∈ 1,3,5,10,20,all) and each model it runs the three design conditions —
 **base**, **A) gold-SFT**, **B) SFT+GRPO**, **C) raw-base GRPO control** — and evals
 each on the fixed holdout (gen) and the rung's own train tasks (mem). Rows append to
-`results/rl_ladder.jsonl` tagged `r<N>/<model>/<cond>/<gen|mem>`.
+`02-rl-grpo/results/rl_ladder.jsonl` tagged `r<N>/<model>/<cond>/<gen|mem>`.
 
 ```bash
 jac run 02-rl-grpo/rl/build_tasks.jac           # drivers -> 02-rl-grpo/dataset/rl/tasks.jsonl + templates/
@@ -99,7 +99,7 @@ jac run 02-rl-grpo/rl/test_ladder.jac           # self-check: disjoint splits, f
 
 jac run 02-rl-grpo/rl/run_ladder.jac            # DRY: print the full command plan, run nothing heavy
 JAC_LADDER_GO=1 jac run 02-rl-grpo/rl/run_ladder.jac   # execute (sequential; hours per cell)
-jac run 02-rl-grpo/rl/show_ladder.jac           # Phase 3: pivot results/rl_ladder.jsonl -> curve table
+jac run 02-rl-grpo/rl/show_ladder.jac           # Phase 3: pivot 02-rl-grpo/results/rl_ladder.jsonl -> curve table
 
 # scope it while iterating:
 JAC_LADDER_RUNGS=1,3 JAC_LADDER_MODELS=qwen3coder:models/qwen-q4:4 \

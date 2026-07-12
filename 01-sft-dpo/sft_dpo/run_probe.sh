@@ -25,7 +25,7 @@ if [ -z "${CAFFEINATED:-}" ] && command -v caffeinate >/dev/null 2>&1; then
 fi
 
 SELF_DIR="$(cd "$(dirname "$0")" && pwd)"
-cd "$(cd "$SELF_DIR/../.." && pwd)"   # repo root: dataset/ models/ 01-sft-dpo/adapters/ results/ resolve here
+cd "$(cd "$SELF_DIR/../.." && pwd)"   # repo root: 01-sft-dpo/dataset/ models/ 01-sft-dpo/adapters/ 01-sft-dpo/results/ resolve here
 [ -d ".venv/bin" ] && export PATH="$PWD/.venv/bin:$PATH"
 
 HF_MODEL="${1:?hf model id, e.g. Qwen/Qwen3-Coder-30B-A3B}"
@@ -37,12 +37,12 @@ need() { command -v "$1" >/dev/null 2>&1 || { echo "MISSING: $1  (try: $2)"; exi
 need jac "pip install jaclang"
 for s in convert lora fuse generate; do need "mlx_lm.$s" "pip install mlx-lm"; done
 for f in 01-sft-dpo/dataset/mlx/train.jsonl 01-sft-dpo/dataset/mlx/valid.jsonl \
-         dataset/eval_holdout/conversion.jsonl 01-sft-dpo/sft_dpo/configs/lora.yaml; do
+         01-sft-dpo/dataset/eval_holdout/conversion.jsonl 01-sft-dpo/sft_dpo/configs/lora.yaml; do
   [ -f "$f" ] || { echo "MISSING: $f  (run build_splits.jac / holdout.jac first)"; exit 1; }
 done
 
-mkdir -p models 01-sft-dpo/adapters "results/${NAME}"   # per-model results dir (no gemma/qwen clash)
-RDIR="results/${NAME}"
+mkdir -p models 01-sft-dpo/adapters "01-sft-dpo/results/${NAME}"   # per-model results dir (no gemma/qwen clash)
+RDIR="01-sft-dpo/results/${NAME}"
 TRAIN_LOG="$RDIR/train.log"
 METRICS="$RDIR/metrics.jsonl"
 ADAPTER="01-sft-dpo/adapters/${NAME}-probe"
@@ -128,7 +128,7 @@ else
     clear
     JAC_TRAIN_LOG="$TRAIN_LOG" JAC_METRICS="$METRICS" \
       jac run 01-sft-dpo/sft_dpo/jacgen/dashboard.jac 2>/dev/null || true
-    # refresh the PNG graphs live too (open results/<name>/*.png in Preview to watch them update)
+    # refresh the PNG graphs live too (open 01-sft-dpo/results/<name>/*.png in Preview to watch them update)
     JAC_TRAIN_LOG="$TRAIN_LOG" JAC_METRICS="$METRICS" JAC_PLOT_DIR="$RDIR" \
       jac run 01-sft-dpo/sft_dpo/jacgen/plot_metrics.jac >/dev/null 2>&1 || true
     sleep "$EVAL_EVERY"

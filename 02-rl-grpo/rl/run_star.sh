@@ -18,7 +18,7 @@ NAME="${1:?short name}"
 RL_BASE="${RL_BASE:?set RL_BASE to the q4 base}"
 ROUNDS="${STAR_ROUNDS:-2}"; SAMPLES="${STAR_SAMPLES:-6}"; PASS="${STAR_PASS:-0.9}"
 TEMP="${STAR_TEMP:-1.0}"; EVAL_K="${EVAL_K:-4}"
-STAR="results/${NAME}/star"; mkdir -p "$STAR"
+STAR="02-rl-grpo/results/${NAME}/star"; mkdir -p "$STAR"
 SFTSET="02-rl-grpo/dataset/rl/star/${NAME}"; mkdir -p "$SFTSET"
 
 ev() {  # model -> appends to a file. args: model outfile

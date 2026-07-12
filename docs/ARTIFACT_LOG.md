@@ -2,7 +2,7 @@
 
 Record of every model/adapter that existed before the big cleanup (1.32TB → ~125GB).
 Hyperparameters for every adapter: `docs/training_configs/<name>.json` (all 41 preserved, including deleted runs).
-Eval numbers: `02-rl-grpo/RL_FINDINGS.md`, `README.md`, `02-rl-grpo/resultspub/rl/corrected_summary.json`, raw logs in `results/`.
+Eval numbers: `02-rl-grpo/RL_FINDINGS.md`, `README.md`, `02-rl-grpo/resultspub/rl/corrected_summary.json`, raw logs in `01-sft-dpo/results/`.
 
 ## How to recreate anything deleted
 

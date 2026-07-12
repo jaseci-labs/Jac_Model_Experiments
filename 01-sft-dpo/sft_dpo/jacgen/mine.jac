@@ -20,7 +20,7 @@ import from pathlib { Path }
 import from typing { Any }
 
 glob DATASET: str = "Vezora/Tested-22k-Python-Alpaca";
-glob POOL_PATH: str = "dataset/source_pool/mined.jsonl";
+glob POOL_PATH: str = "01-sft-dpo/dataset/source_pool/mined.jsonl";
 glob ALLOWED_IMPORTS: list[str] = ["math", "re", "string", "functools", "collections", "itertools"];
 glob BANNED: list[str] = ["np.", "pd.", "yield", "open(", "input(", "@", "class ", "async ", "lambda", "print(", "self"];
 glob INPUTS: list[Any] = ["hello", "Racecar", "abcabc", "level", "Hello World",

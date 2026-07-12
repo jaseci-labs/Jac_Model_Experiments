@@ -82,7 +82,7 @@ One point per saved checkpoint (`save_every: 100`, so 6 points). Function holdou
 | 600 | 100 | 96 | 79 | 100 | 96 | 59 |
 
 Both models learn function conversion **almost immediately** (≥93% by iter 100) and plateau
-— more iters don't help. PNGs: `results/<model>/learning_curve.png`.
+— more iters don't help. PNGs: `01-sft-dpo/results/<model>/learning_curve.png`.
 
 ---
 
@@ -146,7 +146,7 @@ typed/weighted edges (`edge Road{has w}`), linked-list chains.
 
 ## 9. Graph index (PNGs)
 
-Per model, in `results/qwen/` and `results/gemma/`:
+Per model, in `01-sft-dpo/results/qwen/` and `01-sft-dpo/results/gemma/`:
 
 | file | shows |
 |---|---|

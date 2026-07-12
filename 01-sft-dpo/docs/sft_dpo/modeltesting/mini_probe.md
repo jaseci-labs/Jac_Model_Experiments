@@ -10,7 +10,7 @@ and scoring is one command once `mlx-lm` and a model are present.
 |---|---|
 | Balanced training manifest (1:3 idiom:transpile, 464) | `01-sft-dpo/dataset/conversion/sft_train.jsonl` |
 | mlx-lm splits (messages format) | `01-sft-dpo/dataset/mlx/train.jsonl` (417) + `valid.jsonl` (47) |
-| Decontaminated eval holdout (150, behavioral cases) | `dataset/eval_holdout/conversion.jsonl` |
+| Decontaminated eval holdout (150, behavioral cases) | `01-sft-dpo/dataset/eval_holdout/conversion.jsonl` |
 | DPO pairs (compile-gated, 60) | `01-sft-dpo/dataset/conversion/dpo.jsonl` |
 | LoRA config (scaffold) | `configs/lora.yaml` |
 | Eval harness (model-agnostic) | `srccurrent/jacgen/eval_probe.jac` |
@@ -53,9 +53,9 @@ and run `./run_probe.sh <model> <name>`. Full handoff with all gotchas:
 ## Live metrics + graphs
 
 `run_probe.sh` does: quantize → base eval → **30-iter dry-run** (bail check) →
-full train (redirected — not piped — to `results/<name>-train.log` so `$!` is the
+full train (redirected — not piped — to `01-sft-dpo/results/<name>-train.log` so `$!` is the
 trainer) with a live loop that, every `EVAL_EVERY`s, runs a `SUBSET`-task adapter
-eval (no fuse) appending a learning-curve point to `results/<name>-metrics.jsonl`
+eval (no fuse) appending a learning-curve point to `01-sft-dpo/results/<name>-metrics.jsonl`
 and redraws the **ASCII dashboard** (`dashboard.jac`) + the **PNG graphs**
 (`plot_metrics.jac`). After training: fuse → full 150 eval → final graphs.
 The eval loads the model **once** in-process (mlx) and reuses it across the whole
@@ -63,8 +63,8 @@ subset — an earlier version reloaded the 30B model per task and was unusably s
 
 - `dashboard.jac` (zero-dep): train/val loss, LR, tokens/sec, and the holdout
   test-pass learning curve — live in the terminal.
-- `plot_metrics.jac` (matplotlib): the same as `results/*.png`; the learning
-  curve (`results/learning_curve.png`) is the one that tells you if it's learning
+- `plot_metrics.jac` (matplotlib): the same as `01-sft-dpo/results/*.png`; the learning
+  curve (`01-sft-dpo/results/learning_curve.png`) is the one that tells you if it's learning
   Jac, not just lowering loss.
 - Config intervals: `configs/lora.yaml` reports train loss every 10 steps, val
   loss every 50, checkpoints every 100.
@@ -80,7 +80,7 @@ jac run srccurrent/jacgen/build_splits.jac
 ```
 
 `run_probe.sh` quantizes → base eval → LoRA SFT → fuse → finetuned eval, writing
-`results/<name>-base.txt` and `results/<name>-finetuned.txt`. The eval harness
+`01-sft-dpo/results/<name>-base.txt` and `01-sft-dpo/results/<name>-finetuned.txt`. The eval harness
 reads `JAC_EVAL_MODE` / `JAC_EVAL_MODEL` from the environment (no source edits).
 
 ## Metrics

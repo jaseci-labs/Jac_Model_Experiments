@@ -52,7 +52,7 @@ compiler gate → cross-compiled tests → idiom judge → sampled manual review
 
 ## Current state
 
-SFT+DPO phase done: 1647 SFT / 147 DPO examples (git-tracked under `dataset/`),
+SFT+DPO phase done: 1647 SFT / 147 DPO examples (git-tracked under `01-sft-dpo/dataset/`),
 fn conversion 0%→94%, graph conversion 46%→61% (see `README.md` for the full
 tables). RL/GRPO phase done and written up in `02-rl-grpo/RL_FINDINGS.md` — SFT moves
 greedy accuracy (39%→61% at rung-20), GRPO adds nothing; deployable recipe =

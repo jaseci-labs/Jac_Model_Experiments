@@ -51,7 +51,7 @@ avg transpile-similarity (**lower = more idiomatic**, 0.26 ≈ ideal).
 
 \* gpt-oss DPO not possible — see deviation below. † ling dropped — see below.
 
-Comparison graphs: `results/comparison/` — `learning_curve_compare.png`,
+Comparison graphs: `01-sft-dpo/results/comparison/` — `learning_curve_compare.png`,
 `train_loss_compare.png`, `val_loss_compare.png`, `accuracy_compare.png`,
 `idiom_compare.png`, `graph_accuracy_compare.png`, `graph_idiom_compare.png`.
 
@@ -71,7 +71,7 @@ in the field). But its MXFP4 weights break the standard MLX path: Q8 quantizatio
 0% (garbage generation) and `mlx_lm.fuse` corrupts the model at any precision. Scored
 SFT-only via an unfused Q4+adapter eval (documented, conservative). **DPO impossible** —
 `run_dpo` must fuse SFT→base first, and the fuse breaks it. Promising but not shippable
-without new MLX MXFP4 support. (`results/gptoss/DEVIATION.md`.)
+without new MLX MXFP4 support. (`01-sft-dpo/results/gptoss/DEVIATION.md`.)
 
 **DeepSeek-Coder-V2-Lite (`dscoder`) — strong functions, weak graphs.**
 Function 94/94 (ties the field) but graph collapses to 15%→23% with the least-idiomatic
@@ -88,7 +88,7 @@ BailingMoE architecture. Standard convert failed (`rotary_emb.inv_freq` strict-l
 salvaged with a relaxed convert, but the model then loads into a generic class and generates
 **runaway output (512 tokens, no EOS) — 0% across all six checkpoints**. Not a learning
 failure, an integration failure: BailingMoE isn't supported by the installed `mlx_lm`.
-(`results/ling/DROPPED.md`.)
+(`01-sft-dpo/results/ling/DROPPED.md`.)
 
 ## Deviations & incidents (full disclosure)
 

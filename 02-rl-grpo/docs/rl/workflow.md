@@ -47,7 +47,7 @@ flowchart TD
 **Runner:** Phases 1–2 below are driven by one command — `jac run 02-rl-grpo/rl/run_ladder.jac`
 (dry by default; `JAC_LADDER_GO=1` to execute). It loops rungs × models × conditions,
 reusing `pick_rung.jac` / `build_sft_gold.jac` / `run_rft.sh` / `run_grpo.sh` /
-`eval_rl.jac`, and appends rows to `results/rl_ladder.jsonl`. The phases below are the
+`eval_rl.jac`, and appends rows to `02-rl-grpo/results/rl_ladder.jsonl`. The phases below are the
 manual breakdown of what it runs.
 
 ## Phase 0 — Build (once)

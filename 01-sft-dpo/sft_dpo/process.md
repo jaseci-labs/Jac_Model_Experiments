@@ -31,14 +31,14 @@ the pipeline work. check.sh does **not** mutate the dataset.
 
 ## 2. Confirm the data is in place
 
-Already generated (gitignored under `dataset/`):
+Already generated (gitignored under `01-sft-dpo/dataset/`):
 
 | File | What | Count |
 |---|---|---|
 | `01-sft-dpo/dataset/conversion/sft.jsonl` | idiomatic core (hand/agentic) | 116 |
 | `01-sft-dpo/dataset/conversion/sft_auto.jsonl` | transpile volume (py2jac, behaviorally gated) | 1500 |
 | `01-sft-dpo/dataset/mlx/train.jsonl` + `valid.jsonl` | training split (mlx `messages` format, 1:3 idiom:transpile) | 417 / 47 |
-| `dataset/eval_holdout/conversion.jsonl` | unseen, decontaminated eval tasks (behavioral `test_cases`) | 150 |
+| `01-sft-dpo/dataset/eval_holdout/conversion.jsonl` | unseen, decontaminated eval tasks (behavioral `test_cases`) | 150 |
 | `01-sft-dpo/dataset/conversion/dpo.jsonl` | DPO pairs (later stage) | 60 |
 
 Total SFT = 1640 (140 idiomatic incl 24 graph + 1500 transpile). Confirm any time with
@@ -79,14 +79,14 @@ jac run srccurrent/jacgen/dataset_stats.jac       # composition report
 
 What it does, in order:
 1. quantize the model → Q4 (train) + Q8 (eval)
-2. **base eval** on the 150 holdout → `results/qwen-base.txt`
+2. **base eval** on the 150 holdout → `01-sft-dpo/results/qwen-base.txt`
 3. **30-iter dry-run** — bail check (loss drops, no NaN/OOM); Ctrl-C within 8s to abort
 4. **train** (LoRA SFT, `configs/lora.yaml`) with a **live dashboard** every ~60s
    (train/val loss, LR, tokens/sec, and the holdout test-pass **learning curve**
    from a 50-task per-checkpoint eval)
 5. **fuse** adapter → Q8
-6. **finetuned eval** on the 150 holdout → `results/qwen-finetuned.txt`
-7. **graphs** → `results/*.png`
+6. **finetuned eval** on the 150 holdout → `01-sft-dpo/results/qwen-finetuned.txt`
+7. **graphs** → `01-sft-dpo/results/*.png`
 
 Tunables (env): `EVAL_EVERY` (dashboard secs), `SUBSET` (tasks/checkpoint),
 `DRY_ITERS`, `SKIP_DRY=1`.
@@ -94,20 +94,20 @@ Tunables (env): `EVAL_EVERY` (dashboard secs), `SUBSET` (tasks/checkpoint),
 ## 4. Read the result
 
 - **Primary metric:** cross-compiled test pass rate, base vs finetuned, in
-  `results/qwen-base.txt` vs `results/qwen-finetuned.txt`. The delta is the signal:
+  `01-sft-dpo/results/qwen-base.txt` vs `01-sft-dpo/results/qwen-finetuned.txt`. The delta is the signal:
   did finetuning on our Jac data make the model produce more correct Jac?
-- **`results/learning_curve.png`** — pass-rate per checkpoint. Rising = it's
+- **`01-sft-dpo/results/learning_curve.png`** — pass-rate per checkpoint. Rising = it's
   learning Jac; flat-while-loss-drops = it's memorizing format, not idiom.
 - **Token efficiency:** the eval also reports **generation tokens**, **eval
   tokens/sec**, and **tokens-to-correct** (avg tokens to produce a correct
   conversion) in the base/finetuned txt + metrics jsonl.
-- **Graphs** (`results/*.png`, rendered live): `learning_curve`, `train_loss`,
+- **Graphs** (`01-sft-dpo/results/*.png`, rendered live): `learning_curve`, `train_loss`,
   `val_loss`, `learning_rate`, `tokens_per_sec`, `iters_per_sec`,
-  `trained_tokens`, `peak_mem`. Open them with `open results/*.png` (Preview
+  `trained_tokens`, `peak_mem`. Open them with `open 01-sft-dpo/results/*.png` (Preview
   auto-refreshes as they update).
 - Live ASCII view during training: the auto-refreshed dashboard in the run
   terminal, or manually
-  `JAC_TRAIN_LOG=results/qwen-train.log JAC_METRICS=results/qwen-metrics.jsonl jac run srccurrent/jacgen/dashboard.jac`.
+  `JAC_TRAIN_LOG=01-sft-dpo/results/qwen-train.log JAC_METRICS=01-sft-dpo/results/qwen-metrics.jsonl jac run srccurrent/jacgen/dashboard.jac`.
 
 ## Pausing / resuming (close the laptop anytime)
 
@@ -116,7 +116,7 @@ Tunables (env): `EVAL_EVERY` (dashboard secs), `SUBSET` (tasks/checkpoint),
 - It runs under `caffeinate`, so it won't idle-sleep mid-run.
 - **Lid close / sleep:** the process suspends and **continues on wake** — nothing lost.
 - **Shutdown / kill / crash:** just re-run the same command. It skips finished
-  stages (quantize, base eval) via `results/.<name>.*.done` markers and **resumes
+  stages (quantize, base eval) via `01-sft-dpo/results/.<name>.*.done` markers and **resumes
   LoRA training from the last saved checkpoint** (mlx saves every 100 steps to
   `adapters/<name>-probe/`), training only the remaining iters. The learning-curve
   metrics append rather than reset.
@@ -132,7 +132,7 @@ Tunables (env): `EVAL_EVERY` (dashboard secs), `SUBSET` (tasks/checkpoint),
   <key>ProgramArguments</key>
   <array>
     <string>/bin/bash</string><string>-lc</string>
-    <string>cd /Users/ayush/Downloads/JaseciLabs/DataGeneration && ./run_probe.sh Qwen/Qwen3-Coder-30B-A3B-Instruct qwen >> results/qwen-autoresume.log 2>&1</string>
+    <string>cd /Users/ayush/Downloads/JaseciLabs/DataGeneration && ./run_probe.sh Qwen/Qwen3-Coder-30B-A3B-Instruct qwen >> 01-sft-dpo/results/qwen-autoresume.log 2>&1</string>
   </array>
   <key>RunAtLoad</key><true/>
 </dict></plist>
