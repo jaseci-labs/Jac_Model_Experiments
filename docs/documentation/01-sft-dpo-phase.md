@@ -2,8 +2,8 @@
 
 *The complete record of the first finetuning phase: teaching small open models to
 write idiomatic, compiler-correct Jac from 100% synthetic data, on a single 48 GB
-Apple-Silicon Mac. This worked. Sourced from `docs/sft_dpo/modeltesting/`,
-`sft_dpo/process.md`, `docs/initmodelchoice/`, `results/RESULTS.md`.*
+Apple-Silicon Mac. This worked. Sourced from `01-sft-dpo/docs/sft_dpo/modeltesting/`,
+`01-sft-dpo/sft_dpo/process.md`, `01-sft-dpo/docs/initmodelchoice/`, `results/RESULTS.md`.*
 
 ---
 
@@ -26,7 +26,7 @@ Three anchors substitute for a real-data distribution:
 3. **Python** = the proxy distribution (translate validated Python → idiomatic Jac,
    MultiPL-T methodology).
 
-The pipeline (all written in Jac, under `sft_dpo/jacgen/`) mines + generates +
+The pipeline (all written in Jac, under `01-sft-dpo/sft_dpo/jacgen/`) mines + generates +
 gates + dedups + decontaminates + splits. Every example is gated by `jac run`
 (exit 0) AND a behavioral check (output matches across multiple test cases) — never
 by `jac check`, which over-rejects untyped-but-runnable Jac.
@@ -52,8 +52,8 @@ Both small-MoE so ~3-4B active params fit a 48 GB M-series for local MLX LoRA.
 
 ## Training
 
-`sft_dpo/run_probe.sh` (SFT) → `sft_dpo/run_dpo.sh` (DPO). Config
-`sft_dpo/configs/lora.yaml`: LoRA r16, 600 iters, lr 2e-5, batch 2.
+`01-sft-dpo/sft_dpo/run_probe.sh` (SFT) → `01-sft-dpo/sft_dpo/run_dpo.sh` (DPO). Config
+`01-sft-dpo/sft_dpo/configs/lora.yaml`: LoRA r16, 600 iters, lr 2e-5, batch 2.
 
 - **SFT:** quantize base → q4/q8, LoRA-finetune on the conversion data, fuse.
 - **DPO:** the SFT model is 94% behavioral but ~99% of its correct outputs are
@@ -95,10 +95,10 @@ was meant to build on.
 
 ## Artifacts
 
-- Pipeline: `sft_dpo/jacgen/` (~24 Jac modules). Runbook: `sft_dpo/process.md`.
-  Handoff: `docs/sft_dpo/modeltesting/HANDOFF.md`.
+- Pipeline: `01-sft-dpo/sft_dpo/jacgen/` (~24 Jac modules). Runbook: `01-sft-dpo/sft_dpo/process.md`.
+  Handoff: `01-sft-dpo/docs/sft_dpo/modeltesting/HANDOFF.md`.
 - Adapters: `adapters/{qwen,gemma}-{probe,dpo}`. Models:
-  `models/{qwen,gemma}-jac-{fused,dpo-fused}-q8`. Charts: `resultspub/initmodelchoice/`.
+  `models/{qwen,gemma}-jac-{fused,dpo-fused}-q8`. Charts: `01-sft-dpo/resultspub/initmodelchoice/`.
 
 **Bottom line:** the SFT+DPO phase succeeded — a model that had never seen Jac
 reached 94% function conversion and 61% idiomatic graph-task correctness, all from

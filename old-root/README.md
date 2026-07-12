@@ -105,8 +105,8 @@ everywhere in the pipeline.
 parse-checked + the sampled behavioral re-validation green. If clean, the toolchain and
 data are healthy. It **does not** mutate the dataset.
 
-Full operator runbook (setup, run, pause/resume, timings): **[`sft_dpo/process.md`](sft_dpo/process.md)**.
-Full architecture handoff (every module, every gotcha): **[`docs/sft_dpo/modeltesting/HANDOFF.md`](docs/sft_dpo/modeltesting/HANDOFF.md)**.
+Full operator runbook (setup, run, pause/resume, timings): **[`01-sft-dpo/sft_dpo/process.md`](01-sft-dpo/sft_dpo/process.md)**.
+Full architecture handoff (every module, every gotcha): **[`01-sft-dpo/docs/sft_dpo/modeltesting/HANDOFF.md`](01-sft-dpo/docs/sft_dpo/modeltesting/HANDOFF.md)**.
 
 ---
 
@@ -114,7 +114,7 @@ Full architecture handoff (every module, every gotcha): **[`docs/sft_dpo/modelte
 
 Two base models run end-to-end. Primary metric = **cross-compiled test-pass %** on
 unseen, decontaminated holdouts (compiles + runs + output matches behavioral cases).
-**Full results, all 16 training graphs, side-by-side analysis → [`resultspub/initmodelchoice/RESULTS.md`](resultspub/initmodelchoice/RESULTS.md).**
+**Full results, all 16 training graphs, side-by-side analysis → [`01-sft-dpo/resultspub/initmodelchoice/RESULTS.md`](01-sft-dpo/resultspub/initmodelchoice/RESULTS.md).**
 
 ### Function tier — 150 unseen function tasks (correctness)
 
@@ -176,8 +176,8 @@ its DPO behavioral score (61%) is the best of any DPO-capable model.
 | Ling-Coder-lite | dropped | — | — | BailingMoE unusable in this mlx_lm |
 
 Full matrix, per-candidate analysis, comparison graphs, and deviations →
-**[`docs/initmodelchoice/2026-06-26-sft-dpo-bakeoff-results.md`](docs/initmodelchoice/2026-06-26-sft-dpo-bakeoff-results.md)**
-(publishable copies under [`resultspub/initmodelchoice/`](resultspub/initmodelchoice/)).
+**[`01-sft-dpo/docs/initmodelchoice/2026-06-26-sft-dpo-bakeoff-results.md`](01-sft-dpo/docs/initmodelchoice/2026-06-26-sft-dpo-bakeoff-results.md)**
+(publishable copies under [`01-sft-dpo/resultspub/initmodelchoice/`](01-sft-dpo/resultspub/initmodelchoice/)).
 
 ---
 
@@ -196,7 +196,7 @@ Full matrix, per-candidate analysis, comparison graphs, and deviations →
         ├──► dpo_conversion.jac ──► dpo.jsonl          (147: idiomatic chosen vs transpile rejected)
         │
         ├──► build_manifest.jac ──► sft_train.jsonl    (588: 1:3 idiom:transpile, de-skew)
-        │         └──► build_splits.jac ──► dataset/mlx/{train,valid}.jsonl (529/59, messages-only)
+        │         └──► build_splits.jac ──► 01-sft-dpo/dataset/mlx/{train,valid}.jsonl (529/59, messages-only)
         │
         ├──► holdout.jac ──► eval_holdout/conversion.jsonl       (150 function, decontaminated)
         └──► graph_holdout.jac ──► eval_holdout/graph_conversion.jsonl (13 graph, disjoint)
@@ -222,7 +222,7 @@ learn "transpile-ese," without starving on the cheap volume.
 
 **Verification order:** compiler gate → cross-compiled behavioral tests → idiom judge →
 sampled manual review. The 12 generation recipes (R1–R12) are documented in
-[`docs/initmodelchoice/strat.md`](docs/initmodelchoice/strat.md).
+[`01-sft-dpo/docs/initmodelchoice/strat.md`](01-sft-dpo/docs/initmodelchoice/strat.md).
 
 ---
 
@@ -230,17 +230,17 @@ sampled manual review. The 12 generation recipes (R1–R12) are documented in
 
 `dataset/` is **gitignored** but fully **regenerable** from the Jac builders (see
 [Rebuilding](#rebuilding-the-dataset-order-matters)). Confirm any time with
-`jac run sft_dpo/jacgen/dataset_stats.jac`.
+`jac run 01-sft-dpo/sft_dpo/jacgen/dataset_stats.jac`.
 
 | Artifact | Path | Count |
 |---|---|---|
-| Idiomatic SFT core (hand/agentic + 31 graph) | `dataset/conversion/sft.jsonl` | **147** |
-| Transpile SFT volume (py2jac, behaviorally gated) | `dataset/conversion/sft_auto.jsonl` | **1500** |
+| Idiomatic SFT core (hand/agentic + 31 graph) | `01-sft-dpo/dataset/conversion/sft.jsonl` | **147** |
+| Transpile SFT volume (py2jac, behaviorally gated) | `01-sft-dpo/dataset/conversion/sft_auto.jsonl` | **1500** |
 | **Total SFT** | both above | **1647** |
-| DPO pairs (idiomatic vs Python-shaped; 24 graph) | `dataset/conversion/dpo.jsonl` | **147** |
-| Balanced manifest (1:3 idiom:transpile) | `dataset/conversion/sft_train.jsonl` | **588** |
-| mlx-lm SFT split (messages-only) | `dataset/mlx/{train,valid}.jsonl` | **529 / 59** |
-| mlx-lm DPO split (`{prompt,chosen,rejected}`) | `dataset/mlx_dpo/{train,valid}.jsonl` | **132 / 15** |
+| DPO pairs (idiomatic vs Python-shaped; 24 graph) | `01-sft-dpo/dataset/conversion/dpo.jsonl` | **147** |
+| Balanced manifest (1:3 idiom:transpile) | `01-sft-dpo/dataset/conversion/sft_train.jsonl` | **588** |
+| mlx-lm SFT split (messages-only) | `01-sft-dpo/dataset/mlx/{train,valid}.jsonl` | **529 / 59** |
+| mlx-lm DPO split (`{prompt,chosen,rejected}`) | `01-sft-dpo/dataset/mlx_dpo/{train,valid}.jsonl` | **132 / 15** |
 | Function eval holdout (behavioral `test_cases`) | `dataset/eval_holdout/conversion.jsonl` | **150** |
 | Graph eval holdout (idiom headroom) | `dataset/eval_holdout/graph_conversion.jsonl` | **13** |
 
@@ -256,7 +256,7 @@ difficulty mix atomic 41 / idiomatic 37 / composed 69.
 1. **Quantize** the model → Q4 (train) + Q8 (eval).
 2. **Base eval** on the 150 holdout → `results/<name>/base.txt`.
 3. **30-iter dry-run** — bail check (loss drops, no NaN/OOM); Ctrl-C within 8s to abort.
-4. **LoRA train** (`sft_dpo/configs/lora.yaml`, 600 iters) with a live ASCII dashboard + PNG
+4. **LoRA train** (`01-sft-dpo/sft_dpo/configs/lora.yaml`, 600 iters) with a live ASCII dashboard + PNG
    graphs refreshed per checkpoint.
 5. **Fuse** adapter → Q8.
 6. **Finetuned eval** on the 150 holdout → `results/<name>/finetuned.txt`.
@@ -287,20 +287,20 @@ generation); subsequent runs skip download/quantize → **~2–4 hr**.
 
 | Path | What |
 |---|---|
-| `sft_dpo/jacgen/*.jac` | the all-Jac pipeline: generate, validate, dedup, decontaminate, split, eval harness, dashboards (24 modules) |
-| `sft_dpo/jacgen/graph_data/` | authored graph/tree tasks (`train.json` 31, `holdout.json` 13) + the Python generators |
+| `01-sft-dpo/sft_dpo/jacgen/*.jac` | the all-Jac pipeline: generate, validate, dedup, decontaminate, split, eval harness, dashboards (24 modules) |
+| `01-sft-dpo/sft_dpo/jacgen/graph_data/` | authored graph/tree tasks (`train.json` 31, `holdout.json` 13) + the Python generators |
 | `dataset/` *(gitignored)* | generated data — see [the dataset table](#the-dataset-on-disk) |
-| `sft_dpo/configs/lora.yaml` | LoRA SFT config (mlx-lm) |
-| `sft_dpo/run_probe.sh` / `sft_dpo/run_dpo.sh` | SFT probe runner / DPO runner (resumable) |
-| `sft_dpo/bakeoff_postprobe.sh` | per-model bake-off helper: SFT idiom baseline + graph holdout + DPO + graph DPO |
-| `sft_dpo/make_comparison.py` / `sft_dpo/make_pub_graphs.py` | cross-model comparison graphs + matrix (parses `results/<name>/`) |
-| `setup_env.sh` / `sft_dpo/check.sh` | venv + installs / type + behavior gate (non-destructive) |
+| `01-sft-dpo/sft_dpo/configs/lora.yaml` | LoRA SFT config (mlx-lm) |
+| `01-sft-dpo/sft_dpo/run_probe.sh` / `01-sft-dpo/sft_dpo/run_dpo.sh` | SFT probe runner / DPO runner (resumable) |
+| `01-sft-dpo/sft_dpo/bakeoff_postprobe.sh` | per-model bake-off helper: SFT idiom baseline + graph holdout + DPO + graph DPO |
+| `01-sft-dpo/sft_dpo/make_comparison.py` / `01-sft-dpo/sft_dpo/make_pub_graphs.py` | cross-model comparison graphs + matrix (parses `results/<name>/`) |
+| `setup_env.sh` / `01-sft-dpo/sft_dpo/check.sh` | venv + installs / type + behavior gate (non-destructive) |
 | `results/` *(gitignored)* | per-model run outputs (`base.txt`, `finetuned.txt`, `graph-*.txt`, `*.png`, `metrics.jsonl`) |
 | `resultspub/` | **publishable copies** — `initmodelchoice/` (bake-off, all models + comparison graphs) + `other/` |
-| `resultspub/initmodelchoice/` | committed Qwen-vs-Gemma results + graphs → [`RESULTS.md`](resultspub/initmodelchoice/RESULTS.md) |
+| `01-sft-dpo/resultspub/initmodelchoice/` | committed Qwen-vs-Gemma results + graphs → [`RESULTS.md`](01-sft-dpo/resultspub/initmodelchoice/RESULTS.md) |
 | `models/` / `adapters/` *(gitignored)* | quantized/fused models / LoRA adapters |
 | `docs/` | strategy, model-testing, datagen plans, the bake-off result → [map below](#documentation-map) |
-| `sft_dpo/process.md` | operator runbook (setup → check → run, pause/resume) |
+| `01-sft-dpo/sft_dpo/process.md` | operator runbook (setup → check → run, pause/resume) |
 | `context.md` | durable project framing |
 | `papers/` | reference papers (MultiPL-T, WizardCoder, Magicoder, SelfCodeAlign, DeepSeek-Coder, CodeDPO, Magpie) |
 
@@ -308,7 +308,7 @@ generation); subsequent runs skip download/quantize → **~2–4 hr**.
 
 ## The all-Jac pipeline (24 modules)
 
-In `sft_dpo/jacgen/` (full reference: its [`README.md`](sft_dpo/jacgen/README.md)
+In `01-sft-dpo/sft_dpo/jacgen/` (full reference: its [`README.md`](01-sft-dpo/sft_dpo/jacgen/README.md)
 and HANDOFF §5).
 
 **Shared libraries**
@@ -328,7 +328,7 @@ and HANDOFF §5).
 - `scale_conversion.jac` — mine → py2jac → **jac-run gate** → 1500 → `sft_auto.jsonl` (slow).
 - `dpo_conversion.jac` — chosen=idiomatic, rejected=transpile, **parse-gated** → `dpo.jsonl`.
 - `build_manifest.jac` — all idiomatic + stride-sampled transpile at 1:3 → `sft_train.jsonl`.
-- `build_splits.jac` / `build_dpo_splits.jac` — → `dataset/mlx/` / `dataset/mlx_dpo/`.
+- `build_splits.jac` / `build_dpo_splits.jac` — → `01-sft-dpo/dataset/mlx/` / `01-sft-dpo/dataset/mlx_dpo/`.
 - `graph_seeds.jac` — reads `graph_data/train.json`, appends idiomatic graph SFT (node/edge/walker).
 - `graph_holdout.jac` — reads `graph_data/holdout.json` (disjoint) → graph eval holdout.
 - `holdout.jac` — mine from disjoint offsets + decontam → 150 function holdout.
@@ -352,20 +352,20 @@ and HANDOFF §5).
 
 ```bash
 source .venv/bin/activate
-jac run sft_dpo/jacgen/mine.jac              # (optional) refresh source_pool/mined.jsonl
-jac run sft_dpo/jacgen/seed_conversion.jac   # sft.jsonl -> 32 (TRUNCATES), dpo seed -> 2
-jac run sft_dpo/jacgen/idiomatic_batch.jac   # -> 62  (appends)
-jac run sft_dpo/jacgen/idiomatic_batch2.jac  # -> 85
-jac run sft_dpo/jacgen/idiomatic_batch3.jac  # -> 116
-jac run sft_dpo/jacgen/graph_seeds.jac       # + graph-tier idiomatic (node/edge/walker) -> 147
-jac run sft_dpo/jacgen/scale_conversion.jac  # transpile volume -> 1500 (SLOW: mines+gates)
-jac run sft_dpo/jacgen/dpo_conversion.jac    # dpo.jsonl -> 147 (parse-gated, regenerates from sft.jsonl)
-jac run sft_dpo/jacgen/build_manifest.jac    # sft_train.jsonl -> 588 (1:3)
-jac run sft_dpo/jacgen/build_splits.jac      # dataset/mlx/{train,valid}.jsonl -> 529/59
-jac run sft_dpo/jacgen/build_dpo_splits.jac  # dataset/mlx_dpo/{train,valid}.jsonl -> 132/15
-jac run sft_dpo/jacgen/holdout.jac           # function eval holdout (decontaminated, 150)
-jac run sft_dpo/jacgen/graph_holdout.jac     # graph eval holdout (13)
-jac run sft_dpo/jacgen/dataset_stats.jac     # verify composition
+jac run 01-sft-dpo/sft_dpo/jacgen/mine.jac              # (optional) refresh source_pool/mined.jsonl
+jac run 01-sft-dpo/sft_dpo/jacgen/seed_conversion.jac   # sft.jsonl -> 32 (TRUNCATES), dpo seed -> 2
+jac run 01-sft-dpo/sft_dpo/jacgen/idiomatic_batch.jac   # -> 62  (appends)
+jac run 01-sft-dpo/sft_dpo/jacgen/idiomatic_batch2.jac  # -> 85
+jac run 01-sft-dpo/sft_dpo/jacgen/idiomatic_batch3.jac  # -> 116
+jac run 01-sft-dpo/sft_dpo/jacgen/graph_seeds.jac       # + graph-tier idiomatic (node/edge/walker) -> 147
+jac run 01-sft-dpo/sft_dpo/jacgen/scale_conversion.jac  # transpile volume -> 1500 (SLOW: mines+gates)
+jac run 01-sft-dpo/sft_dpo/jacgen/dpo_conversion.jac    # dpo.jsonl -> 147 (parse-gated, regenerates from sft.jsonl)
+jac run 01-sft-dpo/sft_dpo/jacgen/build_manifest.jac    # sft_train.jsonl -> 588 (1:3)
+jac run 01-sft-dpo/sft_dpo/jacgen/build_splits.jac      # 01-sft-dpo/dataset/mlx/{train,valid}.jsonl -> 529/59
+jac run 01-sft-dpo/sft_dpo/jacgen/build_dpo_splits.jac  # 01-sft-dpo/dataset/mlx_dpo/{train,valid}.jsonl -> 132/15
+jac run 01-sft-dpo/sft_dpo/jacgen/holdout.jac           # function eval holdout (decontaminated, 150)
+jac run 01-sft-dpo/sft_dpo/jacgen/graph_holdout.jac     # graph eval holdout (13)
+jac run 01-sft-dpo/sft_dpo/jacgen/dataset_stats.jac     # verify composition
 ```
 
 > **If `sft.jsonl` shows 32 and `dpo.jsonl` shows 2**, the idiomatic batches got wiped
@@ -429,15 +429,15 @@ Read before touching anything — these will bite. Full list: HANDOFF §9.
 
 | Doc | What |
 |---|---|
-| **[`sft_dpo/process.md`](sft_dpo/process.md)** | operator runbook — setup → check → run, pause/resume, launchd, timings |
-| **[`docs/sft_dpo/modeltesting/HANDOFF.md`](docs/sft_dpo/modeltesting/HANDOFF.md)** | **single source of truth** — architecture, every module, every gotcha, rebuild order |
-| **[`docs/initmodelchoice/2026-06-26-sft-dpo-bakeoff-results.md`](docs/initmodelchoice/2026-06-26-sft-dpo-bakeoff-results.md)** | **base-model bake-off** — 6 models, function + graph holdout, the keep-Qwen3-Coder verdict |
-| **[`resultspub/initmodelchoice/RESULTS.md`](resultspub/initmodelchoice/RESULTS.md)** | full measured results + all 16 training graphs, both models, side by side |
+| **[`01-sft-dpo/sft_dpo/process.md`](01-sft-dpo/sft_dpo/process.md)** | operator runbook — setup → check → run, pause/resume, launchd, timings |
+| **[`01-sft-dpo/docs/sft_dpo/modeltesting/HANDOFF.md`](01-sft-dpo/docs/sft_dpo/modeltesting/HANDOFF.md)** | **single source of truth** — architecture, every module, every gotcha, rebuild order |
+| **[`01-sft-dpo/docs/initmodelchoice/2026-06-26-sft-dpo-bakeoff-results.md`](01-sft-dpo/docs/initmodelchoice/2026-06-26-sft-dpo-bakeoff-results.md)** | **base-model bake-off** — 6 models, function + graph holdout, the keep-Qwen3-Coder verdict |
+| **[`01-sft-dpo/resultspub/initmodelchoice/RESULTS.md`](01-sft-dpo/resultspub/initmodelchoice/RESULTS.md)** | full measured results + all 16 training graphs, both models, side by side |
 | [`context.md`](context.md) | durable project framing (what Jac is, goal, constraints) |
-| [`docs/initmodelchoice/strat.md`](docs/initmodelchoice/strat.md) | the 12 data-generation recipes (R1–R12) |
+| [`01-sft-dpo/docs/initmodelchoice/strat.md`](01-sft-dpo/docs/initmodelchoice/strat.md) | the 12 data-generation recipes (R1–R12) |
 | [`docs/wholestack/strat.md`](docs/wholestack/strat.md) | whole-stack strategy |
-| [`docs/sft_dpo/modeltesting/`](docs/sft_dpo/modeltesting/) | strategy, evaluation, conversion-probe, per-model notes (Qwen / Gemma) |
-| [`sft_dpo/jacgen/README.md`](sft_dpo/jacgen/README.md) | module-by-module pipeline reference |
+| [`01-sft-dpo/docs/sft_dpo/modeltesting/`](01-sft-dpo/docs/sft_dpo/modeltesting/) | strategy, evaluation, conversion-probe, per-model notes (Qwen / Gemma) |
+| [`01-sft-dpo/sft_dpo/jacgen/README.md`](01-sft-dpo/sft_dpo/jacgen/README.md) | module-by-module pipeline reference |
 
 ---
 

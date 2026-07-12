@@ -5,16 +5,17 @@ __pycache__/
 .DS_Store
 
 models/
-adapters/
+01-sft-dpo/adapters/
+02-rl-grpo/adapters/
 .venv/
 
-# LaTeX build output (rebuild via presentation/build.sh)
-presentation/main.pdf
-presentation/main.aux
-presentation/main.fdb_latexmk
-presentation/main.fls
-presentation/main.log
-presentation/main.nav
-presentation/main.out
-presentation/main.snm
-presentation/main.toc
+# LaTeX build output (rebuild via 02-rl-grpo/presentation/build.sh)
+02-rl-grpo/presentation/main.pdf
+02-rl-grpo/presentation/main.aux
+02-rl-grpo/presentation/main.fdb_latexmk
+02-rl-grpo/presentation/main.fls
+02-rl-grpo/presentation/main.log
+02-rl-grpo/presentation/main.nav
+02-rl-grpo/presentation/main.out
+02-rl-grpo/presentation/main.snm
+02-rl-grpo/presentation/main.toc

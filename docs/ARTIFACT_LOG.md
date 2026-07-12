@@ -2,13 +2,13 @@
 
 Record of every model/adapter that existed before the big cleanup (1.32TB → ~125GB).
 Hyperparameters for every adapter: `docs/training_configs/<name>.json` (all 41 preserved, including deleted runs).
-Eval numbers: `RL_FINDINGS.md`, `README.md`, `resultspub/rl/corrected_summary.json`, raw logs in `results/`.
+Eval numbers: `02-rl-grpo/RL_FINDINGS.md`, `README.md`, `02-rl-grpo/resultspub/rl/corrected_summary.json`, raw logs in `results/`.
 
 ## How to recreate anything deleted
 
 - **Base models**: re-download + quantize via mlx (HF repos below).
 - **Fused models**: `mlx_lm.fuse --model <base> --adapter-path <adapter>` — base path + dataset recorded in each `training_configs/<name>.json`. All rft LoRA adapters were KEPT, so every ladder rung is re-fusable.
-- **GRPO/loser adapters**: weights deleted permanently (deliberate; null result / bakeoff losers). Recreate = retrain with archived config + `rl/run_grpo.sh` / `sft_dpo/run_probe.sh` etc.
+- **GRPO/loser adapters**: weights deleted permanently (deliberate; null result / bakeoff losers). Recreate = retrain with archived config + `02-rl-grpo/rl/run_grpo.sh` / `01-sft-dpo/sft_dpo/run_probe.sh` etc.
 
 ## KEPT (~125GB)
 
@@ -20,8 +20,8 @@ Eval numbers: `RL_FINDINGS.md`, `README.md`, `resultspub/rl/corrected_summary.js
 | models/jac-qwen3coder-rall-rft-q4 | 16G | rall rung; best pass@k on some holdouts |
 | adapters/jac-qwen3coder-{r1,r3,r5,r10,r20,rall}-rft | 3.1G ea | Jac-arm SFT ladder LoRAs |
 | adapters/qwen3coder-{r1,r3,r5,r10,r20,rall}-rft | 3.1G ea | Fresh-arm control ladder LoRAs |
-| adapters/qwen3coder-conv-rft, jac-convfull-rft, jac-sg-r20-rft, jac-big-rft | 3.1G ea | Conversion / social-graph / big-holdout SFT LoRAs |
-| adapters/qwen-probe, qwen-dry, qwen-dpo | 7.3G/1.0G/1.1G | Incumbent's SFT/DPO record |
+| 02-rl-grpo/adapters/qwen3coder-conv-rft, jac-convfull-rft, jac-sg-r20-rft, jac-big-rft | 3.1G ea | Conversion / social-graph / big-holdout SFT LoRAs |
+| 01-sft-dpo/adapters/qwen-probe, qwen-dry, qwen-dpo | 7.3G/1.0G/1.1G | Incumbent's SFT/DPO record |
 
 ## DELETED — models/ (42 dirs, ~640GB)
 
@@ -37,7 +37,7 @@ Base HF models (re-downloadable):
 | qwen25c-q8 / qwen25c-q4 | 15G/7.7G | Qwen/Qwen2.5-Coder-14B-Instruct |
 | gptoss-q4 | 10G | openai/gpt-oss-20b (MXFP4-broken for finetuning, see bakeoff notes) |
 
-Fused SFT/DPO bakeoff models (losers; eval tables in README.md + resultspub/initmodelchoice/):
+Fused SFT/DPO bakeoff models (losers; eval tables in README.md + 01-sft-dpo/resultspub/initmodelchoice/):
 
 | Dir(s) | Size |
 |---|---|
@@ -64,7 +64,7 @@ Ladder/experiment fused (all re-fusable from kept adapters):
 
 ## DELETED — adapters/ (22 dirs, ~540GB)
 
-GRPO (null result — GRPO added 0 over SFT; raw-GRPO == base 38.9%; full analysis in RL_FINDINGS.md):
+GRPO (null result — GRPO added 0 over SFT; raw-GRPO == base 38.9%; full analysis in 02-rl-grpo/RL_FINDINGS.md):
 
 | Dir | Size |
 |---|---|
