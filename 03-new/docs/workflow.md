@@ -28,7 +28,7 @@ flowchart TD
         SRC_REHEARSE["CF rehearsal\ngeneral code/Python slice\n15-30% of tokens"]
         DECONTAM["Decontaminate vs\nexisting eval holdouts\n(14-gram MinHash, Jaccard>0.5)"]
         PACK["Pack + EOS-join\n(tokenizer.eos_token)"]
-        SPLIT1["Split 95/5 train/val\nstratified by source"]
+        SPLIT1["Split 85/15 train/val\nstratified by source"]
         MANIFEST1["manifest.json\n(counts, weights, decontam drops)"]
         SRC_DOCS & SRC_PAPER & SRC_BLOG & SRC_CODE & SRC_REHEARSE --> DECONTAM --> PACK --> SPLIT1 --> MANIFEST1
     end
@@ -123,7 +123,7 @@ Full detail in [cpt-dataset-design.md](cpt-dataset-design.md). Summary:
 2. **Add CF-rehearsal slice**: general code/Python data, target 15-30% of total CPT tokens (exact ratio TBD by sweep).
 3. **Decontaminate** every source against existing eval holdouts (`02-rl-grpo` RL corpus, `01-sft-dpo` eval holdout) — 14-gram MinHash, Jaccard >0.5 flagged/dropped. Most load-bearing on the code source.
 4. **Pack**: concatenate documents/chunks, join with the real tokenizer EOS token, truncate final chunk per pack.
-5. **Split** 95/5 train/val, stratified by `meta.source`.
+5. **Split** 85/15 train/val, stratified by `meta.source`.
 6. **Emit manifest**: per-source counts, upsample weights applied, decontam drops, tokenizer/EOS version.
 
 **Gates everything downstream** — no CPT checkpoint exists until this build is done.

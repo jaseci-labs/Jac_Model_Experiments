@@ -80,7 +80,7 @@ Reuse the existing convention (`wholestack/strat.md` Phase 1/4, `02-rl-grpo`'s f
 ## Dataset assembly
 
 - **Layout**: `03-new/dataset/cpt/{docs,osp_paper,blogs,code,rehearsal}/` for per-source intermediate JSONL, packed into `03-new/dataset/cpt/packed/{train,val}.jsonl` for the final CPT input. Matches the `dataset/` convention already used in `01-sft-dpo/` and `02-rl-grpo/`.
-- **Split**: train/val only (no test split needed here — CPT isn't graded on held-out packed-doc loss as a primary metric; the semantic MCQ + behavioral judge are the real measurement instruments, per `design.md`). 95/5 train/val, stratified by `meta.source` so val isn't dominated by one source.
+- **Split**: train/val only (no test split needed here — CPT isn't graded on held-out packed-doc loss as a primary metric; the semantic MCQ + behavioral judge are the real measurement instruments, per `design.md`). 85/15 train/val, stratified by `meta.source` so val isn't dominated by one source.
 - **Manifest**: each build emits a manifest (`03-new/dataset/cpt/manifest.json`) recording per-source document/chunk/token counts, upsample weights applied, decontamination drops, and the tokenizer/EOS-token version used — needed to reproduce or audit a CPT run later.
 
 ## Open items (not resolved by this doc)
