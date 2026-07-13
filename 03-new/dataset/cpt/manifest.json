@@ -1,0 +1,199 @@
+{
+  "seq_len": 4096,
+  "split": "85/15",
+  "seed": 3,
+  "tokenizer": "models/qwen-q4",
+  "eos_token": "<|im_end|>",
+  "fim": "skipped: Qwen3-Coder-30B-A3B-Instruct tokenizer has no FIM special tokens; downstream hole-fill is chat-format, not FIM",
+  "repos": {
+    "jac": "199900a8c1383ad2625bf3f5d8d54ee044b7bb45",
+    "Agentic-AI": "a6d82ff4453562f8fb071f186327add3c6336946",
+    "jac-shadcn": "1d691009c6abb59ec9b0e219668d74efd0076800",
+    "this_is_jac": "30dcca9ba08eb6c220aa6ef53bf375467923025a",
+    "jac-load-test": "8832ffcdd3184ced920550018c32c700a192a2ea",
+    "jac-mcp-playground": "9394d762639900d4aaec27310710f6823210121a",
+    "jasketch": "50a4f944a3d0870ba638e85a436a02ff41ac7f38",
+    "jac-client-playground": "d919205b54c3b245dcb6d631d863ef2ad3062393",
+    "Algo": "c31ad99d13b0da295f7d947acbfd0dc42ffba12f",
+    "llvm-slice": "279401bd2f8404a7375720c70c22c0cfcaa95cbe",
+    "littleX": "059b83759cf0ebed6f2705ba1878b77da84554e9",
+    "jaseci-blogs": "b0e792975cd6e117b69c3c2f04c08cbdffcfecd3",
+    "jaseci-studio": "1f8bebe4d0dab1664894a404e54b95f24d345db4",
+    "agentic-ai-tutorial": "3ec45e5b79869ad8d0527e494fa0c2dd7307080f",
+    "the-jac-workshop": "297cd43f7b8ff18fca08850de60d3d0fb3e83600",
+    "inr-codelabs": "48278f0410642081be86b85feb14f2570822afac",
+    "tree-sitter-jac": "825e595d3cd7cb752616175db1c1aa7bb47e5e50",
+    "jaseci-llmdocs": "e2f53b0b3f7dd9581760b993807f6789fc207e0e"
+  },
+  "sources": {
+    "docs": {
+      "rows": 3907,
+      "tokens": 1970952,
+      "windows": 482
+    },
+    "osp_paper": {
+      "rows": 46,
+      "tokens": 35403,
+      "windows": 9
+    },
+    "blogs": {
+      "rows": 233,
+      "tokens": 64451,
+      "windows": 16
+    },
+    "code": {
+      "rows": 691,
+      "tokens": 998581,
+      "windows": 244
+    },
+    "rehearsal": {
+      "rows": 408,
+      "tokens": 769518,
+      "windows": 188
+    }
+  },
+  "code_gate": {
+    "jac": {
+      "files": 86,
+      "passed": 85
+    },
+    "Agentic-AI": {
+      "files": 130,
+      "passed": 107
+    },
+    "jac-shadcn": {
+      "files": 87,
+      "passed": 87
+    },
+    "this_is_jac": {
+      "files": 72,
+      "passed": 72
+    },
+    "jac-load-test": {
+      "files": 74,
+      "passed": 73
+    },
+    "jac-mcp-playground": {
+      "files": 52,
+      "passed": 52
+    },
+    "jasketch": {
+      "files": 47,
+      "passed": 47
+    },
+    "jac-client-playground": {
+      "files": 47,
+      "passed": 47
+    },
+    "Algo": {
+      "files": 45,
+      "passed": 44
+    },
+    "llvm-slice": {
+      "files": 28,
+      "passed": 27
+    },
+    "littleX": {
+      "files": 17,
+      "passed": 16
+    },
+    "jaseci-blogs": {
+      "files": 17,
+      "passed": 17
+    },
+    "jaseci-studio": {
+      "files": 12,
+      "passed": 12
+    },
+    "agentic-ai-tutorial": {
+      "files": 12,
+      "passed": 12
+    },
+    "the-jac-workshop": {
+      "files": 8,
+      "passed": 7
+    },
+    "inr-codelabs": {
+      "files": 4,
+      "passed": 0
+    },
+    "tree-sitter-jac": {
+      "files": 3,
+      "passed": 2
+    }
+  },
+  "decontam": {
+    "docs": 0,
+    "osp_paper": 0,
+    "blogs": 0,
+    "code": 7
+  },
+  "decontam_dropped": {
+    "docs": [],
+    "osp_paper": [],
+    "blogs": [],
+    "code": [
+      {
+        "source": "code",
+        "type": "repo_file",
+        "upsample_weight": 1,
+        "repo": "jaseci-labs/jac",
+        "path": "jac/examples/raylib_shooter/shooter.na.jac"
+      },
+      {
+        "source": "code",
+        "type": "repo_file",
+        "upsample_weight": 1,
+        "repo": "jaseci-labs/jac",
+        "path": "jac/examples/raylib_shooter/web/raylib_shim.cl.jac"
+      },
+      {
+        "source": "code",
+        "type": "repo_file",
+        "upsample_weight": 1,
+        "repo": "jaseci-labs/jac",
+        "path": "jac/examples/raylib_shooter/web/main.jac"
+      },
+      {
+        "source": "code",
+        "type": "repo_file",
+        "upsample_weight": 1,
+        "repo": "jaseci-labs/jac",
+        "path": "jac/examples/littleX/frontend.cl.jac"
+      },
+      {
+        "source": "code",
+        "type": "repo_file",
+        "upsample_weight": 1,
+        "repo": "jaseci-labs/this_is_jac",
+        "path": "raylib_shooter/shooter.na.jac"
+      },
+      {
+        "source": "code",
+        "type": "repo_file",
+        "upsample_weight": 1,
+        "repo": "jaseci-labs/this_is_jac",
+        "path": "raylib_shooter/web/raylib_shim.cl.jac"
+      },
+      {
+        "source": "code",
+        "type": "repo_file",
+        "upsample_weight": 1,
+        "repo": "jaseci-labs/this_is_jac",
+        "path": "main.jac"
+      }
+    ]
+  },
+  "holdout_files_excluded": [
+    "analytics.jac",
+    "littlex/frontend.cl.jac",
+    "raylib_shim.cl.jac",
+    "raylib_shooter/bench.jac",
+    "raylib_shooter/web/main.jac",
+    "source_lexer.jac"
+  ],
+  "packed": {
+    "train": 790,
+    "val": 149
+  }
+}
