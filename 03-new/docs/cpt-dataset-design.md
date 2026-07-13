@@ -85,8 +85,18 @@ Reuse the existing convention (`wholestack/strat.md` Phase 1/4, `02-rl-grpo`'s f
 
 ## Open items (not resolved by this doc)
 
-1. **Blog source location** — find the jaseci-labs blog's git/CMS source, or confirm HTML-scrape is the only path.
-2. **General-code rehearsal corpus pick** — which public dataset/slice, and license check.
-3. **Rehearsal mix ratio** — 15-30% is a starting range, not a locked number; needs a small sweep.
+1. ~~**Blog source location**~~ RESOLVED: `jaseci-labs/jaseci-blogs` repo, markdown under `docs/blog/posts/`.
+2. ~~**General-code rehearsal corpus pick**~~ RESOLVED: `codeparrot/codeparrot-clean-valid` (public; the design's `the-stack-smol` pick turned out HF-gated).
+3. **Rehearsal mix ratio** — built at ~20%; 15-30% sweep still open.
 4. **OSP paper LaTeX cleaning fidelity** — figure/table caption handling not fully specified; revisit once the actual `.tex` source is pulled and inspected.
-5. **jaseci-labs org repo inventory** — exact repo list and total `.jac` file count unknown until enumeration runs; corpus size estimate (needed for epoch/volume planning) depends on this.
+5. ~~**jaseci-labs org repo inventory**~~ RESOLVED: 17 Jac-bearing repos mined (see manifest).
+
+## Build notes (dataset built 2026-07-13, commit 177a978)
+
+Built to `03-new/dataset/cpt/` by `03-new/cpt_build/build_cpt.py`. **3.84M tokens, 939 windows (790 train / 149 val).** Deviations from spec, all forced by ground truth:
+
+- **Gate is parse-only** (`jac check -p`), not full type-check: the v0.16.x checker false-positives on real working client-style code (E1030/E1032 on JS interop, standalone `.impl.jac`), failing ~100% of real repos. Parse-only keeps broken/outdated syntax out — the actual goal. `inr-codelabs` (0/4, jac-v1 syntax) correctly excluded by it.
+- **`jac/tests/**` + `jac/jaclang/**` excluded**: compiler test fixtures — standalone-unresolvable imports and intentionally-broken snippets, not idiomatic teaching material. `jac/examples/**` + `docs/**.jac` kept.
+- **FIM skipped**: Qwen3-Coder-30B-A3B-Instruct tokenizer ships no FIM special tokens; downstream hole-fill is chat-format anyway.
+- **Decontam uses containment** (≥50% of a holdout item's shingles present in the doc), not symmetric Jaccard — corpus docs are much larger than holdout items, so Jaccard would under-trigger. Caught 7 real leaks: holdout mirrors inside `jac` repo examples (raylib_shooter, littleX frontend) + `this_is_jac/main.jac` shooter dupe.
+- **`docs` source includes latest `jaseci-llmdocs` release** (1x weight) alongside official docs (3x).
