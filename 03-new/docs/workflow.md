@@ -140,6 +140,8 @@ LoRA continual pretrain (next-token, raw text) on the packed CPT dataset, Q4 on 
 
 Semantic MCQ picks the CPT checkpoint to carry forward (cheapest signal, no compiler in the loop). Human-sample trust check (Hamming similarity vs. LLM-graded result on the same subset) must pass before trusting the MCQ result at scale — per [design.md](design.md)'s eval section.
 
+**DONE (2026-07-14) — NULL RESULT.** 20-question hand-authored MCQ bank (`03-new/cpt_train/mcq_check/`), greedy decode. `qwen-q4` 18/20 vs `qwen-cpt-v1` 18/20 — **identical answers on all 20 questions**, including the same 2 mistakes. CPT-v1 is **NOT accepted** — Phase 4 should not build on it as-is. Full writeup + interpretation: [analysis.md](analysis.md).
+
 ## Phase 4 — SFT/DPO (redesigned data)
 
 *Spec not yet written — this phase is a placeholder until the SFT/DPO redesign follow-up (`design.md` sequencing item 2) lands.* Planned shape: reuse the `01-sft-dpo` LoRA recipe/hyperparameters unchanged; redesign DPO pair composition to contrast semantically-correct vs. subtly-wrong OSP idiom (both compile) instead of syntax-fix pairs. Runs on top of the accepted CPT checkpoint.
@@ -170,7 +172,7 @@ Build the 4-point delta table (base / +CPT / +CPT+SFT-DPO / +CPT+SFT-DPO+GRPO) a
 - [ ] Phase 0 base eval recorded (both tracks)
 - [x] Phase 1 CPT dataset built, manifest emitted, decontam clean
 - [x] Phase 2 CPT training run complete (2586/2586 iters, train loss -18.5%, val loss -24.4% — see `cpt-v1-training-results.md`). **CF regression check PASS** (16/16 both models, zero delta — `analysis.md`).
-- [ ] Checkpoint 1 MCQ + trust check recorded, CPT checkpoint accepted
+- [x] Checkpoint 1 MCQ + trust check recorded — NULL result, checkpoint NOT accepted (see `analysis.md`)
 - [ ] SFT/DPO redesign spec written (gates Phase 4)
 - [ ] Phase 4 SFT/DPO run, Checkpoint 2 full eval recorded
 - [ ] RL/GRPO redesign spec written (gates Phase 6)

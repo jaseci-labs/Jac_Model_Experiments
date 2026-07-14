@@ -1,0 +1,286 @@
+{
+  "base": [
+    {
+      "id": "walker_def",
+      "output": "A",
+      "letter": "A",
+      "expected": "A",
+      "correct": true
+    },
+    {
+      "id": "obj_vs_class",
+      "output": "A\n\nJac prefers `type` over `class` for defining archetypes. In Jac, `",
+      "letter": "A",
+      "expected": "B",
+      "correct": false
+    },
+    {
+      "id": "can_with_entry",
+      "output": "A",
+      "letter": "A",
+      "expected": "A",
+      "correct": true
+    },
+    {
+      "id": "spawn_operator",
+      "output": "B",
+      "letter": "B",
+      "expected": "B",
+      "correct": true
+    },
+    {
+      "id": "visit_stmt",
+      "output": "B",
+      "letter": "B",
+      "expected": "B",
+      "correct": true
+    },
+    {
+      "id": "disengage",
+      "output": "A",
+      "letter": "A",
+      "expected": "A",
+      "correct": true
+    },
+    {
+      "id": "has_fields",
+      "output": "A",
+      "letter": "A",
+      "expected": "A",
+      "correct": true
+    },
+    {
+      "id": "root_node",
+      "output": "A",
+      "letter": "A",
+      "expected": "A",
+      "correct": true
+    },
+    {
+      "id": "edge_filter",
+      "output": "A",
+      "letter": "A",
+      "expected": "A",
+      "correct": true
+    },
+    {
+      "id": "osp_philosophy",
+      "output": "A",
+      "letter": "A",
+      "expected": "A",
+      "correct": true
+    },
+    {
+      "id": "by_llm",
+      "output": "A",
+      "letter": "A",
+      "expected": "A",
+      "correct": true
+    },
+    {
+      "id": "sem_annotation",
+      "output": "A",
+      "letter": "A",
+      "expected": "A",
+      "correct": true
+    },
+    {
+      "id": "node_edge_relation",
+      "output": "A",
+      "letter": "A",
+      "expected": "A",
+      "correct": true
+    },
+    {
+      "id": "ability_trigger",
+      "output": "B",
+      "letter": "B",
+      "expected": "B",
+      "correct": true
+    },
+    {
+      "id": "jac_python_relation",
+      "output": "A",
+      "letter": "A",
+      "expected": "A",
+      "correct": true
+    },
+    {
+      "id": "not_real_construct",
+      "output": "D",
+      "letter": "D",
+      "expected": "C",
+      "correct": false
+    },
+    {
+      "id": "spawn_semantics",
+      "output": "A",
+      "letter": "A",
+      "expected": "A",
+      "correct": true
+    },
+    {
+      "id": "walker_movement",
+      "output": "A",
+      "letter": "A",
+      "expected": "A",
+      "correct": true
+    },
+    {
+      "id": "byllm_syntax",
+      "output": "A",
+      "letter": "A",
+      "expected": "A",
+      "correct": true
+    },
+    {
+      "id": "def_vs_can",
+      "output": "A",
+      "letter": "A",
+      "expected": "A",
+      "correct": true
+    }
+  ],
+  "cpt": [
+    {
+      "id": "walker_def",
+      "output": "A",
+      "letter": "A",
+      "expected": "A",
+      "correct": true
+    },
+    {
+      "id": "obj_vs_class",
+      "output": "A\n\nJac prefers `type` over `class` for defining archetypes. In Jac's syntax",
+      "letter": "A",
+      "expected": "B",
+      "correct": false
+    },
+    {
+      "id": "can_with_entry",
+      "output": "A",
+      "letter": "A",
+      "expected": "A",
+      "correct": true
+    },
+    {
+      "id": "spawn_operator",
+      "output": "B",
+      "letter": "B",
+      "expected": "B",
+      "correct": true
+    },
+    {
+      "id": "visit_stmt",
+      "output": "B",
+      "letter": "B",
+      "expected": "B",
+      "correct": true
+    },
+    {
+      "id": "disengage",
+      "output": "A",
+      "letter": "A",
+      "expected": "A",
+      "correct": true
+    },
+    {
+      "id": "has_fields",
+      "output": "A",
+      "letter": "A",
+      "expected": "A",
+      "correct": true
+    },
+    {
+      "id": "root_node",
+      "output": "A",
+      "letter": "A",
+      "expected": "A",
+      "correct": true
+    },
+    {
+      "id": "edge_filter",
+      "output": "A",
+      "letter": "A",
+      "expected": "A",
+      "correct": true
+    },
+    {
+      "id": "osp_philosophy",
+      "output": "A",
+      "letter": "A",
+      "expected": "A",
+      "correct": true
+    },
+    {
+      "id": "by_llm",
+      "output": "A",
+      "letter": "A",
+      "expected": "A",
+      "correct": true
+    },
+    {
+      "id": "sem_annotation",
+      "output": "A",
+      "letter": "A",
+      "expected": "A",
+      "correct": true
+    },
+    {
+      "id": "node_edge_relation",
+      "output": "A",
+      "letter": "A",
+      "expected": "A",
+      "correct": true
+    },
+    {
+      "id": "ability_trigger",
+      "output": "B",
+      "letter": "B",
+      "expected": "B",
+      "correct": true
+    },
+    {
+      "id": "jac_python_relation",
+      "output": "A",
+      "letter": "A",
+      "expected": "A",
+      "correct": true
+    },
+    {
+      "id": "not_real_construct",
+      "output": "D",
+      "letter": "D",
+      "expected": "C",
+      "correct": false
+    },
+    {
+      "id": "spawn_semantics",
+      "output": "A",
+      "letter": "A",
+      "expected": "A",
+      "correct": true
+    },
+    {
+      "id": "walker_movement",
+      "output": "A",
+      "letter": "A",
+      "expected": "A",
+      "correct": true
+    },
+    {
+      "id": "byllm_syntax",
+      "output": "A",
+      "letter": "A",
+      "expected": "A",
+      "correct": true
+    },
+    {
+      "id": "def_vs_can",
+      "output": "A",
+      "letter": "A",
+      "expected": "A",
+      "correct": true
+    }
+  ]
+}

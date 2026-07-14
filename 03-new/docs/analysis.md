@@ -56,12 +56,31 @@ Built the check that was flagged as missing above: 16 classic Python coding task
 
 **This clears the CF gate.** Nothing blocks moving to Checkpoint 1.
 
-## Recommendation
+## Checkpoint 1: semantic MCQ (2026-07-14) — NULL RESULT
 
-1. **Do not promote `qwen-cpt-v1` to any default model or downstream stage yet.** It's registered in Studio's chat picker for manual poking, not accepted.
-2. **Run Checkpoint 1** (semantic MCQ + human trust check) against `qwen-cpt-v1` vs base `qwen-q4` — this is what actually answers "is this good." Not built yet.
-3. **Build the CF regression check** before or alongside Checkpoint 1 — currently zero signal on whether general coding ability moved.
-4. If Checkpoint 1 shows a real semantic lift: accept the checkpoint, move to Phase 4 (SFT/DPO redesign spec, unwritten) on top of it. If it shows nothing: that's a real, informative null (matches this project's track record of nulls turning out to be measurement bugs *or* real findings — RL_FINDINGS.md is the precedent for taking a null seriously rather than re-running blind).
+Built the eval Checkpoint 1 calls for: 20 multiple-choice questions on Jac/OSP concepts (walker, node/edge, `can`/`def`, `spawn`/`visit`/`disengage`, `has` fields, `root`, OSP philosophy, `by llm()`, `sem` annotations), no compiler involved — pure concept recognition. Hand-authored and grounded against this project's own verified facts about Jac (not the full LLM+MCP-authored pipeline from the original deck — a scope call made for this first pass, see the earlier "what is semantic MCP" discussion). Question bank: `03-new/cpt_train/mcq_check/questions.py`. Runner: `run_mcq_check.py`, greedy decode (temp 0.0) so answers are deterministic, not sampled.
+
+**Result: `qwen-q4` 18/20 (90%) vs `qwen-cpt-v1` 18/20 (90%) — zero delta. Not just the same score: the exact same 18 questions right and the exact same 2 questions wrong, for both models.** Raw per-question outputs: `03-new/results/cpt-v1/mcq_check.json`.
+
+**This is a real null, not noise from too few questions landing on a coin flip** — an actual behavior change would show up as at least *some* disagreement between the two answer sets, even a small one. Getting byte-identical answer patterns across 20 independent questions is a strong signal that CPT-v1's LoRA delta did not move constrained-choice concept recognition at all on this instrument.
+
+The two shared wrong answers are informative about what CPT did *not* fix:
+- **`obj` vs `class`** (which keyword Jac prefers for archetypes) — both models confidently answered `type` (wrong; the docs corpus was upsampled 3x specifically because it's the highest-quality source, and this exact fact is a basic, frequently-stated one). CPT training did not correct this specific, learnable factual gap.
+- **Which construct isn't real Jac** — both models picked `has` (a real, extremely common keyword used throughout this very codebase) instead of the actual fabricated one (`rule`, the same hallucinated construct base invented unprompted in the head-to-head walker test above). Neither model has reliable grounding on which keywords are real.
+
+**How this fits with the head-to-head qualitative check above**: that test showed CPT-v1 using more real Jac vocabulary in *free-form generation* (`has`, `spawn`, `here.*`) than base's fully-invented pseudo-DSL. This MCQ result shows CPT did *not* move *constrained-choice recognition* of the same concepts. Read together, the honest interpretation is: CPT's effect, if any, shows up as a generation-style/vocabulary nudge, not as corrected factual understanding — the model picked up *how Jac code tends to look* more than *what Jac constructs actually mean*. That's a meaningfully different (and weaker) claim than "CPT taught the model Jac semantics," and it's the claim the evidence actually supports.
+
+**Verdict on the original hypothesis** (did CPT move the semantic ceiling SFT+RL both hit): **no evidence of that yet, on this instrument.** This doesn't rule it out — 3 epochs on 3.8M tokens is a small CPT run, and 20 questions is a small eval — but it means CPT-v1 should not be treated as a confirmed win. Matches this doc's original "plausible, not confirmed" framing, now with a real null attached instead of just an absence of evidence.
+
+## Recommendation (updated post-Checkpoint-1)
+
+Both gates have now run. **CF: pass. Checkpoint 1: null.** CPT-v1 is confirmed not to have broken anything, and confirmed not (yet) to have delivered the thing this whole attempt exists to test.
+
+1. **Do not accept `qwen-cpt-v1` as validated.** Keep it registered in Studio's chat picker (useful for manual poking, and it *did* show a real vocabulary-uptake difference in free-form generation), but the MCQ null means it hasn't earned promotion to any default model or downstream stage.
+2. **Don't yet build Phase 4 (SFT/DPO redesign) on top of `qwen-cpt-v1`** — the checkpoint this stage exists to validate didn't pass its own validation. Building on top of an unconfirmed checkpoint compounds the uncertainty instead of resolving it.
+3. **Before re-running CPT bigger/longer, get more signal on *why* the MCQ was flat.** Two live hypotheses, not mutually exclusive: (a) 3 epochs / 3.8M tokens is genuinely too small a CPT run to shift factual recall measurable at MCQ granularity — scale up token count/epochs and re-test; (b) the LoRA capacity (rank 16) or which layers it targets is limiting how much factual content can actually be absorbed vs. just style/vocabulary — the ladder work already established LoRA-scale limits show up this way in this project's RL experiments, worth checking if the same ceiling applies here.
+4. **The MCQ bank itself is now a reusable instrument** — future CPT runs (bigger corpus, more epochs, different LoRA rank) can be scored against the same 20 questions for a real before/after comparison, not just base-vs-single-checkpoint.
+5. This is a real, informative null, not a failure to hide — matches this project's track record (`RL_FINDINGS.md` is the precedent: take a null seriously, don't paper over it, don't just re-run blind hoping for a different answer).
 
 ## Reference
 
