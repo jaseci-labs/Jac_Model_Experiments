@@ -34,6 +34,8 @@ Launched and monitored through `studio/cpt.sv.jac`'s `start_cpt_training`/`get_c
 
 Both curves move down together over the run, at similar magnitude — no divergence, no sign of val loss decoupling upward while train drops (the classic overfit signature). At `batch_size: 1` the raw per-iter train-loss series is single-example noise (a dense code file and a short prose paragraph have very different intrinsic perplexity, so consecutive points swing 0.8–1.4 routinely) — this was visible live during the run and tracked as expected noise, not instability, against the smoothed trend rather than any single point. Val loss (`val_batches: 20`, so each point already averages 20 examples) is calmer but still noisy at this data scale; the 10-point trailing average is the meaningful read, not the single final point (1.179 — an unremarkable point within the observed 0.82–1.74 band, not a late regression).
 
+**Graphs**: `03-new/results/cpt-v1/{train_loss,val_loss,learning_rate,tokens_per_sec,iters_per_sec,trained_tokens,peak_mem}.png` (generated via the existing `01-sft-dpo/sft_dpo/jacgen/plot_metrics.jac` — reused as-is, no CPT-specific changes needed). No `learning_curve.png` (holdout test-pass per checkpoint) — that plot needs a task-based eval harness, which doesn't exist for CPT yet; see the CF-monitor gap below. The live equivalents of these charts are also always available in Studio's 03 CPT → TRAIN tab (`MonoChart`, same source data).
+
 ## Resource usage
 
 - **Peak memory**: 29.29–30.42 GB, flat across the whole run (well inside the 48GB M5 Pro cap — no memory pressure, no swap risk observed).
