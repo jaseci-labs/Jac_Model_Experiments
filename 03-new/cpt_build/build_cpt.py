@@ -50,7 +50,8 @@ HOLDOUT_FILES = {
 
 SKIP_DIRS = {"node_modules", ".git", ".venv", "__pycache__", "dist", "build"}
 
-HEADER_RE = re.compile(r"^#{1,6} ", re.M)
+HEADER_RE = re.compile(r"^#{1,6} ")
+FENCE_LINE_RE = re.compile(r"^\s*```")
 
 
 def log(msg):
@@ -69,8 +70,20 @@ def repo_sha(path: Path) -> str:
 
 def md_chunks(text: str):
     """Semantic chunk: split at markdown header lines, keep the header with
-    its section. Leading pre-header content becomes its own chunk."""
-    positions = [m.start() for m in HEADER_RE.finditer(text)]
+    its section. Fence-aware: a line starting with '#' inside a ```-fenced
+    code block (a Python/Jac/Bash comment, not a markdown header) never
+    triggers a split. Unguarded header detection was cutting chunks mid-fence
+    on every commented code sample in the docs -- the single biggest source
+    of mid-sentence/mid-statement chunk starts (found during the Jul-14
+    review). Leading pre-header content becomes its own chunk."""
+    lines = text.split("\n")
+    positions, pos, in_fence = [], 0, False
+    for ln in lines:
+        if not in_fence and HEADER_RE.match(ln):
+            positions.append(pos)
+        if FENCE_LINE_RE.match(ln):
+            in_fence = not in_fence
+        pos += len(ln) + 1
     if not positions:
         return [text.strip()] if text.strip() else []
     chunks = []
@@ -84,6 +97,38 @@ def md_chunks(text: str):
     return chunks
 
 
+def split_paragraphs(text: str):
+    """Split a header chunk into paragraph-level units on blank lines, treating
+    fenced code blocks as atomic (a blank line inside ``` ... ``` never splits).
+    A lone header-only first paragraph (e.g. "## Title" with a blank line before
+    its body) is glued to the following paragraph so the header never appears
+    as an orphan unit. This is the fix for 'header-only chunking still produces
+    paragraphs too long for one packed window' -- header chunks in this corpus
+    can run to thousands of tokens; paragraphs are the real atomic unit."""
+    lines = text.split("\n")
+    paras, buf, in_fence = [], [], False
+    for ln in lines:
+        if FENCE_LINE_RE.match(ln):
+            in_fence = not in_fence
+            buf.append(ln)
+            continue
+        if not in_fence and ln.strip() == "":
+            if buf:
+                joined = "\n".join(buf).strip("\n")
+                if joined.strip():
+                    paras.append(joined)
+                buf = []
+        else:
+            buf.append(ln)
+    if buf:
+        joined = "\n".join(buf).strip("\n")
+        if joined.strip():
+            paras.append(joined)
+    if len(paras) > 1 and HEADER_RE.match(paras[0]) and "\n" not in paras[0]:
+        paras = [paras[0] + "\n\n" + paras[1]] + paras[2:]
+    return paras if paras else ([text.strip()] if text.strip() else [])
+
+
 def strip_frontmatter(text: str) -> str:
     if text.startswith("---"):
         end = text.find("\n---", 3)
@@ -95,31 +140,35 @@ def strip_frontmatter(text: str) -> str:
 # ---------------------------------------------------------------- sources
 
 def build_docs(repos: Path):
-    """Jac docs (jaseci-labs/jac docs/docs) + latest jac-llmdocs release."""
+    """Jac docs (jaseci-labs/jac docs/docs) + latest jac-llmdocs release.
+    Each row is one PARAGRAPH (header chunk, further split on blank lines) --
+    header-only chunking left rows too long for a packed window; paragraphs
+    are the real atomic unit for both inspection and overlap-safe packing."""
     rows = []
     base = repos / "jac" / "docs" / "docs"
     for f in sorted(base.rglob("*.md")):
-        chunks = md_chunks(f.read_text(errors="replace"))
-        for ch in chunks:
+        for ch in md_chunks(f.read_text(errors="replace")):
             first = ch.splitlines()[0] if ch else ""
-            rows.append({
-                "text": ch,
-                "meta": {"source": "jaseci_docs", "type": "official_doc",
-                         "upsample_weight": 3,
-                         "file": str(f.relative_to(base)),
-                         "section": first.lstrip("# ")[:120]},
-            })
+            for para in split_paragraphs(ch):
+                rows.append({
+                    "text": para,
+                    "meta": {"source": "jaseci_docs", "type": "official_doc",
+                             "upsample_weight": 3,
+                             "file": str(f.relative_to(base)),
+                             "section": first.lstrip("# ")[:120]},
+                })
     llm = repos / "jaseci-llmdocs" / "release" / "jac-llmdocs.md"
     if llm.exists():
         for ch in md_chunks(llm.read_text(errors="replace")):
             first = ch.splitlines()[0] if ch else ""
-            rows.append({
-                "text": ch,
-                "meta": {"source": "jaseci_docs", "type": "llm_doc",
-                         "upsample_weight": 1,
-                         "file": "jaseci-llmdocs/release/jac-llmdocs.md",
-                         "section": first.lstrip("# ")[:120]},
-            })
+            for para in split_paragraphs(ch):
+                rows.append({
+                    "text": para,
+                    "meta": {"source": "jaseci_docs", "type": "llm_doc",
+                             "upsample_weight": 1,
+                             "file": "jaseci-llmdocs/release/jac-llmdocs.md",
+                             "section": first.lstrip("# ")[:120]},
+                })
     return rows
 
 
@@ -146,19 +195,21 @@ def build_paper(arxiv: Path):
         text = f.read_text(errors="replace")
         for pat, rep in TEX_STRIP:
             text = pat.sub(rep, text)
-        # split at \section boundaries, keep the \section{...} line
+        # split at \section boundaries, keep the \section{...} line, then
+        # paragraph-split each section (sections run long -- same fix as docs).
         parts = re.split(r"(?=\\(?:sub)?section\{)", text)
         for part in parts:
             part = part.strip()
             if len(part) < 40:
                 continue
             m = re.match(r"\\(?:sub)?section\{([^}]*)\}", part)
-            rows.append({
-                "text": part,
-                "meta": {"source": "osp_paper", "type": "paper_section",
-                         "upsample_weight": 1, "file": f.name,
-                         "section": (m.group(1) if m else "")[:120]},
-            })
+            for para in split_paragraphs(part):
+                rows.append({
+                    "text": para,
+                    "meta": {"source": "osp_paper", "type": "paper_section",
+                             "upsample_weight": 1, "file": f.name,
+                             "section": (m.group(1) if m else "")[:120]},
+                })
     lst = arxiv / "littlex.jac"
     if lst.exists():
         rows.append({
@@ -178,14 +229,15 @@ def build_blogs(repos: Path):
         slug = f.stem
         for ch in md_chunks(text):
             first = ch.splitlines()[0] if ch else ""
-            rows.append({
-                "text": ch,
-                "meta": {"source": "blog", "type": "blog_post",
-                         "upsample_weight": 1,
-                         "url": f"https://blogs.jaseci.org/blog/{slug}",
-                         "file": str(f.relative_to(base)),
-                         "section": first.lstrip("# ")[:120]},
-            })
+            for para in split_paragraphs(ch):
+                rows.append({
+                    "text": para,
+                    "meta": {"source": "blog", "type": "blog_post",
+                             "upsample_weight": 1,
+                             "url": f"https://blogs.jaseci.org/blog/{slug}",
+                             "file": str(f.relative_to(base)),
+                             "section": first.lstrip("# ")[:120]},
+                })
     return rows
 
 
@@ -307,10 +359,15 @@ def build_rehearsal(target_tokens: int, tok):
         if not text.strip() or len(text) > 200_000:
             continue
         n = len(tok.encode(text))
+        # `file` must be unique per example -- pack_source groups rows into a
+        # "doc" (one EOS at the end) by this key. Without it every rehearsal
+        # row fell back to the same "?" key and got merged into ONE giant doc
+        # with a single EOS for all ~400 files (found during the Jul-14 review).
         rows.append({
             "text": text,
             "meta": {"source": "rehearsal", "type": "general_code",
                      "upsample_weight": 1, "lang": "python",
+                     "file": f"{ex.get('repo_name', 'unknown')}/{i}.py",
                      "stack_repo": ex.get("repo_name", ""),
                      "license": ex.get("license", "")},
         })
@@ -371,34 +428,126 @@ def decontam(rows, holdout_sets):
 
 # ----------------------------------------------------------------- pack
 
-def pack_source(rows, tok, eos_id, seed=SEED):
-    """Upsample (by weight) -> shuffle documents -> EOS-join token stream ->
-    cut SEQ_LEN windows. Documents here = raw rows grouped by file."""
+def pack_source(rows, tok, eos_id, seed=SEED, line_mode=False):
+    """Upsample (by weight) -> shuffle documents -> pack into SEQ_LEN windows,
+    unit by unit (paragraph for prose, source line for code -- line_mode).
+
+    A "doc" = every row sharing the same file/path key (grouping fixes the
+    rehearsal EOS bug: every row now carries a real per-file key, see
+    build_rehearsal). EOS is appended exactly once, at the END of each doc's
+    units -- never between paragraphs/lines within a doc.
+
+    Overlap on truncation: if a unit doesn't fully fit in the remaining space
+    of the current window, whatever fits is written to finish that window
+    (this is the "truncated" copy), the window is closed, and the FULL unit
+    is written again at the start of the next window. So a paragraph/line
+    split across a window boundary appears complete in at least one window
+    and partially in the one before it -- deliberate redundancy for
+    longer-range context, not an accident of fixed-size slicing."""
+    sep = "\n" if line_mode else "\n\n"
+    sep_ids = tok.encode(sep)
+
     docs = {}
     for r in rows:
-        key = r["meta"].get("file") or r["meta"].get("path") or r["meta"].get("url", "?")
-        docs.setdefault(key, {"chunks": [], "w": r["meta"]["upsample_weight"]})
-        docs[key]["chunks"].append(r["text"])
-    doc_list = []
+        m = r["meta"]
+        key = m.get("file") or m.get("path") or m.get("url") or "?"
+        docs.setdefault(key, {"units": [], "w": int(m["upsample_weight"])})
+        if line_mode:
+            docs[key]["units"].extend(r["text"].split("\n"))
+        else:
+            docs[key]["units"].append(r["text"])  # already one paragraph
+
+    order = []
     for key, d in docs.items():
-        doc_list.extend([("\n\n".join(d["chunks"]))] * d["w"])
-    random.Random(seed).shuffle(doc_list)
-    stream = []
-    for d in doc_list:
-        stream.extend(tok.encode(d))
-        stream.append(eos_id)
-    windows = [stream[i:i + SEQ_LEN] for i in range(0, len(stream), SEQ_LEN)]
+        order.extend([key] * d["w"])
+    random.Random(seed).shuffle(order)
+
+    windows, cur, total_tokens = [], [], 0
+
+    def flush():
+        nonlocal cur
+        if cur:
+            windows.append(cur)
+        cur = []
+
+    for key in order:
+        for u in docs[key]["units"]:
+            ids = tok.encode(u) if u else []
+            if not ids:
+                continue
+            total_tokens += len(ids)
+            room = SEQ_LEN - len(cur) - (len(sep_ids) if cur else 0)
+            if room >= len(ids):
+                if cur:
+                    cur.extend(sep_ids)
+                cur.extend(ids)
+            elif len(ids) > SEQ_LEN:
+                # Rare: a single unit is bigger than a whole window (e.g. a
+                # giant regex table with no blank lines). Can't duplicate
+                # something larger than the window it'd go in -- hard-split
+                # with no overlap, documented ceiling.
+                flush()
+                start = 0
+                while start < len(ids):
+                    cur = ids[start:start + SEQ_LEN]
+                    start += SEQ_LEN
+                    if start < len(ids):
+                        flush()
+            else:
+                # Doesn't fit: finish the current window with a truncated
+                # prefix, then start the next window with the FULL unit.
+                if room > 0:
+                    cur.extend((sep_ids if cur else []) + ids[:room])
+                flush()
+                cur = list(ids)
+        # doc boundary: EOS once, after all of this doc's units.
+        eids = [eos_id]
+        room = SEQ_LEN - len(cur)
+        if room >= len(eids):
+            cur.extend(eids)
+        else:
+            flush()
+            cur = list(eids)
+
+    flush()
     if windows and len(windows[-1]) < 256:  # drop tiny tail window
         windows.pop()
-    return windows, len(stream)
+    return windows, total_tokens
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--repos-dir", required=True, type=Path)
-    ap.add_argument("--arxiv-dir", required=True, type=Path)
+    ap.add_argument("--repos-dir", type=Path)
+    ap.add_argument("--arxiv-dir", type=Path)
     ap.add_argument("--skip-rehearsal", action="store_true")
+    ap.add_argument("--debug-single-md", type=Path, default=None,
+                     help="Chunk ONE local .md file (header -> paragraph split) "
+                          "and write dataset/cpt/single_md.jsonl for inspection. "
+                          "Skips the full build -- no tokenizer, no repos needed.")
     args = ap.parse_args()
+
+    if args.debug_single_md:
+        text = args.debug_single_md.read_text(errors="replace")
+        rows = []
+        for ch in md_chunks(text):
+            first = ch.splitlines()[0] if ch else ""
+            for para in split_paragraphs(ch):
+                rows.append({
+                    "text": para,
+                    "meta": {"source": "debug", "type": "paragraph",
+                             "file": str(args.debug_single_md),
+                             "section": first.lstrip("# ")[:120]},
+                })
+        OUT.mkdir(parents=True, exist_ok=True)
+        outp = OUT / "single_md.jsonl"
+        with open(outp, "w") as f:
+            for r in rows:
+                f.write(json.dumps(r, ensure_ascii=False) + "\n")
+        log(f"debug: {len(rows)} paragraph rows -> {outp}")
+        return 0
+
+    if not args.repos_dir or not args.arxiv_dir:
+        ap.error("--repos-dir and --arxiv-dir are required for a full build")
 
     from transformers import AutoTokenizer
     tok = AutoTokenizer.from_pretrained(str(TOKENIZER_DIR))
@@ -450,10 +599,11 @@ def main():
         log(f"  {name}: {len(rows)} rows")
 
     log("== packing ==")
+    LINE_MODE_SOURCES = {"code", "rehearsal"}
     packed = {}
     jac_tokens = 0
     for name, rows in sources.items():
-        windows, ntok = pack_source(rows, tok, eos_id)
+        windows, ntok = pack_source(rows, tok, eos_id, line_mode=name in LINE_MODE_SOURCES)
         packed[name] = windows
         jac_tokens += ntok
         manifest["sources"][name] = {"rows": len(rows), "tokens": ntok,
@@ -471,7 +621,7 @@ def main():
             with open(d / "raw.jsonl", "w") as f:
                 for r in rrows:
                     f.write(json.dumps(r, ensure_ascii=False) + "\n")
-            windows, ntok = pack_source(rrows, tok, eos_id)
+            windows, ntok = pack_source(rrows, tok, eos_id, line_mode=True)
             packed["rehearsal"] = windows
             manifest["sources"]["rehearsal"] = {"rows": len(rrows),
                                                 "tokens": ntok,

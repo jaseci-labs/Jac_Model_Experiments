@@ -91,7 +91,20 @@ Reuse the existing convention (`wholestack/strat.md` Phase 1/4, `02-rl-grpo`'s f
 4. **OSP paper LaTeX cleaning fidelity** — figure/table caption handling not fully specified; revisit once the actual `.tex` source is pulled and inspected.
 5. ~~**jaseci-labs org repo inventory**~~ RESOLVED: 17 Jac-bearing repos mined (see manifest).
 
-## Build notes (dataset built 2026-07-13, commit 177a978)
+## Build notes v2 (rebuilt 2026-07-14, post-review fixes)
+
+User review of the v1 packed output found windows starting mid-sentence. Root causes + fixes, all in `03-new/cpt_build/build_cpt.py`:
+
+- **Root cause (the big one): `md_chunks` header detection wasn't fence-aware.** Any line starting with `#` inside a fenced code block — a Python/Jac/Bash *comment*, not a markdown header — was matched as a section boundary, silently cutting chunks mid-fence on nearly every commented code sample in the docs. Fixed: header detection now tracks fence state and only splits on `#` lines outside fences.
+- **Paragraph-level splitting.** Header-only chunking still left chunks too long (thousands of tokens) to be a sane packing unit. Added `split_paragraphs()` — fence-aware blank-line splitting within each header chunk — so `docs`/`blogs`/`osp_paper` raw rows are now one paragraph each (docs: 3907 → 8502 rows; a lone header line is glued to its first paragraph so it's never an orphan row).
+- **Debug tool for inspecting chunking on one file**, per request: `build_cpt.py --debug-single-md <path>` chunks a single local `.md` file and writes `dataset/cpt/single_md.jsonl` — no tokenizer, no repo clone, skips the full build.
+- **Overlap on truncation.** `pack_source()` rewritten unit-by-unit (paragraph for prose, source *line* for code/rehearsal — never split mid-line either). When a unit doesn't fully fit in the current window: whatever fits closes out the window (the truncated copy), then the **full unit is written again at the start of the next window** — deliberate redundancy across the window boundary, not silent loss. A unit bigger than a whole window (rare — 2 changelog paragraphs with no internal blank lines, >4096 tokens) can't be duplicated; those hard-split with no overlap, a documented, acknowledged ceiling.
+- **EOS only at file boundaries, never at every paragraph** — this was already correct for docs/blogs/paper (grouped by `meta.file`), but **rehearsal had a real bug**: its rows carried no `file`/`path` key, so all ~400 rehearsal files fell through to the same `"?"` grouping key and got merged into one giant "doc" with a single EOS for the whole slice. Fixed by giving every rehearsal row a real per-file key; EOS count went from ~1 to 403 (one per file) on rebuild.
+- **Verified post-fix**: 0/467 mid-sentence starts stress-testing chunking alone on a 3653-line doc file; 9/553 (1.6%) mid-sentence *packed windows* in the final prose sources, all traced to the two documented oversized-paragraph cases above — everything else starts clean on a paragraph or duplicated-overlap boundary.
+
+Rebuilt totals: **3.80M tokens, 1024 windows (862 train / 162 val)**. `docs` raw rows 3907→8502, `blogs` 233→1153, `osp_paper` 46→457 (all from paragraph-level splitting); `code` unchanged at 691 (still one row per file — line-splitting for packing happens at pack time, not in `raw.jsonl`, so the browsable granularity stays file-level for code).
+
+## Build notes v1 (2026-07-13, commit 177a978) — superseded by v2 above
 
 Built to `03-new/dataset/cpt/` by `03-new/cpt_build/build_cpt.py`. **3.84M tokens, 939 windows (790 train / 149 val).** Deviations from spec, all forced by ground truth:
 

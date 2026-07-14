@@ -27,29 +27,29 @@
   },
   "sources": {
     "docs": {
-      "rows": 3907,
-      "tokens": 1970952,
-      "windows": 482
+      "rows": 8502,
+      "tokens": 1960901,
+      "windows": 527
     },
     "osp_paper": {
-      "rows": 46,
-      "tokens": 35403,
+      "rows": 457,
+      "tokens": 35252,
       "windows": 9
     },
     "blogs": {
-      "rows": 233,
-      "tokens": 64451,
-      "windows": 16
+      "rows": 1153,
+      "tokens": 64241,
+      "windows": 17
     },
     "code": {
       "rows": 691,
-      "tokens": 998581,
-      "windows": 244
+      "tokens": 992184,
+      "windows": 268
     },
     "rehearsal": {
-      "rows": 408,
-      "tokens": 769518,
-      "windows": 188
+      "rows": 403,
+      "tokens": 750235,
+      "windows": 203
     }
   },
   "code_gate": {
@@ -193,7 +193,7 @@
     "source_lexer.jac"
   ],
   "packed": {
-    "train": 790,
-    "val": 149
+    "train": 862,
+    "val": 162
   }
 }
