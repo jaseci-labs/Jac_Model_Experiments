@@ -1,3 +1,5 @@
+
+
 # Attempt 03 Workflow: CPT → SFT/DPO → GRPO
 
 Operational runbook for the full stack. Architecture/ablation/model/eval design of record is [design.md](design.md); CPT data spec is [cpt-dataset-design.md](cpt-dataset-design.md). SFT/DPO and RL/GRPO redesign specs are follow-ups (not yet written — Phase 4 and Phase 6 below are placeholders until those land).
