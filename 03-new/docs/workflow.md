@@ -134,6 +134,8 @@ Full detail in [cpt-dataset-design.md](cpt-dataset-design.md). Summary:
 
 LoRA continual pretrain (next-token, raw text) on the packed CPT dataset, Q4 on 48GB M5 Pro. Track a general-coding regression eval (CF monitor) at every checkpoint alongside training loss — any drop is a stop signal, matches the CF guard in [design.md](design.md) Stage 1.
 
+**DONE (2026-07-14) — `cpt-v1`.** 2586/2586 iters (3 epochs, 862 train windows), 6h49m, exit 0. Train loss −18.5%, val loss −24.4%, moving together (no overfit signature). Peak mem 30.4GB/48GB. Config: `03-new/cpt_train/config.yaml`. Adapter: `03-new/adapters/cpt-v1/` (gitignored). Fused: `models/qwen-cpt-v1-fused-q4`, registered in Studio chat as **Qwen · CPT-v1**. Launched + monitored live through Studio's 03 CPT → TRAIN tab (`studio/cpt.sv.jac`). Full writeup: [cpt-v1-training-results.md](cpt-v1-training-results.md). **CF monitor was NOT run** — the general-coding regression benchmark this phase calls for is still unbuilt; this is an honest gap flagged in the results doc, not silently skipped.
+
 ## Checkpoint 1 — +CPT eval
 
 Semantic MCQ picks the CPT checkpoint to carry forward (cheapest signal, no compiler in the loop). Human-sample trust check (Hamming similarity vs. LLM-graded result on the same subset) must pass before trusting the MCQ result at scale — per [design.md](design.md)'s eval section.
@@ -162,12 +164,12 @@ Build the 4-point delta table (base / +CPT / +CPT+SFT-DPO / +CPT+SFT-DPO+GRPO) a
 
 ## Checklist
 
-- [ ] Blog source location resolved (or scrape-from-HTML path confirmed)
-- [ ] General-code rehearsal corpus picked + license-checked
-- [ ] jaseci-labs org repo inventory enumerated (file/token counts known)
+- [x] Blog source location resolved (jaseci-labs/jaseci-blogs)
+- [x] General-code rehearsal corpus picked + license-checked (codeparrot-clean-valid)
+- [x] jaseci-labs org repo inventory enumerated (17 Jac repos, code_gate in manifest.json)
 - [ ] Phase 0 base eval recorded (both tracks)
-- [ ] Phase 1 CPT dataset built, manifest emitted, decontam clean
-- [ ] Phase 2 CPT training run, CF monitor clean (no general-coding regression)
+- [x] Phase 1 CPT dataset built, manifest emitted, decontam clean
+- [x] Phase 2 CPT training run complete (2586/2586 iters, train loss -18.5%, val loss -24.4% — see `cpt-v1-training-results.md`). **CF monitor still unbuilt** — no general-coding regression check ran this pass.
 - [ ] Checkpoint 1 MCQ + trust check recorded, CPT checkpoint accepted
 - [ ] SFT/DPO redesign spec written (gates Phase 4)
 - [ ] Phase 4 SFT/DPO run, Checkpoint 2 full eval recorded

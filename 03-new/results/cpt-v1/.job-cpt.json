@@ -1,0 +1,1 @@
+{"name": "cpt-v1", "mode": "cpt", "pid": 97316, "status": "done", "started": "2026-07-14 04:03:33", "cmd": "mlx_lm.lora --config 03-new/cpt_train/config.yaml --adapter-path /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/03-new/adapters/cpt-v1 --iters 2586 > /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/03-new/results/cpt-v1/train.log 2>&1", "resumed_from": 0, "iters_this_run": 2586}
