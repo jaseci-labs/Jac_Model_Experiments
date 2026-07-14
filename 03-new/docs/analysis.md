@@ -46,6 +46,16 @@ Loss curves don't answer "does it actually work" — so ran a real, direct compa
 
 **Bottom line**: CPT-v1 nudges idiom vocabulary in code generation, doesn't fix syntax (as designed — that's SFT's job), and doesn't yet visibly fix conceptual misunderstandings from a small 3-epoch run. Consistent with "plausible, not confirmed" from the verdict above — now with a concrete, honest example of what "not confirmed" looks like in practice, not just a caveat.
 
+## CF regression check (2026-07-14) — PASS
+
+Built the check that was flagged as missing above: 16 classic Python coding tasks (fizzbuzz-adjacent — `is_prime`, `bubble_sort`, `binary_search`, `caesar_cipher`, etc.), deliberately **not Jac**, each graded by executing the model's generated function against 1-4 exact-match test cases in a subprocess with a timeout. Script: `03-new/cpt_train/cf_check/{tasks.py,run_cf_check.py}`. Same head-to-head method as before: identical prompts, both models, temp 0.2.
+
+**Result: `qwen-q4` 16/16 (100%) vs `qwen-cpt-v1` 16/16 (100%) — zero regression, zero delta.** CPT did not measurably hurt general Python coding ability at this task difficulty. Raw outputs + per-task pass/fail: `03-new/results/cpt-v1/cf_check.json`.
+
+**Honest caveat**: both models hit the ceiling (16/16), which means this task set has no headroom to detect a *small* regression — if CPT had caused a subtle 1-2 task drop, a harder task set would be needed to see it. What it does confirm: no *gross* catastrophic forgetting (the failure mode design.md's CF guard is actually worried about — a LoRA CPT run destabilizing basic capability) occurred. Good enough to clear this gate; not proof of zero forgetting at any granularity.
+
+**This clears the CF gate.** Nothing blocks moving to Checkpoint 1.
+
 ## Recommendation
 
 1. **Do not promote `qwen-cpt-v1` to any default model or downstream stage yet.** It's registered in Studio's chat picker for manual poking, not accepted.
