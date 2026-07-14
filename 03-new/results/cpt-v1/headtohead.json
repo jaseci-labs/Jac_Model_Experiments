@@ -1,0 +1,68 @@
+{
+  "base": [
+    {
+      "id": "syntax_fn",
+      "kind": "code",
+      "output": "Here's a simple Jac function that adds two integers:\n\n```jac\nfunc add(a: int, b: int) -> int:\n    return a + b\n```\n\nThis function:\n- Takes two integer parameters `a` and `b`\n- Returns their sum as an integer\n- Uses the `func` keyword to define the function\n- Specifies the parameter types with `: int` and return type with `-> int`\n\nYou can use it like:\n```jac\nresult = add(5, 3)  # Returns 8\n```",
+      "code": "func add(a: int, b: int) -> int:\n    return a + b",
+      "compiles": false
+    },
+    {
+      "id": "osp_walker",
+      "kind": "code",
+      "output": "Here's a Jac walker named `CountNodes` that traverses the graph and counts all visited nodes:\n\n```python\nfrom jaclang import jac\n\n# Define the CountNodes walker\nwalker CountNodes {\n    # Start at the root node\n    entry = root\n    \n    # Initialize counter\n    count = 0\n    \n    # Main traversal logic\n    rule traverse {\n        # Increment counter for each node visited\n        count += 1\n        \n        # Print current count\n        print(f\"Visited node {count}\")\n        \n        # Continue traversal to all outgoing edges\n        foreach edge in self.outgoing_edges {\n            # Move to the connected node\n            next_node = edge.target\n            # Continue traversal from this node\n            continue next_node\n        }\n    }\n    \n    # Final result\n    rule finalize {\n        print(f\"Total nodes visited: {count}\")\n    }\n    \n    # Execute the walker\n    rule execute {\n        # Start traversal from root\n        self.traverse(root)\n        self.finalize()\n    }\n}\n```\n\nHowever, since the exact syntax might vary depending on the specific Jac implementation, here's a more standard approach:\n\n```python\nwalker CountNodes {\n    # Initialize counter\n    count = 0\n    \n    # Main traversal rule\n    rule on_entry {\n        # Increment counter for current node\n        self.count += 1\n        \n        # Print current count\n        print(f\"Visiting node {self.count}\")\n        \n        # Continue to all connected nodes\n        foreach node in self.outgoing_nodes {\n            # Recursively visit connected nodes\n            node.visit()\n        }\n    }\n    \n    # Final output\n    rule on_exit {\n        print(f\"Total nodes visited: {self.count}\")\n    }\n}\n```\n\nOr a simpler version that directly counts:\n\n```python\nwalker CountNodes {\n    count = 0\n    \n    rule start {\n        # Start from root and count all reachable nodes\n        self.count_nodes(root)\n",
+      "code": "However, since the exact syntax might vary depending on the specific Jac implementation, here's a more standard approach:",
+      "compiles": false
+    },
+    {
+      "id": "py2jac",
+      "kind": "code",
+      "output": "Here's the idiomatic Jac conversion:\n\n```jac\nfun is_even(n):\n    return n % 2 == 0\n```\n\nThe main differences are:\n- Use `fun` instead of `def` for function definitions in Jac\n- No colon (`:`) needed after the function signature\n- The function body syntax remains the same\n\nAlternatively, you could write it more concisely as a one-liner:\n\n```jac\nfun is_even(n): return n % 2 == 0\n```\n\nOr using Jac's expression syntax:\n\n```jac\nfun is_even(n):\n    return n % 2 == 0\n```\n\nAll three forms are valid, but the first is the most readable and idiomatic.",
+      "code": "fun is_even(n):\n    return n % 2 == 0",
+      "compiles": false
+    },
+    {
+      "id": "concept_node_edge",
+      "kind": "concept",
+      "output": "In Jac's Object-Spatial Programming model, a `node` represents a discrete object or entity that exists at a specific spatial location, while an `edge` represents the relationships or connections between nodes in the spatial structure. Nodes are the fundamental building blocks that contain data and properties, whereas edges define how these objects relate to each other in space. The key distinction is that nodes are spatially located entities, while edges are the spatial relationships that connect and organize these entities within the computational framework."
+    },
+    {
+      "id": "concept_by_llm",
+      "kind": "concept",
+      "output": "The `by llm()` construct in Jac is used to specify that a behavior or action should be executed by a Language Model (LLM) rather than being handled by the Jac runtime or other built-in mechanisms. It allows developers to delegate specific tasks, such as natural language processing, text generation, or complex reasoning, to an LLM for execution. This construct is particularly useful for incorporating AI-powered capabilities into Jac programs, enabling them to leverage LLMs for tasks like generating responses, analyzing text, or performing intelligent decision-making."
+    }
+  ],
+  "cpt": [
+    {
+      "id": "syntax_fn",
+      "kind": "code",
+      "output": "Here's a simple Jac function that adds two integers:\n\n```jac\nfunc add(a: int, b: int) -> int:\n    return a + b\n```\n\nThis function:\n- Takes two integer parameters `a` and `b`\n- Returns their sum as an integer\n- Uses the standard addition operator `+`\n\nExample usage:\n```jac\n# add(3, 5) returns 8\n# add(-2, 7) returns 5\n# add(0, 0) returns 0\n```",
+      "code": "func add(a: int, b: int) -> int:\n    return a + b",
+      "compiles": false
+    },
+    {
+      "id": "osp_walker",
+      "kind": "code",
+      "output": "Here's a Jac walker named `CountNodes` that traverses the graph and counts all visited nodes:\n\n```python\nwalker CountNodes {\n    has root;\n\n    rule start {\n        # Start at the root node\n        spawn here -> root;\n    }\n\n    rule traverse {\n        # Visit all outgoing edges from current node\n        for edge in here.out_edges {\n            spawn here -> edge.target;\n        }\n        \n        # Print the total count when we're done\n        if not here.out_edges:\n            # This is a leaf node, print the count\n            # In a real implementation, you'd need to track the global count\n            # This is a simplified version showing the concept\n            print(f\"Total nodes visited: {count_nodes(here)}\");\n    }\n\n    # Helper function to count nodes (would need to be implemented in actual Jac)\n    # This represents the logic for counting nodes in the traversal\n    def count_nodes(node):\n        count = 1  # Count current node\n        for edge in node.out_edges:\n            count += count_nodes(edge.target)  # Recursively count children\n        return count\n}\n```\n\nHowever, since Jac's walker syntax is more limited, here's a more practical implementation:\n\n```python\nwalker CountNodes {\n    has root;\n    has count = 0;\n\n    rule start {\n        # Initialize counter and start traversal\n        self.count = 0;\n        spawn here -> root;\n    }\n\n    rule visit_node {\n        # Increment counter for each node visited\n        self.count += 1;\n        \n        # Visit all outgoing edges\n        for edge in here.out_edges {\n            spawn here -> edge.target;\n        }\n        \n        # When we've processed all outgoing edges, print result\n        if len(here.out_edges) == 0 or self.count > 1000:  # Prevent infinite loop\n            print(f\"Total nodes visited: {self.count}\");\n    }\n}\n",
+      "code": "However, since Jac's walker syntax is more limited, here's a more practical implementation:",
+      "compiles": false
+    },
+    {
+      "id": "py2jac",
+      "kind": "code",
+      "output": "Here's the idiomatic Jac conversion:\n\n```jac\ndef is_even(n):\n    return n % 2 == 0\n```\n\nThe conversion is actually identical! Jac's syntax for functions and basic operations is very similar to Python, so this function translates directly. In Jac, you can also write it more concisely as:\n\n```jac\ndef is_even(n):\n    return n % 2 == 0\n```\n\nOr using the implicit return syntax (if supported by your Jac version):\n\n```jac\ndef is_even(n) -> bool:\n    return n % 2 == 0\n```\n\nThe function works the same way in Jac - it takes a number `n` and returns `true` if it's even, `false` otherwise.",
+      "code": "def is_even(n):\n    return n % 2 == 0",
+      "compiles": false
+    },
+    {
+      "id": "concept_node_edge",
+      "kind": "concept",
+      "output": "In Jac's Object-Spatial Programming model, a `node` represents a discrete object or entity that exists at specific spatial coordinates, while an `edge` represents a connection or relationship between nodes. Nodes are the fundamental units that store data and can move through space, whereas edges define the topological relationships and communication pathways between these spatially-distributed objects. The key distinction is that nodes are the \"things\" in the system, while edges are the \"connections\" that define how these things relate to each other in both spatial and conceptual terms."
+    },
+    {
+      "id": "concept_by_llm",
+      "kind": "concept",
+      "output": "The `by llm()` construct in Jac is used to integrate and interact with large language models directly within Jac code, allowing developers to leverage LLM capabilities for tasks like text generation, natural language processing, and AI-powered functionality. It provides a seamless way to call LLM APIs and incorporate their responses into Jac programs, making it easier to build AI-enhanced applications. This construct simplifies the process of incorporating machine learning models into Jac applications without requiring extensive API handling code."
+    }
+  ]
+}
