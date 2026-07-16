@@ -1,0 +1,29 @@
+flowchart TD
+    D1["Jac docs<br/>upsample 3x<br/>8502 rows"]
+    D2["Blogs<br/>upsample 1x<br/>1153 rows"]
+    D3["OSP paper<br/>upsample 1x<br/>457 rows"]
+    D4["Code (17 repos)<br/>upsample 1x<br/>691 rows"]
+    D5["Rehearsal (general code)<br/>upsample 1x<br/>~400 files<br/>~20% of tokens (CF guard)"]
+
+    DECON["Decontamination<br/>MinHash shingles vs SFT/RL holdouts<br/>7 leaks caught + dropped"]
+
+    PACK["Pack into fixed windows<br/>joined by EOS token"]
+
+    FINAL["Final CPT corpus<br/>3.80M tokens<br/>1024 windows<br/>862 train / 162 val (85/15 split)"]
+
+    TRAIN["CPT-v1 training run<br/>3 epochs -> 10.04M tokens trained<br/>LoRA rank-16, 16 layers<br/>6h49m, 423-490 tok/s"]
+
+    D1 --> DECON
+    D2 --> DECON
+    D3 --> DECON
+    D4 --> DECON
+    D5 --> DECON
+    DECON --> PACK --> FINAL --> TRAIN
+
+    style D1 fill:#d8ecff,stroke:#333
+    style D2 fill:#eee,stroke:#333
+    style D3 fill:#eee,stroke:#333
+    style D4 fill:#eee,stroke:#333
+    style D5 fill:#ffe8c0,stroke:#333
+    style FINAL fill:#d8ffd8,stroke:#333
+    style TRAIN fill:#ffd8d8,stroke:#900

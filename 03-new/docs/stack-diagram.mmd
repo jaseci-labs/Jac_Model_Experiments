@@ -1,0 +1,15 @@
+flowchart TD
+    B["base<br/>Qwen3-Coder-30B-A3B-Instruct (Q4)"] --> C["+CPT<br/>LoRA next-token PT on raw Jac docs/OSP paper/blogs<br/>(status: v1 null, v2/v3 OOM'd)"]
+    C --> S["+SFT/DPO<br/>same recipe as 01-sft-dpo, redesigned data:<br/>semantic-vs-syntax DPO pairs, not syntax-only"]
+    S --> G["+GRPO<br/>redesigned corpus: multi-project source,<br/>AST-equivalence grader, idiom-balanced tasks"]
+
+    C -.eval.-> M1["Semantic MCQ<br/>(20 Q, no compiler)"]
+    S -.eval.-> M2["Semantic MCQ +<br/>Online-judge (compiler pass@k)"]
+    G -.eval.-> M3["Semantic MCQ +<br/>Online-judge"]
+
+    C -.guard.-> CF["CF regression check<br/>(16 Python tasks)"]
+
+    style B fill:#eee,stroke:#333
+    style C fill:#ffd8d8,stroke:#900
+    style S fill:#e8e8e8,stroke:#333,stroke-dasharray: 5 5
+    style G fill:#e8e8e8,stroke:#333,stroke-dasharray: 5 5

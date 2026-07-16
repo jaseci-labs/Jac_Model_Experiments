@@ -72,7 +72,7 @@ flowchart TD
     end
 
     subgraph Metrics["Phase 5: Metrics Collection"]
-        EVAL1 --> AUTO1["Automated metrics:\nCompiler pass rate\nTest pass rate\nConstruct diversity\nToken efficiency"]
+        EVAL1 --> AUTO1["Automated metrics:\nCompiler passs rate\nTest pass rate\nConstruct diversity\nToken efficiency"]
         EVAL2 --> AUTO2["Automated metrics:\nCompiler pass rate\nTest pass rate\nConstruct diversity\nToken efficiency"]
         
         EVAL1 --> JUDGE1["Judge metrics:\nIdiom adherence\nCode quality\nExplanation clarity"]
