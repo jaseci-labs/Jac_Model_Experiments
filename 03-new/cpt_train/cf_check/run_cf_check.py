@@ -61,9 +61,11 @@ def grade(code, entry_point, tests):
         tmp.unlink(missing_ok=True)
 
 
-def run_model(model_id, path):
-    print(f"\n{'='*70}\nLOADING {model_id} ({path})\n{'='*70}", flush=True)
-    model, tok = load(str(ROOT / path))
+def run_model(model_id, path, adapter_path=None):
+    print(f"\n{'='*70}\nLOADING {model_id} ({path})"
+          f"{' + adapter ' + adapter_path if adapter_path else ''}\n{'='*70}", flush=True)
+    load_kwargs = {"adapter_path": str(ROOT / adapter_path)} if adapter_path else {}
+    model, tok = load(str(ROOT / path), **load_kwargs)
     sampler = make_sampler(temp=0.2, top_p=0.9)
     results = []
     for t in TASKS:
