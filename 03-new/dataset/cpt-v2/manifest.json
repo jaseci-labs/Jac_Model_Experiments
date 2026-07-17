@@ -1,0 +1,57 @@
+{
+  "seq_len": 4096,
+  "split": "85/15",
+  "seed": 3,
+  "tokenizer": "models/qwen-q4",
+  "eos_token": "<|im_end|>",
+  "fim": "skipped: Qwen3-Coder-30B-A3B-Instruct tokenizer has no FIM special tokens; downstream hole-fill is chat-format, not FIM",
+  "repos": {
+    "jac": "1fd0924e0c59d895e3656eb97619f1b79de9ef2f",
+    "jaseci-blogs": "b0e792975cd6e117b69c3c2f04c08cbdffcfecd3",
+    "jaseci-llmdocs": "e2f53b0b3f7dd9581760b993807f6789fc207e0e"
+  },
+  "sources": {
+    "docs": {
+      "rows": 8613,
+      "tokens": 2025830,
+      "windows": 547
+    },
+    "osp_paper": {
+      "rows": 457,
+      "tokens": 35252,
+      "windows": 9
+    },
+    "blogs": {
+      "rows": 1153,
+      "tokens": 64241,
+      "windows": 17
+    },
+    "rehearsal": {
+      "rows": 118,
+      "tokens": 234847,
+      "windows": 64
+    }
+  },
+  "decontam": {
+    "docs": 0,
+    "osp_paper": 0,
+    "blogs": 0
+  },
+  "decontam_dropped": {
+    "docs": [],
+    "osp_paper": [],
+    "blogs": []
+  },
+  "holdout_files_excluded": [
+    "analytics.jac",
+    "littlex/frontend.cl.jac",
+    "raylib_shim.cl.jac",
+    "raylib_shooter/bench.jac",
+    "raylib_shooter/web/main.jac",
+    "source_lexer.jac"
+  ],
+  "packed": {
+    "train": 535,
+    "val": 102
+  }
+}
