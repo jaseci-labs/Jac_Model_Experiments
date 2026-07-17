@@ -140,6 +140,15 @@ def strip_frontmatter(text: str) -> str:
     return text
 
 
+def make_chunk_id(file: str, section: str, text: str) -> str:
+    """Stable per-row ID for curation (Task 7) and question-gen (Task 16) to
+    join verdicts/questions back to rows regardless of build re-ordering.
+    Keyed on file+section+text-prefix, not row index -- a corpus rebuild that
+    reorders rows must not change existing chunk_ids."""
+    key = f"{file}|{section}|{text[:80]}".encode("utf-8", errors="replace")
+    return hashlib.sha1(key).hexdigest()[:12]
+
+
 # ---------------------------------------------------------------- sources
 
 def build_docs(repos: Path):
@@ -158,7 +167,8 @@ def build_docs(repos: Path):
                     "meta": {"source": "jaseci_docs", "type": "official_doc",
                              "upsample_weight": 3,
                              "file": str(f.relative_to(base)),
-                             "section": first.lstrip("# ")[:120]},
+                             "section": first.lstrip("# ")[:120],
+                             "chunk_id": make_chunk_id(str(f.relative_to(base)), first.lstrip("# ")[:120], para)},
                 })
     llm = repos / "jaseci-llmdocs" / "release" / "jac-llmdocs.md"
     if llm.exists():
@@ -170,7 +180,8 @@ def build_docs(repos: Path):
                     "meta": {"source": "jaseci_docs", "type": "llm_doc",
                              "upsample_weight": 1,
                              "file": "jaseci-llmdocs/release/jac-llmdocs.md",
-                             "section": first.lstrip("# ")[:120]},
+                             "section": first.lstrip("# ")[:120],
+                             "chunk_id": make_chunk_id("jaseci-llmdocs/release/jac-llmdocs.md", first.lstrip("# ")[:120], para)},
                 })
     return rows
 
@@ -211,15 +222,18 @@ def build_paper(arxiv: Path):
                     "text": para,
                     "meta": {"source": "osp_paper", "type": "paper_section",
                              "upsample_weight": 1, "file": f.name,
-                             "section": (m.group(1) if m else "")[:120]},
+                             "section": (m.group(1) if m else "")[:120],
+                             "chunk_id": make_chunk_id(f.name, (m.group(1) if m else "")[:120], para)},
                 })
     lst = arxiv / "littlex.jac"
     if lst.exists():
+        listing_text = lst.read_text(errors="replace")
         rows.append({
-            "text": "# path: osp-paper/littlex.jac\n" + lst.read_text(errors="replace"),
+            "text": "# path: osp-paper/littlex.jac\n" + listing_text,
             "meta": {"source": "osp_paper", "type": "paper_listing",
                      "upsample_weight": 1, "file": "littlex.jac",
-                     "section": "littleX listing"},
+                     "section": "littleX listing",
+                     "chunk_id": make_chunk_id("littlex.jac", "littleX listing", listing_text)},
         })
     return rows
 
@@ -239,7 +253,8 @@ def build_blogs(repos: Path):
                              "upsample_weight": 1,
                              "url": f"https://blogs.jaseci.org/blog/{slug}",
                              "file": str(f.relative_to(base)),
-                             "section": first.lstrip("# ")[:120]},
+                             "section": first.lstrip("# ")[:120],
+                             "chunk_id": make_chunk_id(str(f.relative_to(base)), first.lstrip("# ")[:120], para)},
                 })
     return rows
 
@@ -341,7 +356,8 @@ def build_code(repos: Path):
                 "text": f"# path: {repo}/{rel}\n{body}",
                 "meta": {"source": "code", "type": "repo_file",
                          "upsample_weight": 1, "repo": f"jaseci-labs/{repo}",
-                         "path": str(rel)},
+                         "path": str(rel),
+                         "chunk_id": make_chunk_id(str(rel), "", body)},
             })
     return rows, gate_stats
 
@@ -372,7 +388,8 @@ def build_rehearsal(target_tokens: int, tok):
                      "upsample_weight": 1, "lang": "python",
                      "file": f"{ex.get('repo_name', 'unknown')}/{i}.py",
                      "stack_repo": ex.get("repo_name", ""),
-                     "license": ex.get("license", "")},
+                     "license": ex.get("license", ""),
+                     "chunk_id": make_chunk_id(f"{ex.get('repo_name', 'unknown')}/{i}.py", "", text)},
         })
         total += n
         if total >= target_tokens:
