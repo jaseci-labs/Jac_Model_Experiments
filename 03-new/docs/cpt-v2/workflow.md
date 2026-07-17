@@ -48,8 +48,10 @@ flowchart TD
 
     subgraph T1["Training: epoch-loop (new)"]
         direction TB
+        PATCH["mlx_lm patched:\nsave/restore optimizer.state\n(Adam moments + schedule step)"]
         SCHED["one cosine schedule,\ncomputed for 12-epoch ceiling,\nbefore leg 1 runs"]
-        LEG["run leg N\n(1 epoch, resume-adapter-file\nfrom leg N-1)"]
+        LEG["run leg N\n(1 epoch, resume adapter\n+ optimizer state from leg N-1)"]
+        PATCH --> SCHED
         CKPT["checkpoint\n(*_adapters.safetensors)"]
         CF["CF-check\n16-task harness"]
         GATE{"leg <= 6?\n(floor, protects leg 6 too)"}
@@ -143,7 +145,7 @@ Unchanged decontam (14-gram containment ≥0.5 vs `02-rl-grpo` holdouts) runs on
 
 ## Phase T1 — Training: epoch-loop
 
-The core mechanism change from v1. One cosine LR schedule is computed once, for a 12-epoch ceiling, before leg 1 ever runs — not regenerated per leg (design.md §4.2 explains why: regenerating per leg would mean every epoch decays to floor and jumps back to peak, fighting the point of cosine decay entirely). Each leg is one epoch, resumed from the previous leg's checkpoint via the existing `--resume-adapter-file` mechanism already built into `cpt.sv.jac`.
+The core mechanism change from v1. Verified against `mlx_lm` source (not assumed): `--resume-adapter-file` only restores LoRA weights — the optimizer (Adam moments + the schedule's own step counter, which drives the LR curve) is rebuilt from scratch on every process invocation, so naively chaining legs with the same schedule config would restart every leg at peak LR, not continue the curve. Fix: a small patch to `mlx_lm` that also saves/restores `optimizer.state` (a plain `mx.array`-leaved pytree, same serialization primitives already used for adapter weights) at each checkpoint, so the schedule's internal step position genuinely carries across legs. See design.md §4.2 for the full mechanism (uses `Optimizer.init()` to pre-shape restored state) and the backward-compatibility/versioning constraints on patching a third-party package. One cosine LR schedule is computed once, for a 12-epoch ceiling, before leg 1 ever runs. Each leg is one epoch, resumed from the previous leg's checkpoint (weights + optimizer state) via the extended `cpt.sv.jac` mechanism.
 
 Stop rule (design.md §4.3, exact numbers you approved):
 - **Floor 6** — no stop-loss halt before leg 6, log-only if CF dips early.
@@ -153,7 +155,7 @@ Stop rule (design.md §4.3, exact numbers you approved):
 
 Sonnet reviews each leg's checkpoint (loss delta, sample generations, log-only — advisory, doesn't gate) — appended to `03-new/results/cpt-v2/leg_reviews.md`.
 
-**Not started.** Blocked on: `mlx_lm.lora` resume-schedule-position verification (design.md §9), `cpt.sv.jac` multi-leg `CPT_TOTAL_ITERS` rework (design.md §4.4) — both implementation-phase items, not decided by this doc.
+**Not started.** Blocked on: `mlx_lm` optimizer-state-persistence patch, written and regression-checked against an unpatched dry run (design.md §4.2/§9 — root cause confirmed by reading source, fix scoped, not yet built), `cpt.sv.jac` multi-leg `CPT_TOTAL_ITERS` rework (design.md §4.4) — both implementation-phase items, not decided by this doc.
 
 ## Phase E0 — Eval question bank
 
@@ -190,7 +192,9 @@ CPT-v2 accepted only if Track A beats both base and cpt-v1 by a real (non-noise)
 - [ ] Fable curation subagent run, `curation.json` produced
 - [ ] `apply_curation.py` written
 - [ ] CPT-v2 corpus built (`03-new/dataset/cpt-v2/`), manifest emitted
-- [ ] `mlx_lm.lora` resume-schedule-position behavior verified
+- [x] `mlx_lm.lora` resume-schedule-position behavior read from source — confirmed broken as assumed (weights-only resume, fresh optimizer/schedule per invocation)
+- [ ] `mlx_lm` patch written: save/restore `optimizer.state` at each checkpoint, tracked as a versioned `.patch` file
+- [ ] Patch regression-checked: patched-package dry run vs. unpatched, identical loss curve
 - [ ] Leg-config generator written (single 12-epoch-ceiling schedule, per-leg iter slices)
 - [ ] `cpt.sv.jac` reworked for multi-leg cumulative-total tracking
 - [ ] Epoch-loop training run: legs 1-6 (floor, unconditional)
