@@ -559,7 +559,7 @@ def main():
     ap.add_argument("--repack-only", action="store_true",
                      help="Skip source building/decontam; read existing raw.jsonl from --out, optionally apply --curation, then pack.")
     ap.add_argument("--curation", type=Path, default=None,
-                     help="curation.json to apply before packing (only used with --repack-only, or appended after a full build).")
+                     help="curation.json to apply before packing (only used with --repack-only).")
     args = ap.parse_args()
 
     out = resolve_out_dir(args.out)
@@ -616,7 +616,9 @@ def main():
 
         if args.curation:
             from apply_curation import apply_curation
-            sources = apply_curation(sources, args.curation)
+            curation_dict = json.loads(args.curation.read_text())
+            for name in sources:
+                sources[name] = apply_curation(sources[name], curation_dict)
             manifest["curation"] = str(args.curation)
     else:
         for repo in CODE_REPOS + ["jaseci-llmdocs"]:
