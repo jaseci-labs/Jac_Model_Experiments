@@ -1687,7 +1687,7 @@ a. `Agent` tool or direct call: `start_cpt_leg(name="cpt-v2", leg=N)` via Studio
 
 b. Wait for completion (`{done_steps:07d}_adapters.safetensors` + `_optimizer.safetensors` appear in `03-new/adapters/cpt-v2/`).
 
-c. Run the CF-check: `.venv/bin/python3 03-new/cpt_train/cf_check/run_leg_cf_check.py 03-new/adapters/cpt-v2/{step:07d}_adapters.safetensors`
+c. Run the CF-check: `.venv/bin/python3 03-new/cpt_train/cf_check/run_leg_cf_check.py 03-new/adapters/cpt-v2` (pass the shared adapter DIRECTORY, not a numbered checkpoint file — `mlx_lm.utils.load`'s `adapter_path` requires a directory containing `adapter_config.json` + `adapters.safetensors`; the directory's rolling-latest `adapters.safetensors` reflects the most recently completed leg. Must run right after this leg's training completes, before leg N+1's `run_cpt_leg.py` overwrites it.)
 
 d. Sonnet leg review (advisory, design.md section 5): read the leg's loss delta from `train.log` (reuse `metrics.parse_train_log`, same as Studio's TRAIN tab), sample 3-5 generations via `eval_headtohead.py`'s existing prompt set against this leg's checkpoint, write one paragraph appended to `03-new/results/cpt-v2/leg_reviews.md`.
 
