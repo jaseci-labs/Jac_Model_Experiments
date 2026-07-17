@@ -177,7 +177,7 @@ Both tracks share the same ~100-question bank, score it two different ways:
 
 Clone `Agentic-AI/jac-gpt-fullstack` to `03-new/cpt_train/jac_gpt_oracle/` (gitignored). `.env` with `OPENAI_API_KEY` at the clone's own root (auto-loads via its existing `python-dotenv` dependency) — never exported globally, never committed.
 
-**Clone done (2026-07-17, commit 995c69a).** Real endpoint contract discovered from source, corrected from this doc's original guess: `RagChat`/`QAChat`/`CodingChat`/etc are internal nodes, not endpoints — the callable surface is `POST /walker/interact`, and it's a **Server-Sent Events stream**, not plain JSON (design.md §7 has the exact event shape). Boot attempt failed on missing dependencies (`jaclang.byllm`, `langchain-*`, torch, `faiss-cpu` — likely multi-GB) before even reaching the API-key gate. `.env` placeholder created. **Blocked on**: your go-ahead to run `jac install` (dependency size), then your `OPENAI_API_KEY` (set locally via `!` shell command, never pasted in chat).
+**Working end-to-end (2026-07-17).** Clone → real endpoint contract discovered from source (`POST /walker/interact`, SSE stream, corrected from this doc's original wrong JSON-response guess) → `jac install` → two real upstream bugs found and fixed (stale `jaclang.byllm` import path patched to standalone `byllm` package; `.jac/venv` rebuilt with Python 3.13 to match the system `jac` CLI's interpreter ABI, fixing a Pillow load failure) → real `OPENAI_API_KEY` in place → boot succeeded, `POST /walker/interact` verified with a real question, got a full RAG-grounded answer back. Full details: design.md §7.
 
 ## Phase VERDICT — Acceptance
 
@@ -203,8 +203,8 @@ CPT-v2 accepted only if Track A beats both base and cpt-v1 by a real (non-noise)
 - [ ] Sonnet leg reviews logged for every completed leg
 - [ ] CPT-v2 checkpoint fused for eval
 - [x] `jac-gpt-fullstack` cloned (commit 995c69a), real SSE endpoint contract discovered from source
-- [ ] `jac install` run for the oracle's dependency tree (needs go-ahead, likely multi-GB)
-- [ ] `OPENAI_API_KEY` in place, oracle actually boots and responds
+- [x] `jac install` run, plus two real upstream fixes (byllm import path, Python 3.13 venv rebuild)
+- [x] `OPENAI_API_KEY` in place, oracle boots and responds — verified end-to-end with a real question
 - [ ] Fable question bank generated (~100 Q, `source_chunk_id` linked)
 - [ ] Track A cosine-sim script written, run
 - [ ] Track B Sonnet-judge script written, run
