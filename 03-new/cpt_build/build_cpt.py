@@ -18,6 +18,9 @@ import sys
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).parent))
+from text_shingles import shingles
+
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "03-new" / "dataset" / "cpt"
 JAC = ROOT / ".venv" / "bin" / "jac"
@@ -378,11 +381,6 @@ def build_rehearsal(target_tokens: int, tok):
 
 
 # ------------------------------------------------------------- decontam
-
-def shingles(text: str, n=14):
-    words = re.findall(r"\S+", text)
-    return {" ".join(words[i:i + n]) for i in range(len(words) - n + 1)}
-
 
 def load_holdout_shingles():
     """14-gram shingle sets for every RL holdout item (prompt + refbody)."""
