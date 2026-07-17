@@ -154,9 +154,15 @@ def strip_frontmatter(text: str) -> str:
 def make_chunk_id(file: str, section: str, text: str) -> str:
     """Stable per-row ID for curation (Task 7) and question-gen (Task 16) to
     join verdicts/questions back to rows regardless of build re-ordering.
-    Keyed on file+section+text-prefix, not row index -- a corpus rebuild that
-    reorders rows must not change existing chunk_ids."""
-    key = f"{file}|{section}|{text[:80]}".encode("utf-8", errors="replace")
+    Keyed on file+section+FULL text, not row index -- a corpus rebuild that
+    reorders rows must not change existing chunk_ids. Must hash the full text
+    (not a prefix): a prefix-only key lets two rows that share the same
+    leading bytes but differ later (e.g. repeated '---' separator lines,
+    near-identical short diff/code snippets in the same file+section)
+    collide onto the same chunk_id despite being meaningfully different rows.
+    SHA1 has no real per-row cost concern here, so there's no performance
+    reason to truncate the input."""
+    key = f"{file}|{section}|{text}".encode("utf-8", errors="replace")
     return hashlib.sha1(key).hexdigest()[:12]
 
 
