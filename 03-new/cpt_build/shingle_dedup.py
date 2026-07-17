@@ -1,8 +1,10 @@
 """Within-source near-duplicate candidate detection -- cheap pre-filter before
-Fable curation (design.md section 3). Same containment direction as
-build_cpt.py's decontam() (larger item's shingle set is the denominator isn't
-fixed -- we use min-set-as-denominator so containment is symmetric-friendly
-for same-scale chunks, see test_near_duplicate_detected)."""
+Fable curation (design.md section 3). Same containment style as build_cpt.py's
+decontam() (overlap over one set's size, not symmetric Jaccard), but here
+neither chunk is reliably the larger one -- both are same-scale chunks, unlike
+decontam()'s rows-vs-holdout-items split -- so we use the smaller of the two
+shingle sets as the denominator, which keeps containment symmetric-friendly
+for same-scale chunks (see test_near_duplicate_detected)."""
 # ponytail: O(n²) pairwise scan, revisit with LSH bucketing if a source exceeds ~20K rows
 from text_shingles import shingles
 
