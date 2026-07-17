@@ -1779,27 +1779,59 @@ git commit -m "chore: gitignore the jac-gpt-fullstack oracle clone"
 - Create: `03-new/cpt_train/eval_v2/test_jac_gpt_client.py`
 
 **Interfaces:**
-- Produces: `ask_jac_gpt(question: str, base_url: str = "http://localhost:<port>") -> str` — consumed by Track A (Task 17) and Track B (Task 18) to get the oracle's answer per question.
+- Produces: `ask_jac_gpt(question: str, base_url: str = "http://localhost:8000", timeout: int = 120) -> str` — consumed by Track A (Task 17) and Track B (Task 18) to get the oracle's answer per question.
 
-*(The exact endpoint path and payload shape below are placeholders for THIS plan document only, to be filled from Task 14 Step 5's confirmed discovery before writing the real file — replace `<CONFIRMED_PATH>` and the payload/response keys with what Task 14 actually found. Do not commit this file with unconfirmed values.)*
+**Contract confirmed against the real cloned source (Task 14, 2026-07-17), not guessed** — read directly from `services/jacServer.jac`'s `__specs__` blocks, `services/jacServer.impl.jac`'s `stream_chat_response`, and the real frontend client `services/jacService.cl.jac`'s `sendMessage`. The endpoint is `POST /walker/interact`, and **the response is a Server-Sent Events stream, not a plain JSON body** — design.md's original assumption (a single JSON `{"answer": ...}` response) was wrong; this plan section was rewritten once Task 14 confirmed the real shape, per this task's own "do not commit unconfirmed values" gate.
 
-- [ ] **Step 1: Write the failing tests, using `requests_mock` or `unittest.mock.patch`**
+Request JSON: `{"message": str, "session_id": str, "skip_history": bool}` (other optional fields — `user_email`, `chat_history`, `mode` — aren't needed for one-shot eval questions; `session_id` is a fresh UUID per call since Track A/B ask independent questions with no conversation continuity, and `skip_history=True` avoids the walker touching session state we don't use). Response: each SSE frame is `data: <json>\n\n`, decoded JSON has shape `{"type": "chunk"|"thought"|"tool_call", "data": {"content": ...}}` — `"chunk"` and `"thought"` events carry answer text to accumulate, `"tool_call"` clears the running buffer (pre-tool reasoning isn't the answer). This client does not call `POST /walker/save_turn` (turn persistence) — not needed for read-only eval.
+
+- [ ] **Step 1: Write the failing tests**
 
 ```python
 # 03-new/cpt_train/eval_v2/test_jac_gpt_client.py
+import json
 from unittest.mock import patch, MagicMock
 
 from jac_gpt_client import ask_jac_gpt
 
 
-def test_ask_jac_gpt_returns_answer_text():
+def test_ask_jac_gpt_accumulates_chunk_events():
     fake_response = MagicMock()
-    fake_response.json.return_value = {"answer": "A walker traverses the graph."}
     fake_response.raise_for_status.return_value = None
+    fake_response.iter_lines.return_value = [
+        'data: {"type": "chunk", "data": {"content": "A walker "}}',
+        'data: {"type": "chunk", "data": {"content": "traverses the graph."}}',
+    ]
     with patch("jac_gpt_client.requests.post", return_value=fake_response) as mock_post:
         result = ask_jac_gpt("What is a walker?", base_url="http://localhost:9999")
     assert result == "A walker traverses the graph."
-    mock_post.assert_called_once()
+    call_kwargs = mock_post.call_args.kwargs
+    assert call_kwargs["json"]["message"] == "What is a walker?"
+    assert "session_id" in call_kwargs["json"]
+
+
+def test_ask_jac_gpt_tool_call_clears_buffer():
+    fake_response = MagicMock()
+    fake_response.raise_for_status.return_value = None
+    fake_response.iter_lines.return_value = [
+        'data: {"type": "chunk", "data": {"content": "pre-tool reasoning"}}',
+        'data: {"type": "tool_call", "data": {}}',
+        'data: {"type": "chunk", "data": {"content": "final answer"}}',
+    ]
+    with patch("jac_gpt_client.requests.post", return_value=fake_response):
+        result = ask_jac_gpt("q", base_url="http://localhost:9999")
+    assert result == "final answer"
+
+
+def test_ask_jac_gpt_uses_thought_event_when_no_chunks():
+    fake_response = MagicMock()
+    fake_response.raise_for_status.return_value = None
+    fake_response.iter_lines.return_value = [
+        'data: {"type": "thought", "data": {"content": "the final answer via thought"}}',
+    ]
+    with patch("jac_gpt_client.requests.post", return_value=fake_response):
+        result = ask_jac_gpt("q", base_url="http://localhost:9999")
+    assert result == "the final answer via thought"
 
 
 def test_ask_jac_gpt_raises_on_http_error():
@@ -1818,32 +1850,56 @@ def test_ask_jac_gpt_raises_on_http_error():
 Run: `.venv/bin/python3 -m pytest 03-new/cpt_train/eval_v2/test_jac_gpt_client.py -v`
 Expected: FAIL, `ModuleNotFoundError`
 
-- [ ] **Step 3: Implement using Task 14's confirmed contract**
+- [ ] **Step 3: Implement using the real confirmed contract**
 
 ```python
 # 03-new/cpt_train/eval_v2/jac_gpt_client.py
 """HTTP client for the self-hosted jac-gpt-fullstack oracle (design.md
-section 7). Endpoint path/payload shape confirmed against the real running
-service in Task 14 step 5 -- update this docstring with the confirmed port
-and path once known, don't guess."""
+section 7). POST /walker/interact streams Server-Sent Events -- confirmed
+against the real cloned source (Task 14), not guessed. Each SSE frame is
+`data: {"type": ..., "data": {"content": ...}}`. "chunk" events are the
+token stream; "thought" carries the final ReAct answer when the loop ends
+without a distinct tool-call finish; "tool_call" clears the running buffer
+(pre-tool reasoning is discarded, not the answer). Read-only for eval --
+does not call save_turn (turn persistence), since Track A/B ask one-shot
+questions with no need for conversation history."""
+import json
+import uuid
+
 import requests
 
-DEFAULT_BASE_URL = "http://localhost:8000"  # confirm real port from Task 14
+DEFAULT_BASE_URL = "http://localhost:8000"
 
 
-def ask_jac_gpt(question: str, base_url: str = DEFAULT_BASE_URL) -> str:
-    resp = requests.post(f"{base_url}/<CONFIRMED_PATH>",
-                          json={"question": question}, timeout=60)
+def ask_jac_gpt(question: str, base_url: str = DEFAULT_BASE_URL, timeout: int = 120) -> str:
+    resp = requests.post(
+        f"{base_url}/walker/interact",
+        json={"message": question, "session_id": str(uuid.uuid4()), "skip_history": True},
+        stream=True, timeout=timeout,
+    )
     resp.raise_for_status()
-    return resp.json()["answer"]
+
+    buffer = ""
+    for line in resp.iter_lines(decode_unicode=True):
+        if not line or not line.startswith("data: "):
+            continue
+        event = json.loads(line[len("data: "):])
+        etype = event.get("type")
+        if etype in ("chunk", "thought"):
+            buffer += event["data"]["content"]
+        elif etype == "tool_call":
+            buffer = ""
+    return buffer
 ```
 
 - [ ] **Step 4: Run to verify tests pass**
 
 Run: `.venv/bin/python3 -m pytest 03-new/cpt_train/eval_v2/test_jac_gpt_client.py -v`
-Expected: 2 passed
+Expected: 4 passed
 
-- [ ] **Step 5 (operational): Confirm against the real running oracle from Task 14**
+- [ ] **Step 5 (operational): Confirm against the real running oracle**
+
+Blocked until the oracle's dependency tree is installed (`jac install` in `03-new/cpt_train/jac_gpt_oracle/` — Task 14 found this needed but did not run it, likely multi-GB via `torch`, needs a go-ahead) and a real `OPENAI_API_KEY` is in place. Once both are done:
 
 ```bash
 .venv/bin/python3 -c "
@@ -1852,7 +1908,7 @@ print(ask_jac_gpt('What is a walker in Jac?'))
 "
 ```
 
-Expected: a real, on-topic answer. If this fails, the contract discovered in Task 14 step 5 was wrong — go back and re-confirm before trusting Track A/B's results.
+Expected: a real, on-topic answer. If this fails, re-confirm the contract against the live server (e.g. `curl -s -N -X POST http://localhost:8000/walker/interact -H "Content-Type: application/json" -d '{"message": "What is a walker in Jac?", "session_id": "test"}'`, `-N` disables curl's output buffering so SSE frames are visible as they stream) before trusting Track A/B's results.
 
 - [ ] **Step 6: Commit**
 
