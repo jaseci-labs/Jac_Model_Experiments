@@ -80,3 +80,23 @@ def test_run_model_load_accepts_directory_shape(tmp_path):
     model, tok = load("models/qwen-q4", adapter_path=str(adapter_dir))
     assert model is not None
     assert tok is not None
+
+
+def test_run_model_load_rejects_file_shape(tmp_path):
+    """The true negative counterpart of test_run_model_load_accepts_directory_shape
+    above: exercises the REAL (unmocked) mlx_lm.utils.load() against a FILE path
+    (not a directory) as adapter_path -- reproducing the original bug where
+    run_leg_cf_check forwarded a numbered checkpoint .safetensors FILE straight
+    through to load_adapters. load_adapters opens adapter_path/"adapter_config.json",
+    which raises NotADirectoryError when adapter_path is itself a file (not a
+    directory) -- confirmed by actually running this against mlx_lm's real load().
+    Only mlx_lm.generate is out of scope here too (the failure happens during
+    load_adapters, well before any generate call, so no model download/inference
+    is needed)."""
+    adapter_file = tmp_path / "0000570_adapters.safetensors"
+    adapter_file.write_bytes(b"")
+
+    from mlx_lm import load
+    import pytest
+    with pytest.raises(NotADirectoryError):
+        load("models/qwen-q4", adapter_path=str(adapter_file))
