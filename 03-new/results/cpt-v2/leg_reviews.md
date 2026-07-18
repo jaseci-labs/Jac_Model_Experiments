@@ -34,3 +34,12 @@
 - gate decision: continue
 
 **Sonnet review:** Leg 3's uptick resolved -- val loss 1.218 -> 1.107 (best yet, below leg 2's 1.158), train loss 1.365 -> 0.898 (biggest single-leg drop so far). Confirms leg 3 was noise, not a trend. LR now clearly decaying (9.511e-06 -> 8.846e-06). CF-check 16/16, `cf_check_0002176.json` generations still clean idiomatic Python across all 16 tasks, indistinguishable in style/correctness from legs 1-3 -- no degeneration as training progresses. Healthy trajectory through the floor.
+
+## Leg 5
+
+- train loss (last): 1.0, val loss (last): 1.076, final LR: 7.953e-06
+- duration: 5098.0s
+- CF-check: 16/16 (PASS)
+- gate decision: continue
+
+**Sonnet review:** Val loss best yet (1.107 -> 1.076), train loss essentially flat (0.898 -> 1.0, within the noise band the last 3 legs have shown). LR continuing its decay (8.846e-06 -> 7.953e-06). CF-check 16/16, `cf_check_0002720.json` generations still clean and correct across all 16 tasks -- five legs in, zero degeneration signal. This is the last unconditional floor leg; leg 6 (running now) is also floor, and leg 7 onward the stop-loss gate goes live. Nothing here changes the outlook: healthy training, no CF regression risk visible yet.
