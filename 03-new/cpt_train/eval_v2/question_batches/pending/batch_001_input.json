@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "90204d4007bb",
+    "file": "reference/language/library-mode.md",
+    "text": "```jac\nwalker FriendFinder {\n    can find with Root entry {\n        visit [-->];\n    }\n}\n\nwith entry {\n    result = FriendFinder() spawn root;\n}\n```"
+  },
+  {
+    "chunk_id": "2b9ddec76056",
+    "file": "reference/plugins/byllm.md",
+    "text": "### Object Types\n\n```jac\nobj Person {\n    has name: str;\n    has age: int;\n    has bio: str | None;\n}\n\ndef extract_person(text: str) -> Person by llm();\n```"
+  },
+  {
+    "chunk_id": "efdc2893f333",
+    "file": "reference/language/osp.md",
+    "text": "This is useful for aggregation patterns where you need to collect results from children before processing the parent (e.g., calculating subtree totals, building trees bottom-up)."
+  },
+  {
+    "chunk_id": "af709aa34dda",
+    "file": "reference/plugins/byllm.md",
+    "text": "```jac\nwith entry {\n    for event in my_function(\"input\") {\n        if event.event_type == \"usage\" {\n            # Aggregated totals across all LLM calls\n            print(event.data[\"total\"]);\n            # e.g. {\"prompt_tokens\": 1200, \"completion_tokens\": 85, \"total_tokens\": 1285}\n\n            # Per-call breakdown (one dict per LLM call in the ReAct loop)\n            for call_usage in event.data[\"per_call\"] {\n                print(call_usage);\n            }\n        }\n    }\n}\n```"
+  },
+  {
+    "chunk_id": "e6e7d3b3ff2c",
+    "file": "tutorials/language/osp.md",
+    "text": "```jac\nnode Person {\n    has name: str;\n}\n\nwalker Greeter {\n    can start with Root entry {\n        visit [-->];  # Start by visiting nodes connected to root\n    }\n\n    can greet with Person entry {\n        print(f\"Hello, {here.name}!\");\n        visit [-->];  # Continue to all connected nodes\n    }\n}\n\nwith entry {\n    alice = Person(name=\"Alice\");\n    bob = Person(name=\"Bob\");\n    carol = Person(name=\"Carol\");\n\n    root ++> alice;\n    alice ++> bob;\n    alice ++> carol;\n\n    root spawn Greeter();\n}\n```"
+  },
+  {
+    "chunk_id": "ad9928feebfe",
+    "file": "reference/language/osp.md",
+    "text": "### Traversal Semantics: Deferred Exits\n\nWalker traversal uses recursive post-order exit execution. Entry abilities execute immediately when entering a node, while **exit abilities are deferred** until all descendants are visited. This means exits execute in LIFO order (last visited node exits first), similar to function call stack unwinding."
+  },
+  {
+    "chunk_id": "6c1041091287",
+    "file": "community/release_notes/jaclang.md",
+    "text": "### Breaking Changes\n\n- **Breaking: connect operator returns the RHS as-is (#6817)**: The connect operators (`++>`, `<++`, `<++>`, and the typed `+>:Edge:+>` form) no longer always wrap their result in a list. A connect expression now mirrors what it connects to -- connecting to a single node returns that node, and connecting to a list of nodes returns a list. The `(a ++> b)[0]` idiom used to unwrap a single connected node is no longer needed (and now errors); drop the trailing `[0]`. List connects and chaining (`a ++> b ++> c`) are unaffected.\n- **Breaking: `jac/pyproject.toml` removed -- jaclang is the single binary, not a PyPI/editable package.** The clean break is complete: jaclang ships only as the self-contained `jac` binary (Zig launcher + bundled CPython), built with `zig build` from `jac.toml` (no setuptools/pyproject). There is no more `pip install -e ./jac`. CI and the dev `scripts/fresh_env.sh` build the binary (via the new `.github/actions/setup-jac` action) and put `jac` on PATH; plugins install with `jac install -e <plugin>` (deps go into the project venv, jaclang is host-provided by the binary). The binary now bundles `watchdog` (for `jac start --dev`) and `tomlkit` (format-preserving TOML writes), and `jac bundle --precompile` precompiles through the bundled interpreter, so no system Python, pip, or PyPI jaclang is required for any `jac` workflow.\n- **Breaking: the `jaseci` meta-package is retired; releases are anchored on jaclang**: `pip install jaseci` is no longer published. jaclang ships as the native `jac` binary and is now the release anchor -- a release that bumps jaclang cuts the `v<version>` GitHub Release (marked latest) that carries the binaries, while plugins (byllm/jac-scale/jac-mcp) publish to PyPI independently. Install Jac with the one-line installer and add plugins via `jac install <plugin>`.\n- **Breaking: hermetic, self-contained installs**: `jac` now works regardless of the surrounding environment (with or without a host Python), and third-party packages live only where you put them. `jac install <pkg>` and `jac install -e <path>` install into the current project's `.jac/venv` by default (and require a `jac.toml`); pass `--global` to install into the binary's own jac-owned site instead, for a plugin or tool you want importable from any project. Installs always run through the binary's bundled pip (no external `uv`); `.jac` module resolution and plugin discovery no longer consult the host's system/user `site-packages`; and an activated outside venv on `PATH` can no longer shift the interpreter's `sys.prefix`. `jac bundle --precompile` now precompiles for the bundled interpreter only (consumers on another Python recompile on first import)."
+  },
+  {
+    "chunk_id": "5309c09d2ba6",
+    "file": "tutorials/language/coding_primer.md",
+    "text": "1. Walker spawns at `root`\n2. `start` ability runs, visits all nodes connected to root (Alice)\n3. Walker moves to Alice\n4. `greet` ability runs (because Alice is a Person)\n5. Visits Alice's connections (Bob)\n6. Walker moves to Bob\n7. `greet` ability runs\n8. And so on..."
+  },
+  {
+    "chunk_id": "f633386003e7",
+    "file": "tutorials/language/coding_primer.md",
+    "text": "- **OOP**: You're at home, you call restaurants and have food delivered to you\n- **OSP**: You send a robot out to visit different restaurants and collect food"
+  },
+  {
+    "chunk_id": "6a6c5bd66852",
+    "file": "reference/plugins/byllm.md",
+    "text": "### Telemetry Example\n\n```jac\nimport litellm;\nimport from litellm.integrations.custom_logger { CustomLogger }\nimport from jaclang.byllm.telemetry { register_agent_callback }\n\nglob llm_call_records: list = [],\n     agent_records: list = [];\n\nobj UserTelemetryLogger(CustomLogger) {\n    def log_success_event(\n        kwargs: dict,\n        response_obj: object,\n        start_time: object,\n        end_time: object\n    ) -> None {\n        slp = kwargs.get(\"standard_logging_object\", {}) or {};\n        metadata = kwargs.get(\"litellm_params\", {}).get(\"metadata\", {}) or {};\n        llm_call_records.append({\n            \"invocation_id\": metadata.get(\"jac_invocation_id\", \"\"),\n            \"total_tokens\": slp.get(\"total_tokens\") or 0,\n            \"cost\": slp.get(\"response_cost\") or 0.0\n        });\n    }\n}\n\ndef summarize(text: str) -> str by llm();\n\nwith entry {\n    litellm.callbacks.append(UserTelemetryLogger());\n    register_agent_callback(lambda (rec) { agent_records.append(rec); });\n\n    result = summarize(\"Jac is a programming language built on top of Python.\");\n    print(f\"Summary: {result}\");\n\n    rec = agent_records[0];\n    calls = [c for c in llm_call_records if c.get(\"invocation_id\") == rec.get(\"invocation_id\")];\n    print(f\"Caller : {rec.get('caller_name')}\");\n    print(f\"Status : {rec.get('status')}\");\n    print(f\"Latency: {rec.get('latency_ms', 0):.0f} ms\");\n    print(f\"Tokens : {sum(c.get('total_tokens', 0) for c in calls)}\");\n    print(f\"Cost   : ${sum(c.get('cost', 0.0) for c in calls):.6f}\");\n}\n```"
+  },
+  {
+    "chunk_id": "3762f19861e1",
+    "file": "reference/language/primitives.md",
+    "text": "### Bitwise Operators\n\n| Operator | int | dict | set |\n|----------|-----|------|-----|\n| `&` | bitwise AND | -- | intersection |\n| `\\|` | bitwise OR | merge | union |\n| `^` | bitwise XOR | -- | symmetric diff |\n| `<<` `>>` | shift | -- | -- |\n| `~` | invert | -- | -- |"
+  },
+  {
+    "chunk_id": "f96a2b7ce997",
+    "file": "reference/plugins/jac-client.md",
+    "text": "| File | Route | Description |\n|------|-------|-------------|\n| `pages/index.jac` | `/` | Home page |\n| `pages/about.jac` | `/about` | Static page |\n| `pages/users/index.jac` | `/users` | Users list |\n| `pages/users/[id].jac` | `/users/:id` | Dynamic parameter |\n| `pages/[...notFound].jac` | `*` | Catch-all (404) |\n| `pages/(auth)/dashboard.jac` | `/dashboard` | Route group (no URL segment) |\n| `pages/layout.jac` | -- | Wraps child routes with `<Outlet />` |"
+  },
+  {
+    "chunk_id": "af506ced7b84",
+    "file": "reference/plugins/byllm.md",
+    "text": "```jac\nnode Place {\n    has name: str;\n}\n\ndef decide_action(goal: str, current: str, memory: list[dict]) -> str by llm();\nsem decide_action = \"Given the agent's goal, current location, and memory of past decisions, decide the next action.\";\n\nwalker AIAgent {\n    has goal: str;\n    has memory: list[dict] = [];\n\n    can decide with Place entry {\n        decision = decide_action(self.goal, here.name, self.memory);\n        self.memory.append({\"location\": here.name, \"decision\": decision});\n        visit [-->];\n    }\n}\n```"
+  },
+  {
+    "chunk_id": "8de2ac5df981",
+    "file": "reference/plugins/jac-scale-kubernetes.md",
+    "text": "## Kubernetes Secrets\n\nManage sensitive environment variables securely in Kubernetes deployments using the `[scale.secrets]` section."
+  },
+  {
+    "chunk_id": "e80530672c53",
+    "file": "tutorials/production/kubernetes.md",
+    "text": "### 1. Prepare Your Application\n\n```jac\n# main.jac\nnode Todo {\n    has title: str;\n    has done: bool = False;\n}\n\nwalker:pub add_todo {\n    has title: str;\n\n    can create with Root entry {\n        todo = here ++> Todo(title=self.title);\n        report {\"title\": todo.title, \"done\": todo.done};\n    }\n}\n\nwalker:pub list_todos {\n    can fetch with Root entry {\n        todos = [-->][?:Todo];\n        report [{\"title\": t.title, \"done\": t.done} for t in todos];\n    }\n}\n\nwalker:pub health {\n    can check with Root entry {\n        report {\"status\": \"healthy\"};\n    }\n}\n```"
+  },
+  {
+    "chunk_id": "dc1de76d660f",
+    "file": "tutorials/language/osp.md",
+    "text": "```jac\nnode Room {\n    has name: str;\n}\n\nwalker Explorer {\n    has rooms_visited: int = 0;\n\n    can explore with Room entry {\n        self.rooms_visited += 1;\n        print(f\"In {here.name}, visited {self.rooms_visited} rooms\");\n        visit [-->];\n    }\n}\n```"
+  },
+  {
+    "chunk_id": "0fcc82052ba0",
+    "file": "internals/interop.md",
+    "text": "```jac\nwalker:pub PostMessage {\n    has author: str,\n        text: str,\n        reports: list[Message] = [];   # typed result the client sees\n\n    can post with Root entry {\n        report here ++> Message(author=self.author, text=self.text);\n    }\n}\n```"
+  },
+  {
+    "chunk_id": "c8d6d5bd83ab",
+    "file": "build/backend-apis.md",
+    "text": "# I like to build … Backend APIs & services\n\nHTTP backends with no frontend -- REST APIs whose endpoints come straight from your walkers and functions, deployable as a single service or a mesh of independently-scaled ones. These map to the `service` and `service-mesh` [project kinds](../quick-guide/project-kinds.md)."
+  },
+  {
+    "chunk_id": "fc96bc9825d9",
+    "file": "reference/plugins/jac-scale-http.md",
+    "text": "In the sv-to-sv flavor, `order_service.jac` doing `sv import from inventory_service { check_stock }` does not load `inventory_service` into the consumer's process. Calling `check_stock(sku)` issues a `POST /function/check_stock` against the inventory service's URL and returns the result. The same source runs unchanged whether `inventory_service` is a separate microservice, a sibling process started by the same `jac start` command, or (when `sv import` is absent) a normal in-process import."
+  },
+  {
+    "chunk_id": "fba516514931",
+    "file": "reference/language/osp.md",
+    "text": "### 3 Entry and Exit Events\n\n```jac\nnode Room {\n    can on_enter with Visitor entry {\n        print(\"Entering room\");\n    }\n\n    can on_exit with Visitor exit {\n        print(\"Exiting room\");\n    }\n}\n```"
+  },
+  {
+    "chunk_id": "683e8f1bd665",
+    "file": "tutorials/first-app/build-ai-day-planner.md",
+    "text": "The `AddTask` walker may seem like unnecessary complexity compared to the function. The value of walkers becomes clearer with `ListTasks`, which demonstrates the **accumulator pattern** -- collecting data across multiple nodes as the walker traverses the graph:"
+  },
+  {
+    "chunk_id": "7923608db50a",
+    "file": "reference/code-organization.md",
+    "text": "Observe how the declaration file reads almost like a specification document: you can see every type, every field, and every method signature at a glance. The impl file, meanwhile, contains only the method bodies -- the \"how\" behind the \"what.\""
+  },
+  {
+    "chunk_id": "de9b44f7442b",
+    "file": "reference/language/osp.md",
+    "text": "### 2 Creating Edges\n\n```jac\nnode Person { has name: str; }\nedge Friend { has since: int = 2020; }\nedge Colleague { has department: str = \"\"; }\n\nwith entry {\n    alice = Person(name=\"Alice\");\n    bob = Person(name=\"Bob\");\n\n    # Untyped (generic edge)\n    alice ++> bob;\n\n    # Typed edge\n    alice +>: Friend(since=2020) :+> bob;\n\n    # Bidirectional typed\n    alice <+: Colleague(department=\"Engineering\") :+> bob;\n}\n```"
+  },
+  {
+    "chunk_id": "533b72b097b6",
+    "file": "reference/persistence.md",
+    "text": "```jac\nnode Person { has name: str; }\n\nwalker create {\n    can s with Root entry {\n        # Both nodes become persistent because they're attached to root.\n        here ++> Person(name=\"alice\");\n        here ++> Person(name=\"bob\");\n    }\n}\n```"
+  },
+  {
+    "chunk_id": "af85e776b87e",
+    "file": "reference/language/foundation.md",
+    "text": "### 7 Graph Operators (OSP)\n\nGraph operators are fundamental to Object-Spatial Programming. They let you create connections between nodes (`++>`) and traverse the graph (`-->`). Unlike traditional object references, graph connections are first-class entities that can have their own types and attributes. Use these operators whenever you're building or navigating graph structures."
+  },
+  {
+    "chunk_id": "b2c047c4b3f6",
+    "file": "reference/language/appendices.md",
+    "text": "### Graph (OSP)\n\n| Operator | Description |\n|----------|-------------|\n| `++>` | Forward connect |\n| `<++` | Backward connect |\n| `<++>` | Bidirectional connect |\n| `+>:T:+>` | Typed forward |\n| `<+:T:<+` | Typed backward |\n| `<+:T:+>` | Typed bidirectional |\n| `[-->]` | Outgoing edges |\n| `[<--]` | Incoming edges |\n| `[<-->]` | All edges |"
+  },
+  {
+    "chunk_id": "d481b9b7bce9",
+    "file": "tutorials/first-app/build-ai-day-planner.md",
+    "text": "```jac\nwalker AddTask {\n    has title: str;\n\n    can create with Root entry {\n        category = str(categorize(self.title)).split(\".\")[-1].lower();\n        new_task = here ++> Task(\n            title=self.title,\n            category=category\n        );\n        report new_task;\n    }\n}\n```"
+  },
+  {
+    "chunk_id": "92835eb1fad8",
+    "file": "tutorials/first-app/build-ai-day-planner.md",
+    "text": "A key insight here: the walker's `has results: list[Task] = []` state **persists across the entire traversal**. Unlike a local variable in a function call, walker state survives as the walker moves from node to node. This is what makes the accumulator pattern work -- the walker builds up its result set incrementally as it visits each node. And because the results are typed `Task` objects, the client receives them with all fields accessible via dot notation -- no manual dict construction needed."
+  },
+  {
+    "chunk_id": "9799274e1f50",
+    "file": "tutorials/language/osp.md",
+    "text": "```jac\nnode Person {\n    has name: str;\n    has age: int;\n}\n\nwalker FindAdults {\n    can start with Root entry {\n        visit [-->];\n    }\n\n    can check with Person entry {\n        if here.age >= 18 {\n            report here;  # Add to results\n        }\n        visit [-->];\n    }\n}\n\nwith entry {\n    root ++> Person(name=\"Alice\", age=30);\n    root ++> Person(name=\"Bob\", age=15);\n    root ++> Person(name=\"Carol\", age=25);\n\n    result = root spawn FindAdults();\n\n    print(f\"Found {len(result.reports)} adults\");\n    for person in result.reports {\n        print(f\"  - {person.name}\");\n    }\n}\n```"
+  },
+  {
+    "chunk_id": "80712933ff0c",
+    "file": "community/breaking-changes.md",
+    "text": "```jac\nnode MyNode {\n    has val:int;\n}\n\nwalker MyWalker {\n    has Ignore: list = [];\n\n    can func1 with MyNode entry {\n        self.Ignore.append(here); # comment here to check the circular graph\n        visit [i for i in [-->] if i not in self.Ignore]; # now\n        print(here);\n    }\n}\n\nwith entry {\n    n1 = MyNode(5);\n    n1 ++> MyNode(10) ++> MyNode(15) ++> n1; # will result circular\n    n1 spawn MyWalker();\n}\n```"
+  },
+  {
+    "chunk_id": "de552da28f58",
+    "file": "tutorials/language/osp.md",
+    "text": "## Walkers: Mobile Computation\n\n**Naming:** `Root` (capitalized) is the type of the root node, used in ability declarations like `can X with Root entry`. `root` (lowercase) is the built-in instance, used in expressions like `root ++> node` or `root spawn Walker()`."
+  },
+  {
+    "chunk_id": "869e7e33383e",
+    "file": "tutorials/first-app/build-ai-day-planner.md",
+    "text": "When a `ListTasks` walker visits a `Task` node, the node's `respond` ability fires automatically. Inside a node ability, **`visitor`** refers to the visiting walker (so you can access `visitor.results`)."
+  },
+  {
+    "chunk_id": "4fe83af08ece",
+    "file": "reference/language/foundation.md",
+    "text": "### 5 Switch Statement\n\n```jac\ndef example(value: int) {\n    switch value {\n        case 1:\n            print(\"one\");\n\n        case 2:\n            print(\"two\");\n\n        default:\n            print(\"other\");\n    }\n}\n```"
+  },
+  {
+    "chunk_id": "b4f3131dd7c3",
+    "file": "tutorials/native/chess.md",
+    "text": "This compiles the `.jac` file to a self-contained binary. No Python runtime, no external compiler, no external linker -- the entire toolchain runs within Jac itself. The output is a native executable you can distribute and run anywhere."
+  },
+  {
+    "chunk_id": "d002d833b5ce",
+    "file": "tutorials/language/coding_primer.md",
+    "text": "```jac\nnode Person {\n    has name: str;\n}\n\nedge Friend {\n    has since: int;\n}\n\nwith entry {\n    alice = Person(name=\"Alice\");\n    bob = Person(name=\"Bob\");\n    charlie = Person(name=\"Charlie\");\n\n    alice +>:Friend(since=2015):+> bob;\n    alice +>:Friend(since=2020):+> charlie;\n\n    # Get all friends\n    all_friends = [alice -->];\n    print(f\"Alice has {len(all_friends)} friends\");\n\n    # Get specific type of connections\n    friends = [alice ->:Friend:->];\n    for friend in friends {\n        print(friend.name);\n    }\n\n    # Filter by edge properties\n    old_friends = [alice ->:Friend:since < 2018:->];\n}\n```"
+  },
+  {
+    "chunk_id": "eae54eed6b8b",
+    "file": "reference/language/library-mode.md",
+    "text": "### **Node & Edge Operations**\n\n| Function | Description | Parameters |\n|----------|-------------|------------|\n| `get_edges(origin, destination)` | Get edges connected to nodes | `origin`: list of nodes<br>`destination`: ObjectSpatialDestination |\n| `get_edges_with_node(origin, destination, from_visit)` | Get edges and connected nodes | `origin`: list of nodes<br>`destination`: destination spec<br>`from_visit`: include nodes flag |\n| `edges_to_nodes(origin, destination)` | Get nodes connected via edges | `origin`: list of nodes<br>`destination`: destination spec |\n| `remove_edge(node, edge)` | Remove edge reference from node | `node`: NodeAnchor<br>`edge`: EdgeAnchor |\n| `detach(edge)` | Detach edge from both nodes | `edge`: EdgeAnchor |"
+  },
+  {
+    "chunk_id": "461e5a81c079",
+    "file": "community/breaking-changes.md",
+    "text": "- Bytecode cache moved from `.jaccache/` to `.jac/cache/`\n- Python packages moved from `packages/` to `.jac/packages/`\n- Client build artifacts moved from `.client-build/` to `.jac/client/`\n- Client configs moved from `.jac-client.configs/` to `.jac/client/configs/`\n- ShelfDB files moved to `.jac/data/`\n- New `[build].dir` config option allows customizing the base directory"
+  },
+  {
+    "chunk_id": "9a47c6f44e2d",
+    "file": "tutorials/language/basics.md",
+    "text": "- **`node`** instances can be connected in a graph with `++>`\n- **`root`** is a built-in starting node -- nodes connected to it persist across restarts\n- **`[root-->]`** queries all outgoing connections from root\n- **`[?:Task]`** filters by type"
+  },
+  {
+    "chunk_id": "5c2bf13add19",
+    "file": "reference/language/appendices.md",
+    "text": "### 5. Walker `visit` is Queued\n\n```jac\nnode Item { has name: str = \"\"; }\n\nwalker Example {\n    can traverse with Item entry {\n        print(\"Visiting\");\n        visit [-->];  # Nodes queued, visited AFTER this method\n        print(\"This prints before visiting children\");\n    }\n}\n```"
+  },
+  {
+    "chunk_id": "630e8cba1171",
+    "file": "reference/language/functions-objects.md",
+    "text": "| Feature | `def` | `can` |\n|---------|-------|-------|\n| **Call style** | Called explicitly: `obj.method()` | Triggered automatically on walker entry/exit |\n| **Used in** | Any archetype, standalone functions | Walkers, nodes, edges |\n| **Syntax** | `def name(args) -> Type { }` | `can name with NodeType entry { }` |\n| **Best for** | Regular methods, utility functions, API endpoints | Graph traversal logic, event handlers |"
+  },
+  {
+    "chunk_id": "47c78ffcf335",
+    "file": "tutorials/production/microservices.md",
+    "text": "- **Spawn semantics, not construction.** Locally, `Greet(name=\"x\")` only constructs a walker; you still need `spawn` to run it. Across the boundary there's no useful concept of an unexecuted remote walker, so instantiating a sv-imported walker is **spawn-and-execute** and always returns a post-execution instance.\n- **`walker:pub` only.** Private walkers don't get an endpoint. The same 404 you'd see for non-public functions also fires for non-public walkers.\n- **Boundary types still flow through.** A walker that emits an `obj` value via `report` comes back as that type, not as a raw dict, as long as the type is also listed in the `sv import`.\n- **Same observability as functions.** Walker calls share the per-provider circuit breaker, retries, and `X-Trace-Id` propagation with function calls. See the [Scale reference](../../reference/plugins/jac-scale-http.md#walker-imports) for the full contract."
+  },
+  {
+    "chunk_id": "631ebee66b14",
+    "file": "tutorials/first-app/build-ai-day-planner.md",
+    "text": "Here's the key insight: any node connected to `root` (directly or through a chain of edges) is **persistent** -- it survives across requests, program runs, and server restarts. You don't configure a database or write SQL; connecting a node to `root` *is* the declaration that it should be saved. This is a fundamentally different model from traditional persistence, where you explicitly serialize data to a database. In Jac, persistence is a property of graph connectivity. Nodes that are *not* reachable from `root` behave like regular objects -- they live in memory for the duration of the current execution and are then garbage collected, though you can still connect them to other nodes for utility while they exist."
+  },
+  {
+    "chunk_id": "bca39e6f7f26",
+    "file": "reference/cli/index.md",
+    "text": "Outputs are printed raw so they pipe cleanly; JSON-valued results (`eval`, `get`) are serialized. Errors go to stderr and return exit code `1`."
+  },
+  {
+    "chunk_id": "6780f6d663a6",
+    "file": "reference/language/osp.md",
+    "text": "## Walkers\n\nWalkers are mobile agents that traverse the graph, executing abilities at each node they visit. Unlike functions that you call, walkers *go to* data. They maintain state throughout their journey, making them ideal for tasks like collecting information across a graph, implementing AI agents that navigate knowledge structures, or processing pipelines where context accumulates. Spawn a walker with `root spawn MyWalker()` to begin traversal."
+  },
+  {
+    "chunk_id": "7e14f9dd1f97",
+    "file": "reference/language/osp.md",
+    "text": "#### `skip` vs `disengage`\n\n`skip` and `disengage` are easy to confuse, but they operate at different scopes. `skip` is a return-family statement (alongside `return`/`yield`/`report`) -- it is **not** a loop control like `continue`, despite the \"skip an iteration\" connotation of the word."
+  },
+  {
+    "chunk_id": "abc36706f8b2",
+    "file": "reference/diagnostics.md",
+    "text": "### Token Expectation\n\n| Code | Message |\n|------|---------|\n| `E0001` | Expected '{expected}', got '{got}' |\n| `E0002` | Missing '{token}' |\n| `E0003` | Expected identifier, got '{got}' |\n| `E0004` | Unexpected token in expression: '{got}' |\n| `E0005` | Unexpected token '{token}' |\n| `E0006` | Unexpected token |"
+  },
+  {
+    "chunk_id": "cb0ac7c87841",
+    "file": "reference/cli/index.md",
+    "text": "| Option | Description | Default |\n|--------|-------------|---------|\n| `filename` | Jac file | Required |\n| `-s, --session` | Session identifier | None |\n| `-i, --initial` | Initial node ID | None |\n| `-d, --depth` | Max traversal depth | `-1` (unlimited) |\n| `-t, --traverse` | Enable traversal mode | `False` |\n| `-c, --connection` | Connection filters | None |\n| `-b, --bfs` | Use BFS traversal | `False` |\n| `-e, --edge_limit` | Max edges | `512` |\n| `-n, --node_limit` | Max nodes | `512` |\n| `-o, --saveto` | Output file path | None |\n| `-p, --to_screen` | Print to stdout | `False` |\n| `-f, --format` | Output format | `dot` |"
+  },
+  {
+    "chunk_id": "f3204faca1db",
+    "file": "reference/language/osp.md",
+    "text": "> **Note:** Walker abilities must specify which node types they handle. Use `Root` for the root node and specific node types for others. A generic `with entry` only triggers at the spawn location."
+  },
+  {
+    "chunk_id": "9c415a6c7d24",
+    "file": "tutorials/language/coding_primer.md",
+    "text": "### 10.5 Connection Operators\n\n| Operator | Direction | Example |\n|----------|-----------|---------|\n| `++>` | Forward | `alice ++> bob;` (alice → bob) |\n| `<++` | Backward | `alice <++ bob;` (bob → alice) |\n| `<++>` | Both ways | `alice <++> bob;` (alice ↔ bob) |"
+  },
+  {
+    "chunk_id": "6e2becdcbf17",
+    "file": "reference/code-organization.md",
+    "text": "# Code Organization\n\nIn most programming languages, the *interface* of a module -- what it exposes -- is interleaved with its *implementation* -- how it works. Jac takes a fundamentally different approach. Through its `impl` system, Jac allows you to cleanly separate **declarations** (the interfaces, types, and signatures that define a module's contract) from **implementations** (the method bodies and private helpers that fulfill that contract). As we will see throughout this guide, this distinction is far more than syntactic convenience -- it reshapes how both humans and AI models read, navigate, and reason about code."
+  }
+]

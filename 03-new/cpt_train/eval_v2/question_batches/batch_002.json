@@ -1,0 +1,247 @@
+[
+  {
+    "id": "b002-q-node-ability-refs",
+    "question": "Inside a node ability in Jac, how do you refer to the node whose ability is running and to the walker that triggered it? Why is `here` not the reference to use in that context?",
+    "source_chunk_id": "7abcd4d35ea7"
+  },
+  {
+    "id": "b002-q-root-free-code",
+    "question": "Which special OSP reference is available in every execution context in Jac -- walker abilities, node abilities, object methods, and even free code outside any archetype -- and what does it point to?",
+    "source_chunk_id": "7abcd4d35ea7"
+  },
+  {
+    "id": "b002-q-test-walker-reports",
+    "question": "When writing a Jac test for a walker, how do you set up graph state for the test and then assert on what the walker reported after spawning it?",
+    "source_chunk_id": "f5f44dae59f9"
+  },
+  {
+    "id": "b002-q-builtins-backends",
+    "question": "Jac can compile to multiple backends. What guarantee does the language make about the behavior of builtin functions across those backends, and how is that achieved?",
+    "source_chunk_id": "cd8db587b0a0"
+  },
+  {
+    "id": "b002-q-cstyle-loop",
+    "question": "Besides Python-style iteration over a collection, Jac's `for` statement supports a C-style counting form. Describe its structure -- what three clauses does it take and what does each do?",
+    "source_chunk_id": "5c2a537fa3a7"
+  },
+  {
+    "id": "b002-q-for-else",
+    "question": "When does the `else` clause attached to a `for` loop execute in Jac, and when is it skipped?",
+    "source_chunk_id": "5c2a537fa3a7"
+  },
+  {
+    "id": "b002-q-library-mode-walker",
+    "question": "In Jac's library mode (pure Python), how do you define a walker that carries state and attach behavior that runs when it enters a node, without writing any .jac source?",
+    "source_chunk_id": "f38fc324695f"
+  },
+  {
+    "id": "b002-q-bidirectional-friendship",
+    "question": "Jac edges are directed. How do you model a mutual relationship such as friendship between two users, and what does that imply about how many edges you create per pair?",
+    "source_chunk_id": "83c048f74a8c"
+  },
+  {
+    "id": "b002-q-two-hop-traversal",
+    "question": "How can you express a multi-hop graph query in Jac -- for example collecting friends-of-friends -- in a single edge-reference expression instead of writing nested loops or multiple walker visits?",
+    "source_chunk_id": "83c048f74a8c"
+  },
+  {
+    "id": "b002-q-detached-node",
+    "question": "What happens when you instantiate a node archetype but never connect it to root or any other node -- how does it behave compared to a node that is attached to the graph?",
+    "source_chunk_id": "c85053cf991d"
+  },
+  {
+    "id": "b002-q-def-vs-can",
+    "question": "Jac has both `def` and `can` for defining behavior on a type. What is each keyword for, and why does the language keep them separate?",
+    "source_chunk_id": "758448f31638"
+  },
+  {
+    "id": "b002-q-impl-keyword",
+    "question": "What problem does the `impl` keyword solve in Jac -- what does it let you separate, and when would you use it?",
+    "source_chunk_id": "758448f31638"
+  },
+  {
+    "id": "b002-q-react-hooks-why",
+    "question": "Jac client components have their own reactive state sugar, yet you can also import React hooks like useRef, useCallback, and useMemo directly. In what situations would you reach for those hooks instead of relying on Jac's built-in reactivity?",
+    "source_chunk_id": "9cbcb549fb47"
+  },
+  {
+    "id": "b002-q-visit-directions",
+    "question": "When a walker issues a visit over connected nodes, how does edge direction come into play -- what is the difference between following outgoing connections, incoming connections, and both at once?",
+    "source_chunk_id": "f1bcfe284a55"
+  },
+  {
+    "id": "b002-q-unimplemented-primitive",
+    "question": "In Jac's primitive-operation dispatch, what happens when a compilation backend has not implemented a particular operation -- is the problem surfaced at runtime or at compile time, and how?",
+    "source_chunk_id": "587a39d2b733"
+  },
+  {
+    "id": "b002-q-node-entry-type",
+    "question": "In an ability declared on a node with a typed entry clause (for example `with SomeType entry`), what does the type name filter on -- the node's type or something else? Explain.",
+    "source_chunk_id": "f6fcd0af87d7"
+  },
+  {
+    "id": "b002-q-union-entry",
+    "question": "How do you write a single Jac ability that fires for more than one walker type, and when would that be useful?",
+    "source_chunk_id": "f6fcd0af87d7"
+  },
+  {
+    "id": "b002-q-func-vs-walker-endpoint",
+    "question": "In a Jac fullstack app, both server functions and walkers become HTTP endpoints automatically. When would you choose a walker over a plain function for a backend operation, and how does the client invoke each?",
+    "source_chunk_id": "180a40bc43f4"
+  },
+  {
+    "id": "b002-q-service-autostart",
+    "question": "When one Jac service imports other services and you start only the consumer without configuring service URL environment variables, what does the runtime do with those dependencies -- and why is that mode only suitable for single-host deployments?",
+    "source_chunk_id": "0002856f3499"
+  },
+  {
+    "id": "b002-q-visit-queue",
+    "question": "Does the `visit` statement move a walker immediately? Explain the traversal model behind visit, and what the optional `else` clause on a visit statement is for.",
+    "source_chunk_id": "5e5d96a411a3"
+  },
+  {
+    "id": "b002-q-c-structs",
+    "question": "When importing a C library through Jac's native FFI import block, how are C structs exposed to Jac code?",
+    "source_chunk_id": "8640574b11c2"
+  },
+  {
+    "id": "b002-q-disengage",
+    "question": "What does the `disengage` statement do when a walker executes it mid-traversal, and how does it differ from the walker simply not issuing any more visit statements?",
+    "source_chunk_id": "57e2aab53a3b"
+  },
+  {
+    "id": "b002-q-typed-edges-why",
+    "question": "Why would you use a typed edge with its own fields to connect two nodes instead of just storing a reference to one node in a field of the other?",
+    "source_chunk_id": "2bf15b344bae"
+  },
+  {
+    "id": "b002-q-single-file-fullstack",
+    "question": "In a single-file fullstack Jac app, how does client-side code get access to and invoke server-side walkers defined in the same file?",
+    "source_chunk_id": "1fc2b75692c6"
+  },
+  {
+    "id": "b002-q-walker-pub",
+    "question": "What effect does declaring a walker with the `:pub` access tag have when the app is served?",
+    "source_chunk_id": "1fc2b75692c6"
+  },
+  {
+    "id": "b002-q-ability-trigger",
+    "question": "What distinguishes an ability from a regular method in Jac -- what causes an ability to execute, and on which kinds of archetypes can abilities be defined?",
+    "source_chunk_id": "d381a8cf82dd"
+  },
+  {
+    "id": "b002-q-target-node-by-id",
+    "question": "In a CRUD-style walker that updates or deletes one specific node among many of the same type, how do you identify the target node across separate requests?",
+    "source_chunk_id": "4106b4a0ac60"
+  },
+  {
+    "id": "b002-q-root-analogy",
+    "question": "Jac documentation compares `root` to `self`. Explain the analogy -- what does root point to when a script runs locally versus when an authenticated user calls a served app, and do you ever need to import or declare it?",
+    "source_chunk_id": "67e42ef69cb4"
+  },
+  {
+    "id": "b002-q-walker-accumulate",
+    "question": "How does a walker accumulate results across the many nodes it visits during a traversal, and how are those accumulated results typically delivered back at the end?",
+    "source_chunk_id": "cbd4b6453330"
+  },
+  {
+    "id": "b002-q-dict-merge",
+    "question": "For Jac dictionaries, what is the difference between the `|` and `|=` operators, and what does the `in` operator test against?",
+    "source_chunk_id": "cd48c7a93893"
+  },
+  {
+    "id": "b002-q-persistence-rule",
+    "question": "What conditions determine whether an archetype instance gets written to the storage backend in Jac, and at what points in a program's life does the write actually happen?",
+    "source_chunk_id": "45efae5659d9"
+  },
+  {
+    "id": "b002-q-root-exit-timing",
+    "question": "During a walker traversal, when exactly does a `with Root exit` ability fire, and why is it a good place to produce a single consolidated report?",
+    "source_chunk_id": "62c185089d9d"
+  },
+  {
+    "id": "b002-q-outlet-layout",
+    "question": "In Jac client-side routing, what role does the Outlet component play in a layout route, and how do nested child routes interact with it?",
+    "source_chunk_id": "d00a89c16b64"
+  },
+  {
+    "id": "b002-q-byllm-config",
+    "question": "How do you configure which LLM model byllm uses by default, and how are provider credentials such as API keys supplied?",
+    "source_chunk_id": "ac9ce2636ddf"
+  },
+  {
+    "id": "b002-q-self-vs-here",
+    "question": "Within a walker ability, what is the difference between `self` and `here`?",
+    "source_chunk_id": "4ebeb5331f3d"
+  },
+  {
+    "id": "b002-q-missing-visit",
+    "question": "If a walker's ability for a given node type contains no visit statement, what happens to the traversal when the walker reaches a node of that type?",
+    "source_chunk_id": "ce283daed83f"
+  },
+  {
+    "id": "b002-q-spawn-result",
+    "question": "What does spawning a walker return to the caller, and how do you access the values the walker reported during its traversal?",
+    "source_chunk_id": "3612dbcc46bb"
+  },
+  {
+    "id": "b002-q-root-vs-node-spawn",
+    "question": "What is the difference between spawning a walker on root and spawning it on a specific node, and when would you do the latter?",
+    "source_chunk_id": "3cddcdb16e9b"
+  },
+  {
+    "id": "b002-q-no-save-code",
+    "question": "Why does a typical Jac application need no explicit code to save its data to a database or reload it on startup?",
+    "source_chunk_id": "9c8e7ebb182f"
+  },
+  {
+    "id": "b002-q-dom-ref",
+    "question": "How does a Jac client component get a handle to an underlying DOM element -- for example an input field it needs to focus programmatically?",
+    "source_chunk_id": "6e8e6e4d7229"
+  },
+  {
+    "id": "b002-q-jac-python-rel",
+    "question": "What is Jac's relationship to Python -- what does Jac compile to, and what does that mean for familiar constructs like functions, classes, imports, and comprehensions?",
+    "source_chunk_id": "83b8a0f683a4"
+  },
+  {
+    "id": "b002-q-route-groups",
+    "question": "In Jac's file-based routing, what does wrapping a directory name in parentheses (such as a group for public versus authenticated pages) do, and how does it affect the resulting URL paths?",
+    "source_chunk_id": "ebede2d4cc19"
+  },
+  {
+    "id": "b002-q-jac-install-toml",
+    "question": "When you run `jac install` for a package, what happens with respect to your project's jac.toml, and how can you install a package without recording it there?",
+    "source_chunk_id": "2439b705e685"
+  },
+  {
+    "id": "b002-q-library-mode-why",
+    "question": "What is Jac's Library Mode, and why might a team choose it over writing .jac files directly?",
+    "source_chunk_id": "79a004fce47b"
+  },
+  {
+    "id": "b002-q-type-filter",
+    "question": "When you traverse from a node and get back a mixed list of connected nodes, how do you narrow the result to a single node type, and can you further filter by field values? Describe the mechanism conceptually.",
+    "source_chunk_id": "93b600d41f50"
+  },
+  {
+    "id": "b002-q-walker-stops-early",
+    "question": "A walker spawned at root reaches the first connected node, runs its ability there, but never processes any nodes beyond it. What is the most likely cause, and what is the fix?",
+    "source_chunk_id": "4c829c2d1677"
+  },
+  {
+    "id": "b002-q-node-gatekeeper",
+    "question": "Can a node defend itself against unwanted walkers? Describe how a node ability can inspect the visiting walker's state and stop the traversal if some condition is not met.",
+    "source_chunk_id": "b8d9802e01ec"
+  },
+  {
+    "id": "b002-q-edge-type-traversal",
+    "question": "How does a walker restrict its traversal to follow only edges of a particular type, and why is that useful in a graph that contains several kinds of relationships?",
+    "source_chunk_id": "d05e452935e5"
+  },
+  {
+    "id": "b002-q-def-access-modifiers",
+    "question": "For a top-level function in Jac, what does an access modifier control, and what defines the boundary of the 'project' for that visibility?",
+    "source_chunk_id": "ece7b2855fb6"
+  }
+]

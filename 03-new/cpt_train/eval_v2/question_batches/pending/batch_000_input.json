@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "b5b562152d63",
+    "file": "quick-guide/index.md",
+    "text": "    Open [http://localhost:8000](http://localhost:8000) to see it running. Jac supports any [LiteLLM-compatible model](https://docs.litellm.ai/docs/providers) -- use `gemini/gemini-2.5-flash` for a free alternative or `ollama/llama3.2:1b` for local models."
+  },
+  {
+    "chunk_id": "29d454d3fcd3",
+    "file": "reference/language/osp.md",
+    "text": "### 2 Why OSP?\n\n- **Natural graph modeling**: Social networks, knowledge graphs, state machines\n- **AI agent architecture**: Walkers are natural representations of AI agents\n- **Separation of concerns**: Data (nodes/edges) separate from behavior (walkers)\n- **Spatial context**: `here`, `visitor` provide natural context"
+  },
+  {
+    "chunk_id": "3b2aff0f72a0",
+    "file": "reference/language/foundation.md",
+    "text": "`Callable`, `Protocol`, `TypeVar`, `Generic`, `Literal`, `ClassVar`, `Annotated`, `Iterable`, `Iterator`, `AsyncIterable`, `AsyncIterator`, `Mapping`, `MutableMapping`, `Sequence`, `MutableSequence`, `Awaitable`, `Coroutine`."
+  },
+  {
+    "chunk_id": "b2fab688d8c2",
+    "file": "reference/plugins/jac-client.md",
+    "text": "### How It Works\n\n| Jac Syntax | React Equivalent |\n|------------|------------------|\n| `has count: int = 0` | `const [count, setCount] = useState(0)` |\n| `count = count + 1` | `setCount(count + 1)` |"
+  },
+  {
+    "chunk_id": "d3438b6d5b7f",
+    "file": "reference/publishing.md",
+    "text": "!!! warning \"`classifiers` must be a TOML array\"\n    Writing `classifiers` as a plain string instead of an array is a TOML type\n    error and will produce malformed wheel metadata. Always use `[...]` syntax\n    as shown above."
+  },
+  {
+    "chunk_id": "0d80fa3e1c82",
+    "file": "build/fullstack-web.md",
+    "text": "## Your 5-minute quick win {#web-app}\n\nCode in a `cl` block compiles to a React/JSX bundle for the browser; everything else compiles to Python for the server. `await add_todo(...)` in the client is a real RPC to the server function:"
+  },
+  {
+    "chunk_id": "997099069ba8",
+    "file": "reference/language/walker-responses.md",
+    "text": "### Don't: Assume report order without documentation\n\n```jac\nwalker:priv MyWalker {\n    can work with Root entry {\n        report [\"item1\", \"item2\"];\n        report {\"count\": 2};\n    }\n}\n\nwith entry {\n    result = root spawn MyWalker();\n\n    # Bad: Magic indices\n    data = result.reports[0];\n    meta = result.reports[1];\n\n    # Good: Document or structure clearly\n    # reports[0]: List of items\n    # reports[1]: Metadata object\n    data = result.reports[0] if result.reports else [];\n    meta = result.reports[1] if len(result.reports) > 1 else {};\n}\n```"
+  },
+  {
+    "chunk_id": "f7cb5213f250",
+    "file": "tutorials/production/kubernetes.md",
+    "text": "1. **Namespace Setup** - Creates or uses the specified Kubernetes namespace\n2. **Database Provisioning** - Deploys Redis and MongoDB as StatefulSets with persistent storage (first run only)\n3. **Application Deployment** - Creates a deployment for your Jac application\n4. **Service Exposure** - Exposes the application through the NGINX ingress NodePort"
+  },
+  {
+    "chunk_id": "f073f2065da5",
+    "file": "tutorials/language/coding_primer.md",
+    "text": "```jac\nnode Person {\n    has name: str;\n}\n\nwalker Greeter {\n    can start with Root entry {\n        print(\"Walker starting journey!\");\n        visit [-->];  # Visit all connected nodes\n    }\n\n    can greet with Person entry {\n        print(f\"Hello, {here.name}!\");\n        visit [-->];  # Visit this person's connections\n    }\n}\n\nwith entry {\n    # Build graph\n    alice = Person(name=\"Alice\");\n    bob = Person(name=\"Bob\");\n    charlie = Person(name=\"Charlie\");\n\n    root ++> alice ++> bob ++> charlie;\n\n    # Spawn walker\n    root spawn Greeter();\n}\n```"
+  },
+  {
+    "chunk_id": "81279b583438",
+    "file": "internals/compiler_architecture.md",
+    "text": "Boundary types are serialised through the schemas in\n[`codeinfo.jac`](https://github.com/Jaseci-Labs/jaseci/blob/main/jac/jaclang/jac0core/codeinfo.jac).\nThe primitive contract guarantees that types like `int` and `list[str]`\nmean the same thing on both sides; non-primitive types must be reachable\nin both codespaces (typically as plain `obj` archetypes)."
+  },
+  {
+    "chunk_id": "dc7a292608a1",
+    "file": "reference/plugins/jac-scale-http.md",
+    "text": "Errors: `400 VALIDATION_ERROR` (non-email identity or missing value), `401 UNAUTHORIZED`, `404 NOT_FOUND` (identity is not on the current user), `503 EMAIL_DISABLED` (no emailer configured)."
+  },
+  {
+    "chunk_id": "832da809a9ba",
+    "file": "tutorials/language/osp.md",
+    "text": "```jac\nnode Person {\n    has name: str;\n    has age: int;\n}\n\nwalker DataProcessor {\n    has data: str;\n\n    # Runs when spawned at root\n    can start with Root entry {\n        print(\"Starting from root\");\n        visit [-->];\n    }\n\n    # Runs when visiting a Person node\n    can process with Person entry {\n        print(f\"Processing {here.name}\");\n        visit [-->];\n    }\n\n    # Runs only at the spawn location -- a generic `with entry`\n    # does NOT fire on every visited node\n    can default with entry {\n        print(\"At spawn location\");\n        visit [-->];\n    }\n}\n```"
+  },
+  {
+    "chunk_id": "cdf276f166b0",
+    "file": "community/breaking-changes.md",
+    "text": "```jac\nnode Person {\n    has name;\n\n    can greet {\n        self.name = self.name.upper();\n        return \"Hello, I am \" + self.name;\n    }\n\n    can update_walker_info {\n        visitor.age = 25;  # 'visitor' refers to the walker\n    }\n}\n\nwalker PersonVisitor {\n    has age;\n\n    can visit: Person {\n        here.name = \"Visitor\";  # 'here' still refers to the current node in walker context\n        report here.greet();\n    }\n}\n```"
+  },
+  {
+    "chunk_id": "796f4f090eec",
+    "file": "jaseci-llmdocs/release/jac-llmdocs.md",
+    "text": "# 7. GRAPH\n```jac\na ++> b;                              # Untyped forward\na <++ b;                              # Untyped backward (b -> a)\na <++> b;                             # Bidirectional\na +>: Friend(since=2020) :+> b;       # Typed forward\na <+: Friend() :<+ b;                 # Typed backward\na del--> b;                           # Disconnect\n```\n```jac\npeople = [-->](?:Person);             # Type filter\nadults = [-->](?:Person, age > 18);   # Type+attr filter\nold = [-->](?age > 18);               # Attr only\nfriends = [->:Friend:since > 2020:->]; # Edge attr filter\nneighbors = [city_a ->:Road:->];      # Variable node traversal\nuntyped = [node_var -->];             # Untyped from variable\nfof = [root ->:Friend:->->:Friend:->]; # Chained typed\nedges = [edge root -->];              # Get edge objects\n```\nUntyped returns list: `nodes = root ++> Person(); first = nodes[0];`\nWalrus: `root +>: E() :+> (end := A(val=10));`\nAlways assign filter results to variable or use in expression -- never bare statement.\nWRONG: `a ++> Edge() ++> b;` `[-->:E:]` `del a --> b;` `[-->:E1:->-->:E2:->]`\nRIGHT: `a +>: Edge() :+> b;` `[->:E:->]` `a del--> b;` `[->:E1:->->:E2:->]`"
+  },
+  {
+    "chunk_id": "72504446408c",
+    "file": "reference/language/library-mode.md",
+    "text": "```jac\nedge Family {}\n\nwalker Visitor {\n    can traverse with Root entry {\n        visit [-->];                      # Visit all outgoing edges\n        visit [->:Family:->];             # Visit only Family edges\n    }\n}\n```"
+  },
+  {
+    "chunk_id": "43a546caf068",
+    "file": "tutorials/first-app/build-ai-day-planner.md",
+    "text": "The key pattern: **`root spawn Walker(params)`** creates a walker and starts it at root. The walker traverses the graph, and whatever it `report`s ends up in `result.reports`. Since the walker reports typed `Task` objects, the client receives them with full field access -- `new_task.title`, `new_task.done`, `new_task.category` all work directly."
+  },
+  {
+    "chunk_id": "481522d13e74",
+    "file": "reference/code-organization.md",
+    "text": "### Cleaner folder architecture\n\nWithout separation, large packages tend to devolve into a flat list of large files where understanding the system requires opening each one and reading deeply. With separation, the folder structure itself communicates the architecture:"
+  },
+  {
+    "chunk_id": "f6d6e2cde7d1",
+    "file": "tutorials/first-app/build-ai-day-planner.md",
+    "text": "- **`walker`** -- mobile code that traverses the graph\n- **`can X with NodeType entry`** -- ability that fires when a walker enters a specific node type\n- **`can X with NodeType exit`** -- ability that fires when leaving a node type\n- **`visit [-->]`** -- move the walker to all connected nodes\n- **`here`** -- the node the walker is currently visiting\n- **`self`** -- the walker itself (its state and properties)\n- **`visitor`** -- inside a node ability, the walker that's visiting\n- **`report`** -- send data back (typed objects or dicts), collected in `.reports`\n- **`has reports: list[T] = []`** -- type the reports channel so the compiler checks `report X` calls and the client receives typed objects (drop it only when you intentionally report ad-hoc dicts)\n- **`disengage`** -- stop traversal immediately\n- **`root spawn Walker()`** -- create and start a walker at a node\n- **`result.reports[0] if result.reports else []`** -- safe access to the walker's reported data (handles empty traversals)\n- **`walker:priv`** -- per-user walker with data isolation\n- **`sv import`** -- import server walkers (and node types) into client code"
+  },
+  {
+    "chunk_id": "23cc28f6ec0e",
+    "file": "reference/language/osp.md",
+    "text": "```jac\nwalker BFSWalker {\n    can start with Root entry {\n        print(f\"Starting at: {here}\");\n        visit [-->];\n    }\n\n    can traverse with Person entry {\n        print(f\"Visiting: {here.name}\");\n        visit [-->];  # Queue all outgoing for later visits\n    }\n}\n```"
+  },
+  {
+    "chunk_id": "cde752f04635",
+    "file": "quick-guide/install.md",
+    "text": "!!! note \"Deployment & scaling is built in\"\n    Production serving and Kubernetes deployment (`jac start`, `jac start --scale`) ship inside the `jac` binary as the built-in `scale` subsystem -- there is no separate `jac-scale` package to install. Scale's optional heavier dependencies (MongoDB, Redis, Kubernetes, Prometheus, ...) are pulled into your project on demand: declare the matching `[scale.*]` config in `jac.toml`, then run `jac install` to resolve them into `.jac/venv`."
+  },
+  {
+    "chunk_id": "a5aec4c0b7af",
+    "file": "tutorials/language/osp.md",
+    "text": "## When to Use Functions vs Walkers\n\nJac gives you two ways to expose server logic: `def:pub` functions and `walker` types. The short version: `def:pub` functions are great for simple, stateless CRUD and quick prototyping, while walkers shine for graph traversal, per-user data isolation, and production apps where state accumulates across nodes. For the full side-by-side comparison, see [When to Use Walkers vs Functions](../../reference/language/osp.md#when-to-use-walkers-vs-functions) in the reference."
+  },
+  {
+    "chunk_id": "09a04cb8c168",
+    "file": "reference/language/foundation.md",
+    "text": "Type-parameter inference now flows through: the checker infers the concrete\nreturn type, so `first([1, 2]) + 1` checks clean and `s = first([\"a\", \"b\"]); s.upper()`\nresolves. If you ever need to override the checker's inference, the\n[`as` cast operator](#10-the-as-cast-operator) re-types an expression: `n = first(nums) as int;`."
+  },
+  {
+    "chunk_id": "f943785bfa8b",
+    "file": "quick-guide/jac-vs-traditional-stack.md",
+    "text": "- `node Todo` defines the data model with automatic persistence to a graph database\n- `def:pub get_todos` creates an HTTP API endpoint\n- `cl def:pub app()` defines a React component that runs on the client\n- `has items` becomes `useState` in the generated JavaScript\n- `async can with entry` becomes `useEffect(() => {...}, [])` for loading data on mount\n- `with entry` seeds initial data into the graph database\n- `await get_todos()` handles the HTTP request to the backend"
+  },
+  {
+    "chunk_id": "39f1528b7ca3",
+    "file": "tutorials/first-app/build-ai-day-planner.md",
+    "text": "A node is structurally similar to an `obj` -- it's declared with the `node` keyword and its fields use `has`, just like you learned in Part 1. The difference is what the runtime does with it:"
+  },
+  {
+    "chunk_id": "cb96a00b0242",
+    "file": "reference/plugins/byllm.md",
+    "text": "### Default Model Configuration\n\nThe builtin `llm` is configured via `jac.toml`. This controls the model used by any `by llm()` call that doesn't explicitly override `llm`:"
+  },
+  {
+    "chunk_id": "2f1f3385697b",
+    "file": "community/breaking-changes.md",
+    "text": "1. **Exit abilities are deferred** until all descendants of a node are visited\n2. **If `disengage` is called during entry/child traversal**, exit abilities for ancestor nodes will NOT execute\n3. **Exit order is LIFO** (last visited node's exits run first)\n4. **`walker.path`** is now populated during traversal, tracking visited nodes in order"
+  },
+  {
+    "chunk_id": "85359ce5e873",
+    "file": "tutorials/language/coding_primer.md",
+    "text": "1. **Natural graph representation**: Nodes and edges are first-class\n2. **Automatic traversal**: `visit` handles navigation\n3. **Type-driven behavior**: Abilities dispatch on types\n4. **Separation of concerns**: Graph structure ≠ traversal logic\n5. **Bidirectional polymorphism**: Both sides define interaction\n6. **Declarative queries**: Edge references are powerful\n7. **Streaming results**: `report` collects data during traversal"
+  },
+  {
+    "chunk_id": "5405c2f0d48c",
+    "file": "community/breaking-changes.md",
+    "text": "#### 2. `mtllm.llms` Module Replaced with Unified `mtllm.llm {Model}`\n\nThe mtllm library now uses a single unified Model class under the `mtllm.llm` module, instead of separate classes like `Gemini` and `OpenAI`. This simplifies usage and aligns model loading with HuggingFace-style naming conventions."
+  },
+  {
+    "chunk_id": "afd9ebeb0793",
+    "file": "reference/testing.md",
+    "text": "### Testing Exceptions\n\n```jac\ndef divide(a: int, b: int) -> float {\n    if b == 0 {\n        raise ZeroDivisionError(\"Cannot divide by zero\");\n    }\n    return a / b;\n}\n\ntest \"divide normal\" {\n    assert divide(10, 2) == 5;\n}\n\ntest \"divide by zero\" {\n    try {\n        divide(10, 0);\n        assert False, \"Should have raised error\";\n    } except ZeroDivisionError {\n        assert True;  # Expected\n    }\n}\n\ntest \"divide negative\" {\n    assert divide(-10, 2) == -5;\n}\n```"
+  },
+  {
+    "chunk_id": "500b03c6881a",
+    "file": "community/release_notes/jaclang.md",
+    "text": "### Bug Fixes\n\n- **Bugfix: HMR watcher handles renames and directory moves**: renaming a page now moves its route and compiled output atomically,  moving `pages/` out of the project deactivates routing and cleans orphaned artifacts, and the watcher's event buffer is thread-safe so a race can no longer silently stop HMR for the session.\n- **K8s pods no longer cold-compile the app's modules on first boot (any channel)**: #7144's `.jir` seeds rode the `[dev]` overlay only, so stable-channel deploys (every production app) still compiled the whole app once per pod before serving (#7179). `pack_source` now stages the project, precompiles it with the **already-downloaded pod binary** (`.jir` is version-locked, so the driver's own jac cannot produce pod-valid artifacts), and ships `_precompiled/cpython-XY/*.jir` in the source bundle. The core loader already discovers and content-validates `_precompiled/` beside the modules, so pods need no changes - they load instead of compiling, on stable and dev alike. Fully best-effort: if the precompile can't run, the bundle ships source-only and pods compile exactly as before.\n- **`jac eject` output now boots, serves, and uploads like `jac start`**: Endpoints are harvested only from the entry module's import closure (standalone `with entry` scripts no longer hijack uvicorn at boot), `@restspec(path=...)` routes are mounted at their declared paths, the client runtime's sibling chunks and compiled `pages/` router are copied so the frontend renders, and the dev proxy targets `127.0.0.1` instead of `localhost` to avoid IPv6 `ETIMEDOUT` stalls. Functions taking an `UploadFile` now generate a multipart `File()` endpoint (fixing the `UnicodeDecodeError` crash on file upload) and pull in `python-multipart`. Resource files are split cleanly (web assets to the frontend, other data to the backend), docstring-only modules are no longer emitted as backend modules, and a prior eject output is excluded from a re-eject to a different directory.\n- **Host client/admin builds no longer require `jac` on PATH**: the deploy driver invoked itself via a bare `jac`, silently falling back to on-pod builds (a minute-plus of gateway boot time and a bun memory spike) when the driver binary wasn't on PATH. It now resolves its own executable via `JAC_EXECUTABLE` (exported by the launcher), with `which jac` as fallback.\n- **Deploys stop re-downloading an unchanged jac release binary**: the driver caches the 130-170MB release binary locally, keyed by the release's own sha256 (fetched first, and still used to verify) - a changed release re-downloads, an unchanged one is served from `~/.cache/jac/scale-binaries` instantly.\n- **Warm redeploys stop re-uploading unchanged bundles**: the PVC seeder skips objects already present (keys are sha256 of the content, so a present file is the payload), and all bundle archives are now deterministic (zeroed gzip timestamp, normalized tar members) so identical content actually keeps its digest across deploys - previously every pack got a fresh key and ~170MB re-shipped to the cluster on every redeploy.\n- **Service pods stop installing the client's npm dependency closure**: `[dependencies.npm]` packages exist only to build the client, which only the gateway does - yet every service pod installed them on every boot (500+ packages measured on a real app). Non-gateway bootstraps now strip the npm tables from their pod-local `jac.toml` before `jac install`; gateway and single-pod deploys are unchanged.\n- **Fix: Resolve `@jac/wasm_host` in the fullstack client build**: Fullstack apps whose client code imported `@jac/wasm_host` (the versioned `jac_host1` provider that `na`→wasm modules link against) failed `jac build`/`jac start` because the vite client build left the specifier unresolved, so Rollup errored and shipped no dist (breaking the `examples/raylib_shooter/web` example). The vite config templates now alias `@jac/wasm_host` to the compiled provider, alongside `@jac/runtime` and `@jac/desktop`.\n- **Fix: Installed-but-untyped third-party imports no longer hard-error**: Attributes and calls reached through an installed dependency that ships no type information (no PEP 561 `py.typed` marker and no `.pyi` stub) inferred as `Unknown` and the strict-`Unknown` discipline then errored on every downstream access (E1030/E1032) and assignment (E1002), keeping real `requests`/`streamlit`/`kubernetes`-style apps uncheckable. Such modules now degrade to a permissive foreign `Any` at the import boundary (surfaced once via the configurable `untyped-external` diagnostic), while strict `Unknown` stays reserved for the project's own source and packages shipping `py.typed` remain fully analyzed.\n- **Fix: Batch `jac check` no longer self-rejects types**: a module loaded once as a dependency and again as an explicit batch entry (e.g. via its `impl/` annex) left two declaration instances of the same class, so a type stopped comparing equal to itself and consumers checked afterwards saw spurious `X, expected X` errors that depended on which other files shared the batch. Class identity is now compared canonically (defining module, declaration site, name), so a duplicate declaration still compares equal to its twin.\n- **Fix: `include`d package members resolve through member access**: accessing a name surfaced into a package only via `include` (absorb) through the package namespace (e.g. `ir.Value`) resolved to `Unknown` when the included submodule imported back from its own package (circular self-import). This poisoned the vendored llvm `ir`/`binding` surface (the native passes reach it via `import from ...llvm { ir }` then `ir.Value` / `ir.Module` / etc.), cascading ~1,700 downstream `E1030`/`E1032` errors. The member-access path now falls back to the same absorb-aware resolution the `from pkg import X` path already used; overloaded functions re-exported that way (e.g. `asyncio.gather`) now collect their overloads from the defining module; and the base llvm `Value` class declares its `type` attribute.\n- **Fix: Resolve project-root-absolute imports through namespace packages during `jac test`**: A test suite whose project-root-absolute import (e.g. `import from engine.math.vec3 { ... }`) descended through an *intermediate* namespace package (one holding only subpackages and no direct `.jac` file) failed to import during pytest collection with `ModuleNotFoundError`, so a configured `[test] directory` silently collected 0 tests. `JacMetaImporter` (and the lazy bootstrap finder) now recognize a directory as an implicit Jac namespace package when a `.jac` source lives anywhere in its subtree, matching how the native runner resolves the same import.\n- **Fix: Lazy singletons initialized from an `Any` value no longer mis-report their return**: The `if slot is None { slot = init(); } return slot` singleton idiom over an optional `T | None` global or attribute rejected the `return` with a spurious `Cannot return T | NoneType, expected T` (E1002) whenever `init()` had an imprecise `Any` type, such as `json.loads` or a call into an installed-but-untyped third-party package that degrades to foreign `Any`. The assignment-based narrowing engine now recognizes that a flat assignment of an imprecise value still writes a concrete non-`None` value and narrows the optional slot to its non-`None` form, instead of discarding the narrow and letting the declared union cascade into a misleading diagnostic. A genuinely incompatible concrete initializer is unaffected and is still reported at the assignment site."
+  },
+  {
+    "chunk_id": "4bea1b5cfb7e",
+    "file": "reference/language/native-pathway.md",
+    "text": "C-string parameters use `str` in the declaration; the compiler lowers `str` to the `i8*` ABI shape shown in the [primitive-type table](#primitive-type-mappings) above. The `i8*` form is an internal LLVM type and is not part of Jac's surface syntax."
+  },
+  {
+    "chunk_id": "ad3c6282f093",
+    "file": "reference/language/osp.md",
+    "text": "### 1 Creating Nodes\n\n```jac\nnode Person {\n    has name: str;\n    has age: int;\n}\n\nwith entry {\n    # Create and assign\n    alice = Person(name=\"Alice\", age=30);\n    bob = Person(name=\"Bob\", age=25);\n\n    # Inline creation in connection\n    root ++> Person(name=\"Charlie\", age=35);\n}\n```"
+  },
+  {
+    "chunk_id": "b55ca2b8f104",
+    "file": "reference/language/foundation.md",
+    "text": "!!! warning \"`spawn` combined with a pipe operator does not currently work\"\n    Older material documents piping into a spawn to pick a traversal order --\n    `start spawn :> Visitor()` or `start spawn |> Visitor()`. Both forms currently\n    fail at runtime with `'Visitor' object is not callable`. Spawn a walker with\n    the plain form instead (it works and runs the walker's entry abilities):"
+  },
+  {
+    "chunk_id": "2d601c90ddc7",
+    "file": "tutorials/first-app/build-ai-day-planner.md",
+    "text": "Now you need to persist the AI-generated ingredients in the graph. Notice that `Ingredient` (an `obj`) is used for AI output, while `ShoppingItem` (a `node`) is used for persistence. This separation is intentional -- the AI schema and the storage schema can evolve independently:"
+  },
+  {
+    "chunk_id": "c79f4ce86224",
+    "file": "tutorials/language/osp.md",
+    "text": "## What is Object-Spatial Programming?\n\nTraditional OOP: Objects exist in isolation. You call methods to bring data to computation."
+  },
+  {
+    "chunk_id": "75e2b7ba6b87",
+    "file": "reference/language/osp.md",
+    "text": "### 1 Edge Reference Syntax\n\n```jac\nnode Person {}\nedge EdgeType {}\nedge Edge { has attr: int = 0; has a: int = 0; has b: int = 0; }\nedge Friend {}\n\nwalker Traverser {\n    can query with Person entry {\n        # Basic forms\n        outgoing = [-->];                     # All outgoing nodes\n        incoming = [<--];                     # All incoming nodes\n        both = [<-->];                        # Both directions\n\n        # Typed forms\n        via_type = [->:EdgeType:->];          # Outgoing via EdgeType\n\n        # With conditions\n        filtered = [->:Edge:attr > 0:->];     # Filter by edge attribute\n\n        # Node type filter\n        people = [-->][?:Person];             # Filter result nodes by type\n\n        # Get edges vs nodes\n        edges = [edge -->];                   # Get edge objects\n        friends = [edge ->:Friend:->];        # Typed edge objects\n    }\n}\n```"
+  },
+  {
+    "chunk_id": "bad0daf895de",
+    "file": "community/breaking-changes.md",
+    "text": "```jac\n# Before: Exit ability would run before disengage stops traversal\nwalker MyWalker {\n    can process with MyNode entry {\n        if some_condition { disengage; }\n        visit [-->];\n    }\n    can cleanup with Root exit {\n        # This WOULD run before disengage in old semantics\n        print(\"Cleanup\");\n    }\n}\n\n# After: Use entry ability instead, since exits won't run after disengage\nwalker MyWalker {\n    can process with MyNode entry {\n        if some_condition { disengage; }\n        visit [-->];\n    }\n    can cleanup with Root entry {\n        # Use entry to ensure this runs before any disengage\n        print(\"Cleanup will run\");\n    }\n}\n```"
+  },
+  {
+    "chunk_id": "4ee7fc01ee1a",
+    "file": "tutorials/language/osp.md",
+    "text": "!!! warning \"Walkers need explicit traversal\"\n    A walker spawned at `root` starts there but doesn't automatically visit connected nodes. You must include a `can start with Root entry { visit [-->]; }` ability to begin traversal. Without it, the walker sits at root and its node-specific abilities never fire."
+  },
+  {
+    "chunk_id": "664969ca38cb",
+    "file": "reference/plugins/jac-desktop.md",
+    "text": "## Status\n\n`jac build --client desktop` produces a working, self-contained native desktop\nbinary that renders your `cl` UI. In progress: wiring the `sv` codespace and\nwalkers onto the embedded interpreter, HMR dev mode, and per-OS\npackaging/signing. See\n[issue #6436](https://github.com/jaseci-labs/jaseci/issues/6436)."
+  },
+  {
+    "chunk_id": "a0f7678bea13",
+    "file": "reference/language/walker-responses.md",
+    "text": "This is the **accumulator pattern** -- the standard approach for collecting data from a graph traversal. The walker flows through three stages:"
+  },
+  {
+    "chunk_id": "1e808f87e8b3",
+    "file": "reference/plugins/jac-scale-kubernetes.md",
+    "text": "### How It Works\n\n1. At `jac start app.jac --scale`, environment variable references (`${...}`) are resolved\n2. A Kubernetes `Opaque` Secret named `{app_name}-secrets` is created (or updated if it already exists)\n3. The Secret is attached to the deployment pod spec via `envFrom.secretRef`\n4. All keys become environment variables inside the container\n5. On `jac scale destroy`, the Secret is automatically cleaned up"
+  },
+  {
+    "chunk_id": "3eacd96d78fb",
+    "file": "community/release_notes/byllm.md",
+    "text": "## byllm 0.6.4\n\n- **Fix: `ModelPool` streaming fallback infinite recursion**: Fixed a bug where `ModelPool` with `strategy=\"fallback\"` and `stream=True` caused LiteLLM Router's `stream_with_fallbacks` to recurse infinitely on primary model failure. The fix calls `Router._completion()` directly per model with `fallbacks=[]`, avoiding recursive re-entry. A `yielded` guard prevents corrupted output on mid-stream failures by propagating the exception instead of silently falling back. Fallback alias construction is deduplicated into a `_fallback_model_names` field populated in `postinit`.\n- **Add: Automatic Anthropic prompt caching**: Caches system prompt, tool schemas, and ReAct conversation history across iterations for Claude models, significantly reducing input token costs. Enabled by default.\n- **Fix: Emit `usage` StreamEvent for no-tool streaming calls**: The usage event now fires for every streaming invocation, not just ReAct loops with tools, so token accounting is complete across all `by llm()` shapes."
+  },
+  {
+    "chunk_id": "462534aa245e",
+    "file": "tutorials/fullstack/mobile.md",
+    "text": "This installs Capacitor dependencies, creates `capacitor.config.json`, and scaffolds the selected platform. By default, setup follows `[client.mobile].default_platform` and falls back to `ios` on macOS or `android` elsewhere."
+  },
+  {
+    "chunk_id": "a1ea66d9e393",
+    "file": "tutorials/production/kubernetes.md",
+    "text": "### Authentication\n\n| Key | Description | Default |\n|----------|-------------|---------|\n| `[scale.jwt]` `secret` | JWT signing key | Testing-only default; set your own in production |\n| `[scale.jwt]` `exp_delta_days` | Token expiration (days) | `7` |\n| `[scale.sso.google]` `client_id` | Google OAuth client ID | - |\n| `[scale.sso.google]` `client_secret` | Google OAuth secret | - |"
+  },
+  {
+    "chunk_id": "561d95b5f6c5",
+    "file": "quick-guide/what-makes-jac-different.md",
+    "text": "### Persistence through `root`\n\nEvery Jac program has a built-in `root` node. Nodes reachable from `root` are **persistent** -- they survive process restarts. The runtime generates the storage schema from your node declarations automatically. No database setup, no ORM, no SQL."
+  },
+  {
+    "chunk_id": "d8754904849f",
+    "file": "reference/language/osp.md",
+    "text": "!!! note\n    `report value;` both adds `value` to `.reports` **and** prints it to stdout. Keep this in mind when reading output from walker examples."
+  },
+  {
+    "chunk_id": "c827a635648e",
+    "file": "reference/language/native-pathway.md",
+    "text": "| `os.path` | Notes |\n|-----------|-------|\n| `os.path.join(*parts)` | Join with `/`; an absolute part or trailing slash is handled |\n| `os.path.basename(p)` / `os.path.dirname(p)` | Final component / parent |\n| `os.path.exists(p)` | `access(F_OK)` |\n| `os.path.isfile(p)` / `os.path.isdir(p)` | `stat`-based |"
+  },
+  {
+    "chunk_id": "25cf20118586",
+    "file": "reference/plugins/jac-scale-http.md",
+    "text": "#### Forgot Password\n\nIssue a one-time reset token to the user's verified recovery email. **Always returns HTTP 200** regardless of whether the account exists, to avoid leaking account existence to a probing attacker."
+  },
+  {
+    "chunk_id": "a04702a4aa00",
+    "file": "quick-guide/index.md",
+    "text": "??? info \"You can actually run this example\"\n    Save the code above as `main.jac`, then create a `jac.toml` in the same directory:"
+  },
+  {
+    "chunk_id": "c7211d3ec5f5",
+    "file": "tutorials/first-app/build-ai-day-planner.md",
+    "text": "Here's the key to understanding this walker: when `visit [-->]` runs, it doesn't immediately move the walker. Instead, it **queues** all connected nodes for traversal **after the current ability body completes**. So the rest of `generate` runs first -- creating new `ShoppingItem` nodes and building the result list. Then, once the ability body finishes, the walker traverses to the queued nodes. If any of those are `ShoppingItem` nodes that existed *before* this ability ran, the `clear_old` ability fires and deletes them."
+  }
+]

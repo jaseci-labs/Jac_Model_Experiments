@@ -1,0 +1,237 @@
+[
+  {
+    "id": "b003-q-report-on-root-exit",
+    "question": "In a Jac walker that gathers data from many nodes, why would you place the report statement in an ability that fires on Root exit rather than reporting inside each per-node entry ability?",
+    "source_chunk_id": "5c1ddde1f37f"
+  },
+  {
+    "id": "b003-q-walker-state-fields",
+    "question": "Why do Jac walkers that collect results across a traversal accumulate them in `has` fields on the walker instead of local variables inside a single ability?",
+    "source_chunk_id": "5c1ddde1f37f"
+  },
+  {
+    "id": "b003-q-client-app-layout",
+    "question": "When a Jac client-side app grows beyond a few components, what kinds of code belong in dedicated services and hooks files, and what benefit does separating them from page components provide?",
+    "source_chunk_id": "378d1af4102b"
+  },
+  {
+    "id": "b003-q-entry-vs-useeffect",
+    "question": "In a Jac client component, how does the `can with entry` ability relate to React's useEffect, and when would you need to use useEffect directly instead?",
+    "source_chunk_id": "e277b30c3045"
+  },
+  {
+    "id": "b003-q-desktop-any-cast",
+    "question": "When calling Jac desktop plugin APIs such as file dialogs that return dictionaries, why do you need to cast the values you read out of the result, and what should you check before acting on a save-dialog result?",
+    "source_chunk_id": "da121bd9d261"
+  },
+  {
+    "id": "b003-q-walker-after-spawn",
+    "question": "After spawning a walker on a node in Jac, how can the calling code access the state the walker accumulated during its traversal?",
+    "source_chunk_id": "206c492ad7b9"
+  },
+  {
+    "id": "b003-q-native-call-bridge",
+    "question": "How does Python-side code call a function that Jac's native engine has compiled — what mechanism bridges the call across the native/Python boundary?",
+    "source_chunk_id": "fa11459d1a59"
+  },
+  {
+    "id": "b003-q-library-mode-spawn",
+    "question": "In Jac's library mode, when embedding Jac in a Python program, how do you start a walker traversal, and what do the spawn and root helpers return?",
+    "source_chunk_id": "dde4a4b6b87f"
+  },
+  {
+    "id": "b003-q-visit-by-llm",
+    "question": "What is the difference between a plain `visit [-->]` and `visit [-->] by llm()` in a Jac walker, and in what situations is the LLM-guided form useful?",
+    "source_chunk_id": "71b137db20a4"
+  },
+  {
+    "id": "b003-q-connect-return-value",
+    "question": "What does a connect expression like `a ++> b` evaluate to in current Jac, and how does the result differ when the right-hand side is a list of nodes rather than a single node?",
+    "source_chunk_id": "e5e3a4816928"
+  },
+  {
+    "id": "b003-q-closure-factory",
+    "question": "How can you produce a pre-configured callable in Jac using a closure-based factory, and what problem does that pattern solve?",
+    "source_chunk_id": "e523447dde01"
+  },
+  {
+    "id": "b003-q-named-args-defaults",
+    "question": "How do default parameter values and named arguments work together in Jac function calls — for example, can you supply a later parameter while leaving an earlier one at its default?",
+    "source_chunk_id": "b865e7f22fcf"
+  },
+  {
+    "id": "b003-q-report-typed-object",
+    "question": "When a walker endpoint creates a node and needs to send it back to the client, why is reporting the typed object directly preferred over manually building a dict of its fields?",
+    "source_chunk_id": "33b7a4991330"
+  },
+  {
+    "id": "b003-q-visit-else",
+    "question": "What happens when a Jac walker's visit statement finds no nodes to visit, and how can you express a fallback behavior for that case?",
+    "source_chunk_id": "8be8d64b8884"
+  },
+  {
+    "id": "b003-q-def-vs-can",
+    "question": "In Jac, when should you define behavior with `def` versus `can`, and what triggers each to run?",
+    "source_chunk_id": "283f64c90963"
+  },
+  {
+    "id": "b003-q-connect-op-meaning",
+    "question": "Creating and connecting a node with `++>` in Jac is said to replace several distinct steps from traditional database-backed development — which steps does it subsume, and why?",
+    "source_chunk_id": "8154f20a0fdc"
+  },
+  {
+    "id": "b003-q-core-plugin-pinning",
+    "question": "When configuring plugin version pins for a jac-scale Kubernetes deployment, why should you not pin versions for scale, byLLM, or the MCP server?",
+    "source_chunk_id": "d17eea64c803"
+  },
+  {
+    "id": "b003-q-graph-testing",
+    "question": "In a Jac test, what does an expression like `[some_node -->]` evaluate to, and how does specifying an edge type in the traversal change what is returned?",
+    "source_chunk_id": "8c88b014b435"
+  },
+  {
+    "id": "b003-q-node-inheritance",
+    "question": "How does inheritance work between node archetypes in Jac, and why might you define a base node holding common fields?",
+    "source_chunk_id": "ce370b4eeb6b"
+  },
+  {
+    "id": "b003-q-scoped-css",
+    "question": "How does Jac scope a component's styles when you add a .style.css file with the same base name, and why does this prevent class-name collisions across components?",
+    "source_chunk_id": "3ab1d4c51bdf"
+  },
+  {
+    "id": "b003-q-org-conventions",
+    "question": "Are Jac's code-organization patterns, such as splitting declarations from implementations, enforced rules or conventions, and what principle should guide which pattern you choose?",
+    "source_chunk_id": "fa546579e112"
+  },
+  {
+    "id": "b003-q-no-orm",
+    "question": "How does Jac eliminate the need for an ORM, schema definitions, and hand-written queries when persisting application data?",
+    "source_chunk_id": "44889d80f565"
+  },
+  {
+    "id": "b003-q-root-shared",
+    "question": "In a jac-scale deployment, what does `root.shared` refer to, and when would a walker use it?",
+    "source_chunk_id": "51f7fedc6e95"
+  },
+  {
+    "id": "b003-q-anchor-store",
+    "question": "When inspecting a Jac app's local database, persisted entities are counted as 'anchors' — what is an anchor in Jac persistence, and what kinds of archetypes appear in the anchor store?",
+    "source_chunk_id": "01516ec5f904"
+  },
+  {
+    "id": "b003-q-typed-edges-gradual",
+    "question": "When you add typed endpoints to a Jac edge declaration, what happens to existing untyped edges, and does connecting a subtype of the declared endpoint type still type-check?",
+    "source_chunk_id": "63f6b4a79357"
+  },
+  {
+    "id": "b003-q-multi-report",
+    "question": "If a walker executes multiple report statements during one traversal, what does the code that spawned it receive back?",
+    "source_chunk_id": "50608b877395"
+  },
+  {
+    "id": "b003-q-fullstack-rpc",
+    "question": "In a Jac fullstack app, when client code awaits a call to a server function, who generates the network transport between them, and how are types kept consistent across the client-server boundary?",
+    "source_chunk_id": "f2d5ed4bb0a4"
+  },
+  {
+    "id": "b003-q-llm-zero-config",
+    "question": "What does it mean that `llm` is zero-config in Jac — do you need to import it, and where is the model it uses configured?",
+    "source_chunk_id": "2473caecee23"
+  },
+  {
+    "id": "b003-q-node-vs-walker-abilities",
+    "question": "Jac abilities can be defined on the walker or on the node it visits — what is the architectural difference between the two choices, and how would you decide which side should own an ability?",
+    "source_chunk_id": "3fe63a45cf0b"
+  },
+  {
+    "id": "b003-q-report-stdout",
+    "question": "When a Jac walker executes a report statement, where does the reported value end up, both for the running program and for observers of the process output?",
+    "source_chunk_id": "2b9d2bae2958"
+  },
+  {
+    "id": "b003-q-by-llm-body",
+    "question": "What happens when a Jac function is declared with `by llm()` instead of a written body?",
+    "source_chunk_id": "20449e93c3d2"
+  },
+  {
+    "id": "b003-q-sem-purpose",
+    "question": "What role does a `sem` declaration play for a Jac function that is delegated to an LLM?",
+    "source_chunk_id": "20449e93c3d2"
+  },
+  {
+    "id": "b003-q-impl-separation",
+    "question": "Why does Jac separate interface declarations from `impl` blocks, and what practical benefits does this separation give large codebases?",
+    "source_chunk_id": "731c476b1187"
+  },
+  {
+    "id": "b003-q-persist-reachability",
+    "question": "What determines whether an object in a Jac application survives across runs — is there an explicit save step, and which objects are excluded?",
+    "source_chunk_id": "b421cb29ec88"
+  },
+  {
+    "id": "b003-q-template-pack",
+    "question": "How can you turn your own project template directory into a reusable bundle that jac create can consume?",
+    "source_chunk_id": "27b3d8ca043e"
+  },
+  {
+    "id": "b003-q-dangling-ref-heal",
+    "question": "What does the Jac runtime do when a traversal encounters a reference to a node that no longer exists in the store, and does the repair persist even for read-only requests?",
+    "source_chunk_id": "d0aaccbeab37"
+  },
+  {
+    "id": "b003-q-import-vs-include",
+    "question": "What is the difference between `import` and `include` in Jac, and when would you prefer one over the other?",
+    "source_chunk_id": "178f192b8768"
+  },
+  {
+    "id": "b003-q-type-import",
+    "question": "What does marking a Jac import as `type` do at runtime, and what problem is it commonly used to solve?",
+    "source_chunk_id": "178f192b8768"
+  },
+  {
+    "id": "b003-q-func-vs-walker-endpoint",
+    "question": "A Jac backend operation can be exposed as a plain server function or as a walker — how does calling each from the client differ, and how do you obtain the result value in each style?",
+    "source_chunk_id": "c4880f0fe828"
+  },
+  {
+    "id": "b003-q-multimodal-structured",
+    "question": "When using Jac's LLM integration with image inputs, can you still request typed structured outputs, and what kinds of use cases does that combination enable?",
+    "source_chunk_id": "48d73835ca7e"
+  },
+  {
+    "id": "b003-q-here-vs-self",
+    "question": "Inside a Jac walker ability, what is the difference between `here` and `self`?",
+    "source_chunk_id": "a3bdf0100f07"
+  },
+  {
+    "id": "b003-q-report-vs-return",
+    "question": "How does `report` in a Jac walker differ from `return` in a regular function, particularly in what the spawning code receives?",
+    "source_chunk_id": "a3bdf0100f07"
+  },
+  {
+    "id": "b003-q-gateway-spof",
+    "question": "In a jac-scale microservices deployment, why is the default gateway configuration a single point of failure, and what should you do about it for production traffic?",
+    "source_chunk_id": "b27ae8882efc"
+  },
+  {
+    "id": "b003-q-edge-filter-compr",
+    "question": "What does the `[-->]` expression give you in Jac, and how do filter comprehensions let you narrow the result set?",
+    "source_chunk_id": "ff021560d052"
+  },
+  {
+    "id": "b003-q-any-inference",
+    "question": "How does Jac's type checker treat a variable assigned from an untyped Python call, and what changes when you explicitly annotate the variable as `any`?",
+    "source_chunk_id": "4cb9c89895b6"
+  },
+  {
+    "id": "b003-q-jid-identity",
+    "question": "When a client needs to reference one specific node on the server, for example to update or delete it, how does Jac give nodes a stable identity that survives the client-server round trip?",
+    "source_chunk_id": "448ec21a549a"
+  },
+  {
+    "id": "b003-q-node-vs-obj",
+    "question": "What distinguishes a `node` from a plain `obj` in Jac, and what capability do nodes gain?",
+    "source_chunk_id": "31e4c74f7b4d"
+  }
+]
