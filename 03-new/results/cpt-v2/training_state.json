@@ -1,0 +1,16 @@
+{
+  "legs": [
+    {
+      "leg": 1,
+      "done_steps_after": 544,
+      "duration_s": 4762.8,
+      "train_loss": 1.756,
+      "val_loss": 1.371,
+      "final_lr": 8.328e-06,
+      "cf_passed": true,
+      "cf_score": "16/16",
+      "decision": "continue"
+    }
+  ],
+  "status": "continue"
+}

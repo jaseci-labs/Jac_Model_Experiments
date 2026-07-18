@@ -21,6 +21,7 @@ training starts -- because the directory is shared and gets overwritten by
 the next leg's run_cpt_leg.py call. Calling it later (e.g. after leg N+1 has
 already started/finished) will silently CF-check the wrong leg's weights.
 """
+import json
 import sys
 from pathlib import Path
 
@@ -34,8 +35,28 @@ def run_leg_cf_check(adapter_dir: str) -> tuple:
     return passed, len(results)
 
 
+def _save_full_results(adapter_dir: str, results: list):
+    """Best-effort persistence of full per-task CF-check output (generated
+    code + text, not just pass/fail) so a leg review can actually read what
+    the model produced, not just a count. Keyed by the just-completed leg's
+    global step (read back from the same numbered checkpoint the CF-check
+    itself just evaluated) so results accumulate across legs without
+    collision. Never raises -- must not break run_epoch_loop.py's stdout
+    parsing of the "CF-check: N/M" line if persistence fails for any reason
+    (e.g. results dir not writable)."""
+    try:
+        ckpts = sorted(Path(adapter_dir).glob("*_adapters.safetensors"))
+        step = ckpts[-1].name.split("_")[0] if ckpts else "unknown"
+        out_dir = Path(__file__).resolve().parents[3] / "results" / "cpt-v2"
+        out_dir.mkdir(parents=True, exist_ok=True)
+        (out_dir / f"cf_check_{step}.json").write_text(json.dumps(results, indent=2))
+    except Exception as e:
+        print(f"  (non-fatal: failed to persist full CF-check results: {e})")
+
+
 if __name__ == "__main__":
     import argparse
+
     ap = argparse.ArgumentParser()
     ap.add_argument(
         "adapter_dir",
@@ -45,5 +66,7 @@ if __name__ == "__main__":
              "next leg's training starts.",
     )
     args = ap.parse_args()
-    passed, total = run_leg_cf_check(args.adapter_dir)
+    results = run_model("cpt-v2-leg", "models/qwen-q4", adapter_path=args.adapter_dir)
+    passed, total = sum(r["pass"] for r in results), len(results)
+    _save_full_results(args.adapter_dir, results)
     print(f"CF-check: {passed}/{total}")
