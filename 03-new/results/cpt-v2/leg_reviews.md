@@ -88,3 +88,12 @@
 - gate decision: continue
 
 **Sonnet review:** Resolves leg 9's watch item -- val loss dropped to a new run-best (0.893 -> 0.784, below leg 8's previous best of 0.823), train loss also best yet (0.497 -> 0.451). Leg 9's uptick reads as noise after all, not the start of overfitting. LR now under 25% of peak (2.491e-06). CF-check 16/16, `cf_check_0005440.json` still clean idiomatic Python, ten legs in with zero degeneration. Current strongest acceptance candidate is leg 10 (best val loss + best train loss simultaneously, still CF-clean). Two legs remain to the ceiling.
+
+## Leg 11
+
+- train loss (last): 0.392, val loss (last): 0.942, final LR: 1.727e-06
+- duration: 4971.6s
+- CF-check: 16/16 (PASS)
+- gate decision: continue
+
+**Sonnet review:** Train loss keeps improving (0.451 -> 0.392, monotonic since leg 1), but val loss jumped clearly (0.784 -> 0.942) -- worse than leg 9's earlier blip (0.893) and now the second-worst val loss of the entire post-floor stretch. This is a real train/val divergence pattern, not noise: train loss has fallen monotonically for 4 straight legs while val loss bottomed at leg 10 and has moved away from it since. LR is down to ~17% of peak (1.727e-06), so the model is increasingly fitting fine details of the training distribution specifically. CF-check still 16/16 and `cf_check_0005984.json` generations still clean, correct, undegraded Python -- the CF suite doesn't detect this kind of overfitting (it's general Python, not the packed docs corpus the val loss measures). **Leg 10 remains the strongest acceptance candidate** (best val loss 0.784, also CF-clean); this leg strengthens rather than weakens that case. Leg 12 (ceiling, final leg) running now -- the gate always halts after it, ending Task 13.
