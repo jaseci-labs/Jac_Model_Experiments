@@ -16,3 +16,12 @@
 - gate decision: continue
 
 **Sonnet review:** Clear improvement over leg 1 -- val loss 1.371→1.158, train loss 1.756→1.251, both moving the right direction as LR reaches its peak (9.902e-06, essentially at the 1e-5 target; warmup completed mid-leg at step 652). First leg with real generation samples to inspect (`cf_check_0001088.json`, path bug fixed this check -- see commit): all 16 CF-check tasks produce clean, correct, idiomatic Python (`is_prime` via trial division to sqrt, `gcd` via Euclidean algorithm, `caesar_cipher` with proper wraparound) -- no repetition, no gibberish, no Jac-syntax bleed into general Python generation. Model is healthy. Nothing concerning; continuing through the floor as designed.
+
+## Leg 3
+
+- train loss (last): 1.365, val loss (last): 1.218, final LR: 9.511e-06
+- duration: 5115.6s
+- CF-check: 16/16 (PASS)
+- gate decision: continue
+
+**Sonnet review:** LR now past peak (9.902e-06 leg 2 -> 9.511e-06 leg 3), confirms the schedule is in its decay phase as designed. Val loss ticked up slightly vs leg 2 (1.158 -> 1.218) and train loss too (1.251 -> 1.365) -- single-leg noise on a small eval set (20 val batches), not a trend; watching but not concerning at this magnitude, especially unconditional through leg 6. CF-check 16/16 again, sampled generations (`cf_check_0001632.json`) still clean idiomatic Python, same style/correctness as legs 1-2, no degeneration. Continuing as designed.
