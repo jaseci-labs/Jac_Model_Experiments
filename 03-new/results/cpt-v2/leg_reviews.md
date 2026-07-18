@@ -25,3 +25,12 @@
 - gate decision: continue
 
 **Sonnet review:** LR now past peak (9.902e-06 leg 2 -> 9.511e-06 leg 3), confirms the schedule is in its decay phase as designed. Val loss ticked up slightly vs leg 2 (1.158 -> 1.218) and train loss too (1.251 -> 1.365) -- single-leg noise on a small eval set (20 val batches), not a trend; watching but not concerning at this magnitude, especially unconditional through leg 6. CF-check 16/16 again, sampled generations (`cf_check_0001632.json`) still clean idiomatic Python, same style/correctness as legs 1-2, no degeneration. Continuing as designed.
+
+## Leg 4
+
+- train loss (last): 0.898, val loss (last): 1.107, final LR: 8.846e-06
+- duration: 5101.0s
+- CF-check: 16/16 (PASS)
+- gate decision: continue
+
+**Sonnet review:** Leg 3's uptick resolved -- val loss 1.218 -> 1.107 (best yet, below leg 2's 1.158), train loss 1.365 -> 0.898 (biggest single-leg drop so far). Confirms leg 3 was noise, not a trend. LR now clearly decaying (9.511e-06 -> 8.846e-06). CF-check 16/16, `cf_check_0002176.json` generations still clean idiomatic Python across all 16 tasks, indistinguishable in style/correctness from legs 1-3 -- no degeneration as training progresses. Healthy trajectory through the floor.
