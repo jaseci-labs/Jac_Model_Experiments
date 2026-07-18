@@ -79,3 +79,12 @@
 - gate decision: continue
 
 **Sonnet review:** Train loss again best yet (0.613 -> 0.497), but val loss ticked up for the first time since the floor (0.823 -> 0.893) -- train/val starting to diverge, worth watching as a possible early-overfitting signal now that LR is down to ~35% of peak (3.459e-06). Not alarming yet (single-leg move, smaller than leg 3's floor-era noise blip in relative terms), but the pattern to watch is whether val loss keeps climbing while train keeps falling over the remaining legs -- that would argue for accepting an earlier checkpoint (leg 8, the best val loss so far) over a later one even if CF stays clean. CF-check 16/16, `cf_check_0004896.json` generations still clean idiomatic Python, no degeneration. Gate correctly continued (CF is the only automated stop criterion; loss-based judgment is mine to make at the acceptance stage).
+
+## Leg 10
+
+- train loss (last): 0.451, val loss (last): 0.784, final LR: 2.491e-06
+- duration: 4833.2s
+- CF-check: 16/16 (PASS)
+- gate decision: continue
+
+**Sonnet review:** Resolves leg 9's watch item -- val loss dropped to a new run-best (0.893 -> 0.784, below leg 8's previous best of 0.823), train loss also best yet (0.497 -> 0.451). Leg 9's uptick reads as noise after all, not the start of overfitting. LR now under 25% of peak (2.491e-06). CF-check 16/16, `cf_check_0005440.json` still clean idiomatic Python, ten legs in with zero degeneration. Current strongest acceptance candidate is leg 10 (best val loss + best train loss simultaneously, still CF-clean). Two legs remain to the ceiling.

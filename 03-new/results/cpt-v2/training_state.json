@@ -98,6 +98,17 @@
       "cf_passed": true,
       "cf_score": "16/16",
       "decision": "continue"
+    },
+    {
+      "leg": 10,
+      "done_steps_after": 5440,
+      "duration_s": 4833.2,
+      "train_loss": 0.451,
+      "val_loss": 0.784,
+      "final_lr": 2.491e-06,
+      "cf_passed": true,
+      "cf_score": "16/16",
+      "decision": "continue"
     }
   ],
   "status": "continue"
