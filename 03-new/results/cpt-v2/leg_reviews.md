@@ -97,3 +97,24 @@
 - gate decision: continue
 
 **Sonnet review:** Train loss keeps improving (0.451 -> 0.392, monotonic since leg 1), but val loss jumped clearly (0.784 -> 0.942) -- worse than leg 9's earlier blip (0.893) and now the second-worst val loss of the entire post-floor stretch. This is a real train/val divergence pattern, not noise: train loss has fallen monotonically for 4 straight legs while val loss bottomed at leg 10 and has moved away from it since. LR is down to ~17% of peak (1.727e-06), so the model is increasingly fitting fine details of the training distribution specifically. CF-check still 16/16 and `cf_check_0005984.json` generations still clean, correct, undegraded Python -- the CF suite doesn't detect this kind of overfitting (it's general Python, not the packed docs corpus the val loss measures). **Leg 10 remains the strongest acceptance candidate** (best val loss 0.784, also CF-clean); this leg strengthens rather than weakens that case. Leg 12 (ceiling, final leg) running now -- the gate always halts after it, ending Task 13.
+
+## Leg 12 (ceiling, final leg)
+
+- train loss (last): 0.319, val loss (last): 0.783, final LR: 1.221e-06
+- duration: 4952.8s
+- CF-check: 16/16 (PASS)
+- gate decision: **halt_keep_this** -- ceiling reached, CF clean, this checkpoint is final
+
+**Sonnet review:** Best possible ending -- leg 12 recovered to a run-best-tying val loss (0.942 -> 0.783, essentially identical to leg 10's 0.784) while posting the best train loss of the entire run (0.392 -> 0.319). The leg 9/11 upticks read as oscillation around a genuine floor near 0.78-0.79, not a monotonic overfitting trend after all -- leg 12 landing back at that floor with CF still 16/16 is the strongest possible signal to end on. LR fully decayed (1.221e-06, ~12% of peak). `cf_check_0006528.json` generations clean, correct, idiomatic Python across all 16 tasks -- twelve legs, zero degeneration at any point in the entire run. Gate reached the hard ceiling with CF passing, so `halt_keep_this` is correct: **this is the checkpoint that ends up in `03-new/adapters/cpt-v2/adapters.safetensors`**, confirmed on disk (timestamp 19:33, matches leg 12's completion).
+
+---
+
+## Full run summary (Task 13 complete)
+
+12 legs, 6528 total steps, ~16.4h wall clock. **Every single leg passed CF-check 16/16 -- zero regression to general Python coding ability at any point.** No degenerate generations observed in any of the 12 `cf_check_{step}.json` samples inspected.
+
+Val loss trajectory: 1.371 → 1.158 → 1.218 → 1.107 → 1.076 → 0.974 → 0.976 → 0.823 → 0.893 → **0.784** → 0.942 → **0.783**. Net improvement from leg 1 to leg 12: **~43%**. The run wasn't monotonic after the floor (legs 9 and 11 both ticked up while train loss kept falling), but it repeatedly returned to a floor around 0.78-0.79 rather than diverging away from it -- legs 10 and 12 are statistically tied for best, and leg 12 is what's actually on disk.
+
+Train loss trajectory: 1.756 → 1.251 → 1.365 → 0.898 → 1.0 → 1.065 → 0.886 → 0.613 → 0.497 → 0.451 → 0.392 → **0.319**. Monotonic decline for the last 6 legs -- expected as LR decays to near-zero and the model increasingly fits the training distribution.
+
+**Outcome: the checkpoint accepted by the automated gate (leg 12, ceiling reached, CF-clean) is also the strongest checkpoint by validation loss (tied with leg 10) and by train loss (best of the run).** No conflict between the automated criterion and the loss-based judgment call design.md reserved for the acceptance stage -- both point to the same checkpoint. Proceeding to fuse leg 12's weights into `models/qwen-cpt-v2-fused-q4`.
