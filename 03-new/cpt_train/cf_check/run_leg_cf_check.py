@@ -47,7 +47,7 @@ def _save_full_results(adapter_dir: str, results: list):
     try:
         ckpts = sorted(Path(adapter_dir).glob("*_adapters.safetensors"))
         step = ckpts[-1].name.split("_")[0] if ckpts else "unknown"
-        out_dir = Path(__file__).resolve().parents[3] / "results" / "cpt-v2"
+        out_dir = Path(__file__).resolve().parents[2] / "results" / "cpt-v2"
         out_dir.mkdir(parents=True, exist_ok=True)
         (out_dir / f"cf_check_{step}.json").write_text(json.dumps(results, indent=2))
     except Exception as e:
