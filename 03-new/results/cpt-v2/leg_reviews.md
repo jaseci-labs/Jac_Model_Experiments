@@ -61,3 +61,12 @@
 - gate decision: continue
 
 **Sonnet review:** First leg with the stop-loss gate live -- passed clean. Train loss best yet (1.065 -> 0.886), val loss essentially flat at the floor's best level (0.974 -> 0.976). LR now under 6e-06, well into decay (~58% of peak). CF-check 16/16, `cf_check_0003808.json` still clean idiomatic Python across all 16 tasks, seven legs in with zero degeneration. Model comfortably clears the CF bar; gate correctly continued.
+
+## Leg 8
+
+- train loss (last): 0.613, val loss (last): 0.823, final LR: 4.567e-06
+- duration: 4792.6s
+- CF-check: 16/16 (PASS)
+- gate decision: continue
+
+**Sonnet review:** Design's target landing zone (leg 8) delivered the best losses of the run so far by a clear margin -- train loss 0.886 -> 0.613, val loss 0.976 -> 0.823. LR now under half of peak (4.567e-06, ~46%). CF-check 16/16, `cf_check_0004352.json` generations still clean idiomatic Python across all 16 tasks, eight legs in, zero degeneration signal at any point in the run. If a decision were needed right now, this checkpoint alone would already look strong; continuing per the ceiling-12 schedule to see if it improves further or the gate catches a regression first.
