@@ -1,8 +1,8 @@
 # CPT-v2 design: docs-dominant corpus, epoch-loop training, dual-track eval vs jac-gpt
 
-2026-07-17. Follow-up to the closed CPT-v1 null (`03-new/docs/cpt-v1-training-results.md`, `analysis.md` — Checkpoint-1 semantic MCQ NULL, base and CPT-v1 byte-identical on 20/20 questions, see memory `project-attempt03-cpt-design`). This doc supersedes an earlier same-topic draft that was lost to a drive I/O fault before it was committed — nothing downstream depended on it, no content is being silently dropped.
+2026-07-17. Follow-up to the closed CPT-v1 null (`03-new/docs/cpt-1/cpt-v1-training-results.md`, `analysis.md` — Checkpoint-1 semantic MCQ NULL, base and CPT-v1 byte-identical on 20/20 questions, see memory `project-attempt03-cpt-design`). This doc supersedes an earlier same-topic draft that was lost to a drive I/O fault before it was committed — nothing downstream depended on it, no content is being silently dropped.
 
-Status: **design only.** Nothing in this doc is implemented yet. Scope for this pass is documentation — this spec plus `workflow.md` in this folder. Implementation is gated on your review of both, per the brainstorming→writing-plans handoff.
+Status (2026-07-18): **implemented and verified up to the training run itself.** Corpus built + Fable-curated + repacked (train 544 / val 102 windows, §2-3 done), the optimizer-state-persistence mechanism built as a driver script and regression-verified on real hardware (§4.2 — note: built as `run_cpt_leg.py` composing `mlx_lm`'s public API, NOT as the `.patch` file early drafts of this doc mention), leg configs 1-12 generated, `cpt.sv.jac` multi-leg support live, CF-check + stop-loss gate tested, jac-gpt oracle working end-to-end (§7). Not yet run: the actual epoch-loop training (§4.3), question-gen (§6.1), both eval tracks (§6.2-6.3), verdict (§6.4). Current phase-by-phase state of record: `workflow.md` in this folder.
 
 ## 1. Why CPT-v1 nulled, and what this attempt changes
 
@@ -26,7 +26,7 @@ Locked earlier: **docs + small rehearsal slice**, not docs-only, not docs+code. 
 | rehearsal (codeparrot-clean-valid) | 750K (~20%) | **~230K (~10%)** | shrunk |
 | **total** | **3.80M** | **~2.29M** | |
 
-### 2.1 `build_cpt.py` changes required (not yet implemented)
+### 2.1 `build_cpt.py` changes required (DONE — flags live, incl. `--repack-only`/`--curation`)
 
 Current script (`03-new/cpt_build/build_cpt.py`) has no corpus-selection flag — `build_code()` always runs, and the rehearsal target is hardcoded as `jac_tokens // 4` (25% of non-rehearsal tokens, which nets to ~20% of the total once rehearsal is added — this is where CPT-v1's 750K/20% came from). Two new CLI flags:
 
@@ -99,7 +99,7 @@ With this patch in place, the original single-schedule design holds exactly as i
 
 Numbers (6/8/12) are what you approved — flagging here as the authoritative source so `workflow.md`'s diagram and any future implementation doesn't drift from this doc.
 
-### 4.4 `cpt.sv.jac` integration (implementation-phase note, not built today)
+### 4.4 `cpt.sv.jac` integration (DONE — `start_cpt_leg` live)
 
 `start_cpt_training(name, config)` already resumes from the latest `*_adapters.safetensors` checkpoint under `03-new/adapters/<name>/` and takes an explicit `config` path override — this mechanism is directly reusable for legs: each leg is a separate `start_cpt_training("cpt-v2", config="config_v2_leg{N}.yaml")` call. What's missing: `CPT_TOTAL_ITERS["cpt-v2"]` is currently a single static number (`5172`, stub 6-epoch value from before this design existed) — for the leg loop, "total iters so far" needs to track the *cumulative* target through the current leg, not one fixed number for the whole run, so `_cpt_build_status`'s progress bar reads correctly leg-by-leg. This is a real code change (`cpt.sv.jac` + `CptTrain.cl.jac`'s progress display), scoped to the implementation plan, not this doc.
 
@@ -157,11 +157,11 @@ Clone `github.com/jaseci-labs/Agentic-AI`, subdirectory `jac-gpt-fullstack`, to 
 
 **`OPENAI_API_KEY` placement**: a `.env` file at `03-new/cpt_train/jac_gpt_oracle/.env` (the clone's own root, placeholder already created) — its `jac.toml` lists `python-dotenv` as a dependency, so it auto-loads once the service can actually boot. Never export it in a shell profile, never commit it — set the real value via a local shell command (e.g. `! echo "OPENAI_API_KEY=sk-..." > 03-new/cpt_train/jac_gpt_oracle/.env`), never paste it into chat. `jac_ml_studio`'s repo-root `.gitignore` already excludes `.env`; the clone directory itself is also now gitignored (commit `995c69a`).
 
-## 8. File/directory layout (planned, not yet created except this docs folder)
+## 8. File/directory layout (built — matches disk as of 2026-07-18)
 
 ```
 03-new/
-  docs/cpt-v2/
+  docs/cpt-2/
     design.md              <- this file
     workflow.md             <- mermaid diagram + phase runbook
   dataset/cpt-v2/           <- new build output (v1's dataset/cpt/ untouched)
@@ -190,7 +190,7 @@ Clone `github.com/jaseci-labs/Agentic-AI`, subdirectory `jac-gpt-fullstack`, to 
 - `OPENAI_API_KEY` — you supply/export when we reach the oracle-query step, scoped to the clone's `.env` only.
 - Clone + boot `Agentic-AI/jac-gpt-fullstack` locally.
 - Studio dev server stopped before any dual/triple-model-load script (base + cpt-v1 + cpt-v2 sequential loads, same 48GB-combined risk as CPT-v1's gate runs).
-- `mlx_lm` optimizer-state-persistence patch (§4.2) written and regression-checked (patched-package dry run vs. unpatched, identical loss curve) before the leg-config generator or any real CPT-v2 leg runs — this is now a confirmed, scoped code change (verified against source, not an open question), tracked as a versioned `.patch` file so it survives environment changes.
+- `mlx_lm` optimizer-state persistence (§4.2) written and regression-checked before any real CPT-v2 leg runs. **DONE (2026-07-18), with one deliberate deviation from this doc's original wording**: built as our own driver (`03-new/cpt_train/run_cpt_leg.py`) composing `mlx_lm`'s public API — no `.patch` file, installed package untouched (survives venv rebuilds by construction; fails loudly at import time if a future `mlx_lm` upgrade breaks the composed API). Regression check ran on real hardware against the real cpt-v2 packed data: 4-iter fresh leg + 4-iter resumed leg, optimizer restored at global step 4, LR continued the global warmup ramp exactly (6.135e-8 → 1.074e-7, i.e. steps 4-7 × 1.534e-8/step) instead of restarting — schedule continuity proven, not assumed.
 
 ## 10. Next
 

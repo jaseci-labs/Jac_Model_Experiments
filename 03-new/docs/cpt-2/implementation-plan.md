@@ -1,5 +1,7 @@
 # CPT-v2 Implementation Plan
 
+> **STATUS (2026-07-18): Tasks 1-12 + 14 DONE (all scaffolding, corpus, curation, oracle). Task 8's Step 5 dry run PASSED on real hardware (optimizer-resume LR continuity proven). Tasks 13 (the training run), 15-19 (question-gen, Track A/B eval, verdict) NOT started — training is the next step. Live state of record: `workflow.md` checklist in this folder. One deliberate deviation: leg configs live at `03-new/cpt_train/config_v2_leg{1..12}.yaml` generated from the post-curation manifest (544 windows/leg, 6528 total iters), and checkbox states inside this file were NOT retro-ticked — trust workflow.md, not the boxes below.**
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Build and run CPT-v2 — a docs-dominant, curated, epoch-checkpointed continual-pretrain of Qwen3-Coder-30B-A3B-Instruct, evaluated on two independent tracks against the jac-gpt RAG oracle — and record an honest accept/reject verdict.
@@ -10,7 +12,7 @@
 
 ## Global Constraints
 
-- Base model fixed: `models/qwen-q4` (Qwen3-Coder-30B-A3B-Instruct, Q4) — never re-litigated, per `03-new/docs/design.md`.
+- Base model fixed: `models/qwen-q4` (Qwen3-Coder-30B-A3B-Instruct, Q4) — never re-litigated, per `03-new/docs/cpt-1/design.md`.
 - CPT-v2 corpus: docs (1.96M tok, 3x upsample) + jac-llmdocs + OSP paper (35K) + blogs (64K), **code corpus dropped entirely**, rehearsal ≈10% of total (`--rehearsal-frac 0.111`), output at `03-new/dataset/cpt-v2/` — v1's `03-new/dataset/cpt/` is never modified.
 - LoRA recipe unchanged from CPT-v1: `rank16/scale2.0/dropout0.05/num_layers16`, `max_seq_length 4096`, `batch_size 1`, `learning_rate 1e-5`.
 - Epoch-loop stop rule: **floor 6** (no halt through leg 6 even on CF regression), **target 8**, **ceiling 12** (hard cap, matches the pre-generated schedule), CF-check `<16/16` stop-loss active from leg 7 onward, keeps the last `16/16` leg.
@@ -325,7 +327,7 @@ Expected: 4 passed
 
 - [ ] **Step 5: Confirm CPT-v1 behavior is unchanged by these flags (regression guard)**
 
-Run: `.venv/bin/python3 03-new/cpt_build/build_cpt.py --debug-single-md 03-new/docs/design.md` (the existing debug path, cheapest way to confirm the script still runs end-to-end without touching the real 3.8M-token v1 dataset)
+Run: `.venv/bin/python3 03-new/cpt_build/build_cpt.py --debug-single-md 03-new/docs/cpt-1/design.md` (the existing debug path, cheapest way to confirm the script still runs end-to-end without touching the real 3.8M-token v1 dataset)
 Expected: `debug: N paragraph rows -> .../dataset/cpt/single_md.jsonl`, same as before these changes (no `--out`/`--drop-code`/`--rehearsal-frac` passed, so defaults preserve old behavior exactly).
 
 - [ ] **Step 6: Commit**
@@ -397,7 +399,7 @@ Expected: FAIL, `ModuleNotFoundError: No module named 'apply_curation'`
 
 ```python
 # 03-new/cpt_build/apply_curation.py
-"""Apply Fable + shingle-dedup curation verdicts (03-new/docs/cpt-v2/design.md
+"""Apply Fable + shingle-dedup curation verdicts (03-new/docs/cpt-2/design.md
 section 3) before packing. Deterministic, no LLM calls here -- the judgment
 already happened when curation.json was produced (Task 7)."""
 
@@ -543,7 +545,7 @@ No new code — exercises Tasks 1-3 for real, same procedure CPT-v1 used (clone 
 ```bash
 mkdir -p /private/tmp/claude-502/*/scratchpad/cpt-v2-repos
 # clone jac, jaseci-llmdocs, jaseci-blogs, and the OSP paper arxiv source
-# (exact clone commands mirror CPT-v1's build — see 03-new/docs/cpt-v1-training-results.md
+# (exact clone commands mirror CPT-v1's build — see 03-new/docs/cpt-1/cpt-v1-training-results.md
 # for the source list if repos aren't already cached locally)
 ```
 
@@ -1020,7 +1022,7 @@ Expected: FAIL, `ModuleNotFoundError`
 """Run one CPT-v2 training leg with full optimizer-state (Adam moments + LR
 schedule step) persistence across leg boundaries. mlx_lm.lora's own CLI only
 resumes LoRA weights (verified against its installed source -- see
-03-new/docs/cpt-v2/design.md section 4.2); this driver reimplements the small
+03-new/docs/cpt-2/design.md section 4.2); this driver reimplements the small
 model/optimizer-setup slice of mlx_lm.lora.train_model() (Apple Inc, MIT
 licensed) and adds save/restore of optimizer.state around it. Model loading,
 dataset loading, and the training loop itself are mlx_lm's own public API,
@@ -1552,7 +1554,7 @@ Add alongside `_cpt_resume_point` (after line 257):
 ```jac
 """Like _cpt_resume_point but for the leg-based CPT-v2 flow: also resolves
 the matching optimizer-state file (run_cpt_leg.py writes both files with the
-same step prefix, see 03-new/docs/cpt-v2/design.md section 4.2/Task 8)."""
+same step prefix, see 03-new/docs/cpt-2/design.md section 4.2/Task 8)."""
 def _cpt_leg_resume_point(name: str) -> dict {
     base = _cpt_resume_point(name);
     if not base["ckpt"] {
@@ -1695,7 +1697,7 @@ e. `epoch_loop_gate.decide_next_action(leg=N, cf_passed=(passed==16))` → if `"
 
 - [ ] **Step 4: Record the run**
 
-Write `03-new/docs/cpt-v2/training-results.md` (mirrors `cpt-v1-training-results.md`'s structure) — legs run, final leg number, CF-check history per leg, loss curve summary, which checkpoint was accepted as final.
+Write `03-new/docs/cpt-2/training-results.md` (mirrors `cpt-v1-training-results.md`'s structure) — legs run, final leg number, CF-check history per leg, loss curve summary, which checkpoint was accepted as final.
 
 - [ ] **Step 5: Fuse the final accepted checkpoint** (only now — not per-leg, per Task 11's finding)
 
@@ -1712,7 +1714,7 @@ Write `03-new/docs/cpt-v2/training-results.md` (mirrors `cpt-v1-training-results
 - [ ] **Step 7: Commit the results doc + config files**
 
 ```bash
-git add 03-new/docs/cpt-v2/training-results.md 03-new/cpt_train/config_v2_leg*.yaml \
+git add 03-new/docs/cpt-2/training-results.md 03-new/cpt_train/config_v2_leg*.yaml \
         03-new/results/cpt-v2/leg_reviews.md
 git commit -m "docs: CPT-v2 training run results (N legs, final checkpoint accepted at step S)"
 ```
@@ -2414,7 +2416,7 @@ git commit -m "data: Track B blind pairwise results, CPT-v2 vs jac-gpt oracle"
 **Files:**
 - Create: `03-new/cpt_train/eval_v2/acceptance_readout.py`
 - Create: `03-new/cpt_train/eval_v2/test_acceptance_readout.py`
-- Create: `03-new/docs/cpt-v2/results.md`
+- Create: `03-new/docs/cpt-2/results.md`
 
 **Interfaces:**
 - Consumes: `track_a.json` (Task 17), `track_b.json` (Task 18).
@@ -2530,15 +2532,15 @@ Expected: 4 passed
 .venv/bin/python3 03-new/cpt_train/eval_v2/acceptance_readout.py
 ```
 
-Write `03-new/docs/cpt-v2/results.md` covering: corpus stats actually built (vs. design.md's projected ~2.29M), how many legs actually ran and why it stopped there, CF-check history per leg, Track A per-model means + a few spot-checked highest/lowest-similarity outliers (design.md section 6.2's honest-gap discipline — cosine similarity can reward verbose-but-wrong answers, spot-check before trusting the aggregate), Track B win/loss/tie breakdown + a few example justifications, the final accept/reject verdict, and — same discipline as CPT-v1's null — if CPT-v2 doesn't clear the bar, say so plainly rather than rounding up.
+Write `03-new/docs/cpt-2/results.md` covering: corpus stats actually built (vs. design.md's projected ~2.29M), how many legs actually ran and why it stopped there, CF-check history per leg, Track A per-model means + a few spot-checked highest/lowest-similarity outliers (design.md section 6.2's honest-gap discipline — cosine similarity can reward verbose-but-wrong answers, spot-check before trusting the aggregate), Track B win/loss/tie breakdown + a few example justifications, the final accept/reject verdict, and — same discipline as CPT-v1's null — if CPT-v2 doesn't clear the bar, say so plainly rather than rounding up.
 
-- [ ] **Step 5: Update `03-new/docs/workflow.md`'s top-level diagram** to reflect the CPT-v2 outcome (Checkpoint 1 row), same as design.md section 10 promised.
+- [ ] **Step 5: Update `03-new/docs/cpt-1/workflow.md`'s top-level diagram** to reflect the CPT-v2 outcome (Checkpoint 1 row), same as design.md section 10 promised.
 
 - [ ] **Step 6: Commit**
 
 ```bash
 git add 03-new/cpt_train/eval_v2/acceptance_readout.py 03-new/cpt_train/eval_v2/test_acceptance_readout.py \
-        03-new/results/cpt-v2/acceptance.json 03-new/docs/cpt-v2/results.md 03-new/docs/workflow.md
+        03-new/results/cpt-v2/acceptance.json 03-new/docs/cpt-2/results.md 03-new/docs/cpt-1/workflow.md
 git commit -m "docs: CPT-v2 acceptance verdict and results writeup"
 ```
 
@@ -2556,7 +2558,7 @@ git commit -m "docs: CPT-v2 acceptance verdict and results writeup"
 
 ## Execution Handoff
 
-Plan complete and saved to `03-new/docs/cpt-v2/implementation-plan.md`. Two execution options:
+Plan complete and saved to `03-new/docs/cpt-2/implementation-plan.md`. Two execution options:
 
 **1. Subagent-Driven (recommended)** — I dispatch a fresh subagent per task, review between tasks, fast iteration.
 

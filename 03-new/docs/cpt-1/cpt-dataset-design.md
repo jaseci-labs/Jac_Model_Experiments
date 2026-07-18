@@ -1,10 +1,10 @@
 # CPT Dataset Design
 
-*Follow-up spec #1 of `03-new/docs/design.md` (gates everything downstream — no CPT checkpoint until this data exists). Extends `03-new/rui.md`, the source guide this doc is built from.*
+*Follow-up spec #1 of `03-new/docs/cpt-1/design.md` (gates everything downstream — no CPT checkpoint until this data exists). Extends `03-new/rui.md`, the source guide this doc is built from.*
 
 ## Scope
 
-Dataset preparation for **continual pre-training** (CPT) of Qwen3-Coder-30B-A3B-Instruct on Jac-language material. Raw-text, next-token-prediction format — not instruction/chat format (that's the SFT/DPO stage). Four sources: Jac docs, the OSP paper, blogs, code. Plus a general-code rehearsal slice for catastrophic-forgetting (CF) protection (`03-new/docs/design.md` Stage 1).
+Dataset preparation for **continual pre-training** (CPT) of Qwen3-Coder-30B-A3B-Instruct on Jac-language material. Raw-text, next-token-prediction format — not instruction/chat format (that's the SFT/DPO stage). Four sources: Jac docs, the OSP paper, blogs, code. Plus a general-code rehearsal slice for catastrophic-forgetting (CF) protection (`03-new/docs/cpt-1/design.md` Stage 1).
 
 ## Format
 

@@ -1,4 +1,4 @@
-"""Apply Fable + shingle-dedup curation verdicts (03-new/docs/cpt-v2/design.md
+"""Apply Fable + shingle-dedup curation verdicts (03-new/docs/cpt-2/design.md
 section 3) before packing. Deterministic, no LLM calls here -- the judgment
 already happened when curation.json was produced (Task 7)."""
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the CPT dataset per 03-new/docs/cpt-dataset-design.md.
+"""Build the CPT dataset per 03-new/docs/cpt-1/cpt-dataset-design.md.
 
 Sources -> raw per-source JSONL -> decontam -> pack (EOS-join, 4096-token
 windows, 85/15 split) -> 03-new/dataset/cpt/.

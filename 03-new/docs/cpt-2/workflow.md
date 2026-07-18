@@ -1,6 +1,8 @@
 # CPT-v2 workflow
 
-Operational runbook for this sub-pipeline. Design/rationale of record is [design.md](design.md) — this file is the phase-by-phase map + mermaid diagram, same convention as the top-level `03-new/docs/workflow.md` (which this attempt slots into as an expanded Phase 1/2/Checkpoint-1). Nothing here is implemented yet — status markers below are all `[ ]` until real work lands.
+Operational runbook for this sub-pipeline. Design/rationale of record is [design.md](design.md) — this file is the phase-by-phase map + mermaid diagram, same convention as the top-level `03-new/docs/cpt-1/workflow.md` (which this attempt slots into as an expanded Phase 1/2/Checkpoint-1).
+
+**Status (2026-07-18): all pre-training phases DONE and verified — B1/B2/B3 complete (curated corpus packed, 544 train / 102 val windows), T1 scaffolding complete with the optimizer-resume mechanism proven on real hardware, ORACLE working. The actual training run (T1 legs 1+) has NOT started; E0/EA/EB pending (E0 blocked on nothing, EA/EB blocked on a trained checkpoint).**
 
 ```mermaid
 ---
@@ -130,23 +132,23 @@ flowchart TD
 
 Rebuild `03-new/dataset/cpt-v2/` (new path, doesn't touch v1's `03-new/dataset/cpt/`) with `build_cpt.py --drop-code --rehearsal-frac 0.111 --out 03-new/dataset/cpt-v2`. Reuses the fence-aware chunker and overlap-on-truncation packer proven in the v1 rebuild — see `design.md` §2.1 for the exact flag semantics. New: every row gets a stable `meta.chunk_id` so the curation pass (B2) and question-gen (E0) can reference chunks reliably.
 
-**Not started.**
+**DONE (2026-07-17).** Corpus built at `03-new/dataset/cpt-v2/` — docs 8613 rows / blogs 1153 / osp_paper 457 / rehearsal 118, `chunk_id` = full-text hash (rebuilt once after a chunk_id-collision fix, commit `4cb8237`).
 
 ## Phase B2 — Curation pass
 
 Cheap shingle-based within-source dedup flags near-duplicate candidates first (reuses `decontam()`'s 14-gram machinery, chunk-against-chunk instead of chunk-against-holdout). A Fable subagent then judges keep/drop/upweight per chunk, batched 50-at-a-time per source, writing `curation.json` with a logged reason per verdict. See `design.md` §3 for what Fable is and isn't trusted to judge (content quality: yes; cross-file duplicate detection at scale: no, that's the shingle pass).
 
-**Not started.**
+**DONE (2026-07-18).** All 207 batches curated by Fable (`Agent` tool, `model: "fable"`), merged conflict-free by `merge_curation_batches.py` into `curation.json`: **10157 verdicts — 7136 keep / 2550 drop / 471 upweight**, every verdict with a logged reason. Known wrinkle (harmless): ~20 batch input files contained a few duplicate `chunk_id` entries (batch-splitter quirk); curation deduplicated them. Batch working files live in `03-new/dataset/cpt-v2/curation_batches/` (`pending/*_input.json` are stale inputs, safe to clean).
 
 ## Phase B3 — Decontam + pack
 
 Unchanged decontam (14-gram containment ≥0.5 vs `02-rl-grpo` holdouts) runs on the curated row set. `apply_curation.py` (new, small, deterministic — not LLM-authored) applies drop/upweight verdicts before `pack_source`. Emits `manifest.json` — Studio's `cpt.sv.jac` DATA tab pattern (read manifest live, no restart needed) should extend to this path once implementation starts.
 
-**Not started.**
+**DONE (2026-07-18).** `build_cpt.py --repack-only --curation` applied curation in-memory and repacked: docs 8613→6409 rows, blogs 1153→832, osp_paper 457→368, rehearsal untouched; **packed train 544 / val 102 windows** (up from 535 pre-curation — upweights outweigh drops in token terms). `manifest.json` stamped with `"curation"` path. Pre-curation packed output preserved at `packed_precuration_backup/` + `manifest_precuration_backup.json`.
 
 ## Phase T1 — Training: epoch-loop
 
-The core mechanism change from v1. Verified against `mlx_lm` source (not assumed): `--resume-adapter-file` only restores LoRA weights — the optimizer (Adam moments + the schedule's own step counter, which drives the LR curve) is rebuilt from scratch on every process invocation, so naively chaining legs with the same schedule config would restart every leg at peak LR, not continue the curve. Fix: a small patch to `mlx_lm` that also saves/restores `optimizer.state` (a plain `mx.array`-leaved pytree, same serialization primitives already used for adapter weights) at each checkpoint, so the schedule's internal step position genuinely carries across legs. See design.md §4.2 for the full mechanism (uses `Optimizer.init()` to pre-shape restored state) and the backward-compatibility/versioning constraints on patching a third-party package. One cosine LR schedule is computed once, for a 12-epoch ceiling, before leg 1 ever runs. Each leg is one epoch, resumed from the previous leg's checkpoint (weights + optimizer state) via the extended `cpt.sv.jac` mechanism.
+The core mechanism change from v1. Verified against `mlx_lm` source (not assumed): `--resume-adapter-file` only restores LoRA weights — the optimizer (Adam moments + the schedule's own step counter, which drives the LR curve) is rebuilt from scratch on every process invocation, so naively chaining legs with the same schedule config would restart every leg at peak LR, not continue the curve. Fix (as built): our own driver `03-new/cpt_train/run_cpt_leg.py` composes `mlx_lm`'s public API and adds `save/restore_optimizer_state` (safetensors round-trip of `optimizer.state`) — the installed package is never patched, so `01-sft-dpo`/CPT-v1 stock-CLI flows are untouched. It also disables `mlx_lm`'s internal per-invocation-numbered periodic save (collision-prone under resume) in favor of one globally-numbered `{step:07d}_adapters.safetensors` + `{step:07d}_optimizer.safetensors` pair per leg. See design.md §4.2. One cosine LR schedule is computed once, for a 12-epoch ceiling, before leg 1 ever runs. Each leg is one epoch, resumed from the previous leg's checkpoint (weights + optimizer state) via `cpt.sv.jac`'s `start_cpt_leg`.
 
 Stop rule (design.md §4.3, exact numbers you approved):
 - **Floor 6** — no stop-loss halt before leg 6, log-only if CF dips early.
@@ -156,7 +158,7 @@ Stop rule (design.md §4.3, exact numbers you approved):
 
 Sonnet reviews each leg's checkpoint (loss delta, sample generations, log-only — advisory, doesn't gate) — appended to `03-new/results/cpt-v2/leg_reviews.md`.
 
-**Not started.** Blocked on: `mlx_lm` optimizer-state-persistence patch, written and regression-checked against an unpatched dry run (design.md §4.2/§9 — root cause confirmed by reading source, fix scoped, not yet built), `cpt.sv.jac` multi-leg `CPT_TOTAL_ITERS` rework (design.md §4.4) — both implementation-phase items, not decided by this doc.
+**Scaffolding DONE and verified (2026-07-18); the actual training run NOT started.** In place: `run_cpt_leg.py` (unit tests pass against installed `mlx_lm==0.31.3`), `config_v2_leg1..12.yaml` generated from the live manifest (544 iters/leg, one global schedule: warmup 652, 6528 total iters, 1e-5→1e-6), `cpt.sv.jac` `start_cpt_leg` with in-order leg enforcement + optimizer-checkpoint resume + manifest-derived totals, `run_leg_cf_check.py` + `epoch_loop_gate.py` (all tests green). **Regression dry run PASSED on real hardware**: 4 iters fresh + 4 iters resumed on the actual cpt-v2 packed data — leg 2 printed `resuming at global step 4` and its LR continued the warmup ramp exactly (6.135e-8 = step 4 × 1.534e-8/step, up to 1.074e-7 at step 7) instead of restarting at 0; globally-numbered `0000008_*` checkpoint pair written; peak memory 29.3 GB of 48 GB. Observed throughput ~514 tok/s ⇒ ~70 min/leg, floor 6 ≈ 7 h, ceiling 12 ≈ 14 h.
 
 ## Phase E0 — Eval question bank
 
@@ -187,25 +189,25 @@ CPT-v2 accepted only if Track A beats both base and cpt-v1 by a real (non-noise)
 
 ## Checklist
 
-- [ ] `build_cpt.py` gets `--drop-code`, `--rehearsal-frac`, `--out` flags
-- [ ] `meta.chunk_id` added to every built row
-- [ ] Shingle within-source dedup pass written
-- [ ] Fable curation subagent run, `curation.json` produced
-- [ ] `apply_curation.py` written
-- [ ] CPT-v2 corpus built (`03-new/dataset/cpt-v2/`), manifest emitted
+- [x] `build_cpt.py` gets `--drop-code`, `--rehearsal-frac`, `--out` flags (plus `--repack-only`/`--curation`)
+- [x] `meta.chunk_id` added to every built row (full-text hash after collision fix, commit `4cb8237`)
+- [x] Shingle within-source dedup pass written (`shingle_dedup.py`)
+- [x] Fable curation subagent run, `curation.json` produced (10157 verdicts: 7136 keep / 2550 drop / 471 upweight)
+- [x] `apply_curation.py` written (5/5 tests)
+- [x] CPT-v2 corpus built AND repacked post-curation (`03-new/dataset/cpt-v2/`, train 544 / val 102 windows, manifest stamped with curation path)
 - [x] `mlx_lm.lora` resume-schedule-position behavior read from source — confirmed broken as assumed (weights-only resume, fresh optimizer/schedule per invocation)
-- [ ] `mlx_lm` patch written: save/restore `optimizer.state` at each checkpoint, tracked as a versioned `.patch` file
-- [ ] Patch regression-checked: patched-package dry run vs. unpatched, identical loss curve
-- [ ] Leg-config generator written (single 12-epoch-ceiling schedule, per-leg iter slices)
-- [ ] `cpt.sv.jac` reworked for multi-leg cumulative-total tracking
-- [ ] Epoch-loop training run: legs 1-6 (floor, unconditional)
+- [x] Optimizer-state persistence built — NOT as a `.patch`: `run_cpt_leg.py` driver composes `mlx_lm`'s public API, installed package untouched (deliberate deviation, see design.md §4.2)
+- [x] Resume regression-checked on real hardware: 4+4-iter dry run, leg 2 resumed at global step 4 with LR continuing the warmup ramp exactly (not restarting at peak/zero)
+- [x] Leg-config generator written AND run (`config_v2_leg1..12.yaml`, single 12-epoch-ceiling schedule: 544 iters/leg, warmup 652, 6528 total)
+- [x] `cpt.sv.jac` reworked for multi-leg tracking (`start_cpt_leg`, in-order enforcement, manifest-derived total_iters)
+- [ ] Epoch-loop training run: legs 1-6 (floor, unconditional) — **next step, GPU**
 - [ ] Epoch-loop training run: legs 7-12 (stop-loss active) or earlier halt
 - [ ] Sonnet leg reviews logged for every completed leg
 - [ ] CPT-v2 checkpoint fused for eval
 - [x] `jac-gpt-fullstack` cloned (commit 995c69a), real SSE endpoint contract discovered from source
 - [x] `jac install` run, plus two real upstream fixes (byllm import path, Python 3.13 venv rebuild)
 - [x] `OPENAI_API_KEY` in place, oracle boots and responds — verified end-to-end with a real question
-- [ ] Fable question bank generated (~100 Q, `source_chunk_id` linked)
+- [ ] Fable question bank generated (~100 Q, `source_chunk_id` linked) — unblocked (corpus final), can run any time
 - [ ] Track A cosine-sim script written, run
 - [ ] Track B Sonnet-judge script written, run
-- [ ] Acceptance verdict recorded, `03-new/docs/workflow.md` top-level diagram updated to reflect outcome
+- [ ] Acceptance verdict recorded, `03-new/docs/cpt-1/workflow.md` top-level diagram updated to reflect outcome

@@ -1,7 +1,7 @@
 """Run one CPT-v2 training leg with full optimizer-state (Adam moments + LR
 schedule step) persistence across leg boundaries. mlx_lm.lora's own CLI only
 resumes LoRA weights (verified against its installed source -- see
-03-new/docs/cpt-v2/design.md section 4.2); this driver reimplements the small
+03-new/docs/cpt-2/design.md section 4.2); this driver reimplements the small
 model/optimizer-setup slice of mlx_lm.lora.train_model() (Apple Inc, MIT
 licensed) and adds save/restore of optimizer.state around it. Model loading,
 dataset loading, and the training loop itself are mlx_lm's own public API,
