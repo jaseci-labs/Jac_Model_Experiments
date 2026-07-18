@@ -1,0 +1,253 @@
+[
+  {
+    "chunk_id": "1582ede5432b",
+    "verdict": "keep",
+    "reason": "Genuine runtime-internals prose on walker --> operators and edges_to_nodes performance."
+  },
+  {
+    "chunk_id": "4a45ded8d7bd",
+    "verdict": "keep",
+    "reason": "Short but substantive design-decision rationale in the traversal performance narrative."
+  },
+  {
+    "chunk_id": "825b8214c6aa",
+    "verdict": "keep",
+    "reason": "Section intro for the batch_get fix, real technical content."
+  },
+  {
+    "chunk_id": "6da697a73e41",
+    "verdict": "keep",
+    "reason": "Describes the batch_get Memory API and its query semantics."
+  },
+  {
+    "chunk_id": "fb6aac588c80",
+    "verdict": "keep",
+    "reason": "Concrete implementation-scope detail supporting the fix narrative."
+  },
+  {
+    "chunk_id": "41da8b788cca",
+    "verdict": "keep",
+    "reason": "Explains the _prefetch_edges mechanism inside edges_to_nodes, useful runtime knowledge."
+  },
+  {
+    "chunk_id": "5fab5c98446a",
+    "verdict": "keep",
+    "reason": "Genuine benchmarking-methodology prose."
+  },
+  {
+    "chunk_id": "a8c3bb8ae60a",
+    "verdict": "keep",
+    "reason": "Explains L1 cache behavior of jac run with root ++> and [-->] traversal, real technical detail."
+  },
+  {
+    "chunk_id": "d9e35ebada49",
+    "verdict": "keep",
+    "reason": "Lead-in sentence to the N+1 conditions list, part of continuous technical prose."
+  },
+  {
+    "chunk_id": "c2b67d23cb66",
+    "verdict": "keep",
+    "reason": "Enumerates the cold-start conditions where N+1 manifests, substantive content."
+  },
+  {
+    "chunk_id": "e1f39c4d1c7d",
+    "verdict": "keep",
+    "reason": "Explains why the problem is production-only, genuine context."
+  },
+  {
+    "chunk_id": "d09563f01a26",
+    "verdict": "keep",
+    "reason": "Describes the cold-start benchmark setup."
+  },
+  {
+    "chunk_id": "ed9ba31a33e3",
+    "verdict": "keep",
+    "reason": "Benchmark results table with real data, non-redundant."
+  },
+  {
+    "chunk_id": "d1f4c7f9eb32",
+    "verdict": "keep",
+    "reason": "500-edge results table, distinct data from the 100-edge table."
+  },
+  {
+    "chunk_id": "623127e8c25a",
+    "verdict": "keep",
+    "reason": "Summarizes the query-count reduction, genuine prose."
+  },
+  {
+    "chunk_id": "48b2e923599f",
+    "verdict": "keep",
+    "reason": "Small but substantive point about zero write overhead."
+  },
+  {
+    "chunk_id": "e7a5e68660ab",
+    "verdict": "keep",
+    "reason": "Introduces the deserialization gap analysis, real technical content."
+  },
+  {
+    "chunk_id": "574c16ab2788",
+    "verdict": "keep",
+    "reason": "Detailed explanation of anchor deserialization costs (NodeAnchor, EdgeAnchor stubs)."
+  },
+  {
+    "chunk_id": "113affbce97d",
+    "verdict": "keep",
+    "reason": "Interprets the batch_get vs raw $in ceiling, genuine analysis."
+  },
+  {
+    "chunk_id": "a04fc49d49a5",
+    "verdict": "keep",
+    "reason": "Intro relating batch_get to TopologyIndex, real technical context."
+  },
+  {
+    "chunk_id": "951836968c93",
+    "verdict": "keep",
+    "reason": "Comparison table of TopologyIndex vs batch_get including -->(?:Type) filtering."
+  },
+  {
+    "chunk_id": "98a428da8c9e",
+    "verdict": "keep",
+    "reason": "Explains how type-filtered traversal and batch fetch compose, substantive."
+  },
+  {
+    "chunk_id": "69fc020a34cb",
+    "verdict": "keep",
+    "reason": "Genuine lessons-learned prose on benchmarking."
+  },
+  {
+    "chunk_id": "7898c5562502",
+    "verdict": "keep",
+    "reason": "Substantive design lesson about read-path vs write-path changes."
+  },
+  {
+    "chunk_id": "406e7ab700ac",
+    "verdict": "keep",
+    "reason": "Reinforces that edges_to_nodes is the traversal code path, useful runtime knowledge."
+  },
+  {
+    "chunk_id": "c67f27e30702",
+    "verdict": "keep",
+    "reason": "Concluding lesson with concrete specifics, genuine prose."
+  },
+  {
+    "chunk_id": "6c6cd1a34e13",
+    "verdict": "keep",
+    "reason": "PR reference with pointer to benchmark methodology, minor but informative."
+  },
+  {
+    "chunk_id": "8657a17af437",
+    "verdict": "keep",
+    "reason": "Blog intro with real ecosystem context, genuine prose."
+  },
+  {
+    "chunk_id": "19f8347f530b",
+    "verdict": "drop",
+    "reason": "Nav-only excerpt marker comment with no content."
+  },
+  {
+    "chunk_id": "9bbdd15ff8c1",
+    "verdict": "keep",
+    "reason": "Genuine prose describing the program and the Jaseci stack components used."
+  },
+  {
+    "chunk_id": "93c4c81f64d1",
+    "verdict": "drop",
+    "reason": "Image tag fragment with no prose."
+  },
+  {
+    "chunk_id": "afcd2b248148",
+    "verdict": "keep",
+    "reason": "Genuine narrative about the lecture series and Jac learning process."
+  },
+  {
+    "chunk_id": "f8af99892b13",
+    "verdict": "keep",
+    "reason": "Describes hackathon projects built on Jac, byLLM, jac-client, and OSP, genuine content."
+  },
+  {
+    "chunk_id": "36511e6348e2",
+    "verdict": "drop",
+    "reason": "Image tag fragment with no prose."
+  },
+  {
+    "chunk_id": "7ab6d33ecae1",
+    "verdict": "keep",
+    "reason": "Genuine prose about judging structure, minor but non-boilerplate."
+  },
+  {
+    "chunk_id": "da9a5078b227",
+    "verdict": "keep",
+    "reason": "Genuine narrative prose introducing the top projects."
+  },
+  {
+    "chunk_id": "767969b91945",
+    "verdict": "keep",
+    "reason": "Describes a real project architected as a knowledge graph in Jac, genuine content."
+  },
+  {
+    "chunk_id": "2a4c0bd2bd89",
+    "verdict": "keep",
+    "reason": "Short testimonial quote with genuine developer-experience content."
+  },
+  {
+    "chunk_id": "260242a0d89d",
+    "verdict": "drop",
+    "reason": "Attribution-only fragment containing just a name."
+  },
+  {
+    "chunk_id": "b18f21ea2993",
+    "verdict": "drop",
+    "reason": "Link-only fragment with no prose."
+  },
+  {
+    "chunk_id": "8c364e0d0c72",
+    "verdict": "keep",
+    "reason": "Genuine project description with Jaseci stack context."
+  },
+  {
+    "chunk_id": "7e19612f4299",
+    "verdict": "drop",
+    "reason": "Link-only fragment with no prose."
+  },
+  {
+    "chunk_id": "bb5269a2ec9c",
+    "verdict": "upweight",
+    "reason": "First-person narrative explaining core OSP semantics: nodes as data containers, walkers as active agents that become API endpoints, edges as relationships, spawn mechanics, and the by operator.",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "998a00a12f10",
+    "verdict": "drop",
+    "reason": "Attribution-only fragment containing just a name."
+  },
+  {
+    "chunk_id": "1195b3794732",
+    "verdict": "keep",
+    "reason": "Genuine project description mentioning Jac and generative reasoning workflows."
+  },
+  {
+    "chunk_id": "ec6faa551cfa",
+    "verdict": "drop",
+    "reason": "Link-only fragment with no prose."
+  },
+  {
+    "chunk_id": "1542ec713ce6",
+    "verdict": "keep",
+    "reason": "Testimonial with genuine content about learning Jac and OSP through building."
+  },
+  {
+    "chunk_id": "b52796e9746a",
+    "verdict": "drop",
+    "reason": "Attribution-only fragment containing just a name."
+  },
+  {
+    "chunk_id": "4ef72e045c25",
+    "verdict": "keep",
+    "reason": "Genuine closing prose, non-boilerplate."
+  },
+  {
+    "chunk_id": "9dd33e12ebc6",
+    "verdict": "drop",
+    "reason": "Image tag fragment with no prose."
+  }
+]

@@ -1,0 +1,237 @@
+[
+  {
+    "chunk_id": "88090683da5c",
+    "verdict": "keep",
+    "reason": "Genuine Jac code example demonstrating function definition and reuse with entry block."
+  },
+  {
+    "chunk_id": "77308a96778c",
+    "verdict": "drop",
+    "reason": "Bare closing HTML tag with no documentation content."
+  },
+  {
+    "chunk_id": "ec460f278cb9",
+    "verdict": "drop",
+    "reason": "Orphaned heading fragment with no prose or code attached."
+  },
+  {
+    "chunk_id": "98f0f4c28471",
+    "verdict": "drop",
+    "reason": "Bare HTML wrapper tag with no documentation content."
+  },
+  {
+    "chunk_id": "e4345ba6cc8b",
+    "verdict": "keep",
+    "reason": "Substantive Jac example showing typed functions, return types, and f-strings."
+  },
+  {
+    "chunk_id": "259da11d5b32",
+    "verdict": "keep",
+    "reason": "Practice-exercise section header with a real challenge statement pairing with the following code."
+  },
+  {
+    "chunk_id": "e376ff4cdcae",
+    "verdict": "drop",
+    "reason": "Bare HTML wrapper tag with no documentation content."
+  },
+  {
+    "chunk_id": "463b063e248e",
+    "verdict": "keep",
+    "reason": "Genuine Jac code answering the even-number exercise with bool return type."
+  },
+  {
+    "chunk_id": "8d06015dfbae",
+    "verdict": "drop",
+    "reason": "Bare closing HTML tag with no documentation content."
+  },
+  {
+    "chunk_id": "bde71b344403",
+    "verdict": "keep",
+    "reason": "Challenge prompt text that gives context to the adjacent solution code."
+  },
+  {
+    "chunk_id": "2a65c2dda14d",
+    "verdict": "keep",
+    "reason": "Genuine Jac example of if/else control flow in a typed function."
+  },
+  {
+    "chunk_id": "70efea5d17fe",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "64ade3a66fa8",
+    "verdict": "keep",
+    "reason": "Section introduction prose motivating collections."
+  },
+  {
+    "chunk_id": "6f428c287443",
+    "verdict": "keep",
+    "reason": "Section header with explanatory prose introducing lists."
+  },
+  {
+    "chunk_id": "d1b89104fedd",
+    "verdict": "drop",
+    "reason": "Bare HTML wrapper tag with no documentation content."
+  },
+  {
+    "chunk_id": "f5e135563e4f",
+    "verdict": "keep",
+    "reason": "Genuine Jac example of list creation inside a with entry block."
+  },
+  {
+    "chunk_id": "e542f2efa809",
+    "verdict": "drop",
+    "reason": "Bare closing HTML tag with no documentation content."
+  },
+  {
+    "chunk_id": "a450f865b78e",
+    "verdict": "keep",
+    "reason": "Section header with prose explaining zero-based indexing."
+  },
+  {
+    "chunk_id": "92313d9feacf",
+    "verdict": "drop",
+    "reason": "Bare HTML wrapper tag with no documentation content."
+  },
+  {
+    "chunk_id": "fd694d611730",
+    "verdict": "keep",
+    "reason": "Genuine Jac example covering positive and negative list indexing."
+  },
+  {
+    "chunk_id": "6e25917f3e67",
+    "verdict": "drop",
+    "reason": "Bare closing HTML tag with no documentation content."
+  },
+  {
+    "chunk_id": "f397bcc817ec",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('**Visual:**') with no content of its own."
+  },
+  {
+    "chunk_id": "25af0acd33f9",
+    "verdict": "keep",
+    "reason": "Mermaid diagram illustrating list index positions, genuine instructional content."
+  },
+  {
+    "chunk_id": "f04ea44c5f11",
+    "verdict": "keep",
+    "reason": "Section header for modifying lists, anchors the following code."
+  },
+  {
+    "chunk_id": "b135d4fb9b0d",
+    "verdict": "keep",
+    "reason": "Substantive Jac example of list mutation methods (append, insert, remove, pop)."
+  },
+  {
+    "chunk_id": "a08f4e392493",
+    "verdict": "drop",
+    "reason": "Bare closing HTML tag with no documentation content."
+  },
+  {
+    "chunk_id": "91f386d969d0",
+    "verdict": "keep",
+    "reason": "Section header for list operations, anchors the following code."
+  },
+  {
+    "chunk_id": "b02c0f5fca98",
+    "verdict": "keep",
+    "reason": "Genuine Jac example of len, concatenation, repetition, and membership tests."
+  },
+  {
+    "chunk_id": "8389d2098369",
+    "verdict": "drop",
+    "reason": "Bare closing HTML tag with no documentation content."
+  },
+  {
+    "chunk_id": "85350b54ac8b",
+    "verdict": "keep",
+    "reason": "Section header for looping through lists, anchors the following code."
+  },
+  {
+    "chunk_id": "8a0ca19699f0",
+    "verdict": "keep",
+    "reason": "Genuine Jac example including the Jac-specific 'for i = 0 while ... with' loop syntax."
+  },
+  {
+    "chunk_id": "17a7ed8a5872",
+    "verdict": "drop",
+    "reason": "Bare closing HTML tag with no documentation content."
+  },
+  {
+    "chunk_id": "d624d86f9488",
+    "verdict": "keep",
+    "reason": "Section header with prose introducing list slicing."
+  },
+  {
+    "chunk_id": "07da6859e796",
+    "verdict": "drop",
+    "reason": "Bare HTML wrapper tag with no documentation content."
+  },
+  {
+    "chunk_id": "e50af7241bd5",
+    "verdict": "keep",
+    "reason": "Genuine Jac example covering slice start, end, and step forms."
+  },
+  {
+    "chunk_id": "381ca35be8bc",
+    "verdict": "drop",
+    "reason": "Bare closing HTML tag with no documentation content."
+  },
+  {
+    "chunk_id": "a88c3dc34974",
+    "verdict": "keep",
+    "reason": "Section header with prose introducing dictionaries."
+  },
+  {
+    "chunk_id": "1fc2a2a86506",
+    "verdict": "drop",
+    "reason": "Bare HTML wrapper tag with no documentation content."
+  },
+  {
+    "chunk_id": "e0cd5ffb400a",
+    "verdict": "keep",
+    "reason": "Genuine Jac example of dictionary creation, access, and mutation."
+  },
+  {
+    "chunk_id": "4f0bb0790905",
+    "verdict": "drop",
+    "reason": "Bare closing HTML tag with no documentation content."
+  },
+  {
+    "chunk_id": "b2262092e87d",
+    "verdict": "keep",
+    "reason": "Section header for dictionary looping, anchors the following code."
+  },
+  {
+    "chunk_id": "f13146b55a20",
+    "verdict": "keep",
+    "reason": "Genuine Jac example of iterating dictionary keys with f-strings."
+  },
+  {
+    "chunk_id": "1bbfe9b31b3b",
+    "verdict": "drop",
+    "reason": "Bare closing HTML tag with no documentation content."
+  },
+  {
+    "chunk_id": "e899df88556e",
+    "verdict": "keep",
+    "reason": "Section header with prose explaining tuple immutability."
+  },
+  {
+    "chunk_id": "1bffb573a0ff",
+    "verdict": "drop",
+    "reason": "Bare HTML wrapper tag with no documentation content."
+  },
+  {
+    "chunk_id": "7b2acf190c61",
+    "verdict": "keep",
+    "reason": "Genuine Jac example of tuple creation, indexing, and unpacking."
+  },
+  {
+    "chunk_id": "80e95a2c8494",
+    "verdict": "drop",
+    "reason": "Bare closing HTML tag with no documentation content."
+  }
+]

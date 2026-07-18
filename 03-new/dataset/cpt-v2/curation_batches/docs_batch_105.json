@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "bb7b08958507",
+    "verdict": "keep",
+    "reason": "Genuine intro to backend-agnostic identity storage selection in jac-scale."
+  },
+  {
+    "chunk_id": "b8678bd239a8",
+    "verdict": "keep",
+    "reason": "Substantive SQLite-vs-MongoDB backend behavior and file/collection locations."
+  },
+  {
+    "chunk_id": "f4e444d8c4c2",
+    "verdict": "keep",
+    "reason": "Real content on the IdentityStorage interface abstraction."
+  },
+  {
+    "chunk_id": "676be20d2f26",
+    "verdict": "keep",
+    "reason": "Concrete jac.toml MongoDB configuration example."
+  },
+  {
+    "chunk_id": "fc2190feb318",
+    "verdict": "keep",
+    "reason": "Env-var alternative for MongoDB config, non-redundant with the toml form."
+  },
+  {
+    "chunk_id": "6264c6fc803f",
+    "verdict": "keep",
+    "reason": "States the SQLite default-fallback behavior."
+  },
+  {
+    "chunk_id": "6f19256bae40",
+    "verdict": "keep",
+    "reason": "Canonical registration endpoint example with full request shape."
+  },
+  {
+    "chunk_id": "e63f98a498f4",
+    "verdict": "drop",
+    "reason": "Orphaned one-line lead-in fragment with no standalone content."
+  },
+  {
+    "chunk_id": "ca1431d6fe8c",
+    "verdict": "keep",
+    "reason": "Registration success response schema."
+  },
+  {
+    "chunk_id": "afb551a8a871",
+    "verdict": "keep",
+    "reason": "Important behavioral note that registration does not issue a token."
+  },
+  {
+    "chunk_id": "1486ec3102b1",
+    "verdict": "drop",
+    "reason": "Bare heading fragment ('Validation rules:') with no content of its own."
+  },
+  {
+    "chunk_id": "d5db9959291f",
+    "verdict": "keep",
+    "reason": "Substantive identity/credential validation rules."
+  },
+  {
+    "chunk_id": "17dc310475a8",
+    "verdict": "keep",
+    "reason": "Explains the optional profile field and its purpose."
+  },
+  {
+    "chunk_id": "325e3b7fd614",
+    "verdict": "keep",
+    "reason": "Concrete profile bounds table with real limits."
+  },
+  {
+    "chunk_id": "06e651b29427",
+    "verdict": "keep",
+    "reason": "Security rationale for the profile key pattern (injection/pollution defenses)."
+  },
+  {
+    "chunk_id": "05add2e23bef",
+    "verdict": "keep",
+    "reason": "Login section intro carrying the any-identity-plus-password semantic."
+  },
+  {
+    "chunk_id": "e36a81b4d7ac",
+    "verdict": "keep",
+    "reason": "Canonical login request example."
+  },
+  {
+    "chunk_id": "627d2b309c4e",
+    "verdict": "drop",
+    "reason": "One-line lead-in fragment; the HTTP 200 detail alone carries negligible signal."
+  },
+  {
+    "chunk_id": "fc343e63f58b",
+    "verdict": "keep",
+    "reason": "Login response schema including token, root_id, and role."
+  },
+  {
+    "chunk_id": "e452a22506d4",
+    "verdict": "keep",
+    "reason": "Short but conveys the email-as-alternate-identity semantic tied to the next example."
+  },
+  {
+    "chunk_id": "e83a5486fa0c",
+    "verdict": "keep",
+    "reason": "Email-login variant example; demonstrates multi-identity login concretely."
+  },
+  {
+    "chunk_id": "2860125f07ed",
+    "verdict": "keep",
+    "reason": "Shows Bearer-token usage against a walker endpoint, connecting auth to walker invocation."
+  },
+  {
+    "chunk_id": "22626eb8de0b",
+    "verdict": "keep",
+    "reason": "Token-refresh section intro with real semantic content."
+  },
+  {
+    "chunk_id": "5f09204c102c",
+    "verdict": "keep",
+    "reason": "Refresh endpoint request example."
+  },
+  {
+    "chunk_id": "f5e10b572d20",
+    "verdict": "keep",
+    "reason": "Useful behavioral detail about Bearer-prefix stripping."
+  },
+  {
+    "chunk_id": "951ca021c68d",
+    "verdict": "drop",
+    "reason": "Content-free 'Returns on success:' fragment."
+  },
+  {
+    "chunk_id": "bc08fe5b5b76",
+    "verdict": "keep",
+    "reason": "Refresh success response schema."
+  },
+  {
+    "chunk_id": "29d1e79ab625",
+    "verdict": "keep",
+    "reason": "Documents the 401 failure mode for refresh."
+  },
+  {
+    "chunk_id": "5fc45914458e",
+    "verdict": "keep",
+    "reason": "Password-update section intro with the current-password requirement."
+  },
+  {
+    "chunk_id": "e5e2c9c145b6",
+    "verdict": "keep",
+    "reason": "Password-update request example."
+  },
+  {
+    "chunk_id": "8410b92f85d2",
+    "verdict": "drop",
+    "reason": "Content-free 'Returns on success:' fragment."
+  },
+  {
+    "chunk_id": "597ae0bd8c5f",
+    "verdict": "keep",
+    "reason": "Password-update success response schema."
+  },
+  {
+    "chunk_id": "66a01cf37909",
+    "verdict": "keep",
+    "reason": "Documents the 400 failure modes for password update."
+  },
+  {
+    "chunk_id": "587f2b7e8f8d",
+    "verdict": "keep",
+    "reason": "Meaningful design note: user_id as primary JWT claim decouples tokens from identity changes."
+  },
+  {
+    "chunk_id": "22161016bdfa",
+    "verdict": "drop",
+    "reason": "One-line lead-in fragment; the toml/env-var fact is fully covered by adjacent chunks."
+  },
+  {
+    "chunk_id": "ace183a4d73b",
+    "verdict": "keep",
+    "reason": "Concrete JWT jac.toml configuration block."
+  },
+  {
+    "chunk_id": "c9896471d511",
+    "verdict": "keep",
+    "reason": "JWT config reference table with env-var/toml mapping and defaults."
+  },
+  {
+    "chunk_id": "5745baf463fc",
+    "verdict": "keep",
+    "reason": "Production security warning about the default JWT secret."
+  },
+  {
+    "chunk_id": "ea1a477ca094",
+    "verdict": "drop",
+    "reason": "Bare heading fragment ('JWT claims:') with no content."
+  },
+  {
+    "chunk_id": "ddfc049df41a",
+    "verdict": "keep",
+    "reason": "JWT claims reference table."
+  },
+  {
+    "chunk_id": "1769232c8253",
+    "verdict": "drop",
+    "reason": "Bare heading fragment ('Current limitations:') with no content."
+  },
+  {
+    "chunk_id": "07209f7fd341",
+    "verdict": "keep",
+    "reason": "Substantive limitations: no revocation or refresh rotation."
+  },
+  {
+    "chunk_id": "203baa9d7a6d",
+    "verdict": "keep",
+    "reason": "Roles section intro stating the three built-in roles exist."
+  },
+  {
+    "chunk_id": "dae022b23977",
+    "verdict": "keep",
+    "reason": "Role definitions table."
+  },
+  {
+    "chunk_id": "e4f2104210df",
+    "verdict": "keep",
+    "reason": "Explains role storage, JWT inclusion, and admin bootstrapping."
+  },
+  {
+    "chunk_id": "ea225de5f995",
+    "verdict": "keep",
+    "reason": "Lead-in carrying the protected-accounts concept for the adjacent list."
+  },
+  {
+    "chunk_id": "f6b51bbc0b09",
+    "verdict": "keep",
+    "reason": "Concrete protected-account list including the fixed bootstrap-admin UUID."
+  },
+  {
+    "chunk_id": "ab4f66bb0f5d",
+    "verdict": "keep",
+    "reason": "Valuable bridge content linking the guest account to root.shared and the OSP public-graph model."
+  },
+  {
+    "chunk_id": "805d798f078e",
+    "verdict": "keep",
+    "reason": "States how roles are managed (admin API / UserManager)."
+  },
+  {
+    "chunk_id": "a3535af0d0ad",
+    "verdict": "keep",
+    "reason": "Concrete admin API example for setting a user role."
+  }
+]

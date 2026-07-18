@@ -6,6 +6,13 @@ sys.path.insert(0, str(Path(__file__).parent))
 from run_leg_cf_check import run_leg_cf_check
 from run_cf_check import run_model
 
+# Anchor the local base model at the repo root (same convention as
+# run_cf_check.ROOT) so the two real-load integration tests below work
+# regardless of pytest's cwd -- a bare "models/qwen-q4" resolves against cwd,
+# and when that misses, mlx_lm falls back to treating it as a HF repo id
+# (HTTP 404 in offline/headless runs).
+BASE_MODEL = Path(__file__).resolve().parents[3] / "models" / "qwen-q4"
+
 
 def test_run_leg_cf_check_counts_passes():
     fake_results = [{"id": f"t{i}", "pass": i < 16} for i in range(16)]  # all pass
@@ -77,7 +84,7 @@ def test_run_model_load_accepts_directory_shape(tmp_path):
     save_file({}, str(adapter_dir / "adapters.safetensors"))
 
     from mlx_lm import load
-    model, tok = load("models/qwen-q4", adapter_path=str(adapter_dir))
+    model, tok = load(str(BASE_MODEL), adapter_path=str(adapter_dir))
     assert model is not None
     assert tok is not None
 
@@ -99,4 +106,4 @@ def test_run_model_load_rejects_file_shape(tmp_path):
     from mlx_lm import load
     import pytest
     with pytest.raises(NotADirectoryError):
-        load("models/qwen-q4", adapter_path=str(adapter_file))
+        load(str(BASE_MODEL), adapter_path=str(adapter_file))

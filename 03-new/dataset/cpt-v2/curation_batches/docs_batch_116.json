@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "727130036a63",
+    "verdict": "keep",
+    "reason": "Partial overlap (0.643) is inconclusive and minikube setup steps are legitimate deploy-doc content, so retain rather than risk dropping unique material."
+  },
+  {
+    "chunk_id": "268bfedb0218",
+    "verdict": "drop",
+    "reason": "Containment 1.0 means this one-liner is fully subsumed by ef5175282d02, making this the strictly less complete copy."
+  },
+  {
+    "chunk_id": "e9766e14ecb5",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "a5d5ef7f7060",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose."
+  },
+  {
+    "chunk_id": "a431c359f132",
+    "verdict": "keep",
+    "reason": "Concrete troubleshooting commands including the Jac-specific ingress port convention."
+  },
+  {
+    "chunk_id": "ec392c6da56a",
+    "verdict": "keep",
+    "reason": "Partial containment (0.778) leaves unique content and the pair cannot be confirmed redundant, so keep per instructions."
+  },
+  {
+    "chunk_id": "84111ad5930d",
+    "verdict": "keep",
+    "reason": "Explains jac-scale's bootstrap initContainer behavior, which is product-specific prose."
+  },
+  {
+    "chunk_id": "dc1bd506ebd5",
+    "verdict": "drop",
+    "reason": "Containment 1.0 shows this bash snippet is a strict subset of 617e21984a39, so this is the worse copy."
+  },
+  {
+    "chunk_id": "92b18afac3fa",
+    "verdict": "keep",
+    "reason": "Detailed, jac-scale-specific troubleshooting for PVC, permissions, and image-pull failures."
+  },
+  {
+    "chunk_id": "5fee20265b34",
+    "verdict": "keep",
+    "reason": "Debugging commands in context of the Jac deployment workflow, non-duplicated."
+  },
+  {
+    "chunk_id": "4c4ae4034081",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "6aaf02d26681",
+    "verdict": "keep",
+    "reason": "Substantive introduction of the jac-scale sandbox system and its use cases."
+  },
+  {
+    "chunk_id": "0f7f85e3ab75",
+    "verdict": "keep",
+    "reason": "Explains the SandboxEnvironment factory-pattern architecture, genuine product prose."
+  },
+  {
+    "chunk_id": "a1ebfaba802c",
+    "verdict": "keep",
+    "reason": "Provider comparison table with real informational content."
+  },
+  {
+    "chunk_id": "d0512fa2e5cf",
+    "verdict": "keep",
+    "reason": "Short but contentful lead-in tying sandbox configuration to jac.toml."
+  },
+  {
+    "chunk_id": "bd02e8920a78",
+    "verdict": "keep",
+    "reason": "Complete annotated jac.toml sandbox configuration example, core plugin reference material."
+  },
+  {
+    "chunk_id": "a7dd66361ccb",
+    "verdict": "keep",
+    "reason": "Full option reference table with types, defaults, and descriptions."
+  },
+  {
+    "chunk_id": "59fe9b4a520c",
+    "verdict": "drop",
+    "reason": "One-line bold lead-in fragment with no standalone content."
+  },
+  {
+    "chunk_id": "34cf04e2fbe5",
+    "verdict": "keep",
+    "reason": "Environment-variable override table with real reference content."
+  },
+  {
+    "chunk_id": "7f361dd82816",
+    "verdict": "keep",
+    "reason": "States the configuration precedence rule, a substantive one-line fact."
+  },
+  {
+    "chunk_id": "1c38225ad14c",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "def1e7826c1f",
+    "verdict": "keep",
+    "reason": "Lead-in naming the SandboxFactory API, contextualizing the code examples that follow."
+  },
+  {
+    "chunk_id": "91499a9f9380",
+    "verdict": "keep",
+    "reason": "Genuine Jac code showing SandboxFactory import and instantiation patterns."
+  },
+  {
+    "chunk_id": "8bb8d29e3118",
+    "verdict": "keep",
+    "reason": "Jac code example for sandbox creation with the result-handling pattern."
+  },
+  {
+    "chunk_id": "ae7d70849fd2",
+    "verdict": "keep",
+    "reason": "Jac code covering the full sandbox lifecycle API surface."
+  },
+  {
+    "chunk_id": "97f24097caef",
+    "verdict": "keep",
+    "reason": "Short but contentful lead-in describing the file-operations capability."
+  },
+  {
+    "chunk_id": "ac0c1836a95e",
+    "verdict": "keep",
+    "reason": "Jac code example for the sandbox file API including binary/base64 handling."
+  },
+  {
+    "chunk_id": "535f3c8a6af0",
+    "verdict": "keep",
+    "reason": "Documents path-security validation behavior, substantive product detail."
+  },
+  {
+    "chunk_id": "b2a939071ba3",
+    "verdict": "keep",
+    "reason": "Documents the excluded-directories behavior of file listing, a real product fact."
+  },
+  {
+    "chunk_id": "f395a29b737b",
+    "verdict": "keep",
+    "reason": "Jac code example for exec_command with timeout parameter."
+  },
+  {
+    "chunk_id": "b9b9aac21cab",
+    "verdict": "keep",
+    "reason": "Jac code example for log retrieval including the streaming offset semantics."
+  },
+  {
+    "chunk_id": "813b189a7491",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "6f145b8fcdc5",
+    "verdict": "keep",
+    "reason": "Sandbox state-machine reference table with real content."
+  },
+  {
+    "chunk_id": "925e5131300e",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "d99d8b8bcd38",
+    "verdict": "keep",
+    "reason": "Introduces the local provider's subprocess model, genuine prose."
+  },
+  {
+    "chunk_id": "ee143195406c",
+    "verdict": "keep",
+    "reason": "Minimal but valid jac.toml example enabling the local provider."
+  },
+  {
+    "chunk_id": "62e87b998b34",
+    "verdict": "drop",
+    "reason": "Bold lead-in fragment ('How it works:') with no content of its own."
+  },
+  {
+    "chunk_id": "4fa41890b114",
+    "verdict": "keep",
+    "reason": "Documents concrete local-provider mechanics: port pool, jac start invocation, readiness check."
+  },
+  {
+    "chunk_id": "07b362078b48",
+    "verdict": "drop",
+    "reason": "Bold lead-in fragment ('Environment sourcing:') with no content of its own."
+  },
+  {
+    "chunk_id": "be8c3a07cf85",
+    "verdict": "keep",
+    "reason": "Documents the global and project env-file sourcing paths, a real product fact."
+  },
+  {
+    "chunk_id": "04eb77a9a82d",
+    "verdict": "drop",
+    "reason": "Bold lead-in fragment ('Limitations:') with no content of its own."
+  },
+  {
+    "chunk_id": "dbc626fb35a1",
+    "verdict": "keep",
+    "reason": "Substantive list of local-provider limitations including the port-pool cap."
+  },
+  {
+    "chunk_id": "4de2ea206c58",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "8b2aac15c6cf",
+    "verdict": "keep",
+    "reason": "Introduces the Docker provider's isolation model, genuine prose."
+  },
+  {
+    "chunk_id": "4822b18512d0",
+    "verdict": "keep",
+    "reason": "Valid jac.toml example configuring the Docker provider with limits."
+  },
+  {
+    "chunk_id": "f2286f631ce0",
+    "verdict": "drop",
+    "reason": "Bold lead-in fragment ('How it works:') with no content of its own."
+  },
+  {
+    "chunk_id": "9915143cb5b1",
+    "verdict": "keep",
+    "reason": "Documents concrete Docker-provider mechanics: tarball injection, jac install/start, health polling."
+  },
+  {
+    "chunk_id": "cca47d0a8ee0",
+    "verdict": "drop",
+    "reason": "Bold lead-in fragment ('Container labels:') with no content of its own."
+  },
+  {
+    "chunk_id": "4bc8c9639daf",
+    "verdict": "drop",
+    "reason": "Containment 1.0 shows this label table is a strict subset of 9d7e5346273c, so this is the worse copy."
+  },
+  {
+    "chunk_id": "f20db7124401",
+    "verdict": "keep",
+    "reason": "States the Docker daemon requirement, a substantive one-line fact."
+  }
+]

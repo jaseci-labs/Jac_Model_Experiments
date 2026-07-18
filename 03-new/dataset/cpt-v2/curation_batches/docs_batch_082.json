@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "6a708eebaeef",
+    "verdict": "drop",
+    "reason": "Bare label line with no prose or technical content, a chunking artifact."
+  },
+  {
+    "chunk_id": "6bbfc718abbb",
+    "verdict": "keep",
+    "reason": "Concrete jac check success output JSON showing real CLI result shape."
+  },
+  {
+    "chunk_id": "61af3ce39dd6",
+    "verdict": "drop",
+    "reason": "Bare label line with no prose or technical content, a chunking artifact."
+  },
+  {
+    "chunk_id": "7fbb3943e2c9",
+    "verdict": "keep",
+    "reason": "Concrete failure-case output JSON showing exit code and stderr conventions."
+  },
+  {
+    "chunk_id": "9d0a0a0b4b99",
+    "verdict": "drop",
+    "reason": "Bare label line with no prose or technical content, a chunking artifact."
+  },
+  {
+    "chunk_id": "65d21bcaba0c",
+    "verdict": "keep",
+    "reason": "Concrete usage-error output JSON showing exit code 2 behavior."
+  },
+  {
+    "chunk_id": "7d71d1f64585",
+    "verdict": "drop",
+    "reason": "Orphaned admonition marker with no content, pure markup fragment."
+  },
+  {
+    "chunk_id": "55bdbe79c2bc",
+    "verdict": "keep",
+    "reason": "Documents jac CLI exit-code conventions, genuine reference content."
+  },
+  {
+    "chunk_id": "4939bed0ada3",
+    "verdict": "keep",
+    "reason": "Explains error-reporting semantics of the MCP tool output."
+  },
+  {
+    "chunk_id": "f991223e6d76",
+    "verdict": "keep",
+    "reason": "Clarifies when the error field is used, genuine doc content."
+  },
+  {
+    "chunk_id": "398f139284ed",
+    "verdict": "keep",
+    "reason": "Guidance on interpreting stdout/stderr together, genuine doc content."
+  },
+  {
+    "chunk_id": "8be4f6c7d6a0",
+    "verdict": "keep",
+    "reason": "Documents the command field semantics including trailing-space caveat."
+  },
+  {
+    "chunk_id": "fbba1021b171",
+    "verdict": "keep",
+    "reason": "Section intro explaining what MCP prompt templates are and how they load context."
+  },
+  {
+    "chunk_id": "9aff22596cd5",
+    "verdict": "keep",
+    "reason": "Documents the write_module prompt and its .impl.jac option."
+  },
+  {
+    "chunk_id": "de84b93ec0a5",
+    "verdict": "keep",
+    "reason": "Argument table for write_module, genuine reference content."
+  },
+  {
+    "chunk_id": "50c881f49e9a",
+    "verdict": "keep",
+    "reason": "Documents the write_impl prompt for .impl.jac generation."
+  },
+  {
+    "chunk_id": "c3dd10355b84",
+    "verdict": "keep",
+    "reason": "Argument table for write_impl, genuine reference content."
+  },
+  {
+    "chunk_id": "050423b38d89",
+    "verdict": "keep",
+    "reason": "Documents the write_walker prompt, ties MCP tooling to walker concepts."
+  },
+  {
+    "chunk_id": "55a736302609",
+    "verdict": "keep",
+    "reason": "Argument table for write_walker including node_types, genuine reference content."
+  },
+  {
+    "chunk_id": "284081d2b913",
+    "verdict": "keep",
+    "reason": "Documents the write_node prompt referencing has declarations."
+  },
+  {
+    "chunk_id": "b5205969228a",
+    "verdict": "keep",
+    "reason": "Argument table for write_node, genuine reference content."
+  },
+  {
+    "chunk_id": "d1b2119e5560",
+    "verdict": "keep",
+    "reason": "Documents the write_test prompt for test block generation."
+  },
+  {
+    "chunk_id": "4e1a8288837c",
+    "verdict": "keep",
+    "reason": "Argument table for write_test, genuine reference content."
+  },
+  {
+    "chunk_id": "3a1a87a25f87",
+    "verdict": "keep",
+    "reason": "Documents the write_ability prompt for ability generation."
+  },
+  {
+    "chunk_id": "9993e2af0886",
+    "verdict": "keep",
+    "reason": "Argument table for write_ability, genuine reference content."
+  },
+  {
+    "chunk_id": "006069a94481",
+    "verdict": "keep",
+    "reason": "Documents the debug_error prompt for compilation errors."
+  },
+  {
+    "chunk_id": "43410dee7ea7",
+    "verdict": "keep",
+    "reason": "Argument table for debug_error, genuine reference content."
+  },
+  {
+    "chunk_id": "1332e5accf6b",
+    "verdict": "keep",
+    "reason": "Documents the fix_type_error prompt, genuine reference content."
+  },
+  {
+    "chunk_id": "d8669a13192d",
+    "verdict": "keep",
+    "reason": "Argument table for fix_type_error, genuine reference content."
+  },
+  {
+    "chunk_id": "ba3b0ab15b0a",
+    "verdict": "keep",
+    "reason": "Documents the migrate_python prompt for Python-to-Jac conversion."
+  },
+  {
+    "chunk_id": "cdd7ebeb5bae",
+    "verdict": "keep",
+    "reason": "Argument table for migrate_python, genuine reference content."
+  },
+  {
+    "chunk_id": "e043cf4c2b83",
+    "verdict": "drop",
+    "reason": "Bare section heading with no content, a chunking artifact."
+  },
+  {
+    "chunk_id": "a15f0f8c34c9",
+    "verdict": "keep",
+    "reason": "Troubleshooting guidance for jac binary PATH issues, genuine content."
+  },
+  {
+    "chunk_id": "7833a9fb9c6b",
+    "verdict": "keep",
+    "reason": "Concrete config JSON for pointing a client at the jac binary path."
+  },
+  {
+    "chunk_id": "4a0afe8a6b4d",
+    "verdict": "keep",
+    "reason": "Short but actionable tip completing the PATH troubleshooting entry."
+  },
+  {
+    "chunk_id": "8634a889b485",
+    "verdict": "keep",
+    "reason": "Troubleshooting for MCP server tool discovery, genuine content."
+  },
+  {
+    "chunk_id": "b2c8addf2edc",
+    "verdict": "keep",
+    "reason": "Documents compiler bridge timeout and input size limits, genuine content."
+  },
+  {
+    "chunk_id": "a63c11e9d8ba",
+    "verdict": "keep",
+    "reason": "Explains bundled documentation resources and upgrade fix, genuine content."
+  },
+  {
+    "chunk_id": "a7c8e1e3573f",
+    "verdict": "drop",
+    "reason": "Easter-egg filler line with no technical content."
+  },
+  {
+    "chunk_id": "52f189329615",
+    "verdict": "drop",
+    "reason": "Raw HTML spacer div, pure page-layout boilerplate with zero content."
+  },
+  {
+    "chunk_id": "8fadb75bffb8",
+    "verdict": "keep",
+    "reason": "Explains what jac ninja is and the single-binary editor design."
+  },
+  {
+    "chunk_id": "1f7c187b32b6",
+    "verdict": "keep",
+    "reason": "Minimal but canonical jac ninja invocation example."
+  },
+  {
+    "chunk_id": "d59e3d98362f",
+    "verdict": "keep",
+    "reason": "Explains the ninja architecture and jac lsp integration, genuine content."
+  },
+  {
+    "chunk_id": "760d0142b0d8",
+    "verdict": "keep",
+    "reason": "Substantive note tying editor features to the single jac executable."
+  },
+  {
+    "chunk_id": "f2e73b1bb5d9",
+    "verdict": "drop",
+    "reason": "Horizontal rule only, pure markup with no content."
+  },
+  {
+    "chunk_id": "58881e59127f",
+    "verdict": "keep",
+    "reason": "Documents binary vs pip install requirements for jac ninja."
+  },
+  {
+    "chunk_id": "65ed5a562fe5",
+    "verdict": "keep",
+    "reason": "Actual error message users see under pip installs, useful training signal."
+  },
+  {
+    "chunk_id": "1c70ab12f6b0",
+    "verdict": "keep",
+    "reason": "Install pointer plus IDE alternative via the jac lsp server."
+  },
+  {
+    "chunk_id": "b6d59fb5eb36",
+    "verdict": "drop",
+    "reason": "Horizontal rule only, pure markup with no content."
+  },
+  {
+    "chunk_id": "7b9d896c4443",
+    "verdict": "keep",
+    "reason": "Command table documenting jac ninja launch modes, genuine reference content."
+  }
+]

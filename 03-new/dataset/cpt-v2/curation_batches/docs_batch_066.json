@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "475b451562dc",
+    "verdict": "keep",
+    "reason": "Concrete nacompile invocation with real output showing binary stats and execution, useful grounding for the native pathway."
+  },
+  {
+    "chunk_id": "75b25c301ef2",
+    "verdict": "keep",
+    "reason": "Substantive prose explaining the self-contained linker-free compilation pipeline, a distinctive Jac feature."
+  },
+  {
+    "chunk_id": "e9689af098d5",
+    "verdict": "keep",
+    "reason": "Documents auto-promotion rules and which features exclude native compilation, genuine semantic content."
+  },
+  {
+    "chunk_id": "04d6cdd281c4",
+    "verdict": "keep",
+    "reason": "Pipeline diagram encoding the parse-to-binary stages, complements the prose description."
+  },
+  {
+    "chunk_id": "3fc503ffffca",
+    "verdict": "keep",
+    "reason": "Detailed four-stage pipeline description naming NaIRGenPass, llvmlite MCJIT, and the built-in linker."
+  },
+  {
+    "chunk_id": "9d1a0320a440",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "3a8ff882f977",
+    "verdict": "keep",
+    "reason": "Explains the --shared inverse-FFI feature and per-platform library outputs, core native-pathway documentation."
+  },
+  {
+    "chunk_id": "a524d8e5ac21",
+    "verdict": "keep",
+    "reason": "Concrete --shared and --target command examples mapping to .so/.dylib/.dll outputs."
+  },
+  {
+    "chunk_id": "3969f12689f3",
+    "verdict": "keep",
+    "reason": "Explains :pub as a curated C-ABI export surface, key semantic rule for shared libraries."
+  },
+  {
+    "chunk_id": "0b7f6e37276f",
+    "verdict": "keep",
+    "reason": "Full worked .na.jac example demonstrating glob:pub, def:pub, obj:pub, and internal helpers."
+  },
+  {
+    "chunk_id": "8389d3aa6834",
+    "verdict": "keep",
+    "reason": "Documents re-export behavior of :pub symbols across imported native modules, non-obvious rule."
+  },
+  {
+    "chunk_id": "bfb946afe6d5",
+    "verdict": "keep",
+    "reason": "Explains C symbol naming and scalar ABI mapping, introduces the C-caller example."
+  },
+  {
+    "chunk_id": "34dc990a29be",
+    "verdict": "keep",
+    "reason": "Working C consumer example with gcc link flags showing the exported ABI in use."
+  },
+  {
+    "chunk_id": "a033c8ebc1a9",
+    "verdict": "drop",
+    "reason": "Six-word transitional fragment with no standalone content, nav-glue between examples."
+  },
+  {
+    "chunk_id": "265f638d7090",
+    "verdict": "keep",
+    "reason": "Its flagged duplicate ff4e83d4781f is not present in this batch to compare or drop, and this ctypes example is genuine usable content, so it stays."
+  },
+  {
+    "chunk_id": "41bf905ac685",
+    "verdict": "keep",
+    "reason": "Explains opaque-handle semantics and refcounted lifetimes across the C ABI, essential interop detail."
+  },
+  {
+    "chunk_id": "a6aace01dc87",
+    "verdict": "keep",
+    "reason": "Signatures of the exported jac_retain/jac_release lifetime helpers referenced by the surrounding prose."
+  },
+  {
+    "chunk_id": "45044ac4401c",
+    "verdict": "keep",
+    "reason": "Short ctypes example demonstrating handle passing and release, completes the lifetime section."
+  },
+  {
+    "chunk_id": "de25e9b911f0",
+    "verdict": "keep",
+    "reason": "Documents automatic global initialization via platform init mechanisms, distinctive design detail."
+  },
+  {
+    "chunk_id": "c30efeb40f15",
+    "verdict": "keep",
+    "reason": "Per-platform binary-format table with concrete ELF/Mach-O/PE details, dense factual content."
+  },
+  {
+    "chunk_id": "de7eb3ae3eb2",
+    "verdict": "keep",
+    "reason": "States export-eligibility constraints and the method-wrapping workaround, non-obvious rule."
+  },
+  {
+    "chunk_id": "2e25ee5619d7",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "05e8ca3178f7",
+    "verdict": "drop",
+    "reason": "Lone section heading with no prose, nav-only fragment."
+  },
+  {
+    "chunk_id": "dd38699bdcb7",
+    "verdict": "keep",
+    "reason": "Introduces the Jac-to-LLVM type mapping table with a contentful sentence."
+  },
+  {
+    "chunk_id": "b842355b6991",
+    "verdict": "keep",
+    "reason": "Primitive type mapping table (int/i64, float/f64, str/i8*), core native type-system facts."
+  },
+  {
+    "chunk_id": "121a85833d7f",
+    "verdict": "keep",
+    "reason": "Introduces fixed-width types for C interop, contentful lead-in to the table."
+  },
+  {
+    "chunk_id": "493dbba83cea",
+    "verdict": "keep",
+    "reason": "Fixed-width type table (i8-u64, f32/f64, c_void), factual interop reference."
+  },
+  {
+    "chunk_id": "2b3123085426",
+    "verdict": "keep",
+    "reason": "Introduces collection internal representation as LLVM structs, contentful lead-in."
+  },
+  {
+    "chunk_id": "dd1f81d4d315",
+    "verdict": "keep",
+    "reason": "Internal struct layouts for list/dict/set/tuple, unique implementation-level facts."
+  },
+  {
+    "chunk_id": "0db8fd6bfdd9",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "cd4722340d52",
+    "verdict": "drop",
+    "reason": "Lone section heading with no prose, nav-only fragment."
+  },
+  {
+    "chunk_id": "100d5d9057fb",
+    "verdict": "keep",
+    "reason": "Data-type feature table with Jac syntax examples including typed-base enums, good syntax signal."
+  },
+  {
+    "chunk_id": "e6762341675b",
+    "verdict": "keep",
+    "reason": "Control-flow feature table with Jac curly-brace syntax examples, useful syntax grounding."
+  },
+  {
+    "chunk_id": "3865e9be72e5",
+    "verdict": "keep",
+    "reason": "Function feature table covering def, init, postinit, and defaults in Jac syntax."
+  },
+  {
+    "chunk_id": "af3ba5c4db0f",
+    "verdict": "keep",
+    "reason": "Operator reference table, compact factual coverage of supported operators."
+  },
+  {
+    "chunk_id": "11e1d2954a75",
+    "verdict": "keep",
+    "reason": "String operation table including f-string and raw f-string syntax."
+  },
+  {
+    "chunk_id": "177e5c9468de",
+    "verdict": "keep",
+    "reason": "List operation table with method and comprehension examples."
+  },
+  {
+    "chunk_id": "f026142427b0",
+    "verdict": "keep",
+    "reason": "Dict operation table with method and comprehension examples."
+  },
+  {
+    "chunk_id": "6b6b023cb5f8",
+    "verdict": "keep",
+    "reason": "Set operation table including operator forms of union/intersection/difference."
+  },
+  {
+    "chunk_id": "9c84732015b2",
+    "verdict": "keep",
+    "reason": "OOP feature table covering obj/has syntax, inheritance, and vtable dispatch."
+  },
+  {
+    "chunk_id": "94fe7552245a",
+    "verdict": "keep",
+    "reason": "Exception-handling feature table with Jac brace-style except syntax."
+  },
+  {
+    "chunk_id": "7010193a893b",
+    "verdict": "keep",
+    "reason": "Enumerates the supported exception types in native compilation, standalone factual list."
+  },
+  {
+    "chunk_id": "9579b212a4d9",
+    "verdict": "keep",
+    "reason": "File I/O and context-manager table noting CPython-congruent FileNotFoundError behavior."
+  },
+  {
+    "chunk_id": "cfaedd87913b",
+    "verdict": "keep",
+    "reason": "Builtin-function table documenting which builtins are natively supported and their caveats."
+  },
+  {
+    "chunk_id": "19d1085a8d81",
+    "verdict": "keep",
+    "reason": "Explains lazy-iterator semantics and the next() limitation, substantive behavioral detail beyond the table."
+  },
+  {
+    "chunk_id": "c18cc325bec6",
+    "verdict": "keep",
+    "reason": "States the Python-congruent stdlib design goal for the native pathway, key framing prose."
+  },
+  {
+    "chunk_id": "d9dcba693c7c",
+    "verdict": "keep",
+    "reason": "Module support-status table with lowering targets including MT19937-faithful random."
+  },
+  {
+    "chunk_id": "591f18b8cef5",
+    "verdict": "keep",
+    "reason": "Documents fail-loud compile-time rejection of unlowered imports, important behavioral guarantee."
+  },
+  {
+    "chunk_id": "19b6a65d897d",
+    "verdict": "keep",
+    "reason": "Explains libm lowering and ULP-level CPython congruence for math."
+  },
+  {
+    "chunk_id": "c21f255649c9",
+    "verdict": "keep",
+    "reason": "Complete grouped listing of supported math module members, factual reference content."
+  }
+]

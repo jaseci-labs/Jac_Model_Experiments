@@ -1,0 +1,215 @@
+[
+  {
+    "chunk_id": "33b7a4991330",
+    "verdict": "upweight",
+    "reason": "Core walker mechanics (entry abilities, here, ++> edge creation, report) with contrastive good/bad examples valuable for domain adaptation.",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "25ea0b3dfa5a",
+    "verdict": "keep",
+    "reason": "Short but content-bearing connective prose linking the walker pattern to def:pub functions."
+  },
+  {
+    "chunk_id": "49d90b070d79",
+    "verdict": "keep",
+    "reason": "Genuine Jac endpoint documentation showing typed returns vs manual dicts, including jid usage."
+  },
+  {
+    "chunk_id": "776f237a64e4",
+    "verdict": "upweight",
+    "reason": "Demonstrates the walker traversal lifecycle (visit [-->], entry/exit abilities, state accumulation across nodes) which is core OSP fundamentals.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "997099069ba8",
+    "verdict": "upweight",
+    "reason": "Covers root spawn mechanics and the reports result structure, core spawn/report semantics.",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "90b9669dfd5e",
+    "verdict": "keep",
+    "reason": "Genuine prose introducing the jac mcp server and its purpose."
+  },
+  {
+    "chunk_id": "8cf6978d9936",
+    "verdict": "keep",
+    "reason": "Substantive installation notes with real facts about transports and the deprecated jac-mcp plugin."
+  },
+  {
+    "chunk_id": "c8bc85400b60",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose or code."
+  },
+  {
+    "chunk_id": "0a41a3813e20",
+    "verdict": "keep",
+    "reason": "Documents the jac mcp start command, genuine tool usage content."
+  },
+  {
+    "chunk_id": "8a3578d1925a",
+    "verdict": "keep",
+    "reason": "Content-bearing sentence explaining the default stdio transport."
+  },
+  {
+    "chunk_id": "cad218c5eb71",
+    "verdict": "keep",
+    "reason": "Documents the jac mcp --inspect command."
+  },
+  {
+    "chunk_id": "9f02f7af23dc",
+    "verdict": "keep",
+    "reason": "Explains what --inspect outputs, complements the preceding command chunk."
+  },
+  {
+    "chunk_id": "301d932f587c",
+    "verdict": "keep",
+    "reason": "Genuine prose describing the client-connection step."
+  },
+  {
+    "chunk_id": "84e0af361535",
+    "verdict": "drop",
+    "reason": "Nav-only HTML details/summary wrapper with no documentation content."
+  },
+  {
+    "chunk_id": "365e83e441fb",
+    "verdict": "keep",
+    "reason": "Documents the Claude Desktop config file paths, real integration content."
+  },
+  {
+    "chunk_id": "9d5ee1cf035d",
+    "verdict": "keep",
+    "reason": "Canonical jac MCP config snippet; keep one copy and collapse its exact-duplicate occurrences (flagged self-containment 1.0), with the worse copy 5a62d8bd1c3d dropped elsewhere."
+  },
+  {
+    "chunk_id": "8a2a09bd998f",
+    "verdict": "keep",
+    "reason": "Content-bearing instruction about restarting Claude Desktop and finding the tool picker."
+  },
+  {
+    "chunk_id": "6a2cd75ad947",
+    "verdict": "drop",
+    "reason": "Pure closing </details> HTML tag repeated eight times, boilerplate with zero training value."
+  },
+  {
+    "chunk_id": "4f6de3752296",
+    "verdict": "drop",
+    "reason": "Nav-only HTML details/summary wrapper with no documentation content."
+  },
+  {
+    "chunk_id": "d498b2b006ff",
+    "verdict": "keep",
+    "reason": "Names the .mcp.json file for Claude Code, content-bearing context for the config snippet."
+  },
+  {
+    "chunk_id": "4fa32db4b1ee",
+    "verdict": "keep",
+    "reason": "Distinct Claude Code config variant including the type stdio field, not redundant with 9d5ee1cf035d."
+  },
+  {
+    "chunk_id": "ca37b9565817",
+    "verdict": "keep",
+    "reason": "Connective prose introducing the interactive alternative command."
+  },
+  {
+    "chunk_id": "e4cdff0284f1",
+    "verdict": "keep",
+    "reason": "Documents the claude mcp add command for registering the server."
+  },
+  {
+    "chunk_id": "23a1486f2309",
+    "verdict": "drop",
+    "reason": "Nav-only HTML details/summary wrapper with no documentation content."
+  },
+  {
+    "chunk_id": "73418d826aee",
+    "verdict": "keep",
+    "reason": "Documents the Cursor config file location."
+  },
+  {
+    "chunk_id": "00d7a7908df0",
+    "verdict": "keep",
+    "reason": "Content-bearing verification step for the Cursor integration."
+  },
+  {
+    "chunk_id": "e216592086f9",
+    "verdict": "drop",
+    "reason": "Nav-only HTML details/summary wrapper with no documentation content."
+  },
+  {
+    "chunk_id": "9e153f61b22d",
+    "verdict": "keep",
+    "reason": "Documents the Continue config file location."
+  },
+  {
+    "chunk_id": "1ba5bf73f0f7",
+    "verdict": "keep",
+    "reason": "Distinct Continue config shape (array of servers), not redundant with the other JSON snippets."
+  },
+  {
+    "chunk_id": "18dd67877b63",
+    "verdict": "drop",
+    "reason": "Nav-only HTML details/summary wrapper with no documentation content."
+  },
+  {
+    "chunk_id": "105497fcb3c0",
+    "verdict": "keep",
+    "reason": "Names the VS Code settings.json target for the config."
+  },
+  {
+    "chunk_id": "f3ec169f6343",
+    "verdict": "keep",
+    "reason": "Distinct VS Code mcp.servers config shape, not redundant with the other snippets."
+  },
+  {
+    "chunk_id": "9c0ee168383c",
+    "verdict": "drop",
+    "reason": "Nav-only HTML details/summary wrapper with no documentation content."
+  },
+  {
+    "chunk_id": "2b3656c99655",
+    "verdict": "keep",
+    "reason": "Documents the Windsurf config file location."
+  },
+  {
+    "chunk_id": "0c40f0f72d97",
+    "verdict": "drop",
+    "reason": "Nav-only HTML details/summary wrapper with no documentation content."
+  },
+  {
+    "chunk_id": "8d54427c8c91",
+    "verdict": "keep",
+    "reason": "Connective prose introducing the global Codex registration command."
+  },
+  {
+    "chunk_id": "3bdf0e55c45c",
+    "verdict": "keep",
+    "reason": "Documents the codex mcp add command."
+  },
+  {
+    "chunk_id": "351a7b8b4dde",
+    "verdict": "keep",
+    "reason": "Names the project-local Codex config file, content-bearing context."
+  },
+  {
+    "chunk_id": "611fa74cbd86",
+    "verdict": "keep",
+    "reason": "Distinct TOML config format for Codex, not redundant with the JSON snippets."
+  },
+  {
+    "chunk_id": "fb94da6e5b5a",
+    "verdict": "drop",
+    "reason": "Nav-only HTML details/summary wrapper with no documentation content."
+  },
+  {
+    "chunk_id": "2b714c386cec",
+    "verdict": "keep",
+    "reason": "Documents the Opencode config file location."
+  },
+  {
+    "chunk_id": "414faa5e875f",
+    "verdict": "keep",
+    "reason": "Distinct Opencode config shape with type local, not redundant with the other snippets."
+  }
+]

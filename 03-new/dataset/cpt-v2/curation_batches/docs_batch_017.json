@@ -1,0 +1,253 @@
+[
+ {
+  "chunk_id": "6dc2b2cb4970",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (Bug Fixes) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "921deb9aae54",
+  "verdict": "drop",
+  "reason": "Version-heading-only stub with no prose content."
+ },
+ {
+  "chunk_id": "9828e6504230",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (New Features) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "2db48450debe",
+  "verdict": "drop",
+  "reason": "Version-heading-only stub with no prose content."
+ },
+ {
+  "chunk_id": "3eda03492750",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (New Features) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "ceb08b546bc3",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (Bug Fixes) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "ad19563e63bd",
+  "verdict": "drop",
+  "reason": "Version-heading-only stub with no prose content."
+ },
+ {
+  "chunk_id": "17323501e82b",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (Breaking Changes) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "f7b66d94272b",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (New Features) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "f494817b13dd",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (Bug Fixes) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "0720ef28ce24",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (Refactors) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "91eb8829ab8c",
+  "verdict": "drop",
+  "reason": "Version-heading-only stub with no prose content."
+ },
+ {
+  "chunk_id": "60fdde833972",
+  "verdict": "drop",
+  "reason": "Near-duplicate of 17323501e82b (0.969 containment): the byLLM breaking-change note verbatim, while 17323501e82b is the more complete copy with an additional breaking change."
+ },
+ {
+  "chunk_id": "a593da022b54",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (New Features) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "f76357265fc5",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (Bug Fixes) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "2a3a447c9d6a",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (Refactors) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "11322c9fa32e",
+  "verdict": "drop",
+  "reason": "Version-heading-only stub with no prose content."
+ },
+ {
+  "chunk_id": "0cf87047982a",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (Breaking Changes) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "3acec3212252",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (New Features) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "319db55668fd",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (Bug Fixes) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "3f6778f61570",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (Refactors) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "acdd7bc2dced",
+  "verdict": "drop",
+  "reason": "Version-heading-only stub with no prose content."
+ },
+ {
+  "chunk_id": "0b0ab645ce86",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (New Features) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "702a0946e54e",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (Bug Fixes) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "8d2b650d69b4",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (Refactors) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "6c6871a6e3e7",
+  "verdict": "drop",
+  "reason": "Version-heading-only stub with no prose content."
+ },
+ {
+  "chunk_id": "6c1041091287",
+  "verdict": "upweight",
+  "reason": "Documents current connect-operator (++>/<++>) return semantics and node/edge connection behavior -- core OSP graph mechanics, and a breaking change stale training data would get wrong.",
+  "weight": 2.5
+ },
+ {
+  "chunk_id": "972fae5993e5",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (New Features) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "bf586edf403f",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (Bug Fixes) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "be83faa386a8",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (Refactors) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "a7c6f9f8e071",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (Documentation) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "93399c8e7f0b",
+  "verdict": "drop",
+  "reason": "Version-heading-only stub with no prose content."
+ },
+ {
+  "chunk_id": "ef5f2187f46f",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (Breaking Changes) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "1f94c132496f",
+  "verdict": "drop",
+  "reason": "Version-heading-only stub with no prose content."
+ },
+ {
+  "chunk_id": "c2c42de785ec",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (New Features) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "f16f091494ac",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (Bug Fixes) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "88b8995b4eb5",
+  "verdict": "drop",
+  "reason": "Version-heading-only stub with no prose content."
+ },
+ {
+  "chunk_id": "4a9f6aeeba3a",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (New Features) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "90db30053d9b",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (Bug Fixes) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "cf8b8c42bacb",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (Documentation) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "8c1f3ecb5857",
+  "verdict": "drop",
+  "reason": "Version-heading-only stub with no prose content."
+ },
+ {
+  "chunk_id": "f9d4ed6c3316",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (New Features) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "cb609ce89fa4",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (Bug Fixes) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "d6f7c7b2bfff",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (Refactors) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "625805b85218",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (Documentation) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "9e64590b06e6",
+  "verdict": "drop",
+  "reason": "Version-heading-only stub with no prose content."
+ },
+ {
+  "chunk_id": "dd7be47f2184",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (New Features) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "8f67b087e51a",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (Bug Fixes) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "d262215a023e",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (Refactors) with genuine Jac language/tooling technical detail."
+ },
+ {
+  "chunk_id": "6f7005001de5",
+  "verdict": "keep",
+  "reason": "Substantive release-notes prose (Documentation) with genuine Jac language/tooling technical detail."
+ }
+]

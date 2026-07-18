@@ -1,0 +1,253 @@
+[
+  {
+    "chunk_id": "bf04efdeb600",
+    "verdict": "keep",
+    "reason": "Section opener framing the scaling argument for the Jac vs SOTA comparison."
+  },
+  {
+    "chunk_id": "13f6e89d54a2",
+    "verdict": "keep",
+    "reason": "Substantive prose on how the polyglot tax scales, part of Jac's value narrative."
+  },
+  {
+    "chunk_id": "2106fa8ba346",
+    "verdict": "keep",
+    "reason": "Genuine argument about type-drift and shared type systems motivating Jac."
+  },
+  {
+    "chunk_id": "0ed3422452db",
+    "verdict": "keep",
+    "reason": "Points to the runnable open-source comparison repo, useful grounding context."
+  },
+  {
+    "chunk_id": "c72679024a4c",
+    "verdict": "keep",
+    "reason": "Concrete run instructions including the jac start command."
+  },
+  {
+    "chunk_id": "b07d5afe568c",
+    "verdict": "keep",
+    "reason": "Real prose describing QA methodology and the line-count result."
+  },
+  {
+    "chunk_id": "b9fd8a105464",
+    "verdict": "keep",
+    "reason": "Substantive framing of what the comparison claims, genuine blog prose."
+  },
+  {
+    "chunk_id": "9ab0be356ee1",
+    "verdict": "keep",
+    "reason": "Core thesis paragraph of the polyglot-tax argument."
+  },
+  {
+    "chunk_id": "ef7f2eb20913",
+    "verdict": "keep",
+    "reason": "Historical analogy prose supporting the Jac abstraction argument."
+  },
+  {
+    "chunk_id": "0faa97981f21",
+    "verdict": "keep",
+    "reason": "Explains Jac's full-stack compiler positioning across storage, API, frontend, and AI."
+  },
+  {
+    "chunk_id": "cd0649904a2d",
+    "verdict": "keep",
+    "reason": "Short but meaningful concluding sentence of the argument."
+  },
+  {
+    "chunk_id": "ce07e2ba2c05",
+    "verdict": "drop",
+    "reason": "Content is only a horizontal-rule separator with no text."
+  },
+  {
+    "chunk_id": "f32776a82fe6",
+    "verdict": "keep",
+    "reason": "Section opener introducing the configuration-tax comparison with real framing prose."
+  },
+  {
+    "chunk_id": "010aa263ae7c",
+    "verdict": "keep",
+    "reason": "Describes jac.toml as the single config file covering deps, server, and LLM selection."
+  },
+  {
+    "chunk_id": "aa593db72a10",
+    "verdict": "keep",
+    "reason": "Lead-in with the SOTA config line/file counts, pairs with the following detail chunk."
+  },
+  {
+    "chunk_id": "012565391325",
+    "verdict": "keep",
+    "reason": "Concrete breakdown of the five SOTA config files, genuine comparison content."
+  },
+  {
+    "chunk_id": "fe0681212198",
+    "verdict": "keep",
+    "reason": "Substantive prose explaining why Jac needs one config file versus five."
+  },
+  {
+    "chunk_id": "3ce048525289",
+    "verdict": "keep",
+    "reason": "Summary statistic that concludes the configuration comparison."
+  },
+  {
+    "chunk_id": "bbbfb28686b8",
+    "verdict": "keep",
+    "reason": "Final totals sentence tying the comparison together."
+  },
+  {
+    "chunk_id": "526d4854f3ca",
+    "verdict": "keep",
+    "reason": "Article intro explaining Jac as a Python-extending language and runtime."
+  },
+  {
+    "chunk_id": "8b0bc78a4720",
+    "verdict": "drop",
+    "reason": "Content is only the <!-- more --> excerpt marker, pure boilerplate."
+  },
+  {
+    "chunk_id": "09e783d82592",
+    "verdict": "keep",
+    "reason": "Explains Jac's motivation of new abstractions for cloud, scale, and AI."
+  },
+  {
+    "chunk_id": "65f2299e51b5",
+    "verdict": "keep",
+    "reason": "Section opener leading into the pip install instructions."
+  },
+  {
+    "chunk_id": "2075da9fdca1",
+    "verdict": "keep",
+    "reason": "The canonical pip install jaclang command."
+  },
+  {
+    "chunk_id": "84720e8a1e16",
+    "verdict": "keep",
+    "reason": "Describes the zero-dependency compiler-plus-runtime package running on CPython."
+  },
+  {
+    "chunk_id": "32cd82705a46",
+    "verdict": "keep",
+    "reason": "Mermaid diagram of the install-to-execution architecture, genuine content."
+  },
+  {
+    "chunk_id": "397518c47123",
+    "verdict": "keep",
+    "reason": "Explains that Jac compiles to Python bytecode on the standard VM, key architecture fact."
+  },
+  {
+    "chunk_id": "830fe9b6809b",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no content of its own."
+  },
+  {
+    "chunk_id": "c9d4205e29e8",
+    "verdict": "keep",
+    "reason": "Informative table of Jac's core components and their implementations."
+  },
+  {
+    "chunk_id": "43f2be60f6d0",
+    "verdict": "drop",
+    "reason": "Single transition sentence with no standalone content."
+  },
+  {
+    "chunk_id": "bf385409faf3",
+    "verdict": "keep",
+    "reason": "Mermaid diagram of the compilation and execution layers, genuine architecture content."
+  },
+  {
+    "chunk_id": "632ab1f65215",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no content of its own."
+  },
+  {
+    "chunk_id": "063d7668ae67",
+    "verdict": "keep",
+    "reason": "Explains the PEP 302 import hook that makes Jac modules importable from Python."
+  },
+  {
+    "chunk_id": "babf1f6d2f63",
+    "verdict": "keep",
+    "reason": "Describes incremental module-by-module Jac adoption, genuine prose."
+  },
+  {
+    "chunk_id": "98f07f493528",
+    "verdict": "keep",
+    "reason": "Explains the deliberate Python-compatible extension philosophy."
+  },
+  {
+    "chunk_id": "591b9b4a556c",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no content of its own."
+  },
+  {
+    "chunk_id": "08720c6191f6",
+    "verdict": "keep",
+    "reason": "Brief but real sentence introducing the four adoption patterns."
+  },
+  {
+    "chunk_id": "ad3ba82cb043",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no content of its own."
+  },
+  {
+    "chunk_id": "ecca566b99b6",
+    "verdict": "keep",
+    "reason": "Mermaid diagram illustrating the pure-Python-plus-library adoption pattern."
+  },
+  {
+    "chunk_id": "c734b5271ead",
+    "verdict": "keep",
+    "reason": "Explains the decorator/base-class API path for teams avoiding new syntax."
+  },
+  {
+    "chunk_id": "a6da4cdc305b",
+    "verdict": "upweight",
+    "reason": "Complete working OSP example showing Node, Walker, on_entry, spawn, visit, disengage, connect, and root semantics.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "d40536367e14",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no content of its own."
+  },
+  {
+    "chunk_id": "8677a799ae9a",
+    "verdict": "keep",
+    "reason": "Mermaid diagram illustrating the Python-first project pattern."
+  },
+  {
+    "chunk_id": "0b9868f7741a",
+    "verdict": "keep",
+    "reason": "Explains surgical single-file Jac adoption in a Python codebase."
+  },
+  {
+    "chunk_id": "485254951d18",
+    "verdict": "keep",
+    "reason": "Code snippet showing import jaclang enabling imports from a .jac module."
+  },
+  {
+    "chunk_id": "5cf3e2b83477",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no content of its own."
+  },
+  {
+    "chunk_id": "ded111ec93b4",
+    "verdict": "keep",
+    "reason": "Mermaid diagram illustrating the Jac-first project pattern with legacy Python."
+  },
+  {
+    "chunk_id": "cf07f9567358",
+    "verdict": "keep",
+    "reason": "Practical prose on keeping working Python modules while writing new code in Jac."
+  },
+  {
+    "chunk_id": "6be40c25fee7",
+    "verdict": "keep",
+    "reason": "Jac code snippet showing stdlib and legacy Python import syntax."
+  },
+  {
+    "chunk_id": "3b469a617e24",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no content of its own."
+  }
+]

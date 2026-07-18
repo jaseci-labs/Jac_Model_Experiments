@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "898fa6cd6c69",
+    "verdict": "keep",
+    "reason": "Genuine iOS build guidance specific to the Jac mobile workflow."
+  },
+  {
+    "chunk_id": "75924a269a7b",
+    "verdict": "keep",
+    "reason": "Concrete command tied to the surrounding Xcode workflow prose."
+  },
+  {
+    "chunk_id": "bcf387052dea",
+    "verdict": "drop",
+    "reason": "Four-word lead-in fragment with no standalone content; the actual list is its own chunk."
+  },
+  {
+    "chunk_id": "825c81ee0a77",
+    "verdict": "keep",
+    "reason": "Substantive list of Xcode capabilities relevant to the iOS build path."
+  },
+  {
+    "chunk_id": "6d3c4dc57f50",
+    "verdict": "keep",
+    "reason": "Real CocoaPods guidance for Capacitor iOS dependency management."
+  },
+  {
+    "chunk_id": "3dedc38e7e9e",
+    "verdict": "keep",
+    "reason": "The pod install command referenced by the preceding CocoaPods prose."
+  },
+  {
+    "chunk_id": "ba71bc6101b4",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with zero content."
+  },
+  {
+    "chunk_id": "aaf18496c7ff",
+    "verdict": "drop",
+    "reason": "Heading-only nav fragment with no prose."
+  },
+  {
+    "chunk_id": "1621c09f80b2",
+    "verdict": "keep",
+    "reason": "Explains the shared-web-bundle model, a real cross-platform concept."
+  },
+  {
+    "chunk_id": "4d293ba5e126",
+    "verdict": "keep",
+    "reason": "Genuine guidance on Capacitor native plugin installation."
+  },
+  {
+    "chunk_id": "e1978f55929f",
+    "verdict": "keep",
+    "reason": "Shows the Jac-specific `jac install --npm` plugin install flow."
+  },
+  {
+    "chunk_id": "30e114e7b92b",
+    "verdict": "keep",
+    "reason": "Substantive device-testing instructions for both platforms."
+  },
+  {
+    "chunk_id": "436a8908d8a5",
+    "verdict": "keep",
+    "reason": "Documents jac-client auto host selection behavior in mobile dev."
+  },
+  {
+    "chunk_id": "6fd31be90d8b",
+    "verdict": "keep",
+    "reason": "Canonical `jac start --client mobile --dev` command with annotation."
+  },
+  {
+    "chunk_id": "9e59d7430161",
+    "verdict": "keep",
+    "reason": "Brief but conveys that host override is optional, contextualizing the next command."
+  },
+  {
+    "chunk_id": "77867c8f54f3",
+    "verdict": "keep",
+    "reason": "Shows the --host override flag usage."
+  },
+  {
+    "chunk_id": "f099dae5c803",
+    "verdict": "keep",
+    "reason": "Conveys that platform can be forced in dev, contextualizing the following command."
+  },
+  {
+    "chunk_id": "291210044e5d",
+    "verdict": "keep",
+    "reason": "Shows the --platform flag usage."
+  },
+  {
+    "chunk_id": "baae1f275339",
+    "verdict": "keep",
+    "reason": "Real debugging instructions for webview inspection on both platforms."
+  },
+  {
+    "chunk_id": "56bddf184482",
+    "verdict": "keep",
+    "reason": "Short intro but frames the substantive troubleshooting list that follows."
+  },
+  {
+    "chunk_id": "1ebd011f1e6b",
+    "verdict": "keep",
+    "reason": "Dense, genuinely useful troubleshooting checklist with concrete commands."
+  },
+  {
+    "chunk_id": "158e3df34f58",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with zero content."
+  },
+  {
+    "chunk_id": "1101f32c6971",
+    "verdict": "keep",
+    "reason": "Explains the React Native target's architecture and tradeoffs."
+  },
+  {
+    "chunk_id": "090ebddadcc3",
+    "verdict": "keep",
+    "reason": "Core explanation of mobUI projects and the @jac/mobui vocabulary."
+  },
+  {
+    "chunk_id": "cfc57688b6cf",
+    "verdict": "keep",
+    "reason": "The mobUI-to-HTML mapping table, essential Jac-specific reference content."
+  },
+  {
+    "chunk_id": "40a323ee2764",
+    "verdict": "keep",
+    "reason": "Documents mobUI styling rules and the E1105 diagnostic for host tags."
+  },
+  {
+    "chunk_id": "cf4cfc348fdd",
+    "verdict": "keep",
+    "reason": "Setup section heading with context for the scaffold command."
+  },
+  {
+    "chunk_id": "6508fda2591c",
+    "verdict": "keep",
+    "reason": "The `jac setup react-native` scaffold command."
+  },
+  {
+    "chunk_id": "7cfb730defad",
+    "verdict": "keep",
+    "reason": "Explains the scaffold output location and its config knob."
+  },
+  {
+    "chunk_id": "7f4453d09f2c",
+    "verdict": "keep",
+    "reason": "Lead-in that names the mobUI opt-in step in jac.toml."
+  },
+  {
+    "chunk_id": "41d39123ed05",
+    "verdict": "keep",
+    "reason": "The jac.toml client_kind = mobui configuration example."
+  },
+  {
+    "chunk_id": "610cabdc0613",
+    "verdict": "keep",
+    "reason": "Full working Jac code example of a mobUI component, high-value language content."
+  },
+  {
+    "chunk_id": "d9531437706f",
+    "verdict": "keep",
+    "reason": "States the one-source-two-targets build property of mobUI."
+  },
+  {
+    "chunk_id": "0aae5a47d00d",
+    "verdict": "keep",
+    "reason": "The React Native dev-mode start command with its heading."
+  },
+  {
+    "chunk_id": "c10952d725be",
+    "verdict": "keep",
+    "reason": "Dense description of the RN dev loop, Metro/Expo wiring, and env overrides."
+  },
+  {
+    "chunk_id": "68287ee50410",
+    "verdict": "keep",
+    "reason": "Production build commands for both mobile platforms."
+  },
+  {
+    "chunk_id": "bc7a5a80abc5",
+    "verdict": "keep",
+    "reason": "Explains build outputs (APK, .app, EAS path) and the release config flag."
+  },
+  {
+    "chunk_id": "1a5a69e4e861",
+    "verdict": "keep",
+    "reason": "Introduces the EAS OTA update workflow and scaffolded eas.json."
+  },
+  {
+    "chunk_id": "c57b03600bc8",
+    "verdict": "keep",
+    "reason": "Step lead-in naming the one-time EAS linking requirement."
+  },
+  {
+    "chunk_id": "057807c93f00",
+    "verdict": "keep",
+    "reason": "The expo-updates install and configure commands."
+  },
+  {
+    "chunk_id": "814bb61da856",
+    "verdict": "keep",
+    "reason": "Explains version resolution behavior for expo-updates."
+  },
+  {
+    "chunk_id": "cc236430e9c8",
+    "verdict": "keep",
+    "reason": "Step lead-in for the jac.toml opt-in that follows."
+  },
+  {
+    "chunk_id": "d109046bc991",
+    "verdict": "keep",
+    "reason": "The eas_update jac.toml config example with branch semantics."
+  },
+  {
+    "chunk_id": "154aea1a1dcf",
+    "verdict": "keep",
+    "reason": "Describes the automatic eas update step after a successful build."
+  },
+  {
+    "chunk_id": "6958bb480e5a",
+    "verdict": "keep",
+    "reason": "Cross-reference sentence but names the canonical reference location for EAS fields."
+  },
+  {
+    "chunk_id": "40aea8b2b9ea",
+    "verdict": "keep",
+    "reason": "Documents the .native.cl.jac platform-file resolution rule, real compiler behavior."
+  },
+  {
+    "chunk_id": "71ef74e2ca6f",
+    "verdict": "keep",
+    "reason": "Explains what Jac subsystems carry over to RN and the routing adaptation."
+  },
+  {
+    "chunk_id": "874f1db565cd",
+    "verdict": "keep",
+    "reason": "Pointer sentence but names the full RN target reference path."
+  },
+  {
+    "chunk_id": "4957f2b2deba",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with zero content."
+  },
+  {
+    "chunk_id": "f37a134ded5b",
+    "verdict": "drop",
+    "reason": "Truncated section stub ending in a colon with no actual content."
+  }
+]

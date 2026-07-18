@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "4afde0798251",
+    "verdict": "keep",
+    "reason": "Substantive explanation of Jac's uniform primitive-type guarantee across codespaces."
+  },
+  {
+    "chunk_id": "c30254b20ed5",
+    "verdict": "keep",
+    "reason": "Short but genuine prose stating why uniform primitives make multi-target compilation practical."
+  },
+  {
+    "chunk_id": "e469d3e9d395",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "dc56df4839f8",
+    "verdict": "drop",
+    "reason": "Nav-only 'Learn More' section heading with no prose."
+  },
+  {
+    "chunk_id": "b581830287ac",
+    "verdict": "drop",
+    "reason": "Pure cross-reference link list with no documentation content."
+  },
+  {
+    "chunk_id": "5c64622d1a41",
+    "verdict": "drop",
+    "reason": "Title plus related-links nav fragment with no prose content."
+  },
+  {
+    "chunk_id": "327500f8e6a9",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "e9e8295773f1",
+    "verdict": "keep",
+    "reason": "Core explanation of Jac's compilation targets and ecosystem compatibility."
+  },
+  {
+    "chunk_id": "7490f1d430c5",
+    "verdict": "keep",
+    "reason": "Substantive description of the transpilation pipeline to Python bytecode."
+  },
+  {
+    "chunk_id": "d6693bf2c221",
+    "verdict": "keep",
+    "reason": "Concrete advantages of running on the standard Python runtime."
+  },
+  {
+    "chunk_id": "cae070f7874f",
+    "verdict": "keep",
+    "reason": "Restates the Python-target guarantee concisely; not flagged as a duplicate and adds the no-interop-layer framing."
+  },
+  {
+    "chunk_id": "1937612511a7",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose or code."
+  },
+  {
+    "chunk_id": "7fcc201e07bd",
+    "verdict": "keep",
+    "reason": "Connective prose that frames the following Jac example."
+  },
+  {
+    "chunk_id": "da72b05ac7ad",
+    "verdict": "keep",
+    "reason": "Genuine Jac code example showing functions, objects, and entrypoint syntax."
+  },
+  {
+    "chunk_id": "6d701e5f5f22",
+    "verdict": "keep",
+    "reason": "Connective prose linking the Jac source to its compiled Python output."
+  },
+  {
+    "chunk_id": "e937fac00050",
+    "verdict": "keep",
+    "reason": "Compiled-Python counterpart example demonstrating the Jac-to-Python mapping."
+  },
+  {
+    "chunk_id": "b7f74469e3cc",
+    "verdict": "keep",
+    "reason": "Explains how Jac objects map to Python classes via the Obj base archetype."
+  },
+  {
+    "chunk_id": "92663937196c",
+    "verdict": "keep",
+    "reason": "Useful note distinguishing internal transpiler imports from the public jaclang.lib API."
+  },
+  {
+    "chunk_id": "98073b0de35a",
+    "verdict": "keep",
+    "reason": "Introduces the type-only import feature and its lowering behavior."
+  },
+  {
+    "chunk_id": "9fe17b0aa6b2",
+    "verdict": "keep",
+    "reason": "Code showing the TYPE_CHECKING lowering of type-only imports."
+  },
+  {
+    "chunk_id": "cf83de87be6c",
+    "verdict": "keep",
+    "reason": "Substantive guidance on when type-only imports break versus when regular imports are required."
+  },
+  {
+    "chunk_id": "2d22bfff1628",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "273d0723b3ca",
+    "verdict": "keep",
+    "reason": "Explains the automatic .pth import-hook mechanism for importing .jac files."
+  },
+  {
+    "chunk_id": "918970bcb322",
+    "verdict": "keep",
+    "reason": "Documents a behavioral change (import jaclang no longer required) relevant to correct usage."
+  },
+  {
+    "chunk_id": "a0ee4b88ab92",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose."
+  },
+  {
+    "chunk_id": "cc461c2e4884",
+    "verdict": "keep",
+    "reason": "Documents bidirectional Jac/Python module interoperability."
+  },
+  {
+    "chunk_id": "7f8127b164ad",
+    "verdict": "keep",
+    "reason": "Documents incremental-adoption capability in existing Python projects."
+  },
+  {
+    "chunk_id": "8003d225085c",
+    "verdict": "keep",
+    "reason": "Documents that standard import syntax works for .jac files."
+  },
+  {
+    "chunk_id": "b11bc7895d3d",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose or code."
+  },
+  {
+    "chunk_id": "27e84bf0194d",
+    "verdict": "keep",
+    "reason": "Connective prose framing the cross-language import example."
+  },
+  {
+    "chunk_id": "51daad8a566c",
+    "verdict": "keep",
+    "reason": "Jac code example defining a node archetype for the interop demo."
+  },
+  {
+    "chunk_id": "2302944030e9",
+    "verdict": "keep",
+    "reason": "Connective prose introducing the Python-side import example."
+  },
+  {
+    "chunk_id": "954ab3560403",
+    "verdict": "keep",
+    "reason": "Python code example importing a Jac-defined class directly."
+  },
+  {
+    "chunk_id": "79c5f9798071",
+    "verdict": "keep",
+    "reason": "Connective prose introducing the Jac-imports-Python example."
+  },
+  {
+    "chunk_id": "7802fe753d2a",
+    "verdict": "keep",
+    "reason": "Jac code example importing pandas/numpy/sklearn, demonstrating import syntax."
+  },
+  {
+    "chunk_id": "8a5c951943a3",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose or code."
+  },
+  {
+    "chunk_id": "16578fa0f5ff",
+    "verdict": "keep",
+    "reason": "Prose explaining the purpose of ::py:: inline Python blocks."
+  },
+  {
+    "chunk_id": "25c5b26db2b8",
+    "verdict": "keep",
+    "reason": "Code example demonstrating ::py:: block syntax and usage from Jac."
+  },
+  {
+    "chunk_id": "121138fa8f85",
+    "verdict": "drop",
+    "reason": "Heading-only lead-in fragment with no content of its own."
+  },
+  {
+    "chunk_id": "96d0548fdedd",
+    "verdict": "keep",
+    "reason": "Concrete criteria for when inline Python is appropriate."
+  },
+  {
+    "chunk_id": "3522cd6ef33b",
+    "verdict": "drop",
+    "reason": "Heading-only lead-in fragment with no content of its own."
+  },
+  {
+    "chunk_id": "68442e6bfc9d",
+    "verdict": "keep",
+    "reason": "Concrete criteria for when to avoid inline Python."
+  },
+  {
+    "chunk_id": "c1699af375a4",
+    "verdict": "keep",
+    "reason": "Detailed explanation of the PEP 302 import-hook implementation."
+  },
+  {
+    "chunk_id": "e938fd0c5499",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "a468e863c637",
+    "verdict": "keep",
+    "reason": "Introduces the five Python-integration adoption patterns."
+  },
+  {
+    "chunk_id": "faea8397de08",
+    "verdict": "keep",
+    "reason": "Substantive comparison table of the five adoption patterns."
+  },
+  {
+    "chunk_id": "846bdcd3dea1",
+    "verdict": "keep",
+    "reason": "Mermaid diagram encoding the adoption-pattern spectrum, complements the table."
+  },
+  {
+    "chunk_id": "39654ab742ab",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "8537a4b7aea2",
+    "verdict": "keep",
+    "reason": "Frames the running task-manager example used by subsequent pattern details."
+  },
+  {
+    "chunk_id": "84b22be3fcae",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose."
+  }
+]

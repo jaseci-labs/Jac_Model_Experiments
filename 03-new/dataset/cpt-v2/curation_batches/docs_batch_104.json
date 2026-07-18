@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "6f8ebf667aaf",
+    "verdict": "keep",
+    "reason": "Genuine operational CLI examples for Mongo-backed deployments, unique content."
+  },
+  {
+    "chunk_id": "5010845683b6",
+    "verdict": "keep",
+    "reason": "Real server configuration reference with TOML keys and defaults."
+  },
+  {
+    "chunk_id": "ec124dee3177",
+    "verdict": "keep",
+    "reason": "Substantive one-liner explaining the docs_enabled production setting."
+  },
+  {
+    "chunk_id": "0fc407afbda6",
+    "verdict": "keep",
+    "reason": "Explains suppress_health_check_logs behavior and the affected endpoints."
+  },
+  {
+    "chunk_id": "c635aa2085ca",
+    "verdict": "keep",
+    "reason": "Documents single-process CORS behavior, a real gotcha (no tunable knob)."
+  },
+  {
+    "chunk_id": "61c9fb758944",
+    "verdict": "keep",
+    "reason": "Prose lead-in that carries the microservice-mode CORS distinction."
+  },
+  {
+    "chunk_id": "18ec3b4a4afa",
+    "verdict": "keep",
+    "reason": "Concrete CORS TOML example complementing the surrounding prose."
+  },
+  {
+    "chunk_id": "e61a3dc78d1b",
+    "verdict": "keep",
+    "reason": "Documents CORS defaults and the additional recognized keys."
+  },
+  {
+    "chunk_id": "338c93c0f016",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, zero content."
+  },
+  {
+    "chunk_id": "acfc8503c717",
+    "verdict": "drop",
+    "reason": "Header-only fragment with no prose, nav-only."
+  },
+  {
+    "chunk_id": "f5180cfb76bc",
+    "verdict": "keep",
+    "reason": "States the core walker-becomes-endpoint mapping, key jac-scale concept."
+  },
+  {
+    "chunk_id": "6cf6468f8b88",
+    "verdict": "keep",
+    "reason": "Canonical walker example showing the endpoint-generation pattern."
+  },
+  {
+    "chunk_id": "8ab329dacca3",
+    "verdict": "keep",
+    "reason": "Short but carries the concrete POST /walker/<name> URL mapping."
+  },
+  {
+    "chunk_id": "96fea782287c",
+    "verdict": "keep",
+    "reason": "States the walker-params-to-request-body rule."
+  },
+  {
+    "chunk_id": "d33cb1a58b28",
+    "verdict": "keep",
+    "reason": "Example walker showing has-field request parameters with a default."
+  },
+  {
+    "chunk_id": "5833f10714da",
+    "verdict": "keep",
+    "reason": "Concrete curl invocation demonstrating the request format."
+  },
+  {
+    "chunk_id": "1b4d754b1f47",
+    "verdict": "keep",
+    "reason": "States the report-values-become-response rule."
+  },
+  {
+    "chunk_id": "c595a274cb42",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, zero content."
+  },
+  {
+    "chunk_id": "5a2a6ebdcfcb",
+    "verdict": "keep",
+    "reason": "Defines the underscore-prefixed middleware-walker convention."
+  },
+  {
+    "chunk_id": "e50fe7670f5e",
+    "verdict": "keep",
+    "reason": "Duplicate of 7c325bc4ca3d (tutorials/production/local.md) but this reference-page copy is the more canonical location; drop the tutorial copy instead."
+  },
+  {
+    "chunk_id": "7ce03a122295",
+    "verdict": "keep",
+    "reason": "Duplicate of a4c5c99b50eb (tutorials/production/local.md) but this reference-page copy sits in fuller context with the adjacent auth tip; drop the tutorial copy instead."
+  },
+  {
+    "chunk_id": "5af5062d1f91",
+    "verdict": "keep",
+    "reason": "Useful guidance distinguishing custom middleware from built-in JWT auth."
+  },
+  {
+    "chunk_id": "77dbc120422e",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, zero content."
+  },
+  {
+    "chunk_id": "2f2a517670b4",
+    "verdict": "keep",
+    "reason": "Introduces the @restspec decorator's purpose."
+  },
+  {
+    "chunk_id": "325727d47a8f",
+    "verdict": "keep",
+    "reason": "Complete @restspec options table with types and defaults."
+  },
+  {
+    "chunk_id": "897a5901a3df",
+    "verdict": "keep",
+    "reason": "Import-requirement note (HTTPMethod vs builtins), a real gotcha."
+  },
+  {
+    "chunk_id": "25a6c3d81f83",
+    "verdict": "keep",
+    "reason": "Explains the default-POST behavior and how to override it."
+  },
+  {
+    "chunk_id": "41a0ce7c3013",
+    "verdict": "keep",
+    "reason": "Working example of @restspec with HTTPMethod.GET and :pub walker."
+  },
+  {
+    "chunk_id": "aaad33b4432f",
+    "verdict": "keep",
+    "reason": "States the resulting GET route, completes the preceding example."
+  },
+  {
+    "chunk_id": "1a96a4969504",
+    "verdict": "keep",
+    "reason": "Introduces custom-path override, minimal but contentful."
+  },
+  {
+    "chunk_id": "f5b57ba0ae27",
+    "verdict": "keep",
+    "reason": "Example of path override via @restspec."
+  },
+  {
+    "chunk_id": "8d51ec76fc12",
+    "verdict": "keep",
+    "reason": "States the resulting custom route for the preceding example."
+  },
+  {
+    "chunk_id": "537edbc6e8db",
+    "verdict": "keep",
+    "reason": "Introduces {param_name} path-parameter syntax."
+  },
+  {
+    "chunk_id": "f69360deae95",
+    "verdict": "keep",
+    "reason": "Rich example showing path vs query parameter binding in walkers."
+  },
+  {
+    "chunk_id": "0bfe21ecf063",
+    "verdict": "keep",
+    "reason": "Documents the parameter-classification precedence rule (path/file/query/body)."
+  },
+  {
+    "chunk_id": "6aa9a72fd28b",
+    "verdict": "keep",
+    "reason": "States that @restspec applies to standalone functions too."
+  },
+  {
+    "chunk_id": "7e4c6b68a736",
+    "verdict": "keep",
+    "reason": "Function-endpoint examples with def :pub, distinct from walker examples."
+  },
+  {
+    "chunk_id": "a1920f621155",
+    "verdict": "drop",
+    "reason": "Nav-only cross-reference stub with no content of its own."
+  },
+  {
+    "chunk_id": "5a3e40002ede",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, zero content."
+  },
+  {
+    "chunk_id": "5303bd226f23",
+    "verdict": "keep",
+    "reason": "Introduces the identity-based auth model, real conceptual content."
+  },
+  {
+    "chunk_id": "ba167f506d12",
+    "verdict": "keep",
+    "reason": "Lead-in to the user-document schema, contentful."
+  },
+  {
+    "chunk_id": "885252fed8be",
+    "verdict": "keep",
+    "reason": "The user-document schema itself, core auth reference material."
+  },
+  {
+    "chunk_id": "d5e6f4e679eb",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('Example (sanitized):') with no content."
+  },
+  {
+    "chunk_id": "71cd77e6cd77",
+    "verdict": "keep",
+    "reason": "Full sanitized user-document JSON example, substantive."
+  },
+  {
+    "chunk_id": "b7578b48fc0d",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('Identity types:') with no content."
+  },
+  {
+    "chunk_id": "56ff37ab4770",
+    "verdict": "keep",
+    "reason": "Identity-types table with per-type semantics."
+  },
+  {
+    "chunk_id": "67249ba85f81",
+    "verdict": "keep",
+    "reason": "Documents identity uniqueness and normalization rules."
+  },
+  {
+    "chunk_id": "8729ec8ce4be",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('Credential types:') with no content."
+  },
+  {
+    "chunk_id": "770d6a9df5ff",
+    "verdict": "keep",
+    "reason": "Credential-types table, minimal but factual."
+  },
+  {
+    "chunk_id": "5b2c357ca38a",
+    "verdict": "keep",
+    "reason": "Documents bcrypt hashing and password-handling guarantees."
+  }
+]

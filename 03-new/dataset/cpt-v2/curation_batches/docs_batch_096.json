@@ -1,0 +1,253 @@
+[
+  {
+    "chunk_id": "c6fdab0c92bf",
+    "verdict": "keep",
+    "reason": "Genuine component-composition example with valid Jac/JSX syntax."
+  },
+  {
+    "chunk_id": "c802c42d16ef",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "26af2a5f0178",
+    "verdict": "drop",
+    "reason": "Nav-only section heading with no prose."
+  },
+  {
+    "chunk_id": "be8b3d69d12d",
+    "verdict": "keep",
+    "reason": "Explains the reactive-state semantics of `has` in client code."
+  },
+  {
+    "chunk_id": "57a75d35e5fd",
+    "verdict": "keep",
+    "reason": "Canonical Counter example showing has-to-useState compilation."
+  },
+  {
+    "chunk_id": "b2fab688d8c2",
+    "verdict": "keep",
+    "reason": "Concise Jac-to-React mapping table with real semantic content."
+  },
+  {
+    "chunk_id": "ce8ef6e865f0",
+    "verdict": "keep",
+    "reason": "Complex-state example demonstrating list/dict has fields."
+  },
+  {
+    "chunk_id": "db6bec9a03e3",
+    "verdict": "keep",
+    "reason": "Important immutability warning tied to re-render semantics."
+  },
+  {
+    "chunk_id": "d59ed2482e86",
+    "verdict": "keep",
+    "reason": "Correct-vs-wrong code pair completing the immutability warning."
+  },
+  {
+    "chunk_id": "29bad87f7d2c",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "4246350815fa",
+    "verdict": "drop",
+    "reason": "Nav-only section heading with no prose."
+  },
+  {
+    "chunk_id": "f8a3b51b50cd",
+    "verdict": "keep",
+    "reason": "Explains can-with-entry/exit to useEffect mapping semantics."
+  },
+  {
+    "chunk_id": "9f055b8729bf",
+    "verdict": "keep",
+    "reason": "Dense mapping table for effect syntax variants including dependency arrays."
+  },
+  {
+    "chunk_id": "bd28bd53f770",
+    "verdict": "keep",
+    "reason": "Substantial example covering mount, cleanup, and dependency effects."
+  },
+  {
+    "chunk_id": "3dcfaf6e13d8",
+    "verdict": "keep",
+    "reason": "Introduces the manual useEffect alternative pattern."
+  },
+  {
+    "chunk_id": "ed1e94c5aead",
+    "verdict": "keep",
+    "reason": "Working manual-useEffect example with React import syntax."
+  },
+  {
+    "chunk_id": "4726a12ec8aa",
+    "verdict": "keep",
+    "reason": "Complete useContext example including glob context creation."
+  },
+  {
+    "chunk_id": "8bd6686d9d40",
+    "verdict": "keep",
+    "reason": "Introduces the custom-hooks pattern with has."
+  },
+  {
+    "chunk_id": "9e1260c4be81",
+    "verdict": "keep",
+    "reason": "Full custom hook example with tuple return and localStorage."
+  },
+  {
+    "chunk_id": "02564b28be7c",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "7521d1a94785",
+    "verdict": "drop",
+    "reason": "Nav-only section heading with no prose."
+  },
+  {
+    "chunk_id": "fd1868b291dd",
+    "verdict": "keep",
+    "reason": "Explains sv import plus spawn as the client-to-walker bridge."
+  },
+  {
+    "chunk_id": "c084395e582b",
+    "verdict": "keep",
+    "reason": "Complete walker-fetch example showing root spawn and reports handling."
+  },
+  {
+    "chunk_id": "ff703e2123de",
+    "verdict": "keep",
+    "reason": "Lead-in for the canonical walker response table that follows."
+  },
+  {
+    "chunk_id": "317e16539a78",
+    "verdict": "keep",
+    "reason": "Canonical table form of the spawn result object properties."
+  },
+  {
+    "chunk_id": "d85530e1dc00",
+    "verdict": "upweight",
+    "reason": "Core spawn mechanics (root spawn, node spawn, parameters) central to OSP semantics.",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "e4f56d28e9eb",
+    "verdict": "drop",
+    "reason": "Redundant restatement of the walker-response lead-in already kept as ff703e2123de."
+  },
+  {
+    "chunk_id": "6ffc169f3eba",
+    "verdict": "drop",
+    "reason": "Bullet-list duplicate of the more canonical response table 317e16539a78."
+  },
+  {
+    "chunk_id": "f2866a192935",
+    "verdict": "keep",
+    "reason": "Substantial CRUD-via-walkers example with immutable state updates."
+  },
+  {
+    "chunk_id": "a55a76df3b58",
+    "verdict": "keep",
+    "reason": "Introduces the error-handling pattern for spawn calls."
+  },
+  {
+    "chunk_id": "bead01d8f61e",
+    "verdict": "keep",
+    "reason": "Flagged pair partner 1e6d755a95c5 is not in this batch so no comparison possible; this is a complete canonical error-handling example."
+  },
+  {
+    "chunk_id": "d7b776425bff",
+    "verdict": "keep",
+    "reason": "Introduces the polling pattern with effect cleanup."
+  },
+  {
+    "chunk_id": "395ec6ba991e",
+    "verdict": "keep",
+    "reason": "Polling example with a non-obvious type-annotation caveat on cleanup lambdas."
+  },
+  {
+    "chunk_id": "0aa2b740bfa8",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "619f768cba28",
+    "verdict": "drop",
+    "reason": "Nav-only section heading with no prose."
+  },
+  {
+    "chunk_id": "f1f6744b4f66",
+    "verdict": "keep",
+    "reason": "Introduces file-based routing via the pages/ directory."
+  },
+  {
+    "chunk_id": "4fb420bb0143",
+    "verdict": "keep",
+    "reason": "Directory-tree example encoding routing conventions including dynamic routes and groups."
+  },
+  {
+    "chunk_id": "2f5fd4bc4e6d",
+    "verdict": "drop",
+    "reason": "Bold label fragment with no content of its own."
+  },
+  {
+    "chunk_id": "f96a2b7ce997",
+    "verdict": "keep",
+    "reason": "Flagged pair partner 4bb5e3d66274 is not in this batch so no comparison possible; this route-mapping table is complete and canonical."
+  },
+  {
+    "chunk_id": "d914ab777a9d",
+    "verdict": "keep",
+    "reason": "Short but semantic: states the page-function export contract for page files."
+  },
+  {
+    "chunk_id": "785948113825",
+    "verdict": "keep",
+    "reason": "Dynamic-route page example with useParams and Link."
+  },
+  {
+    "chunk_id": "deb295c973f2",
+    "verdict": "keep",
+    "reason": "Explains route groups and auth-layout wrapping semantics."
+  },
+  {
+    "chunk_id": "71ef73b1398e",
+    "verdict": "keep",
+    "reason": "Flagged pair partner a05ed9bcd8e1 is not in this batch so no comparison possible; this AuthGuard layout example is complete."
+  },
+  {
+    "chunk_id": "b85d12b19813",
+    "verdict": "keep",
+    "reason": "Introduces manual routing via @jac/runtime imports."
+  },
+  {
+    "chunk_id": "469bdfd79ff0",
+    "verdict": "keep",
+    "reason": "Complete manual Router/Routes/Route/Link example."
+  },
+  {
+    "chunk_id": "deacdbb9f64a",
+    "verdict": "keep",
+    "reason": "URL-parameter access example with useParams."
+  },
+  {
+    "chunk_id": "9bd7fdebb6c9",
+    "verdict": "keep",
+    "reason": "Programmatic navigation example with useNavigate."
+  },
+  {
+    "chunk_id": "1e215478f6cb",
+    "verdict": "keep",
+    "reason": "Nested-layout example demonstrating Outlet placement."
+  },
+  {
+    "chunk_id": "45b9135c20e2",
+    "verdict": "keep",
+    "reason": "Lead-in for the routing hooks reference table."
+  },
+  {
+    "chunk_id": "d9ff820d7e86",
+    "verdict": "keep",
+    "reason": "Reference table for routing hooks and components with usage signatures."
+  }
+]

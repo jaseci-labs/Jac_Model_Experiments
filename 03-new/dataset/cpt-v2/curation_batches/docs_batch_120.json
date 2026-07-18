@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "c204ac408a45",
+    "verdict": "keep",
+    "reason": "Genuine prose on broker auto-selection behavior."
+  },
+  {
+    "chunk_id": "4fce237c86a5",
+    "verdict": "keep",
+    "reason": "Real config guidance on enabling event streaming."
+  },
+  {
+    "chunk_id": "1c14d3499060",
+    "verdict": "keep",
+    "reason": "Complete jac.toml events config example with commented semantics."
+  },
+  {
+    "chunk_id": "08720a33ca99",
+    "verdict": "keep",
+    "reason": "Non-redundant dependency/fallback behavior note."
+  },
+  {
+    "chunk_id": "0d314bfc52db",
+    "verdict": "keep",
+    "reason": "Working Jac walker code example using publish and Event."
+  },
+  {
+    "chunk_id": "76e00082741f",
+    "verdict": "keep",
+    "reason": "Substantive semantics of publish() error handling and event_type defaulting."
+  },
+  {
+    "chunk_id": "8f5ab05e575a",
+    "verdict": "keep",
+    "reason": "Working Jac @subscribe code example."
+  },
+  {
+    "chunk_id": "96ea77b14225",
+    "verdict": "keep",
+    "reason": "Explains handler registration and consumer-thread lifecycle."
+  },
+  {
+    "chunk_id": "a53ecef0c2e5",
+    "verdict": "keep",
+    "reason": "Detailed start_from/group/retry semantics, unique content."
+  },
+  {
+    "chunk_id": "7643cea457a8",
+    "verdict": "keep",
+    "reason": "Jac code example illustrating start_from=earliest."
+  },
+  {
+    "chunk_id": "1a72da50abf2",
+    "verdict": "keep",
+    "reason": "Working Jac pull-consumption code example with ack."
+  },
+  {
+    "chunk_id": "3c001c047063",
+    "verdict": "keep",
+    "reason": "Substantive consume/ack/visibility-timeout semantics."
+  },
+  {
+    "chunk_id": "aecd66fb89f1",
+    "verdict": "keep",
+    "reason": "Canonical configuration reference table for events."
+  },
+  {
+    "chunk_id": "c5de58bf4e21",
+    "verdict": "keep",
+    "reason": "Core reliability semantics (at-least-once, retry, DLQ, drain)."
+  },
+  {
+    "chunk_id": "1cde62679576",
+    "verdict": "keep",
+    "reason": "Unique operational details: thread naming, delivery metadata, CloudEvents wire format."
+  },
+  {
+    "chunk_id": "ae809eaf7e93",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "b5acf9427af4",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose."
+  },
+  {
+    "chunk_id": "5faa5dde04e4",
+    "verdict": "keep",
+    "reason": "Substantive auto-provisioning behavior description."
+  },
+  {
+    "chunk_id": "ea71f547f8bd",
+    "verdict": "drop",
+    "reason": "Three-word lead-in fragment with no content of its own."
+  },
+  {
+    "chunk_id": "23f3d474d850",
+    "verdict": "keep",
+    "reason": "The actual provisioned-components list with per-item explanations."
+  },
+  {
+    "chunk_id": "31ebd675275e",
+    "verdict": "keep",
+    "reason": "Provisioning TOML key reference table with secret-handling detail."
+  },
+  {
+    "chunk_id": "5fc0fd8491b7",
+    "verdict": "keep",
+    "reason": "Unique K8s Secret handling detail for credentials."
+  },
+  {
+    "chunk_id": "7b2c8a4b1100",
+    "verdict": "drop",
+    "reason": "Lead-in-only fragment; the content lives in the following TOML chunk."
+  },
+  {
+    "chunk_id": "d843452f5bcb",
+    "verdict": "keep",
+    "reason": "Concrete external-database TOML example."
+  },
+  {
+    "chunk_id": "da9a8c0cbafb",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "2f582af1ba0f",
+    "verdict": "keep",
+    "reason": "States the env-over-toml precedence rule and section intro."
+  },
+  {
+    "chunk_id": "9f0f0127a77c",
+    "verdict": "drop",
+    "reason": "Lead-in-only fragment; content is in the adjacent table and example."
+  },
+  {
+    "chunk_id": "ad6950b2dae2",
+    "verdict": "keep",
+    "reason": "Dup counterpart 25860dbf1305 is not in this batch and cannot be inspected, so keeping to avoid dropping both copies."
+  },
+  {
+    "chunk_id": "72946db289b8",
+    "verdict": "keep",
+    "reason": "Concrete .env example with URI formats."
+  },
+  {
+    "chunk_id": "11ebb7de5989",
+    "verdict": "drop",
+    "reason": "Lead-in-only fragment; content is in the following TOML chunk."
+  },
+  {
+    "chunk_id": "362ec7a13772",
+    "verdict": "keep",
+    "reason": "Concrete scale.database TOML example including shelf_db_path."
+  },
+  {
+    "chunk_id": "b2e9994fe375",
+    "verdict": "drop",
+    "reason": "One-line restatement of the precedence rule already stated in 2f582af1ba0f."
+  },
+  {
+    "chunk_id": "a10043b3a260",
+    "verdict": "keep",
+    "reason": "Database TOML key reference table with unique L1-invalidation keys."
+  },
+  {
+    "chunk_id": "a2c8d2b5876b",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "5391879a4233",
+    "verdict": "keep",
+    "reason": "States the off-by-default dashboard policy."
+  },
+  {
+    "chunk_id": "70996c773c39",
+    "verdict": "keep",
+    "reason": "Concrete dashboard-enable TOML example."
+  },
+  {
+    "chunk_id": "382b62cff98e",
+    "verdict": "keep",
+    "reason": "Dashboard key reference table including loki_enabled not covered elsewhere."
+  },
+  {
+    "chunk_id": "ebf560184308",
+    "verdict": "keep",
+    "reason": "Explains ingress-subpath serving for dashboards."
+  },
+  {
+    "chunk_id": "4d17f54ec92d",
+    "verdict": "keep",
+    "reason": "Dashboard credential key reference table."
+  },
+  {
+    "chunk_id": "6eb8efd2cb2c",
+    "verdict": "keep",
+    "reason": "Security-relevant note on basic auth and changing default credentials."
+  },
+  {
+    "chunk_id": "b7e83f4d7b3f",
+    "verdict": "drop",
+    "reason": "Two-word lead-in fragment with no content."
+  },
+  {
+    "chunk_id": "b1ee860d88a6",
+    "verdict": "keep",
+    "reason": "Dashboard access-URL table with unique path information."
+  },
+  {
+    "chunk_id": "06e781445a14",
+    "verdict": "drop",
+    "reason": "Lead-in-only fragment; content is in the following TOML chunk."
+  },
+  {
+    "chunk_id": "2bd96ba56dd5",
+    "verdict": "keep",
+    "reason": "Concrete combined dashboard-credentials TOML example."
+  },
+  {
+    "chunk_id": "667d187aeacc",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "df8de1e130da",
+    "verdict": "keep",
+    "reason": "Section intro sentence establishing the tiered memory model."
+  },
+  {
+    "chunk_id": "aa5fd655e409",
+    "verdict": "keep",
+    "reason": "L1/L2/L3 tier table, the canonical memory-hierarchy summary."
+  },
+  {
+    "chunk_id": "25cba64af49d",
+    "verdict": "keep",
+    "reason": "Mermaid diagram of the tier hierarchy; adds diagram-syntax signal beyond the table."
+  },
+  {
+    "chunk_id": "57fdea3a293b",
+    "verdict": "keep",
+    "reason": "Substantive explanation of request-scoped L1 caching and the staleness problem."
+  },
+  {
+    "chunk_id": "2f79c25158de",
+    "verdict": "keep",
+    "reason": "Detailed cross-pod invalidation protocol semantics, unique content."
+  }
+]

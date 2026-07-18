@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "c9b4e1b2d699",
+    "verdict": "drop",
+    "reason": "Label-only fragment (a lone bold heading with no prose or code) carries no training signal."
+  },
+  {
+    "chunk_id": "b196ad8aae77",
+    "verdict": "keep",
+    "reason": "Complete pattern-matching reference table with Jac-specific syntax examples."
+  },
+  {
+    "chunk_id": "4fe83af08ece",
+    "verdict": "keep",
+    "reason": "Genuine Jac switch-statement documentation with a code example."
+  },
+  {
+    "chunk_id": "c251f3f578de",
+    "verdict": "keep",
+    "reason": "Substantive semantic note on C-style fall-through behavior in switch."
+  },
+  {
+    "chunk_id": "9ea7660ea4da",
+    "verdict": "keep",
+    "reason": "Genuine loop-control documentation with break/continue Jac example."
+  },
+  {
+    "chunk_id": "6d11c59a3af0",
+    "verdict": "keep",
+    "reason": "Genuine context-manager documentation showing Jac with-block syntax."
+  },
+  {
+    "chunk_id": "b4a70d883c52",
+    "verdict": "drop",
+    "reason": "Header-plus-label fragment with no prose or code; the actual content lives in adjacent chunks."
+  },
+  {
+    "chunk_id": "a04ed4658f5b",
+    "verdict": "keep",
+    "reason": "Genuine try/except Jac code example showing brace-based exception syntax."
+  },
+  {
+    "chunk_id": "9bd8cd6a0ebf",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no prose or code content."
+  },
+  {
+    "chunk_id": "9ebe71fc7718",
+    "verdict": "keep",
+    "reason": "Genuine example of capturing exceptions with 'as' in multiple except arms."
+  },
+  {
+    "chunk_id": "b297dab10fe7",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no prose or code content."
+  },
+  {
+    "chunk_id": "b23ad842ba5c",
+    "verdict": "keep",
+    "reason": "Genuine example of catching a tuple of exception types in Jac."
+  },
+  {
+    "chunk_id": "ca34f5a49bd4",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no prose or code content."
+  },
+  {
+    "chunk_id": "cb08fe529152",
+    "verdict": "keep",
+    "reason": "Complete try/except/else/finally example, valuable Jac control-flow syntax."
+  },
+  {
+    "chunk_id": "6899b1955186",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no prose or code content."
+  },
+  {
+    "chunk_id": "8ccb9efdcfca",
+    "verdict": "keep",
+    "reason": "Genuine example of raise and exception chaining with 'from' in Jac."
+  },
+  {
+    "chunk_id": "edf3b8454863",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no prose or code content."
+  },
+  {
+    "chunk_id": "7e66bec3e843",
+    "verdict": "keep",
+    "reason": "Genuine custom-exception example using Jac obj inheritance and has fields."
+  },
+  {
+    "chunk_id": "041196a73204",
+    "verdict": "keep",
+    "reason": "Section header with an actual prose sentence introducing assertions."
+  },
+  {
+    "chunk_id": "0facacfebb75",
+    "verdict": "keep",
+    "reason": "Substantive assertion examples including invariant checks in an obj method."
+  },
+  {
+    "chunk_id": "b10931902fb0",
+    "verdict": "keep",
+    "reason": "Substantive guidance note on assertions versus exceptions in production."
+  },
+  {
+    "chunk_id": "ea61272f70e3",
+    "verdict": "keep",
+    "reason": "Section header with prose introducing generator/yield semantics."
+  },
+  {
+    "chunk_id": "f16640d6a0ff",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no prose or code content."
+  },
+  {
+    "chunk_id": "80dae32c351b",
+    "verdict": "keep",
+    "reason": "Genuine generator example showing yield and with-entry usage in Jac."
+  },
+  {
+    "chunk_id": "a4ec38a2efca",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no prose or code content."
+  },
+  {
+    "chunk_id": "e45dd9dd55e2",
+    "verdict": "keep",
+    "reason": "Genuine stateful generator (fibonacci) example with tuple assignment."
+  },
+  {
+    "chunk_id": "bd37170c5335",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no prose or code content."
+  },
+  {
+    "chunk_id": "31b594f2e5bb",
+    "verdict": "keep",
+    "reason": "Genuine yield-from delegation example with recursive flatten."
+  },
+  {
+    "chunk_id": "f0b7e77cf6c6",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no prose or code content."
+  },
+  {
+    "chunk_id": "2553d08190b9",
+    "verdict": "keep",
+    "reason": "Genuine example contrasting lazy generator expressions with eager comprehensions."
+  },
+  {
+    "chunk_id": "fbdb6db7d45a",
+    "verdict": "keep",
+    "reason": "Substantive worked example combining control flow and generators in Jac."
+  },
+  {
+    "chunk_id": "31aacd210f34",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with zero content."
+  },
+  {
+    "chunk_id": "b86be351856a",
+    "verdict": "keep",
+    "reason": "Genuine prose introducing Jac's LLVM native-compilation capability."
+  },
+  {
+    "chunk_id": "993d5f3557df",
+    "verdict": "keep",
+    "reason": "Genuine documentation of the .na.jac native file convention."
+  },
+  {
+    "chunk_id": "4cb215b44e6c",
+    "verdict": "keep",
+    "reason": "Concrete CLI usage for running native Jac files."
+  },
+  {
+    "chunk_id": "892ce593c8d0",
+    "verdict": "keep",
+    "reason": "Substantive prose on variant annexing and automatic native-codespace merging."
+  },
+  {
+    "chunk_id": "ea19aff1c70e",
+    "verdict": "keep",
+    "reason": "Short intro sentence that anchors the following feature list."
+  },
+  {
+    "chunk_id": "be2eac36fbad",
+    "verdict": "keep",
+    "reason": "Substantive feature list of the native backend including Jac-specific C types."
+  },
+  {
+    "chunk_id": "611cb90b4d84",
+    "verdict": "keep",
+    "reason": "Genuine documentation of C library import resolution rules in native Jac."
+  },
+  {
+    "chunk_id": "c8e2941a484c",
+    "verdict": "keep",
+    "reason": "Genuine C-library import example showing Jac FFI declaration syntax."
+  },
+  {
+    "chunk_id": "f04a0dcc4042",
+    "verdict": "keep",
+    "reason": "Substantive prose on C struct declarations and value-type coercion."
+  },
+  {
+    "chunk_id": "6b88c96730ab",
+    "verdict": "keep",
+    "reason": "Genuine example of declaring C structs inside library import blocks."
+  },
+  {
+    "chunk_id": "e1bd44191270",
+    "verdict": "keep",
+    "reason": "Substantive note on explicit path imports with a cross-reference to full rules."
+  },
+  {
+    "chunk_id": "4d0b67377d0e",
+    "verdict": "keep",
+    "reason": "Section intro with prose on Python-native interop within a module."
+  },
+  {
+    "chunk_id": "0a1077147e4b",
+    "verdict": "keep",
+    "reason": "Genuine cross-codespace interop example between .jac and .na.jac files."
+  },
+  {
+    "chunk_id": "b04a816fd9b4",
+    "verdict": "keep",
+    "reason": "Genuine prose on compiling self-contained native executables."
+  },
+  {
+    "chunk_id": "9bfa34af929c",
+    "verdict": "keep",
+    "reason": "Concrete nacompile CLI usage example for standalone binaries."
+  },
+  {
+    "chunk_id": "ead0e8629901",
+    "verdict": "keep",
+    "reason": "Substantive prose introducing the pure-Python compilation pipeline."
+  },
+  {
+    "chunk_id": "d0ff4712831b",
+    "verdict": "keep",
+    "reason": "Substantive three-step description of the LLVM IR to ELF pipeline."
+  },
+  {
+    "chunk_id": "8abb1296d763",
+    "verdict": "keep",
+    "reason": "Real detail on runtime linking against libc with a CLI cross-reference."
+  }
+]

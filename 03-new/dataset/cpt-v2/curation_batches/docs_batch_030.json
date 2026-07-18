@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "fbeb7362be26",
+    "verdict": "keep",
+    "reason": "Genuine orientation note on Jac compiling to Python and prerequisites."
+  },
+  {
+    "chunk_id": "1d9f55f5e3be",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "5337eefbebc8",
+    "verdict": "drop",
+    "reason": "Community/support link boilerplate, no Jac content."
+  },
+  {
+    "chunk_id": "054a621cd265",
+    "verdict": "keep",
+    "reason": "Installation page intro."
+  },
+  {
+    "chunk_id": "7f482315ba83",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "d00e3d052304",
+    "verdict": "keep",
+    "reason": "One-line install section intro."
+  },
+  {
+    "chunk_id": "529cbd603eeb",
+    "verdict": "keep",
+    "reason": "Canonical install command."
+  },
+  {
+    "chunk_id": "c6eb2d35cf44",
+    "verdict": "keep",
+    "reason": "Explains the self-contained native binary bundling its runtime."
+  },
+  {
+    "chunk_id": "fb23a88b9161",
+    "verdict": "keep",
+    "reason": "Introduces installer flag options."
+  },
+  {
+    "chunk_id": "f4dda879cb42",
+    "verdict": "keep",
+    "reason": "Contextual label for the version-install example."
+  },
+  {
+    "chunk_id": "57fa773171ff",
+    "verdict": "keep",
+    "reason": "Version-specific install command."
+  },
+  {
+    "chunk_id": "e47e01b02ffd",
+    "verdict": "keep",
+    "reason": "Contextual label for the uninstall command."
+  },
+  {
+    "chunk_id": "acbd3618e8e0",
+    "verdict": "keep",
+    "reason": "Uninstall command."
+  },
+  {
+    "chunk_id": "afad32f5ba98",
+    "verdict": "keep",
+    "reason": "Installer flag reference table."
+  },
+  {
+    "chunk_id": "1c5c6f760524",
+    "verdict": "keep",
+    "reason": "Upgrade instructions."
+  },
+  {
+    "chunk_id": "d8ddc1a63351",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "0b0129217905",
+    "verdict": "keep",
+    "reason": "Section heading introducing alternate install methods."
+  },
+  {
+    "chunk_id": "a1af2fa9f37d",
+    "verdict": "keep",
+    "reason": "AUR/Arch install instructions."
+  },
+  {
+    "chunk_id": "569386762266",
+    "verdict": "keep",
+    "reason": "AUR install command."
+  },
+  {
+    "chunk_id": "5497c9e9f7d5",
+    "verdict": "keep",
+    "reason": "Docker install section."
+  },
+  {
+    "chunk_id": "7c5319341661",
+    "verdict": "keep",
+    "reason": "Docker pull command."
+  },
+  {
+    "chunk_id": "b224c439bf16",
+    "verdict": "keep",
+    "reason": "Describes available Docker image tags."
+  },
+  {
+    "chunk_id": "bc10a24fac1a",
+    "verdict": "keep",
+    "reason": "Contextual label for the docker run example."
+  },
+  {
+    "chunk_id": "f1b31bca4ab3",
+    "verdict": "keep",
+    "reason": "Docker run command for a project."
+  },
+  {
+    "chunk_id": "d9dd46eb63f8",
+    "verdict": "keep",
+    "reason": "Contextual label for interactive-shell example."
+  },
+  {
+    "chunk_id": "c4ffa6987db5",
+    "verdict": "keep",
+    "reason": "Docker interactive shell command."
+  },
+  {
+    "chunk_id": "aa58f11dfecf",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "a892f105d54e",
+    "verdict": "keep",
+    "reason": "Explains built-in subsystems and optional-dependency resolution."
+  },
+  {
+    "chunk_id": "2bc2c177c114",
+    "verdict": "keep",
+    "reason": "jac install usage for byllm and scale deps."
+  },
+  {
+    "chunk_id": "e02603a29c92",
+    "verdict": "keep",
+    "reason": "Notes the built-in MCP server for Jac development."
+  },
+  {
+    "chunk_id": "4885adc86741",
+    "verdict": "keep",
+    "reason": "Clarifies how jac install resolves PyPI packages."
+  },
+  {
+    "chunk_id": "cde752f04635",
+    "verdict": "keep",
+    "reason": "Explains the built-in deployment/scaling subsystem and its optional deps."
+  },
+  {
+    "chunk_id": "f2eddc50c552",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "0fc90b2e1031",
+    "verdict": "keep",
+    "reason": "IDE setup section intro."
+  },
+  {
+    "chunk_id": "7338425c48bd",
+    "verdict": "keep",
+    "reason": "Notes the Jac extension is on both marketplaces."
+  },
+  {
+    "chunk_id": "f53a70911942",
+    "verdict": "keep",
+    "reason": "Marketplace links table."
+  },
+  {
+    "chunk_id": "768315599429",
+    "verdict": "keep",
+    "reason": "List of supported IDEs."
+  },
+  {
+    "chunk_id": "1c8274a8d3cd",
+    "verdict": "keep",
+    "reason": "Extension install section intro."
+  },
+  {
+    "chunk_id": "9b4c5e85cde0",
+    "verdict": "keep",
+    "reason": "Extension install steps."
+  },
+  {
+    "chunk_id": "6b4c70174b59",
+    "verdict": "keep",
+    "reason": "Manual VSIX install intro."
+  },
+  {
+    "chunk_id": "ae366fcc6637",
+    "verdict": "keep",
+    "reason": "VSIX install steps."
+  },
+  {
+    "chunk_id": "81d7ee9d2fa8",
+    "verdict": "keep",
+    "reason": "Lists extension features."
+  },
+  {
+    "chunk_id": "5c2352e16452",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "8fc49c23bfc3",
+    "verdict": "keep",
+    "reason": "Verify-installation command."
+  },
+  {
+    "chunk_id": "c54db1d74e26",
+    "verdict": "keep",
+    "reason": "Contextual label for expected output."
+  },
+  {
+    "chunk_id": "d73450abf09d",
+    "verdict": "keep",
+    "reason": "Shows the jac version banner output."
+  },
+  {
+    "chunk_id": "3893d431ee12",
+    "verdict": "keep",
+    "reason": "Introduces the first-program step."
+  },
+  {
+    "chunk_id": "75d8c8dff980",
+    "verdict": "keep",
+    "reason": "Hello-world Jac code example."
+  },
+  {
+    "chunk_id": "b553219fdfc8",
+    "verdict": "keep",
+    "reason": "Command to run the hello program."
+  },
+  {
+    "chunk_id": "42b1dfb40a5e",
+    "verdict": "keep",
+    "reason": "Expected output of the first program."
+  }
+]

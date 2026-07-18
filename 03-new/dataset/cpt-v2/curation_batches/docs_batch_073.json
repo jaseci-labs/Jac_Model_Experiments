@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "28274585b600",
+    "verdict": "keep",
+    "reason": "Genuine prose explaining braced codespace blocks, a core Jac codespace mechanic."
+  },
+  {
+    "chunk_id": "a3e9beedf104",
+    "verdict": "keep",
+    "reason": "Concrete cl-block code example showing JSX components and reactive has fields."
+  },
+  {
+    "chunk_id": "fe6e94728474",
+    "verdict": "keep",
+    "reason": "Short but substantive fact that codespace blocks can nest inside class/function bodies."
+  },
+  {
+    "chunk_id": "0a9acdecc291",
+    "verdict": "keep",
+    "reason": "Heading plus explanatory sentence introducing the single-statement codespace prefix."
+  },
+  {
+    "chunk_id": "e841102407a5",
+    "verdict": "keep",
+    "reason": "Code example demonstrating the cl statement-prefix override against the default server codespace."
+  },
+  {
+    "chunk_id": "fb77409b4b50",
+    "verdict": "keep",
+    "reason": "Substantive explanation of compiler-generated cross-codespace interop (HTTP, FFI, serialization)."
+  },
+  {
+    "chunk_id": "3dbd773c7e91",
+    "verdict": "keep",
+    "reason": "Code example showing sv/cl interop with compiler-generated HTTP call."
+  },
+  {
+    "chunk_id": "53becfc382ea",
+    "verdict": "keep",
+    "reason": "Heading with lead-in sentence framing the cross-codespace shared-semantics list that follows."
+  },
+  {
+    "chunk_id": "9525cd7e6b21",
+    "verdict": "keep",
+    "reason": "Informative list of what is identical across codespaces (types, operators, builtins, control flow)."
+  },
+  {
+    "chunk_id": "29a7155d1365",
+    "verdict": "keep",
+    "reason": "Explains the behavioral-equivalence guarantee across Python/JS/LLVM backends."
+  },
+  {
+    "chunk_id": "180fc1c94a02",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "c0383935a3a6",
+    "verdict": "keep",
+    "reason": "Section intro stating the 12 primitive type families and the backend contract."
+  },
+  {
+    "chunk_id": "bf9cf0ad038a",
+    "verdict": "drop",
+    "reason": "Bare section heading with no prose, nav-only fragment."
+  },
+  {
+    "chunk_id": "f4ff0e3f172b",
+    "verdict": "keep",
+    "reason": "Documents int's per-codespace representations (arbitrary-precision vs 64-bit vs BigInt)."
+  },
+  {
+    "chunk_id": "88dd4c8534c8",
+    "verdict": "drop",
+    "reason": "Bare 'Named methods:' label with no content, boilerplate fragment."
+  },
+  {
+    "chunk_id": "dfe213059fa6",
+    "verdict": "keep",
+    "reason": "Substantive table of int named methods."
+  },
+  {
+    "chunk_id": "e468402cdf48",
+    "verdict": "drop",
+    "reason": "Bare 'Operators:' label with no content, boilerplate fragment."
+  },
+  {
+    "chunk_id": "3499ec253a65",
+    "verdict": "keep",
+    "reason": "Substantive table of int operator categories."
+  },
+  {
+    "chunk_id": "5b9adc992061",
+    "verdict": "keep",
+    "reason": "Documents float as IEEE 754 double across all codespaces."
+  },
+  {
+    "chunk_id": "acc1dfa3b4bd",
+    "verdict": "drop",
+    "reason": "Bare 'Named methods:' label with no content, boilerplate fragment."
+  },
+  {
+    "chunk_id": "58dfd9eed891",
+    "verdict": "keep",
+    "reason": "Substantive table of float named methods."
+  },
+  {
+    "chunk_id": "1915e4e9bfa2",
+    "verdict": "drop",
+    "reason": "Bare 'Operators:' label with no content, boilerplate fragment."
+  },
+  {
+    "chunk_id": "138967d234d7",
+    "verdict": "keep",
+    "reason": "Substantive table of float operators."
+  },
+  {
+    "chunk_id": "4a6365298d10",
+    "verdict": "keep",
+    "reason": "Brief but genuine description of the complex primitive type."
+  },
+  {
+    "chunk_id": "8a1ad6b70628",
+    "verdict": "drop",
+    "reason": "Bare 'Named methods:' label with no content, boilerplate fragment."
+  },
+  {
+    "chunk_id": "5beb126acd6b",
+    "verdict": "keep",
+    "reason": "Small but real content documenting complex.conjugate()."
+  },
+  {
+    "chunk_id": "b6da1327cb9c",
+    "verdict": "drop",
+    "reason": "Bare 'Operators:' label with no content, boilerplate fragment."
+  },
+  {
+    "chunk_id": "61c6024e1744",
+    "verdict": "keep",
+    "reason": "Substantive table of complex operators."
+  },
+  {
+    "chunk_id": "3d700146ea09",
+    "verdict": "keep",
+    "reason": "Meaningful admonition that complex has no ordering, enforced across codespaces."
+  },
+  {
+    "chunk_id": "3ecc16bb3449",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "b6095ab7c4c9",
+    "verdict": "drop",
+    "reason": "Bare section heading with no prose, nav-only fragment."
+  },
+  {
+    "chunk_id": "4cd7a1704302",
+    "verdict": "keep",
+    "reason": "Documents str as an immutable Unicode string type."
+  },
+  {
+    "chunk_id": "dd45feec952b",
+    "verdict": "drop",
+    "reason": "Bare 'Named methods:' label with no content, boilerplate fragment."
+  },
+  {
+    "chunk_id": "3c8050ce6406",
+    "verdict": "keep",
+    "reason": "Substantive categorized table of str methods."
+  },
+  {
+    "chunk_id": "ed745196d7f3",
+    "verdict": "drop",
+    "reason": "Bare 'Operators:' label with no content, boilerplate fragment."
+  },
+  {
+    "chunk_id": "f0060573b2ca",
+    "verdict": "keep",
+    "reason": "Flagged near-dup of the bytes operator table but documents str (substring test row) so the pair is not actually redundant."
+  },
+  {
+    "chunk_id": "560aa9912c00",
+    "verdict": "keep",
+    "reason": "Documents bytes as an immutable byte sequence mirroring str methods."
+  },
+  {
+    "chunk_id": "2356d5c55e23",
+    "verdict": "drop",
+    "reason": "Bare 'Named methods:' label with no content, boilerplate fragment."
+  },
+  {
+    "chunk_id": "50ebebaa898d",
+    "verdict": "keep",
+    "reason": "Substantive categorized table of bytes methods."
+  },
+  {
+    "chunk_id": "9da5156cc826",
+    "verdict": "drop",
+    "reason": "Bare 'Operators:' label with no content, boilerplate fragment."
+  },
+  {
+    "chunk_id": "e621c3893105",
+    "verdict": "keep",
+    "reason": "Flagged near-dup of the str operator table but documents bytes (byte membership row) for a different type, so not redundant."
+  },
+  {
+    "chunk_id": "d6f15621d58b",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "7fbdab7d7b32",
+    "verdict": "drop",
+    "reason": "Bare section heading with no prose, nav-only fragment."
+  },
+  {
+    "chunk_id": "7dd09ebc4c5d",
+    "verdict": "keep",
+    "reason": "Documents list as an ordered mutable sequence with indexing and slicing."
+  },
+  {
+    "chunk_id": "4f2ab1d89d41",
+    "verdict": "drop",
+    "reason": "Bare 'Named methods:' label with no content, boilerplate fragment."
+  },
+  {
+    "chunk_id": "785765bdc36f",
+    "verdict": "keep",
+    "reason": "Substantive table of list named methods."
+  },
+  {
+    "chunk_id": "963408f4598f",
+    "verdict": "drop",
+    "reason": "Bare 'Operators:' label with no content, boilerplate fragment."
+  },
+  {
+    "chunk_id": "6b8848f3699f",
+    "verdict": "keep",
+    "reason": "Flagged dup partner 7925d465d923 is not in this batch to compare or drop instead, so retain this list operator table rather than risk losing both copies."
+  },
+  {
+    "chunk_id": "7aca3fa24368",
+    "verdict": "keep",
+    "reason": "Documents dict as an insertion-order-preserving key-value mapping."
+  },
+  {
+    "chunk_id": "ba2fd70cad77",
+    "verdict": "drop",
+    "reason": "Bare 'Named methods:' label with no content, boilerplate fragment."
+  }
+]

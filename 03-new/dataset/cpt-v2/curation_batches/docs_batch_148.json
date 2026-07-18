@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "1318843b52eb",
+    "verdict": "keep",
+    "reason": "Complete file-based page example showing cl block and def:pub page() convention."
+  },
+  {
+    "chunk_id": "1232045b794a",
+    "verdict": "keep",
+    "reason": "Explains the [param] dynamic-segment convention with prose."
+  },
+  {
+    "chunk_id": "37632874289e",
+    "verdict": "keep",
+    "reason": "Full dynamic-route example with useParams, Link, and not-found handling."
+  },
+  {
+    "chunk_id": "0947bd5367ed",
+    "verdict": "keep",
+    "reason": "Distinct slug-route example demonstrating useParams for string slugs."
+  },
+  {
+    "chunk_id": "88270bb63da4",
+    "verdict": "keep",
+    "reason": "Explains the [...param] catch-all convention with prose."
+  },
+  {
+    "chunk_id": "4e1ac1f76f70",
+    "verdict": "keep",
+    "reason": "Concrete catch-all 404 page example with inline style syntax."
+  },
+  {
+    "chunk_id": "bbfb74259c2f",
+    "verdict": "keep",
+    "reason": "Explains route groups (groupName) semantics with prose."
+  },
+  {
+    "chunk_id": "429a9f84db2f",
+    "verdict": "keep",
+    "reason": "Informative table documenting (public)/(auth) group behavior."
+  },
+  {
+    "chunk_id": "ebede2d4cc19",
+    "verdict": "keep",
+    "reason": "Directory tree showing how route groups map to URLs and protection."
+  },
+  {
+    "chunk_id": "ce6d5dae3568",
+    "verdict": "keep",
+    "reason": "States the auto-auth-wrapping behavior of the (auth) group."
+  },
+  {
+    "chunk_id": "cbfd991cc6f7",
+    "verdict": "keep",
+    "reason": "Introduces the layout.jac convention with prose."
+  },
+  {
+    "chunk_id": "db406bded89c",
+    "verdict": "keep",
+    "reason": "Canonical layout.jac example with Outlet and relative cl import."
+  },
+  {
+    "chunk_id": "9211628b3509",
+    "verdict": "keep",
+    "reason": "Explains index.jac default-page semantics with prose."
+  },
+  {
+    "chunk_id": "694cc2a4e621",
+    "verdict": "keep",
+    "reason": "Informative table mapping index.jac files to routes."
+  },
+  {
+    "chunk_id": "b9ce00794025",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "08b8ee945bb4",
+    "verdict": "keep",
+    "reason": "Introduces manual routing via @jac/runtime with prose."
+  },
+  {
+    "chunk_id": "582db5344f67",
+    "verdict": "keep",
+    "reason": "Minimal Router/Routes/Route manual-configuration example."
+  },
+  {
+    "chunk_id": "140846080278",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "9611f0935b2b",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose or code."
+  },
+  {
+    "chunk_id": "c71f7208b074",
+    "verdict": "keep",
+    "reason": "Complete multi-component routing example with nav Links and Routes."
+  },
+  {
+    "chunk_id": "c8e19fb8e9f2",
+    "verdict": "keep",
+    "reason": "Documents the Link-vs-anchor distinction for internal versus external navigation."
+  },
+  {
+    "chunk_id": "86006b9906c5",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "4afbdaed3323",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose or code."
+  },
+  {
+    "chunk_id": "98a4cc5bafc9",
+    "verdict": "drop",
+    "reason": "Heading plus bold label only, no explanatory prose or code."
+  },
+  {
+    "chunk_id": "cd01302112d1",
+    "verdict": "keep",
+    "reason": "Prose sentence explaining the bracket file-naming convention."
+  },
+  {
+    "chunk_id": "6e8676287e97",
+    "verdict": "keep",
+    "reason": "Documents the [id].jac to /users/:id route mapping."
+  },
+  {
+    "chunk_id": "8b57801e33a0",
+    "verdict": "keep",
+    "reason": "Minimal useParams example for file-based dynamic routes."
+  },
+  {
+    "chunk_id": "ee9de42c5047",
+    "verdict": "drop",
+    "reason": "Bold label-only fragment with no prose or code."
+  },
+  {
+    "chunk_id": "1caef112418f",
+    "verdict": "keep",
+    "reason": "Manual :id route example pairing Route path syntax with useParams."
+  },
+  {
+    "chunk_id": "dc4df9b67596",
+    "verdict": "keep",
+    "reason": "Multiple-parameter example with commented URL-to-params mapping."
+  },
+  {
+    "chunk_id": "bf9993e2ae08",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "89ca8f4634a0",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose or code."
+  },
+  {
+    "chunk_id": "4a4e1c850aa3",
+    "verdict": "keep",
+    "reason": "Introduces the nested-layout file-based pattern with prose."
+  },
+  {
+    "chunk_id": "961d27c5cf53",
+    "verdict": "keep",
+    "reason": "Directory tree showing nested dashboard routes under a shared layout."
+  },
+  {
+    "chunk_id": "8676decd4ac7",
+    "verdict": "keep",
+    "reason": "Dashboard layout.jac example with sidebar Links and Outlet."
+  },
+  {
+    "chunk_id": "d00a89c16b64",
+    "verdict": "keep",
+    "reason": "Manual nested-route example showing index routes and Route nesting."
+  },
+  {
+    "chunk_id": "0f3323f36402",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "20d6f1f1e630",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose or code."
+  },
+  {
+    "chunk_id": "6e10033e6a02",
+    "verdict": "keep",
+    "reason": "useNavigate example with has fields, async handler, and lambda events."
+  },
+  {
+    "chunk_id": "bb5c9facfe4e",
+    "verdict": "keep",
+    "reason": "Documents navigate options: replace, back (-1), and forward (1)."
+  },
+  {
+    "chunk_id": "849fcfce6e5b",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "b599b87406d2",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose or code."
+  },
+  {
+    "chunk_id": "c7f55537becc",
+    "verdict": "keep",
+    "reason": "Introduces the recommended AuthGuard-in-layout pattern with prose."
+  },
+  {
+    "chunk_id": "a05ed9bcd8e1",
+    "verdict": "keep",
+    "reason": "Canonical AuthGuard layout example; flagged duplicate 71ef73b1398e is not in this batch so this copy is retained."
+  },
+  {
+    "chunk_id": "e53fb034d95c",
+    "verdict": "keep",
+    "reason": "States that (protected) group pages require authentication."
+  },
+  {
+    "chunk_id": "ad738f32c11a",
+    "verdict": "keep",
+    "reason": "Custom guard example combining jacIsLoggedIn with can with entry."
+  },
+  {
+    "chunk_id": "af6d9a463a1e",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "b77ec812278e",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose or code."
+  },
+  {
+    "chunk_id": "414e64476566",
+    "verdict": "keep",
+    "reason": "Introduces query-parameter access via useLocation with prose."
+  },
+  {
+    "chunk_id": "3f9565bde3d8",
+    "verdict": "keep",
+    "reason": "Full query-param example with URLSearchParams, f-strings, and pagination."
+  }
+]

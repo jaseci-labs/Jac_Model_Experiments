@@ -1,0 +1,253 @@
+[
+  {
+    "chunk_id": "1ca3a7574dd0",
+    "verdict": "keep",
+    "reason": "Genuine parameter documentation for the format_jac tool."
+  },
+  {
+    "chunk_id": "c022a7c503fd",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('Example output:') with no documentation content."
+  },
+  {
+    "chunk_id": "6df7fb154166",
+    "verdict": "keep",
+    "reason": "Concrete formatted-output example showing Jac obj/has syntax in tool response."
+  },
+  {
+    "chunk_id": "c01bc69115ef",
+    "verdict": "keep",
+    "reason": "Section header and description for the py_to_jac tool."
+  },
+  {
+    "chunk_id": "576d70a3043d",
+    "verdict": "keep",
+    "reason": "Genuine parameter documentation for py_to_jac."
+  },
+  {
+    "chunk_id": "511a5fc86ca6",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no content."
+  },
+  {
+    "chunk_id": "13e47ea3f426",
+    "verdict": "keep",
+    "reason": "Useful Python-to-Jac conversion example showing Jac def/f-string syntax."
+  },
+  {
+    "chunk_id": "f2af9bd1fe85",
+    "verdict": "keep",
+    "reason": "Genuine description of the jac_to_py transpilation tool."
+  },
+  {
+    "chunk_id": "b6d098af2ffe",
+    "verdict": "keep",
+    "reason": "Kept as the canonical copy of the flagged identical parameter-table pair."
+  },
+  {
+    "chunk_id": "85240c1c3611",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('Example input:') with no content."
+  },
+  {
+    "chunk_id": "d1b6cf4e2f22",
+    "verdict": "keep",
+    "reason": "Kept as the canonical copy of the flagged identical example-input pair; shows valid Jac source."
+  },
+  {
+    "chunk_id": "f832be677af1",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no content."
+  },
+  {
+    "chunk_id": "80fe5efd6546",
+    "verdict": "keep",
+    "reason": "Informative Jac-to-Python transpilation example showing generated code structure."
+  },
+  {
+    "chunk_id": "a543a94063e6",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no content."
+  },
+  {
+    "chunk_id": "ed90456751b5",
+    "verdict": "keep",
+    "reason": "Error-output example showing Jac compiler diagnostic format."
+  },
+  {
+    "chunk_id": "4f3a4664059f",
+    "verdict": "keep",
+    "reason": "Substantive note about error reporting semantics via the warnings field."
+  },
+  {
+    "chunk_id": "0f5224504779",
+    "verdict": "keep",
+    "reason": "Genuine description of the jac_to_js transpilation tool."
+  },
+  {
+    "chunk_id": "b7613a877497",
+    "verdict": "keep",
+    "reason": "Documents how Jac constructs (obj, def, node, walker) map to JavaScript."
+  },
+  {
+    "chunk_id": "8f6a653bcc37",
+    "verdict": "keep",
+    "reason": "Substantive caveat about the minimal nature of generated JS output."
+  },
+  {
+    "chunk_id": "682a122782c3",
+    "verdict": "drop",
+    "reason": "Byte-identical duplicate of b6d098af2ffe (flagged pair, containment 1.0); this copy dropped."
+  },
+  {
+    "chunk_id": "811860596608",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no content."
+  },
+  {
+    "chunk_id": "d7e2c52d2ea4",
+    "verdict": "drop",
+    "reason": "Byte-identical duplicate of d1b6cf4e2f22 (flagged pair, containment 1.0); this copy dropped."
+  },
+  {
+    "chunk_id": "c50190742c90",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no content."
+  },
+  {
+    "chunk_id": "c1d1da19f0f6",
+    "verdict": "keep",
+    "reason": "Informative Jac-to-JS transpilation example showing generated class and default-value handling."
+  },
+  {
+    "chunk_id": "4cca05772df0",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no content."
+  },
+  {
+    "chunk_id": "15109e68c819",
+    "verdict": "keep",
+    "reason": "Error-output example showing empty js_code with diagnostics in warnings."
+  },
+  {
+    "chunk_id": "3245c870de18",
+    "verdict": "keep",
+    "reason": "Substantive note clarifying warnings field carries both warnings and errors."
+  },
+  {
+    "chunk_id": "5c5877492b8f",
+    "verdict": "keep",
+    "reason": "Substantive prose on failure behavior and error-message contents."
+  },
+  {
+    "chunk_id": "e5fdb33d56ec",
+    "verdict": "keep",
+    "reason": "Genuine description of the explain_error tool."
+  },
+  {
+    "chunk_id": "32101b161eae",
+    "verdict": "keep",
+    "reason": "Genuine parameter documentation for explain_error."
+  },
+  {
+    "chunk_id": "90a0d4d885d9",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no content."
+  },
+  {
+    "chunk_id": "c7b2399d015c",
+    "verdict": "keep",
+    "reason": "Rich example covering common Jac syntax pitfalls and correct obj/has pattern."
+  },
+  {
+    "chunk_id": "2ea01d6f3b5f",
+    "verdict": "keep",
+    "reason": "Genuine description of the list_examples tool."
+  },
+  {
+    "chunk_id": "508ba586e17d",
+    "verdict": "keep",
+    "reason": "Genuine parameter documentation for list_examples."
+  },
+  {
+    "chunk_id": "5fbf6f7f1495",
+    "verdict": "keep",
+    "reason": "Genuine description of the get_example tool."
+  },
+  {
+    "chunk_id": "318242186f8e",
+    "verdict": "keep",
+    "reason": "Genuine parameter documentation for get_example."
+  },
+  {
+    "chunk_id": "2030fcd15865",
+    "verdict": "keep",
+    "reason": "Genuine description of the search_docs tool."
+  },
+  {
+    "chunk_id": "b2f8025d67a6",
+    "verdict": "keep",
+    "reason": "Genuine parameter documentation for search_docs."
+  },
+  {
+    "chunk_id": "dfaf7d080673",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no content."
+  },
+  {
+    "chunk_id": "18ff5b3fc0c0",
+    "verdict": "keep",
+    "reason": "Search-result example that also restates OSP node/edge/walker framing; useful in context."
+  },
+  {
+    "chunk_id": "9bd945dc1d1f",
+    "verdict": "keep",
+    "reason": "Genuine description of the get_ast tool."
+  },
+  {
+    "chunk_id": "092c644fd0fd",
+    "verdict": "keep",
+    "reason": "Genuine parameter documentation for get_ast including format options."
+  },
+  {
+    "chunk_id": "99b6aedfaf6f",
+    "verdict": "keep",
+    "reason": "Substantive note on compiler-tool input-size and timeout limits."
+  },
+  {
+    "chunk_id": "a0c3859cf083",
+    "verdict": "keep",
+    "reason": "Genuine description of run_jac in-process execution semantics."
+  },
+  {
+    "chunk_id": "eadd8bac81a2",
+    "verdict": "keep",
+    "reason": "Genuine parameter documentation for run_jac including walker entrypoint option."
+  },
+  {
+    "chunk_id": "2b9d2bae2958",
+    "verdict": "upweight",
+    "reason": "Explains core walker report semantics (stdout plus the walker's .reports list), a genuine OSP execution-model concept.",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "6a722f2b5d57",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no content."
+  },
+  {
+    "chunk_id": "13bcb6349c2f",
+    "verdict": "keep",
+    "reason": "Minimal but valid Jac 'with entry' program example."
+  },
+  {
+    "chunk_id": "5d78cf931e15",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no content."
+  },
+  {
+    "chunk_id": "0efffd671c25",
+    "verdict": "keep",
+    "reason": "Execution-output example showing stdout/stderr/exit_code response shape."
+  }
+]

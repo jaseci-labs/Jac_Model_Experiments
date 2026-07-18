@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "4140e7c6403e",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "f7b6ee8491ca",
+    "verdict": "drop",
+    "reason": "Nav-only section heading with no prose."
+  },
+  {
+    "chunk_id": "d33666dd1009",
+    "verdict": "drop",
+    "reason": "Traditional-stack package.json boilerplate, no Jac signal."
+  },
+  {
+    "chunk_id": "1ddb16a76574",
+    "verdict": "keep",
+    "reason": "Comparison prose framing what Jac replaces."
+  },
+  {
+    "chunk_id": "8a51cabde1ff",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "c663b4de3221",
+    "verdict": "drop",
+    "reason": "Traditional-stack tsconfig.json boilerplate, no Jac signal."
+  },
+  {
+    "chunk_id": "843788b83bf3",
+    "verdict": "keep",
+    "reason": "Comparison prose explaining the traditional TypeScript config."
+  },
+  {
+    "chunk_id": "de3a84dc78c0",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "1982c0909284",
+    "verdict": "drop",
+    "reason": "Traditional-stack tsconfig.node.json boilerplate, no Jac signal."
+  },
+  {
+    "chunk_id": "0032e4d036f3",
+    "verdict": "keep",
+    "reason": "Comparison prose explaining the Node config file."
+  },
+  {
+    "chunk_id": "76bbf1cfcd94",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "943e4599703c",
+    "verdict": "drop",
+    "reason": "Traditional-stack vite.config.ts boilerplate, no Jac signal."
+  },
+  {
+    "chunk_id": "df3147b86f83",
+    "verdict": "keep",
+    "reason": "Comparison prose on the Vite proxy setup Jac replaces."
+  },
+  {
+    "chunk_id": "3d8c2982e260",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "de7d7b8cb458",
+    "verdict": "drop",
+    "reason": "Traditional-stack index.html boilerplate, no Jac signal."
+  },
+  {
+    "chunk_id": "208ddd445054",
+    "verdict": "keep",
+    "reason": "Comparison prose on the HTML entry point Jac automates."
+  },
+  {
+    "chunk_id": "9fa27bffabd7",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "e383a8cf9ea4",
+    "verdict": "drop",
+    "reason": "Traditional TypeScript interface dump, non-Jac code."
+  },
+  {
+    "chunk_id": "3022db70a85c",
+    "verdict": "keep",
+    "reason": "Comparison prose noting sync with backend Pydantic schemas."
+  },
+  {
+    "chunk_id": "1e974f26acf6",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "ab112e7ee7d3",
+    "verdict": "drop",
+    "reason": "Traditional fetch-based API client dump, non-Jac code."
+  },
+  {
+    "chunk_id": "5044f5b1c78b",
+    "verdict": "keep",
+    "reason": "Comparison prose on the API client Jac replaces with RPC."
+  },
+  {
+    "chunk_id": "dbfb1fa90147",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "7f30853fecd3",
+    "verdict": "drop",
+    "reason": "Traditional React App.tsx dump, non-Jac code."
+  },
+  {
+    "chunk_id": "8f524d237748",
+    "verdict": "keep",
+    "reason": "Comparison prose mapping useState/useEffect to Jac constructs."
+  },
+  {
+    "chunk_id": "dafe6474c6e7",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "d7070b80cb3e",
+    "verdict": "drop",
+    "reason": "Traditional React mount boilerplate, non-Jac code."
+  },
+  {
+    "chunk_id": "b1caf1b43d90",
+    "verdict": "keep",
+    "reason": "Comparison prose on the React entry point Jac automates."
+  },
+  {
+    "chunk_id": "9da07f9bddfe",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "7c765d79fb34",
+    "verdict": "keep",
+    "reason": "Valuable table contrasting traditional stack requirements with Jac equivalents."
+  },
+  {
+    "chunk_id": "4f807599f2ec",
+    "verdict": "keep",
+    "reason": "Genuine intro to Jac's single-binary toolchain."
+  },
+  {
+    "chunk_id": "b2dd412a077b",
+    "verdict": "keep",
+    "reason": "Official Jac install command."
+  },
+  {
+    "chunk_id": "53330221200b",
+    "verdict": "keep",
+    "reason": "Prose summarizing bundled Jac toolchain components."
+  },
+  {
+    "chunk_id": "34109e21423c",
+    "verdict": "keep",
+    "reason": "Detailed table of bundled Jac capabilities and CLI verbs."
+  },
+  {
+    "chunk_id": "915e11020ca8",
+    "verdict": "keep",
+    "reason": "Explains Jac's two dependency scopes."
+  },
+  {
+    "chunk_id": "22e1678f4e6c",
+    "verdict": "keep",
+    "reason": "Describes project-scope dependency model."
+  },
+  {
+    "chunk_id": "a186e853a211",
+    "verdict": "keep",
+    "reason": "jac install usage examples."
+  },
+  {
+    "chunk_id": "b4892d983d70",
+    "verdict": "keep",
+    "reason": "jac.toml dependency declaration example."
+  },
+  {
+    "chunk_id": "d695fa4cb767",
+    "verdict": "keep",
+    "reason": "Prose on unified PyPI/npm management."
+  },
+  {
+    "chunk_id": "d71970c2393f",
+    "verdict": "keep",
+    "reason": "Describes global-scope dependency model."
+  },
+  {
+    "chunk_id": "271abca97465",
+    "verdict": "keep",
+    "reason": "jac install --global usage example."
+  },
+  {
+    "chunk_id": "c9715f4bdc16",
+    "verdict": "keep",
+    "reason": "Explains where global packages live."
+  },
+  {
+    "chunk_id": "39101acd1820",
+    "verdict": "keep",
+    "reason": "Introduces the jac x universal tool runner."
+  },
+  {
+    "chunk_id": "84ee05e99981",
+    "verdict": "keep",
+    "reason": "Practical jac x usage examples."
+  },
+  {
+    "chunk_id": "005357d67d53",
+    "verdict": "keep",
+    "reason": "Explains jac x environment/resolution behavior."
+  },
+  {
+    "chunk_id": "444b641cb301",
+    "verdict": "keep",
+    "reason": "Frames what Jac lets you uninstall."
+  },
+  {
+    "chunk_id": "cde77f000e66",
+    "verdict": "keep",
+    "reason": "Table of replaced toolchain components."
+  },
+  {
+    "chunk_id": "5943a646fbfa",
+    "verdict": "keep",
+    "reason": "Useful caveat note on toolchain replacement."
+  },
+  {
+    "chunk_id": "54bce2003b67",
+    "verdict": "keep",
+    "reason": "Explains jac build and the .jab app bundle."
+  },
+  {
+    "chunk_id": "293a43135800",
+    "verdict": "keep",
+    "reason": "jac build/run/start example; duplicate partner not present in this batch so retained."
+  }
+]

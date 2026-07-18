@@ -1,0 +1,256 @@
+[
+  {
+    "chunk_id": "07c0ef1b1660",
+    "verdict": "upweight",
+    "reason": "Core walker-control semantics explaining disengage behavior during traversal.",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "c7ffdac4a09d",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "f2384b4c40fe",
+    "verdict": "keep",
+    "reason": "Section header introducing walker entry points, useful context for the following example."
+  },
+  {
+    "chunk_id": "832da809a9ba",
+    "verdict": "upweight",
+    "reason": "Canonical entry-point example covering Root/typed/generic entries and the key fact that generic with entry fires only at spawn.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "4a03786d19df",
+    "verdict": "keep",
+    "reason": "Cross-reference with useful terminology (typed entries, exit abilities, walker-type unions)."
+  },
+  {
+    "chunk_id": "58d9f22db51b",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "c06d6a712785",
+    "verdict": "upweight",
+    "reason": "Complete OSP worked example exercising nodes, typed edges, edge-filtered queries, spawn, and report.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "8d4f44bf92ba",
+    "verdict": "drop",
+    "reason": "Fragment containing only the label 'Output:' with no content."
+  },
+  {
+    "chunk_id": "15e6ba0588c6",
+    "verdict": "keep",
+    "reason": "Program output that grounds the preceding social-network example."
+  },
+  {
+    "chunk_id": "65c4941f9839",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "5b089eea1b53",
+    "verdict": "keep",
+    "reason": "Header introducing the walkers-as-REST-API concept."
+  },
+  {
+    "chunk_id": "af82be1b6e24",
+    "verdict": "keep",
+    "reason": "Flagged pair's other member (51af9bdff39d) is not in this batch, so retain this complete todo-walker example."
+  },
+  {
+    "chunk_id": "029c97a5c13f",
+    "verdict": "keep",
+    "reason": "Genuine explanation of how walker has-fields and report map to REST request/response."
+  },
+  {
+    "chunk_id": "fa0dee788cc5",
+    "verdict": "keep",
+    "reason": "Flagged pair's other member (503175b97c3d) is not in this batch, so keep this entry-point note rather than risk dropping both."
+  },
+  {
+    "chunk_id": "7f698bd74c80",
+    "verdict": "keep",
+    "reason": "Flagged pair's other member (4acd6d508dce) is not in this batch, so keep this jac start / curl example rather than risk dropping both."
+  },
+  {
+    "chunk_id": "426bfd232150",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "a5aec4c0b7af",
+    "verdict": "keep",
+    "reason": "Substantive guidance on choosing def:pub functions versus walkers."
+  },
+  {
+    "chunk_id": "b61da39de394",
+    "verdict": "keep",
+    "reason": "Low containment (0.583) with an absent pair member; the rule-of-thumb tip stands as genuine content."
+  },
+  {
+    "chunk_id": "2f17ba4ac904",
+    "verdict": "keep",
+    "reason": "Prose sentence with pedagogical context about when to refactor from functions to walkers."
+  },
+  {
+    "chunk_id": "2f5fbaef6cfa",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "b1027ee2593d",
+    "verdict": "upweight",
+    "reason": "Dense summary table of core OSP constructs (node/edge/walker, spawn/visit/here/report/disengage, connect and query operators).",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "ed2ae27fa139",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "ddf8baea28ae",
+    "verdict": "drop",
+    "reason": "Nav-only 'Next Steps' header with no documentation content."
+  },
+  {
+    "chunk_id": "b3c7f3b5b663",
+    "verdict": "drop",
+    "reason": "Nav-only link list with no prose content."
+  },
+  {
+    "chunk_id": "2926a4ff6df8",
+    "verdict": "drop",
+    "reason": "Fragment containing only the label 'Reference:' with no content."
+  },
+  {
+    "chunk_id": "ccec04cf973f",
+    "verdict": "drop",
+    "reason": "Nav-only link list with no prose content."
+  },
+  {
+    "chunk_id": "45b20a942d99",
+    "verdict": "keep",
+    "reason": "Chess tutorial title and prerequisites, genuine native-pathway documentation."
+  },
+  {
+    "chunk_id": "aaef5706f92f",
+    "verdict": "keep",
+    "reason": "Tutorial introduction describing what the chess engine walkthrough covers."
+  },
+  {
+    "chunk_id": "0e921d7f2282",
+    "verdict": "keep",
+    "reason": "Learning-objectives list covering autonative, nacompile, sys.argv, and decl/impl separation."
+  },
+  {
+    "chunk_id": "88cf3eaf6b5e",
+    "verdict": "keep",
+    "reason": "Source-location pointer that anchors the tutorial's example code."
+  },
+  {
+    "chunk_id": "a212ecbce048",
+    "verdict": "keep",
+    "reason": "Describes the declaration/implementation file split for the example."
+  },
+  {
+    "chunk_id": "69bccea5f30e",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "7b21cfaeb316",
+    "verdict": "keep",
+    "reason": "Section header framing what the tutorial builds."
+  },
+  {
+    "chunk_id": "c45bab8ce7b8",
+    "verdict": "keep",
+    "reason": "Feature list of the chess engine, real tutorial content."
+  },
+  {
+    "chunk_id": "1b39c116ed6a",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "705f2ca52e7e",
+    "verdict": "keep",
+    "reason": "Step introduction framing the three native execution options."
+  },
+  {
+    "chunk_id": "0393c464375e",
+    "verdict": "keep",
+    "reason": "Concrete jac run command for standard execution."
+  },
+  {
+    "chunk_id": "9508c69a5378",
+    "verdict": "keep",
+    "reason": "Explains the Python-backend execution mode."
+  },
+  {
+    "chunk_id": "adabb21ce9aa",
+    "verdict": "keep",
+    "reason": "Concrete jac run --autonative command example."
+  },
+  {
+    "chunk_id": "cad276a9fba3",
+    "verdict": "keep",
+    "reason": "Substantive explanation of autonative promotion and its compatibility constraints."
+  },
+  {
+    "chunk_id": "96672003776a",
+    "verdict": "keep",
+    "reason": "Explains NativeCompatCheckPass, LLVM JIT, and transparent Python fallback."
+  },
+  {
+    "chunk_id": "7141a2e75bf9",
+    "verdict": "keep",
+    "reason": "Concrete jac nacompile command producing a standalone binary."
+  },
+  {
+    "chunk_id": "b4f3131dd7c3",
+    "verdict": "keep",
+    "reason": "Explains the self-contained native toolchain and binary output."
+  },
+  {
+    "chunk_id": "b7eb58e905c3",
+    "verdict": "keep",
+    "reason": "Documents sys.argv-based CLI argument handling in native programs."
+  },
+  {
+    "chunk_id": "4d11a8931dd5",
+    "verdict": "keep",
+    "reason": "Concrete benchmark-mode commands for both autonative and compiled binary."
+  },
+  {
+    "chunk_id": "c26d5049a796",
+    "verdict": "keep",
+    "reason": "Sample benchmark output grounding the preceding commands."
+  },
+  {
+    "chunk_id": "615e770fd8a1",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "57f847b04a61",
+    "verdict": "keep",
+    "reason": "Explains declaration/implementation separation as a language feature."
+  },
+  {
+    "chunk_id": "77e2e6e7f115",
+    "verdict": "keep",
+    "reason": "Project layout tree illustrating the decl/impl file split."
+  },
+  {
+    "chunk_id": "59ebb89712ff",
+    "verdict": "keep",
+    "reason": "Explains the what-versus-how semantics of decl/impl linking."
+  }
+]

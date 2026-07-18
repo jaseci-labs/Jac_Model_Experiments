@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "58128fc9c9d9",
+    "verdict": "keep",
+    "reason": "Explains the distinction between compile-time visibility and runtime auth rules."
+  },
+  {
+    "chunk_id": "0daed1e7d8e6",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "31c0c056dc2b",
+    "verdict": "keep",
+    "reason": "Defines member encapsulation semantics for archetype fields/abilities."
+  },
+  {
+    "chunk_id": "92ef463bc71f",
+    "verdict": "keep",
+    "reason": "Reference table of member access tags."
+  },
+  {
+    "chunk_id": "92a9c8d48726",
+    "verdict": "keep",
+    "reason": "Concrete code example of pub/protect/priv member encapsulation."
+  },
+  {
+    "chunk_id": "7258f8c8b4de",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "9941df539df4",
+    "verdict": "keep",
+    "reason": "Explains module/project visibility rules for top-level symbols."
+  },
+  {
+    "chunk_id": "dc1cb771f33d",
+    "verdict": "keep",
+    "reason": "Reference table of module/project visibility semantics."
+  },
+  {
+    "chunk_id": "27ed8a4f1cba",
+    "verdict": "keep",
+    "reason": "Code example of glob visibility modifiers."
+  },
+  {
+    "chunk_id": "30139aeb7c01",
+    "verdict": "keep",
+    "reason": "States the same-module reference rule."
+  },
+  {
+    "chunk_id": "a8f58c74634d",
+    "verdict": "keep",
+    "reason": "Clarifying note distinguishing visibility from endpoint auth."
+  },
+  {
+    "chunk_id": "b1ba8e82e1d0",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "382400149086",
+    "verdict": "keep",
+    "reason": "Explains secure-by-default service auth semantics."
+  },
+  {
+    "chunk_id": "a3f4b02019e2",
+    "verdict": "keep",
+    "reason": "Reference table mapping tags to endpoint auth requirements."
+  },
+  {
+    "chunk_id": "b248b0bd1ddf",
+    "verdict": "keep",
+    "reason": "Important clarification that protect is not a middle auth tier."
+  },
+  {
+    "chunk_id": "a094561ef3fb",
+    "verdict": "keep",
+    "reason": "Cross-reference with substantive framing of the serve/auth model."
+  },
+  {
+    "chunk_id": "22c70727e735",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "95330b45d5f0",
+    "verdict": "keep",
+    "reason": "Documents AccessCheckPass enforcement and warning/error promotion."
+  },
+  {
+    "chunk_id": "604e5600f8be",
+    "verdict": "keep",
+    "reason": "Config example for enabling access enforcement."
+  },
+  {
+    "chunk_id": "7eeb8dce6739",
+    "verdict": "keep",
+    "reason": "Explains diagnostic suppression mechanisms."
+  },
+  {
+    "chunk_id": "0512090fafc0",
+    "verdict": "keep",
+    "reason": "Reference table of access-violation diagnostic codes."
+  },
+  {
+    "chunk_id": "0661444af809",
+    "verdict": "keep",
+    "reason": "Clarifies treatment of non-Jac symbols and serve-time auth."
+  },
+  {
+    "chunk_id": "0c7918b71e11",
+    "verdict": "drop",
+    "reason": "Section title plus nav stub with no content."
+  },
+  {
+    "chunk_id": "e13fe20c8be7",
+    "verdict": "drop",
+    "reason": "Table-of-contents link list, nav-only."
+  },
+  {
+    "chunk_id": "f406587ae062",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "da27a328b467",
+    "verdict": "keep",
+    "reason": "Introduces Jac's graph-oriented comprehension operators."
+  },
+  {
+    "chunk_id": "1d83a1e6e43a",
+    "verdict": "keep",
+    "reason": "Describes filter and assign comprehension operators with examples."
+  },
+  {
+    "chunk_id": "aae13b11d161",
+    "verdict": "keep",
+    "reason": "Explains chaining of filter and assign comprehensions in traversal."
+  },
+  {
+    "chunk_id": "972f0cc0a61c",
+    "verdict": "drop",
+    "reason": "Related-links cross-reference block, nav-only."
+  },
+  {
+    "chunk_id": "83106e018db0",
+    "verdict": "keep",
+    "reason": "Documents standard Python-style comprehension support."
+  },
+  {
+    "chunk_id": "f0d6f74f03a4",
+    "verdict": "keep",
+    "reason": "Code examples of all four standard comprehension forms."
+  },
+  {
+    "chunk_id": "d6ada3a3fa29",
+    "verdict": "keep",
+    "reason": "Explains filter comprehension syntax and semantics."
+  },
+  {
+    "chunk_id": "c49682da4ef5",
+    "verdict": "keep",
+    "reason": "Shows filter comprehensions applied to graph traversals."
+  },
+  {
+    "chunk_id": "1c198420d4ec",
+    "verdict": "keep",
+    "reason": "Code example of filter comprehensions including traversal filtering."
+  },
+  {
+    "chunk_id": "fc8b94713d04",
+    "verdict": "keep",
+    "reason": "Documents typed filter comprehensions for graph node types."
+  },
+  {
+    "chunk_id": "bb09d9da32dc",
+    "verdict": "keep",
+    "reason": "Code example of typed filter comprehensions on traversals."
+  },
+  {
+    "chunk_id": "62df90f5a273",
+    "verdict": "keep",
+    "reason": "Explains assign comprehensions and chaining with filters."
+  },
+  {
+    "chunk_id": "44774dfa0930",
+    "verdict": "keep",
+    "reason": "Code example of assign comprehensions and filter-then-assign."
+  },
+  {
+    "chunk_id": "46009ba2c280",
+    "verdict": "keep",
+    "reason": "Appendices intro describing available reference material."
+  },
+  {
+    "chunk_id": "dd725916c141",
+    "verdict": "drop",
+    "reason": "Nav stub with no content."
+  },
+  {
+    "chunk_id": "040937909d1f",
+    "verdict": "drop",
+    "reason": "Table-of-contents link list, nav-only."
+  },
+  {
+    "chunk_id": "33fe6afc43e8",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "ed187907ba88",
+    "verdict": "keep",
+    "reason": "Complete Jac keyword reference table, high-value lookup content."
+  },
+  {
+    "chunk_id": "feb37a1a0c9c",
+    "verdict": "drop",
+    "reason": "Bare Notes label with no content."
+  },
+  {
+    "chunk_id": "a79dfad5f7c9",
+    "verdict": "keep",
+    "reason": "Notes on keyword forms and special variable references with backtick rules."
+  },
+  {
+    "chunk_id": "a90ef56eb3a7",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "f092aa68613f",
+    "verdict": "drop",
+    "reason": "Section heading only, no content."
+  },
+  {
+    "chunk_id": "231f55447d2f",
+    "verdict": "keep",
+    "reason": "Arithmetic operator reference table."
+  },
+  {
+    "chunk_id": "1f308fd2fd8f",
+    "verdict": "keep",
+    "reason": "Comparison operator reference table; duplicate partner not in this batch."
+  },
+  {
+    "chunk_id": "3557af7139d4",
+    "verdict": "keep",
+    "reason": "Logical operator reference table."
+  }
+]

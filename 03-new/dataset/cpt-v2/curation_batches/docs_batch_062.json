@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "e523447dde01",
+    "verdict": "keep",
+    "reason": "Genuine prose introducing the anonymous-factory idiom for the following code example."
+  },
+  {
+    "chunk_id": "7ff5f8ef010b",
+    "verdict": "keep",
+    "reason": "Working Jac code example showing IIFE plus closure, unique in the batch."
+  },
+  {
+    "chunk_id": "3fd843bebfc1",
+    "verdict": "keep",
+    "reason": "Genuine prose introducing the typed-product factory pattern."
+  },
+  {
+    "chunk_id": "4bcedfae0718",
+    "verdict": "keep",
+    "reason": "Working code example of a lambda factory returning obj instances, non-redundant."
+  },
+  {
+    "chunk_id": "a8e560b3d5a7",
+    "verdict": "keep",
+    "reason": "Explains a real language constraint (no anonymous archetypes) with recommended alternatives."
+  },
+  {
+    "chunk_id": "2a9eba0fd8cd",
+    "verdict": "keep",
+    "reason": "Useful JS-to-Jac idiom mapping table, distinct content."
+  },
+  {
+    "chunk_id": "16bd436e763f",
+    "verdict": "keep",
+    "reason": "States real lambda syntax rules (typed params, braced body, implicit return)."
+  },
+  {
+    "chunk_id": "941ea8ca72e2",
+    "verdict": "keep",
+    "reason": "Complete decorator syntax example, unique coverage of the feature."
+  },
+  {
+    "chunk_id": "ece7b2855fb6",
+    "verdict": "keep",
+    "reason": "Genuine prose introducing top-level def access modifiers and project scoping."
+  },
+  {
+    "chunk_id": "2d7342096aa9",
+    "verdict": "keep",
+    "reason": "Code example of def:pub/def:protect/def:priv visibility, non-redundant."
+  },
+  {
+    "chunk_id": "216e4e90f237",
+    "verdict": "keep",
+    "reason": "Explains the three-context meaning of access tags with a cross-reference."
+  },
+  {
+    "chunk_id": "8e7b6f810bbf",
+    "verdict": "keep",
+    "reason": "Complete runnable functions example covering Callable types and lambdas."
+  },
+  {
+    "chunk_id": "6b545c7aa3df",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with zero content, pure formatting boilerplate."
+  },
+  {
+    "chunk_id": "f2812dd7ddbb",
+    "verdict": "keep",
+    "reason": "Core prose on obj vs class, has-field declaration, and auto-generated constructors."
+  },
+  {
+    "chunk_id": "559979671429",
+    "verdict": "keep",
+    "reason": "Introduces obj and points to node/edge/walker for graph programming, genuine content."
+  },
+  {
+    "chunk_id": "52a33c796f7b",
+    "verdict": "keep",
+    "reason": "Explains why obj semantics are stricter and codespace portability rationale."
+  },
+  {
+    "chunk_id": "3b0ac191c539",
+    "verdict": "keep",
+    "reason": "Documents static def, class def, static has, and property syntax availability."
+  },
+  {
+    "chunk_id": "fb5a5852d809",
+    "verdict": "keep",
+    "reason": "Canonical obj example with has fields, postinit, and method usage."
+  },
+  {
+    "chunk_id": "08a228c13b96",
+    "verdict": "keep",
+    "reason": "Explains the declarative data model and future prohibition of dynamic attributes."
+  },
+  {
+    "chunk_id": "e4fe0aa09878",
+    "verdict": "keep",
+    "reason": "Warning admonition with real guidance on declaring fields via has."
+  },
+  {
+    "chunk_id": "7ca6f1e32c15",
+    "verdict": "keep",
+    "reason": "Short label but semantically marks the following code as an anti-pattern."
+  },
+  {
+    "chunk_id": "725c9c6e354e",
+    "verdict": "keep",
+    "reason": "Anti-pattern code example showing invalid dynamic attribute assignment."
+  },
+  {
+    "chunk_id": "8c04204eb839",
+    "verdict": "keep",
+    "reason": "Short label but marks the following code as the correct declarative approach."
+  },
+  {
+    "chunk_id": "901e9ba8f3e4",
+    "verdict": "keep",
+    "reason": "Correct-approach code example with comma-continued has declarations."
+  },
+  {
+    "chunk_id": "12423ab3dd0d",
+    "verdict": "keep",
+    "reason": "Prose explaining when to use the postinit field modifier."
+  },
+  {
+    "chunk_id": "964a38d45db4",
+    "verdict": "keep",
+    "reason": "Code example of the postinit modifier and method, unique coverage."
+  },
+  {
+    "chunk_id": "234f9578b7d3",
+    "verdict": "keep",
+    "reason": "Prose bridging the anti-pattern guidance to class-based examples."
+  },
+  {
+    "chunk_id": "fc22a300b463",
+    "verdict": "keep",
+    "reason": "Short label but semantically flags the following code as discouraged."
+  },
+  {
+    "chunk_id": "b940fd8c889c",
+    "verdict": "keep",
+    "reason": "Anti-pattern example of dynamic assignment inside class methods."
+  },
+  {
+    "chunk_id": "4086c7867438",
+    "verdict": "keep",
+    "reason": "Short label but semantically flags the following code as preferred."
+  },
+  {
+    "chunk_id": "6dcb1c116307",
+    "verdict": "keep",
+    "reason": "Preferred-pattern example with declared has fields replacing dynamic assignment."
+  },
+  {
+    "chunk_id": "e2324aa1126c",
+    "verdict": "keep",
+    "reason": "Full inheritance example covering override, mixins, and multiple inheritance with the default-field constraint."
+  },
+  {
+    "chunk_id": "f86b07f5faf4",
+    "verdict": "keep",
+    "reason": "Enum syntax example with explicit and auto values, unique coverage."
+  },
+  {
+    "chunk_id": "d26d23323b77",
+    "verdict": "keep",
+    "reason": "Explains typed-base enum desugaring to IntEnum/StrEnum/mixin, core reference prose."
+  },
+  {
+    "chunk_id": "91d942840bb4",
+    "verdict": "keep",
+    "reason": "Flagged near-duplicate but its counterpart d474b3d7ac85 is not in this batch to compare, and this is a complete canonical typed-enum example."
+  },
+  {
+    "chunk_id": "881f62ec8ec5",
+    "verdict": "keep",
+    "reason": "Compact desugaring table complementing the typed-enum prose."
+  },
+  {
+    "chunk_id": "7d1c39960700",
+    "verdict": "keep",
+    "reason": "Documents surprising mixin-enum constructor behavior, valuable non-obvious semantics."
+  },
+  {
+    "chunk_id": "1ac08da9fe14",
+    "verdict": "keep",
+    "reason": "Code example demonstrating the surprising mixin-enum value wrapping."
+  },
+  {
+    "chunk_id": "d4bdfc7e7277",
+    "verdict": "keep",
+    "reason": "Practical guidance on when to avoid the mixin enum form."
+  },
+  {
+    "chunk_id": "9ab0a421dd6f",
+    "verdict": "keep",
+    "reason": "Unique example of embedding inline Python inside an enum via ::py:: blocks."
+  },
+  {
+    "chunk_id": "0d4d5a2d4687",
+    "verdict": "keep",
+    "reason": "Introduces property accessor-block syntax, genuine reference prose."
+  },
+  {
+    "chunk_id": "dad7cac34d95",
+    "verdict": "keep",
+    "reason": "Short label but introduces the pure computed-property example."
+  },
+  {
+    "chunk_id": "8e0633b76dfb",
+    "verdict": "keep",
+    "reason": "Minimal getter-only computed property example, non-redundant."
+  },
+  {
+    "chunk_id": "1b2378e1d798",
+    "verdict": "keep",
+    "reason": "Prose explaining explicit backing-storage convention for properties."
+  },
+  {
+    "chunk_id": "8bb90f7eca66",
+    "verdict": "keep",
+    "reason": "Flagged near-duplicate but counterpart f773f1bdffd5 is not in this batch, and this getter/setter/deleter example is complete and canonical."
+  },
+  {
+    "chunk_id": "44548b541efd",
+    "verdict": "keep",
+    "reason": "Prose introducing impl-separated property accessors, distinct feature coverage."
+  },
+  {
+    "chunk_id": "bdd219b5f740",
+    "verdict": "keep",
+    "reason": "Unique example of dotted-impl syntax for property accessor bodies."
+  },
+  {
+    "chunk_id": "3f4af249c722",
+    "verdict": "keep",
+    "reason": "Documents read-only properties and the E1005 type-check error."
+  },
+  {
+    "chunk_id": "a55a7e5dcca5",
+    "verdict": "keep",
+    "reason": "Bare heading label but it frames the immediately following rules list."
+  },
+  {
+    "chunk_id": "9858dcd0d0cf",
+    "verdict": "keep",
+    "reason": "Precise property-vs-field rules including E0080/E0081 diagnostics, high-value reference content."
+  }
+]

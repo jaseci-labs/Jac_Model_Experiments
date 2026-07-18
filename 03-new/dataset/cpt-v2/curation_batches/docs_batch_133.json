@@ -1,0 +1,254 @@
+[
+  {
+    "chunk_id": "ec24218f5825",
+    "verdict": "keep",
+    "reason": "Transitional tutorial prose introducing the checkbox/delete/counter code that follows."
+  },
+  {
+    "chunk_id": "893bfa620eb9",
+    "verdict": "drop",
+    "reason": "Near-duplicate of 1b566cba8a9e (containment 0.871); this is the partial app component subsumed by the complete Parts 1-4 recap."
+  },
+  {
+    "chunk_id": "935c104e90ca",
+    "verdict": "keep",
+    "reason": "Short connective prose leading into the pattern explanations; harmless and contextual."
+  },
+  {
+    "chunk_id": "0ba360f700d3",
+    "verdict": "keep",
+    "reason": "Substantive explanation of list comprehensions and immutable reactive-state updates in Jac client code."
+  },
+  {
+    "chunk_id": "e2f226058b62",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose content."
+  },
+  {
+    "chunk_id": "c9ab6459474b",
+    "verdict": "keep",
+    "reason": "One-line instruction tying the CSS file into the project; minimal but genuine tutorial content."
+  },
+  {
+    "chunk_id": "0c237fc304dd",
+    "verdict": "keep",
+    "reason": "The styles.css contents referenced by the tutorial's cl import; genuine non-redundant material."
+  },
+  {
+    "chunk_id": "db3e32a09d72",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose content."
+  },
+  {
+    "chunk_id": "479b1f635ac5",
+    "verdict": "drop",
+    "reason": "Bare admonition header line with no content of its own."
+  },
+  {
+    "chunk_id": "1b566cba8a9e",
+    "verdict": "upweight",
+    "reason": "Complete canonical full-stack example: node declaration, root ++> connect, [root-->][?:Task] queries, del, and the reactive client in one coherent program.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "d3202c22c05b",
+    "verdict": "keep",
+    "reason": "The jac start command snippet needed to run the tutorial app."
+  },
+  {
+    "chunk_id": "1c260d726492",
+    "verdict": "keep",
+    "reason": "Genuine run-and-verify instruction pointing at localhost:8000."
+  },
+  {
+    "chunk_id": "24db368ef80c",
+    "verdict": "keep",
+    "reason": "Concrete verification steps including the restart-and-persist observation."
+  },
+  {
+    "chunk_id": "9c8e7ebb182f",
+    "verdict": "upweight",
+    "reason": "Core OSP persistence semantics: nodes connected to root persist automatically with no save/load code.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "f567e0630d91",
+    "verdict": "keep",
+    "reason": "Useful tip about the live /graph visualization of nodes connected to root."
+  },
+  {
+    "chunk_id": "ade6ba82ae04",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose content."
+  },
+  {
+    "chunk_id": "92c7f04b5921",
+    "verdict": "keep",
+    "reason": "Dense recap of client-side Jac keywords (cl, has, can with entry, await, JSX); good syntax signal."
+  },
+  {
+    "chunk_id": "191c61f13eb6",
+    "verdict": "keep",
+    "reason": "Cross-reference with a sentence of descriptive prose about the jac-client reference scope; borderline but not pure nav."
+  },
+  {
+    "chunk_id": "f5ec07e4cde8",
+    "verdict": "keep",
+    "reason": "Exercise prompt reinforcing the def:pub endpoint plus async client-method pattern."
+  },
+  {
+    "chunk_id": "16ba858360c0",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator only, no content."
+  },
+  {
+    "chunk_id": "ac443356330c",
+    "verdict": "keep",
+    "reason": "Part 5 introduction framing AI delegation via type signatures; genuine prose."
+  },
+  {
+    "chunk_id": "dae82fce653e",
+    "verdict": "keep",
+    "reason": "Practical tip about clearing .jac/data/ on schema change; real operational knowledge."
+  },
+  {
+    "chunk_id": "205a82ac8572",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose content."
+  },
+  {
+    "chunk_id": "981dc4f3ae29",
+    "verdict": "keep",
+    "reason": "Explains the local-model default (Gemma via llama.cpp) for Jac AI features."
+  },
+  {
+    "chunk_id": "6609e774f8cb",
+    "verdict": "keep",
+    "reason": "The jac install 'byllm[local]' command the surrounding prose depends on."
+  },
+  {
+    "chunk_id": "faf107322140",
+    "verdict": "keep",
+    "reason": "Genuine detail on GGUF weight download and cache location for byLLM."
+  },
+  {
+    "chunk_id": "d7f6d2a5e7e1",
+    "verdict": "keep",
+    "reason": "The jac model pull command snippet for pre-fetching weights."
+  },
+  {
+    "chunk_id": "77f3eff6b65e",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose content."
+  },
+  {
+    "chunk_id": "c570cdf1d01b",
+    "verdict": "keep",
+    "reason": "Explains where model configuration lives (jac.toml [byllm.model])."
+  },
+  {
+    "chunk_id": "644c0ed49295",
+    "verdict": "keep",
+    "reason": "The canonical jac.toml default_model configuration snippet."
+  },
+  {
+    "chunk_id": "5b9cdd93b1dd",
+    "verdict": "keep",
+    "reason": "Explains that by llm() resolves the model from jac.toml with no code change to swap."
+  },
+  {
+    "chunk_id": "f95a26cca241",
+    "verdict": "keep",
+    "reason": "Genuine info on byLLM wrapping LiteLLM for cloud model providers."
+  },
+  {
+    "chunk_id": "a78f90c463f7",
+    "verdict": "keep",
+    "reason": "Provider/model-string table for byLLM cloud configuration; concrete reference content."
+  },
+  {
+    "chunk_id": "547f33203260",
+    "verdict": "keep",
+    "reason": "API-key environment-variable instruction completing the cloud-model setup."
+  },
+  {
+    "chunk_id": "cfe4bcd693f8",
+    "verdict": "keep",
+    "reason": "Introduces the alternative glob-based in-code model configuration."
+  },
+  {
+    "chunk_id": "c1a397e47448",
+    "verdict": "keep",
+    "reason": "The import-Model-plus-glob code snippet for in-source LLM configuration."
+  },
+  {
+    "chunk_id": "8b7ea77b7a78",
+    "verdict": "keep",
+    "reason": "Explains glob module-level variables and the byLLM import; real language content."
+  },
+  {
+    "chunk_id": "314d7a7fb0fc",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose content."
+  },
+  {
+    "chunk_id": "f4ecc76439bc",
+    "verdict": "keep",
+    "reason": "Explains enums as output constraints for AI functions; genuine concept prose."
+  },
+  {
+    "chunk_id": "de7971c7087f",
+    "verdict": "keep",
+    "reason": "The Category enum declaration the surrounding explanation refers to."
+  },
+  {
+    "chunk_id": "59d676ea2ee7",
+    "verdict": "keep",
+    "reason": "Substantive explanation of why enum return types make LLM output deterministic."
+  },
+  {
+    "chunk_id": "367af2134ad1",
+    "verdict": "keep",
+    "reason": "Typed-base enum syntax (enum X: T) tip; distinct language feature content."
+  },
+  {
+    "chunk_id": "792a7e2a5e79",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose content."
+  },
+  {
+    "chunk_id": "da6648c8737b",
+    "verdict": "keep",
+    "reason": "Short lead-in emphasizing the centrality of the by llm() pattern that follows."
+  },
+  {
+    "chunk_id": "37d0f6b3f0c2",
+    "verdict": "keep",
+    "reason": "Canonical minimal by llm() plus sem example; flagged pairs are all against out-of-batch chunks I cannot inspect, so keeping this side."
+  },
+  {
+    "chunk_id": "d865ed809362",
+    "verdict": "keep",
+    "reason": "Explains that by llm() delegates the function body and how the prompt is constructed."
+  },
+  {
+    "chunk_id": "72e843276b20",
+    "verdict": "keep",
+    "reason": "Enumerates exactly what the compiler feeds the LLM (name, params, return type, sem)."
+  },
+  {
+    "chunk_id": "9390677fe68d",
+    "verdict": "keep",
+    "reason": "Ties the type system to AI specification; genuine core by-llm concept prose."
+  },
+  {
+    "chunk_id": "66874e65b06b",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose content."
+  },
+  {
+    "chunk_id": "f6b303680bf3",
+    "verdict": "keep",
+    "reason": "Genuine doc guidance distinguishing sem from docstrings for by llm() functions; informative Jac-specific content, not boilerplate and not core OSP material."
+  }
+]

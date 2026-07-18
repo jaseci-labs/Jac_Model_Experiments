@@ -1,0 +1,259 @@
+[
+  {
+    "chunk_id": "83da00b5c7d8",
+    "verdict": "drop",
+    "reason": "Bare closing HTML tag with no documentation content."
+  },
+  {
+    "chunk_id": "3f9c7c82f8fe",
+    "verdict": "drop",
+    "reason": "Markdown horizontal-rule separator only, pure boilerplate."
+  },
+  {
+    "chunk_id": "aefd2b6a348d",
+    "verdict": "keep",
+    "reason": "Section intro motivating graphs before OSP, genuine prose."
+  },
+  {
+    "chunk_id": "f0a4e2ef58f8",
+    "verdict": "keep",
+    "reason": "Defines what a graph is, foundational tutorial prose."
+  },
+  {
+    "chunk_id": "12a261e21848",
+    "verdict": "drop",
+    "reason": "Bare label heading with no content of its own."
+  },
+  {
+    "chunk_id": "c00df5dc0653",
+    "verdict": "keep",
+    "reason": "Concrete real-world graph examples supporting the concept."
+  },
+  {
+    "chunk_id": "4cf92dc4af41",
+    "verdict": "keep",
+    "reason": "Introduces graph terminology (nodes/vertices), genuine content."
+  },
+  {
+    "chunk_id": "37758a25d2ab",
+    "verdict": "keep",
+    "reason": "Describes what nodes are with examples."
+  },
+  {
+    "chunk_id": "ac5cfea5b3b7",
+    "verdict": "drop",
+    "reason": "Bare label heading with no content of its own."
+  },
+  {
+    "chunk_id": "443f15a05a4e",
+    "verdict": "keep",
+    "reason": "Describes what edges are with examples."
+  },
+  {
+    "chunk_id": "55fa56f756c9",
+    "verdict": "drop",
+    "reason": "Bare label heading with no content of its own."
+  },
+  {
+    "chunk_id": "b1ec223d1b15",
+    "verdict": "keep",
+    "reason": "Mermaid social-network diagram illustrating a graph."
+  },
+  {
+    "chunk_id": "759cd1352cf0",
+    "verdict": "keep",
+    "reason": "Explains the nodes and edges of the diagram example."
+  },
+  {
+    "chunk_id": "9be9db17855c",
+    "verdict": "keep",
+    "reason": "Introduces directed vs undirected graphs with a substantive claim."
+  },
+  {
+    "chunk_id": "e98fc3bc46cc",
+    "verdict": "keep",
+    "reason": "Mermaid diagram illustrating an undirected relationship."
+  },
+  {
+    "chunk_id": "6d2c8072f4ee",
+    "verdict": "keep",
+    "reason": "Caption explaining the mutual-relationship diagram."
+  },
+  {
+    "chunk_id": "3a5d8e6c9ecf",
+    "verdict": "keep",
+    "reason": "States the directed-relationship concept, genuine content."
+  },
+  {
+    "chunk_id": "c09adf2cb3d2",
+    "verdict": "keep",
+    "reason": "Mermaid diagram illustrating a directed relationship."
+  },
+  {
+    "chunk_id": "dd3167574d55",
+    "verdict": "keep",
+    "reason": "Caption explaining the directed follow relationship."
+  },
+  {
+    "chunk_id": "8ad8c2203099",
+    "verdict": "keep",
+    "reason": "Section intro on why graphs matter in programming."
+  },
+  {
+    "chunk_id": "b4745a8d2612",
+    "verdict": "keep",
+    "reason": "Social-network example mapping domain to nodes/edges."
+  },
+  {
+    "chunk_id": "a5183072522f",
+    "verdict": "keep",
+    "reason": "Transportation example mapping domain to nodes/edges."
+  },
+  {
+    "chunk_id": "4a1f998e26bc",
+    "verdict": "keep",
+    "reason": "Website example mapping domain to nodes/edges."
+  },
+  {
+    "chunk_id": "e56e646b8bf7",
+    "verdict": "keep",
+    "reason": "Recommendation-system example mapping domain to nodes/edges."
+  },
+  {
+    "chunk_id": "d03e420718e5",
+    "verdict": "keep",
+    "reason": "Knowledge-base example mapping domain to nodes/edges."
+  },
+  {
+    "chunk_id": "33c3e8de8167",
+    "verdict": "keep",
+    "reason": "Sets up the traditional-OOP graph approach for contrast."
+  },
+  {
+    "chunk_id": "29a03ad7eba4",
+    "verdict": "drop",
+    "reason": "Bare opening HTML div tag, pure boilerplate."
+  },
+  {
+    "chunk_id": "30d0474f63d8",
+    "verdict": "keep",
+    "reason": "Full Jac OOP code example showing manual friend-list graph management."
+  },
+  {
+    "chunk_id": "07e3c8bda1b5",
+    "verdict": "drop",
+    "reason": "Bare closing HTML tag with no documentation content."
+  },
+  {
+    "chunk_id": "d188897c77d4",
+    "verdict": "drop",
+    "reason": "Bare label heading with no content of its own."
+  },
+  {
+    "chunk_id": "522c015a82d7",
+    "verdict": "keep",
+    "reason": "Lists concrete problems with the OOP approach, motivating OSP."
+  },
+  {
+    "chunk_id": "3170a02f9433",
+    "verdict": "keep",
+    "reason": "Transition sentence naming Object-Spatial Programming as the solution."
+  },
+  {
+    "chunk_id": "2cd5b78e0284",
+    "verdict": "drop",
+    "reason": "Markdown horizontal-rule separator only, pure boilerplate."
+  },
+  {
+    "chunk_id": "f1a6fed62b72",
+    "verdict": "keep",
+    "reason": "Section intro to the OSP chapter, genuine prose."
+  },
+  {
+    "chunk_id": "7ccc9b8cb305",
+    "verdict": "keep",
+    "reason": "Introduces the OOP-vs-OSP big-idea comparison."
+  },
+  {
+    "chunk_id": "95b23d98adab",
+    "verdict": "keep",
+    "reason": "States the OOP half of the computation-to-data contrast."
+  },
+  {
+    "chunk_id": "6d73942dfcf3",
+    "verdict": "drop",
+    "reason": "Bare label heading with no content of its own."
+  },
+  {
+    "chunk_id": "b866058c7d40",
+    "verdict": "upweight",
+    "reason": "Core OSP thesis: computation travels through spatially arranged data via walkers.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "b542b1d73d09",
+    "verdict": "drop",
+    "reason": "Bare label heading with no content of its own."
+  },
+  {
+    "chunk_id": "f633386003e7",
+    "verdict": "upweight",
+    "reason": "Memorable OOP-vs-OSP analogy reinforcing the mobile-computation model.",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "5f43ed2540c1",
+    "verdict": "keep",
+    "reason": "Introduces the three pillars of OSP, genuine content."
+  },
+  {
+    "chunk_id": "ccd8f5dc916a",
+    "verdict": "upweight",
+    "reason": "Canonical node/edge/walker table defining the three core OSP types.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "bec20f653c86",
+    "verdict": "upweight",
+    "reason": "Core concept: nodes as connectable class-like data locations.",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "9dbd64ddf5d4",
+    "verdict": "drop",
+    "reason": "Bare opening HTML div tag, pure boilerplate."
+  },
+  {
+    "chunk_id": "c85053cf991d",
+    "verdict": "upweight",
+    "reason": "Working Jac code showing node declaration and instantiation mechanics.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "37a56dba9c96",
+    "verdict": "drop",
+    "reason": "Bare closing HTML tag with no documentation content."
+  },
+  {
+    "chunk_id": "596ea97a71fb",
+    "verdict": "keep",
+    "reason": "Bridging sentence contrasting nodes with plain classes."
+  },
+  {
+    "chunk_id": "4b3799e937e2",
+    "verdict": "upweight",
+    "reason": "Introduces the ++> edge-connection operator, core OSP mechanics.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "0efc2209cd5c",
+    "verdict": "drop",
+    "reason": "Bare opening HTML div tag, pure boilerplate."
+  },
+  {
+    "chunk_id": "a9d5a99853de",
+    "verdict": "upweight",
+    "reason": "Working Jac code demonstrating ++> edge creation and the special root node.",
+    "weight": 3.5
+  }
+]

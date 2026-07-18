@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "a8d326c7d3f7",
+    "verdict": "drop",
+    "reason": "Nav-only fragment: a bare cross-reference link to a tutorial with no documentation content."
+  },
+  {
+    "chunk_id": "774223671232",
+    "verdict": "keep",
+    "reason": "Substantive intro to the Capacitor mobile target explaining the web-bundle-in-native-shell model."
+  },
+  {
+    "chunk_id": "09e74e4838a9",
+    "verdict": "drop",
+    "reason": "Header-only fragment ('**Prerequisites:**') with no content."
+  },
+  {
+    "chunk_id": "0cf41b21bbbf",
+    "verdict": "keep",
+    "reason": "Genuine prerequisites content (Bun runtime, Android/iOS toolchains); retained as the surviving copy of the flagged duplicate pair."
+  },
+  {
+    "chunk_id": "07572baa122e",
+    "verdict": "drop",
+    "reason": "Header-only fragment ('**Setup & Build:**') with no content."
+  },
+  {
+    "chunk_id": "c9e1f8604251",
+    "verdict": "keep",
+    "reason": "Canonical jac setup/start/build command sequence for the Capacitor mobile target."
+  },
+  {
+    "chunk_id": "ed62d8a64fba",
+    "verdict": "drop",
+    "reason": "Header-only fragment ('**Output:**') with no content."
+  },
+  {
+    "chunk_id": "913ec9905b6b",
+    "verdict": "keep",
+    "reason": "Concrete build-output paths for Android APK and iOS products."
+  },
+  {
+    "chunk_id": "8dc4141f2680",
+    "verdict": "keep",
+    "reason": "Short but informative lead-in naming the [client.mobile] jac.toml config section."
+  },
+  {
+    "chunk_id": "cdc1a3588272",
+    "verdict": "keep",
+    "reason": "Complete [client.mobile] configuration reference with keys and defaults."
+  },
+  {
+    "chunk_id": "44b9f968501d",
+    "verdict": "drop",
+    "reason": "Header-only fragment ('**Notes:**') with no content."
+  },
+  {
+    "chunk_id": "cfd1f73256ae",
+    "verdict": "keep",
+    "reason": "Dense operational notes on setup platform resolution, adb reverse, signing, and Capacitor plugins."
+  },
+  {
+    "chunk_id": "16facb129586",
+    "verdict": "drop",
+    "reason": "Nav-only fragment: bare tutorial cross-reference with no content."
+  },
+  {
+    "chunk_id": "85418be910e4",
+    "verdict": "keep",
+    "reason": "Substantive intro distinguishing the React Native target from Capacitor (native views via Expo/Metro/Hermes)."
+  },
+  {
+    "chunk_id": "381d25ec393a",
+    "verdict": "keep",
+    "reason": "Defines the mobUI project concept and its one-tree web+native compilation model."
+  },
+  {
+    "chunk_id": "7997376110b9",
+    "verdict": "drop",
+    "reason": "Header-only fragment ('**Prerequisites:**') with no content."
+  },
+  {
+    "chunk_id": "8570b7e3dda7",
+    "verdict": "drop",
+    "reason": "Exact duplicate (containment 1.0) of 0cf41b21bbbf, which is kept; identical prerequisites text repeated in the RN section."
+  },
+  {
+    "chunk_id": "dba8e6a09d0c",
+    "verdict": "drop",
+    "reason": "Header-only fragment ('**Setup & Build:**') with no content."
+  },
+  {
+    "chunk_id": "f44985f18a66",
+    "verdict": "keep",
+    "reason": "Canonical setup/dev/build command sequence for the React Native target."
+  },
+  {
+    "chunk_id": "ae0f1fa301d8",
+    "verdict": "keep",
+    "reason": "Useful dev-loop details: Metro port, dev host env overrides, --clear rebundle behavior."
+  },
+  {
+    "chunk_id": "896ea3dc30ae",
+    "verdict": "drop",
+    "reason": "Header-only fragment ('**Output:**') with no content."
+  },
+  {
+    "chunk_id": "c585b0693bdd",
+    "verdict": "keep",
+    "reason": "Concrete RN build-output details for gradle, xcodebuild, and EAS paths."
+  },
+  {
+    "chunk_id": "9b841312eaee",
+    "verdict": "keep",
+    "reason": "Short but informative lead-in naming the [client.react_native] jac.toml config section."
+  },
+  {
+    "chunk_id": "d8fee9c81b80",
+    "verdict": "keep",
+    "reason": "Complete [client.react_native] configuration reference with keys, defaults, and comments."
+  },
+  {
+    "chunk_id": "b873d93bdf2c",
+    "verdict": "keep",
+    "reason": "Documents the client_kind = 'mobui' opt-in mechanism."
+  },
+  {
+    "chunk_id": "999d0db84e6e",
+    "verdict": "keep",
+    "reason": "Concrete jac.toml [project] example showing the mobui opt-in in context."
+  },
+  {
+    "chunk_id": "f2b564e293df",
+    "verdict": "drop",
+    "reason": "Header-only fragment ('**Notes:**') with no content."
+  },
+  {
+    "chunk_id": "1373ac94b79e",
+    "verdict": "keep",
+    "reason": "Dense notes on scaffold location, coexistence with Capacitor, dev networking, and signing constraints."
+  },
+  {
+    "chunk_id": "e741cfaca7ea",
+    "verdict": "keep",
+    "reason": "Explains the EAS Update OTA integration wired into jac build."
+  },
+  {
+    "chunk_id": "cb8a4cb92355",
+    "verdict": "keep",
+    "reason": "Reference table of eas_update config keys, defaults, and legacy aliases."
+  },
+  {
+    "chunk_id": "b5dcaf88f2b8",
+    "verdict": "keep",
+    "reason": "Brief lead-in that carries a real fact (commands run inside .jac/mobile-rn/)."
+  },
+  {
+    "chunk_id": "836dccb54142",
+    "verdict": "keep",
+    "reason": "Concrete one-time EAS Update setup commands (expo install, eas update:configure)."
+  },
+  {
+    "chunk_id": "7bad51de6dca",
+    "verdict": "keep",
+    "reason": "Explains the deliberate non-pinning of expo-updates and the failure mode without it."
+  },
+  {
+    "chunk_id": "6a02183c83ef",
+    "verdict": "drop",
+    "reason": "Lead-in-only fragment ('**Then opt in via jac.toml:**') with no content."
+  },
+  {
+    "chunk_id": "2e3019316389",
+    "verdict": "keep",
+    "reason": "Concrete opt-in config example for eas_update."
+  },
+  {
+    "chunk_id": "1a59b0a17046",
+    "verdict": "keep",
+    "reason": "Describes the post-build OTA publish behavior and eas_update_message semantics."
+  },
+  {
+    "chunk_id": "73e1667b8857",
+    "verdict": "keep",
+    "reason": "Frames the Capacitor-vs-React-Native comparison as complementary targets."
+  },
+  {
+    "chunk_id": "ccb5bfdc8db5",
+    "verdict": "keep",
+    "reason": "Substantive comparison table of the two mobile targets."
+  },
+  {
+    "chunk_id": "ab5e23b8f70e",
+    "verdict": "keep",
+    "reason": "States the per-project target-selection model via the --client layer."
+  },
+  {
+    "chunk_id": "08a3c74854b6",
+    "verdict": "keep",
+    "reason": "Core definition of @jac/mobui as a sealed Jac-owned vocabulary, not re-exported React Native."
+  },
+  {
+    "chunk_id": "e7d6206a6af0",
+    "verdict": "keep",
+    "reason": "The full @jac/mobui component mapping table (HTML replacements, RN/RNW backends)."
+  },
+  {
+    "chunk_id": "775300be36e0",
+    "verdict": "keep",
+    "reason": "Documents the styling model, E1105 HTML rejection, and CSS stripping on native builds."
+  },
+  {
+    "chunk_id": "9a804bdaf9d9",
+    "verdict": "keep",
+    "reason": "Important caveat that web builds of @jac/mobui require react-native-web declared in jac.toml."
+  },
+  {
+    "chunk_id": "f099b81ef4b5",
+    "verdict": "keep",
+    "reason": "Genuine Jac code example showing @jac/mobui imports, StyleSheet, and JSX in a cl block."
+  },
+  {
+    "chunk_id": "8c8cefceee50",
+    "verdict": "keep",
+    "reason": "Explains the E1105 compile-time guard and its scope-resolution rule."
+  },
+  {
+    "chunk_id": "c9106c6cfd61",
+    "verdict": "keep",
+    "reason": "Concrete E1105 error-message example useful for error-recognition training."
+  },
+  {
+    "chunk_id": "2698227fb5ef",
+    "verdict": "keep",
+    "reason": "Precise E1105 rules on uppercase/lowercase resolution and .cl.jac vs .native.cl.jac exemptions."
+  },
+  {
+    "chunk_id": "8b5636786e75",
+    "verdict": "keep",
+    "reason": "Carries the fact that web projects with client_kind unset are unaffected by E1105, beyond the cross-reference."
+  },
+  {
+    "chunk_id": "8af5d0dc5e8b",
+    "verdict": "keep",
+    "reason": "Heading plus lead-in that anchors the platform-divergence priority list that follows."
+  },
+  {
+    "chunk_id": "7d88e4c8215e",
+    "verdict": "keep",
+    "reason": "Substantive explanation of divergence handling: vocabulary absorption vs .native.cl.jac platform files."
+  }
+]

@@ -1,0 +1,252 @@
+[
+ {
+  "chunk_id": "718c2b5c9334",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.13.5) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "f15c6f3d96ae",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.13.4) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "003d728b35ee",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.13.3) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "a501c692879c",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.13.2) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "0b5260fcea53",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.13.1) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "f8985310f589",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.13.0) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "627a569c34ed",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.12.2) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "d919d0adf79f",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.12.1) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "1adde6e0f7fc",
+  "verdict": "drop",
+  "reason": "Empty changelog stub: heading plus '27 small refactors/changes' with no substantive content (full 0.12.0 notes live in chunk fd0bf0a7b55f)."
+ },
+ {
+  "chunk_id": "fd0bf0a7b55f",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.12.0) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "03173fac668b",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.11.3) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "8c37142a0b57",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.11.2) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "20f34543ff4a",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.11.1) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "eeaf65a53d2d",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.11.0) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "c9f1615c7cbc",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.10.5) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "99f19e51eb35",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.10.4) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "dea822a8d3cd",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.10.3) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "a7db3cd5a317",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.10.2) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "611e13a7910c",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.10.1) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "743736edd0d9",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.10.0) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "863fb49efb66",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.9.15) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "c9d135ffab9b",
+  "verdict": "keep",
+  "reason": "Flagged near-dup of jac-scale 0.1.5 chunk (batch 015) shares only one bullet; this 0.9.14 release note is far larger with mostly unique content, so keep."
+ },
+ {
+  "chunk_id": "3a0eca882ead",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.9.13) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "6b104d821453",
+  "verdict": "keep",
+  "reason": "Flagged against three small jac-scale chunks (batch 015) that are contained in it; this 0.9.12 note is the complete canonical copy, so keep."
+ },
+ {
+  "chunk_id": "cdd67189950d",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.9.11) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "951037c1da7e",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.9.11) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "29c8450d6ff0",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.9.11) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "eb7bb128d6df",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.9.11) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "d03ee8cfff0f",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.9.11) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "6778f6282a34",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.9.10) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "5a1a964879e1",
+  "verdict": "drop",
+  "reason": "Heading-only fragment ('## jaclang 0.9.9') with zero body content."
+ },
+ {
+  "chunk_id": "0891738af040",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (Breaking Changes) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "db634d50615d",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (Features and Improvements) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "cce25d761c87",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (Features and Improvements) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "f4feaaa821e2",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (Features and Improvements) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "b9a670b7e87a",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (Features and Improvements) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "cfd3d5ada6ca",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (Features and Improvements) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "7df136e5f39e",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (Features and Improvements) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "579fa3238259",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (Features and Improvements) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "d36fbdb4c4bc",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (Features and Improvements) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "ecaffaaf3dd1",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (Features and Improvements) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "7b39cade619d",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.9.8) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "b3008b33b47c",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.9.7) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "6dc06a5b8ae5",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.9.4) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "3156ce5e34ea",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.9.3) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "9da0a3ca80b3",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.9.1) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "e4d97dc6ecb4",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.9.1) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "0deaab17a887",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.9.0) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "13a8705db01b",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.8.10) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ },
+ {
+  "chunk_id": "b794de66c3c1",
+  "verdict": "keep",
+  "reason": "Genuine release-note content (jaclang 0.8.9) with substantive Jac feature/fix detail; changelog prose, not core-OSP concept material, so no upweight."
+ }
+]

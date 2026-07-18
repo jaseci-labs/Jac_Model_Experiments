@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "22a7a39f96c0",
+    "verdict": "drop",
+    "reason": "Call-to-action bullet with no documentation content."
+  },
+  {
+    "chunk_id": "59f23b1a82de",
+    "verdict": "drop",
+    "reason": "Boilerplate CTA with an unfilled placeholder link."
+  },
+  {
+    "chunk_id": "19e3c9fa045e",
+    "verdict": "drop",
+    "reason": "One-line install CTA fragment; also outdated relative to the binary install story documented elsewhere in the corpus."
+  },
+  {
+    "chunk_id": "5c0d246513e6",
+    "verdict": "keep",
+    "reason": "Genuine intro prose describing Jac's single-binary distribution model."
+  },
+  {
+    "chunk_id": "4a802608e660",
+    "verdict": "drop",
+    "reason": "Corrupted install snippet ('c*rl') duplicated verbatim and correctly in the Quick Start chunk 707f6c99a68b."
+  },
+  {
+    "chunk_id": "ecb337744857",
+    "verdict": "keep",
+    "reason": "Substantive prose summarizing the toolchain bundled in the binary."
+  },
+  {
+    "chunk_id": "4378efb97743",
+    "verdict": "keep",
+    "reason": "Informative capability table mapping Jac tooling to the tools it replaces."
+  },
+  {
+    "chunk_id": "62bef54f08f0",
+    "verdict": "keep",
+    "reason": "Explains the two-scope dependency model, real documentation content."
+  },
+  {
+    "chunk_id": "85a904986b5e",
+    "verdict": "keep",
+    "reason": "Documents project-scoped dependencies via jac.toml and .jac/venv."
+  },
+  {
+    "chunk_id": "bd45d6120be3",
+    "verdict": "keep",
+    "reason": "Concrete jac add / jac install usage example."
+  },
+  {
+    "chunk_id": "c87c2a3c0255",
+    "verdict": "keep",
+    "reason": "Canonical jac.toml example showing PyPI and npm dependency declaration."
+  },
+  {
+    "chunk_id": "8bfffb8ef416",
+    "verdict": "keep",
+    "reason": "Prose tying PyPI and npm management together, complements the toml example."
+  },
+  {
+    "chunk_id": "b466a51ce85f",
+    "verdict": "keep",
+    "reason": "Documents the global dependency scope."
+  },
+  {
+    "chunk_id": "c84a3af3f72d",
+    "verdict": "keep",
+    "reason": "Concrete jac install --global example."
+  },
+  {
+    "chunk_id": "7f81ba714400",
+    "verdict": "keep",
+    "reason": "Short but informative statement of global package semantics."
+  },
+  {
+    "chunk_id": "3205126cb9b6",
+    "verdict": "keep",
+    "reason": "Documents the jac x universal tool runner concept."
+  },
+  {
+    "chunk_id": "327a5cdbb070",
+    "verdict": "keep",
+    "reason": "Worked examples of jac x across PyPI, npm, and project scopes."
+  },
+  {
+    "chunk_id": "481e6c595a33",
+    "verdict": "keep",
+    "reason": "Explains automatic environment resolution for jac x, real content."
+  },
+  {
+    "chunk_id": "1e28fc1b2f70",
+    "verdict": "keep",
+    "reason": "Lead-in to the replacement table with genuine framing prose."
+  },
+  {
+    "chunk_id": "36e88932b043",
+    "verdict": "keep",
+    "reason": "Informative table mapping replaced tools to Jac equivalents."
+  },
+  {
+    "chunk_id": "b53e252a3b1a",
+    "verdict": "keep",
+    "reason": "Useful caveat note clarifying scope of the tool replacements."
+  },
+  {
+    "chunk_id": "e345b5532bf8",
+    "verdict": "keep",
+    "reason": "Section intro to the binary's internal architecture."
+  },
+  {
+    "chunk_id": "3852b269e7b1",
+    "verdict": "keep",
+    "reason": "Details the embedded runtimes and subsystems, substantive architecture content."
+  },
+  {
+    "chunk_id": "be0703ec00cf",
+    "verdict": "keep",
+    "reason": "Explains dependency resolution and environment isolation mechanics."
+  },
+  {
+    "chunk_id": "707f6c99a68b",
+    "verdict": "keep",
+    "reason": "Canonical quick-start sequence from install to running app."
+  },
+  {
+    "chunk_id": "ebb388e54651",
+    "verdict": "keep",
+    "reason": "Closing prose reinforcing the one-tool workflow, ties the post together."
+  },
+  {
+    "chunk_id": "27b090dd6c32",
+    "verdict": "keep",
+    "reason": "Genuine blog prose introducing the Socratic Prompt Method."
+  },
+  {
+    "chunk_id": "41816c320da1",
+    "verdict": "keep",
+    "reason": "Author context prose, part of the coherent essay narrative."
+  },
+  {
+    "chunk_id": "e20e18887226",
+    "verdict": "keep",
+    "reason": "Substantive argument prose about demo-format passivity."
+  },
+  {
+    "chunk_id": "ad6015943eaf",
+    "verdict": "drop",
+    "reason": "Bare '<!-- more -->' excerpt marker, pure markup boilerplate."
+  },
+  {
+    "chunk_id": "25716ba45b1a",
+    "verdict": "keep",
+    "reason": "Core statement of the method's principle, substantive content."
+  },
+  {
+    "chunk_id": "f3059c304be1",
+    "verdict": "keep",
+    "reason": "Workflow overview diagram with meaningful phase structure."
+  },
+  {
+    "chunk_id": "da2390e1cfff",
+    "verdict": "keep",
+    "reason": "Transitional sentence but glue for the surrounding essay flow."
+  },
+  {
+    "chunk_id": "2907a4876e77",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "ee0d40799ac7",
+    "verdict": "keep",
+    "reason": "Phase 1 explanation with substantive methodological prose."
+  },
+  {
+    "chunk_id": "58ff78f1c736",
+    "verdict": "keep",
+    "reason": "The method's canonical opening question, load-bearing for the essay."
+  },
+  {
+    "chunk_id": "5fb2534ac701",
+    "verdict": "keep",
+    "reason": "Substantive reasoning about probing model understanding."
+  },
+  {
+    "chunk_id": "ba8c7574874b",
+    "verdict": "keep",
+    "reason": "Illustrative sequence diagram of the Socratic debate loop."
+  },
+  {
+    "chunk_id": "435a6dde7c74",
+    "verdict": "keep",
+    "reason": "Section intro leading into the question-type taxonomy."
+  },
+  {
+    "chunk_id": "4b2180381826",
+    "verdict": "keep",
+    "reason": "Informative table of Socratic question types and what they expose."
+  },
+  {
+    "chunk_id": "50241330c0fd",
+    "verdict": "keep",
+    "reason": "Substantive prose on leading versus dictating."
+  },
+  {
+    "chunk_id": "7478c37b7691",
+    "verdict": "keep",
+    "reason": "Section intro on context-window budgeting, real advice."
+  },
+  {
+    "chunk_id": "6394d9318cfc",
+    "verdict": "keep",
+    "reason": "Concrete context-budget pacing diagram."
+  },
+  {
+    "chunk_id": "441e6f859d19",
+    "verdict": "keep",
+    "reason": "Substantive advice on converging before context exhaustion."
+  },
+  {
+    "chunk_id": "997549837f86",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "8b429ef0bca6",
+    "verdict": "keep",
+    "reason": "Phase 2 explanation of plan crystallization, substantive prose."
+  },
+  {
+    "chunk_id": "ef29294775a3",
+    "verdict": "keep",
+    "reason": "Short lead-in that anchors the following requirements list."
+  },
+  {
+    "chunk_id": "6705cf865582",
+    "verdict": "keep",
+    "reason": "The plan-content checklist, substantive methodological detail."
+  },
+  {
+    "chunk_id": "7db70f3fdceb",
+    "verdict": "keep",
+    "reason": "Substantive closing rationale for the written-plan artifact."
+  },
+  {
+    "chunk_id": "5924c579e07e",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  }
+]

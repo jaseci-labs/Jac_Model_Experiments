@@ -1,0 +1,259 @@
+[
+  {
+    "chunk_id": "48ba39561a01",
+    "verdict": "keep",
+    "reason": "Genuine intro prose framing Jac's Python interoperability story."
+  },
+  {
+    "chunk_id": "57b75c82c26e",
+    "verdict": "keep",
+    "reason": "Concrete code example showing how to import Jac modules from Python."
+  },
+  {
+    "chunk_id": "7596b7c0bcac",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "2021ea226095",
+    "verdict": "keep",
+    "reason": "Jac-to-Python type mapping table is useful reference content."
+  },
+  {
+    "chunk_id": "1c1c9d546010",
+    "verdict": "upweight",
+    "reason": "Introduces the report statement, the core mechanism for getting data out of walker traversals.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "4544e6806b30",
+    "verdict": "keep",
+    "reason": "Framing prose explaining why walker response pattern choice matters."
+  },
+  {
+    "chunk_id": "a19c6c4319c2",
+    "verdict": "drop",
+    "reason": "Nav-only related-links block with no instructional content."
+  },
+  {
+    "chunk_id": "03e19f891f11",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "d67f25634d7e",
+    "verdict": "upweight",
+    "reason": "Core spawn/report semantics: explains the .reports array as the walker's multi-shot return channel.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "d73181eec3d5",
+    "verdict": "keep",
+    "reason": "Useful behavioral note about report's stdout side effect."
+  },
+  {
+    "chunk_id": "50608b877395",
+    "verdict": "upweight",
+    "reason": "Minimal canonical example of spawn plus report ordering into .reports.",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "1e4baafa1746",
+    "verdict": "keep",
+    "reason": "Solid guidance on declaring typed reports as the default contract."
+  },
+  {
+    "chunk_id": "a6f1b8c0efd1",
+    "verdict": "keep",
+    "reason": "Explains the list[any] fallback and its downstream typing cost."
+  },
+  {
+    "chunk_id": "89d216032bf8",
+    "verdict": "keep",
+    "reason": "Short but real intro prose for the single-typed-report pattern."
+  },
+  {
+    "chunk_id": "648f3b89fc5e",
+    "verdict": "upweight",
+    "reason": "Rich worked example exercising visit, here, disengage, spawn, and typed reports together.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "e42f442bd454",
+    "verdict": "keep",
+    "reason": "Clarifies that reports is an ordinary has field with a default."
+  },
+  {
+    "chunk_id": "12f4d48ab396",
+    "verdict": "keep",
+    "reason": "Explains the non-obvious list[list[T]] shape for collection walkers."
+  },
+  {
+    "chunk_id": "d7fdc9e15770",
+    "verdict": "keep",
+    "reason": "Code example for the single-shot typed collection pattern."
+  },
+  {
+    "chunk_id": "ecd037795e7b",
+    "verdict": "keep",
+    "reason": "Concrete gotcha: missing default makes reports a required spawn parameter (E1050)."
+  },
+  {
+    "chunk_id": "8915f4b22f0c",
+    "verdict": "keep",
+    "reason": "Header sentence that sets up the type-checker rules that follow."
+  },
+  {
+    "chunk_id": "32f38a722504",
+    "verdict": "keep",
+    "reason": "Specifies the two type-checking rules enforced on the reports channel."
+  },
+  {
+    "chunk_id": "47f65478e1da",
+    "verdict": "keep",
+    "reason": "Explains the untyped fallback and strict-any consequence; complements rather than duplicates earlier chunk."
+  },
+  {
+    "chunk_id": "9da30bef8943",
+    "verdict": "keep",
+    "reason": "Documents the as-cast escape hatch for third-party walkers."
+  },
+  {
+    "chunk_id": "c0413680341e",
+    "verdict": "drop",
+    "reason": "Section header only, no prose or code."
+  },
+  {
+    "chunk_id": "e58216c4132d",
+    "verdict": "keep",
+    "reason": "One-sentence intro to the recommended single-report pattern."
+  },
+  {
+    "chunk_id": "6f0b23817408",
+    "verdict": "upweight",
+    "reason": "Canonical accumulator-pattern example combining visit, here, walker state, and Root exit reporting.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "26abae33dbc6",
+    "verdict": "keep",
+    "reason": "Brief but genuine when-to-use guidance for the pattern."
+  },
+  {
+    "chunk_id": "a0f7678bea13",
+    "verdict": "upweight",
+    "reason": "Names and explains the accumulator pattern, the standard graph-traversal collection model.",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "727ad852a8f8",
+    "verdict": "keep",
+    "reason": "Three-stage traversal breakdown supporting the accumulator explanation."
+  },
+  {
+    "chunk_id": "62c185089d9d",
+    "verdict": "upweight",
+    "reason": "Core walker-lifecycle semantics: when the with Root exit ability fires relative to the visit queue.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "5b68309cc34c",
+    "verdict": "keep",
+    "reason": "Practical tip on consuming the accumulator result from client code."
+  },
+  {
+    "chunk_id": "69b3b9b86c1a",
+    "verdict": "drop",
+    "reason": "Single cross-reference sentence to a tutorial, nav-only with no content."
+  },
+  {
+    "chunk_id": "938d41fad5ae",
+    "verdict": "keep",
+    "reason": "Intro sentence for the report-per-node pattern."
+  },
+  {
+    "chunk_id": "3b49d51c90a7",
+    "verdict": "keep",
+    "reason": "Typed search-walker example showing per-match reporting."
+  },
+  {
+    "chunk_id": "1c85073f1dbb",
+    "verdict": "keep",
+    "reason": "When-to-use guidance for search and filter walkers."
+  },
+  {
+    "chunk_id": "5a5a2e4722e6",
+    "verdict": "keep",
+    "reason": "Intro sentence for the operation-plus-result pattern."
+  },
+  {
+    "chunk_id": "79c9296507ea",
+    "verdict": "keep",
+    "reason": "CRUD example including ++> edge creation and typed report of the created node."
+  },
+  {
+    "chunk_id": "24b077b3d079",
+    "verdict": "keep",
+    "reason": "When-to-use guidance for mutation walkers."
+  },
+  {
+    "chunk_id": "732592b91e43",
+    "verdict": "keep",
+    "reason": "Introduces the nested walker spawning pattern and its rationale."
+  },
+  {
+    "chunk_id": "1bb69c440223",
+    "verdict": "keep",
+    "reason": "Code example for passing data between nested walkers via has attributes."
+  },
+  {
+    "chunk_id": "cb696a66307e",
+    "verdict": "keep",
+    "reason": "Important caveat about inner-walker reports being inaccessible from parent context."
+  },
+  {
+    "chunk_id": "c3bd00f0be4e",
+    "verdict": "keep",
+    "reason": "Intro sentence for the multiple-reports pattern."
+  },
+  {
+    "chunk_id": "2a8e2e04e647",
+    "verdict": "keep",
+    "reason": "Example of multi-report walkers producing detail plus summary."
+  },
+  {
+    "chunk_id": "4bf8f219a008",
+    "verdict": "keep",
+    "reason": "When-to-use guidance for multi-report operations."
+  },
+  {
+    "chunk_id": "a3bd36a7857d",
+    "verdict": "keep",
+    "reason": "Introduces defensive handling of empty reports."
+  },
+  {
+    "chunk_id": "ad52a0d1f3f0",
+    "verdict": "keep",
+    "reason": "Practical safe-access idioms for consuming .reports."
+  },
+  {
+    "chunk_id": "09b06200851b",
+    "verdict": "keep",
+    "reason": "Introduces the response object structure section."
+  },
+  {
+    "chunk_id": "b5f15ed9600f",
+    "verdict": "keep",
+    "reason": "Documents the response object's available properties; distinct enough from the earlier minimal example."
+  },
+  {
+    "chunk_id": "4b9e37d09798",
+    "verdict": "keep",
+    "reason": "Dense best-practices list consolidating typing, reporting, and hydration guidance."
+  },
+  {
+    "chunk_id": "5a37da0ba0ed",
+    "verdict": "drop",
+    "reason": "Bare Anti-Patterns section header with no accompanying content."
+  }
+]

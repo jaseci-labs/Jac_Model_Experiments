@@ -1,0 +1,252 @@
+[
+ {
+  "chunk_id": "f9608031edc7",
+  "verdict": "drop",
+  "reason": "Heading-only version stub with no prose (nav-only fragment)."
+ },
+ {
+  "chunk_id": "42f746e0de59",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "f6f302e5a5e0",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "33161fc90258",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "6e13efb71779",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "4991fcec7274",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "784d4fdec642",
+  "verdict": "drop",
+  "reason": "Heading-only version stub with no prose (nav-only fragment)."
+ },
+ {
+  "chunk_id": "e14379676189",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "6f0b9396ee7d",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "28f1debeb267",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "a5056004af70",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "0976af83dbcc",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "463000e73d8b",
+  "verdict": "drop",
+  "reason": "Heading-only version stub with no prose (nav-only fragment)."
+ },
+ {
+  "chunk_id": "a31d713dfcfe",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "5af29ff327aa",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "de4eb507f86c",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "8d63808ccc54",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "1cdccb02054a",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "ccc3f17f77fb",
+  "verdict": "drop",
+  "reason": "Heading-only version stub with no prose (nav-only fragment)."
+ },
+ {
+  "chunk_id": "4736307b68ad",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "fcbb349b06e8",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "bcd462fd4014",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "abaa8024572e",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "a3eba61952a0",
+  "verdict": "drop",
+  "reason": "Heading-only version stub with no prose (nav-only fragment)."
+ },
+ {
+  "chunk_id": "f4f227f0686c",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "b2007501d702",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "783f7ded3001",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "e74fc2e2e77f",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "4a0ed290e92b",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "01162758350a",
+  "verdict": "drop",
+  "reason": "Heading-only version stub with no prose (nav-only fragment)."
+ },
+ {
+  "chunk_id": "9d4011534913",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "19743aeef3f6",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "09617413c41b",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "e527e1b30237",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "ee48e9c3043f",
+  "verdict": "drop",
+  "reason": "Heading-only version stub with no prose (nav-only fragment)."
+ },
+ {
+  "chunk_id": "20b1b9e88077",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "3b9adc9ae950",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "06d0e78a921b",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "89df37597166",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "c237d034e63d",
+  "verdict": "drop",
+  "reason": "Heading-only version stub with no prose (nav-only fragment)."
+ },
+ {
+  "chunk_id": "9d29217f913e",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "149cb925d65e",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "cbad7c1bf186",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "35f33c4cdb8e",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "3d17299ca9a0",
+  "verdict": "drop",
+  "reason": "Heading-only version stub with no prose (nav-only fragment)."
+ },
+ {
+  "chunk_id": "e7e9add76d9e",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "e5cd92b36712",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "500b03c6881a",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "e207d435a8e1",
+  "verdict": "keep",
+  "reason": "Substantive release-note content documenting real Jac language/tooling changes."
+ },
+ {
+  "chunk_id": "a855979c444b",
+  "verdict": "drop",
+  "reason": "Heading-only version stub with no prose (nav-only fragment)."
+ }
+]

@@ -1,0 +1,9 @@
+[
+  {"chunk_id": "577359562b75", "verdict": "upweight", "reason": "Core walker traversal semantics: path collections translated into sequential steps via destination queues.", "weight": 2.5},
+  {"chunk_id": "73915e27cc3c", "verdict": "upweight", "reason": "Core self/here dual-perspective mechanics, the bidirectional walker-location coupling at the heart of OSP.", "weight": 3.0},
+  {"chunk_id": "04703c50ccca", "verdict": "upweight", "reason": "Walker termination conditions (queue exhaustion, disengagement) are core execution-model semantics.", "weight": 2.0},
+  {"chunk_id": "325e5590526b", "verdict": "keep", "reason": "Short transitional sentence introducing the analysis list; genuine prose but no standalone concept density."},
+  {"chunk_id": "01d3e18a47b8", "verdict": "keep", "reason": "Genuine content on formal-analysis properties (correctness, termination, concurrency) but meta-level, not core traversal mechanics."},
+  {"chunk_id": "4d4bd2b487b0", "verdict": "keep", "reason": "Concluding paragraph tying topological and execution semantics together; genuine but summary-level prose."},
+  {"chunk_id": "48ff3a602df6", "verdict": "upweight", "reason": "Complete canonical littleX Jac listing demonstrating nodes, edges, walkers, entry abilities, visit/here and spawn patterns end-to-end; it is the superset side of all flagged near-dup pairs (containment 1.0 into it), so the fragments elsewhere are the redundant copies.", "weight": 3.0}
+]

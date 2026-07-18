@@ -1,0 +1,254 @@
+[
+  {
+    "chunk_id": "9bed1a8d36a9",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "f6d17f048945",
+    "verdict": "keep",
+    "reason": "Explains scaffolding a full-stack Jac project."
+  },
+  {
+    "chunk_id": "79a2a658a626",
+    "verdict": "keep",
+    "reason": "Concrete jac create/install/start command sequence."
+  },
+  {
+    "chunk_id": "2a9525cd0c94",
+    "verdict": "keep",
+    "reason": "Notes main.jac default entry-point behavior for jac start."
+  },
+  {
+    "chunk_id": "dd3d45bf7974",
+    "verdict": "keep",
+    "reason": "Describes the resulting full-stack project layout and URL."
+  },
+  {
+    "chunk_id": "e513e1f8f2f2",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "ea22cdb7b7cb",
+    "verdict": "keep",
+    "reason": "Explains community Jacpack templates and --use URL usage."
+  },
+  {
+    "chunk_id": "a2a0c76a2fcb",
+    "verdict": "keep",
+    "reason": "Command example spinning up a jacpack from GitHub."
+  },
+  {
+    "chunk_id": "1d3e19324cbf",
+    "verdict": "keep",
+    "reason": "Describes the AI-integrated meals jacpack template."
+  },
+  {
+    "chunk_id": "0840bb994d58",
+    "verdict": "keep",
+    "reason": "Shows API-key setup and create command for the AI jacpack."
+  },
+  {
+    "chunk_id": "8e47dab8abcc",
+    "verdict": "keep",
+    "reason": "Short but meaningful lead-in to swapping jacpack URLs."
+  },
+  {
+    "chunk_id": "70200db76f3b",
+    "verdict": "keep",
+    "reason": "Generic jacpack URL command template."
+  },
+  {
+    "chunk_id": "4555013d3dcf",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "ccbed23dba57",
+    "verdict": "keep",
+    "reason": "Documents upgrading the jac binary via the installer."
+  },
+  {
+    "chunk_id": "b4430f339eba",
+    "verdict": "keep",
+    "reason": "One-line installer/upgrade command."
+  },
+  {
+    "chunk_id": "81a1cadf3cff",
+    "verdict": "keep",
+    "reason": "Explains subsystem upgrades and dependency refresh."
+  },
+  {
+    "chunk_id": "d2b029c933e6",
+    "verdict": "keep",
+    "reason": "jac install --force-reinstall command."
+  },
+  {
+    "chunk_id": "8560969eb385",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "88e806901882",
+    "verdict": "keep",
+    "reason": "Introduces jac create for scaffolding projects."
+  },
+  {
+    "chunk_id": "044ccd5b5a7f",
+    "verdict": "keep",
+    "reason": "Concrete web-static create/start command example."
+  },
+  {
+    "chunk_id": "8eb368693bfa",
+    "verdict": "keep",
+    "reason": "Lead-in describing the web-static template contents."
+  },
+  {
+    "chunk_id": "49fa08562702",
+    "verdict": "keep",
+    "reason": "Lists the files a web-static project scaffolds."
+  },
+  {
+    "chunk_id": "0672e459a24f",
+    "verdict": "keep",
+    "reason": "Short lead-in to the templates table."
+  },
+  {
+    "chunk_id": "b55f2999f664",
+    "verdict": "keep",
+    "reason": "Table of available project templates and commands."
+  },
+  {
+    "chunk_id": "538474f2beef",
+    "verdict": "keep",
+    "reason": "Lead-in to community template usage."
+  },
+  {
+    "chunk_id": "c5d8310da28f",
+    "verdict": "keep",
+    "reason": "Community template create command example."
+  },
+  {
+    "chunk_id": "2c3fc922686b",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "d017e61c311d",
+    "verdict": "keep",
+    "reason": "Contributor build-from-source guidance."
+  },
+  {
+    "chunk_id": "89c82fa00d3c",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "0d4910ae76f0",
+    "verdict": "keep",
+    "reason": "Next-steps navigation with concept and tutorial links."
+  },
+  {
+    "chunk_id": "9f9b32ec4455",
+    "verdict": "keep",
+    "reason": "Frames the single-file Jac model where nodes/walkers/cl replace a full stack."
+  },
+  {
+    "chunk_id": "d46cb859c9a0",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "3a71e6450c1d",
+    "verdict": "upweight",
+    "reason": "Core OSP example showing node definition, root ++> graph connect, and [root-->][?:Todo] traversal in a real app.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "3da69ff8a88f",
+    "verdict": "keep",
+    "reason": "Section header lead-in to the feature breakdown."
+  },
+  {
+    "chunk_id": "f943785bfa8b",
+    "verdict": "upweight",
+    "reason": "Explains OSP/full-stack semantics of node persistence, def:pub endpoints, and graph seeding.",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "238b76da573a",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "e715c1590e09",
+    "verdict": "keep",
+    "reason": "Introduces the equivalent traditional-stack implementation for contrast."
+  },
+  {
+    "chunk_id": "0a94966866bf",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "aa8853b57503",
+    "verdict": "keep",
+    "reason": "Backend section header for the comparison."
+  },
+  {
+    "chunk_id": "0d41c657a427",
+    "verdict": "keep",
+    "reason": "Part of the traditional-stack comparison showing dependency overhead."
+  },
+  {
+    "chunk_id": "f9f5833ea6ca",
+    "verdict": "keep",
+    "reason": "Explains the Python dependency file's role in the comparison."
+  },
+  {
+    "chunk_id": "60702a2ce10b",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "185b5b6ebcda",
+    "verdict": "keep",
+    "reason": "Traditional-stack DB config contrasting Jac's built-in persistence."
+  },
+  {
+    "chunk_id": "17ef477d6e32",
+    "verdict": "keep",
+    "reason": "Explains the purpose of the SQLAlchemy database module."
+  },
+  {
+    "chunk_id": "f93efa880535",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "33acce8264b6",
+    "verdict": "keep",
+    "reason": "Traditional-stack models showing duplicated data definitions vs Jac nodes."
+  },
+  {
+    "chunk_id": "f95c01c26a73",
+    "verdict": "keep",
+    "reason": "Explains the double data-definition overhead in the comparison."
+  },
+  {
+    "chunk_id": "7fdf575f1adc",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "0e80baf240e4",
+    "verdict": "keep",
+    "reason": "Traditional-stack FastAPI main contrasting Jac's single-file approach."
+  },
+  {
+    "chunk_id": "96d6560ca5b4",
+    "verdict": "keep",
+    "reason": "Explains the FastAPI app setup being contrasted with Jac."
+  }
+]

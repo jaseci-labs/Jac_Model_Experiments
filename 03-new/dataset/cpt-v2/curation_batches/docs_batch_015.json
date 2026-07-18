@@ -1,0 +1,252 @@
+[
+ {
+  "chunk_id": "7d257b0c88f6",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "a83915ab1727",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "b30f20e5d7b4",
+  "verdict": "drop",
+  "reason": "Heading-only stub ('## jac-scale 0.2.15') with no content."
+ },
+ {
+  "chunk_id": "8ed1bb3944c5",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "faa82359ab7e",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "aaff2bbd7377",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "2f9c77cc4445",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "50b4bf4ee315",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "1f61727f5bdb",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "ccab31f5fcb6",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "ed4155d5af6c",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "aaa846f5261f",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "e93464c730e8",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "1229b607fe47",
+  "verdict": "drop",
+  "reason": "Empty changelog stub ('1 small changes') with no substantive content."
+ },
+ {
+  "chunk_id": "fcd448a9731c",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "df2d253f11bb",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "6cbe750ddc6c",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "afe47eed7301",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "2c82f55aa90b",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "ac9b707ffc4e",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "d7b1b1715a9b",
+  "verdict": "keep",
+  "reason": "Flagged near-dup but this is the fuller/container side of both pairs; substantive 0.2.2 notes kept."
+ },
+ {
+  "chunk_id": "86757442e2e8",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "6272053e62df",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "d869542bcfe8",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "f5c9b76d7e5b",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "56d6986d19e9",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "6b3c61be036b",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "48b139d95981",
+  "verdict": "keep",
+  "reason": "Flagged near-dup but this copy documents the KWESC/TYPE_OP syntax migration and is the container side; kept."
+ },
+ {
+  "chunk_id": "3715ba36f56b",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "1768f3010581",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "fd51931b4ff7",
+  "verdict": "keep",
+  "reason": "Flagged near-dup at only 0.52 containment; not actually redundant, distinct 0.1.5 notes."
+ },
+ {
+  "chunk_id": "51fe87ea780a",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "11cbe3cdbbbb",
+  "verdict": "drop",
+  "reason": "Near-duplicate 0.875-contained in chunk 6b104d821453, which is the fuller copy of the GET-support note."
+ },
+ {
+  "chunk_id": "dcb93818ed96",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "539207dc9790",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "838275495e5d",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "09cbe25fd5f2",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "5b26f91cbe43",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "4bd8d6c708e5",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "c04accbb966a",
+  "verdict": "drop",
+  "reason": "Nav-only label fragment ('Default behavior (PyPI installation):') with no prose."
+ },
+ {
+  "chunk_id": "5ffdded2296c",
+  "verdict": "drop",
+  "reason": "Orphaned bash fence fragment; command is covered in the kept PyPI-default chunk."
+ },
+ {
+  "chunk_id": "1ea4162af7d9",
+  "verdict": "drop",
+  "reason": "Nav-only label fragment ('Experimental mode:') with no prose."
+ },
+ {
+  "chunk_id": "e8a94fc2e75b",
+  "verdict": "drop",
+  "reason": "Orphaned bash fence fragment; the --experimental command is covered in the kept flag chunk."
+ },
+ {
+  "chunk_id": "2107f2edbb0c",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "c473194a4eec",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "b5daa5986aea",
+  "verdict": "keep",
+  "reason": "Genuine jac-scale release-note content (features/fixes with real API and config detail); not core OSP material, so no upweight."
+ },
+ {
+  "chunk_id": "066ec33c2619",
+  "verdict": "drop",
+  "reason": "Context-free trailing sentence fragment of the plugin_versions section."
+ },
+ {
+  "chunk_id": "79df4885d1ef",
+  "verdict": "keep",
+  "reason": "Flagged near-dup at only 0.5 containment; intro prose for @restspec enhancements is not redundant."
+ },
+ {
+  "chunk_id": "55b7d3e7cb28",
+  "verdict": "drop",
+  "reason": "Near-duplicate fully contained (1.0) in chunk 6b104d821453; this shard adds nothing."
+ },
+ {
+  "chunk_id": "77ea62f7a600",
+  "verdict": "drop",
+  "reason": "Heading-only stub ('## jac-scale 0.1.1') with no content."
+ }
+]

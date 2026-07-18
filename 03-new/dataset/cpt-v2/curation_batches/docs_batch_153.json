@@ -1,0 +1,242 @@
+[
+  {
+    "chunk_id": "6dfe900e6f22",
+    "verdict": "keep",
+    "reason": "Genuine tutorial prose introducing the guide's framing."
+  },
+  {
+    "chunk_id": "c42c3f1c6566",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule markup with no content."
+  },
+  {
+    "chunk_id": "483530c24cad",
+    "verdict": "keep",
+    "reason": "Introduces the `with entry` entry-point construct, real Jac content."
+  },
+  {
+    "chunk_id": "48846d4b2a0d",
+    "verdict": "drop",
+    "reason": "HTML wrapper div only, pure boilerplate."
+  },
+  {
+    "chunk_id": "70af2c6b09fb",
+    "verdict": "keep",
+    "reason": "Canonical hello-world Jac code example."
+  },
+  {
+    "chunk_id": "e5a8c8412f8a",
+    "verdict": "drop",
+    "reason": "Closing HTML div tag only, pure boilerplate."
+  },
+  {
+    "chunk_id": "1a2ee1249277",
+    "verdict": "drop",
+    "reason": "Dangling bold label with no explanatory content."
+  },
+  {
+    "chunk_id": "f8c13f669813",
+    "verdict": "keep",
+    "reason": "Explains entry block, print, strings, semicolons, and braces -- core beginner syntax."
+  },
+  {
+    "chunk_id": "89dc2cf037bb",
+    "verdict": "keep",
+    "reason": "Genuine tutorial exercise prose tied to the example."
+  },
+  {
+    "chunk_id": "a147fe953a92",
+    "verdict": "keep",
+    "reason": "Valid Jac code example showing the exercise solution."
+  },
+  {
+    "chunk_id": "a7f803659024",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule markup with no content."
+  },
+  {
+    "chunk_id": "24cb5ecf2bfd",
+    "verdict": "drop",
+    "reason": "Lone section heading with no prose, nav-only fragment."
+  },
+  {
+    "chunk_id": "ae47a3ee880e",
+    "verdict": "keep",
+    "reason": "Heading plus real prose explaining what a variable is."
+  },
+  {
+    "chunk_id": "dd3257d4857c",
+    "verdict": "drop",
+    "reason": "HTML wrapper div only, pure boilerplate."
+  },
+  {
+    "chunk_id": "5cbbc5cadf3d",
+    "verdict": "keep",
+    "reason": "Jac code example demonstrating variable assignment and printing."
+  },
+  {
+    "chunk_id": "5b508f1f69d4",
+    "verdict": "drop",
+    "reason": "Closing HTML div tag only, pure boilerplate."
+  },
+  {
+    "chunk_id": "222e68c1d5d2",
+    "verdict": "keep",
+    "reason": "Explains Jac comment syntax, genuine content."
+  },
+  {
+    "chunk_id": "d84bb954de80",
+    "verdict": "keep",
+    "reason": "Heading plus introductory prose on data types."
+  },
+  {
+    "chunk_id": "c282886c9403",
+    "verdict": "drop",
+    "reason": "Bare sub-heading plus HTML wrapper, no prose content."
+  },
+  {
+    "chunk_id": "842f77f2f9cf",
+    "verdict": "keep",
+    "reason": "Jac code example for string variables."
+  },
+  {
+    "chunk_id": "64dbe220e099",
+    "verdict": "drop",
+    "reason": "Closing HTML div tag only, pure boilerplate."
+  },
+  {
+    "chunk_id": "42279cc1a5b1",
+    "verdict": "keep",
+    "reason": "Explains string quoting syntax, genuine content."
+  },
+  {
+    "chunk_id": "6ed5168a3d56",
+    "verdict": "drop",
+    "reason": "Bare sub-heading plus HTML wrapper, no prose content."
+  },
+  {
+    "chunk_id": "42dfe177927c",
+    "verdict": "keep",
+    "reason": "Jac code example for integer variables."
+  },
+  {
+    "chunk_id": "062f27905248",
+    "verdict": "drop",
+    "reason": "Closing HTML div tag only, pure boilerplate."
+  },
+  {
+    "chunk_id": "ebaab15da06e",
+    "verdict": "keep",
+    "reason": "One-sentence definition of integers completing the section."
+  },
+  {
+    "chunk_id": "efc3901b42c8",
+    "verdict": "drop",
+    "reason": "Bare sub-heading plus HTML wrapper, no prose content."
+  },
+  {
+    "chunk_id": "c5513741c774",
+    "verdict": "keep",
+    "reason": "Jac code example for float variables."
+  },
+  {
+    "chunk_id": "43abe16ad2d0",
+    "verdict": "drop",
+    "reason": "Closing HTML div tag only, pure boilerplate."
+  },
+  {
+    "chunk_id": "30e79ba9422c",
+    "verdict": "keep",
+    "reason": "One-sentence definition of floats completing the section."
+  },
+  {
+    "chunk_id": "0383c07d1523",
+    "verdict": "drop",
+    "reason": "Bare sub-heading plus HTML wrapper, no prose content."
+  },
+  {
+    "chunk_id": "2e1aca38dcdf",
+    "verdict": "keep",
+    "reason": "Jac code example for boolean variables."
+  },
+  {
+    "chunk_id": "baf6c742ecf9",
+    "verdict": "drop",
+    "reason": "Closing HTML div tag only, pure boilerplate."
+  },
+  {
+    "chunk_id": "890e31bad8fa",
+    "verdict": "keep",
+    "reason": "Jac-specific note that booleans are capitalized True/False."
+  },
+  {
+    "chunk_id": "d9586ab9abf9",
+    "verdict": "keep",
+    "reason": "Heading plus prose introducing type annotations."
+  },
+  {
+    "chunk_id": "e0167febd73e",
+    "verdict": "drop",
+    "reason": "HTML wrapper div only, pure boilerplate."
+  },
+  {
+    "chunk_id": "9e665b4d47fd",
+    "verdict": "keep",
+    "reason": "Jac code example covering str/int/float/bool annotations and f-strings."
+  },
+  {
+    "chunk_id": "e0e4a50f60ea",
+    "verdict": "drop",
+    "reason": "Closing HTML div tag only, pure boilerplate."
+  },
+  {
+    "chunk_id": "35345efdb069",
+    "verdict": "keep",
+    "reason": "Explains f-string interpolation syntax, genuine content."
+  },
+  {
+    "chunk_id": "453388df2238",
+    "verdict": "keep",
+    "reason": "Heading plus introductory prose on arithmetic."
+  },
+  {
+    "chunk_id": "affb04a61948",
+    "verdict": "drop",
+    "reason": "HTML wrapper div only, pure boilerplate."
+  },
+  {
+    "chunk_id": "309307ac0d7e",
+    "verdict": "keep",
+    "reason": "Jac code example covering arithmetic, modulo, exponent, and precedence."
+  },
+  {
+    "chunk_id": "dfaec72c22fa",
+    "verdict": "drop",
+    "reason": "Closing HTML div tag only, pure boilerplate."
+  },
+  {
+    "chunk_id": "e2dca629846a",
+    "verdict": "keep",
+    "reason": "Heading plus prose introducing variable reassignment."
+  },
+  {
+    "chunk_id": "497813fb9a49",
+    "verdict": "drop",
+    "reason": "HTML wrapper div only, pure boilerplate."
+  },
+  {
+    "chunk_id": "5554fef16430",
+    "verdict": "keep",
+    "reason": "Jac code example showing reassignment and += shorthand."
+  },
+  {
+    "chunk_id": "a622791e07fd",
+    "verdict": "drop",
+    "reason": "Closing HTML div tag only, pure boilerplate."
+  },
+  {
+    "chunk_id": "2473245bf8ef",
+    "verdict": "drop",
+    "reason": "Dangling bold label with no content following it."
+  }
+]

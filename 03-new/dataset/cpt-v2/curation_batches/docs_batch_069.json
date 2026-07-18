@@ -1,0 +1,265 @@
+[
+  {
+    "chunk_id": "83e8b5c259b5",
+    "verdict": "drop",
+    "reason": "Chunk is only a '---' horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "2bf15b344bae",
+    "verdict": "upweight",
+    "reason": "Core OSP fundamental: explains edges as first-class typed connections carrying data.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "c7759b5f007b",
+    "verdict": "keep",
+    "reason": "Genuine edge-declaration syntax examples with fields and methods."
+  },
+  {
+    "chunk_id": "79aa7adb686b",
+    "verdict": "keep",
+    "reason": "Short but real prose introducing edge entry/exit abilities for the following example."
+  },
+  {
+    "chunk_id": "c68bf512d113",
+    "verdict": "keep",
+    "reason": "Concrete edge-ability code example with visitor reference."
+  },
+  {
+    "chunk_id": "a4069db05824",
+    "verdict": "keep",
+    "reason": "Important factual limitation note that prevents the model learning an unimplemented feature as working."
+  },
+  {
+    "chunk_id": "aa7a38297947",
+    "verdict": "keep",
+    "reason": "Prose lead-in explaining edge direction is set by connection operators."
+  },
+  {
+    "chunk_id": "525e12634ac1",
+    "verdict": "upweight",
+    "reason": "Core graph-construction mechanics: ++> and <++> connection operator semantics.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "8e372111d79f",
+    "verdict": "keep",
+    "reason": "Genuine documentation of typed edge endpoints, a more advanced feature."
+  },
+  {
+    "chunk_id": "753d2f14fc53",
+    "verdict": "keep",
+    "reason": "Concrete typed-endpoint declaration example, not redundant."
+  },
+  {
+    "chunk_id": "ec2afca25e97",
+    "verdict": "keep",
+    "reason": "Connective prose explaining type inference from declared endpoints."
+  },
+  {
+    "chunk_id": "cc32e7c2045c",
+    "verdict": "keep",
+    "reason": "Substantive example of inferred traversal result types."
+  },
+  {
+    "chunk_id": "36f8ec6ec671",
+    "verdict": "keep",
+    "reason": "Precise semantics of target vs source narrowing in traversals."
+  },
+  {
+    "chunk_id": "63f6b4a79357",
+    "verdict": "keep",
+    "reason": "Explains gradual opt-in and subtype-bound semantics of endpoint types."
+  },
+  {
+    "chunk_id": "b6f4e94f2896",
+    "verdict": "keep",
+    "reason": "Explains edge inheritance interaction with endpoint declarations."
+  },
+  {
+    "chunk_id": "4a4e90e564d6",
+    "verdict": "keep",
+    "reason": "Concrete edge-inheritance example complementing the preceding prose."
+  },
+  {
+    "chunk_id": "9e5aece48261",
+    "verdict": "keep",
+    "reason": "Useful compile-error fact (E2027) about endpoint clause validity."
+  },
+  {
+    "chunk_id": "b34b8839088c",
+    "verdict": "drop",
+    "reason": "Chunk is only a '---' horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "6780f6d663a6",
+    "verdict": "upweight",
+    "reason": "Central OSP concept: walkers as mobile agents plus spawn mechanics, the heart of the traversal model.",
+    "weight": 4.0
+  },
+  {
+    "chunk_id": "88ee89f3c6b3",
+    "verdict": "upweight",
+    "reason": "Canonical walker declaration showing abilities, entry types, state, and visit together.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "64a4f44b2d65",
+    "verdict": "keep",
+    "reason": "Brief but genuine prose introducing walker state persistence."
+  },
+  {
+    "chunk_id": "206c492ad7b9",
+    "verdict": "upweight",
+    "reason": "End-to-end example of walker state with root spawn and expected output, core spawn mechanics.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "f3204faca1db",
+    "verdict": "upweight",
+    "reason": "Key semantic gotcha: walker abilities must name node types and generic entry only fires at spawn.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "5e5d96a411a3",
+    "verdict": "upweight",
+    "reason": "Core visit semantics: queue-based deferred movement underlying BFS/DFS control.",
+    "weight": 3.5
+  },
+  {
+    "chunk_id": "ce283daed83f",
+    "verdict": "upweight",
+    "reason": "Fundamental traversal rule that walkers stop without an explicit visit at each step.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "c5bca7bb2a2f",
+    "verdict": "drop",
+    "reason": "Heading-only fragment ('Basic Syntax:') with no prose or code."
+  },
+  {
+    "chunk_id": "f1bcfe284a55",
+    "verdict": "upweight",
+    "reason": "Core visit directional syntax ([-->], [<--], [<-->]) fundamental to traversal.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "264499da790d",
+    "verdict": "drop",
+    "reason": "Heading-only fragment ('With Type Filters:') with no content."
+  },
+  {
+    "chunk_id": "c34def0bc5d6",
+    "verdict": "upweight",
+    "reason": "Core traversal filtering: node-type, edge-type, and edge-condition visit syntax.",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "b65b260a4059",
+    "verdict": "drop",
+    "reason": "Heading-only fragment ('With Else Clause:') with no content."
+  },
+  {
+    "chunk_id": "f1907172739d",
+    "verdict": "keep",
+    "reason": "Genuine example of the visit-else fallback clause."
+  },
+  {
+    "chunk_id": "afdb75bd4789",
+    "verdict": "drop",
+    "reason": "Heading-only fragment ('Direct Node Visit:') with no content."
+  },
+  {
+    "chunk_id": "f2529e0826a7",
+    "verdict": "keep",
+    "reason": "Genuine example of visiting a specific node via here or a walker field."
+  },
+  {
+    "chunk_id": "1956656754dd",
+    "verdict": "drop",
+    "reason": "Heading-only fragment ('Queue Insertion Index:') with no content."
+  },
+  {
+    "chunk_id": "4ff726ca34c6",
+    "verdict": "keep",
+    "reason": "Prose explaining the visit-index syntax for DFS/BFS control."
+  },
+  {
+    "chunk_id": "7ad3b0cc751a",
+    "verdict": "keep",
+    "reason": "Concrete queue-insertion-index code example."
+  },
+  {
+    "chunk_id": "ee981033d6f1",
+    "verdict": "keep",
+    "reason": "Reference table summarizing queue-position semantics, complements the example."
+  },
+  {
+    "chunk_id": "942a3d56e18c",
+    "verdict": "keep",
+    "reason": "Small but real fact about out-of-bounds index fallback."
+  },
+  {
+    "chunk_id": "117e69e8bbe8",
+    "verdict": "keep",
+    "reason": "Genuine documentation of the report statement's behavior."
+  },
+  {
+    "chunk_id": "d8754904849f",
+    "verdict": "keep",
+    "reason": "Useful note that report both appends to .reports and prints to stdout."
+  },
+  {
+    "chunk_id": "df36203cbc43",
+    "verdict": "keep",
+    "reason": "Full working example of report with spawn result and .reports access."
+  },
+  {
+    "chunk_id": "f037bb314eda",
+    "verdict": "keep",
+    "reason": "Prose introducing typed 'has reports' compile-time checking."
+  },
+  {
+    "chunk_id": "02dbd9b647f0",
+    "verdict": "keep",
+    "reason": "Concrete typed-reports code example."
+  },
+  {
+    "chunk_id": "ae6848f3027c",
+    "verdict": "keep",
+    "reason": "Default reports typing fact plus cross-reference, non-redundant."
+  },
+  {
+    "chunk_id": "0545103fa592",
+    "verdict": "upweight",
+    "reason": "Core traversal-control semantics: disengage terminates the whole walker.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "2deb9aa49251",
+    "verdict": "keep",
+    "reason": "Concrete search-and-disengage walker example."
+  },
+  {
+    "chunk_id": "7e14f9dd1f97",
+    "verdict": "upweight",
+    "reason": "Critical semantic distinction: skip is an ability-level return, not loop control.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "0db744d588fc",
+    "verdict": "upweight",
+    "reason": "Precise scoping table contrasting skip (ability return) with disengage (walker termination).",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "25a61c155efb",
+    "verdict": "keep",
+    "reason": "Clarifies interaction of skip with pending visit queues, genuine detail."
+  },
+  {
+    "chunk_id": "75e4d5f49251",
+    "verdict": "keep",
+    "reason": "Concrete example demonstrating skip in a walker ability."
+  }
+]

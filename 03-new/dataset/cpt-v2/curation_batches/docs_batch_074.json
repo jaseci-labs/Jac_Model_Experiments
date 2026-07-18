@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "110dce2a628f",
+    "verdict": "keep",
+    "reason": "Substantive dict method reference table, genuine Jac primitives documentation."
+  },
+  {
+    "chunk_id": "8bd0d6d0a9df",
+    "verdict": "drop",
+    "reason": "Bare '**Operators:**' heading fragment with no content, chunking artifact."
+  },
+  {
+    "chunk_id": "cd48c7a93893",
+    "verdict": "keep",
+    "reason": "Dict operator semantics table, genuine reference content."
+  },
+  {
+    "chunk_id": "9aaecead1e96",
+    "verdict": "keep",
+    "reason": "Set type definition heading with descriptive prose."
+  },
+  {
+    "chunk_id": "7319c72e1a36",
+    "verdict": "drop",
+    "reason": "Bare '**Named methods:**' heading fragment with no content, chunking artifact."
+  },
+  {
+    "chunk_id": "70cae19f80a0",
+    "verdict": "keep",
+    "reason": "Substantive set method reference table."
+  },
+  {
+    "chunk_id": "bf2bc5aa7ebf",
+    "verdict": "drop",
+    "reason": "Bare '**Operators:**' heading fragment with no content, chunking artifact."
+  },
+  {
+    "chunk_id": "e57329c8bdb0",
+    "verdict": "keep",
+    "reason": "Set operator semantics table, genuine reference content."
+  },
+  {
+    "chunk_id": "d2f66cb5565f",
+    "verdict": "keep",
+    "reason": "Frozenset semantics prose, genuine documentation."
+  },
+  {
+    "chunk_id": "f68aa0449855",
+    "verdict": "keep",
+    "reason": "Tuple type definition with descriptive prose."
+  },
+  {
+    "chunk_id": "025734475d3c",
+    "verdict": "drop",
+    "reason": "Bare '**Named methods:**' heading fragment with no content, chunking artifact."
+  },
+  {
+    "chunk_id": "7777552621b2",
+    "verdict": "keep",
+    "reason": "Tuple methods table; near-duplicate of range table but documents a different type, so not truly redundant."
+  },
+  {
+    "chunk_id": "f7b4ee62014c",
+    "verdict": "drop",
+    "reason": "Bare '**Operators:**' heading fragment with no content, chunking artifact."
+  },
+  {
+    "chunk_id": "7925d465d923",
+    "verdict": "keep",
+    "reason": "Tuple operators table; flagged duplicate partner 6b8848f3699f is not in this batch, so keeping this copy to avoid dropping both."
+  },
+  {
+    "chunk_id": "09996415730c",
+    "verdict": "keep",
+    "reason": "Range type definition with descriptive prose."
+  },
+  {
+    "chunk_id": "171fa56c5257",
+    "verdict": "drop",
+    "reason": "Bare '**Named methods:**' heading fragment with no content, chunking artifact."
+  },
+  {
+    "chunk_id": "2cfda0c0a730",
+    "verdict": "keep",
+    "reason": "Range methods table; near-duplicate of tuple table but documents a different type's API, so both are retained per pair guidance."
+  },
+  {
+    "chunk_id": "72e6ba9b1b56",
+    "verdict": "drop",
+    "reason": "Bare '**Operators:**' heading fragment with no content, chunking artifact."
+  },
+  {
+    "chunk_id": "799fb7d784c2",
+    "verdict": "keep",
+    "reason": "Range operator table, genuine reference content."
+  },
+  {
+    "chunk_id": "0a826b8699e5",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator only, no content."
+  },
+  {
+    "chunk_id": "90b6fa4c7b1e",
+    "verdict": "keep",
+    "reason": "Fixed-width native types section intro, genuine Jac-specific documentation."
+  },
+  {
+    "chunk_id": "b5f893ed0e43",
+    "verdict": "keep",
+    "reason": "Fixed-width type mapping table, distinctive Jac native-codespace content."
+  },
+  {
+    "chunk_id": "8c4993106165",
+    "verdict": "keep",
+    "reason": "Coercion semantics sentence; flagged duplicate partner 75f9384c8430 is not in this batch, so keeping this copy to avoid dropping both."
+  },
+  {
+    "chunk_id": "886dfbe62e9c",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator only, no content."
+  },
+  {
+    "chunk_id": "be220e7fe8a7",
+    "verdict": "keep",
+    "reason": "Operator semantics section intro with substantive prose about codespace consistency."
+  },
+  {
+    "chunk_id": "d71fd1ec0421",
+    "verdict": "keep",
+    "reason": "Cross-type arithmetic operator matrix, high-value reference content."
+  },
+  {
+    "chunk_id": "36246cf9c457",
+    "verdict": "keep",
+    "reason": "Cross-type comparison operator matrix, genuine reference content."
+  },
+  {
+    "chunk_id": "3762f19861e1",
+    "verdict": "keep",
+    "reason": "Bitwise operator matrix, genuine reference content."
+  },
+  {
+    "chunk_id": "8ab823b48f23",
+    "verdict": "keep",
+    "reason": "Membership operator section intro with prose context for the following table."
+  },
+  {
+    "chunk_id": "683747b46898",
+    "verdict": "keep",
+    "reason": "Per-type 'in' semantics table, genuine reference content."
+  },
+  {
+    "chunk_id": "5c20e7dc3526",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator only, no content."
+  },
+  {
+    "chunk_id": "cd8db587b0a0",
+    "verdict": "keep",
+    "reason": "Builtin functions section intro with substantive cross-backend semantics prose."
+  },
+  {
+    "chunk_id": "930349ada616",
+    "verdict": "keep",
+    "reason": "Jac-specific backtick-escaping rule for `any`, distinctive language semantics worth training on."
+  },
+  {
+    "chunk_id": "e67d85aa5640",
+    "verdict": "keep",
+    "reason": "I/O builtin functions table, genuine reference content."
+  },
+  {
+    "chunk_id": "1ab3aa79c7e4",
+    "verdict": "keep",
+    "reason": "Aggregation builtin functions table, genuine reference content."
+  },
+  {
+    "chunk_id": "5ebd028b9210",
+    "verdict": "keep",
+    "reason": "Iteration builtin functions table, genuine reference content."
+  },
+  {
+    "chunk_id": "7645a1488b53",
+    "verdict": "keep",
+    "reason": "Type-checking builtin functions table, genuine reference content."
+  },
+  {
+    "chunk_id": "0d78a03b560a",
+    "verdict": "keep",
+    "reason": "Introspection builtin functions table, genuine reference content."
+  },
+  {
+    "chunk_id": "40ea6f05883c",
+    "verdict": "keep",
+    "reason": "Numeric conversion builtins table, genuine reference content."
+  },
+  {
+    "chunk_id": "670bd0285d68",
+    "verdict": "keep",
+    "reason": "Type constructors section heading with prose lead-in to the following table."
+  },
+  {
+    "chunk_id": "a170a1a983e4",
+    "verdict": "keep",
+    "reason": "Type constructor functions table, genuine reference content."
+  },
+  {
+    "chunk_id": "9a5addd8a783",
+    "verdict": "keep",
+    "reason": "Misc builtins table including Jac-specific portable `new()` constructor semantics."
+  },
+  {
+    "chunk_id": "53a5c476610b",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator only, no content."
+  },
+  {
+    "chunk_id": "925d6af8a80c",
+    "verdict": "keep",
+    "reason": "Backend contract intro explaining emitter class architecture, substantive compiler documentation."
+  },
+  {
+    "chunk_id": "106bc2378035",
+    "verdict": "keep",
+    "reason": "Defines the V/C type parameters of the emitter contract, substantive content."
+  },
+  {
+    "chunk_id": "b479bd798d30",
+    "verdict": "keep",
+    "reason": "Short but informative statement that every backend must implement every emitter."
+  },
+  {
+    "chunk_id": "ecf00a99a0cc",
+    "verdict": "keep",
+    "reason": "Mermaid diagram of the emitter interface hierarchy across backends, substantive architecture content."
+  },
+  {
+    "chunk_id": "2b24621423ad",
+    "verdict": "keep",
+    "reason": "Step-by-step compiler pipeline explanation, substantive prose."
+  },
+  {
+    "chunk_id": "587a39d2b733",
+    "verdict": "keep",
+    "reason": "Substantive detail on emitter fallback/error behavior at compile time."
+  },
+  {
+    "chunk_id": "659f7c9b7846",
+    "verdict": "keep",
+    "reason": "Developer-facing takeaway prose about the emitter abstraction, genuine documentation."
+  }
+]

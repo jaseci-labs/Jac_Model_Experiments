@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "221bb620349b",
+    "verdict": "keep",
+    "reason": "Genuine feature-list prose describing the example application's Jac capabilities."
+  },
+  {
+    "chunk_id": "dd91244f8fd0",
+    "verdict": "keep",
+    "reason": "Connective prose that frames the five integration patterns; harmless genuine content."
+  },
+  {
+    "chunk_id": "5169952542a8",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "bb6560b55796",
+    "verdict": "keep",
+    "reason": "Pattern 1 heading with explanatory prose about pure-Jac projects."
+  },
+  {
+    "chunk_id": "959bca970380",
+    "verdict": "keep",
+    "reason": "Use-case guidance for the pure-Jac pattern, genuine documentation signal."
+  },
+  {
+    "chunk_id": "590228a91e28",
+    "verdict": "drop",
+    "reason": "Orphaned 'Directory Structure:' label with no accompanying content in the chunk."
+  },
+  {
+    "chunk_id": "32e48d04a3c3",
+    "verdict": "keep",
+    "reason": "Concrete directory layout for a pure-Jac project, useful structural example."
+  },
+  {
+    "chunk_id": "2d29471bb86a",
+    "verdict": "keep",
+    "reason": "Complete Jac walker example using spawn, here, and ++> in a realistic module setup."
+  },
+  {
+    "chunk_id": "e6755eaa6377",
+    "verdict": "keep",
+    "reason": "Canonical copy of the Task node definition; the identical duplicates are dropped instead."
+  },
+  {
+    "chunk_id": "6fa73f98cfe1",
+    "verdict": "keep",
+    "reason": "Genuine Jac def-function example showing typed utility functions."
+  },
+  {
+    "chunk_id": "978da908db2e",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "a456d972b595",
+    "verdict": "keep",
+    "reason": "Pattern 2 heading with substantive prose about inline ::py:: blocks."
+  },
+  {
+    "chunk_id": "a6ce01efcb51",
+    "verdict": "keep",
+    "reason": "Use-case guidance for incremental Python migration, genuine content."
+  },
+  {
+    "chunk_id": "8d85f03ca920",
+    "verdict": "drop",
+    "reason": "Orphaned 'Directory Structure:' label with no accompanying content in the chunk."
+  },
+  {
+    "chunk_id": "15f2a0dd2623",
+    "verdict": "keep",
+    "reason": "Concrete directory layout for the inline-Python pattern."
+  },
+  {
+    "chunk_id": "4185414cd3ea",
+    "verdict": "keep",
+    "reason": "Substantial example demonstrating ::py:: inline Python blocks inside a Jac walker."
+  },
+  {
+    "chunk_id": "8f49438b9c5d",
+    "verdict": "drop",
+    "reason": "Byte-identical duplicate of the models.jac chunk kept as e6755eaa6377."
+  },
+  {
+    "chunk_id": "4eedcdab9dc8",
+    "verdict": "keep",
+    "reason": "Genuine prose summarizing the incremental-migration value of inline Python."
+  },
+  {
+    "chunk_id": "ee5cf968270e",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "c2a29432b944",
+    "verdict": "keep",
+    "reason": "Pattern 3 heading with real prose about importing Python utilities from Jac."
+  },
+  {
+    "chunk_id": "29d9bec8bd35",
+    "verdict": "keep",
+    "reason": "Use-case guidance for Jac-first development with Python utilities."
+  },
+  {
+    "chunk_id": "d41d97b54c2d",
+    "verdict": "drop",
+    "reason": "Orphaned 'Directory Structure:' label with no accompanying content in the chunk."
+  },
+  {
+    "chunk_id": "6a5ef7feff6f",
+    "verdict": "keep",
+    "reason": "Concrete directory layout mixing .jac and .py files."
+  },
+  {
+    "chunk_id": "1ee7b55ba722",
+    "verdict": "keep",
+    "reason": "Complete example of Jac importing a Python module and calling its functions from a walker."
+  },
+  {
+    "chunk_id": "f477e5b94566",
+    "verdict": "drop",
+    "reason": "Byte-identical duplicate of the models.jac chunk kept as e6755eaa6377."
+  },
+  {
+    "chunk_id": "bc625cc6ed99",
+    "verdict": "keep",
+    "reason": "The Python-side module of the cross-language import example, needed for context."
+  },
+  {
+    "chunk_id": "3ea70c9436f1",
+    "verdict": "keep",
+    "reason": "States the zero-config Python import behavior, a real language fact."
+  },
+  {
+    "chunk_id": "cb87fbe29cc8",
+    "verdict": "keep",
+    "reason": "Dense, unique content on gradual typing, any-boundary rules, .pyi stubs, and the as cast."
+  },
+  {
+    "chunk_id": "128c9c1b1364",
+    "verdict": "keep",
+    "reason": "Unique factual content on third-party type stubs and PEP 561 resolution via jac install."
+  },
+  {
+    "chunk_id": "9679f270dbc8",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "9068ebb70952",
+    "verdict": "keep",
+    "reason": "Pattern 4 heading with real prose about Python-first projects importing Jac modules."
+  },
+  {
+    "chunk_id": "b9b8e1e9a4d3",
+    "verdict": "keep",
+    "reason": "Use-case guidance for adding Jac graph/AI features to existing Python projects."
+  },
+  {
+    "chunk_id": "f64539960e74",
+    "verdict": "drop",
+    "reason": "Orphaned 'Directory Structure:' label with no accompanying content in the chunk."
+  },
+  {
+    "chunk_id": "78e9f1324206",
+    "verdict": "keep",
+    "reason": "Concrete directory layout for the Python-first pattern."
+  },
+  {
+    "chunk_id": "f54ec7f49b79",
+    "verdict": "keep",
+    "reason": "Unique example of Python importing Jac archetypes and using jaclang.lib spawn/root."
+  },
+  {
+    "chunk_id": "4336ffec540b",
+    "verdict": "keep",
+    "reason": "Canonical copy of the short validators.py chunk; its identical duplicate is dropped."
+  },
+  {
+    "chunk_id": "d7f04f189e1f",
+    "verdict": "keep",
+    "reason": "Jac module example with node and walker consumed from Python, distinct from other snippets."
+  },
+  {
+    "chunk_id": "d60e46cd6da6",
+    "verdict": "keep",
+    "reason": "Genuine closing prose for the Python-first pattern."
+  },
+  {
+    "chunk_id": "748b82022c67",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "75688916ea00",
+    "verdict": "keep",
+    "reason": "Pattern 5 heading with real prose about using the Jac runtime as a pure-Python library."
+  },
+  {
+    "chunk_id": "79814d199da3",
+    "verdict": "keep",
+    "reason": "Use-case guidance for conservative library-only adoption."
+  },
+  {
+    "chunk_id": "95ed8edc79c3",
+    "verdict": "drop",
+    "reason": "Orphaned 'Directory Structure:' label with no accompanying content in the chunk."
+  },
+  {
+    "chunk_id": "05b105f25794",
+    "verdict": "keep",
+    "reason": "Concrete directory layout for the pure-Python pattern."
+  },
+  {
+    "chunk_id": "c3a366deabec",
+    "verdict": "keep",
+    "reason": "Unique example of Node/Walker/on_entry/connect from jaclang.lib in pure Python."
+  },
+  {
+    "chunk_id": "cec79874fa53",
+    "verdict": "drop",
+    "reason": "Byte-identical duplicate of the validators.py chunk kept as 4336ffec540b."
+  },
+  {
+    "chunk_id": "ecad3a72c812",
+    "verdict": "keep",
+    "reason": "Genuine prose tying the library pattern to Jac's object-spatial model."
+  },
+  {
+    "chunk_id": "e262de037512",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "d8bd2f089867",
+    "verdict": "keep",
+    "reason": "Key-takeaways heading with prose about Python bytecode compilation."
+  },
+  {
+    "chunk_id": "966e0e3387b8",
+    "verdict": "keep",
+    "reason": "Substantive summary of adoption paths, ecosystem access, and the .pth lazy import hook."
+  },
+  {
+    "chunk_id": "54a6153bbf61",
+    "verdict": "keep",
+    "reason": "Comparison table of the five adoption patterns, unique reference content."
+  }
+]

@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "8c8c05ce5648",
+    "verdict": "keep",
+    "reason": "Concrete imm/E1309 code example with real semantics; shares only the Buffer boilerplate with its flagged pair, which illustrates a different error (E1308), so not redundant."
+  },
+  {
+    "chunk_id": "4c044b4f1643",
+    "verdict": "keep",
+    "reason": "Important status warning that `linear` is design-only, which prevents the model from learning it as shipped syntax."
+  },
+  {
+    "chunk_id": "6f0c691ed7d5",
+    "verdict": "keep",
+    "reason": "Substantive prose defining linear-vs-affine semantics and the E1305/E1301 distinction."
+  },
+  {
+    "chunk_id": "0713884e575d",
+    "verdict": "keep",
+    "reason": "Minimal illustrative example of the planned E1305 never-consumed error, paired with the surrounding prose."
+  },
+  {
+    "chunk_id": "2ba1a8e18e14",
+    "verdict": "keep",
+    "reason": "Core explanatory prose introducing Region handles, `in` opens, and backend reclamation semantics."
+  },
+  {
+    "chunk_id": "43a7f1631123",
+    "verdict": "keep",
+    "reason": "Worked region example that also exercises OSP constructs (++>, spawn) in context."
+  },
+  {
+    "chunk_id": "f3ad51fc30a5",
+    "verdict": "keep",
+    "reason": "Short but load-bearing statement that ownership discipline is suspended inside regions."
+  },
+  {
+    "chunk_id": "b815c718bc00",
+    "verdict": "keep",
+    "reason": "Dense rule list covering E1307 boundary semantics, elision, reboxing, and cross-extent edges."
+  },
+  {
+    "chunk_id": "4b6af304ec72",
+    "verdict": "keep",
+    "reason": "Genuine content on dynamic extent and walker-driven region growth via region_of(here)."
+  },
+  {
+    "chunk_id": "cb2aab6851bf",
+    "verdict": "keep",
+    "reason": "Compact code example demonstrating single-region elision."
+  },
+  {
+    "chunk_id": "022d0c36cdf2",
+    "verdict": "keep",
+    "reason": "Substantive sendability rules for flow/wait/thread_run boundaries and E1308."
+  },
+  {
+    "chunk_id": "5edd8d3b2093",
+    "verdict": "keep",
+    "reason": "E1308 borrow-across-flow example; despite shingle overlap with the imm example it demonstrates a different rule, so the flagged pair is not actually redundant."
+  },
+  {
+    "chunk_id": "ee11e359c22f",
+    "verdict": "keep",
+    "reason": "Introduces the reserved `drop` hook ability and its invocation contract."
+  },
+  {
+    "chunk_id": "27a75ae86041",
+    "verdict": "keep",
+    "reason": "Canonical minimal drop-hook code example."
+  },
+  {
+    "chunk_id": "950b74a52fb1",
+    "verdict": "keep",
+    "reason": "Short but carries the cross-gc-mode drop-point guarantee."
+  },
+  {
+    "chunk_id": "295fac462a46",
+    "verdict": "keep",
+    "reason": "Substantive detail on how drop fires under headerless vs managed gc modes."
+  },
+  {
+    "chunk_id": "6b197b1ea506",
+    "verdict": "keep",
+    "reason": "Explains liveness-scheduled eager drops, a subtle observable semantic."
+  },
+  {
+    "chunk_id": "d5e2f18555de",
+    "verdict": "keep",
+    "reason": "Example demonstrating eager drop ordering ('prints 7 then alive')."
+  },
+  {
+    "chunk_id": "b37acff73988",
+    "verdict": "keep",
+    "reason": "Honest caveat about current statement-granularity limits of drop placement."
+  },
+  {
+    "chunk_id": "14fefc10106d",
+    "verdict": "drop",
+    "reason": "Two-word connective fragment ('Two caveats:') with no standalone content."
+  },
+  {
+    "chunk_id": "b78148da566e",
+    "verdict": "keep",
+    "reason": "Substantive caveats on cycle-collector drop ordering and the no-resurrection rule."
+  },
+  {
+    "chunk_id": "b64ea7c960a9",
+    "verdict": "keep",
+    "reason": "Important backend-portability caveat for drop hooks outside vs inside regions."
+  },
+  {
+    "chunk_id": "0728ba358e0c",
+    "verdict": "keep",
+    "reason": "Dense content on nogc enforcement, headerless codegen, and the managed(...) membrane."
+  },
+  {
+    "chunk_id": "245574ecb94f",
+    "verdict": "keep",
+    "reason": "Explains compile-time erasure of borrows and the legacy &x-to-jobj change, valuable for correct code generation."
+  },
+  {
+    "chunk_id": "e2061cbde5d4",
+    "verdict": "keep",
+    "reason": "See-also section but its annotations carry real facts (E1305 reserved, code table range), so borderline-keep."
+  },
+  {
+    "chunk_id": "ac98352e92f9",
+    "verdict": "keep",
+    "reason": "Authoritative framing of the ownership fact schema and the superseded diagnostics-only contract."
+  },
+  {
+    "chunk_id": "f1f822259826",
+    "verdict": "drop",
+    "reason": "Pure cross-reference/navigation fragment with no semantic content of its own."
+  },
+  {
+    "chunk_id": "334b9ae62cd6",
+    "verdict": "keep",
+    "reason": "Ground rule 1 (opt-in checker) is core semantic content for the ownership system."
+  },
+  {
+    "chunk_id": "e47274957661",
+    "verdict": "keep",
+    "reason": "Ground rule 2 lead-in defining symbol-level binding granularity."
+  },
+  {
+    "chunk_id": "b3ccdd037460",
+    "verdict": "keep",
+    "reason": "Detailed limits of the analysis (no path-sensitivity, no interprocedural, conservative joins)."
+  },
+  {
+    "chunk_id": "5be9dfc66b96",
+    "verdict": "keep",
+    "reason": "Ground rule 3 on single-computation facts and display-neutrality."
+  },
+  {
+    "chunk_id": "ef93453d9d78",
+    "verdict": "keep",
+    "reason": "Frames the per-code guarantee table that follows; genuine contract prose."
+  },
+  {
+    "chunk_id": "fbe57c260042",
+    "verdict": "keep",
+    "reason": "The full E1301-E1309 guarantee table, the densest single chunk in the set."
+  },
+  {
+    "chunk_id": "c5bb34d5385f",
+    "verdict": "keep",
+    "reason": "Important negative-space statement of what the codes do not guarantee."
+  },
+  {
+    "chunk_id": "25f9170f05f2",
+    "verdict": "keep",
+    "reason": "Short section opener but states the facts-contract supersession, pairing with the list that follows."
+  },
+  {
+    "chunk_id": "34066c82895f",
+    "verdict": "keep",
+    "reason": "Concrete stamped-fact inventory (Symbol.ownership, na_move_lowerable, param_rebound)."
+  },
+  {
+    "chunk_id": "78de56281e81",
+    "verdict": "drop",
+    "reason": "Five-word lead-in fragment ('Requirements on the native pathway:') with no standalone content."
+  },
+  {
+    "chunk_id": "9ccc32fa5fa4",
+    "verdict": "keep",
+    "reason": "Substantive native-pathway requirements: always-run schedule, error gating, display-neutral codegen."
+  },
+  {
+    "chunk_id": "5ac990678069",
+    "verdict": "keep",
+    "reason": "Contributor rule that backends consume stamped facts rather than re-deriving them."
+  },
+  {
+    "chunk_id": "d0964f5be1ee",
+    "verdict": "keep",
+    "reason": "Pass-scheduling semantics and cost model for the checker."
+  },
+  {
+    "chunk_id": "3a78e30d1ee5",
+    "verdict": "drop",
+    "reason": "Title plus 'In this part:' lead-in, a nav-only fragment."
+  },
+  {
+    "chunk_id": "893e1f1e2952",
+    "verdict": "drop",
+    "reason": "Auto-style table-of-contents anchor list with no prose content."
+  },
+  {
+    "chunk_id": "2861424796d9",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, pure boilerplate."
+  },
+  {
+    "chunk_id": "dbb2265511a8",
+    "verdict": "keep",
+    "reason": "Overview prose establishing the shared-primitives contract across the three codespaces."
+  },
+  {
+    "chunk_id": "1859504567f4",
+    "verdict": "keep",
+    "reason": "Explains the primitive codegen interface insight underlying cross-backend uniformity."
+  },
+  {
+    "chunk_id": "4dabbc65de76",
+    "verdict": "keep",
+    "reason": "Mermaid diagram encoding the compiler-to-backend architecture, useful structural signal."
+  },
+  {
+    "chunk_id": "760ffa4b2de1",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, pure boilerplate."
+  },
+  {
+    "chunk_id": "d276c2519885",
+    "verdict": "keep",
+    "reason": "Defines the codespace concept and its two selection syntaxes."
+  },
+  {
+    "chunk_id": "28e49ac29a39",
+    "verdict": "keep",
+    "reason": "Canonical sv/cl/na codespace table (extensions, targets, ecosystems), high-value reference."
+  },
+  {
+    "chunk_id": "635f8779f858",
+    "verdict": "keep",
+    "reason": "One sentence but states the important default-codespace rule."
+  }
+]

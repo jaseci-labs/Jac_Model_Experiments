@@ -1,0 +1,253 @@
+[
+  {
+    "chunk_id": "157ffd9042a8",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "ce9dd0365d60",
+    "verdict": "keep",
+    "reason": "Genuine section intro establishing that auth functions come from @jac/runtime."
+  },
+  {
+    "chunk_id": "9b7ca8fe461c",
+    "verdict": "keep",
+    "reason": "Canonical reference table of auth function signatures and return types."
+  },
+  {
+    "chunk_id": "449c42e3f48d",
+    "verdict": "keep",
+    "reason": "Substantive lead-in tying the following table to the scale subsystem's API endpoints."
+  },
+  {
+    "chunk_id": "0dbae49e0186",
+    "verdict": "keep",
+    "reason": "Unique table documenting user-management operations including the __guest__ account."
+  },
+  {
+    "chunk_id": "43ac50e50567",
+    "verdict": "keep",
+    "reason": "Complete worked jacLogin example showing async handler, navigation, and error path."
+  },
+  {
+    "chunk_id": "c2b0fb41004c",
+    "verdict": "drop",
+    "reason": "Fully contained (containment 1.0) in chunk c9fb86b5b13b, making this the strictly less complete copy of the jacSignup example."
+  },
+  {
+    "chunk_id": "4a2274f759e7",
+    "verdict": "keep",
+    "reason": "Distinct example covering jacLogout/jacIsLoggedIn with conditional JSX rendering."
+  },
+  {
+    "chunk_id": "87c31b35b020",
+    "verdict": "keep",
+    "reason": "Introduces the per-user root-node isolation model, a real semantic fact."
+  },
+  {
+    "chunk_id": "3cfaabea47c5",
+    "verdict": "upweight",
+    "reason": "Crisp OSP-fundamentals example: walker with Root entry, 'here' as user root, typed edge traversal, and report.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "4cdb3cd6b36a",
+    "verdict": "keep",
+    "reason": "SSO section intro pointing to jac.toml configuration."
+  },
+  {
+    "chunk_id": "56c24f3d134d",
+    "verdict": "keep",
+    "reason": "Concrete jac.toml SSO configuration snippet with the [scale.sso.google] key path."
+  },
+  {
+    "chunk_id": "4ffa3de634d6",
+    "verdict": "drop",
+    "reason": "Two-word bold label with no content; nav-only fragment."
+  },
+  {
+    "chunk_id": "10f3a80af5e9",
+    "verdict": "keep",
+    "reason": "Unique table of SSO endpoint routes."
+  },
+  {
+    "chunk_id": "9b67805fbbbe",
+    "verdict": "keep",
+    "reason": "Intro naming AuthGuard's role in file-based routing."
+  },
+  {
+    "chunk_id": "82be305785a6",
+    "verdict": "keep",
+    "reason": "Working AuthGuard/Outlet layout example with the (auth) route-group convention."
+  },
+  {
+    "chunk_id": "c41594dcdd1f",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "a399915e8fab",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose; nav-only."
+  },
+  {
+    "chunk_id": "bcec81ca1872",
+    "verdict": "keep",
+    "reason": "Shows Jac's dict-literal inline-style syntax, which differs from JS object syntax."
+  },
+  {
+    "chunk_id": "2e5393ff9970",
+    "verdict": "keep",
+    "reason": "Minimal but genuine className usage example."
+  },
+  {
+    "chunk_id": "109f20bed83b",
+    "verdict": "keep",
+    "reason": "CSS-file half of the import-a-stylesheet pattern."
+  },
+  {
+    "chunk_id": "335e57a30c03",
+    "verdict": "keep",
+    "reason": "Jac-side css-import syntax that completes the previous chunk's pattern."
+  },
+  {
+    "chunk_id": "5fa118b41ed3",
+    "verdict": "keep",
+    "reason": "Dense, unique explanation of the .style.css annex scoping mechanism."
+  },
+  {
+    "chunk_id": "86079649128b",
+    "verdict": "keep",
+    "reason": "One-line glue that names the base-name pairing convention for the annex example."
+  },
+  {
+    "chunk_id": "12b38f15fb83",
+    "verdict": "keep",
+    "reason": "Annex CSS example including the :global() escape hatch."
+  },
+  {
+    "chunk_id": "3af82315d669",
+    "verdict": "keep",
+    "reason": "Companion .cl.jac component for the scoped-CSS example."
+  },
+  {
+    "chunk_id": "67112adc60dd",
+    "verdict": "keep",
+    "reason": "Explains the selector-hash rewrite that the following output snippets demonstrate."
+  },
+  {
+    "chunk_id": "87572cf3e519",
+    "verdict": "keep",
+    "reason": "Compiled-JS output showing the hashed className rewrite, unique compiler-behavior evidence."
+  },
+  {
+    "chunk_id": "6e4b4c962825",
+    "verdict": "keep",
+    "reason": "Emitted sidecar CSS showing hashed selectors and :global unwrapping."
+  },
+  {
+    "chunk_id": "1148c03a4957",
+    "verdict": "drop",
+    "reason": "Two-word lead-in ('Key points:') with no content; nav-only fragment."
+  },
+  {
+    "chunk_id": "72baa4150146",
+    "verdict": "keep",
+    "reason": "Substantive bullet list covering auto-injected imports, partial rewriting, and the :global escape hatch."
+  },
+  {
+    "chunk_id": "a59fcb433648",
+    "verdict": "keep",
+    "reason": "Worked cn() example showing conditional and dict-based class composition in Jac."
+  },
+  {
+    "chunk_id": "65c853ba5d66",
+    "verdict": "keep",
+    "reason": "Unique note on writing cn() in pure Jac with variadic parameters and npm dependencies."
+  },
+  {
+    "chunk_id": "70086633a54c",
+    "verdict": "keep",
+    "reason": "JSX syntax reference exercising conditionals, lists, spread, and shorthand attributes."
+  },
+  {
+    "chunk_id": "be382adab06b",
+    "verdict": "keep",
+    "reason": "Unique semantics: {**props} vs {...props} (W0063) and the {name} attribute shorthand."
+  },
+  {
+    "chunk_id": "88dede50dfcd",
+    "verdict": "keep",
+    "reason": "Unique explanation of try/awaiting lowering to JacAwaiting and the sv/na W2020 caveat."
+  },
+  {
+    "chunk_id": "a7d38dd7eeda",
+    "verdict": "keep",
+    "reason": "Not redundant with bf6aae1e02e3 despite overlap: this is the base try/awaiting form the preceding prose describes, before the except arm is introduced."
+  },
+  {
+    "chunk_id": "8299f4876c42",
+    "verdict": "keep",
+    "reason": "Explains the except-arm lowering to JacClientErrorBoundary wrapping JacAwaiting."
+  },
+  {
+    "chunk_id": "bf6aae1e02e3",
+    "verdict": "keep",
+    "reason": "The more complete member of the flagged pair, demonstrating the full try/awaiting/except form."
+  },
+  {
+    "chunk_id": "bea1182825b2",
+    "verdict": "keep",
+    "reason": "Unique caveats: no per-type dispatch, concatenated except bodies, E2022 on finally."
+  },
+  {
+    "chunk_id": "ef4deb519f1c",
+    "verdict": "keep",
+    "reason": "Introduces the Jac-native {#* ... *#} JSX comment form."
+  },
+  {
+    "chunk_id": "b23acb96dba9",
+    "verdict": "keep",
+    "reason": "Concrete example of the JSX block-comment slot in a component."
+  },
+  {
+    "chunk_id": "ce2dac0acb05",
+    "verdict": "drop",
+    "reason": "One-sentence lead-in with no content; nav-only fragment."
+  },
+  {
+    "chunk_id": "07606b585b38",
+    "verdict": "keep",
+    "reason": "Substantive rules: # in JSX text, {/* */} unsupported, empty {} is a parse error."
+  },
+  {
+    "chunk_id": "d296dcaca71a",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "d7ff7dd4f559",
+    "verdict": "keep",
+    "reason": "Section intro stating TS/TSX auto-support, needed context for the next two chunks."
+  },
+  {
+    "chunk_id": "39178dfc2d8b",
+    "verdict": "keep",
+    "reason": "TSX component half of the TypeScript-interop example."
+  },
+  {
+    "chunk_id": "47f13e57e9ab",
+    "verdict": "keep",
+    "reason": "Jac side of the interop example showing import-from-TSX and lambda props."
+  },
+  {
+    "chunk_id": "329fbb781ab3",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "a95b98d22d1f",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose; nav-only."
+  }
+]

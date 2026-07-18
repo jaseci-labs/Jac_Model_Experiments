@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "3fe1c85f1880",
+    "verdict": "keep",
+    "reason": "Substantive performance analysis of edge-index internals with concrete complexity reasoning."
+  },
+  {
+    "chunk_id": "da387e05bb3f",
+    "verdict": "keep",
+    "reason": "Lead-in sentence contextualizing the benchmark table that follows."
+  },
+  {
+    "chunk_id": "84c6f5def3e8",
+    "verdict": "keep",
+    "reason": "Benchmark data table showing the O(N) regression, integral to the post's argument."
+  },
+  {
+    "chunk_id": "51aee3805013",
+    "verdict": "keep",
+    "reason": "Genuine engineering prose analyzing why linear per-edge growth matters once encode/decode is removed."
+  },
+  {
+    "chunk_id": "6260039bc582",
+    "verdict": "keep",
+    "reason": "Explains the list-to-set fix rationale for O(1) mutation."
+  },
+  {
+    "chunk_id": "99ed00420c89",
+    "verdict": "keep",
+    "reason": "The actual diff of the fix, load-bearing code content."
+  },
+  {
+    "chunk_id": "7c8343eb1443",
+    "verdict": "keep",
+    "reason": "Connective sentence introducing the post-fix benchmark table."
+  },
+  {
+    "chunk_id": "ab58e8777196",
+    "verdict": "keep",
+    "reason": "Post-fix benchmark table demonstrating flat per-edge cost."
+  },
+  {
+    "chunk_id": "0d24c5b1982c",
+    "verdict": "keep",
+    "reason": "Explains the residual per-edge gap and unchanged read path, real analysis."
+  },
+  {
+    "chunk_id": "b5f52d32cfa0",
+    "verdict": "keep",
+    "reason": "Tradeoffs section opener framing where the new index loses to main."
+  },
+  {
+    "chunk_id": "ebba67a5adce",
+    "verdict": "keep",
+    "reason": "Concrete tradeoff enumeration for tiny graphs and mutation throughput."
+  },
+  {
+    "chunk_id": "dc6514429104",
+    "verdict": "keep",
+    "reason": "Memory-scaling analysis of the MRO fan-out index, substantive content."
+  },
+  {
+    "chunk_id": "1c7c7bafa0ff",
+    "verdict": "keep",
+    "reason": "Lessons-learned prose on adjacency-list versus type-keyed bucket tradeoffs."
+  },
+  {
+    "chunk_id": "2a1f849e6d43",
+    "verdict": "keep",
+    "reason": "Genuine testing lesson about silent equivalence failures between optimization and fallback paths."
+  },
+  {
+    "chunk_id": "16f0c4b35cad",
+    "verdict": "keep",
+    "reason": "Substantive planner-bypass design lesson."
+  },
+  {
+    "chunk_id": "234f228764cf",
+    "verdict": "keep",
+    "reason": "Migration design lesson on deferring MRO warm-up out of the decode hot path."
+  },
+  {
+    "chunk_id": "9c8ecf1ec869",
+    "verdict": "keep",
+    "reason": "Insightful point about second-order costs hidden behind current bottlenecks."
+  },
+  {
+    "chunk_id": "75a5ceb17cc2",
+    "verdict": "keep",
+    "reason": "Closing roadmap with PR/issue references, still informative project context."
+  },
+  {
+    "chunk_id": "30f235a64c96",
+    "verdict": "keep",
+    "reason": "Intro explaining jac-client meta-packages and the scaffold context, genuine Jac ecosystem prose."
+  },
+  {
+    "chunk_id": "b94f2466243d",
+    "verdict": "keep",
+    "reason": "Thesis statement of the meta-package post, connective but content-bearing."
+  },
+  {
+    "chunk_id": "c3a02d414c03",
+    "verdict": "drop",
+    "reason": "Pure MkDocs excerpt marker with zero content."
+  },
+  {
+    "chunk_id": "9063eea2b3e6",
+    "verdict": "keep",
+    "reason": "Section lead-in framing the current jac.toml state before the example."
+  },
+  {
+    "chunk_id": "218ea93019b2",
+    "verdict": "keep",
+    "reason": "Concrete jac.toml example showing the meta-package dependency syntax."
+  },
+  {
+    "chunk_id": "d59e1e58ea57",
+    "verdict": "keep",
+    "reason": "Explains what each meta-package actually pulls in, useful factual content."
+  },
+  {
+    "chunk_id": "0de7f896b511",
+    "verdict": "keep",
+    "reason": "Short transitional sentence but part of coherent argumentative flow."
+  },
+  {
+    "chunk_id": "bb1734817aef",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose content."
+  },
+  {
+    "chunk_id": "2b6a438ed83d",
+    "verdict": "keep",
+    "reason": "Concrete phantom-dependency failure scenario, substantive prose."
+  },
+  {
+    "chunk_id": "01ade68bd0d6",
+    "verdict": "keep",
+    "reason": "Core argument about transitive dependencies hiding intent."
+  },
+  {
+    "chunk_id": "62eaf27ff5c0",
+    "verdict": "keep",
+    "reason": "Real-world consequence (duplicate React, invalid hook call), genuine content."
+  },
+  {
+    "chunk_id": "fbed9e8311f2",
+    "verdict": "keep",
+    "reason": "Version-pinning problem statement with concrete example."
+  },
+  {
+    "chunk_id": "fc5e2dab1bcf",
+    "verdict": "keep",
+    "reason": "Enumerates the workaround options, substantive continuation."
+  },
+  {
+    "chunk_id": "36116137f061",
+    "verdict": "keep",
+    "reason": "Lead-in to the direct-dependency code example."
+  },
+  {
+    "chunk_id": "2bc363dcfaa7",
+    "verdict": "keep",
+    "reason": "jac.toml direct-dependency example, useful config syntax."
+  },
+  {
+    "chunk_id": "b60431306e9e",
+    "verdict": "keep",
+    "reason": "Short concluding sentence completing the pinning example."
+  },
+  {
+    "chunk_id": "ca182466607b",
+    "verdict": "keep",
+    "reason": "Publishing-tax argument opener with concrete version-bump example."
+  },
+  {
+    "chunk_id": "ffc2bc970466",
+    "verdict": "keep",
+    "reason": "Enumerated release-cycle steps, substantive content."
+  },
+  {
+    "chunk_id": "4bfbf35b0d4f",
+    "verdict": "keep",
+    "reason": "Completes the publishing-tax argument with genuine prose."
+  },
+  {
+    "chunk_id": "d5fea3255d79",
+    "verdict": "keep",
+    "reason": "Opacity problem explained with concrete developer scenario."
+  },
+  {
+    "chunk_id": "56404d35e805",
+    "verdict": "keep",
+    "reason": "Lead-in to the full direct-dependency listing."
+  },
+  {
+    "chunk_id": "e76bcbdc5d91",
+    "verdict": "keep",
+    "reason": "Full jac.toml example of direct npm dependencies, useful config reference."
+  },
+  {
+    "chunk_id": "5313ae4786f7",
+    "verdict": "keep",
+    "reason": "Argues readability benefit of explicit dependencies, real prose."
+  },
+  {
+    "chunk_id": "a52cdefb474d",
+    "verdict": "keep",
+    "reason": "Proposal section with PR reference, content-bearing."
+  },
+  {
+    "chunk_id": "ff8080e2a55b",
+    "verdict": "keep",
+    "reason": "Describes the config-loader injection change, substantive."
+  },
+  {
+    "chunk_id": "937a680221d1",
+    "verdict": "keep",
+    "reason": "Table categorizing injected packages, concrete factual content."
+  },
+  {
+    "chunk_id": "63e0822a131c",
+    "verdict": "keep",
+    "reason": "Describes automatic migration behavior for existing projects."
+  },
+  {
+    "chunk_id": "b5d30aa044f6",
+    "verdict": "keep",
+    "reason": "Describes improved error diagnostics, genuine content."
+  },
+  {
+    "chunk_id": "03b5ab4cbf48",
+    "verdict": "keep",
+    "reason": "Describes deletion of meta-package directories, part of the change description."
+  },
+  {
+    "chunk_id": "5c957562d9c4",
+    "verdict": "keep",
+    "reason": "Broader-lesson prose on hidden complexity, substantive conclusion."
+  },
+  {
+    "chunk_id": "09083a3609e3",
+    "verdict": "keep",
+    "reason": "Lead-in sentence to the dependency-management principles list."
+  },
+  {
+    "chunk_id": "1f65d8be54b3",
+    "verdict": "keep",
+    "reason": "Enumerated principles of good dependency management, real content."
+  }
+]

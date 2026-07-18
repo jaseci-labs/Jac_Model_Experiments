@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "cb136f6ed3c9",
+    "verdict": "keep",
+    "reason": "Shows implicit-package directory layout without __init__.jac."
+  },
+  {
+    "chunk_id": "209a23f577b6",
+    "verdict": "keep",
+    "reason": "Import-by-submodule-path example."
+  },
+  {
+    "chunk_id": "5fe734d521ee",
+    "verdict": "keep",
+    "reason": "States the recommended default for package structure."
+  },
+  {
+    "chunk_id": "e40a67d857bf",
+    "verdict": "keep",
+    "reason": "Introduces explicit packages with __init__.jac."
+  },
+  {
+    "chunk_id": "d66a5124f15e",
+    "verdict": "keep",
+    "reason": "Lists concrete use cases for __init__.jac."
+  },
+  {
+    "chunk_id": "984e0c6bca8e",
+    "verdict": "keep",
+    "reason": "Directory layout for a re-exporting package."
+  },
+  {
+    "chunk_id": "49ee888147ac",
+    "verdict": "drop",
+    "reason": "Bare filename label with no prose content."
+  },
+  {
+    "chunk_id": "284e8b9db7e5",
+    "verdict": "keep",
+    "reason": "Re-export __init__.jac code example."
+  },
+  {
+    "chunk_id": "2e7c86c5115b",
+    "verdict": "keep",
+    "reason": "Lead-in explaining the benefit of package re-exports."
+  },
+  {
+    "chunk_id": "e1bb71c3d75f",
+    "verdict": "keep",
+    "reason": "Clean package-level import example."
+  },
+  {
+    "chunk_id": "0ae714675dbc",
+    "verdict": "keep",
+    "reason": "Contrastive lead-in for submodule imports."
+  },
+  {
+    "chunk_id": "05a65c0ba805",
+    "verdict": "keep",
+    "reason": "Verbose submodule-import counterexample."
+  },
+  {
+    "chunk_id": "de0e581bd390",
+    "verdict": "keep",
+    "reason": "Decision table for when __init__.jac is needed."
+  },
+  {
+    "chunk_id": "500b10ca4846",
+    "verdict": "keep",
+    "reason": "Actionable tip on starting without __init__.jac."
+  },
+  {
+    "chunk_id": "fbbb072c900d",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "b4b3af57911c",
+    "verdict": "keep",
+    "reason": "Introduces the impl-system best-practices section."
+  },
+  {
+    "chunk_id": "f2ba56384eae",
+    "verdict": "keep",
+    "reason": "Best-practice guidance on declaration files as API docs."
+  },
+  {
+    "chunk_id": "4b831f9854e5",
+    "verdict": "keep",
+    "reason": "Explains impl-file naming convention and auto-discovery."
+  },
+  {
+    "chunk_id": "20b726d2f6fc",
+    "verdict": "keep",
+    "reason": "Guidance on organizing impl files by feature."
+  },
+  {
+    "chunk_id": "afa997a403b9",
+    "verdict": "keep",
+    "reason": "Consistency guidance for impl patterns within a package."
+  },
+  {
+    "chunk_id": "aa8fa4f224dd",
+    "verdict": "keep",
+    "reason": "Explains placing private helpers in impl files."
+  },
+  {
+    "chunk_id": "d80a2a55487b",
+    "verdict": "keep",
+    "reason": "Introduces a concrete compiler-codebase example."
+  },
+  {
+    "chunk_id": "2a3458aac2cf",
+    "verdict": "keep",
+    "reason": "Code example of private helpers alongside impls."
+  },
+  {
+    "chunk_id": "ef367320a5c2",
+    "verdict": "keep",
+    "reason": "Explains the rationale for helper placement."
+  },
+  {
+    "chunk_id": "3991d85e550a",
+    "verdict": "keep",
+    "reason": "Overview of jac.toml purpose and configuration surface."
+  },
+  {
+    "chunk_id": "f6180c310571",
+    "verdict": "keep",
+    "reason": "Explains when manual jac.toml editing matters."
+  },
+  {
+    "chunk_id": "2fb53db8fa90",
+    "verdict": "keep",
+    "reason": "Documents how jac locates jac.toml."
+  },
+  {
+    "chunk_id": "d8ae0d413033",
+    "verdict": "keep",
+    "reason": "Project-creation command examples."
+  },
+  {
+    "chunk_id": "65f3964a9245",
+    "verdict": "keep",
+    "reason": "Lead-in describing web-static scaffold contents."
+  },
+  {
+    "chunk_id": "16a00fe6d79f",
+    "verdict": "keep",
+    "reason": "Scaffolded web-static project directory layout."
+  },
+  {
+    "chunk_id": "88c585c74450",
+    "verdict": "keep",
+    "reason": "Lead-in introducing the generated jac.toml example."
+  },
+  {
+    "chunk_id": "fc7fb0e5ffd3",
+    "verdict": "keep",
+    "reason": "Example auto-generated jac.toml for web-static."
+  },
+  {
+    "chunk_id": "a2646647bc8e",
+    "verdict": "keep",
+    "reason": "Note that the file rarely needs manual edits."
+  },
+  {
+    "chunk_id": "30882263be93",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "33f002aedb10",
+    "verdict": "drop",
+    "reason": "Bare section heading with no prose."
+  },
+  {
+    "chunk_id": "4901874d96c7",
+    "verdict": "keep",
+    "reason": "Documents [project] metadata fields and their uses."
+  },
+  {
+    "chunk_id": "10a2e68631b2",
+    "verdict": "keep",
+    "reason": "Full [project] section example with publishing fields."
+  },
+  {
+    "chunk_id": "8e9cb2d53332",
+    "verdict": "keep",
+    "reason": "Reference table of all [project] fields."
+  },
+  {
+    "chunk_id": "5fad5fb16083",
+    "verdict": "keep",
+    "reason": "Note on authors/maintainers formats."
+  },
+  {
+    "chunk_id": "5fda8cfe266c",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "dd0c2b211cfc",
+    "verdict": "keep",
+    "reason": "Introduces the [dependencies] section."
+  },
+  {
+    "chunk_id": "2f1cef3d5349",
+    "verdict": "keep",
+    "reason": "Example dependencies including git and system packages."
+  },
+  {
+    "chunk_id": "148da4f6a520",
+    "verdict": "keep",
+    "reason": "Explains [dependencies.system] apt-package behavior."
+  },
+  {
+    "chunk_id": "8cbc1af4ca99",
+    "verdict": "drop",
+    "reason": "Bare label fragment with no content."
+  },
+  {
+    "chunk_id": "2d454963c630",
+    "verdict": "keep",
+    "reason": "Version-specifier format reference table."
+  },
+  {
+    "chunk_id": "f0757ed8c9fd",
+    "verdict": "keep",
+    "reason": "Documents default version-pinning behavior on install."
+  },
+  {
+    "chunk_id": "abadeb0ef99c",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "830af8ca9a24",
+    "verdict": "keep",
+    "reason": "Explains [optional-dependencies] groups."
+  },
+  {
+    "chunk_id": "968ed16fe133",
+    "verdict": "keep",
+    "reason": "Example optional-dependency group definitions."
+  },
+  {
+    "chunk_id": "3b65ae9e404a",
+    "verdict": "keep",
+    "reason": "Lead-in introducing the group-install command."
+  }
+]

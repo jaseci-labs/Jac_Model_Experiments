@@ -1,0 +1,253 @@
+[
+  {
+    "chunk_id": "5a667b9609cb",
+    "verdict": "keep",
+    "reason": "Genuine API reference table for library-mode access control and permission functions."
+  },
+  {
+    "chunk_id": "31960a12a2ba",
+    "verdict": "keep",
+    "reason": "Substantive reference table for module management and archetype APIs including spawn_node/spawn_walker."
+  },
+  {
+    "chunk_id": "fbea64650b10",
+    "verdict": "keep",
+    "reason": "Genuine reference table for testing, report, and printgraph debugging APIs."
+  },
+  {
+    "chunk_id": "9027e725d684",
+    "verdict": "keep",
+    "reason": "Genuine reference table for LLM integration functions (by_operator, call_llm, sem)."
+  },
+  {
+    "chunk_id": "945dcd5bed57",
+    "verdict": "keep",
+    "reason": "Genuine reference table for runtime context and threading helpers."
+  },
+  {
+    "chunk_id": "fb01b8718a69",
+    "verdict": "drop",
+    "reason": "Chunk contains only a horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "be2b7729bed5",
+    "verdict": "keep",
+    "reason": "Short but real prose framing the library-mode best-practices section."
+  },
+  {
+    "chunk_id": "2c3195c8e796",
+    "verdict": "keep",
+    "reason": "Header plus advice sentence introducing the walker-state code example."
+  },
+  {
+    "chunk_id": "f38fc324695f",
+    "verdict": "upweight",
+    "reason": "Clean minimal example of walker state with on_entry and here — core walker semantics worth extra signal.",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "6feb1d817360",
+    "verdict": "keep",
+    "reason": "Header plus advice sentence introducing the path-filtering example."
+  },
+  {
+    "chunk_id": "063721864deb",
+    "verdict": "keep",
+    "reason": "Covers core visit/edge_out traversal filtering, but the snippet mixes Python and Jac lambda syntax so it should not get extra weight."
+  },
+  {
+    "chunk_id": "f8e63eefb758",
+    "verdict": "drop",
+    "reason": "Pure cross-reference pointer to other sections with no standalone documentation content."
+  },
+  {
+    "chunk_id": "7e2461402b0c",
+    "verdict": "drop",
+    "reason": "Chunk contains only a horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "bada5124630b",
+    "verdict": "keep",
+    "reason": "Summary lead-in sentence with real descriptive content about library mode."
+  },
+  {
+    "chunk_id": "bc2ebe4f2d24",
+    "verdict": "keep",
+    "reason": "Substantive bullets describing library-mode feature parity and Python integration."
+  },
+  {
+    "chunk_id": "7586aad546fa",
+    "verdict": "keep",
+    "reason": "Concluding guidance sentence on when to use library mode; genuine prose."
+  },
+  {
+    "chunk_id": "7bd6cfa4ec8c",
+    "verdict": "drop",
+    "reason": "Title plus related-links line only — nav-only fragment with no prose."
+  },
+  {
+    "chunk_id": "890c2b1b5724",
+    "verdict": "drop",
+    "reason": "Contains only the phrase 'In this part:' — nav boilerplate."
+  },
+  {
+    "chunk_id": "3cc442c8498b",
+    "verdict": "drop",
+    "reason": "Pure table-of-contents anchor list with no documentation prose."
+  },
+  {
+    "chunk_id": "b6643d480c8b",
+    "verdict": "drop",
+    "reason": "Chunk contains only a horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "6918e70474b5",
+    "verdict": "keep",
+    "reason": "Genuine overview prose explaining what native compilation is."
+  },
+  {
+    "chunk_id": "b5630a960ce0",
+    "verdict": "keep",
+    "reason": "Substantive explanation of inline na blocks versus standalone .na.jac compilation."
+  },
+  {
+    "chunk_id": "92f9b370c426",
+    "verdict": "keep",
+    "reason": "Lead-in sentence for the use-case bullets; keeps the following chunk coherent."
+  },
+  {
+    "chunk_id": "a7698ea607c0",
+    "verdict": "keep",
+    "reason": "Substantive bullets on when native compilation is appropriate."
+  },
+  {
+    "chunk_id": "9251fee7203a",
+    "verdict": "drop",
+    "reason": "Chunk contains only a horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "89dc018062ab",
+    "verdict": "keep",
+    "reason": "Dense quick-reference table of native-compilation capabilities and flags."
+  },
+  {
+    "chunk_id": "d687072b1a3b",
+    "verdict": "drop",
+    "reason": "Chunk contains only a horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "e5570ecd8570",
+    "verdict": "keep",
+    "reason": "Genuine prose explaining native sections in mixed-codespace files."
+  },
+  {
+    "chunk_id": "bd5ae79d5d8c",
+    "verdict": "keep",
+    "reason": "Lead-in sentence for the two codespace-selection syntaxes that follow."
+  },
+  {
+    "chunk_id": "88a4beb4e03b",
+    "verdict": "keep",
+    "reason": "Substantive description of na block versus na statement-prefix syntax."
+  },
+  {
+    "chunk_id": "8cba4fe347eb",
+    "verdict": "keep",
+    "reason": "Complete worked example mixing Python-backed and native Jac code."
+  },
+  {
+    "chunk_id": "539a65e800c5",
+    "verdict": "keep",
+    "reason": "Genuine prose on automatic JIT compilation and interop bridging."
+  },
+  {
+    "chunk_id": "5869ca4a237a",
+    "verdict": "keep",
+    "reason": "Substantive guidance bullets on when to use native sections."
+  },
+  {
+    "chunk_id": "b7e05a684658",
+    "verdict": "keep",
+    "reason": "Genuine explanation of codespace context isolation semantics."
+  },
+  {
+    "chunk_id": "42e754d79f2f",
+    "verdict": "drop",
+    "reason": "Chunk contains only a horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "fa77b851a560",
+    "verdict": "keep",
+    "reason": "Genuine intro prose for automatic Python-native interop stub generation."
+  },
+  {
+    "chunk_id": "a133e1b75abc",
+    "verdict": "keep",
+    "reason": "Complete worked example of a native function calling a Python function."
+  },
+  {
+    "chunk_id": "27c50f849f6b",
+    "verdict": "keep",
+    "reason": "Lead-in line for the numbered list describing compiler interop behavior."
+  },
+  {
+    "chunk_id": "5969e0ef4db0",
+    "verdict": "keep",
+    "reason": "Substantive numbered list of what the compiler generates at the interop boundary."
+  },
+  {
+    "chunk_id": "44eaf708cb72",
+    "verdict": "keep",
+    "reason": "Genuine note on interop type coverage and the Python-class boundary."
+  },
+  {
+    "chunk_id": "028da3ccb7e8",
+    "verdict": "keep",
+    "reason": "Section intro for imports between native modules."
+  },
+  {
+    "chunk_id": "5961ec2ad880",
+    "verdict": "keep",
+    "reason": "Code example defining a native module for the import demonstration."
+  },
+  {
+    "chunk_id": "4ec2266a1e25",
+    "verdict": "keep",
+    "reason": "Code example showing native-module import syntax."
+  },
+  {
+    "chunk_id": "8e061be650ba",
+    "verdict": "keep",
+    "reason": "Genuine explanation that native imports link at the IR level."
+  },
+  {
+    "chunk_id": "50bb73ca04f2",
+    "verdict": "drop",
+    "reason": "Chunk contains only a horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "ab16ca83997a",
+    "verdict": "keep",
+    "reason": "Genuine intro prose for standalone .na.jac binary compilation."
+  },
+  {
+    "chunk_id": "f28689ed9724",
+    "verdict": "keep",
+    "reason": "Substantive explanation of .na.jac files and the with entry entry point."
+  },
+  {
+    "chunk_id": "ccae9c8ad47a",
+    "verdict": "keep",
+    "reason": "Canonical hello.na.jac example; its flagged near-duplicate ce402f5182a4 is not in this batch, so this copy is retained."
+  },
+  {
+    "chunk_id": "b9b10f0de278",
+    "verdict": "keep",
+    "reason": "Genuine documentation of the jac nacompile command invocation."
+  },
+  {
+    "chunk_id": "1729832dedab",
+    "verdict": "keep",
+    "reason": "Genuine options table for the nacompile command."
+  }
+]

@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "37488decb111",
+    "verdict": "keep",
+    "reason": "Genuine prose introducing the test-first phase of the workflow blog post."
+  },
+  {
+    "chunk_id": "b66279e932c7",
+    "verdict": "keep",
+    "reason": "Short but load-bearing prompt example tied to the surrounding test-first section."
+  },
+  {
+    "chunk_id": "41a648760ab4",
+    "verdict": "keep",
+    "reason": "Substantive prose on debating test strategy and context-reset resilience."
+  },
+  {
+    "chunk_id": "a4ee6d6cba36",
+    "verdict": "keep",
+    "reason": "Core rule of the post with an illustrative mermaid flowchart, non-redundant."
+  },
+  {
+    "chunk_id": "d42470cae0d3",
+    "verdict": "keep",
+    "reason": "Genuine prose stating the every-test-must-fail rule."
+  },
+  {
+    "chunk_id": "226c29af1372",
+    "verdict": "keep",
+    "reason": "Non-redundant list explaining why a prematurely passing test is suspect."
+  },
+  {
+    "chunk_id": "2501bb894d59",
+    "verdict": "keep",
+    "reason": "Concrete anecdote on interrogating passing tests, genuine prose."
+  },
+  {
+    "chunk_id": "fb03e6dc58a6",
+    "verdict": "keep",
+    "reason": "Genuine prose on committing tests as the contract."
+  },
+  {
+    "chunk_id": "e2978c340b10",
+    "verdict": "drop",
+    "reason": "Content-free horizontal-rule separator fragment."
+  },
+  {
+    "chunk_id": "2c58f0d5fc2d",
+    "verdict": "keep",
+    "reason": "Section opener with real content framing guided implementation."
+  },
+  {
+    "chunk_id": "9affa2060cf6",
+    "verdict": "keep",
+    "reason": "Mermaid flowchart encoding the implementation loop, genuine content."
+  },
+  {
+    "chunk_id": "af12bc8d9a99",
+    "verdict": "keep",
+    "reason": "Substantive prose on stopping the model at deviations."
+  },
+  {
+    "chunk_id": "c1c669799feb",
+    "verdict": "keep",
+    "reason": "Concrete interrogation prompts complementing the surrounding section."
+  },
+  {
+    "chunk_id": "d5b15d364035",
+    "verdict": "keep",
+    "reason": "Genuine prose on tests as a safety net enabling exploration."
+  },
+  {
+    "chunk_id": "3b1a74bce3f8",
+    "verdict": "keep",
+    "reason": "Short but genuine closing prose for the exploration subsection."
+  },
+  {
+    "chunk_id": "e077efab90de",
+    "verdict": "keep",
+    "reason": "Genuine prose on context-window strategy during implementation."
+  },
+  {
+    "chunk_id": "940c84e729c8",
+    "verdict": "keep",
+    "reason": "Concrete restart-prompt example tied to the context-strategy section."
+  },
+  {
+    "chunk_id": "cf2627ccbadb",
+    "verdict": "keep",
+    "reason": "Brief but genuine concluding line for the context-strategy section."
+  },
+  {
+    "chunk_id": "f131bca0aa66",
+    "verdict": "drop",
+    "reason": "Content-free horizontal-rule separator fragment."
+  },
+  {
+    "chunk_id": "1d16c77aa54c",
+    "verdict": "keep",
+    "reason": "Section opener introducing dual-context validation with real content."
+  },
+  {
+    "chunk_id": "1d7d57e129a3",
+    "verdict": "keep",
+    "reason": "Genuine lead-in sentence for the two-context technique."
+  },
+  {
+    "chunk_id": "51dbfdb6a027",
+    "verdict": "keep",
+    "reason": "Mermaid diagram encoding the dual-context validation flow, genuine content."
+  },
+  {
+    "chunk_id": "8711692e09c0",
+    "verdict": "keep",
+    "reason": "Substantive explanation of sunk-cost bias motivating two contexts."
+  },
+  {
+    "chunk_id": "3ec0cb675738",
+    "verdict": "keep",
+    "reason": "Tiny connective lead-in but part of a coherent instructional sequence."
+  },
+  {
+    "chunk_id": "17ab48312764",
+    "verdict": "keep",
+    "reason": "Concrete builder-context prompt example, non-redundant."
+  },
+  {
+    "chunk_id": "c53bd0ea6abb",
+    "verdict": "keep",
+    "reason": "Genuine prose on why the builder context is candid about shortcuts."
+  },
+  {
+    "chunk_id": "24fb1329cdce",
+    "verdict": "keep",
+    "reason": "Tiny connective lead-in paired with the fresh-context prompt that follows."
+  },
+  {
+    "chunk_id": "e9aeeacab1a4",
+    "verdict": "keep",
+    "reason": "Concrete fresh-context review prompt example."
+  },
+  {
+    "chunk_id": "9e8eed3e3c0b",
+    "verdict": "keep",
+    "reason": "Substantive prose on comparing reviews and looping until standards are met."
+  },
+  {
+    "chunk_id": "7db140b9e2b8",
+    "verdict": "drop",
+    "reason": "Content-free horizontal-rule separator fragment."
+  },
+  {
+    "chunk_id": "fecad99d1bb4",
+    "verdict": "keep",
+    "reason": "Genuine prose on CI as the final arbiter."
+  },
+  {
+    "chunk_id": "c98afc87b1f3",
+    "verdict": "keep",
+    "reason": "Lead-in sentence for the documentation-pass prompt, part of coherent content."
+  },
+  {
+    "chunk_id": "3dd94cf14d2d",
+    "verdict": "keep",
+    "reason": "Concrete documentation-update prompt example."
+  },
+  {
+    "chunk_id": "4fd11558a079",
+    "verdict": "keep",
+    "reason": "Genuine prose on the model tracing diffs to find stale docs."
+  },
+  {
+    "chunk_id": "d6162c775240",
+    "verdict": "drop",
+    "reason": "Content-free horizontal-rule separator fragment."
+  },
+  {
+    "chunk_id": "7d665a05e792",
+    "verdict": "keep",
+    "reason": "Complete six-phase flow diagram summarizing the whole method, genuine content."
+  },
+  {
+    "chunk_id": "650e7ca8c6b9",
+    "verdict": "drop",
+    "reason": "Content-free horizontal-rule separator fragment."
+  },
+  {
+    "chunk_id": "a44d15f430a1",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose content."
+  },
+  {
+    "chunk_id": "f981d1086da4",
+    "verdict": "keep",
+    "reason": "Substantive prose on staying in the driver's seat."
+  },
+  {
+    "chunk_id": "724e602e98ef",
+    "verdict": "keep",
+    "reason": "Substantive prose on tests as an objective contract."
+  },
+  {
+    "chunk_id": "6015590c7009",
+    "verdict": "keep",
+    "reason": "Substantive prose on compounding understanding across interactions."
+  },
+  {
+    "chunk_id": "00289a7d65c2",
+    "verdict": "keep",
+    "reason": "Genuine concluding prose contrasting speed with compounding understanding."
+  },
+  {
+    "chunk_id": "83b19a73e291",
+    "verdict": "drop",
+    "reason": "Content-free horizontal-rule separator fragment."
+  },
+  {
+    "chunk_id": "b555ef83ac9a",
+    "verdict": "keep",
+    "reason": "Quick-reference table condensing all six phases, genuine non-redundant content."
+  },
+  {
+    "chunk_id": "22e62ff3da7d",
+    "verdict": "keep",
+    "reason": "Title and lead of the Tobu-on-Jaseci case study, genuine ecosystem content."
+  },
+  {
+    "chunk_id": "69252257fd57",
+    "verdict": "drop",
+    "reason": "Bare HTML excerpt-marker comment with zero content."
+  },
+  {
+    "chunk_id": "8b0e6244f98f",
+    "verdict": "keep",
+    "reason": "Stat-card markup carrying the case study's concrete outcome figures."
+  },
+  {
+    "chunk_id": "17fd72ba3c67",
+    "verdict": "keep",
+    "reason": "Figure markup whose alt text and caption carry genuine descriptive prose."
+  },
+  {
+    "chunk_id": "54888b9fee07",
+    "verdict": "keep",
+    "reason": "Genuine prose describing Tobu's product vision."
+  },
+  {
+    "chunk_id": "e815a02c649e",
+    "verdict": "keep",
+    "reason": "Genuine prose framing the graph-shaped backend challenge Jaseci addressed."
+  }
+]

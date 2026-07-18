@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "b63963642a20",
+    "verdict": "keep",
+    "reason": "Real note on shell completion activation."
+  },
+  {
+    "chunk_id": "27a5e7c3a81f",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "1c29887fc529",
+    "verdict": "keep",
+    "reason": "Introduces client framework commands section."
+  },
+  {
+    "chunk_id": "4d0b5d6d31c7",
+    "verdict": "keep",
+    "reason": "Documents jac build --client behavior."
+  },
+  {
+    "chunk_id": "054a8c185c62",
+    "verdict": "keep",
+    "reason": "Command usage syntax for build --client."
+  },
+  {
+    "chunk_id": "cd4cd23dc6ad",
+    "verdict": "keep",
+    "reason": "Option reference table for client build."
+  },
+  {
+    "chunk_id": "6ac3e5262c28",
+    "verdict": "drop",
+    "reason": "Bare 'Examples:' heading fragment with no content."
+  },
+  {
+    "chunk_id": "ba31d1383bab",
+    "verdict": "keep",
+    "reason": "Concrete client build command examples."
+  },
+  {
+    "chunk_id": "14cf387a057e",
+    "verdict": "keep",
+    "reason": "Documents jac setup command."
+  },
+  {
+    "chunk_id": "54177f08571b",
+    "verdict": "keep",
+    "reason": "jac setup usage syntax."
+  },
+  {
+    "chunk_id": "54db6fdcf173",
+    "verdict": "keep",
+    "reason": "Platform flag detail for mobile setup."
+  },
+  {
+    "chunk_id": "712c513e5a8e",
+    "verdict": "drop",
+    "reason": "Bare 'Examples:' heading fragment with no content."
+  },
+  {
+    "chunk_id": "095250445a90",
+    "verdict": "keep",
+    "reason": "Concrete jac setup mobile examples."
+  },
+  {
+    "chunk_id": "d42e88727e2d",
+    "verdict": "keep",
+    "reason": "Extended flags table; its flagged duplicate pair is absent so retain this copy."
+  },
+  {
+    "chunk_id": "f22d44eca2fe",
+    "verdict": "keep",
+    "reason": "Explains desktop/cef build targets and config."
+  },
+  {
+    "chunk_id": "9497a444f41e",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "d7bb938f4b18",
+    "verdict": "drop",
+    "reason": "Nav-only section header with no prose."
+  },
+  {
+    "chunk_id": "7db7636fedb9",
+    "verdict": "keep",
+    "reason": "Development workflow command sequence."
+  },
+  {
+    "chunk_id": "a0579a6132ea",
+    "verdict": "keep",
+    "reason": "Publishing workflow intro with layout lead-in."
+  },
+  {
+    "chunk_id": "a98b2847f1dc",
+    "verdict": "keep",
+    "reason": "Package project layout example."
+  },
+  {
+    "chunk_id": "af52b61e73f2",
+    "verdict": "keep",
+    "reason": "Wheel build and publish command workflow."
+  },
+  {
+    "chunk_id": "c505181c5410",
+    "verdict": "keep",
+    "reason": "Production entry-point note for jac start."
+  },
+  {
+    "chunk_id": "4c38cb37e71c",
+    "verdict": "keep",
+    "reason": "Production start/scale command examples."
+  },
+  {
+    "chunk_id": "4ba3a6e25bde",
+    "verdict": "drop",
+    "reason": "See Also nav-only link list."
+  },
+  {
+    "chunk_id": "6e2becdcbf17",
+    "verdict": "keep",
+    "reason": "Explains Jac impl declaration/implementation separation."
+  },
+  {
+    "chunk_id": "d9623db689dc",
+    "verdict": "keep",
+    "reason": "Guide overview of five organizational patterns."
+  },
+  {
+    "chunk_id": "b2eeac497b00",
+    "verdict": "keep",
+    "reason": "Contextual note grounding examples in real compiler."
+  },
+  {
+    "chunk_id": "d16ec7390e13",
+    "verdict": "keep",
+    "reason": "Prerequisites pointer to impl block docs."
+  },
+  {
+    "chunk_id": "5213cf331754",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "0381882e8efa",
+    "verdict": "keep",
+    "reason": "Intro to why declarations/implementations separate."
+  },
+  {
+    "chunk_id": "7228e9dab4b5",
+    "verdict": "keep",
+    "reason": "Explains architecture-at-a-glance benefit."
+  },
+  {
+    "chunk_id": "931ffd9bb1d3",
+    "verdict": "keep",
+    "reason": "Lead-in referencing type-system example."
+  },
+  {
+    "chunk_id": "7816febd7b2a",
+    "verdict": "keep",
+    "reason": "Type-system file layout example."
+  },
+  {
+    "chunk_id": "5a583eb4043e",
+    "verdict": "keep",
+    "reason": "Explains architecture visibility from declarations."
+  },
+  {
+    "chunk_id": "bdc78690eff8",
+    "verdict": "keep",
+    "reason": "Explains human/AI readability benefit."
+  },
+  {
+    "chunk_id": "c193c3fd8ad0",
+    "verdict": "keep",
+    "reason": "Details reader and AI-model benefits."
+  },
+  {
+    "chunk_id": "76a4a8c1c418",
+    "verdict": "keep",
+    "reason": "Design guidance on declaration-file completeness."
+  },
+  {
+    "chunk_id": "38015f612a7d",
+    "verdict": "keep",
+    "reason": "Explains granular separation of concerns."
+  },
+  {
+    "chunk_id": "b27f631f658e",
+    "verdict": "keep",
+    "reason": "Feature-domain impl split example."
+  },
+  {
+    "chunk_id": "43fff8e3abbd",
+    "verdict": "drop",
+    "reason": "Standalone GitHub browse link with no prose."
+  },
+  {
+    "chunk_id": "d9e20e51190d",
+    "verdict": "keep",
+    "reason": "Explains isolation benefit of focused impl files."
+  },
+  {
+    "chunk_id": "481522d13e74",
+    "verdict": "keep",
+    "reason": "Explains cleaner folder architecture benefit."
+  },
+  {
+    "chunk_id": "7e5c4730b4a8",
+    "verdict": "keep",
+    "reason": "Details what each layout layer communicates."
+  },
+  {
+    "chunk_id": "564fe0f25e49",
+    "verdict": "keep",
+    "reason": "Textbook analogy for declaration/impl split."
+  },
+  {
+    "chunk_id": "ff417a74ba9c",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "aaf60233c952",
+    "verdict": "keep",
+    "reason": "Introduces the five-pattern overview."
+  },
+  {
+    "chunk_id": "26550dfb2c10",
+    "verdict": "keep",
+    "reason": "Reference table of organizational patterns."
+  },
+  {
+    "chunk_id": "6e02ea781b36",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "476732a70926",
+    "verdict": "keep",
+    "reason": "Explains the inline all-in-one pattern."
+  },
+  {
+    "chunk_id": "342289839d12",
+    "verdict": "keep",
+    "reason": "Concrete inline obj/impl code example."
+  }
+]

@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "46e02b133106",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('Example output' heading) with no standalone content."
+  },
+  {
+    "chunk_id": "60a414aaf36b",
+    "verdict": "keep",
+    "reason": "Concrete runtime-error response example documenting run_jac output shape."
+  },
+  {
+    "chunk_id": "7d8d231b9e97",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no standalone content."
+  },
+  {
+    "chunk_id": "3b332b887856",
+    "verdict": "keep",
+    "reason": "Concrete no-entrypoint response example showing empty-output success shape."
+  },
+  {
+    "chunk_id": "ae8a83f04e4a",
+    "verdict": "keep",
+    "reason": "Substantive behavioral notes on entrypoints, error reporting, and stderr semantics."
+  },
+  {
+    "chunk_id": "bd404df7145a",
+    "verdict": "keep",
+    "reason": "Genuine tool description for graph_visualize, a Jac-specific graph feature."
+  },
+  {
+    "chunk_id": "e8b5da1017d1",
+    "verdict": "keep",
+    "reason": "Substantive notes on Root()-rooted graph output and program_output capture."
+  },
+  {
+    "chunk_id": "9b016d59efe7",
+    "verdict": "keep",
+    "reason": "Complete parameter table for graph_visualize with types and defaults."
+  },
+  {
+    "chunk_id": "616f42b6d48b",
+    "verdict": "keep",
+    "reason": "Genuine caveat about jac dot parameter behavior, non-redundant."
+  },
+  {
+    "chunk_id": "1406a99f4b72",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no standalone content."
+  },
+  {
+    "chunk_id": "8885429702ca",
+    "verdict": "keep",
+    "reason": "Real Jac code example demonstrating node declaration and ++> edge connection syntax."
+  },
+  {
+    "chunk_id": "64918b7a8ec8",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no standalone content."
+  },
+  {
+    "chunk_id": "f92136c047da",
+    "verdict": "keep",
+    "reason": "Concrete DOT-format graph output example tied to the node/edge input above."
+  },
+  {
+    "chunk_id": "1fbb79b1a68a",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no standalone content."
+  },
+  {
+    "chunk_id": "e0d063735830",
+    "verdict": "keep",
+    "reason": "Concrete edgeless-graph output example showing Root()-only DOT result."
+  },
+  {
+    "chunk_id": "41e22c2622e6",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no standalone content."
+  },
+  {
+    "chunk_id": "921f0517b8ea",
+    "verdict": "keep",
+    "reason": "Concrete error-response example for graph_visualize."
+  },
+  {
+    "chunk_id": "59295deaa3d7",
+    "verdict": "keep",
+    "reason": "Substantive notes on program_output, Root() guarantee, and DOT styling."
+  },
+  {
+    "chunk_id": "dda5c7c96b9b",
+    "verdict": "keep",
+    "reason": "Genuine tool description for understand_jac_and_jaseci and its discovery workflow."
+  },
+  {
+    "chunk_id": "07a0d9f7e7af",
+    "verdict": "drop",
+    "reason": "Two-word fragment duplicated verbatim elsewhere (b3fc1e83d65e), no standalone signal."
+  },
+  {
+    "chunk_id": "b7ca87760eba",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no standalone content."
+  },
+  {
+    "chunk_id": "6a89c3cc9a98",
+    "verdict": "keep",
+    "reason": "Response-shape example showing the knowledge_map field."
+  },
+  {
+    "chunk_id": "f617cfdb3f50",
+    "verdict": "keep",
+    "reason": "Genuine tool description for get_resource including URI semantics."
+  },
+  {
+    "chunk_id": "830b30a893e0",
+    "verdict": "keep",
+    "reason": "Parameter table documenting jac:// resource URI format with examples."
+  },
+  {
+    "chunk_id": "ed3dcbb26b2b",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no standalone content."
+  },
+  {
+    "chunk_id": "940c666f4721",
+    "verdict": "keep",
+    "reason": "Concrete input example showing a valid jac://docs/osp URI."
+  },
+  {
+    "chunk_id": "4c65848c4233",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no standalone content."
+  },
+  {
+    "chunk_id": "d6a4688f1fe0",
+    "verdict": "keep",
+    "reason": "Concrete success-response example for get_resource."
+  },
+  {
+    "chunk_id": "2136660ff217",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no standalone content."
+  },
+  {
+    "chunk_id": "87c38e905ca1",
+    "verdict": "keep",
+    "reason": "Concrete not-found error example for get_resource."
+  },
+  {
+    "chunk_id": "3a5940cb5f19",
+    "verdict": "keep",
+    "reason": "Substantive notes on Markdown content, response size, and error behavior."
+  },
+  {
+    "chunk_id": "1cda4956a892",
+    "verdict": "keep",
+    "reason": "Genuine tool description for list_commands including plugin-added commands."
+  },
+  {
+    "chunk_id": "b3fc1e83d65e",
+    "verdict": "drop",
+    "reason": "Two-word fragment, exact duplicate of 07a0d9f7e7af with no standalone signal."
+  },
+  {
+    "chunk_id": "bb14cabc8359",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no standalone content."
+  },
+  {
+    "chunk_id": "50ed483146ae",
+    "verdict": "keep",
+    "reason": "Response-shape example for list_commands showing commands/groups/total fields."
+  },
+  {
+    "chunk_id": "d69d2756cb3a",
+    "verdict": "keep",
+    "reason": "Non-redundant note documenting the extended_by plugin field."
+  },
+  {
+    "chunk_id": "a15d7cce2641",
+    "verdict": "keep",
+    "reason": "Genuine tool description for get_command and its role before execute_command."
+  },
+  {
+    "chunk_id": "b8433ea14088",
+    "verdict": "keep",
+    "reason": "Parameter table for get_command with example command names."
+  },
+  {
+    "chunk_id": "39f3e8191df4",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no standalone content."
+  },
+  {
+    "chunk_id": "29949971fb98",
+    "verdict": "keep",
+    "reason": "Detailed response example documenting jac run argument metadata schema."
+  },
+  {
+    "chunk_id": "053542565457",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no standalone content."
+  },
+  {
+    "chunk_id": "bc18cb307ba3",
+    "verdict": "keep",
+    "reason": "Concrete command-not-found error example."
+  },
+  {
+    "chunk_id": "a900b89a1930",
+    "verdict": "keep",
+    "reason": "Documents the four argument kind values, leads into the definitions chunk."
+  },
+  {
+    "chunk_id": "3e9231b183f8",
+    "verdict": "keep",
+    "reason": "Substantive definitions of POSITIONAL/OPTION/MULTI/REMAINDER argument kinds."
+  },
+  {
+    "chunk_id": "2b000441ef96",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('Additional notes:') with no standalone content."
+  },
+  {
+    "chunk_id": "ed07588d8734",
+    "verdict": "keep",
+    "reason": "Substantive caveats about default, short, and optional argument fields."
+  },
+  {
+    "chunk_id": "7138437ddbfd",
+    "verdict": "keep",
+    "reason": "Genuine tool description for execute_command and its discovery workflow."
+  },
+  {
+    "chunk_id": "d68209bd9c41",
+    "verdict": "keep",
+    "reason": "Parameter table for execute_command with types and defaults."
+  },
+  {
+    "chunk_id": "d54cd873440b",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no standalone content."
+  },
+  {
+    "chunk_id": "bb35c0eed4a1",
+    "verdict": "keep",
+    "reason": "Concrete input example for invoking jac check via execute_command."
+  }
+]

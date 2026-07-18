@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "8bd7403dfab0",
+    "verdict": "keep",
+    "reason": "Substantive access-level reference table for the permission system."
+  },
+  {
+    "chunk_id": "ce4992df2219",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no content."
+  },
+  {
+    "chunk_id": "4f66d456ab7a",
+    "verdict": "keep",
+    "reason": "Introduces perm_grant semantics; pairs with the following code example."
+  },
+  {
+    "chunk_id": "2cc325ea2ccc",
+    "verdict": "keep",
+    "reason": "Genuine Jac code example demonstrating perm_grant usage."
+  },
+  {
+    "chunk_id": "64aae694a5ae",
+    "verdict": "keep",
+    "reason": "Introduces allow_root semantics; real explanatory content."
+  },
+  {
+    "chunk_id": "150fe9f507b4",
+    "verdict": "keep",
+    "reason": "Genuine Jac code example demonstrating allow_root usage."
+  },
+  {
+    "chunk_id": "27a9f9525c73",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no content."
+  },
+  {
+    "chunk_id": "eaa34d2e5c07",
+    "verdict": "keep",
+    "reason": "Code example for perm_revoke with contextual heading."
+  },
+  {
+    "chunk_id": "e25d1b1632ee",
+    "verdict": "keep",
+    "reason": "Code example for disallow_root with contextual heading."
+  },
+  {
+    "chunk_id": "17594f764047",
+    "verdict": "keep",
+    "reason": "Important secure-by-default endpoint semantics prose."
+  },
+  {
+    "chunk_id": "545021850f84",
+    "verdict": "keep",
+    "reason": "Canonical code example contrasting :pub/:priv walker endpoint modifiers."
+  },
+  {
+    "chunk_id": "eee7d3ae4d12",
+    "verdict": "keep",
+    "reason": "Short but sets up the walker access-level table with the :priv clarification."
+  },
+  {
+    "chunk_id": "95fa2e5a36c1",
+    "verdict": "keep",
+    "reason": "Dense, non-obvious semantics on :pub vs :protect vs :priv auth behavior."
+  },
+  {
+    "chunk_id": "60d92c497ba6",
+    "verdict": "keep",
+    "reason": "Permission function signature reference table, genuine API content."
+  },
+  {
+    "chunk_id": "fbcca0bc17e4",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment, pure boilerplate."
+  },
+  {
+    "chunk_id": "0e4acc1e7df0",
+    "verdict": "keep",
+    "reason": "Section intro prose explaining what webhooks provide."
+  },
+  {
+    "chunk_id": "298e37a5f60f",
+    "verdict": "keep",
+    "reason": "Feature bullet list completing the webhook intro."
+  },
+  {
+    "chunk_id": "83c8d65c9960",
+    "verdict": "keep",
+    "reason": "States where webhook config lives (jac.toml), useful fact."
+  },
+  {
+    "chunk_id": "543707612bd9",
+    "verdict": "keep",
+    "reason": "Canonical jac.toml webhook configuration example."
+  },
+  {
+    "chunk_id": "e6367c2b1368",
+    "verdict": "keep",
+    "reason": "Config option reference table with defaults and env-var note."
+  },
+  {
+    "chunk_id": "27299a67400e",
+    "verdict": "drop",
+    "reason": "Bold-label-only fragment with no content."
+  },
+  {
+    "chunk_id": "5a699f6909e9",
+    "verdict": "keep",
+    "reason": "One-sentence production guidance that contextualizes the env-var example."
+  },
+  {
+    "chunk_id": "0a464c1d8883",
+    "verdict": "keep",
+    "reason": "Concrete WEBHOOK_SECRET env-var example tied to preceding prose."
+  },
+  {
+    "chunk_id": "0e8f45acf7f3",
+    "verdict": "keep",
+    "reason": "Documents the @restspec webhook decorator, key API fact."
+  },
+  {
+    "chunk_id": "d96954f3e1a9",
+    "verdict": "keep",
+    "reason": "Full Jac webhook walker code example with has fields and report."
+  },
+  {
+    "chunk_id": "42627b1738c8",
+    "verdict": "keep",
+    "reason": "States the walker-name-to-URL mapping, small but informative."
+  },
+  {
+    "chunk_id": "6a2687328d5f",
+    "verdict": "keep",
+    "reason": "Non-obvious routing constraint (webhook-only, not /walker/)."
+  },
+  {
+    "chunk_id": "c2e451cff623",
+    "verdict": "keep",
+    "reason": "Explains API-key auth requirement for webhook endpoints."
+  },
+  {
+    "chunk_id": "0aa1796defde",
+    "verdict": "keep",
+    "reason": "Persistence detail (MongoDB webhook_api_keys collection) with behavioral implication."
+  },
+  {
+    "chunk_id": "84420a7dff30",
+    "verdict": "keep",
+    "reason": "Names the API-key creation endpoint, minimal but factual."
+  },
+  {
+    "chunk_id": "e75d4c93ef7b",
+    "verdict": "drop",
+    "reason": "Bold-label-only fragment with no content."
+  },
+  {
+    "chunk_id": "2b830fe0c258",
+    "verdict": "drop",
+    "reason": "Orphaned single-bullet header fragment detached from its section."
+  },
+  {
+    "chunk_id": "53edbe6b9860",
+    "verdict": "drop",
+    "reason": "Bold-label-only fragment with no content."
+  },
+  {
+    "chunk_id": "7d2ffd4c3ef8",
+    "verdict": "keep",
+    "reason": "Concrete API-key creation request-body example."
+  },
+  {
+    "chunk_id": "e7428e3a1853",
+    "verdict": "drop",
+    "reason": "Bold-label-only fragment with no content."
+  },
+  {
+    "chunk_id": "6c36de3206f8",
+    "verdict": "keep",
+    "reason": "Concrete API-key creation response schema example."
+  },
+  {
+    "chunk_id": "247779cfa86f",
+    "verdict": "keep",
+    "reason": "Names the API-key list endpoint, minimal but factual."
+  },
+  {
+    "chunk_id": "98f1dbdb1c5c",
+    "verdict": "drop",
+    "reason": "Bold-label-only fragment with no content."
+  },
+  {
+    "chunk_id": "370b4e99871c",
+    "verdict": "drop",
+    "reason": "Orphaned single-bullet header fragment duplicating chunk 2b830fe0c258."
+  },
+  {
+    "chunk_id": "a7f950190f5e",
+    "verdict": "keep",
+    "reason": "Intro sentence for the two required webhook auth headers."
+  },
+  {
+    "chunk_id": "4064a370f574",
+    "verdict": "keep",
+    "reason": "Names the X-API-Key and X-Webhook-Signature headers, real content."
+  },
+  {
+    "chunk_id": "0a1f181988cc",
+    "verdict": "keep",
+    "reason": "Specifies the exact HMAC signature computation formula."
+  },
+  {
+    "chunk_id": "ee5c77bb0387",
+    "verdict": "drop",
+    "reason": "Bold-label-only fragment with no content."
+  },
+  {
+    "chunk_id": "b24aca902dd1",
+    "verdict": "keep",
+    "reason": "Complete working cURL example for signed webhook calls."
+  },
+  {
+    "chunk_id": "807b13d942f7",
+    "verdict": "keep",
+    "reason": "Useful comparison table of webhook vs regular walker endpoints."
+  },
+  {
+    "chunk_id": "c80554ccf21d",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no content."
+  },
+  {
+    "chunk_id": "a002f987a8d2",
+    "verdict": "keep",
+    "reason": "Webhook endpoint reference table, small but complete."
+  },
+  {
+    "chunk_id": "b0ef76e643fc",
+    "verdict": "keep",
+    "reason": "API-key endpoint reference table including the revoke route."
+  },
+  {
+    "chunk_id": "5eedad8d06e5",
+    "verdict": "keep",
+    "reason": "Required-headers reference table with the verify_signature caveat."
+  },
+  {
+    "chunk_id": "c8ad64b0f7d1",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment, pure boilerplate."
+  }
+]

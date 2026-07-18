@@ -1,0 +1,257 @@
+[
+  {
+    "chunk_id": "6082d05e53b7",
+    "verdict": "keep",
+    "reason": "Mobile scaffold/build CLI commands, genuine reference; near-dup counterpart not in this batch."
+  },
+  {
+    "chunk_id": "9f2e37ef625b",
+    "verdict": "keep",
+    "reason": "iOS platform note with config detail; counterpart not present to compare against."
+  },
+  {
+    "chunk_id": "2ae9f607750d",
+    "verdict": "drop",
+    "reason": "Nav-only cross-reference link to another page, no prose content."
+  },
+  {
+    "chunk_id": "e9eb02c1ae73",
+    "verdict": "keep",
+    "reason": "Explains the React Native mobile app project kind and its architecture."
+  },
+  {
+    "chunk_id": "01b80d9ca202",
+    "verdict": "keep",
+    "reason": "Substantive explanation of mobUI projects and the component vocabulary."
+  },
+  {
+    "chunk_id": "ac029d55aa13",
+    "verdict": "keep",
+    "reason": "React Native scaffold/build commands, genuine CLI reference."
+  },
+  {
+    "chunk_id": "aa536db3a502",
+    "verdict": "keep",
+    "reason": "jac.toml config for opting into mobui client kind."
+  },
+  {
+    "chunk_id": "89cfed2dfdc0",
+    "verdict": "drop",
+    "reason": "Nav-only cross-reference links, no documentation prose."
+  },
+  {
+    "chunk_id": "049a2df1c452",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "252f7f7c137c",
+    "verdict": "keep",
+    "reason": "Roadmap framing prose about capability combinations."
+  },
+  {
+    "chunk_id": "74650a5b06bc",
+    "verdict": "keep",
+    "reason": "Explains the not-yet-shipped full-stack package concept and its requirements."
+  },
+  {
+    "chunk_id": "a8d03544da50",
+    "verdict": "keep",
+    "reason": "Design-status admonition on the attachable package artifact."
+  },
+  {
+    "chunk_id": "844b999e781b",
+    "verdict": "keep",
+    "reason": "Intro prose framing the syntax reference page."
+  },
+  {
+    "chunk_id": "bcacaedc36f6",
+    "verdict": "drop",
+    "reason": "Nav-only list of tutorial links, no prose content."
+  },
+  {
+    "chunk_id": "5d3e6f14a3de",
+    "verdict": "keep",
+    "reason": "Comprehensive Learn-Jac-in-Y-Minutes cheatsheet; the more complete copy, counterparts not in batch."
+  },
+  {
+    "chunk_id": "83b8a0f683a4",
+    "verdict": "keep",
+    "reason": "Core Concepts intro relating Jac to Python."
+  },
+  {
+    "chunk_id": "cfdbe01dfd96",
+    "verdict": "keep",
+    "reason": "Framing prose for the three distinguishing Jac concepts."
+  },
+  {
+    "chunk_id": "04ef8648efea",
+    "verdict": "keep",
+    "reason": "Frames the three core questions the page answers, substantive not pure nav."
+  },
+  {
+    "chunk_id": "f978a87b98a4",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "ce568ea2404b",
+    "verdict": "keep",
+    "reason": "Introduces codespaces, a core Jac concept."
+  },
+  {
+    "chunk_id": "67cc73c297e6",
+    "verdict": "keep",
+    "reason": "Mermaid diagram illustrating the sv/cl/na codespace targets."
+  },
+  {
+    "chunk_id": "bdabda20341a",
+    "verdict": "keep",
+    "reason": "Introduces braced-block codespace regions."
+  },
+  {
+    "chunk_id": "b5177d00b0bd",
+    "verdict": "keep",
+    "reason": "Defines the sv/cl/na braced-block semantics and default codespace."
+  },
+  {
+    "chunk_id": "865981706188",
+    "verdict": "keep",
+    "reason": "Explains single-statement codespace prefixes."
+  },
+  {
+    "chunk_id": "38cc327e985e",
+    "verdict": "keep",
+    "reason": "Introduces file-extension codespace defaults."
+  },
+  {
+    "chunk_id": "2531ffe3dd78",
+    "verdict": "keep",
+    "reason": "Lists the .sv/.cl/.na/.jac extension defaults."
+  },
+  {
+    "chunk_id": "43a4aca5feb9",
+    "verdict": "keep",
+    "reason": "Clarifies extensions only set defaults, not restrictions."
+  },
+  {
+    "chunk_id": "39ea2c7e226c",
+    "verdict": "keep",
+    "reason": "Transitional prose introducing the two-codespace example."
+  },
+  {
+    "chunk_id": "a35983ce5e3c",
+    "verdict": "keep",
+    "reason": "Worked example combining server and client codespaces in one file."
+  },
+  {
+    "chunk_id": "aef9a9fcf455",
+    "verdict": "keep",
+    "reason": "Explains compiler-generated cross-codespace interop."
+  },
+  {
+    "chunk_id": "2c84336cf8fd",
+    "verdict": "keep",
+    "reason": "Clarifies codespaces vs namespaces and compiler-handled interop."
+  },
+  {
+    "chunk_id": "665bdc2f7637",
+    "verdict": "keep",
+    "reason": "Explains why obj is used for cross-codespace interop."
+  },
+  {
+    "chunk_id": "b54e88a87eeb",
+    "verdict": "keep",
+    "reason": "Guidance on when to use Python class vs Jac obj."
+  },
+  {
+    "chunk_id": "85ba8eeffff9",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "44889d80f565",
+    "verdict": "upweight",
+    "reason": "Core OSP concept: nodes living in a graph with automatic persistence.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "31e4c74f7b4d",
+    "verdict": "upweight",
+    "reason": "Core OSP fundamentals: nodes connected by edges forming a graph.",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "5f939f4d1548",
+    "verdict": "keep",
+    "reason": "Node/edge creation code example; near-dup counterpart not in batch."
+  },
+  {
+    "chunk_id": "bcdb4a3559f4",
+    "verdict": "upweight",
+    "reason": "Core OSP mechanic: the ++> connection operator creating and linking nodes.",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "c9a986453934",
+    "verdict": "keep",
+    "reason": "Mermaid diagram of the task graph; identical counterpart is out-of-batch so keep to avoid dropping the only visible copy."
+  },
+  {
+    "chunk_id": "561d95b5f6c5",
+    "verdict": "upweight",
+    "reason": "Core OSP model: persistence via reachability from root, no ORM/DB.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "986c3e4bf1a3",
+    "verdict": "keep",
+    "reason": "Multi-user isolated root concept; flagged as exact dup with out-of-batch chunk so keep without extra weight."
+  },
+  {
+    "chunk_id": "ff021560d052",
+    "verdict": "upweight",
+    "reason": "Core OSP traversal: [-->] connected-node queries with filter comprehensions.",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "e004a060aa48",
+    "verdict": "keep",
+    "reason": "Graph query code example demonstrating traversal and filters."
+  },
+  {
+    "chunk_id": "b1a423c684dc",
+    "verdict": "keep",
+    "reason": "Introduces typed edges carrying their own data."
+  },
+  {
+    "chunk_id": "c5709a81c6f9",
+    "verdict": "keep",
+    "reason": "Typed-edge declaration and query code example."
+  },
+  {
+    "chunk_id": "2567cba52142",
+    "verdict": "keep",
+    "reason": "Summarizes the graph-as-data-model insight."
+  },
+  {
+    "chunk_id": "cc5e8e759a77",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "0c9d2a18cf19",
+    "verdict": "keep",
+    "reason": "Introduces compiler-integrated AI via by and sem keywords."
+  },
+  {
+    "chunk_id": "bb1683a76a6e",
+    "verdict": "keep",
+    "reason": "Shows the by llm() function-delegation syntax."
+  },
+  {
+    "chunk_id": "ade9cdfd4932",
+    "verdict": "keep",
+    "reason": "Explains how the compiler builds prompts from function semantics."
+  }
+]

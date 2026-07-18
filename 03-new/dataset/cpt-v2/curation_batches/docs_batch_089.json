@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "cb96a00b0242",
+    "verdict": "keep",
+    "reason": "Genuine prose introducing the builtin llm configuration mechanism."
+  },
+  {
+    "chunk_id": "3079cefc6d93",
+    "verdict": "keep",
+    "reason": "Complete jac.toml config reference block with inline explanations; canonical byllm configuration content."
+  },
+  {
+    "chunk_id": "d0d6a9dab87b",
+    "verdict": "drop",
+    "reason": "Header-only fragment with no content of its own."
+  },
+  {
+    "chunk_id": "440f8429e835",
+    "verdict": "keep",
+    "reason": "Substantive options table for [byllm.model] with descriptions beyond the config block's inline comments."
+  },
+  {
+    "chunk_id": "3ab42669d623",
+    "verdict": "drop",
+    "reason": "Header-only fragment with no content of its own."
+  },
+  {
+    "chunk_id": "6e01b1c1274d",
+    "verdict": "keep",
+    "reason": "Substantive call_params table including retry semantics detail."
+  },
+  {
+    "chunk_id": "0b798c403788",
+    "verdict": "drop",
+    "reason": "Header-only fragment with no content of its own."
+  },
+  {
+    "chunk_id": "516ecfccbb2c",
+    "verdict": "keep",
+    "reason": "LiteLLM options table with logging behavior details not in the config block."
+  },
+  {
+    "chunk_id": "2e60cbd8207d",
+    "verdict": "drop",
+    "reason": "Header-only fragment with no content of its own."
+  },
+  {
+    "chunk_id": "b51fe827f870",
+    "verdict": "keep",
+    "reason": "Parallel tool execution semantics including env var and per-call alternatives."
+  },
+  {
+    "chunk_id": "fafd94b2bfdb",
+    "verdict": "drop",
+    "reason": "Header-only fragment with no content of its own."
+  },
+  {
+    "chunk_id": "ea009037cbe5",
+    "verdict": "keep",
+    "reason": "Prompt caching behavior details specific to Claude models."
+  },
+  {
+    "chunk_id": "c951c652e11e",
+    "verdict": "drop",
+    "reason": "Header-only fragment with no content of its own."
+  },
+  {
+    "chunk_id": "2b3503204c96",
+    "verdict": "keep",
+    "reason": "Compaction options table with semantics richer than the config block's inline comments."
+  },
+  {
+    "chunk_id": "e11ab6d67a94",
+    "verdict": "drop",
+    "reason": "One-line transitional sentence fragment with no standalone content."
+  },
+  {
+    "chunk_id": "8b9aa42e7441",
+    "verdict": "drop",
+    "reason": "Generic two-line bash env-var export with no Jac-specific content."
+  },
+  {
+    "chunk_id": "a98873e7c262",
+    "verdict": "keep",
+    "reason": "Minimal working Jac example of the builtin llm and by llm() syntax."
+  },
+  {
+    "chunk_id": "25a337a8fb52",
+    "verdict": "keep",
+    "reason": "Section intro establishing the global system-prompt override feature."
+  },
+  {
+    "chunk_id": "8dda85d4e363",
+    "verdict": "keep",
+    "reason": "Concrete jac.toml example for the system_prompt override."
+  },
+  {
+    "chunk_id": "2682b59395a6",
+    "verdict": "keep",
+    "reason": "Explains automatic application of the system prompt to all by llm() calls."
+  },
+  {
+    "chunk_id": "fcab774c302c",
+    "verdict": "keep",
+    "reason": "Bullet rationale completing the preceding sentence; genuine doc content."
+  },
+  {
+    "chunk_id": "bfad70d18645",
+    "verdict": "keep",
+    "reason": "Introduces the per-call system_prompt= keyword mechanism."
+  },
+  {
+    "chunk_id": "28cded0bbda9",
+    "verdict": "keep",
+    "reason": "Concrete Jac example of per-call system_prompt with conversation history."
+  },
+  {
+    "chunk_id": "7c7b0bdd156e",
+    "verdict": "keep",
+    "reason": "Precise semantics: append-not-replace behavior and precedence order for system prompts."
+  },
+  {
+    "chunk_id": "a8526ce96f7d",
+    "verdict": "keep",
+    "reason": "Non-obvious explanation of sem duplication into chat history and why system_prompt fixes it."
+  },
+  {
+    "chunk_id": "60b086981b2b",
+    "verdict": "keep",
+    "reason": "Section intro for configuring self-hosted model endpoints."
+  },
+  {
+    "chunk_id": "451e4b138d2f",
+    "verdict": "keep",
+    "reason": "Complete Jac example of the Model constructor with HTTP client config."
+  },
+  {
+    "chunk_id": "efa046f7230e",
+    "verdict": "drop",
+    "reason": "Header-only fragment with no content of its own."
+  },
+  {
+    "chunk_id": "e6dd6a385f21",
+    "verdict": "keep",
+    "reason": "HTTP client parameter table documenting the direct-HTTP bypass mode."
+  },
+  {
+    "chunk_id": "9b51b83312a0",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "28abb8239ad9",
+    "verdict": "drop",
+    "reason": "Bare section heading with no prose."
+  },
+  {
+    "chunk_id": "7e19600241e1",
+    "verdict": "keep",
+    "reason": "Core by llm() function declaration syntax plus the sem annotation pattern."
+  },
+  {
+    "chunk_id": "c727dc71d049",
+    "verdict": "keep",
+    "reason": "Method declaration pattern showing self-attribute access in obj methods."
+  },
+  {
+    "chunk_id": "3410cb1521cf",
+    "verdict": "keep",
+    "reason": "Important not-yet-implemented warning preventing use of invalid inline syntax."
+  },
+  {
+    "chunk_id": "6a1a3338616d",
+    "verdict": "keep",
+    "reason": "The workaround example completing the inline-expression warning."
+  },
+  {
+    "chunk_id": "ee8988e3fd8b",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "e27df155a532",
+    "verdict": "drop",
+    "reason": "Bare section heading with no prose."
+  },
+  {
+    "chunk_id": "8f092e4a0614",
+    "verdict": "keep",
+    "reason": "Primitive return-type examples for by llm() functions."
+  },
+  {
+    "chunk_id": "bde1b992d2bf",
+    "verdict": "keep",
+    "reason": "Enum return-type example showing Jac enum syntax with by llm()."
+  },
+  {
+    "chunk_id": "40b222646a29",
+    "verdict": "keep",
+    "reason": "Explains that enum member semstrings flow into the LLM schema."
+  },
+  {
+    "chunk_id": "45c5d731cdc9",
+    "verdict": "keep",
+    "reason": "Rich example combining enum declaration with per-member sem statements."
+  },
+  {
+    "chunk_id": "ac8104b3ea5d",
+    "verdict": "keep",
+    "reason": "Introduces typed-base enum syntax and its purpose for by llm() return flow."
+  },
+  {
+    "chunk_id": "d474b3d7ac85",
+    "verdict": "keep",
+    "reason": "Concrete typed-base enum example; near-dup counterpart absent from this batch so evaluated on merits and it is compact, valid, and instructive."
+  },
+  {
+    "chunk_id": "b4e6cd85789e",
+    "verdict": "keep",
+    "reason": "Precise desugaring semantics (IntEnum/StrEnum/mixin) not stated elsewhere in batch."
+  },
+  {
+    "chunk_id": "2b9ddec76056",
+    "verdict": "keep",
+    "reason": "Object return-type example showing has fields and union-with-None typing."
+  },
+  {
+    "chunk_id": "e0fcefec8270",
+    "verdict": "keep",
+    "reason": "List return-type examples including list of custom objects."
+  },
+  {
+    "chunk_id": "a268d1e9ca1b",
+    "verdict": "keep",
+    "reason": "Optional return-type example with union-None syntax."
+  },
+  {
+    "chunk_id": "a5cfade5cfbb",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "d5b63a2ea1a4",
+    "verdict": "keep",
+    "reason": "Substantive prose explaining the typed-output retry mechanism and its motivation."
+  },
+  {
+    "chunk_id": "633cd4ff4814",
+    "verdict": "keep",
+    "reason": "Start of the retry-mechanics explanation; truncated but continues real content rather than boilerplate."
+  }
+]

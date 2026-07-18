@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "60ebc0a69d9d",
+    "verdict": "keep",
+    "reason": "Substantive guidance on async/await vs flow/wait and the GIL."
+  },
+  {
+    "chunk_id": "df81271cc506",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "a9212ef7ac5c",
+    "verdict": "drop",
+    "reason": "Nav-only 'Learn More' heading fragment."
+  },
+  {
+    "chunk_id": "c6dfe3632ccd",
+    "verdict": "drop",
+    "reason": "Nav-only list of related-reference links."
+  },
+  {
+    "chunk_id": "af8f47e5064f",
+    "verdict": "drop",
+    "reason": "Part-title header stub with no prose."
+  },
+  {
+    "chunk_id": "3e6f49af17a4",
+    "verdict": "drop",
+    "reason": "Table-of-contents anchor list, nav-only."
+  },
+  {
+    "chunk_id": "039c74105cc2",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator."
+  },
+  {
+    "chunk_id": "7be8a6db693b",
+    "verdict": "drop",
+    "reason": "Section header with no content."
+  },
+  {
+    "chunk_id": "344b57e971b4",
+    "verdict": "keep",
+    "reason": "Genuine definition of what Jac is, OSP, and by llm()."
+  },
+  {
+    "chunk_id": "086a74fe6738",
+    "verdict": "keep",
+    "reason": "Canonical hello-world code example."
+  },
+  {
+    "chunk_id": "399730d5deaf",
+    "verdict": "keep",
+    "reason": "Six Principles table conveys core language design."
+  },
+  {
+    "chunk_id": "2de8ce79fc44",
+    "verdict": "keep",
+    "reason": "Prose on Jac clarity and design for humans/AI."
+  },
+  {
+    "chunk_id": "5857a3523767",
+    "verdict": "keep",
+    "reason": "Explains has declarations and impl separation."
+  },
+  {
+    "chunk_id": "2a0dfe66589a",
+    "verdict": "keep",
+    "reason": "Introduces where Jac excels."
+  },
+  {
+    "chunk_id": "ccbb24cb5458",
+    "verdict": "keep",
+    "reason": "Concrete list of Jac use cases."
+  },
+  {
+    "chunk_id": "11f790b77577",
+    "verdict": "keep",
+    "reason": "Jac obj/has/def example; near-dup partner not in this batch."
+  },
+  {
+    "chunk_id": "f37efeaa8c07",
+    "verdict": "drop",
+    "reason": "Bare bold-label fragment with no content."
+  },
+  {
+    "chunk_id": "72ce7dd4b180",
+    "verdict": "keep",
+    "reason": "Useful Python-vs-Jac syntax comparison table."
+  },
+  {
+    "chunk_id": "078a21e486fc",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator."
+  },
+  {
+    "chunk_id": "210d3a116f67",
+    "verdict": "drop",
+    "reason": "Section header with no content."
+  },
+  {
+    "chunk_id": "d63cedca06b7",
+    "verdict": "keep",
+    "reason": "Installation commands for the Jac toolchain."
+  },
+  {
+    "chunk_id": "cee46d131493",
+    "verdict": "keep",
+    "reason": "Notes the self-contained jac binary requires no Python."
+  },
+  {
+    "chunk_id": "065e1a951d2a",
+    "verdict": "keep",
+    "reason": "First-program section with file setup."
+  },
+  {
+    "chunk_id": "ce402f5182a4",
+    "verdict": "keep",
+    "reason": "greet function example; near-dup partner not in this batch."
+  },
+  {
+    "chunk_id": "d9556c2fd5c9",
+    "verdict": "drop",
+    "reason": "Two-word connective fragment with no content."
+  },
+  {
+    "chunk_id": "4dc7889e5e83",
+    "verdict": "keep",
+    "reason": "Shows the jac run command for a file."
+  },
+  {
+    "chunk_id": "545348e9fad5",
+    "verdict": "keep",
+    "reason": "Useful fact that jac is shorthand for jac run."
+  },
+  {
+    "chunk_id": "2cfe63f8419c",
+    "verdict": "keep",
+    "reason": "Illustrates canonical Jac project structure."
+  },
+  {
+    "chunk_id": "de0e1100025f",
+    "verdict": "drop",
+    "reason": "Bare bold-label fragment with no content."
+  },
+  {
+    "chunk_id": "caa6d70e37cc",
+    "verdict": "keep",
+    "reason": "File-extension table (.sv/.cl/.na/.impl) is valuable reference."
+  },
+  {
+    "chunk_id": "410b14f0820b",
+    "verdict": "keep",
+    "reason": "Explains logical modules and variant-file merging."
+  },
+  {
+    "chunk_id": "b619da1db5ac",
+    "verdict": "keep",
+    "reason": "Editor setup guidance for Jac support."
+  },
+  {
+    "chunk_id": "3f4bb74b9ea9",
+    "verdict": "keep",
+    "reason": "Shows the jac lsp language-server command."
+  },
+  {
+    "chunk_id": "45dc4aedb508",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator."
+  },
+  {
+    "chunk_id": "d788c04c923a",
+    "verdict": "drop",
+    "reason": "Section header with no content."
+  },
+  {
+    "chunk_id": "635ab0c67682",
+    "verdict": "keep",
+    "reason": "States UTF-8 encoding and Unicode support."
+  },
+  {
+    "chunk_id": "0af262f7c006",
+    "verdict": "keep",
+    "reason": "Comment and docstring syntax example."
+  },
+  {
+    "chunk_id": "3f765a4c743b",
+    "verdict": "keep",
+    "reason": "Highlights key braces/semicolons difference from Python."
+  },
+  {
+    "chunk_id": "a20b04f0542f",
+    "verdict": "keep",
+    "reason": "Explains semicolon-terminated statements."
+  },
+  {
+    "chunk_id": "51db97504070",
+    "verdict": "keep",
+    "reason": "Statement/expression code example."
+  },
+  {
+    "chunk_id": "bcc1ecdeb6d6",
+    "verdict": "keep",
+    "reason": "Explains brace-delimited code blocks."
+  },
+  {
+    "chunk_id": "c7c6fa7b24d9",
+    "verdict": "keep",
+    "reason": "Code-block syntax example."
+  },
+  {
+    "chunk_id": "7af2bcdab421",
+    "verdict": "keep",
+    "reason": "Introduces reserved keywords."
+  },
+  {
+    "chunk_id": "fdab3575efb4",
+    "verdict": "keep",
+    "reason": "Full keyword reference table including OSP keywords."
+  },
+  {
+    "chunk_id": "90711ce3f0bc",
+    "verdict": "keep",
+    "reason": "Clarifies abst vs abstract/abs distinction."
+  },
+  {
+    "chunk_id": "1acf1e8417a1",
+    "verdict": "keep",
+    "reason": "Explains entry/exit as contextual keywords."
+  },
+  {
+    "chunk_id": "818e071bc6d4",
+    "verdict": "keep",
+    "reason": "Defines valid identifier rules."
+  },
+  {
+    "chunk_id": "bccb914f5bae",
+    "verdict": "keep",
+    "reason": "Explains backtick escaping of reserved keywords."
+  },
+  {
+    "chunk_id": "2c3c71dfc211",
+    "verdict": "keep",
+    "reason": "Backtick-escaped identifier code example."
+  },
+  {
+    "chunk_id": "2e5fe4516f93",
+    "verdict": "keep",
+    "reason": "Notes the any type vs any() function backtick convention."
+  }
+]

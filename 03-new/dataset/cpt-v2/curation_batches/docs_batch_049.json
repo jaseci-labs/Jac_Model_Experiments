@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "1190b97c7ab4",
+    "verdict": "keep",
+    "reason": "Prose explaining Vite inlining of config values in client code."
+  },
+  {
+    "chunk_id": "df9c89b58ef3",
+    "verdict": "keep",
+    "reason": "Genuine Jac code example; near-dup partner aa3ee5d17b99 not present in this batch to compare/drop against."
+  },
+  {
+    "chunk_id": "f5149a6c975e",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "50d8b53d1114",
+    "verdict": "keep",
+    "reason": "Section header introducing [scripts] config."
+  },
+  {
+    "chunk_id": "a3be3e21ef1c",
+    "verdict": "keep",
+    "reason": "Concrete toml example of the [scripts] table."
+  },
+  {
+    "chunk_id": "ba10171088a9",
+    "verdict": "keep",
+    "reason": "Short lead-in prose tied to the following command example."
+  },
+  {
+    "chunk_id": "846023399afa",
+    "verdict": "keep",
+    "reason": "Example showing how to invoke custom script shortcuts."
+  },
+  {
+    "chunk_id": "e9595098e9bb",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "fee6ca36e64c",
+    "verdict": "keep",
+    "reason": "Section header introducing [environments] config."
+  },
+  {
+    "chunk_id": "2cf5009d4048",
+    "verdict": "keep",
+    "reason": "Detailed toml example of environment profiles and inheritance."
+  },
+  {
+    "chunk_id": "12906c6d8d14",
+    "verdict": "keep",
+    "reason": "Lead-in prose tied to the profile-activation example."
+  },
+  {
+    "chunk_id": "4e6df2daa28a",
+    "verdict": "keep",
+    "reason": "Example of activating a profile via JAC_PROFILE."
+  },
+  {
+    "chunk_id": "780f84ffd3bd",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "102be3f57563",
+    "verdict": "keep",
+    "reason": "Section explaining environment-variable interpolation in jac.toml."
+  },
+  {
+    "chunk_id": "df548f3675b2",
+    "verdict": "keep",
+    "reason": "Concrete toml interpolation syntax examples."
+  },
+  {
+    "chunk_id": "d168f91af0ba",
+    "verdict": "keep",
+    "reason": "Reference table of interpolation syntax variants."
+  },
+  {
+    "chunk_id": "d57d3285f9b0",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "d18e1a9f13e4",
+    "verdict": "keep",
+    "reason": "Section describing [project.include] wheel-build config."
+  },
+  {
+    "chunk_id": "7c03e467a6be",
+    "verdict": "keep",
+    "reason": "Useful migration note about [package] merging into [project]."
+  },
+  {
+    "chunk_id": "036c34c3ea6c",
+    "verdict": "keep",
+    "reason": "Detailed toml example of package inclusion patterns."
+  },
+  {
+    "chunk_id": "36895a8615c3",
+    "verdict": "keep",
+    "reason": "Reference table documenting packages/data keys."
+  },
+  {
+    "chunk_id": "31a628048cd5",
+    "verdict": "keep",
+    "reason": "Explains recursive matching of simple patterns."
+  },
+  {
+    "chunk_id": "2b90207c4644",
+    "verdict": "keep",
+    "reason": "Lead-in to the default-patterns reference table."
+  },
+  {
+    "chunk_id": "a10993897e50",
+    "verdict": "keep",
+    "reason": "Reference table of default included file patterns."
+  },
+  {
+    "chunk_id": "6d2c53a07160",
+    "verdict": "keep",
+    "reason": "Lead-in to the always-excluded list."
+  },
+  {
+    "chunk_id": "21484e9bec89",
+    "verdict": "keep",
+    "reason": "Lists directories and suffixes always excluded from wheels."
+  },
+  {
+    "chunk_id": "bd5572bbce6f",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "b42b291bf703",
+    "verdict": "keep",
+    "reason": "Section describing [entrypoints] console-script config."
+  },
+  {
+    "chunk_id": "0e3b61541f7b",
+    "verdict": "keep",
+    "reason": "toml example declaring a console-script entry point."
+  },
+  {
+    "chunk_id": "234a5b224906",
+    "verdict": "keep",
+    "reason": "Explains console_scripts mapping and pip install behavior."
+  },
+  {
+    "chunk_id": "5d1f965da7ac",
+    "verdict": "keep",
+    "reason": "Documents pass-through of arbitrary entry-point groups."
+  },
+  {
+    "chunk_id": "b4efd83d6064",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "1793dd0807f3",
+    "verdict": "keep",
+    "reason": "Section introducing CLI override of config settings."
+  },
+  {
+    "chunk_id": "6283bc00e05d",
+    "verdict": "keep",
+    "reason": "Examples of overriding run/test/serve settings via flags."
+  },
+  {
+    "chunk_id": "694e2c9f5ded",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "8bdae0582f53",
+    "verdict": "keep",
+    "reason": "Complete annotated jac.toml example spanning many sections."
+  },
+  {
+    "chunk_id": "3136ac262fd1",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "5830fb5cae1d",
+    "verdict": "keep",
+    "reason": "Documents the .jacignore file purpose and placement."
+  },
+  {
+    "chunk_id": "98a79d2ff030",
+    "verdict": "keep",
+    "reason": "Describes .jacignore file format."
+  },
+  {
+    "chunk_id": "cb349a782345",
+    "verdict": "keep",
+    "reason": "Concrete .jacignore pattern example."
+  },
+  {
+    "chunk_id": "b728b8832fbe",
+    "verdict": "keep",
+    "reason": "Explains per-line semantics of .jacignore patterns."
+  },
+  {
+    "chunk_id": "ba44a7c2760c",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "30c3137435bc",
+    "verdict": "keep",
+    "reason": "Section header for Environment Variables reference."
+  },
+  {
+    "chunk_id": "7393fad331bc",
+    "verdict": "keep",
+    "reason": "Reference table of general Jac environment variables."
+  },
+  {
+    "chunk_id": "f0c26474a30b",
+    "verdict": "keep",
+    "reason": "Reference table of storage-related environment variables."
+  },
+  {
+    "chunk_id": "25860dbf1305",
+    "verdict": "keep",
+    "reason": "Database env-var table; near-dup partner ad6950b2dae2 not present in this batch to compare/drop against."
+  },
+  {
+    "chunk_id": "97137bab62fe",
+    "verdict": "keep",
+    "reason": "Explains project-ID env-var override precedence."
+  },
+  {
+    "chunk_id": "ccbfca7ddf27",
+    "verdict": "keep",
+    "reason": "Reference table of authentication env vars with defaults."
+  },
+  {
+    "chunk_id": "eca00da86f0a",
+    "verdict": "keep",
+    "reason": "Reference table of microservices env vars."
+  },
+  {
+    "chunk_id": "416ea60adaa4",
+    "verdict": "keep",
+    "reason": "Reference table of client-build env vars."
+  }
+]

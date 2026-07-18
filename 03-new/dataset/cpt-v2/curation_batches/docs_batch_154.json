@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "6d82b65ceb68",
+    "verdict": "keep",
+    "reason": "Genuine tutorial content explaining augmented assignment operators in Jac."
+  },
+  {
+    "chunk_id": "c82a76f8e5c0",
+    "verdict": "keep",
+    "reason": "Practice exercise prompt that gives context for the following code example."
+  },
+  {
+    "chunk_id": "d8bea5a094d6",
+    "verdict": "drop",
+    "reason": "Bare HTML wrapper fragment with no documentation content."
+  },
+  {
+    "chunk_id": "1bd6657c45b6",
+    "verdict": "keep",
+    "reason": "Valid Jac code example demonstrating with entry, typed variables, and f-strings."
+  },
+  {
+    "chunk_id": "9c788cdf3fb1",
+    "verdict": "drop",
+    "reason": "Bare closing HTML tag with no content."
+  },
+  {
+    "chunk_id": "5ade7e102c25",
+    "verdict": "drop",
+    "reason": "Horizontal rule only, pure formatting boilerplate."
+  },
+  {
+    "chunk_id": "aec4dc05a173",
+    "verdict": "keep",
+    "reason": "Section intro prose explaining control flow concepts."
+  },
+  {
+    "chunk_id": "2dd6c790ddc9",
+    "verdict": "keep",
+    "reason": "Section heading carries structural context for the if-statement material despite the stray div tag."
+  },
+  {
+    "chunk_id": "efba75789622",
+    "verdict": "keep",
+    "reason": "Valid Jac if-statement code example with curly-brace block syntax."
+  },
+  {
+    "chunk_id": "43897b9ece40",
+    "verdict": "drop",
+    "reason": "Bare closing HTML tag with no content."
+  },
+  {
+    "chunk_id": "a0876ebfa906",
+    "verdict": "drop",
+    "reason": "Orphaned 'How it works:' label with zero informational content."
+  },
+  {
+    "chunk_id": "300e31d742ab",
+    "verdict": "keep",
+    "reason": "Substantive explanation of if-condition evaluation semantics."
+  },
+  {
+    "chunk_id": "a67a0566298d",
+    "verdict": "keep",
+    "reason": "Section lead-in for comparison operators, pairs with the table chunk."
+  },
+  {
+    "chunk_id": "a3660a6986b3",
+    "verdict": "keep",
+    "reason": "Complete comparison-operator reference table with examples."
+  },
+  {
+    "chunk_id": "c3e3876fd370",
+    "verdict": "keep",
+    "reason": "Useful == vs = distinction, a common beginner error worth training signal."
+  },
+  {
+    "chunk_id": "ebe98e6769a7",
+    "verdict": "keep",
+    "reason": "Section intro motivating if-else, genuine tutorial prose."
+  },
+  {
+    "chunk_id": "38fd19285eab",
+    "verdict": "drop",
+    "reason": "Bare HTML wrapper fragment with no documentation content."
+  },
+  {
+    "chunk_id": "95266a7dcd1d",
+    "verdict": "keep",
+    "reason": "Valid Jac if-else code example."
+  },
+  {
+    "chunk_id": "352b4ee3d6da",
+    "verdict": "drop",
+    "reason": "Bare closing HTML tag with no content."
+  },
+  {
+    "chunk_id": "0fb0002f4900",
+    "verdict": "keep",
+    "reason": "Section heading and prose introducing if-elif-else."
+  },
+  {
+    "chunk_id": "2edaf3cc2587",
+    "verdict": "drop",
+    "reason": "Bare HTML wrapper fragment with no documentation content."
+  },
+  {
+    "chunk_id": "8d739aba46da",
+    "verdict": "keep",
+    "reason": "Valid Jac elif-chain grading example demonstrating multi-branch syntax."
+  },
+  {
+    "chunk_id": "bcd17982e8b8",
+    "verdict": "drop",
+    "reason": "Bare closing HTML tag with no content."
+  },
+  {
+    "chunk_id": "0226d95d7fc6",
+    "verdict": "drop",
+    "reason": "Orphaned 'How it works:' label with zero informational content."
+  },
+  {
+    "chunk_id": "34f4971a1544",
+    "verdict": "keep",
+    "reason": "Substantive explanation of elif-chain evaluation order."
+  },
+  {
+    "chunk_id": "6b43d07dc13e",
+    "verdict": "keep",
+    "reason": "Section lead-in for combining boolean conditions."
+  },
+  {
+    "chunk_id": "262f6b0076c5",
+    "verdict": "drop",
+    "reason": "Bare HTML wrapper fragment with no documentation content."
+  },
+  {
+    "chunk_id": "b1ae15024c51",
+    "verdict": "keep",
+    "reason": "Valid Jac example covering and/or/not boolean operators."
+  },
+  {
+    "chunk_id": "24a9fba9f041",
+    "verdict": "drop",
+    "reason": "Bare closing HTML tag with no content."
+  },
+  {
+    "chunk_id": "24d8a15af9bf",
+    "verdict": "keep",
+    "reason": "Section intro explaining nested if statements."
+  },
+  {
+    "chunk_id": "a6bf4845021b",
+    "verdict": "drop",
+    "reason": "Bare HTML wrapper fragment with no documentation content."
+  },
+  {
+    "chunk_id": "4ee8363cb237",
+    "verdict": "keep",
+    "reason": "Valid Jac nested-if code example."
+  },
+  {
+    "chunk_id": "7e9fcd81619a",
+    "verdict": "drop",
+    "reason": "Bare closing HTML tag with no content."
+  },
+  {
+    "chunk_id": "290aa1f0c71a",
+    "verdict": "keep",
+    "reason": "Practice exercise prompt giving context for the solution code."
+  },
+  {
+    "chunk_id": "7a557121112f",
+    "verdict": "drop",
+    "reason": "Bare HTML wrapper fragment with no documentation content."
+  },
+  {
+    "chunk_id": "08ed276b468a",
+    "verdict": "keep",
+    "reason": "Valid Jac solution code for the age-classification exercise."
+  },
+  {
+    "chunk_id": "4d29fbdae87d",
+    "verdict": "drop",
+    "reason": "Bare closing HTML tag with no content."
+  },
+  {
+    "chunk_id": "eb54ff1d4396",
+    "verdict": "drop",
+    "reason": "Horizontal rule only, pure formatting boilerplate."
+  },
+  {
+    "chunk_id": "a97ceb5f399f",
+    "verdict": "keep",
+    "reason": "Section intro prose motivating loops."
+  },
+  {
+    "chunk_id": "4dc1ac34e815",
+    "verdict": "keep",
+    "reason": "Section intro explaining while-loop semantics."
+  },
+  {
+    "chunk_id": "1ef76f91ea4f",
+    "verdict": "drop",
+    "reason": "Bare HTML wrapper fragment with no documentation content."
+  },
+  {
+    "chunk_id": "2a47f58b975e",
+    "verdict": "keep",
+    "reason": "Valid Jac while-loop example including the infinite-loop caution comment."
+  },
+  {
+    "chunk_id": "179da7bdf15f",
+    "verdict": "drop",
+    "reason": "Bare closing HTML tag with no content."
+  },
+  {
+    "chunk_id": "92710c20657d",
+    "verdict": "keep",
+    "reason": "Substantive warning about infinite loops."
+  },
+  {
+    "chunk_id": "6eb989f566fe",
+    "verdict": "keep",
+    "reason": "Section intro for the counting for-loop."
+  },
+  {
+    "chunk_id": "aaf460873bca",
+    "verdict": "drop",
+    "reason": "Bare HTML wrapper fragment with no documentation content."
+  },
+  {
+    "chunk_id": "f46e1d054fde",
+    "verdict": "keep",
+    "reason": "Code example of Jac's distinctive for-while-with loop syntax, valuable Jac-specific signal."
+  },
+  {
+    "chunk_id": "7727bb74a30c",
+    "verdict": "drop",
+    "reason": "Bare closing HTML tag with no content."
+  },
+  {
+    "chunk_id": "65d2ac58a797",
+    "verdict": "drop",
+    "reason": "Orphaned 'Breaking it down:' label with zero informational content."
+  },
+  {
+    "chunk_id": "685d4a0b606d",
+    "verdict": "keep",
+    "reason": "Substantive breakdown of the for-loop's init/condition/step clauses."
+  }
+]

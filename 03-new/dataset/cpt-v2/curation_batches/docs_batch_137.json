@@ -1,0 +1,266 @@
+[
+  {
+    "chunk_id": "32261b775798",
+    "verdict": "drop",
+    "reason": "Content-free transitional lead-in sentence with no standalone documentation value."
+  },
+  {
+    "chunk_id": "a3bdf0100f07",
+    "verdict": "upweight",
+    "reason": "Dense core OSP explanation of walker declaration, has fields, abilities, here, self, and report semantics.",
+    "weight": 3.5
+  },
+  {
+    "chunk_id": "f2844817022a",
+    "verdict": "drop",
+    "reason": "Two-word connective fragment ('Spawn it:') with no content."
+  },
+  {
+    "chunk_id": "269c3e961812",
+    "verdict": "keep",
+    "reason": "Canonical spawn syntax example showing root spawn and result.reports access."
+  },
+  {
+    "chunk_id": "99b73d8df0af",
+    "verdict": "upweight",
+    "reason": "Core spawn mechanics: root spawn creates a walker at root and report values land in result.reports.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "19644a4ae847",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose."
+  },
+  {
+    "chunk_id": "4ba4a7b44f68",
+    "verdict": "keep",
+    "reason": "Introduces the typed reports field best practice for walkers."
+  },
+  {
+    "chunk_id": "6aa19e86d4fa",
+    "verdict": "keep",
+    "reason": "AddTask walker code example; flagged near-dup partner d080f765f67c is outside this batch and this is the canonical in-context tutorial copy."
+  },
+  {
+    "chunk_id": "9921d0d1a9d1",
+    "verdict": "keep",
+    "reason": "Substantive explanation of how the typed reports declaration types the report channel."
+  },
+  {
+    "chunk_id": "c19c9506af5f",
+    "verdict": "drop",
+    "reason": "Single connective lead-in sentence with no standalone content."
+  },
+  {
+    "chunk_id": "060db056f2ef",
+    "verdict": "keep",
+    "reason": "Useful mapping of report shapes to reports field types."
+  },
+  {
+    "chunk_id": "ccbe5e946914",
+    "verdict": "drop",
+    "reason": "One-sentence filler with no documentation content."
+  },
+  {
+    "chunk_id": "fc7e8707aa37",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose."
+  },
+  {
+    "chunk_id": "683e8f1bd665",
+    "verdict": "keep",
+    "reason": "Introduces the accumulator pattern and motivates walkers over functions."
+  },
+  {
+    "chunk_id": "5c1ddde1f37f",
+    "verdict": "upweight",
+    "reason": "Canonical ListTasks accumulator walker showing entry/exit abilities and visit [-->]; near-dup partner is outside this batch.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "6713551d9e02",
+    "verdict": "drop",
+    "reason": "Four-word connective fragment with no content."
+  },
+  {
+    "chunk_id": "d42f693b9e3b",
+    "verdict": "upweight",
+    "reason": "Core semantics of Root entry, Task entry, and Root exit ability firing order during traversal.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "55c5771a6b1b",
+    "verdict": "keep",
+    "reason": "Clarifies the list[list[Task]] reports typing for whole-list reports."
+  },
+  {
+    "chunk_id": "92835eb1fad8",
+    "verdict": "upweight",
+    "reason": "Key OSP insight that walker state persists across the entire traversal, enabling the accumulator pattern.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "298b5d107305",
+    "verdict": "drop",
+    "reason": "Connective lead-in fragment with no content."
+  },
+  {
+    "chunk_id": "7331cf32d94a",
+    "verdict": "keep",
+    "reason": "Compact function-version comparison snippet using edge filter syntax."
+  },
+  {
+    "chunk_id": "fd6815e1ebbf",
+    "verdict": "upweight",
+    "reason": "Explains when walkers beat functions: natural recursion through deep graphs via visit [-->] at each level.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "d9a131a0e193",
+    "verdict": "keep",
+    "reason": "Practical troubleshooting note for empty walker reports."
+  },
+  {
+    "chunk_id": "194e2416e808",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose."
+  },
+  {
+    "chunk_id": "3fe63a45cf0b",
+    "verdict": "upweight",
+    "reason": "Introduces the core architectural choice between walker-side and node-side abilities.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "1afa19c7ea69",
+    "verdict": "upweight",
+    "reason": "Canonical node-ability code showing can ... with Walker entry and visitor access; 0.5 containment with out-of-batch f2941ba73837 is not redundant enough to drop.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "869e7e33383e",
+    "verdict": "upweight",
+    "reason": "Core semantics of node abilities firing on walker visit and the visitor reference.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "beb9f91be979",
+    "verdict": "upweight",
+    "reason": "Core design guidance on walker-side (traversal logic) versus node-side (data logic) abilities.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "38fa884170c9",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose."
+  },
+  {
+    "chunk_id": "3bf40e7073d8",
+    "verdict": "upweight",
+    "reason": "Core visit semantics: visit [-->] queues connected nodes for subsequent traversal.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "8be8d64b8884",
+    "verdict": "upweight",
+    "reason": "Canonical visit filter and visit-else fallback syntax.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "efa0df2d059e",
+    "verdict": "upweight",
+    "reason": "Core disengage semantics: immediately stopping the walker once the target is found.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "fce335e120bc",
+    "verdict": "keep",
+    "reason": "ToggleTask walker example demonstrating disengage; near-dup partner d080f765f67c is outside this batch."
+  },
+  {
+    "chunk_id": "e01519589e85",
+    "verdict": "keep",
+    "reason": "Short but substantive note on the cost of omitting disengage."
+  },
+  {
+    "chunk_id": "ef52b60a064c",
+    "verdict": "keep",
+    "reason": "Explains when to omit the typed reports field for status-dict reports."
+  },
+  {
+    "chunk_id": "836db1d0e8b7",
+    "verdict": "keep",
+    "reason": "DeleteTask walker example with del here and status-dict report; near-dup partner is outside this batch."
+  },
+  {
+    "chunk_id": "1de570cedfcb",
+    "verdict": "keep",
+    "reason": "Substantive note on plain-dict reports and the list[any] channel."
+  },
+  {
+    "chunk_id": "86ccb6afce0c",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose."
+  },
+  {
+    "chunk_id": "e33aecde7fba",
+    "verdict": "keep",
+    "reason": "Motivates the multi-step traversal example and flags the subtle execution order."
+  },
+  {
+    "chunk_id": "ab53557f005c",
+    "verdict": "keep",
+    "reason": "GenerateShoppingList walker demonstrating multi-operation single traversal with deferred visits."
+  },
+  {
+    "chunk_id": "c7211d3ec5f5",
+    "verdict": "upweight",
+    "reason": "Critical visit-queueing semantics: visit defers traversal until the current ability body completes.",
+    "weight": 3.5
+  },
+  {
+    "chunk_id": "3166eaa6e605",
+    "verdict": "keep",
+    "reason": "Compares declarative walker cleanup to the imperative function version."
+  },
+  {
+    "chunk_id": "9959529bba08",
+    "verdict": "drop",
+    "reason": "One-sentence connective fragment with no content."
+  },
+  {
+    "chunk_id": "53aaf21b1c6a",
+    "verdict": "keep",
+    "reason": "GetShoppingList and ClearShoppingList walker examples reinforcing accumulator and delete patterns; near-dup partner is outside this batch."
+  },
+  {
+    "chunk_id": "30d60f3ba247",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose."
+  },
+  {
+    "chunk_id": "2a6e0cfe0b7f",
+    "verdict": "keep",
+    "reason": "Explains spawning walkers from the frontend versus calling def:priv functions."
+  },
+  {
+    "chunk_id": "a0a341f01af0",
+    "verdict": "keep",
+    "reason": "One-sentence but substantive: sv import brings server walkers into client code."
+  },
+  {
+    "chunk_id": "52d835c75ff7",
+    "verdict": "keep",
+    "reason": "Canonical sv import syntax example listing walkers."
+  },
+  {
+    "chunk_id": "417f141dd171",
+    "verdict": "drop",
+    "reason": "Connective lead-in fragment with no content."
+  },
+  {
+    "chunk_id": "2d3a84b4d341",
+    "verdict": "keep",
+    "reason": "Genuine official-doc explanation of the sv server-import mechanism for spawning server walkers from client code; useful but not core OSP fundamentals."
+  }
+]

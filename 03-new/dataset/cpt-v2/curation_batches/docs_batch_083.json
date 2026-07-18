@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "81fdafa58332",
+    "verdict": "keep",
+    "reason": "Genuine doc prose explaining argument pass-through behavior of jac ninja."
+  },
+  {
+    "chunk_id": "40fb48e7e98e",
+    "verdict": "keep",
+    "reason": "Core explanation of the leader-key convention and discoverability hint window."
+  },
+  {
+    "chunk_id": "f5995032c843",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "4a9a679ffbc4",
+    "verdict": "keep",
+    "reason": "Section header introducing the tutorial walkthrough with setup context."
+  },
+  {
+    "chunk_id": "88e1fa3819e1",
+    "verdict": "keep",
+    "reason": "Concrete jac create/jac ninja command example needed by the walkthrough."
+  },
+  {
+    "chunk_id": "7a4c3976900c",
+    "verdict": "keep",
+    "reason": "Short but genuine connective prose anchoring the start-screen tutorial steps."
+  },
+  {
+    "chunk_id": "d2e9b58b5050",
+    "verdict": "keep",
+    "reason": "Substantive instruction on the fuzzy file finder keybinding and behavior."
+  },
+  {
+    "chunk_id": "fdad61194f97",
+    "verdict": "keep",
+    "reason": "Explains normal/insert mode editing basics with cross-reference."
+  },
+  {
+    "chunk_id": "e8aa92613a55",
+    "verdict": "keep",
+    "reason": "Thin but load-bearing tutorial transition setting up the diagnostics example."
+  },
+  {
+    "chunk_id": "3f899d75aa2b",
+    "verdict": "keep",
+    "reason": "Real Jac code sample (def, with entry) valuable for language-form exposure."
+  },
+  {
+    "chunk_id": "56821c7ace5e",
+    "verdict": "keep",
+    "reason": "Describes jac lsp diagnostics behavior and the Space-d keybinding."
+  },
+  {
+    "chunk_id": "60c65bf85465",
+    "verdict": "keep",
+    "reason": "Covers hover, go-to-definition, and jac fmt formatting workflow."
+  },
+  {
+    "chunk_id": "969aba7485dc",
+    "verdict": "keep",
+    "reason": "Explains jac check integration with the quickfix list in detail."
+  },
+  {
+    "chunk_id": "2d7e2f388856",
+    "verdict": "keep",
+    "reason": "Documents running jac run in a terminal split and escaping terminal mode."
+  },
+  {
+    "chunk_id": "f582dbda4c2b",
+    "verdict": "keep",
+    "reason": "Documents the jac ai agent keybindings for sessions and diagnostic fixes."
+  },
+  {
+    "chunk_id": "c2de65bf929a",
+    "verdict": "keep",
+    "reason": "Concluding prose summarizing the integrated edit-check-run-ask loop."
+  },
+  {
+    "chunk_id": "6b87789cd542",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "ac714dbdbbe9",
+    "verdict": "keep",
+    "reason": "Genuine explanation of modal editing, the key newcomer concept."
+  },
+  {
+    "chunk_id": "4bd47ac9ccd2",
+    "verdict": "keep",
+    "reason": "Informative mode-reference table (normal/insert/visual/command)."
+  },
+  {
+    "chunk_id": "b4f96f4f30a4",
+    "verdict": "keep",
+    "reason": "Short lead-in sentence anchoring the survival-kit key table that follows."
+  },
+  {
+    "chunk_id": "58d9fe58b546",
+    "verdict": "keep",
+    "reason": "Dense survival-kit keybinding table with real reference content."
+  },
+  {
+    "chunk_id": "80c7afbee31c",
+    "verdict": "keep",
+    "reason": "Genuine detail about mouse support (mouse=a) for newcomers."
+  },
+  {
+    "chunk_id": "c7013141614d",
+    "verdict": "keep",
+    "reason": "Useful tip admonition about the discoverable hint-window keymap."
+  },
+  {
+    "chunk_id": "bd8618e793ae",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "473fc0b7195d",
+    "verdict": "keep",
+    "reason": "Explains the shared picker interaction model with concrete keys."
+  },
+  {
+    "chunk_id": "e70ac83b2b3e",
+    "verdict": "keep",
+    "reason": "Reference table of all picker keybindings, non-redundant content."
+  },
+  {
+    "chunk_id": "639d098150f3",
+    "verdict": "keep",
+    "reason": "Substantive explanation of the buffer-based file explorer workflow."
+  },
+  {
+    "chunk_id": "e2b0b594a4d1",
+    "verdict": "keep",
+    "reason": "Lead-in noting tree-sitter text objects understand Jac grammar."
+  },
+  {
+    "chunk_id": "ac9603a45717",
+    "verdict": "keep",
+    "reason": "Table mapping text-object keys to Jac structures (functions, objects, blocks)."
+  },
+  {
+    "chunk_id": "f5b5e26042c8",
+    "verdict": "keep",
+    "reason": "Explains operator composition and tree-sitter folding, genuine content."
+  },
+  {
+    "chunk_id": "6962f4e59887",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "8278a8ce51c6",
+    "verdict": "keep",
+    "reason": "Explains jac lsp auto-attach and completion keybindings."
+  },
+  {
+    "chunk_id": "8b0538f7c027",
+    "verdict": "keep",
+    "reason": "Complete LSP action keybinding reference table."
+  },
+  {
+    "chunk_id": "f30552226348",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "2de2d272f37a",
+    "verdict": "keep",
+    "reason": "Section intro explaining in-editor execution via the same jac binary."
+  },
+  {
+    "chunk_id": "2223f25fd4c7",
+    "verdict": "keep",
+    "reason": "Table mapping keybindings to jac run/test/dot/check commands."
+  },
+  {
+    "chunk_id": "fb9348ef2b6e",
+    "verdict": "keep",
+    "reason": "Genuine behavioral detail about commands requiring a .jac file in focus."
+  },
+  {
+    "chunk_id": "160fb66e167d",
+    "verdict": "keep",
+    "reason": "Section intro for the check-to-quickfix workflow explanation."
+  },
+  {
+    "chunk_id": "6f7c78ff9b13",
+    "verdict": "keep",
+    "reason": "Detailed description of jac check output panel, quickfix, and summary behavior."
+  },
+  {
+    "chunk_id": "ec5b506de41e",
+    "verdict": "keep",
+    "reason": "Covers quickfix window commands and the --no-nowarn warning policy."
+  },
+  {
+    "chunk_id": "85a419ac22c1",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "5e301be68f2b",
+    "verdict": "keep",
+    "reason": "Introduces the jac ai agent menu integration."
+  },
+  {
+    "chunk_id": "b2d2dc5466b8",
+    "verdict": "keep",
+    "reason": "Explains the references-not-code design of agent context passing."
+  },
+  {
+    "chunk_id": "82c6beea7df3",
+    "verdict": "keep",
+    "reason": "Complete agent keybinding reference table with distinct actions."
+  },
+  {
+    "chunk_id": "0aa1fdfa87e9",
+    "verdict": "keep",
+    "reason": "Genuine detail on named, independent agent sessions."
+  },
+  {
+    "chunk_id": "fbbef9bee931",
+    "verdict": "keep",
+    "reason": "Important caveat that model/safe-mode flags apply only to new sessions."
+  },
+  {
+    "chunk_id": "c82dc1db06ca",
+    "verdict": "keep",
+    "reason": "Documents the :NinjaAgent and :NinjaAgentSend command-line interface."
+  },
+  {
+    "chunk_id": "e53b4c8b13fb",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "bfc3b1fdf5ae",
+    "verdict": "keep",
+    "reason": "Describes the default jac-ninja theme and bundled base16 schemes."
+  },
+  {
+    "chunk_id": "dca921cdf249",
+    "verdict": "keep",
+    "reason": "Concrete list of shipped dark and light theme names."
+  }
+]

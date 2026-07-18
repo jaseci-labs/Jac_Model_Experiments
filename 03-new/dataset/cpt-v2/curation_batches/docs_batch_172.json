@@ -1,0 +1,15 @@
+[
+  {"chunk_id": "93853860b5c8", "verdict": "keep", "reason": "Concise but genuine persistence reference (root-connected auto-persist, save/commit/del semantics)."},
+  {"chunk_id": "49b3db3a9988", "verdict": "keep", "reason": "Testing syntax reference with correct-vs-wrong forms specific to Jac 0.10.2."},
+  {"chunk_id": "2461753bda67", "verdict": "keep", "reason": "Stdlib/builtins reference grounding Jac's Python-like surface API."},
+  {"chunk_id": "fd96d7b0e67b", "verdict": "keep", "reason": "Substantive client/JSX compilation semantics (.cl.jac vs cl blocks, has-as-useState, spawn-to-POST) unique to Jac fullstack."},
+  {"chunk_id": "df177d88922d", "verdict": "keep", "reason": "Short but real client-auth API reference (jacSignup/jacLogin imports, per-user graph isolation)."},
+  {"chunk_id": "72e81324115d", "verdict": "keep", "reason": "jac.toml configuration reference with npm-dependency rules, genuine tooling content."},
+  {"chunk_id": "a3c89b1dcbe8", "verdict": "keep", "reason": "Fullstack scaffolding commands and __init__.jac include rules, real setup documentation."},
+  {"chunk_id": "ed551aa52b3b", "verdict": "keep", "reason": "Dev-server ports and proxy-route reference, genuine tooling content."},
+  {"chunk_id": "b21311022760", "verdict": "keep", "reason": "Deployment/env reference (jaseci vs jaclang, dotenv pattern), genuine ops documentation."},
+  {"chunk_id": "1fc2b75692c6", "verdict": "keep", "reason": "Complete fullstack counter example wiring walkers, report, and cl-block client; mostly app-pattern rather than core OSP."},
+  {"chunk_id": "31003acff872", "verdict": "upweight", "reason": "Core OSP traversal exemplar: node/edge definitions, walker spawn, visit with typed-edge navigation, here mutation, edge-attr filters, del-edge, disengage.", "weight": 3.0},
+  {"chunk_id": "dc43868b18fa", "verdict": "keep", "reason": "Walker-based CRUD API pattern with client fetch contract, useful but application-level rather than core OSP semantics."},
+  {"chunk_id": "19744ead3028", "verdict": "keep", "reason": "Dense WRONG/RIGHT error catalog encoding Jac-specific syntax corrections, high-value non-redundant signal."}
+]
