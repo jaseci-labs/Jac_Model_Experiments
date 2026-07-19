@@ -10,14 +10,14 @@ Idiom headroom is real here (idiomatic-vs-transpile similarity ~0.26 vs ~0.97 fo
 function tasks): a model that learns the walker idiom diverges from the transpile; one
 that just transpiles scores ~0.97. That is exactly the axis the function holdout lacked.
 
-    jac run srccurrent/jacgen/graph_holdout.jac
+    jac run 01-sft-dpo/sft_dpo/jacgen/graph_holdout.jac
 """
 
 import json;
 import from pathlib { Path }
 import from typing { Any }
 
-glob TASKS: str = "srccurrent/jacgen/graph_data/holdout.json";
+glob TASKS: str = "01-sft-dpo/sft_dpo/jacgen/graph_data/holdout.json";
 glob OUT_PATH: str = "01-sft-dpo/dataset/eval_holdout/graph_conversion.jsonl";
 glob SOURCE: str = "generated_graph_holdout";
 
