@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "02348b12e637",
+    "verdict": "keep",
+    "reason": "Genuine prose on zero-RC enforcement errors and nogc-enforced modules."
+  },
+  {
+    "chunk_id": "f520cc04a9c4",
+    "verdict": "keep",
+    "reason": "Canonical diagnostic-code table (E1401-E1406)."
+  },
+  {
+    "chunk_id": "19dee865ebcd",
+    "verdict": "keep",
+    "reason": "Type-warnings diagnostic table with real codes."
+  },
+  {
+    "chunk_id": "11d68e254c5b",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "6727197036cd",
+    "verdict": "keep",
+    "reason": "Import-warnings diagnostic table."
+  },
+  {
+    "chunk_id": "2e57bd26795f",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "23da2b5276b9",
+    "verdict": "keep",
+    "reason": "Section intro describing semantic-error emission passes."
+  },
+  {
+    "chunk_id": "29c83d06df25",
+    "verdict": "keep",
+    "reason": "Static-analysis warnings table."
+  },
+  {
+    "chunk_id": "103e0efbaff5",
+    "verdict": "keep",
+    "reason": "Semantic-errors diagnostic table."
+  },
+  {
+    "chunk_id": "8db799bcffd7",
+    "verdict": "keep",
+    "reason": "Explains W2029 property-decorator diagnostic with cross-references."
+  },
+  {
+    "chunk_id": "f773f1bdffd5",
+    "verdict": "keep",
+    "reason": "Native property-syntax code example; its flagged duplicates are not in this batch."
+  },
+  {
+    "chunk_id": "609cf9b78be8",
+    "verdict": "keep",
+    "reason": "Documents autofix behavior and property-decorator exemptions."
+  },
+  {
+    "chunk_id": "3b8c1d1b0e8d",
+    "verdict": "keep",
+    "reason": "Declaration-implementation matching diagnostic table."
+  },
+  {
+    "chunk_id": "4741ac5c70f1",
+    "verdict": "keep",
+    "reason": "Describes JSX slot body rules and the ViewLowerPass."
+  },
+  {
+    "chunk_id": "5055af8c56cc",
+    "verdict": "keep",
+    "reason": "Detailed JSX-slot diagnostic table with substantive explanatory messages."
+  },
+  {
+    "chunk_id": "6c19de346711",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "02527f4731f3",
+    "verdict": "keep",
+    "reason": "Lint-rules section intro with config context."
+  },
+  {
+    "chunk_id": "a390817d5f42",
+    "verdict": "keep",
+    "reason": "Comprehensive lint-rules reference table."
+  },
+  {
+    "chunk_id": "98c21db07d5b",
+    "verdict": "keep",
+    "reason": "Explains destructive opt-in deslop lint rules."
+  },
+  {
+    "chunk_id": "25a8c4f00c55",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "d4685b70a6b0",
+    "verdict": "keep",
+    "reason": "Codegen-errors section intro."
+  },
+  {
+    "chunk_id": "1253dc83dc38",
+    "verdict": "keep",
+    "reason": "Python AST generation diagnostic table (includes spawn diagnostics)."
+  },
+  {
+    "chunk_id": "d5e00ec91b1d",
+    "verdict": "keep",
+    "reason": "Native-compilation diagnostic table."
+  },
+  {
+    "chunk_id": "108d3f0b18f4",
+    "verdict": "keep",
+    "reason": "Layout-pass diagnostic table."
+  },
+  {
+    "chunk_id": "0784b7922b2a",
+    "verdict": "keep",
+    "reason": "Bytecode-generation diagnostic table."
+  },
+  {
+    "chunk_id": "3a828a137114",
+    "verdict": "keep",
+    "reason": "Formatter/comment-injection diagnostic table."
+  },
+  {
+    "chunk_id": "c8f1d540779a",
+    "verdict": "keep",
+    "reason": "Native IR generation diagnostic entry."
+  },
+  {
+    "chunk_id": "d775223665ee",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "d25116a6d15d",
+    "verdict": "keep",
+    "reason": "Internal-compiler-errors section intro with reporting guidance."
+  },
+  {
+    "chunk_id": "6a8d05e3412e",
+    "verdict": "keep",
+    "reason": "ICE diagnostic table."
+  },
+  {
+    "chunk_id": "06718e93f507",
+    "verdict": "keep",
+    "reason": "Reference landing intro with orientation prose."
+  },
+  {
+    "chunk_id": "9e73a2db0f21",
+    "verdict": "drop",
+    "reason": "Nav-only how-to-use link list, no substantive content."
+  },
+  {
+    "chunk_id": "53ffd0706089",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "389b7ea4274f",
+    "verdict": "keep",
+    "reason": "Short but descriptive Language-section intro sentence."
+  },
+  {
+    "chunk_id": "ff99199520c9",
+    "verdict": "drop",
+    "reason": "Auto-index link list of language pages, nav-only."
+  },
+  {
+    "chunk_id": "0357d3904dd5",
+    "verdict": "keep",
+    "reason": "Prose explaining capability-gating and first-party plugins."
+  },
+  {
+    "chunk_id": "960325a4ea78",
+    "verdict": "drop",
+    "reason": "Nav-only plugin link list."
+  },
+  {
+    "chunk_id": "ee81abb55582",
+    "verdict": "drop",
+    "reason": "Nav-only Python-integration link list."
+  },
+  {
+    "chunk_id": "f4b9e13b148c",
+    "verdict": "drop",
+    "reason": "Nav-only developer-workflow link list."
+  },
+  {
+    "chunk_id": "8ecc909750a8",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "4049d733a4a7",
+    "verdict": "keep",
+    "reason": "Quick-start install/scaffold/run commands."
+  },
+  {
+    "chunk_id": "099bc7e5e7d9",
+    "verdict": "keep",
+    "reason": "Explains default entry-point behavior."
+  },
+  {
+    "chunk_id": "37b71c28ec37",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "88c303e92657",
+    "verdict": "keep",
+    "reason": "Prose on using Jac with AI assistants and the llmdocs reference."
+  },
+  {
+    "chunk_id": "4b3a13caf3dd",
+    "verdict": "keep",
+    "reason": "Command to fetch the condensed LLM reference."
+  },
+  {
+    "chunk_id": "f396dfe6e657",
+    "verdict": "keep",
+    "reason": "Useful table of assistant context-file setup commands."
+  },
+  {
+    "chunk_id": "f4c8c8349c5f",
+    "verdict": "keep",
+    "reason": "Note on the live MCP server option."
+  },
+  {
+    "chunk_id": "943a49dbb13c",
+    "verdict": "keep",
+    "reason": "Introduces the three access modifiers and their semantics."
+  },
+  {
+    "chunk_id": "1bcc37491662",
+    "verdict": "keep",
+    "reason": "Explains context-dependent meaning of access modifiers."
+  },
+  {
+    "chunk_id": "53eccff9c67f",
+    "verdict": "keep",
+    "reason": "Table mapping access-modifier contexts to what they control."
+  }
+]

@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "360364b5c208",
+    "verdict": "keep",
+    "reason": "Genuine example of backend imports and a minimal walker endpoint."
+  },
+  {
+    "chunk_id": "2f5624ed21c4",
+    "verdict": "keep",
+    "reason": "Genuine example of client-side imports and JSX component composition."
+  },
+  {
+    "chunk_id": "3f08fea5790b",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "efd3d7118fa8",
+    "verdict": "keep",
+    "reason": "Documents the jac install --npm workflow with concrete commands."
+  },
+  {
+    "chunk_id": "1630556bf919",
+    "verdict": "drop",
+    "reason": "One-line connector fragment ('Or in jac.toml:') with no standalone content."
+  },
+  {
+    "chunk_id": "46d3766dd024",
+    "verdict": "keep",
+    "reason": "Shows the [dependencies.npm] jac.toml declaration syntax."
+  },
+  {
+    "chunk_id": "97934a050c99",
+    "verdict": "drop",
+    "reason": "One-line connector fragment ('Then use in frontend:') with no content."
+  },
+  {
+    "chunk_id": "c764addf8627",
+    "verdict": "keep",
+    "reason": "Substantive note on jac check behavior with npm .d.ts declarations."
+  },
+  {
+    "chunk_id": "ef2eb1a89bbc",
+    "verdict": "keep",
+    "reason": "Working example of importing and using an npm package in cl code."
+  },
+  {
+    "chunk_id": "37083837abc4",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "7add3dd09ef1",
+    "verdict": "drop",
+    "reason": "Lone section heading with no prose or code."
+  },
+  {
+    "chunk_id": "a7f5be9ae261",
+    "verdict": "keep",
+    "reason": "Canonical jac.toml configuration reference with all major sections."
+  },
+  {
+    "chunk_id": "84ab70c6647d",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "0f8b65dc9d10",
+    "verdict": "keep",
+    "reason": "Setup-verification instruction that frames the following minimal example."
+  },
+  {
+    "chunk_id": "f1bcbe914b8f",
+    "verdict": "keep",
+    "reason": "Complete minimal counter app showing cl block, has state, JSX, and lambda handler."
+  },
+  {
+    "chunk_id": "606ac84a310e",
+    "verdict": "keep",
+    "reason": "Documents the jac start --dev command and the /cl/app URL convention."
+  },
+  {
+    "chunk_id": "41c02e7076de",
+    "verdict": "drop",
+    "reason": "Trivial one-line prose fragment with no Jac-specific information."
+  },
+  {
+    "chunk_id": "a98465a9bf53",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "6942309726ba",
+    "verdict": "drop",
+    "reason": "Nav-only next-steps link list with no instructional content."
+  },
+  {
+    "chunk_id": "434733ca4661",
+    "verdict": "keep",
+    "reason": "Core explanation of reactive has state and the re-render model in client Jac."
+  },
+  {
+    "chunk_id": "1c7ec18a1e63",
+    "verdict": "keep",
+    "reason": "Brief but genuine overview of the state-management tutorial scope."
+  },
+  {
+    "chunk_id": "fa7c4d5c4714",
+    "verdict": "drop",
+    "reason": "Prerequisites/time metadata blurb with no technical content."
+  },
+  {
+    "chunk_id": "64ac1b8a876f",
+    "verdict": "keep",
+    "reason": "Substantive caveat about jac check limitations with React helper imports."
+  },
+  {
+    "chunk_id": "ff70b0f9747c",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "6a1ffea317da",
+    "verdict": "keep",
+    "reason": "Defines the has-inside-component reactive state semantics, a key client-Jac concept."
+  },
+  {
+    "chunk_id": "13b6beff5c6d",
+    "verdict": "keep",
+    "reason": "Canonical counter example demonstrating reactive has state."
+  },
+  {
+    "chunk_id": "c46dfa6a85dc",
+    "verdict": "drop",
+    "reason": "Lone '**How it works:**' heading fragment with no content."
+  },
+  {
+    "chunk_id": "fe83b725515f",
+    "verdict": "keep",
+    "reason": "Explains the has-to-useState compilation semantics, load-bearing detail."
+  },
+  {
+    "chunk_id": "6c368fc0bf9b",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "585d370a49f7",
+    "verdict": "keep",
+    "reason": "Full form example with multiple state variables, ChangeEvent handlers, and conditional render."
+  },
+  {
+    "chunk_id": "3da55c5c70a7",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "d74440ed0dc5",
+    "verdict": "keep",
+    "reason": "Complete todo-list example covering list state, comprehensions, and keyed JSX."
+  },
+  {
+    "chunk_id": "670c3c365676",
+    "verdict": "keep",
+    "reason": "States the immutable-update rule for list/object state; frames the following bullets."
+  },
+  {
+    "chunk_id": "39d55d93280e",
+    "verdict": "keep",
+    "reason": "Concrete spread/filter patterns for creating new state references."
+  },
+  {
+    "chunk_id": "70b20dd3b7cc",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "feb8a5305535",
+    "verdict": "drop",
+    "reason": "Lone section heading with no prose or code."
+  },
+  {
+    "chunk_id": "1f832c0307a8",
+    "verdict": "keep",
+    "reason": "Introduces the can with entry/exit to useEffect mapping, a distinctive Jac feature."
+  },
+  {
+    "chunk_id": "9bff8675fa7e",
+    "verdict": "keep",
+    "reason": "Example of async can with entry mount effect with IIFE wrapping detail."
+  },
+  {
+    "chunk_id": "8877baba58cc",
+    "verdict": "keep",
+    "reason": "Documents effect dependency-array syntax for can with [deps] entry."
+  },
+  {
+    "chunk_id": "da11281d58ef",
+    "verdict": "keep",
+    "reason": "Working dependency-driven effect example with async search."
+  },
+  {
+    "chunk_id": "6b7f26313071",
+    "verdict": "keep",
+    "reason": "Explains can with exit cleanup semantics and when to use it."
+  },
+  {
+    "chunk_id": "d0b0d7d713ea",
+    "verdict": "keep",
+    "reason": "Subscribe/cleanup example demonstrating entry and exit effects together."
+  },
+  {
+    "chunk_id": "7331021a5d97",
+    "verdict": "keep",
+    "reason": "Critical warning that entry/exit compile to separate closures and how to share handles."
+  },
+  {
+    "chunk_id": "c24d85df9075",
+    "verdict": "keep",
+    "reason": "Correct single-useEffect setup/teardown pattern with returned cleanup."
+  },
+  {
+    "chunk_id": "a7f08048445c",
+    "verdict": "keep",
+    "reason": "Explains when to fall back to manual useEffect over the idiomatic syntax."
+  },
+  {
+    "chunk_id": "85464a810d31",
+    "verdict": "keep",
+    "reason": "Minimal manual useEffect import-and-use example."
+  },
+  {
+    "chunk_id": "e549835fa2be",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "83b4b84ce81b",
+    "verdict": "keep",
+    "reason": "Defines Ref[T] semantics and its compilation to useRef, a distinctive Jac mapping."
+  },
+  {
+    "chunk_id": "17022e55c820",
+    "verdict": "keep",
+    "reason": "Working Ref[HTMLInputElement] focus example with ref wiring."
+  },
+  {
+    "chunk_id": "de8d5b5794c9",
+    "verdict": "keep",
+    "reason": "Precise rules for Ref() vs Ref(initial) compilation and auto-import of useRef."
+  }
+]

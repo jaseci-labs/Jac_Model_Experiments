@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "e1be5ca2628c",
+    "verdict": "keep",
+    "reason": "Command section header noting jac precommit is hidden but functional, real CLI info."
+  },
+  {
+    "chunk_id": "a6bace107fc5",
+    "verdict": "keep",
+    "reason": "Substantive description of the jac precommit pipeline and its lint interactions."
+  },
+  {
+    "chunk_id": "8f8fc29059a2",
+    "verdict": "keep",
+    "reason": "Usage syntax for jac precommit, useful CLI reference."
+  },
+  {
+    "chunk_id": "407cee6bcca3",
+    "verdict": "keep",
+    "reason": "Options table for jac precommit flags."
+  },
+  {
+    "chunk_id": "6b6be69c0ca9",
+    "verdict": "drop",
+    "reason": "Bare '**Examples:**' label with no prose."
+  },
+  {
+    "chunk_id": "15629c917d97",
+    "verdict": "keep",
+    "reason": "Concrete jac precommit example commands."
+  },
+  {
+    "chunk_id": "80f0618da92f",
+    "verdict": "keep",
+    "reason": "Explains the installed git pre-commit hook behavior."
+  },
+  {
+    "chunk_id": "800f451e6dbe",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "ac209b8a52fd",
+    "verdict": "keep",
+    "reason": "Documents that jac enter folded into jac run --entry."
+  },
+  {
+    "chunk_id": "2988a2dea2d6",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "56781beb8c8c",
+    "verdict": "drop",
+    "reason": "Section header only, nav fragment."
+  },
+  {
+    "chunk_id": "4281d228dc3b",
+    "verdict": "keep",
+    "reason": "Command header noting jac dot is hidden but functional."
+  },
+  {
+    "chunk_id": "cb735fb94020",
+    "verdict": "keep",
+    "reason": "Describes what jac dot does."
+  },
+  {
+    "chunk_id": "ca6eb3868819",
+    "verdict": "keep",
+    "reason": "Usage syntax for jac dot."
+  },
+  {
+    "chunk_id": "cb0ac7c87841",
+    "verdict": "keep",
+    "reason": "Options table for jac dot visualization flags."
+  },
+  {
+    "chunk_id": "7b8ed0a051fc",
+    "verdict": "drop",
+    "reason": "Bare '**Examples:**' label with no prose."
+  },
+  {
+    "chunk_id": "dcbb25fea501",
+    "verdict": "keep",
+    "reason": "Concrete jac dot example commands."
+  },
+  {
+    "chunk_id": "aab1437f68ad",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "9459c973b9c4",
+    "verdict": "keep",
+    "reason": "Documents that jac debug folded into jac run --debug."
+  },
+  {
+    "chunk_id": "ea7bd31e9a7d",
+    "verdict": "keep",
+    "reason": "Example command to start the debugger."
+  },
+  {
+    "chunk_id": "5fed39a25b4e",
+    "verdict": "keep",
+    "reason": "Intro to VS Code debugger setup section."
+  },
+  {
+    "chunk_id": "2829472a925c",
+    "verdict": "keep",
+    "reason": "Step-by-step VS Code debugger setup instructions."
+  },
+  {
+    "chunk_id": "fc32644b8e44",
+    "verdict": "keep",
+    "reason": "Introduces the generated launch.json config."
+  },
+  {
+    "chunk_id": "a44bb379c0ef",
+    "verdict": "keep",
+    "reason": "The launch.json content; duplicate partner not present in this batch, so this copy is retained."
+  },
+  {
+    "chunk_id": "1c68dd750991",
+    "verdict": "keep",
+    "reason": "Documents debugger keyboard controls."
+  },
+  {
+    "chunk_id": "f0a9cf41b3de",
+    "verdict": "keep",
+    "reason": "Intro to jacvis live graph visualization."
+  },
+  {
+    "chunk_id": "3d32cd31f40f",
+    "verdict": "keep",
+    "reason": "Steps to launch jacvis from the command palette."
+  },
+  {
+    "chunk_id": "fbe5fdae1730",
+    "verdict": "keep",
+    "reason": "Explains real-time node/edge visualization during debugging."
+  },
+  {
+    "chunk_id": "32be4360adfc",
+    "verdict": "drop",
+    "reason": "Cross-reference pointer only, no standalone content."
+  },
+  {
+    "chunk_id": "78fb2c1d4417",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "457d359763da",
+    "verdict": "drop",
+    "reason": "Section header only, nav fragment."
+  },
+  {
+    "chunk_id": "cd3f2956bbfb",
+    "verdict": "keep",
+    "reason": "Command header noting jac browse is hidden but functional."
+  },
+  {
+    "chunk_id": "a5f559a187a8",
+    "verdict": "keep",
+    "reason": "Substantive description of the jac browse CDP driver."
+  },
+  {
+    "chunk_id": "6aaed3ff955b",
+    "verdict": "keep",
+    "reason": "Usage syntax for jac browse."
+  },
+  {
+    "chunk_id": "a8fcd8cfb83a",
+    "verdict": "keep",
+    "reason": "Options table for jac browse."
+  },
+  {
+    "chunk_id": "c626c2ab2933",
+    "verdict": "drop",
+    "reason": "Bare '**Actions:**' label with no prose."
+  },
+  {
+    "chunk_id": "1e4c69336cdb",
+    "verdict": "keep",
+    "reason": "Rich table of jac browse actions and arguments."
+  },
+  {
+    "chunk_id": "bca39e6f7f26",
+    "verdict": "keep",
+    "reason": "Explains output/error semantics of jac browse."
+  },
+  {
+    "chunk_id": "211d433d4375",
+    "verdict": "drop",
+    "reason": "Bare label with no prose."
+  },
+  {
+    "chunk_id": "3630dcf3d7cb",
+    "verdict": "keep",
+    "reason": "Explains browser session persistence and refs across calls."
+  },
+  {
+    "chunk_id": "ab7e955a73ec",
+    "verdict": "drop",
+    "reason": "Bare label with no prose."
+  },
+  {
+    "chunk_id": "ed3d9cf6de47",
+    "verdict": "keep",
+    "reason": "Explains refs vs selectors and auto-wait behavior."
+  },
+  {
+    "chunk_id": "94346066e13a",
+    "verdict": "drop",
+    "reason": "Bare label with no prose."
+  },
+  {
+    "chunk_id": "3f11544fefa5",
+    "verdict": "keep",
+    "reason": "Table of jac browse environment variables."
+  },
+  {
+    "chunk_id": "42f9c65b48b6",
+    "verdict": "drop",
+    "reason": "Bare '**Examples:**' label with no prose."
+  },
+  {
+    "chunk_id": "2c7356c26691",
+    "verdict": "keep",
+    "reason": "Extensive jac browse example commands."
+  },
+  {
+    "chunk_id": "c3ea146a408c",
+    "verdict": "keep",
+    "reason": "Introduces an end-to-end browser flow example."
+  },
+  {
+    "chunk_id": "3b26dc3e153b",
+    "verdict": "keep",
+    "reason": "Chained end-to-end browser automation example."
+  },
+  {
+    "chunk_id": "a937c7d7c461",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "e2c685fc5103",
+    "verdict": "keep",
+    "reason": "Intro prose on AI-assisted development commands for Jac."
+  }
+]

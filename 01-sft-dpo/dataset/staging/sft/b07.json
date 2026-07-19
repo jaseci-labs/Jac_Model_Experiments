@@ -1,0 +1,895 @@
+{
+ "batch_id": "b07",
+ "generator": "fable-agent-v1",
+ "examples": [
+  {
+   "name": "count_user_posts",
+   "category": "graph_osp",
+   "subcategory": "hetero_type_filter",
+   "difficulty": "simple",
+   "py": "def count_user_posts(spec: dict) -> int:\n    \"\"\"Count how many posts were written by the given user.\"\"\"\n    who = spec[\"who\"]\n    return sum(1 for p in spec[\"posts\"] if p[\"author\"] == who)",
+   "jac": "node User { has name: str; }\nnode Post {}\n\nwalker PostCount {\n    has count: int = 0;\n    can seek with User entry { visit [-->][?:Post]; }\n    can tally with Post entry { self.count += 1; }\n}\n\ndef count_user_posts(spec: dict) -> int {\n    who: str = str(spec[\"who\"]);\n    unodes: dict = {};\n    for nm in list(spec[\"users\"]) { unodes[nm] = User(name=str(nm)); }\n    for p in list(spec[\"posts\"]) {\n        if p[\"author\"] in unodes { unodes[p[\"author\"]] ++> Post(); }\n    }\n    if who not in unodes { return 0; }\n    return (unodes[who] spawn PostCount()).count;\n}\n\nwith entry { print(count_user_posts({'users': ['alice', 'bob'], 'posts': [{'author': 'alice'}, {'author': 'bob'}, {'author': 'alice'}], 'who': 'alice'})); }",
+   "expected_output": "2",
+   "cases": [
+    {
+     "input": {
+      "users": [
+       "alice",
+       "bob"
+      ],
+      "posts": [
+       {
+        "author": "alice"
+       },
+       {
+        "author": "bob"
+       },
+       {
+        "author": "alice"
+       }
+      ],
+      "who": "alice"
+     },
+     "output": "2"
+    },
+    {
+     "input": {
+      "users": [
+       "alice",
+       "bob"
+      ],
+      "posts": [
+       {
+        "author": "alice"
+       },
+       {
+        "author": "bob"
+       },
+       {
+        "author": "alice"
+       }
+      ],
+      "who": "bob"
+     },
+     "output": "1"
+    },
+    {
+     "input": {
+      "users": [
+       "ana"
+      ],
+      "posts": [],
+      "who": "ana"
+     },
+     "output": "0"
+    }
+   ]
+  },
+  {
+   "name": "sum_item_stock",
+   "category": "graph_osp",
+   "subcategory": "cross_type_rollup",
+   "difficulty": "simple",
+   "py": "def sum_item_stock(spec: dict) -> int:\n    \"\"\"Total quantity of the named item across every warehouse.\"\"\"\n    total = 0\n    for stock in spec[\"warehouses\"].values():\n        for nm, q in stock.items():\n            if nm == spec[\"item\"]:\n                total += q\n    return total",
+   "jac": "node Depot {}\nnode Warehouse { has name: str; }\nnode Item { has name: str; has qty: int; }\n\nwalker StockSum {\n    has target: str;\n    has total: int = 0;\n    can start with Depot entry { visit [-->][?:Warehouse]; }\n    can descend with Warehouse entry { visit [-->][?:Item]; }\n    can add with Item entry { if here.name == self.target { self.total += here.qty; } }\n}\n\ndef sum_item_stock(spec: dict) -> int {\n    d = Depot();\n    for (wn, stock) in dict(spec[\"warehouses\"]).items() {\n        w = Warehouse(name=str(wn));\n        d ++> w;\n        for (inm, q) in dict(stock).items() { w ++> Item(name=str(inm), qty=int(q)); }\n    }\n    return (d spawn StockSum(target=str(spec[\"item\"]))).total;\n}\n\nwith entry { print(sum_item_stock({'warehouses': {'east': {'bolt': 4, 'nut': 9}, 'west': {'bolt': 6}}, 'item': 'bolt'})); }",
+   "expected_output": "10",
+   "cases": [
+    {
+     "input": {
+      "warehouses": {
+       "east": {
+        "bolt": 4,
+        "nut": 9
+       },
+       "west": {
+        "bolt": 6
+       }
+      },
+      "item": "bolt"
+     },
+     "output": "10"
+    },
+    {
+     "input": {
+      "warehouses": {
+       "north": {
+        "gear": 3
+       }
+      },
+      "item": "cog"
+     },
+     "output": "0"
+    },
+    {
+     "input": {
+      "warehouses": {
+       "a": {
+        "pin": 2
+       },
+       "b": {
+        "pin": 5,
+        "rod": 1
+       }
+      },
+      "item": "pin"
+     },
+     "output": "7"
+    }
+   ]
+  },
+  {
+   "name": "has_powered_device",
+   "category": "graph_osp",
+   "subcategory": "node_ability_probe",
+   "difficulty": "simple",
+   "py": "def has_powered_device(spec: dict) -> bool:\n    \"\"\"Does the given person own at least one device that is switched on?\"\"\"\n    return any(d[\"on\"] for d in spec[\"people\"].get(spec[\"who\"], []))",
+   "jac": "node Person { has name: str; }\nnode Device {\n    has label: str;\n    has on: bool;\n    can report with PowerProbe entry { if self.on { visitor.found = True; } }\n}\n\nwalker PowerProbe {\n    has found: bool = False;\n    can seek with Person entry { visit [-->][?:Device]; }\n}\n\ndef has_powered_device(spec: dict) -> bool {\n    who: str = str(spec[\"who\"]);\n    pnodes: dict = {};\n    for (nm, devices) in dict(spec[\"people\"]).items() {\n        p = Person(name=str(nm));\n        pnodes[nm] = p;\n        for d in list(devices) { p ++> Device(label=str(d[\"label\"]), on=bool(d[\"on\"])); }\n    }\n    if who not in pnodes { return False; }\n    return (pnodes[who] spawn PowerProbe()).found;\n}\n\nwith entry { print(has_powered_device({'people': {'ana': [{'label': 'lamp', 'on': False}, {'label': 'fan', 'on': True}], 'bo': [{'label': 'tv', 'on': False}]}, 'who': 'ana'})); }",
+   "expected_output": "True",
+   "cases": [
+    {
+     "input": {
+      "people": {
+       "ana": [
+        {
+         "label": "lamp",
+         "on": false
+        },
+        {
+         "label": "fan",
+         "on": true
+        }
+       ],
+       "bo": [
+        {
+         "label": "tv",
+         "on": false
+        }
+       ]
+      },
+      "who": "ana"
+     },
+     "output": "True"
+    },
+    {
+     "input": {
+      "people": {
+       "ana": [
+        {
+         "label": "lamp",
+         "on": false
+        },
+        {
+         "label": "fan",
+         "on": true
+        }
+       ],
+       "bo": [
+        {
+         "label": "tv",
+         "on": false
+        }
+       ]
+      },
+      "who": "bo"
+     },
+     "output": "False"
+    },
+    {
+     "input": {
+      "people": {
+       "kim": []
+      },
+      "who": "kim"
+     },
+     "output": "False"
+    }
+   ]
+  },
+  {
+   "name": "count_hot_sensors",
+   "category": "graph_osp",
+   "subcategory": "hetero_type_filter",
+   "difficulty": "simple",
+   "py": "def count_hot_sensors(spec: dict) -> int:\n    \"\"\"Count sensor devices whose reading is at or above the threshold.\"\"\"\n    return sum(1 for d in spec[\"devices\"] if d[\"kind\"] == \"sensor\" and d[\"reading\"] >= spec[\"min\"])",
+   "jac": "node Hub {}\nnode Sensor { has reading: int; }\nnode Camera { has fps: int; }\n\nwalker HotScan {\n    has low: int;\n    has count: int = 0;\n    can start with Hub entry { visit [-->][?:Sensor]; }\n    can check with Sensor entry { if here.reading >= self.low { self.count += 1; } }\n}\n\ndef count_hot_sensors(spec: dict) -> int {\n    h = Hub();\n    for d in list(spec[\"devices\"]) {\n        if d[\"kind\"] == \"sensor\" { h ++> Sensor(reading=int(d[\"reading\"])); }\n        else { h ++> Camera(fps=int(d[\"fps\"])); }\n    }\n    return (h spawn HotScan(low=int(spec[\"min\"]))).count;\n}\n\nwith entry { print(count_hot_sensors({'devices': [{'kind': 'sensor', 'reading': 7}, {'kind': 'camera', 'fps': 30}, {'kind': 'sensor', 'reading': 2}], 'min': 5})); }",
+   "expected_output": "1",
+   "cases": [
+    {
+     "input": {
+      "devices": [
+       {
+        "kind": "sensor",
+        "reading": 7
+       },
+       {
+        "kind": "camera",
+        "fps": 30
+       },
+       {
+        "kind": "sensor",
+        "reading": 2
+       }
+      ],
+      "min": 5
+     },
+     "output": "1"
+    },
+    {
+     "input": {
+      "devices": [
+       {
+        "kind": "sensor",
+        "reading": 9
+       },
+       {
+        "kind": "sensor",
+        "reading": 5
+       },
+       {
+        "kind": "sensor",
+        "reading": 6
+       }
+      ],
+      "min": 5
+     },
+     "output": "3"
+    },
+    {
+     "input": {
+      "devices": [
+       {
+        "kind": "camera",
+        "fps": 24
+       }
+      ],
+      "min": 1
+     },
+     "output": "0"
+    }
+   ]
+  },
+  {
+   "name": "posts_per_user",
+   "category": "graph_osp",
+   "subcategory": "per_type_histogram",
+   "difficulty": "composed",
+   "py": "def posts_per_user(spec: dict) -> str:\n    \"\"\"Report post counts as \"name=count\" pairs, comma-joined, sorted by user name.\"\"\"\n    parts = []\n    for u in sorted(spec[\"users\"]):\n        n = sum(1 for p in spec[\"posts\"] if p[\"author\"] == u)\n        parts.append(u + \"=\" + str(n))\n    return \",\".join(parts)",
+   "jac": "node User { has name: str; }\nnode Post {}\n\nwalker TallyPosts {\n    has count: int = 0;\n    can seek with User entry { visit [-->][?:Post]; }\n    can tally with Post entry { self.count += 1; }\n}\n\ndef posts_per_user(spec: dict) -> str {\n    unodes: dict = {};\n    for nm in list(spec[\"users\"]) { unodes[nm] = User(name=str(nm)); }\n    for p in list(spec[\"posts\"]) {\n        if p[\"author\"] in unodes { unodes[p[\"author\"]] ++> Post(); }\n    }\n    parts: list = [];\n    for u in sorted(unodes.keys()) {\n        parts.append(u + \"=\" + str((unodes[u] spawn TallyPosts()).count));\n    }\n    return \",\".join(parts);\n}\n\nwith entry { print(posts_per_user({'users': ['bob', 'alice'], 'posts': [{'author': 'alice'}, {'author': 'alice'}, {'author': 'bob'}]})); }",
+   "expected_output": "alice=2,bob=1",
+   "cases": [
+    {
+     "input": {
+      "users": [
+       "bob",
+       "alice"
+      ],
+      "posts": [
+       {
+        "author": "alice"
+       },
+       {
+        "author": "alice"
+       },
+       {
+        "author": "bob"
+       }
+      ]
+     },
+     "output": "alice=2,bob=1"
+    },
+    {
+     "input": {
+      "users": [
+       "c",
+       "a",
+       "b"
+      ],
+      "posts": [
+       {
+        "author": "b"
+       },
+       {
+        "author": "c"
+       },
+       {
+        "author": "c"
+       }
+      ]
+     },
+     "output": "a=0,b=1,c=2"
+    },
+    {
+     "input": {
+      "users": [
+       "zed"
+      ],
+      "posts": []
+     },
+     "output": "zed=0"
+    }
+   ]
+  },
+  {
+   "name": "loyal_users",
+   "category": "graph_osp",
+   "subcategory": "all_quantifier",
+   "difficulty": "composed",
+   "py": "def loyal_users(spec: dict) -> list:\n    \"\"\"Sorted names of users who have at least one post and whose every post has likes >= min.\"\"\"\n    out = []\n    for u in sorted(spec[\"users\"]):\n        ps = [p for p in spec[\"posts\"] if p[\"author\"] == u]\n        if ps and all(p[\"likes\"] >= spec[\"min\"] for p in ps):\n            out.append(u)\n    return out",
+   "jac": "node User { has name: str; }\nnode Post { has likes: int; }\n\nwalker LoyalCheck {\n    has low: int;\n    has total: int = 0;\n    has bad: int = 0;\n    can seek with User entry { visit [-->][?:Post]; }\n    can judge with Post entry {\n        self.total += 1;\n        if here.likes < self.low { self.bad += 1; }\n    }\n}\n\ndef loyal_users(spec: dict) -> list {\n    low: int = int(spec[\"min\"]);\n    unodes: dict = {};\n    for nm in list(spec[\"users\"]) { unodes[nm] = User(name=str(nm)); }\n    for p in list(spec[\"posts\"]) {\n        if p[\"author\"] in unodes { unodes[p[\"author\"]] ++> Post(likes=int(p[\"likes\"])); }\n    }\n    out: list = [];\n    for u in sorted(unodes.keys()) {\n        w = unodes[u] spawn LoyalCheck(low=low);\n        if w.total > 0 and w.bad == 0 { out.append(u); }\n    }\n    return out;\n}\n\nwith entry { print(loyal_users({'users': ['ana', 'bob', 'cara'], 'posts': [{'author': 'ana', 'likes': 8}, {'author': 'ana', 'likes': 5}, {'author': 'bob', 'likes': 2}, {'author': 'cara', 'likes': 9}], 'min': 5})); }",
+   "expected_output": "['ana', 'cara']",
+   "cases": [
+    {
+     "input": {
+      "users": [
+       "ana",
+       "bob",
+       "cara"
+      ],
+      "posts": [
+       {
+        "author": "ana",
+        "likes": 8
+       },
+       {
+        "author": "ana",
+        "likes": 5
+       },
+       {
+        "author": "bob",
+        "likes": 2
+       },
+       {
+        "author": "cara",
+        "likes": 9
+       }
+      ],
+      "min": 5
+     },
+     "output": "['ana', 'cara']"
+    },
+    {
+     "input": {
+      "users": [
+       "ana",
+       "bob",
+       "cara"
+      ],
+      "posts": [
+       {
+        "author": "ana",
+        "likes": 8
+       },
+       {
+        "author": "ana",
+        "likes": 5
+       },
+       {
+        "author": "bob",
+        "likes": 2
+       },
+       {
+        "author": "cara",
+        "likes": 9
+       }
+      ],
+      "min": 9
+     },
+     "output": "['cara']"
+    },
+    {
+     "input": {
+      "users": [
+       "dee"
+      ],
+      "posts": [],
+      "min": 1
+     },
+     "output": "[]"
+    }
+   ]
+  },
+  {
+   "name": "top_city_revenue",
+   "category": "graph_osp",
+   "subcategory": "cross_type_max",
+   "difficulty": "composed",
+   "py": "def top_city_revenue(spec: dict) -> str:\n    \"\"\"Name of the city whose shops earn the most in total; ties go to the alphabetically first city.\"\"\"\n    cities = spec[\"cities\"]\n    if not cities:\n        return \"\"\n    best = \"\"; bt = 0; seen = False\n    for nm in sorted(cities):\n        t = sum(cities[nm])\n        if not seen or t > bt:\n            best = nm; bt = t; seen = True\n    return best",
+   "jac": "node City { has name: str; }\nnode Shop { has revenue: int; }\n\nwalker RevenueSum {\n    has total: int = 0;\n    can open with City entry { visit [-->][?:Shop]; }\n    can add with Shop entry { self.total += here.revenue; }\n}\n\ndef top_city_revenue(spec: dict) -> str {\n    cities: dict = dict(spec[\"cities\"]);\n    if len(cities) == 0 { return \"\"; }\n    cnodes: dict = {};\n    for (nm, revs) in cities.items() {\n        c = City(name=str(nm));\n        cnodes[nm] = c;\n        for r in list(revs) { c ++> Shop(revenue=int(r)); }\n    }\n    best: str = \"\"; bt: int = 0; seen: bool = False;\n    for nm in sorted(cnodes.keys()) {\n        t: int = (cnodes[nm] spawn RevenueSum()).total;\n        if not seen or t > bt { best = nm; bt = t; seen = True; }\n    }\n    return best;\n}\n\nwith entry { print(top_city_revenue({'cities': {'berlin': [12, 40], 'oslo': [60]}})); }",
+   "expected_output": "oslo",
+   "cases": [
+    {
+     "input": {
+      "cities": {
+       "berlin": [
+        12,
+        40
+       ],
+       "oslo": [
+        60
+       ]
+      }
+     },
+     "output": "oslo"
+    },
+    {
+     "input": {
+      "cities": {
+       "pune": [
+        30,
+        30
+       ],
+       "lima": [
+        20
+       ]
+      }
+     },
+     "output": "pune"
+    },
+    {
+     "input": {
+      "cities": {
+       "bern": [
+        25
+       ],
+       "agra": [
+        25
+       ]
+      }
+     },
+     "output": "agra"
+    }
+   ]
+  },
+  {
+   "name": "low_stock_warehouses",
+   "category": "graph_osp",
+   "subcategory": "stamped_parent_any",
+   "difficulty": "composed",
+   "py": "def low_stock_warehouses(spec: dict) -> int:\n    \"\"\"Count warehouses holding at least one item whose quantity is below min.\"\"\"\n    count = 0\n    for stock in spec[\"warehouses\"].values():\n        if any(q < spec[\"min\"] for q in stock.values()):\n            count += 1\n    return count",
+   "jac": "node Depot {}\nnode Warehouse { has name: str; }\nnode Item { has wh: str; has qty: int; }\n\nwalker ShortageScan {\n    has low: int;\n    has hit: list = [];\n    can start with Depot entry { visit [-->][?:Warehouse]; }\n    can descend with Warehouse entry { visit [-->][?:Item]; }\n    can flag with Item entry {\n        if here.qty < self.low and here.wh not in self.hit { self.hit.append(here.wh); }\n    }\n}\n\ndef low_stock_warehouses(spec: dict) -> int {\n    d = Depot();\n    for (wn, stock) in dict(spec[\"warehouses\"]).items() {\n        w = Warehouse(name=str(wn));\n        d ++> w;\n        for (inm, q) in dict(stock).items() { w ++> Item(wh=str(wn), qty=int(q)); }\n    }\n    return len((d spawn ShortageScan(low=int(spec[\"min\"]))).hit);\n}\n\nwith entry { print(low_stock_warehouses({'warehouses': {'east': {'bolt': 2, 'nut': 9}, 'west': {'rod': 7}}, 'min': 3})); }",
+   "expected_output": "1",
+   "cases": [
+    {
+     "input": {
+      "warehouses": {
+       "east": {
+        "bolt": 2,
+        "nut": 9
+       },
+       "west": {
+        "rod": 7
+       }
+      },
+      "min": 3
+     },
+     "output": "1"
+    },
+    {
+     "input": {
+      "warehouses": {
+       "a": {
+        "x": 1
+       },
+       "b": {
+        "y": 2
+       },
+       "c": {
+        "z": 9
+       }
+      },
+      "min": 5
+     },
+     "output": "2"
+    },
+    {
+     "input": {
+      "warehouses": {
+       "main": {
+        "kit": 8
+       }
+      },
+      "min": 3
+     },
+     "output": "0"
+    }
+   ]
+  },
+  {
+   "name": "avg_category_price",
+   "category": "graph_osp",
+   "subcategory": "type_filter_condition",
+   "difficulty": "composed",
+   "py": "def avg_category_price(spec: dict) -> float:\n    \"\"\"Average price of products in the named category, or 0.0 if it has none.\"\"\"\n    prices = spec[\"catalog\"].get(spec[\"category\"], [])\n    if not prices:\n        return 0.0\n    return sum(prices) / len(prices)",
+   "jac": "node Store {}\nnode Category { has name: str; }\nnode Product { has price: int; }\n\nwalker PriceAvg {\n    has want: str;\n    has total: int = 0;\n    has count: int = 0;\n    can start with Store entry { visit [-->][?:Category]; }\n    can pick with Category entry {\n        if here.name == self.want { visit [-->][?:Product]; }\n    }\n    can add with Product entry { self.total += here.price; self.count += 1; }\n}\n\ndef avg_category_price(spec: dict) -> float {\n    s = Store();\n    for (cn, prices) in dict(spec[\"catalog\"]).items() {\n        c = Category(name=str(cn));\n        s ++> c;\n        for p in list(prices) { c ++> Product(price=int(p)); }\n    }\n    w = s spawn PriceAvg(want=str(spec[\"category\"]));\n    if w.count == 0 { return 0.0; }\n    return w.total / w.count;\n}\n\nwith entry { print(avg_category_price({'catalog': {'tools': [10, 20], 'toys': [5]}, 'category': 'tools'})); }",
+   "expected_output": "15.0",
+   "cases": [
+    {
+     "input": {
+      "catalog": {
+       "tools": [
+        10,
+        20
+       ],
+       "toys": [
+        5
+       ]
+      },
+      "category": "tools"
+     },
+     "output": "15.0"
+    },
+    {
+     "input": {
+      "catalog": {
+       "tools": [
+        10,
+        20
+       ],
+       "toys": [
+        5
+       ]
+      },
+      "category": "toys"
+     },
+     "output": "5.0"
+    },
+    {
+     "input": {
+      "catalog": {
+       "books": [
+        7
+       ]
+      },
+      "category": "games"
+     },
+     "output": "0.0"
+    }
+   ]
+  },
+  {
+   "name": "author_of_top_post",
+   "category": "graph_osp",
+   "subcategory": "stamped_owner_max",
+   "difficulty": "composed",
+   "py": "def author_of_top_post(spec: dict) -> str:\n    \"\"\"Author of the post with the most likes; ties go to the alphabetically first author.\"\"\"\n    posts = spec[\"posts\"]\n    if not posts:\n        return \"\"\n    best = \"\"; bl = 0; seen = False\n    for p in posts:\n        if not seen or p[\"likes\"] > bl or (p[\"likes\"] == bl and p[\"author\"] < best):\n            best = p[\"author\"]; bl = p[\"likes\"]; seen = True\n    return best",
+   "jac": "node Feed {}\nnode User { has name: str; }\nnode Post { has author: str; has likes: int; }\n\nwalker TopScan {\n    has best: str = \"\";\n    has bl: int = 0;\n    has seen: bool = False;\n    can start with Feed entry { visit [-->][?:User]; }\n    can seek with User entry { visit [-->][?:Post]; }\n    can judge with Post entry {\n        if not self.seen or here.likes > self.bl or (here.likes == self.bl and here.author < self.best) {\n            self.best = here.author; self.bl = here.likes; self.seen = True;\n        }\n    }\n}\n\ndef author_of_top_post(spec: dict) -> str {\n    posts: list = list(spec[\"posts\"]);\n    if len(posts) == 0 { return \"\"; }\n    feed = Feed();\n    unodes: dict = {};\n    for p in posts {\n        a: str = str(p[\"author\"]);\n        if a not in unodes { u = User(name=a); unodes[a] = u; feed ++> u; }\n        unodes[a] ++> Post(author=a, likes=int(p[\"likes\"]));\n    }\n    return (feed spawn TopScan()).best;\n}\n\nwith entry { print(author_of_top_post({'posts': [{'author': 'bob', 'likes': 7}, {'author': 'ana', 'likes': 9}, {'author': 'bob', 'likes': 4}]})); }",
+   "expected_output": "ana",
+   "cases": [
+    {
+     "input": {
+      "posts": [
+       {
+        "author": "bob",
+        "likes": 7
+       },
+       {
+        "author": "ana",
+        "likes": 9
+       },
+       {
+        "author": "bob",
+        "likes": 4
+       }
+      ]
+     },
+     "output": "ana"
+    },
+    {
+     "input": {
+      "posts": [
+       {
+        "author": "zoe",
+        "likes": 6
+       },
+       {
+        "author": "amy",
+        "likes": 6
+       }
+      ]
+     },
+     "output": "amy"
+    },
+    {
+     "input": {
+      "posts": [
+       {
+        "author": "raj",
+        "likes": 1
+       }
+      ]
+     },
+     "output": "raj"
+    }
+   ]
+  },
+  {
+   "name": "fan_post_count",
+   "category": "graph_osp",
+   "subcategory": "mixed_edge_types",
+   "difficulty": "composed",
+   "py": "def fan_post_count(spec: dict) -> int:\n    \"\"\"Count posts written by the users that the given user follows.\"\"\"\n    fol = set(spec[\"follows\"].get(spec[\"who\"], []))\n    return sum(1 for p in spec[\"posts\"] if p[\"author\"] in fol)",
+   "jac": "node User { has name: str; }\nnode Post {}\nedge Follows {}\n\nwalker FanCount {\n    has moved: bool = False;\n    has count: int = 0;\n    can seek with User entry {\n        if not self.moved {\n            self.moved = True;\n            visit [->:Follows:->][?:User];\n        } else {\n            visit [-->][?:Post];\n        }\n    }\n    can tally with Post entry { self.count += 1; }\n}\n\ndef fan_post_count(spec: dict) -> int {\n    who: str = str(spec[\"who\"]);\n    unodes: dict = {};\n    for nm in list(spec[\"users\"]) { unodes[nm] = User(name=str(nm)); }\n    for (src, tgts) in dict(spec[\"follows\"]).items() {\n        for t in list(tgts) {\n            if src in unodes and t in unodes { unodes[src] +>:Follows:+> unodes[t]; }\n        }\n    }\n    for p in list(spec[\"posts\"]) {\n        if p[\"author\"] in unodes { unodes[p[\"author\"]] ++> Post(); }\n    }\n    if who not in unodes { return 0; }\n    return (unodes[who] spawn FanCount()).count;\n}\n\nwith entry { print(fan_post_count({'users': ['a', 'b', 'c'], 'follows': {'a': ['b', 'c']}, 'posts': [{'author': 'a'}, {'author': 'b'}, {'author': 'b'}, {'author': 'c'}], 'who': 'a'})); }",
+   "expected_output": "3",
+   "cases": [
+    {
+     "input": {
+      "users": [
+       "a",
+       "b",
+       "c"
+      ],
+      "follows": {
+       "a": [
+        "b",
+        "c"
+       ]
+      },
+      "posts": [
+       {
+        "author": "a"
+       },
+       {
+        "author": "b"
+       },
+       {
+        "author": "b"
+       },
+       {
+        "author": "c"
+       }
+      ],
+      "who": "a"
+     },
+     "output": "3"
+    },
+    {
+     "input": {
+      "users": [
+       "a",
+       "b",
+       "c"
+      ],
+      "follows": {
+       "a": [
+        "b",
+        "c"
+       ]
+      },
+      "posts": [
+       {
+        "author": "a"
+       },
+       {
+        "author": "b"
+       },
+       {
+        "author": "b"
+       },
+       {
+        "author": "c"
+       }
+      ],
+      "who": "b"
+     },
+     "output": "0"
+    },
+    {
+     "input": {
+      "users": [
+       "x",
+       "y"
+      ],
+      "follows": {
+       "x": [
+        "y"
+       ]
+      },
+      "posts": [
+       {
+        "author": "y"
+       }
+      ],
+      "who": "x"
+     },
+     "output": "1"
+    }
+   ]
+  },
+  {
+   "name": "richest_department",
+   "category": "graph_osp",
+   "subcategory": "multi_level_rollup",
+   "difficulty": "advanced",
+   "py": "def richest_department(spec: dict) -> str:\n    \"\"\"Department with the highest total salary; ties go to the alphabetically first name.\"\"\"\n    depts = spec[\"depts\"]\n    if not depts:\n        return \"\"\n    totals = {d: sum(sals) for d, sals in depts.items()}\n    best = \"\"; bt = 0; seen = False\n    for d in sorted(totals):\n        if not seen or totals[d] > bt:\n            best = d; bt = totals[d]; seen = True\n    return best",
+   "jac": "node Company {}\nnode Dept { has name: str; }\nnode Employee { has dept: str; has salary: int; }\n\nwalker PayrollScan {\n    has totals: dict = {};\n    can start with Company entry { visit [-->][?:Dept]; }\n    can open with Dept entry {\n        self.totals[here.name] = 0;\n        visit [-->][?:Employee];\n    }\n    can add with Employee entry { self.totals[here.dept] += here.salary; }\n}\n\ndef richest_department(spec: dict) -> str {\n    depts: dict = dict(spec[\"depts\"]);\n    if len(depts) == 0 { return \"\"; }\n    co = Company();\n    for (dn, sals) in depts.items() {\n        d = Dept(name=str(dn));\n        co ++> d;\n        for s in list(sals) { d ++> Employee(dept=str(dn), salary=int(s)); }\n    }\n    w = co spawn PayrollScan();\n    best: str = \"\"; bt: int = 0; seen: bool = False;\n    for dn in sorted(w.totals.keys()) {\n        if not seen or w.totals[dn] > bt { best = dn; bt = w.totals[dn]; seen = True; }\n    }\n    return best;\n}\n\nwith entry { print(richest_department({'depts': {'eng': [120, 90], 'ops': [50]}})); }",
+   "expected_output": "eng",
+   "cases": [
+    {
+     "input": {
+      "depts": {
+       "eng": [
+        120,
+        90
+       ],
+       "ops": [
+        50
+       ]
+      }
+     },
+     "output": "eng"
+    },
+    {
+     "input": {
+      "depts": {
+       "hr": [
+        40
+       ],
+       "ads": [
+        15,
+        25
+       ]
+      }
+     },
+     "output": "ads"
+    },
+    {
+     "input": {
+      "depts": {
+       "lab": []
+      }
+     },
+     "output": "lab"
+    }
+   ]
+  },
+  {
+   "name": "fully_stocked_cities",
+   "category": "graph_osp",
+   "subcategory": "nested_all_quantifier",
+   "difficulty": "advanced",
+   "py": "def fully_stocked_cities(spec: dict) -> int:\n    \"\"\"Count cities that have at least one shop and where every shop's total stock reaches min.\"\"\"\n    low = spec[\"min\"]\n    count = 0\n    for shops in spec[\"cities\"].values():\n        if shops and all(sum(qtys) >= low for qtys in shops.values()):\n            count += 1\n    return count",
+   "jac": "node City { has name: str; }\nnode Shop { has sid: str; }\nnode Item { has sid: str; has qty: int; }\n\nwalker StockAudit {\n    has totals: dict = {};\n    can open with City entry { visit [-->][?:Shop]; }\n    can reg with Shop entry {\n        self.totals[here.sid] = 0;\n        visit [-->][?:Item];\n    }\n    can add with Item entry { self.totals[here.sid] += here.qty; }\n}\n\ndef fully_stocked_cities(spec: dict) -> int {\n    low: int = int(spec[\"min\"]);\n    count: int = 0;\n    for (cn, shops) in dict(spec[\"cities\"]).items() {\n        c = City(name=str(cn));\n        for (sn, qtys) in dict(shops).items() {\n            s = Shop(sid=str(sn));\n            c ++> s;\n            for q in list(qtys) { s ++> Item(sid=str(sn), qty=int(q)); }\n        }\n        w = c spawn StockAudit();\n        good: bool = len(w.totals) > 0;\n        for v in w.totals.values() { if v < low { good = False; } }\n        if good { count += 1; }\n    }\n    return count;\n}\n\nwith entry { print(fully_stocked_cities({'cities': {'rome': {'alpha': [3, 4], 'beta': [9]}, 'oslo': {'solo': [1]}}, 'min': 5})); }",
+   "expected_output": "1",
+   "cases": [
+    {
+     "input": {
+      "cities": {
+       "rome": {
+        "alpha": [
+         3,
+         4
+        ],
+        "beta": [
+         9
+        ]
+       },
+       "oslo": {
+        "solo": [
+         1
+        ]
+       }
+      },
+      "min": 5
+     },
+     "output": "1"
+    },
+    {
+     "input": {
+      "cities": {
+       "kyiv": {
+        "a": [
+         6
+        ]
+       },
+       "lima": {
+        "b": [
+         2,
+         4
+        ]
+       }
+      },
+      "min": 5
+     },
+     "output": "2"
+    },
+    {
+     "input": {
+      "cities": {
+       "perm": {
+        "s": [
+         1
+        ]
+       },
+       "baku": {}
+      },
+      "min": 2
+     },
+     "output": "0"
+    }
+   ]
+  },
+  {
+   "name": "suspended_users",
+   "category": "graph_osp",
+   "subcategory": "node_ability_ratio",
+   "difficulty": "advanced",
+   "py": "def suspended_users(spec: dict) -> list:\n    \"\"\"Sorted names of users with at least one post where flagged posts make up half or more of their posts.\"\"\"\n    out = []\n    for u in sorted(spec[\"users\"]):\n        ps = [p for p in spec[\"posts\"] if p[\"author\"] == u]\n        f = sum(1 for p in ps if p[\"flagged\"])\n        if ps and 2 * f >= len(ps):\n            out.append(u)\n    return out",
+   "jac": "node User { has name: str; }\nnode Post {\n    has flagged: bool;\n    can confess with ModScan entry {\n        visitor.total += 1;\n        if self.flagged { visitor.flagged += 1; }\n    }\n}\n\nwalker ModScan {\n    has total: int = 0;\n    has flagged: int = 0;\n    can seek with User entry { visit [-->][?:Post]; }\n}\n\ndef suspended_users(spec: dict) -> list {\n    unodes: dict = {};\n    for nm in list(spec[\"users\"]) { unodes[nm] = User(name=str(nm)); }\n    for p in list(spec[\"posts\"]) {\n        if p[\"author\"] in unodes { unodes[p[\"author\"]] ++> Post(flagged=bool(p[\"flagged\"])); }\n    }\n    out: list = [];\n    for u in sorted(unodes.keys()) {\n        w = unodes[u] spawn ModScan();\n        if w.total > 0 and 2 * w.flagged >= w.total { out.append(u); }\n    }\n    return out;\n}\n\nwith entry { print(suspended_users({'users': ['ana', 'bob'], 'posts': [{'author': 'ana', 'flagged': True}, {'author': 'ana', 'flagged': False}, {'author': 'bob', 'flagged': False}]})); }",
+   "expected_output": "['ana']",
+   "cases": [
+    {
+     "input": {
+      "users": [
+       "ana",
+       "bob"
+      ],
+      "posts": [
+       {
+        "author": "ana",
+        "flagged": true
+       },
+       {
+        "author": "ana",
+        "flagged": false
+       },
+       {
+        "author": "bob",
+        "flagged": false
+       }
+      ]
+     },
+     "output": "['ana']"
+    },
+    {
+     "input": {
+      "users": [
+       "cid",
+       "dot"
+      ],
+      "posts": [
+       {
+        "author": "cid",
+        "flagged": true
+       },
+       {
+        "author": "dot",
+        "flagged": true
+       },
+       {
+        "author": "dot",
+        "flagged": true
+       },
+       {
+        "author": "dot",
+        "flagged": false
+       }
+      ]
+     },
+     "output": "['cid', 'dot']"
+    },
+    {
+     "input": {
+      "users": [
+       "eve"
+      ],
+      "posts": [
+       {
+        "author": "eve",
+        "flagged": false
+       },
+       {
+        "author": "eve",
+        "flagged": false
+       },
+       {
+        "author": "eve",
+        "flagged": true
+       }
+      ]
+     },
+     "output": "[]"
+    }
+   ]
+  }
+ ]
+}

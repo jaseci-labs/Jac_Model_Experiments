@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "60cb99063d00",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "6caaa809f920",
+    "verdict": "keep",
+    "reason": "Substantive description of jac start flags and behavior."
+  },
+  {
+    "chunk_id": "18f22b144945",
+    "verdict": "keep",
+    "reason": "Canonical usage signature for jac start."
+  },
+  {
+    "chunk_id": "d9a9195236be",
+    "verdict": "keep",
+    "reason": "Full options table for jac start."
+  },
+  {
+    "chunk_id": "e948e2a5cd7e",
+    "verdict": "drop",
+    "reason": "Bare section-label fragment with no content."
+  },
+  {
+    "chunk_id": "38a5081ae7e2",
+    "verdict": "keep",
+    "reason": "Concrete jac start usage examples."
+  },
+  {
+    "chunk_id": "c034690552b3",
+    "verdict": "keep",
+    "reason": "Note on specifying a custom entry file."
+  },
+  {
+    "chunk_id": "94e3e8200881",
+    "verdict": "keep",
+    "reason": "Describes jac dev live-reload loop and distinction from run/start."
+  },
+  {
+    "chunk_id": "db858adf3119",
+    "verdict": "keep",
+    "reason": "Usage signature for jac dev."
+  },
+  {
+    "chunk_id": "052f7e09ca49",
+    "verdict": "keep",
+    "reason": "Options table for jac dev."
+  },
+  {
+    "chunk_id": "15b3ccf658ec",
+    "verdict": "drop",
+    "reason": "Bare Examples label with no content."
+  },
+  {
+    "chunk_id": "6c7145aaa049",
+    "verdict": "keep",
+    "reason": "Concrete jac dev usage examples."
+  },
+  {
+    "chunk_id": "50dd10193e79",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "6804c9208efc",
+    "verdict": "keep",
+    "reason": "Describes jac create project initialization."
+  },
+  {
+    "chunk_id": "975ce2e002cf",
+    "verdict": "keep",
+    "reason": "Explains kind-aware scaffolding and built-in kinds."
+  },
+  {
+    "chunk_id": "4966526e0035",
+    "verdict": "keep",
+    "reason": "Usage signature for jac create."
+  },
+  {
+    "chunk_id": "f900e29ab74a",
+    "verdict": "keep",
+    "reason": "Full options table for jac create."
+  },
+  {
+    "chunk_id": "939efd7d820d",
+    "verdict": "keep",
+    "reason": "States mutual exclusivity of --kind and --use."
+  },
+  {
+    "chunk_id": "77e68679b093",
+    "verdict": "drop",
+    "reason": "Bare Examples label with no content."
+  },
+  {
+    "chunk_id": "844a33588720",
+    "verdict": "keep",
+    "reason": "Extensive jac create usage examples."
+  },
+  {
+    "chunk_id": "6a2826aa3080",
+    "verdict": "keep",
+    "reason": "See Also on .jacpack bundling workflow."
+  },
+  {
+    "chunk_id": "2e053c9ced61",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "66ae9f48fc6b",
+    "verdict": "keep",
+    "reason": "Describes jac check and its linter integration."
+  },
+  {
+    "chunk_id": "1c0a0301c82a",
+    "verdict": "keep",
+    "reason": "Usage signature for jac check."
+  },
+  {
+    "chunk_id": "0ff31e5c92bd",
+    "verdict": "keep",
+    "reason": "Full options table for jac check."
+  },
+  {
+    "chunk_id": "ad8fd83ba324",
+    "verdict": "drop",
+    "reason": "Bare Examples label with no content."
+  },
+  {
+    "chunk_id": "8556e9596f1e",
+    "verdict": "keep",
+    "reason": "Concrete jac check usage examples."
+  },
+  {
+    "chunk_id": "1f0d5350b17c",
+    "verdict": "keep",
+    "reason": "Explains diagnostic codes and inline suppression."
+  },
+  {
+    "chunk_id": "d949cd2698fe",
+    "verdict": "keep",
+    "reason": "Lint rules note with config pointers."
+  },
+  {
+    "chunk_id": "c34c189eb11a",
+    "verdict": "keep",
+    "reason": "Code example of jac:ignore inline suppression."
+  },
+  {
+    "chunk_id": "cd9ac3bc7851",
+    "verdict": "drop",
+    "reason": "Nav-only cross-reference line with no substantive content."
+  },
+  {
+    "chunk_id": "831096907336",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "46fa8e1a2f61",
+    "verdict": "keep",
+    "reason": "Describes jac test command."
+  },
+  {
+    "chunk_id": "715ae4954f95",
+    "verdict": "keep",
+    "reason": "Note that jac test uses bundled pytest."
+  },
+  {
+    "chunk_id": "6fa8a1abe6f6",
+    "verdict": "keep",
+    "reason": "Usage signature for jac test."
+  },
+  {
+    "chunk_id": "9e3126e7142f",
+    "verdict": "keep",
+    "reason": "Full options table for jac test."
+  },
+  {
+    "chunk_id": "6c28aac63bb7",
+    "verdict": "drop",
+    "reason": "Bare Examples label with no content."
+  },
+  {
+    "chunk_id": "cc8a109f0601",
+    "verdict": "keep",
+    "reason": "Concrete jac test usage examples."
+  },
+  {
+    "chunk_id": "dcc767cbcb9b",
+    "verdict": "drop",
+    "reason": "Bare section-label fragment with no content."
+  },
+  {
+    "chunk_id": "9ab88263c63a",
+    "verdict": "keep",
+    "reason": "Error-handling table for jac test mistakes."
+  },
+  {
+    "chunk_id": "79ee1dbdf62b",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "ad92a7644322",
+    "verdict": "keep",
+    "reason": "Describes jac fmt and its relation to lint fixes."
+  },
+  {
+    "chunk_id": "8c91b6451e7e",
+    "verdict": "keep",
+    "reason": "Usage signature for jac fmt."
+  },
+  {
+    "chunk_id": "081adc045735",
+    "verdict": "keep",
+    "reason": "Full options table for jac fmt."
+  },
+  {
+    "chunk_id": "181530c96b32",
+    "verdict": "drop",
+    "reason": "Bare Examples label with no content."
+  },
+  {
+    "chunk_id": "f20b3b171a09",
+    "verdict": "keep",
+    "reason": "Concrete jac fmt usage examples."
+  },
+  {
+    "chunk_id": "f87ee15e2452",
+    "verdict": "keep",
+    "reason": "Detailed notes on format cache and safety behavior."
+  },
+  {
+    "chunk_id": "a9564f2cdc57",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "f1cd55229736",
+    "verdict": "keep",
+    "reason": "Documents that jac lint folded into jac check."
+  },
+  {
+    "chunk_id": "2babcf849289",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  }
+]

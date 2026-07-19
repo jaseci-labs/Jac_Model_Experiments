@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "b4d155a27211",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "890cd7b05b97",
+    "verdict": "keep",
+    "reason": "Complete 404 catch-all routing example with real Jac client code."
+  },
+  {
+    "chunk_id": "50c6497907e0",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "9fbd7795af26",
+    "verdict": "keep",
+    "reason": "Section intro explaining useLocation-based active link styling."
+  },
+  {
+    "chunk_id": "a2d42b49806a",
+    "verdict": "keep",
+    "reason": "Genuine Jac example of useLocation with conditional className styling."
+  },
+  {
+    "chunk_id": "24993f490f57",
+    "verdict": "keep",
+    "reason": "CSS companion to the active-link example, needed for the pattern to make sense."
+  },
+  {
+    "chunk_id": "dddd7ee54667",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "ef424a08c86f",
+    "verdict": "keep",
+    "reason": "Rich complete routing example covering layouts, params, navigation, and nested routes."
+  },
+  {
+    "chunk_id": "16384105d5c3",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "0b5c23d808af",
+    "verdict": "keep",
+    "reason": "Short but meaningful lead-in identifying @jac/runtime as the routing hooks import source."
+  },
+  {
+    "chunk_id": "e8dd2b7d0ba4",
+    "verdict": "keep",
+    "reason": "Annotated import reference listing all routing primitives from @jac/runtime."
+  },
+  {
+    "chunk_id": "7be1a3810818",
+    "verdict": "keep",
+    "reason": "Concise hooks reference table with return types and usage."
+  },
+  {
+    "chunk_id": "9e02cf5abe81",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "d494718debf2",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose."
+  },
+  {
+    "chunk_id": "bb923195fdd6",
+    "verdict": "keep",
+    "reason": "Useful file-based routing pattern table mapping filenames to routes."
+  },
+  {
+    "chunk_id": "d6e4922be924",
+    "verdict": "keep",
+    "reason": "Dense quick-reference table summarizing routing concepts and usage."
+  },
+  {
+    "chunk_id": "fc94e2f84cc3",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "7bc7a5182d46",
+    "verdict": "drop",
+    "reason": "Nav-only next-steps link list with no documentation content."
+  },
+  {
+    "chunk_id": "d14aaa7b110c",
+    "verdict": "keep",
+    "reason": "Core prose explaining Jac's unified client/server compilation model (cl blocks, .cl.jac)."
+  },
+  {
+    "chunk_id": "c97b3746cb6a",
+    "verdict": "keep",
+    "reason": "Substantive prose on auto-generated HTTP layer and built-in HMR."
+  },
+  {
+    "chunk_id": "c5c5690b9681",
+    "verdict": "keep",
+    "reason": "Brief tutorial framing sentence that ties the setup content together."
+  },
+  {
+    "chunk_id": "26a00872bdfc",
+    "verdict": "keep",
+    "reason": "Prerequisites block containing the real install command for the jac binary."
+  },
+  {
+    "chunk_id": "73233a817f1e",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "24084b6f886c",
+    "verdict": "keep",
+    "reason": "Documents the jac create --use web-static scaffolding command."
+  },
+  {
+    "chunk_id": "92da0ae0bba0",
+    "verdict": "drop",
+    "reason": "Two-word lead-in fragment with no content of its own."
+  },
+  {
+    "chunk_id": "073033e7f4e4",
+    "verdict": "keep",
+    "reason": "Annotated project layout tree showing what the scaffold generates."
+  },
+  {
+    "chunk_id": "93a1ac4888a0",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "c08576ec8912",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose."
+  },
+  {
+    "chunk_id": "f2708e811471",
+    "verdict": "keep",
+    "reason": "Canonical main.jac example combining node/walker backend with a cl frontend block."
+  },
+  {
+    "chunk_id": "0d1fd4573bd4",
+    "verdict": "keep",
+    "reason": "Real jac.toml reference showing project, npm dependency, and serve configuration."
+  },
+  {
+    "chunk_id": "e5fdb8f9ae0c",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "d2db0daa12ad",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose."
+  },
+  {
+    "chunk_id": "9bc24fbac7f3",
+    "verdict": "keep",
+    "reason": "Documents the jac start --dev command for hot-reload development."
+  },
+  {
+    "chunk_id": "ada55d84bb1c",
+    "verdict": "drop",
+    "reason": "Two-word lead-in fragment with no content of its own."
+  },
+  {
+    "chunk_id": "2ec74b14d6fd",
+    "verdict": "keep",
+    "reason": "Concrete detail on dev-server ports (Vite 8000, API 8001) and file watching."
+  },
+  {
+    "chunk_id": "88445b4adfaa",
+    "verdict": "keep",
+    "reason": "Documents the /cl/app URL where the app is served."
+  },
+  {
+    "chunk_id": "476bd017b360",
+    "verdict": "keep",
+    "reason": "Documents plain jac start for production mode."
+  },
+  {
+    "chunk_id": "9a603c5a2a1a",
+    "verdict": "drop",
+    "reason": "Exact one-line duplicate of chunk 88445b4adfaa (the kept copy)."
+  },
+  {
+    "chunk_id": "f8d3f86f13ab",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "8d97f46114da",
+    "verdict": "keep",
+    "reason": "Explains the cl block client/server split, a central fullstack Jac concept."
+  },
+  {
+    "chunk_id": "27d8c175a2ed",
+    "verdict": "keep",
+    "reason": "Minimal contrasting example of server walker vs browser cl component."
+  },
+  {
+    "chunk_id": "d7b0070b04a0",
+    "verdict": "drop",
+    "reason": "Two-word lead-in fragment with no content of its own."
+  },
+  {
+    "chunk_id": "72f58314ce89",
+    "verdict": "keep",
+    "reason": "Key rules bullets: cl compilation target, def:pub exports, required app() entry point."
+  },
+  {
+    "chunk_id": "653c67a4a9f1",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "27cf03affe5a",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose."
+  },
+  {
+    "chunk_id": "b7ca5821c551",
+    "verdict": "keep",
+    "reason": "Single-file organization example mixing backend and frontend code."
+  },
+  {
+    "chunk_id": "0badc0337a38",
+    "verdict": "keep",
+    "reason": "Multi-file layout convention for larger apps with .cl.jac components."
+  },
+  {
+    "chunk_id": "c2aeb263b2ef",
+    "verdict": "keep",
+    "reason": "Important note that .cl.jac files are implicitly client-side."
+  },
+  {
+    "chunk_id": "d7021f55eddb",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "939addefc70e",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose."
+  }
+]

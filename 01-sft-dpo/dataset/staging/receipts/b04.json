@@ -1,0 +1,21 @@
+{
+  "batch_id": "b04",
+  "accepted": [
+    "any_over_limit",
+    "all_flags_set",
+    "count_label_matches",
+    "min_over_positive",
+    "sign_bucket_counts",
+    "label_histogram",
+    "avg_over_threshold",
+    "names_passing",
+    "count_even_leaves",
+    "max_under_cap",
+    "gated_count",
+    "sum_unblocked",
+    "strong_edge_max",
+    "deepest_hit"
+  ],
+  "rejected": [],
+  "accept_rate": 1.0
+}

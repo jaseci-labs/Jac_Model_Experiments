@@ -1,0 +1,249 @@
+[
+  {
+    "chunk_id": "b2c047c4b3f6",
+    "verdict": "upweight",
+    "reason": "Core OSP graph connect operators and edge-reference syntax reference.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "6fc7acff5ea1",
+    "verdict": "keep",
+    "reason": "Pipe operator reference table, genuine language content."
+  },
+  {
+    "chunk_id": "479bdfb1dd5a",
+    "verdict": "keep",
+    "reason": "Type cast operator reference, genuine content."
+  },
+  {
+    "chunk_id": "f22134d4ebd1",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "a8257e7ec89d",
+    "verdict": "keep",
+    "reason": "Full grammar summary, substantive reference material."
+  },
+  {
+    "chunk_id": "f5324135fd6a",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "5dfaf5924110",
+    "verdict": "drop",
+    "reason": "Section header only, no prose."
+  },
+  {
+    "chunk_id": "3f3d39ddea6f",
+    "verdict": "keep",
+    "reason": "Semicolons-required gotcha with example."
+  },
+  {
+    "chunk_id": "c1782598b4cf",
+    "verdict": "keep",
+    "reason": "Braces-required gotcha with example."
+  },
+  {
+    "chunk_id": "af52f3ce7093",
+    "verdict": "keep",
+    "reason": "Type-annotation gotcha; not redundant with migration add example."
+  },
+  {
+    "chunk_id": "95acfbcb1752",
+    "verdict": "keep",
+    "reason": "has vs local variable distinction with example."
+  },
+  {
+    "chunk_id": "5c2bf13add19",
+    "verdict": "upweight",
+    "reason": "Core walker visit-queuing semantics, key OSP mechanic.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "3efa9340c455",
+    "verdict": "keep",
+    "reason": "Anonymous entry-trigger walker nuance, useful OSP detail."
+  },
+  {
+    "chunk_id": "250e38db74e7",
+    "verdict": "keep",
+    "reason": "report vs return walker behavior with example."
+  },
+  {
+    "chunk_id": "214c1b5d3ff2",
+    "verdict": "keep",
+    "reason": "Explains walker reports list and return semantics."
+  },
+  {
+    "chunk_id": "b36e2bc1c5e3",
+    "verdict": "keep",
+    "reason": "glob rebinding semantics explanation."
+  },
+  {
+    "chunk_id": "2eb739b7929f",
+    "verdict": "keep",
+    "reason": "glob rebind vs local declaration code example."
+  },
+  {
+    "chunk_id": "2a659d91dbdb",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "2ec116a731bb",
+    "verdict": "drop",
+    "reason": "Section header only, no prose."
+  },
+  {
+    "chunk_id": "cf73a052cf57",
+    "verdict": "keep",
+    "reason": "Python-to-Jac quick reference table, substantive migration content."
+  },
+  {
+    "chunk_id": "198c439f99dd",
+    "verdict": "keep",
+    "reason": "Match-case indentation warning, genuine syntax nuance."
+  },
+  {
+    "chunk_id": "1eb79d98e01b",
+    "verdict": "drop",
+    "reason": "Nav-only heading plus label fragment, no content."
+  },
+  {
+    "chunk_id": "2513fb9c61b6",
+    "verdict": "keep",
+    "reason": "Python class example for migration comparison."
+  },
+  {
+    "chunk_id": "bd97a744c3c4",
+    "verdict": "drop",
+    "reason": "Bare label fragment, no content."
+  },
+  {
+    "chunk_id": "c3f902e09b6a",
+    "verdict": "keep",
+    "reason": "Jac obj Person example; partner not in batch, not redundant."
+  },
+  {
+    "chunk_id": "cdd9ce7de239",
+    "verdict": "drop",
+    "reason": "Nav-only heading plus label fragment, no content."
+  },
+  {
+    "chunk_id": "cdbf24d60343",
+    "verdict": "keep",
+    "reason": "Python add function for migration comparison."
+  },
+  {
+    "chunk_id": "a22507d5fdca",
+    "verdict": "drop",
+    "reason": "Bare label fragment, no content."
+  },
+  {
+    "chunk_id": "647ffe065ab6",
+    "verdict": "keep",
+    "reason": "Jac add function; not redundant with gotcha chunk sharing the snippet."
+  },
+  {
+    "chunk_id": "6dae971e534c",
+    "verdict": "drop",
+    "reason": "Nav-only heading plus label fragment, no content."
+  },
+  {
+    "chunk_id": "9e36ecb62f17",
+    "verdict": "keep",
+    "reason": "Python control-flow example for migration comparison."
+  },
+  {
+    "chunk_id": "ed3f945f72c7",
+    "verdict": "drop",
+    "reason": "Bare label fragment, no content."
+  },
+  {
+    "chunk_id": "eae1a6255bfe",
+    "verdict": "keep",
+    "reason": "Jac if/elif/else control flow example."
+  },
+  {
+    "chunk_id": "549b44946c13",
+    "verdict": "drop",
+    "reason": "Nav-only heading plus label fragment, no content."
+  },
+  {
+    "chunk_id": "35d731959aa2",
+    "verdict": "keep",
+    "reason": "Python import example for migration comparison."
+  },
+  {
+    "chunk_id": "9481ae8ca3be",
+    "verdict": "drop",
+    "reason": "Bare label fragment, no content."
+  },
+  {
+    "chunk_id": "8bb6b5b45b33",
+    "verdict": "keep",
+    "reason": "Jac import syntax example."
+  },
+  {
+    "chunk_id": "4ccaef08b64b",
+    "verdict": "drop",
+    "reason": "Nav-only heading plus label fragment, no content."
+  },
+  {
+    "chunk_id": "34a1a9e8a20b",
+    "verdict": "keep",
+    "reason": "Python enum example for migration comparison."
+  },
+  {
+    "chunk_id": "f4681f926ca8",
+    "verdict": "drop",
+    "reason": "Bare label fragment, no content."
+  },
+  {
+    "chunk_id": "1a904c25d934",
+    "verdict": "keep",
+    "reason": "Jac enum syntax example."
+  },
+  {
+    "chunk_id": "7f4b23e60522",
+    "verdict": "keep",
+    "reason": "Typed-base enum shorthand explanation."
+  },
+  {
+    "chunk_id": "0705f7010223",
+    "verdict": "drop",
+    "reason": "Bare label fragment, no content."
+  },
+  {
+    "chunk_id": "68ef94674554",
+    "verdict": "keep",
+    "reason": "Python IntEnum/StrEnum example for migration comparison."
+  },
+  {
+    "chunk_id": "c9404a50a477",
+    "verdict": "keep",
+    "reason": "Jac typed-enum example; partners not in batch, not redundant."
+  },
+  {
+    "chunk_id": "c4bc9de3dafa",
+    "verdict": "keep",
+    "reason": "Enum base desugaring explanation."
+  },
+  {
+    "chunk_id": "012422682c91",
+    "verdict": "drop",
+    "reason": "Nav-only heading plus label fragment, no content."
+  },
+  {
+    "chunk_id": "2456dda8a3a8",
+    "verdict": "keep",
+    "reason": "Python entry-point example for migration comparison."
+  },
+  {
+    "chunk_id": "cd8d99189e53",
+    "verdict": "drop",
+    "reason": "Bare label fragment, no content."
+  }
+]

@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "4292ac7103cf",
+    "verdict": "keep",
+    "reason": "Concrete description of what the mobile target generates (jac.toml section, Capacitor projects)."
+  },
+  {
+    "chunk_id": "0aec5ade33a8",
+    "verdict": "drop",
+    "reason": "Nav-only cross-reference pointer with no documentation content of its own."
+  },
+  {
+    "chunk_id": "10608b4680f4",
+    "verdict": "keep",
+    "reason": "Genuine intro prose explaining npm ecosystem access from .cl.jac files."
+  },
+  {
+    "chunk_id": "b20771be1972",
+    "verdict": "drop",
+    "reason": "Prerequisites/time-estimate boilerplate with no technical content."
+  },
+  {
+    "chunk_id": "be1ecd547cdb",
+    "verdict": "keep",
+    "reason": "Substantive detail on how jac check types npm imports and the W1102/E1120 diagnostics."
+  },
+  {
+    "chunk_id": "a1485e018c3e",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, pure markup boilerplate."
+  },
+  {
+    "chunk_id": "4a51b3bb3aa8",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose."
+  },
+  {
+    "chunk_id": "c416848b9ad1",
+    "verdict": "keep",
+    "reason": "Short but carries the key fact that npm deps go under [dependencies.npm] in jac.toml."
+  },
+  {
+    "chunk_id": "f44b2a5907ec",
+    "verdict": "keep",
+    "reason": "Canonical jac.toml example showing npm dependency and dev-dependency declaration syntax."
+  },
+  {
+    "chunk_id": "6acd85054434",
+    "verdict": "keep",
+    "reason": "States the install commands (jac start / jac install --npm) that act on declared deps."
+  },
+  {
+    "chunk_id": "908fbb925b60",
+    "verdict": "keep",
+    "reason": "CLI reference for adding, dev-adding, and removing npm dependencies."
+  },
+  {
+    "chunk_id": "33946f3bbfd8",
+    "verdict": "keep",
+    "reason": "States the compatibility rule that any React+Vite npm package is supported."
+  },
+  {
+    "chunk_id": "d2fbcd0665b7",
+    "verdict": "keep",
+    "reason": "Useful concrete catalog of supported package categories and examples."
+  },
+  {
+    "chunk_id": "333e11cec36d",
+    "verdict": "keep",
+    "reason": "Single-sentence but a genuine, memorable compatibility guarantee."
+  },
+  {
+    "chunk_id": "56dd8d0ca914",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, pure markup boilerplate."
+  },
+  {
+    "chunk_id": "87d674095e4c",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose."
+  },
+  {
+    "chunk_id": "19ccfc9a335e",
+    "verdict": "keep",
+    "reason": "Core Jac import syntax for npm packages including scoped packages and aliasing."
+  },
+  {
+    "chunk_id": "9d9116e67b01",
+    "verdict": "keep",
+    "reason": "Explains the relationship between Jac sugar (has, can with entry) and direct React hook imports."
+  },
+  {
+    "chunk_id": "2ec677d86d14",
+    "verdict": "keep",
+    "reason": "Canonical import-from-react syntax example for the standard hooks."
+  },
+  {
+    "chunk_id": "9542e6541524",
+    "verdict": "drop",
+    "reason": "Content-free four-word lead-in fragment ('This is useful when:')."
+  },
+  {
+    "chunk_id": "9cbcb549fb47",
+    "verdict": "keep",
+    "reason": "Substantive list of when to prefer direct React hooks over Jac sugar."
+  },
+  {
+    "chunk_id": "9ed5956f323f",
+    "verdict": "keep",
+    "reason": "Accurate one-line explanation of useRef semantics introducing the example."
+  },
+  {
+    "chunk_id": "e78c3894458a",
+    "verdict": "keep",
+    "reason": "Complete working Jac component example using useRef with a DOM ref."
+  },
+  {
+    "chunk_id": "fdec1ac94fe1",
+    "verdict": "keep",
+    "reason": "Valuable idiomatic guidance on the typed Ref[T] has-field form versus manual useRef."
+  },
+  {
+    "chunk_id": "466891c0563a",
+    "verdict": "drop",
+    "reason": "Content-free lead-in fragment ('Common uses for useRef:')."
+  },
+  {
+    "chunk_id": "d2293f014eeb",
+    "verdict": "keep",
+    "reason": "Concrete useRef usage patterns (DOM refs, mutable values, mount tracking) in Jac syntax."
+  },
+  {
+    "chunk_id": "0378ad3bc484",
+    "verdict": "keep",
+    "reason": "Accurate one-line explanation of useCallback introducing the example."
+  },
+  {
+    "chunk_id": "4110865efd90",
+    "verdict": "keep",
+    "reason": "Complete working Jac component example using useCallback with a hidden file input."
+  },
+  {
+    "chunk_id": "072bc233bc89",
+    "verdict": "keep",
+    "reason": "States the important fact that Jac sugar and direct React hooks mix freely in one component."
+  },
+  {
+    "chunk_id": "fa6398c47e0a",
+    "verdict": "keep",
+    "reason": "Rich example combining has-state, can-with-entry effects, and direct useRef/useEffect."
+  },
+  {
+    "chunk_id": "6fde3426f177",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, pure markup boilerplate."
+  },
+  {
+    "chunk_id": "9907e3f2b8cd",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose."
+  },
+  {
+    "chunk_id": "d0c1bb223c50",
+    "verdict": "keep",
+    "reason": "Carries the signal that Tailwind v4 is the recommended setup path."
+  },
+  {
+    "chunk_id": "1208708bde6d",
+    "verdict": "keep",
+    "reason": "The exact jac install command for Tailwind dev dependencies."
+  },
+  {
+    "chunk_id": "d2306104cbf3",
+    "verdict": "drop",
+    "reason": "Content-free numbered-step lead-in ('Configure in jac.toml:')."
+  },
+  {
+    "chunk_id": "6b8c95fbab76",
+    "verdict": "keep",
+    "reason": "Key jac.toml config showing [client.vite] plugins and lib_imports wiring for Tailwind."
+  },
+  {
+    "chunk_id": "00c3a1c34c92",
+    "verdict": "keep",
+    "reason": "Names the CSS entry-point convention (assets/main.css), a small but real setup detail."
+  },
+  {
+    "chunk_id": "42c3146193dd",
+    "verdict": "keep",
+    "reason": "The required @import 'tailwindcss' CSS entry content for v4."
+  },
+  {
+    "chunk_id": "fd633eb0916d",
+    "verdict": "drop",
+    "reason": "Content-free numbered-step lead-in ('Import it in your app:')."
+  },
+  {
+    "chunk_id": "0a040f3e63a6",
+    "verdict": "keep",
+    "reason": "Shows CSS import syntax in Jac plus a working Tailwind-classed component."
+  },
+  {
+    "chunk_id": "53ca667dd704",
+    "verdict": "keep",
+    "reason": "States the ternary-expression idiom for dynamic Tailwind classes."
+  },
+  {
+    "chunk_id": "5287da68444a",
+    "verdict": "keep",
+    "reason": "Working Jac example of conditional class composition via string concat and ternary."
+  },
+  {
+    "chunk_id": "2152daa36cba",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, pure markup boilerplate."
+  },
+  {
+    "chunk_id": "468d3e4e8a83",
+    "verdict": "keep",
+    "reason": "Explains that shadcn support is bundled in jaclang and installs offline, a distinctive fact."
+  },
+  {
+    "chunk_id": "c39aeb8af348",
+    "verdict": "keep",
+    "reason": "Setup lead-in reinforcing that the component set, styles, and themes ship offline with jaclang."
+  },
+  {
+    "chunk_id": "14c1f45c3062",
+    "verdict": "keep",
+    "reason": "The canonical jac create --use jac-shadcn command with theme and font flags."
+  },
+  {
+    "chunk_id": "710dfe8a7da2",
+    "verdict": "keep",
+    "reason": "Describes exactly what the shadcn scaffold generates and the default flag values."
+  },
+  {
+    "chunk_id": "fcaae6395174",
+    "verdict": "keep",
+    "reason": "Reference table of all shadcn theme flags, their values, and defaults."
+  },
+  {
+    "chunk_id": "a471e227afa9",
+    "verdict": "keep",
+    "reason": "Records that chosen theme values persist to the [jac-shadcn] section of jac.toml."
+  },
+  {
+    "chunk_id": "94ba8352a7f4",
+    "verdict": "keep",
+    "reason": "Documents jac retheme for in-place re-theming, a distinct CLI capability."
+  }
+]

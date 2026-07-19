@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "3573f4bf6f5d",
+    "verdict": "keep",
+    "reason": "Genuine prose describing TLS enablement behavior of the deploy command."
+  },
+  {
+    "chunk_id": "eb06e692a23e",
+    "verdict": "drop",
+    "reason": "Single-word connective fragment ('Output:') with no content."
+  },
+  {
+    "chunk_id": "2c6a0f1f2bd9",
+    "verdict": "keep",
+    "reason": "Concrete example of CLI output after enabling TLS; real documentation content."
+  },
+  {
+    "chunk_id": "e02de55572d5",
+    "verdict": "keep",
+    "reason": "Substantive note on the --enable-tls domain requirement and its error behavior."
+  },
+  {
+    "chunk_id": "55203a2029ca",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('Configuration options:') with no standalone content."
+  },
+  {
+    "chunk_id": "216f3bccb807",
+    "verdict": "keep",
+    "reason": "Config table documenting domain and cert_manager_email TOML keys."
+  },
+  {
+    "chunk_id": "8a5e30b72c03",
+    "verdict": "keep",
+    "reason": "Factual statement about automatic cert-manager renewal timing."
+  },
+  {
+    "chunk_id": "9ad8592d51df",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator only, no content."
+  },
+  {
+    "chunk_id": "57e294e8cb19",
+    "verdict": "keep",
+    "reason": "Section prose explaining Kubernetes resource requests vs limits semantics."
+  },
+  {
+    "chunk_id": "b4508882fdb2",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('Defaults:')."
+  },
+  {
+    "chunk_id": "68e8fadbef14",
+    "verdict": "keep",
+    "reason": "Config table for CPU/memory request and limit keys."
+  },
+  {
+    "chunk_id": "3a8104323abf",
+    "verdict": "keep",
+    "reason": "Useful factual detail on accepted memory unit suffixes."
+  },
+  {
+    "chunk_id": "445901195839",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('To change in jac.toml:')."
+  },
+  {
+    "chunk_id": "e68b17097114",
+    "verdict": "keep",
+    "reason": "Concrete TOML example for resource limit configuration."
+  },
+  {
+    "chunk_id": "423fc1a31a5c",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator only."
+  },
+  {
+    "chunk_id": "3752cd891344",
+    "verdict": "keep",
+    "reason": "Section prose explaining readiness/liveness probe semantics."
+  },
+  {
+    "chunk_id": "df619a79369b",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('Defaults:')."
+  },
+  {
+    "chunk_id": "1d6f32abdb87",
+    "verdict": "keep",
+    "reason": "Config table documenting all health probe TOML keys."
+  },
+  {
+    "chunk_id": "2e10215a9468",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('To change in jac.toml:')."
+  },
+  {
+    "chunk_id": "a675cc62a378",
+    "verdict": "keep",
+    "reason": "Concrete TOML example for health probe configuration."
+  },
+  {
+    "chunk_id": "f89d0c3c52eb",
+    "verdict": "keep",
+    "reason": "Actionable tip pointing to built-in health endpoints."
+  },
+  {
+    "chunk_id": "f92c5d34a071",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator only."
+  },
+  {
+    "chunk_id": "7e493e1e26bf",
+    "verdict": "keep",
+    "reason": "Section prose introducing the two autoscaler engines and shared settings."
+  },
+  {
+    "chunk_id": "36b3e53d84b8",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('Defaults:')."
+  },
+  {
+    "chunk_id": "7eee68d394cc",
+    "verdict": "keep",
+    "reason": "Config table for autoscaler engine selection and replica bounds."
+  },
+  {
+    "chunk_id": "a3c82c021943",
+    "verdict": "keep",
+    "reason": "Substantive note on why CPU-based scaling requires cpu_request."
+  },
+  {
+    "chunk_id": "817592d4c2bc",
+    "verdict": "keep",
+    "reason": "Prose describing the default HPA engine behavior."
+  },
+  {
+    "chunk_id": "8c6234fee3e1",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('To configure in jac.toml:')."
+  },
+  {
+    "chunk_id": "448d460c6da1",
+    "verdict": "drop",
+    "reason": "Flagged near-duplicate with containment 1.0 (fully contained in chunk 08ad8f0dbf37), so this is the strictly worse copy."
+  },
+  {
+    "chunk_id": "0dd96d2a3271",
+    "verdict": "keep",
+    "reason": "Prose describing the KEDA engine, ScaledObject, and scale-to-zero capability."
+  },
+  {
+    "chunk_id": "e262e5226529",
+    "verdict": "keep",
+    "reason": "Substantive note on KEDA installation requirement and fallback behavior."
+  },
+  {
+    "chunk_id": "2e45dfc65fd3",
+    "verdict": "keep",
+    "reason": "Explains safe engine switching and mutual resource cleanup."
+  },
+  {
+    "chunk_id": "96565d0c89c7",
+    "verdict": "keep",
+    "reason": "Detailed warning on HPA stabilization window overriding autoscaler_cooldown."
+  },
+  {
+    "chunk_id": "a357c8de93fb",
+    "verdict": "keep",
+    "reason": "Actionable tip with example for startup CPU spike mitigation."
+  },
+  {
+    "chunk_id": "16677b42d993",
+    "verdict": "drop",
+    "reason": "Label-only fragment introducing the following table."
+  },
+  {
+    "chunk_id": "4576691aa459",
+    "verdict": "keep",
+    "reason": "Config table for KEDA-specific keys including idle_replicas and cooldowns."
+  },
+  {
+    "chunk_id": "a9f968d45e4d",
+    "verdict": "drop",
+    "reason": "Label-only fragment introducing the trigger entry key table."
+  },
+  {
+    "chunk_id": "51ac4ea7cb95",
+    "verdict": "keep",
+    "reason": "Detailed table of KEDA trigger entry keys including auth.secret_refs semantics."
+  },
+  {
+    "chunk_id": "bdd1f74fe3e2",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('To configure in jac.toml:')."
+  },
+  {
+    "chunk_id": "016a7ef99e99",
+    "verdict": "keep",
+    "reason": "Rich TOML example covering KEDA config, extra triggers, and secret-based auth."
+  },
+  {
+    "chunk_id": "578570bfe6dc",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator only."
+  },
+  {
+    "chunk_id": "34498415b6dc",
+    "verdict": "keep",
+    "reason": "Section prose on PVC sizing for app code, MongoDB, and Redis."
+  },
+  {
+    "chunk_id": "c9865eabfbb7",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('Defaults:')."
+  },
+  {
+    "chunk_id": "7c4ead5889cd",
+    "verdict": "keep",
+    "reason": "Config table for pvc_size and mongodb_storage_size."
+  },
+  {
+    "chunk_id": "abe1363b6c8f",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('To change in jac.toml:')."
+  },
+  {
+    "chunk_id": "2e7e9f63e2f5",
+    "verdict": "keep",
+    "reason": "Concrete TOML example for storage size configuration."
+  },
+  {
+    "chunk_id": "a3bacddfff7a",
+    "verdict": "drop",
+    "reason": "Label-only fragment introducing the resize behaviour bullets."
+  },
+  {
+    "chunk_id": "6b5bdfa28565",
+    "verdict": "keep",
+    "reason": "Substantive explanation of PVC increase/decrease/no-change behavior."
+  },
+  {
+    "chunk_id": "a044321fe19e",
+    "verdict": "keep",
+    "reason": "Substantive notes on allowVolumeExpansion requirement and pvc_size immutability."
+  },
+  {
+    "chunk_id": "a2837142bf3a",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator only."
+  }
+]

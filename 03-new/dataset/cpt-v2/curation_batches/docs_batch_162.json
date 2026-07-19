@@ -1,0 +1,253 @@
+[
+  {
+    "chunk_id": "9f3cbdf2534a",
+    "verdict": "drop",
+    "reason": "Nav/HTML wrapper fragment (heading plus opening div tag) with no documentation content."
+  },
+  {
+    "chunk_id": "5f62d4cc8dd5",
+    "verdict": "upweight",
+    "reason": "Canonical compact OSP example covering node/edge/walker declarations, typed edge connect, edge-filtered queries, visit, here, and spawn in one block.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "4e46d0600382",
+    "verdict": "drop",
+    "reason": "Bare closing HTML div tag, pure boilerplate."
+  },
+  {
+    "chunk_id": "b10184eb4008",
+    "verdict": "drop",
+    "reason": "Nav/HTML wrapper fragment (heading plus opening div tag) with no content."
+  },
+  {
+    "chunk_id": "d2ef571beaf3",
+    "verdict": "keep",
+    "reason": "Genuine Jac syntax content demonstrating comprehensions, f-strings, ternary, and tuple assignment."
+  },
+  {
+    "chunk_id": "d48bb1b84073",
+    "verdict": "drop",
+    "reason": "Bare closing HTML div tag, pure boilerplate."
+  },
+  {
+    "chunk_id": "ac1d33685141",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "4a821d442593",
+    "verdict": "drop",
+    "reason": "Sign-off pleasantry with no technical content."
+  },
+  {
+    "chunk_id": "643623bad4a2",
+    "verdict": "keep",
+    "reason": "Substantive intro to Jac VS Code debugging and the jacvis live graph visualizer."
+  },
+  {
+    "chunk_id": "cf010c2bb8ae",
+    "verdict": "keep",
+    "reason": "Genuine transition prose describing the tutorial's scope."
+  },
+  {
+    "chunk_id": "8089252fa2d7",
+    "verdict": "keep",
+    "reason": "Prerequisites block conveying real environment requirements for Jac debugging."
+  },
+  {
+    "chunk_id": "0c397ad62ef0",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "688e23dbb8ce",
+    "verdict": "keep",
+    "reason": "Section heading with lead-in prose that anchors the quick-start steps."
+  },
+  {
+    "chunk_id": "a4514e02cec0",
+    "verdict": "keep",
+    "reason": "Concrete quick-start workflow for the Jac debugger and jacvis."
+  },
+  {
+    "chunk_id": "62bcec5a7c15",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "8111dc7c8ad1",
+    "verdict": "keep",
+    "reason": "Genuine prose introducing the Jac debugger's capabilities."
+  },
+  {
+    "chunk_id": "ddbbb5c0911b",
+    "verdict": "keep",
+    "reason": "Feature list including the Jac-specific graph visualization capability."
+  },
+  {
+    "chunk_id": "1a9e5b49c170",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "dde5b7f4dcd1",
+    "verdict": "keep",
+    "reason": "Section lead-in for one-time setup instructions."
+  },
+  {
+    "chunk_id": "1bc30511d2b6",
+    "verdict": "keep",
+    "reason": "Requirements table with concrete version checks (jac --version, Python 3.12+)."
+  },
+  {
+    "chunk_id": "f931525af9b1",
+    "verdict": "keep",
+    "reason": "Heading plus lead-in for a real setup step specific to Jac breakpoints."
+  },
+  {
+    "chunk_id": "2c000a3c3ad0",
+    "verdict": "keep",
+    "reason": "Concrete VS Code setting steps required for Jac breakpoints to work."
+  },
+  {
+    "chunk_id": "6ebc9b1a7837",
+    "verdict": "keep",
+    "reason": "Concrete Jac extension installation steps."
+  },
+  {
+    "chunk_id": "a1fc022f689c",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "632e387058ba",
+    "verdict": "keep",
+    "reason": "Section lead-in for per-project debugger setup."
+  },
+  {
+    "chunk_id": "5dfea5aae9b2",
+    "verdict": "keep",
+    "reason": "Explains the role of launch.json in Jac debugging."
+  },
+  {
+    "chunk_id": "a5d057b4157e",
+    "verdict": "keep",
+    "reason": "Concrete steps for generating a Jac Debug launch configuration."
+  },
+  {
+    "chunk_id": "cfc02c95836f",
+    "verdict": "keep",
+    "reason": "Lead-in sentence anchoring the launch.json example that follows."
+  },
+  {
+    "chunk_id": "afe801a6df6a",
+    "verdict": "keep",
+    "reason": "Canonical Jac Debug launch.json example in its tutorial context; its duplicate (a44bb379c0ef) is not in this batch so this copy is retained."
+  },
+  {
+    "chunk_id": "5c52d8e0a4d5",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "ad43e38bb98a",
+    "verdict": "keep",
+    "reason": "Section lead-in explaining what breakpoints do."
+  },
+  {
+    "chunk_id": "cc900aad7ea8",
+    "verdict": "keep",
+    "reason": "Concrete instruction for setting a breakpoint in a Jac file."
+  },
+  {
+    "chunk_id": "96f661c844d1",
+    "verdict": "keep",
+    "reason": "Valid Jac code example (def, with entry) used for breakpoint practice."
+  },
+  {
+    "chunk_id": "82f3c1eb9796",
+    "verdict": "keep",
+    "reason": "Concrete steps for launching the debugger."
+  },
+  {
+    "chunk_id": "d526bed1518a",
+    "verdict": "keep",
+    "reason": "Debugger controls reference table with real shortcut/behavior content."
+  },
+  {
+    "chunk_id": "fa91f9560e26",
+    "verdict": "keep",
+    "reason": "Lead-in for the variable inspection feature description."
+  },
+  {
+    "chunk_id": "50efc97b1719",
+    "verdict": "keep",
+    "reason": "Describes local vs global variable scoping in the Variables panel."
+  },
+  {
+    "chunk_id": "463d52ad5d32",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "a50715f4f4ef",
+    "verdict": "keep",
+    "reason": "Introduces the Jac-unique live graph visualization feature."
+  },
+  {
+    "chunk_id": "d936d375afd3",
+    "verdict": "keep",
+    "reason": "Valid Jac example showing node declaration and ++> graph construction from root."
+  },
+  {
+    "chunk_id": "7ad04fbffc81",
+    "verdict": "keep",
+    "reason": "Concrete steps for opening the jacvis graph visualizer."
+  },
+  {
+    "chunk_id": "ba59947ca069",
+    "verdict": "keep",
+    "reason": "Short but genuine continuation prose describing jacvis behavior."
+  },
+  {
+    "chunk_id": "e8afd941e529",
+    "verdict": "keep",
+    "reason": "Concrete workflow for watching the graph build during step-through debugging."
+  },
+  {
+    "chunk_id": "2f40a6b96167",
+    "verdict": "keep",
+    "reason": "Genuine usage tip about the graph visualizer's drag interaction."
+  },
+  {
+    "chunk_id": "1cb9f5b352e3",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "9d70c915627b",
+    "verdict": "keep",
+    "reason": "Troubleshooting table with real, Jac-specific problem/solution pairs."
+  },
+  {
+    "chunk_id": "ad6f8c1544c2",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "3416b4baed7f",
+    "verdict": "drop",
+    "reason": "Nav-only next-steps link list with no documentation prose."
+  },
+  {
+    "chunk_id": "1e56f78fe0ea",
+    "verdict": "keep",
+    "reason": "OSP page title and framing sentence introducing nodes, edges, and walkers; too thin on its own to upweight."
+  },
+  {
+    "chunk_id": "bfda0cbb8cc5",
+    "verdict": "keep",
+    "reason": "Prerequisites block giving real learning-path context for the OSP tutorial."
+  }
+]

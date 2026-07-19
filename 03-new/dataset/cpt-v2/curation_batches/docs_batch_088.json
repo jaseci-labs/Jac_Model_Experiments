@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "68a0b90f849b",
+    "verdict": "keep",
+    "reason": "Documents the per-file glob llm override, a real byLLM configuration fact."
+  },
+  {
+    "chunk_id": "b00e6ef8ce1e",
+    "verdict": "drop",
+    "reason": "Bare bold section label with no content; the following table chunk carries the actual information."
+  },
+  {
+    "chunk_id": "18d791ae0077",
+    "verdict": "keep",
+    "reason": "Provider/model-name-format table is genuine reference content used when writing Model(...) calls."
+  },
+  {
+    "chunk_id": "acaf158be120",
+    "verdict": "keep",
+    "reason": "Short but conveys that byLLM inherits LiteLLM's full provider list, a useful fact."
+  },
+  {
+    "chunk_id": "bb66057153d7",
+    "verdict": "drop",
+    "reason": "Pure horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "ca310f99ef95",
+    "verdict": "keep",
+    "reason": "Substantive guidance distinguishing Ollama vs in-process local: route."
+  },
+  {
+    "chunk_id": "ee151d742947",
+    "verdict": "keep",
+    "reason": "Explains local: prefix semantics, caching path, and install extra; core plugin behavior."
+  },
+  {
+    "chunk_id": "1cc53dd0d0ac",
+    "verdict": "keep",
+    "reason": "Canonical install command for the [local] extra."
+  },
+  {
+    "chunk_id": "80d3dc4d5610",
+    "verdict": "keep",
+    "reason": "Explains why --extra-index-url matters and the GPU wheel variants."
+  },
+  {
+    "chunk_id": "3d837e62e13b",
+    "verdict": "keep",
+    "reason": "Substantive internals of the local: route (GBNF rewriting, schema injection)."
+  },
+  {
+    "chunk_id": "5af21b8a3887",
+    "verdict": "keep",
+    "reason": "Minimal but shows the core 'by llm()' function-delegation syntax in Jac."
+  },
+  {
+    "chunk_id": "d4fc393dafdd",
+    "verdict": "keep",
+    "reason": "Canonical jac.toml default_model configuration example."
+  },
+  {
+    "chunk_id": "585c937cd7b7",
+    "verdict": "keep",
+    "reason": "Documents first-call download behavior and the non-TTY escape hatches."
+  },
+  {
+    "chunk_id": "d52c318846a6",
+    "verdict": "keep",
+    "reason": "Bundled alias table is genuine reference data for local models."
+  },
+  {
+    "chunk_id": "e6ad76986c70",
+    "verdict": "keep",
+    "reason": "Documents jac model list/pull/rm workflow."
+  },
+  {
+    "chunk_id": "105799d2cec3",
+    "verdict": "keep",
+    "reason": "Detailed first-run download behavior matrix across contexts."
+  },
+  {
+    "chunk_id": "007635d3aadd",
+    "verdict": "keep",
+    "reason": "Introduces GPU acceleration reinstall path with real content."
+  },
+  {
+    "chunk_id": "c09a3bcbb7f5",
+    "verdict": "keep",
+    "reason": "Concrete CUDA wheel-index install command."
+  },
+  {
+    "chunk_id": "63dc5b73c9e2",
+    "verdict": "keep",
+    "reason": "Concrete Metal wheel-index install command, distinct from CUDA variant."
+  },
+  {
+    "chunk_id": "a13126f8ff02",
+    "verdict": "keep",
+    "reason": "Concrete Vulkan wheel-index install command, distinct from other variants."
+  },
+  {
+    "chunk_id": "2c81814f4d2f",
+    "verdict": "keep",
+    "reason": "Brief but conveys the source-compile fallback exists for uncovered platforms."
+  },
+  {
+    "chunk_id": "6948f4d9a2d5",
+    "verdict": "keep",
+    "reason": "The CMAKE_ARGS source-build command referenced by the preceding sentence."
+  },
+  {
+    "chunk_id": "c45f2545cc78",
+    "verdict": "keep",
+    "reason": "Documents the backend flag substitutions (GGML_METAL/VULKAN/HIP)."
+  },
+  {
+    "chunk_id": "5220413156d3",
+    "verdict": "drop",
+    "reason": "Content-free lead-in fragment ('Then offload layers via jac.toml:') whose information lives in the following config chunk."
+  },
+  {
+    "chunk_id": "828377ba2cf4",
+    "verdict": "keep",
+    "reason": "n_gpu_layers config example with the -1/0 semantics inline."
+  },
+  {
+    "chunk_id": "a9d43fa1d91d",
+    "verdict": "keep",
+    "reason": "Useful one-liner for verifying GPU support in the installed wheel."
+  },
+  {
+    "chunk_id": "12968811d04c",
+    "verdict": "keep",
+    "reason": "Complete [byllm.local] configuration key reference table."
+  },
+  {
+    "chunk_id": "794a94680bf2",
+    "verdict": "keep",
+    "reason": "Environment-variable override table with real behavioral detail."
+  },
+  {
+    "chunk_id": "75280142af1b",
+    "verdict": "keep",
+    "reason": "Section lead-in that names the resolution-order concept; pairs with the numbered list."
+  },
+  {
+    "chunk_id": "78184d2f2eda",
+    "verdict": "keep",
+    "reason": "The full default-model resolution order including API-key auto-detect and error behavior."
+  },
+  {
+    "chunk_id": "b1a63fa0323f",
+    "verdict": "keep",
+    "reason": "Short but states the jac model CLI owns cache management and links the canonical reference."
+  },
+  {
+    "chunk_id": "717d64049c55",
+    "verdict": "keep",
+    "reason": "Concrete jac model command examples."
+  },
+  {
+    "chunk_id": "1607a3209eb7",
+    "verdict": "keep",
+    "reason": "Real limitations of local: (streaming, tool-calling, multimodal) that a model should learn."
+  },
+  {
+    "chunk_id": "b0c249300046",
+    "verdict": "drop",
+    "reason": "Pure horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "f9212cb14f43",
+    "verdict": "keep",
+    "reason": "Core ModelPool concept introduction with drop-in-replacement semantics."
+  },
+  {
+    "chunk_id": "cead39da91f0",
+    "verdict": "keep",
+    "reason": "Canonical ModelPool import-and-declare Jac example."
+  },
+  {
+    "chunk_id": "47a2bb9584d8",
+    "verdict": "keep",
+    "reason": "Explains the fallback strategy's ordered-priority semantics."
+  },
+  {
+    "chunk_id": "b4e743fc209e",
+    "verdict": "keep",
+    "reason": "Full fallback-strategy code example with multi-provider ordering."
+  },
+  {
+    "chunk_id": "03f090524dca",
+    "verdict": "keep",
+    "reason": "One sentence but states the key fact that the pool applies to all by llm() calls in the file."
+  },
+  {
+    "chunk_id": "65afe5b8bf8b",
+    "verdict": "keep",
+    "reason": "Explains the simple-shuffle strategy and its key-rotation use case."
+  },
+  {
+    "chunk_id": "da898314b607",
+    "verdict": "keep",
+    "reason": "Concrete multi-key load-balancing example distinct from the fallback example."
+  },
+  {
+    "chunk_id": "5fe2de2cd947",
+    "verdict": "keep",
+    "reason": "Clarifies per-call random routing and the rate-limit motivation."
+  },
+  {
+    "chunk_id": "65fcd5da61d3",
+    "verdict": "keep",
+    "reason": "ModelPool constructor parameter reference table."
+  },
+  {
+    "chunk_id": "c9cc2ec58473",
+    "verdict": "drop",
+    "reason": "Bare bold section label with no content; the strategies table chunk carries the information."
+  },
+  {
+    "chunk_id": "eb474982d46e",
+    "verdict": "keep",
+    "reason": "Complete routing-strategy behavior table, genuine reference content."
+  },
+  {
+    "chunk_id": "fd48ab534117",
+    "verdict": "keep",
+    "reason": "Introduces the [byllm.fallback] jac.toml section by name; pairs with the config example."
+  },
+  {
+    "chunk_id": "c3c76bd8e15d",
+    "verdict": "keep",
+    "reason": "Concrete [byllm.fallback] configuration example."
+  },
+  {
+    "chunk_id": "bf115ecf9f27",
+    "verdict": "keep",
+    "reason": "States the constructor-over-toml precedence rule, a real behavioral fact."
+  },
+  {
+    "chunk_id": "fca3872cdd93",
+    "verdict": "drop",
+    "reason": "Pure horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "d6a96548d911",
+    "verdict": "drop",
+    "reason": "Bare section heading with no body text; nav-only fragment."
+  }
+]

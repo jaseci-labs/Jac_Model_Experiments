@@ -1,0 +1,1071 @@
+{
+ "batch_id": "b05",
+ "generator": "fable-agent-v1",
+ "examples": [
+  {
+   "name": "count_road_reachable",
+   "category": "graph_osp",
+   "subcategory": "typed_edge_filter_count",
+   "difficulty": "simple",
+   "py": "def count_road_reachable(spec: dict) -> int:\n    \"\"\"Count nodes reachable from start crossing road edges only.\"\"\"\n    adj = {}\n    for pair in spec[\"roads\"]:\n        if pair[0] not in adj:\n            adj[pair[0]] = []\n        adj[pair[0]].append(pair[1])\n    seen = set()\n    stack = [spec[\"start\"]]\n    while stack:\n        n = stack.pop()\n        if n in seen:\n            continue\n        seen.add(n)\n        if n in adj:\n            stack.extend(adj[n])\n    return len(seen)",
+   "jac": "edge Road {}\nedge Rail {}\nnode Town { has name: str; has seen: bool = False; }\n\nwalker RoadScout {\n    has count: int = 0;\n    can step with Town entry {\n        if not here.seen {\n            here.seen = True;\n            self.count += 1;\n            visit [->:Road:->];\n        }\n    }\n}\n\ndef count_road_reachable(spec: dict) -> int {\n    reg: dict = {};\n    reg[spec[\"start\"]] = Town(name=spec[\"start\"]);\n    for pr in spec[\"roads\"] { for nm in pr { if nm not in reg { reg[nm] = Town(name=nm); } } }\n    for pr in spec[\"rails\"] { for nm in pr { if nm not in reg { reg[nm] = Town(name=nm); } } }\n    for pr in spec[\"roads\"] { reg[pr[0]] +>:Road:+> reg[pr[1]]; }\n    for pr in spec[\"rails\"] { reg[pr[0]] +>:Rail:+> reg[pr[1]]; }\n    wk = reg[spec[\"start\"]] spawn RoadScout();\n    return wk.count;\n}\n\nwith entry { print(count_road_reachable({\"roads\": [[\"a\", \"b\"], [\"b\", \"c\"]], \"rails\": [[\"a\", \"x\"], [\"x\", \"y\"]], \"start\": \"a\"})); }",
+   "expected_output": "3",
+   "cases": [
+    {
+     "input": {
+      "roads": [
+       [
+        "a",
+        "b"
+       ],
+       [
+        "b",
+        "c"
+       ]
+      ],
+      "rails": [
+       [
+        "a",
+        "x"
+       ],
+       [
+        "x",
+        "y"
+       ]
+      ],
+      "start": "a"
+     },
+     "output": "3"
+    },
+    {
+     "input": {
+      "roads": [
+       [
+        "a",
+        "b"
+       ]
+      ],
+      "rails": [
+       [
+        "b",
+        "c"
+       ],
+       [
+        "c",
+        "d"
+       ]
+      ],
+      "start": "a"
+     },
+     "output": "2"
+    },
+    {
+     "input": {
+      "roads": [],
+      "rails": [
+       [
+        "a",
+        "b"
+       ]
+      ],
+      "start": "a"
+     },
+     "output": "1"
+    }
+   ]
+  },
+  {
+   "name": "rail_reachable_names",
+   "category": "graph_osp",
+   "subcategory": "typed_edge_collect",
+   "difficulty": "simple",
+   "py": "def rail_reachable_names(spec: dict) -> list:\n    \"\"\"Sorted names of nodes reachable from start via rail edges only.\"\"\"\n    adj = {}\n    for pair in spec[\"rails\"]:\n        if pair[0] not in adj:\n            adj[pair[0]] = []\n        adj[pair[0]].append(pair[1])\n    seen = set()\n    stack = [spec[\"start\"]]\n    while stack:\n        n = stack.pop()\n        if n in seen:\n            continue\n        seen.add(n)\n        if n in adj:\n            stack.extend(adj[n])\n    return sorted(seen)",
+   "jac": "edge Road {}\nedge Rail {}\nnode Stop { has name: str; has seen: bool = False; }\n\nwalker RailRider {\n    has names: list = [];\n    can step with Stop entry {\n        if not here.seen {\n            here.seen = True;\n            self.names.append(here.name);\n            visit [->:Rail:->];\n        }\n    }\n}\n\ndef rail_reachable_names(spec: dict) -> list {\n    reg: dict = {};\n    reg[spec[\"start\"]] = Stop(name=spec[\"start\"]);\n    for pr in spec[\"roads\"] { for nm in pr { if nm not in reg { reg[nm] = Stop(name=nm); } } }\n    for pr in spec[\"rails\"] { for nm in pr { if nm not in reg { reg[nm] = Stop(name=nm); } } }\n    for pr in spec[\"roads\"] { reg[pr[0]] +>:Road:+> reg[pr[1]]; }\n    for pr in spec[\"rails\"] { reg[pr[0]] +>:Rail:+> reg[pr[1]]; }\n    wk = reg[spec[\"start\"]] spawn RailRider();\n    return sorted(wk.names);\n}\n\nwith entry { print(rail_reachable_names({\"roads\": [[\"a\", \"b\"]], \"rails\": [[\"a\", \"c\"], [\"c\", \"d\"]], \"start\": \"a\"})); }",
+   "expected_output": "['a', 'c', 'd']",
+   "cases": [
+    {
+     "input": {
+      "roads": [
+       [
+        "a",
+        "b"
+       ]
+      ],
+      "rails": [
+       [
+        "a",
+        "c"
+       ],
+       [
+        "c",
+        "d"
+       ]
+      ],
+      "start": "a"
+     },
+     "output": "['a', 'c', 'd']"
+    },
+    {
+     "input": {
+      "roads": [
+       [
+        "a",
+        "b"
+       ],
+       [
+        "b",
+        "c"
+       ]
+      ],
+      "rails": [
+       [
+        "a",
+        "b"
+       ]
+      ],
+      "start": "a"
+     },
+     "output": "['a', 'b']"
+    },
+    {
+     "input": {
+      "roads": [
+       [
+        "m",
+        "n"
+       ]
+      ],
+      "rails": [],
+      "start": "m"
+     },
+     "output": "['m']"
+    }
+   ]
+  },
+  {
+   "name": "out_degree_by_mode",
+   "category": "graph_osp",
+   "subcategory": "typed_edge_degree",
+   "difficulty": "simple",
+   "py": "def out_degree_by_mode(spec: dict) -> list:\n    \"\"\"Return [road_out, rail_out] counts for the start node.\"\"\"\n    roads_out = 0\n    for pair in spec[\"roads\"]:\n        if pair[0] == spec[\"start\"]:\n            roads_out += 1\n    rails_out = 0\n    for pair in spec[\"rails\"]:\n        if pair[0] == spec[\"start\"]:\n            rails_out += 1\n    return [roads_out, rails_out]",
+   "jac": "edge Road {}\nedge Rail {}\nnode Hub { has name: str; }\n\ndef out_degree_by_mode(spec: dict) -> list {\n    reg: dict = {};\n    reg[spec[\"start\"]] = Hub(name=spec[\"start\"]);\n    for pr in spec[\"roads\"] { for nm in pr { if nm not in reg { reg[nm] = Hub(name=nm); } } }\n    for pr in spec[\"rails\"] { for nm in pr { if nm not in reg { reg[nm] = Hub(name=nm); } } }\n    for pr in spec[\"roads\"] { reg[pr[0]] +>:Road:+> reg[pr[1]]; }\n    for pr in spec[\"rails\"] { reg[pr[0]] +>:Rail:+> reg[pr[1]]; }\n    base = reg[spec[\"start\"]];\n    return [len([edge base ->:Road:->]), len([edge base ->:Rail:->])];\n}\n\nwith entry { print(out_degree_by_mode({\"roads\": [[\"a\", \"b\"], [\"a\", \"c\"], [\"b\", \"c\"]], \"rails\": [[\"a\", \"x\"]], \"start\": \"a\"})); }",
+   "expected_output": "[2, 1]",
+   "cases": [
+    {
+     "input": {
+      "roads": [
+       [
+        "a",
+        "b"
+       ],
+       [
+        "a",
+        "c"
+       ],
+       [
+        "b",
+        "c"
+       ]
+      ],
+      "rails": [
+       [
+        "a",
+        "x"
+       ]
+      ],
+      "start": "a"
+     },
+     "output": "[2, 1]"
+    },
+    {
+     "input": {
+      "roads": [
+       [
+        "a",
+        "b"
+       ]
+      ],
+      "rails": [
+       [
+        "a",
+        "x"
+       ],
+       [
+        "a",
+        "y"
+       ],
+       [
+        "b",
+        "x"
+       ]
+      ],
+      "start": "a"
+     },
+     "output": "[1, 2]"
+    },
+    {
+     "input": {
+      "roads": [],
+      "rails": [
+       [
+        "p",
+        "q"
+       ]
+      ],
+      "start": "q"
+     },
+     "output": "[0, 0]"
+    }
+   ]
+  },
+  {
+   "name": "sum_follow_values",
+   "category": "graph_osp",
+   "subcategory": "typed_edge_sum",
+   "difficulty": "simple",
+   "py": "def sum_follow_values(spec: dict) -> int:\n    \"\"\"Sum values of users reachable from start via follow edges only.\"\"\"\n    adj = {}\n    for pair in spec[\"follows\"]:\n        if pair[0] not in adj:\n            adj[pair[0]] = []\n        adj[pair[0]].append(pair[1])\n    seen = set()\n    stack = [spec[\"start\"]]\n    total = 0\n    while stack:\n        n = stack.pop()\n        if n in seen:\n            continue\n        seen.add(n)\n        total += spec[\"vals\"][n]\n        if n in adj:\n            stack.extend(adj[n])\n    return total",
+   "jac": "edge Follows {}\nedge Blocks {}\nnode User { has name: str; has val: int; has seen: bool = False; }\n\nwalker FollowSum {\n    has total: int = 0;\n    can step with User entry {\n        if not here.seen {\n            here.seen = True;\n            self.total += here.val;\n            visit [->:Follows:->];\n        }\n    }\n}\n\ndef sum_follow_values(spec: dict) -> int {\n    reg: dict = {};\n    for (nm, v) in spec[\"vals\"].items() { reg[nm] = User(name=nm, val=int(v)); }\n    for pr in spec[\"follows\"] { reg[pr[0]] +>:Follows:+> reg[pr[1]]; }\n    for pr in spec[\"blocks\"] { reg[pr[0]] +>:Blocks:+> reg[pr[1]]; }\n    wk = reg[spec[\"start\"]] spawn FollowSum();\n    return wk.total;\n}\n\nwith entry { print(sum_follow_values({\"follows\": [[\"a\", \"b\"], [\"b\", \"c\"]], \"blocks\": [[\"a\", \"d\"]], \"vals\": {\"a\": 1, \"b\": 2, \"c\": 3, \"d\": 50}, \"start\": \"a\"})); }",
+   "expected_output": "6",
+   "cases": [
+    {
+     "input": {
+      "follows": [
+       [
+        "a",
+        "b"
+       ],
+       [
+        "b",
+        "c"
+       ]
+      ],
+      "blocks": [
+       [
+        "a",
+        "d"
+       ]
+      ],
+      "vals": {
+       "a": 1,
+       "b": 2,
+       "c": 3,
+       "d": 50
+      },
+      "start": "a"
+     },
+     "output": "6"
+    },
+    {
+     "input": {
+      "follows": [
+       [
+        "a",
+        "b"
+       ]
+      ],
+      "blocks": [
+       [
+        "b",
+        "c"
+       ]
+      ],
+      "vals": {
+       "a": 4,
+       "b": 6,
+       "c": 9
+      },
+      "start": "a"
+     },
+     "output": "10"
+    },
+    {
+     "input": {
+      "follows": [],
+      "blocks": [
+       [
+        "a",
+        "b"
+       ]
+      ],
+      "vals": {
+       "a": 7,
+       "b": 1
+      },
+      "start": "a"
+     },
+     "output": "7"
+    }
+   ]
+  },
+  {
+   "name": "wider_network",
+   "category": "graph_osp",
+   "subcategory": "typed_edge_compare",
+   "difficulty": "composed",
+   "py": "def wider_network(spec: dict) -> str:\n    \"\"\"Return which edge type reaches more nodes from start: road, rail, or tie.\"\"\"\n    road_adj = {}\n    for pair in spec[\"roads\"]:\n        if pair[0] not in road_adj:\n            road_adj[pair[0]] = []\n        road_adj[pair[0]].append(pair[1])\n    rail_adj = {}\n    for pair in spec[\"rails\"]:\n        if pair[0] not in rail_adj:\n            rail_adj[pair[0]] = []\n        rail_adj[pair[0]].append(pair[1])\n    road_seen = set()\n    stack = [spec[\"start\"]]\n    while stack:\n        n = stack.pop()\n        if n in road_seen:\n            continue\n        road_seen.add(n)\n        if n in road_adj:\n            stack.extend(road_adj[n])\n    rail_seen = set()\n    stack = [spec[\"start\"]]\n    while stack:\n        n = stack.pop()\n        if n in rail_seen:\n            continue\n        rail_seen.add(n)\n        if n in rail_adj:\n            stack.extend(rail_adj[n])\n    if len(road_seen) > len(rail_seen):\n        return \"road\"\n    if len(rail_seen) > len(road_seen):\n        return \"rail\"\n    return \"tie\"",
+   "jac": "edge Road {}\nedge Rail {}\nnode Depot { has name: str; has seen_road: bool = False; has seen_rail: bool = False; }\n\nwalker RoadReach {\n    has count: int = 0;\n    can step with Depot entry {\n        if not here.seen_road {\n            here.seen_road = True;\n            self.count += 1;\n            visit [->:Road:->];\n        }\n    }\n}\n\nwalker RailReach {\n    has count: int = 0;\n    can step with Depot entry {\n        if not here.seen_rail {\n            here.seen_rail = True;\n            self.count += 1;\n            visit [->:Rail:->];\n        }\n    }\n}\n\ndef wider_network(spec: dict) -> str {\n    reg: dict = {};\n    reg[spec[\"start\"]] = Depot(name=spec[\"start\"]);\n    for pr in spec[\"roads\"] { for nm in pr { if nm not in reg { reg[nm] = Depot(name=nm); } } }\n    for pr in spec[\"rails\"] { for nm in pr { if nm not in reg { reg[nm] = Depot(name=nm); } } }\n    for pr in spec[\"roads\"] { reg[pr[0]] +>:Road:+> reg[pr[1]]; }\n    for pr in spec[\"rails\"] { reg[pr[0]] +>:Rail:+> reg[pr[1]]; }\n    wr = reg[spec[\"start\"]] spawn RoadReach();\n    wl = reg[spec[\"start\"]] spawn RailReach();\n    if wr.count > wl.count { return \"road\"; }\n    if wl.count > wr.count { return \"rail\"; }\n    return \"tie\";\n}\n\nwith entry { print(wider_network({\"roads\": [[\"a\", \"b\"], [\"b\", \"c\"]], \"rails\": [[\"a\", \"x\"]], \"start\": \"a\"})); }",
+   "expected_output": "road",
+   "cases": [
+    {
+     "input": {
+      "roads": [
+       [
+        "a",
+        "b"
+       ],
+       [
+        "b",
+        "c"
+       ]
+      ],
+      "rails": [
+       [
+        "a",
+        "x"
+       ]
+      ],
+      "start": "a"
+     },
+     "output": "road"
+    },
+    {
+     "input": {
+      "roads": [
+       [
+        "a",
+        "b"
+       ]
+      ],
+      "rails": [
+       [
+        "a",
+        "x"
+       ],
+       [
+        "x",
+        "y"
+       ]
+      ],
+      "start": "a"
+     },
+     "output": "rail"
+    },
+    {
+     "input": {
+      "roads": [
+       [
+        "a",
+        "b"
+       ]
+      ],
+      "rails": [
+       [
+        "a",
+        "c"
+       ]
+      ],
+      "start": "a"
+     },
+     "output": "tie"
+    }
+   ]
+  },
+  {
+   "name": "shared_reach_count",
+   "category": "graph_osp",
+   "subcategory": "typed_edge_intersect",
+   "difficulty": "composed",
+   "py": "def shared_reach_count(spec: dict) -> int:\n    \"\"\"Count nodes reachable from start by road-only AND by rail-only traversal.\"\"\"\n    road_adj = {}\n    for pair in spec[\"roads\"]:\n        if pair[0] not in road_adj:\n            road_adj[pair[0]] = []\n        road_adj[pair[0]].append(pair[1])\n    rail_adj = {}\n    for pair in spec[\"rails\"]:\n        if pair[0] not in rail_adj:\n            rail_adj[pair[0]] = []\n        rail_adj[pair[0]].append(pair[1])\n    road_seen = set()\n    stack = [spec[\"start\"]]\n    while stack:\n        n = stack.pop()\n        if n in road_seen:\n            continue\n        road_seen.add(n)\n        if n in road_adj:\n            stack.extend(road_adj[n])\n    rail_seen = set()\n    stack = [spec[\"start\"]]\n    while stack:\n        n = stack.pop()\n        if n in rail_seen:\n            continue\n        rail_seen.add(n)\n        if n in rail_adj:\n            stack.extend(rail_adj[n])\n    both = 0\n    for n in road_seen:\n        if n in rail_seen:\n            both += 1\n    return both",
+   "jac": "edge Road {}\nedge Rail {}\nnode Yard { has name: str; has by_road: bool = False; has by_rail: bool = False; }\n\nwalker RoadMark {\n    can step with Yard entry {\n        if not here.by_road {\n            here.by_road = True;\n            visit [->:Road:->];\n        }\n    }\n}\n\nwalker RailMark {\n    can step with Yard entry {\n        if not here.by_rail {\n            here.by_rail = True;\n            visit [->:Rail:->];\n        }\n    }\n}\n\ndef shared_reach_count(spec: dict) -> int {\n    reg: dict = {};\n    reg[spec[\"start\"]] = Yard(name=spec[\"start\"]);\n    for pr in spec[\"roads\"] { for nm in pr { if nm not in reg { reg[nm] = Yard(name=nm); } } }\n    for pr in spec[\"rails\"] { for nm in pr { if nm not in reg { reg[nm] = Yard(name=nm); } } }\n    for pr in spec[\"roads\"] { reg[pr[0]] +>:Road:+> reg[pr[1]]; }\n    for pr in spec[\"rails\"] { reg[pr[0]] +>:Rail:+> reg[pr[1]]; }\n    wa = reg[spec[\"start\"]] spawn RoadMark();\n    wb = reg[spec[\"start\"]] spawn RailMark();\n    both: int = 0;\n    for nd in reg.values() { if nd.by_road and nd.by_rail { both += 1; } }\n    return both;\n}\n\nwith entry { print(shared_reach_count({\"roads\": [[\"a\", \"b\"], [\"b\", \"c\"]], \"rails\": [[\"a\", \"b\"], [\"a\", \"c\"]], \"start\": \"a\"})); }",
+   "expected_output": "3",
+   "cases": [
+    {
+     "input": {
+      "roads": [
+       [
+        "a",
+        "b"
+       ],
+       [
+        "b",
+        "c"
+       ]
+      ],
+      "rails": [
+       [
+        "a",
+        "b"
+       ],
+       [
+        "a",
+        "c"
+       ]
+      ],
+      "start": "a"
+     },
+     "output": "3"
+    },
+    {
+     "input": {
+      "roads": [
+       [
+        "a",
+        "b"
+       ]
+      ],
+      "rails": [
+       [
+        "a",
+        "c"
+       ]
+      ],
+      "start": "a"
+     },
+     "output": "1"
+    },
+    {
+     "input": {
+      "roads": [
+       [
+        "a",
+        "b"
+       ],
+       [
+        "a",
+        "c"
+       ]
+      ],
+      "rails": [
+       [
+        "a",
+        "c"
+       ],
+       [
+        "c",
+        "d"
+       ]
+      ],
+      "start": "a"
+     },
+     "output": "2"
+    }
+   ]
+  },
+  {
+   "name": "mode_cost_split",
+   "category": "graph_osp",
+   "subcategory": "typed_edge_weight_split",
+   "difficulty": "composed",
+   "py": "def mode_cost_split(spec: dict) -> list:\n    \"\"\"Traverse all edges from start; return [road_toll_sum, ferry_fare_sum] over visited nodes' out-edges.\"\"\"\n    adj = {}\n    for trip in spec[\"roads\"]:\n        if trip[0] not in adj:\n            adj[trip[0]] = []\n        adj[trip[0]].append(trip[1])\n    for trip in spec[\"ferries\"]:\n        if trip[0] not in adj:\n            adj[trip[0]] = []\n        adj[trip[0]].append(trip[1])\n    seen = set()\n    stack = [spec[\"start\"]]\n    while stack:\n        n = stack.pop()\n        if n in seen:\n            continue\n        seen.add(n)\n        if n in adj:\n            stack.extend(adj[n])\n    tolls = 0\n    for trip in spec[\"roads\"]:\n        if trip[0] in seen:\n            tolls += trip[2]\n    fares = 0\n    for trip in spec[\"ferries\"]:\n        if trip[0] in seen:\n            fares += trip[2]\n    return [tolls, fares]",
+   "jac": "edge Road { has toll: int; }\nedge Ferry { has fare: int; }\nnode Port { has name: str; has seen: bool = False; }\n\nwalker CostAudit {\n    has tolls: int = 0;\n    has fares: int = 0;\n    can tally with Port entry {\n        if not here.seen {\n            here.seen = True;\n            for e in [edge here ->:Road:->] { self.tolls += e.toll; }\n            for e in [edge here ->:Ferry:->] { self.fares += e.fare; }\n            visit [-->];\n        }\n    }\n}\n\ndef mode_cost_split(spec: dict) -> list {\n    reg: dict = {};\n    reg[spec[\"start\"]] = Port(name=spec[\"start\"]);\n    for tr in spec[\"roads\"] { for nm in [tr[0], tr[1]] { if nm not in reg { reg[nm] = Port(name=nm); } } }\n    for tr in spec[\"ferries\"] { for nm in [tr[0], tr[1]] { if nm not in reg { reg[nm] = Port(name=nm); } } }\n    for tr in spec[\"roads\"] { reg[tr[0]] +>:Road(toll=int(tr[2])):+> reg[tr[1]]; }\n    for tr in spec[\"ferries\"] { reg[tr[0]] +>:Ferry(fare=int(tr[2])):+> reg[tr[1]]; }\n    wk = reg[spec[\"start\"]] spawn CostAudit();\n    return [wk.tolls, wk.fares];\n}\n\nwith entry { print(mode_cost_split({\"roads\": [[\"a\", \"b\", 3], [\"b\", \"c\", 4]], \"ferries\": [[\"a\", \"d\", 2]], \"start\": \"a\"})); }",
+   "expected_output": "[7, 2]",
+   "cases": [
+    {
+     "input": {
+      "roads": [
+       [
+        "a",
+        "b",
+        3
+       ],
+       [
+        "b",
+        "c",
+        4
+       ]
+      ],
+      "ferries": [
+       [
+        "a",
+        "d",
+        2
+       ]
+      ],
+      "start": "a"
+     },
+     "output": "[7, 2]"
+    },
+    {
+     "input": {
+      "roads": [
+       [
+        "a",
+        "b",
+        1
+       ]
+      ],
+      "ferries": [
+       [
+        "b",
+        "c",
+        5
+       ],
+       [
+        "c",
+        "a",
+        2
+       ]
+      ],
+      "start": "a"
+     },
+     "output": "[1, 7]"
+    },
+    {
+     "input": {
+      "roads": [
+       [
+        "x",
+        "y",
+        9
+       ]
+      ],
+      "ferries": [],
+      "start": "y"
+     },
+     "output": "[0, 0]"
+    }
+   ]
+  },
+  {
+   "name": "mentor_chain_depth",
+   "category": "graph_osp",
+   "subcategory": "typed_edge_depth",
+   "difficulty": "composed",
+   "py": "def mentor_chain_depth(spec: dict) -> int:\n    \"\"\"Deepest mentor-hop distance reachable from start via mentor edges only.\"\"\"\n    adj = {}\n    for pair in spec[\"mentors\"]:\n        if pair[0] not in adj:\n            adj[pair[0]] = []\n        adj[pair[0]].append(pair[1])\n    depth = {spec[\"start\"]: 0}\n    queue = [spec[\"start\"]]\n    best = 0\n    while queue:\n        n = queue.pop(0)\n        if depth[n] > best:\n            best = depth[n]\n        if n in adj:\n            for t in adj[n]:\n                if t not in depth:\n                    depth[t] = depth[n] + 1\n                    queue.append(t)\n    return best",
+   "jac": "edge Parent {}\nedge Mentor {}\nnode Person { has name: str; has d: int = -1; has seen: bool = False; }\n\nwalker MentorDepth {\n    has best: int = 0;\n    can step with Person entry {\n        if not here.seen {\n            here.seen = True;\n            if here.d > self.best { self.best = here.d; }\n            for nxt in [->:Mentor:->] { if nxt.d == -1 { nxt.d = here.d + 1; } }\n            visit [->:Mentor:->];\n        }\n    }\n}\n\ndef mentor_chain_depth(spec: dict) -> int {\n    reg: dict = {};\n    reg[spec[\"start\"]] = Person(name=spec[\"start\"]);\n    for pr in spec[\"parents\"] { for nm in pr { if nm not in reg { reg[nm] = Person(name=nm); } } }\n    for pr in spec[\"mentors\"] { for nm in pr { if nm not in reg { reg[nm] = Person(name=nm); } } }\n    for pr in spec[\"parents\"] { reg[pr[0]] +>:Parent:+> reg[pr[1]]; }\n    for pr in spec[\"mentors\"] { reg[pr[0]] +>:Mentor:+> reg[pr[1]]; }\n    reg[spec[\"start\"]].d = 0;\n    wk = reg[spec[\"start\"]] spawn MentorDepth();\n    return wk.best;\n}\n\nwith entry { print(mentor_chain_depth({\"parents\": [[\"a\", \"b\"]], \"mentors\": [[\"a\", \"c\"], [\"c\", \"d\"]], \"start\": \"a\"})); }",
+   "expected_output": "2",
+   "cases": [
+    {
+     "input": {
+      "parents": [
+       [
+        "a",
+        "b"
+       ]
+      ],
+      "mentors": [
+       [
+        "a",
+        "c"
+       ],
+       [
+        "c",
+        "d"
+       ]
+      ],
+      "start": "a"
+     },
+     "output": "2"
+    },
+    {
+     "input": {
+      "parents": [
+       [
+        "a",
+        "b"
+       ],
+       [
+        "b",
+        "c"
+       ]
+      ],
+      "mentors": [
+       [
+        "a",
+        "b"
+       ]
+      ],
+      "start": "a"
+     },
+     "output": "1"
+    },
+    {
+     "input": {
+      "parents": [
+       [
+        "a",
+        "b"
+       ]
+      ],
+      "mentors": [],
+      "start": "a"
+     },
+     "output": "0"
+    }
+   ]
+  },
+  {
+   "name": "unblocked_follower_count",
+   "category": "graph_osp",
+   "subcategory": "typed_edge_exclude",
+   "difficulty": "composed",
+   "py": "def unblocked_follower_count(spec: dict) -> int:\n    \"\"\"Count users reachable via follow edges (excluding start) not directly blocked by start.\"\"\"\n    adj = {}\n    for pair in spec[\"follows\"]:\n        if pair[0] not in adj:\n            adj[pair[0]] = []\n        adj[pair[0]].append(pair[1])\n    seen = set()\n    stack = [spec[\"start\"]]\n    while stack:\n        n = stack.pop()\n        if n in seen:\n            continue\n        seen.add(n)\n        if n in adj:\n            stack.extend(adj[n])\n    blocked = []\n    for pair in spec[\"blocks\"]:\n        if pair[0] == spec[\"start\"]:\n            blocked.append(pair[1])\n    count = 0\n    for n in seen:\n        if n != spec[\"start\"] and n not in blocked:\n            count += 1\n    return count",
+   "jac": "edge Follows {}\nedge Blocks {}\nnode Member { has name: str; has reached: bool = False; }\n\nwalker FollowSweep {\n    can step with Member entry {\n        if not here.reached {\n            here.reached = True;\n            visit [->:Follows:->];\n        }\n    }\n}\n\ndef unblocked_follower_count(spec: dict) -> int {\n    reg: dict = {};\n    reg[spec[\"start\"]] = Member(name=spec[\"start\"]);\n    for pr in spec[\"follows\"] { for nm in pr { if nm not in reg { reg[nm] = Member(name=nm); } } }\n    for pr in spec[\"blocks\"] { for nm in pr { if nm not in reg { reg[nm] = Member(name=nm); } } }\n    for pr in spec[\"follows\"] { reg[pr[0]] +>:Follows:+> reg[pr[1]]; }\n    for pr in spec[\"blocks\"] { reg[pr[0]] +>:Blocks:+> reg[pr[1]]; }\n    base = reg[spec[\"start\"]];\n    wk = base spawn FollowSweep();\n    blocked: list = [];\n    for nb in [base ->:Blocks:->] { blocked.append(nb.name); }\n    count: int = 0;\n    for nd in reg.values() {\n        if nd.reached and nd.name != spec[\"start\"] and nd.name not in blocked { count += 1; }\n    }\n    return count;\n}\n\nwith entry { print(unblocked_follower_count({\"follows\": [[\"a\", \"b\"], [\"b\", \"c\"], [\"a\", \"d\"]], \"blocks\": [[\"a\", \"c\"]], \"start\": \"a\"})); }",
+   "expected_output": "2",
+   "cases": [
+    {
+     "input": {
+      "follows": [
+       [
+        "a",
+        "b"
+       ],
+       [
+        "b",
+        "c"
+       ],
+       [
+        "a",
+        "d"
+       ]
+      ],
+      "blocks": [
+       [
+        "a",
+        "c"
+       ]
+      ],
+      "start": "a"
+     },
+     "output": "2"
+    },
+    {
+     "input": {
+      "follows": [
+       [
+        "a",
+        "b"
+       ]
+      ],
+      "blocks": [
+       [
+        "b",
+        "a"
+       ]
+      ],
+      "start": "a"
+     },
+     "output": "1"
+    },
+    {
+     "input": {
+      "follows": [
+       [
+        "a",
+        "b"
+       ],
+       [
+        "a",
+        "c"
+       ],
+       [
+        "c",
+        "d"
+       ]
+      ],
+      "blocks": [],
+      "start": "a"
+     },
+     "output": "3"
+    }
+   ]
+  },
+  {
+   "name": "strong_or_rail_reach",
+   "category": "graph_osp",
+   "subcategory": "typed_edge_guard",
+   "difficulty": "composed",
+   "py": "def strong_or_rail_reach(spec: dict) -> int:\n    \"\"\"Count nodes reachable crossing roads of weight >= min_w or any rail edge.\"\"\"\n    adj = {}\n    for trip in spec[\"roads\"]:\n        if trip[2] >= spec[\"min_w\"]:\n            if trip[0] not in adj:\n                adj[trip[0]] = []\n            adj[trip[0]].append(trip[1])\n    for pair in spec[\"rails\"]:\n        if pair[0] not in adj:\n            adj[pair[0]] = []\n        adj[pair[0]].append(pair[1])\n    seen = set()\n    stack = [spec[\"start\"]]\n    while stack:\n        n = stack.pop()\n        if n in seen:\n            continue\n        seen.add(n)\n        if n in adj:\n            stack.extend(adj[n])\n    return len(seen)",
+   "jac": "edge Road { has w: int; }\nedge Rail {}\nnode Camp { has name: str; has seen: bool = False; }\n\nwalker StrongLink {\n    has min_w: int;\n    has count: int = 0;\n    can step with Camp entry {\n        if not here.seen {\n            here.seen = True;\n            self.count += 1;\n            visit [->:Road:w >= self.min_w:->];\n            visit [->:Rail:->];\n        }\n    }\n}\n\ndef strong_or_rail_reach(spec: dict) -> int {\n    reg: dict = {};\n    reg[spec[\"start\"]] = Camp(name=spec[\"start\"]);\n    for tr in spec[\"roads\"] { for nm in [tr[0], tr[1]] { if nm not in reg { reg[nm] = Camp(name=nm); } } }\n    for pr in spec[\"rails\"] { for nm in pr { if nm not in reg { reg[nm] = Camp(name=nm); } } }\n    for tr in spec[\"roads\"] { reg[tr[0]] +>:Road(w=int(tr[2])):+> reg[tr[1]]; }\n    for pr in spec[\"rails\"] { reg[pr[0]] +>:Rail:+> reg[pr[1]]; }\n    wk = reg[spec[\"start\"]] spawn StrongLink(min_w=int(spec[\"min_w\"]));\n    return wk.count;\n}\n\nwith entry { print(strong_or_rail_reach({\"roads\": [[\"a\", \"b\", 5], [\"a\", \"c\", 1], [\"b\", \"d\", 4]], \"rails\": [[\"c\", \"e\"]], \"min_w\": 3, \"start\": \"a\"})); }",
+   "expected_output": "3",
+   "cases": [
+    {
+     "input": {
+      "roads": [
+       [
+        "a",
+        "b",
+        5
+       ],
+       [
+        "a",
+        "c",
+        1
+       ],
+       [
+        "b",
+        "d",
+        4
+       ]
+      ],
+      "rails": [
+       [
+        "c",
+        "e"
+       ]
+      ],
+      "min_w": 3,
+      "start": "a"
+     },
+     "output": "3"
+    },
+    {
+     "input": {
+      "roads": [
+       [
+        "a",
+        "b",
+        5
+       ],
+       [
+        "a",
+        "c",
+        1
+       ],
+       [
+        "b",
+        "d",
+        4
+       ]
+      ],
+      "rails": [
+       [
+        "a",
+        "c"
+       ]
+      ],
+      "min_w": 3,
+      "start": "a"
+     },
+     "output": "4"
+    },
+    {
+     "input": {
+      "roads": [
+       [
+        "a",
+        "b",
+        2
+       ]
+      ],
+      "rails": [],
+      "min_w": 3,
+      "start": "a"
+     },
+     "output": "1"
+    }
+   ]
+  },
+  {
+   "name": "transfer_count",
+   "category": "graph_osp",
+   "subcategory": "typed_edge_chain_switch",
+   "difficulty": "composed",
+   "py": "def transfer_count(spec: dict) -> int:\n    \"\"\"Count mode switches riding the leg chain in order (each leg is [src, dst, mode]).\"\"\"\n    prev = \"\"\n    switches = 0\n    for leg in spec[\"legs\"]:\n        mode = leg[2]\n        if prev != \"\" and mode != prev:\n            switches += 1\n        prev = mode\n    return switches",
+   "jac": "edge RoadLeg {}\nedge RailLeg {}\nnode Stop { has name: str; }\n\nwalker Transfers {\n    has last: str = \"\";\n    has switches: int = 0;\n    can ride with Stop entry {\n        road_next = [->:RoadLeg:->];\n        rail_next = [->:RailLeg:->];\n        if len(road_next) > 0 {\n            if self.last != \"\" and self.last != \"road\" { self.switches += 1; }\n            self.last = \"road\";\n            visit road_next;\n        } elif len(rail_next) > 0 {\n            if self.last != \"\" and self.last != \"rail\" { self.switches += 1; }\n            self.last = \"rail\";\n            visit rail_next;\n        }\n    }\n}\n\ndef transfer_count(spec: dict) -> int {\n    legs: list = spec[\"legs\"];\n    if len(legs) == 0 { return 0; }\n    reg: dict = {};\n    for leg in legs { for nm in [leg[0], leg[1]] { if nm not in reg { reg[nm] = Stop(name=nm); } } }\n    for leg in legs {\n        if leg[2] == \"road\" { reg[leg[0]] +>:RoadLeg:+> reg[leg[1]]; }\n        else { reg[leg[0]] +>:RailLeg:+> reg[leg[1]]; }\n    }\n    wk = reg[legs[0][0]] spawn Transfers();\n    return wk.switches;\n}\n\nwith entry { print(transfer_count({\"legs\": [[\"a\", \"b\", \"road\"], [\"b\", \"c\", \"rail\"], [\"c\", \"d\", \"road\"]]})); }",
+   "expected_output": "2",
+   "cases": [
+    {
+     "input": {
+      "legs": [
+       [
+        "a",
+        "b",
+        "road"
+       ],
+       [
+        "b",
+        "c",
+        "rail"
+       ],
+       [
+        "c",
+        "d",
+        "road"
+       ]
+      ]
+     },
+     "output": "2"
+    },
+    {
+     "input": {
+      "legs": [
+       [
+        "a",
+        "b",
+        "road"
+       ],
+       [
+        "b",
+        "c",
+        "road"
+       ]
+      ]
+     },
+     "output": "0"
+    },
+    {
+     "input": {
+      "legs": [
+       [
+        "a",
+        "b",
+        "rail"
+       ],
+       [
+        "b",
+        "c",
+        "road"
+       ]
+      ]
+     },
+     "output": "1"
+    }
+   ]
+  },
+  {
+   "name": "mixed_only_count",
+   "category": "graph_osp",
+   "subcategory": "typed_edge_mixed_path",
+   "difficulty": "advanced",
+   "py": "def mixed_only_count(spec: dict) -> int:\n    \"\"\"Count nodes reachable from start only by mixing road and rail edges on one path.\"\"\"\n    road_adj = {}\n    for pair in spec[\"roads\"]:\n        if pair[0] not in road_adj:\n            road_adj[pair[0]] = []\n        road_adj[pair[0]].append(pair[1])\n    rail_adj = {}\n    for pair in spec[\"rails\"]:\n        if pair[0] not in rail_adj:\n            rail_adj[pair[0]] = []\n        rail_adj[pair[0]].append(pair[1])\n    any_seen = set()\n    stack = [spec[\"start\"]]\n    while stack:\n        n = stack.pop()\n        if n in any_seen:\n            continue\n        any_seen.add(n)\n        if n in road_adj:\n            stack.extend(road_adj[n])\n        if n in rail_adj:\n            stack.extend(rail_adj[n])\n    road_seen = set()\n    stack = [spec[\"start\"]]\n    while stack:\n        n = stack.pop()\n        if n in road_seen:\n            continue\n        road_seen.add(n)\n        if n in road_adj:\n            stack.extend(road_adj[n])\n    rail_seen = set()\n    stack = [spec[\"start\"]]\n    while stack:\n        n = stack.pop()\n        if n in rail_seen:\n            continue\n        rail_seen.add(n)\n        if n in rail_adj:\n            stack.extend(rail_adj[n])\n    count = 0\n    for n in any_seen:\n        if n not in road_seen and n not in rail_seen:\n            count += 1\n    return count",
+   "jac": "edge Road {}\nedge Rail {}\nnode Site { has name: str; has sa: bool = False; has sr: bool = False; has sl: bool = False; }\n\nwalker AnyReach {\n    can step with Site entry {\n        if not here.sa {\n            here.sa = True;\n            visit [-->];\n        }\n    }\n}\n\nwalker PureRoad {\n    can step with Site entry {\n        if not here.sr {\n            here.sr = True;\n            visit [->:Road:->];\n        }\n    }\n}\n\nwalker PureRail {\n    can step with Site entry {\n        if not here.sl {\n            here.sl = True;\n            visit [->:Rail:->];\n        }\n    }\n}\n\ndef mixed_only_count(spec: dict) -> int {\n    reg: dict = {};\n    reg[spec[\"start\"]] = Site(name=spec[\"start\"]);\n    for pr in spec[\"roads\"] { for nm in pr { if nm not in reg { reg[nm] = Site(name=nm); } } }\n    for pr in spec[\"rails\"] { for nm in pr { if nm not in reg { reg[nm] = Site(name=nm); } } }\n    for pr in spec[\"roads\"] { reg[pr[0]] +>:Road:+> reg[pr[1]]; }\n    for pr in spec[\"rails\"] { reg[pr[0]] +>:Rail:+> reg[pr[1]]; }\n    base = reg[spec[\"start\"]];\n    w1 = base spawn AnyReach();\n    w2 = base spawn PureRoad();\n    w3 = base spawn PureRail();\n    count: int = 0;\n    for nd in reg.values() { if nd.sa and not nd.sr and not nd.sl { count += 1; } }\n    return count;\n}\n\nwith entry { print(mixed_only_count({\"roads\": [[\"a\", \"b\"]], \"rails\": [[\"b\", \"c\"]], \"start\": \"a\"})); }",
+   "expected_output": "1",
+   "cases": [
+    {
+     "input": {
+      "roads": [
+       [
+        "a",
+        "b"
+       ]
+      ],
+      "rails": [
+       [
+        "b",
+        "c"
+       ]
+      ],
+      "start": "a"
+     },
+     "output": "1"
+    },
+    {
+     "input": {
+      "roads": [
+       [
+        "a",
+        "b"
+       ],
+       [
+        "b",
+        "c"
+       ]
+      ],
+      "rails": [
+       [
+        "a",
+        "d"
+       ]
+      ],
+      "start": "a"
+     },
+     "output": "0"
+    },
+    {
+     "input": {
+      "roads": [
+       [
+        "a",
+        "b"
+       ]
+      ],
+      "rails": [
+       [
+        "b",
+        "c"
+       ],
+       [
+        "b",
+        "d"
+       ]
+      ],
+      "start": "a"
+     },
+     "output": "2"
+    }
+   ]
+  },
+  {
+   "name": "interchange_names",
+   "category": "graph_osp",
+   "subcategory": "typed_edge_interchange",
+   "difficulty": "advanced",
+   "py": "def interchange_names(spec: dict) -> list:\n    \"\"\"Sorted names of reachable nodes that have both an outgoing road and an outgoing rail.\"\"\"\n    road_adj = {}\n    for pair in spec[\"roads\"]:\n        if pair[0] not in road_adj:\n            road_adj[pair[0]] = []\n        road_adj[pair[0]].append(pair[1])\n    rail_adj = {}\n    for pair in spec[\"rails\"]:\n        if pair[0] not in rail_adj:\n            rail_adj[pair[0]] = []\n        rail_adj[pair[0]].append(pair[1])\n    seen = set()\n    stack = [spec[\"start\"]]\n    while stack:\n        n = stack.pop()\n        if n in seen:\n            continue\n        seen.add(n)\n        if n in road_adj:\n            stack.extend(road_adj[n])\n        if n in rail_adj:\n            stack.extend(rail_adj[n])\n    hits = []\n    for n in seen:\n        if n in road_adj and n in rail_adj:\n            hits.append(n)\n    return sorted(hits)",
+   "jac": "edge Road {}\nedge Rail {}\nnode Station { has name: str; has seen: bool = False; }\n\nwalker FindInterchanges {\n    has hits: list = [];\n    can scan with Station entry {\n        if not here.seen {\n            here.seen = True;\n            if len([edge here ->:Road:->]) > 0 and len([edge here ->:Rail:->]) > 0 {\n                self.hits.append(here.name);\n            }\n            visit [-->];\n        }\n    }\n}\n\ndef interchange_names(spec: dict) -> list {\n    reg: dict = {};\n    reg[spec[\"start\"]] = Station(name=spec[\"start\"]);\n    for pr in spec[\"roads\"] { for nm in pr { if nm not in reg { reg[nm] = Station(name=nm); } } }\n    for pr in spec[\"rails\"] { for nm in pr { if nm not in reg { reg[nm] = Station(name=nm); } } }\n    for pr in spec[\"roads\"] { reg[pr[0]] +>:Road:+> reg[pr[1]]; }\n    for pr in spec[\"rails\"] { reg[pr[0]] +>:Rail:+> reg[pr[1]]; }\n    wk = reg[spec[\"start\"]] spawn FindInterchanges();\n    return sorted(wk.hits);\n}\n\nwith entry { print(interchange_names({\"roads\": [[\"a\", \"b\"], [\"b\", \"c\"]], \"rails\": [[\"a\", \"d\"], [\"b\", \"d\"]], \"start\": \"a\"})); }",
+   "expected_output": "['a', 'b']",
+   "cases": [
+    {
+     "input": {
+      "roads": [
+       [
+        "a",
+        "b"
+       ],
+       [
+        "b",
+        "c"
+       ]
+      ],
+      "rails": [
+       [
+        "a",
+        "d"
+       ],
+       [
+        "b",
+        "d"
+       ]
+      ],
+      "start": "a"
+     },
+     "output": "['a', 'b']"
+    },
+    {
+     "input": {
+      "roads": [
+       [
+        "a",
+        "b"
+       ]
+      ],
+      "rails": [
+       [
+        "b",
+        "c"
+       ]
+      ],
+      "start": "a"
+     },
+     "output": "[]"
+    },
+    {
+     "input": {
+      "roads": [
+       [
+        "a",
+        "b"
+       ],
+       [
+        "c",
+        "d"
+       ]
+      ],
+      "rails": [
+       [
+        "a",
+        "c"
+       ],
+       [
+        "c",
+        "a"
+       ]
+      ],
+      "start": "a"
+     },
+     "output": "['a', 'c']"
+    }
+   ]
+  },
+  {
+   "name": "faster_mode_hops",
+   "category": "graph_osp",
+   "subcategory": "typed_edge_shortest_compare",
+   "difficulty": "advanced",
+   "py": "def faster_mode_hops(spec: dict) -> int:\n    \"\"\"Fewest hops from start to target via road-only or rail-only travel; -1 if neither reaches.\"\"\"\n    road_adj = {}\n    for pair in spec[\"roads\"]:\n        if pair[0] not in road_adj:\n            road_adj[pair[0]] = []\n        road_adj[pair[0]].append(pair[1])\n    rail_adj = {}\n    for pair in spec[\"rails\"]:\n        if pair[0] not in rail_adj:\n            rail_adj[pair[0]] = []\n        rail_adj[pair[0]].append(pair[1])\n    road_d = {spec[\"start\"]: 0}\n    queue = [spec[\"start\"]]\n    while queue:\n        n = queue.pop(0)\n        if n in road_adj:\n            for t in road_adj[n]:\n                if t not in road_d:\n                    road_d[t] = road_d[n] + 1\n                    queue.append(t)\n    rail_d = {spec[\"start\"]: 0}\n    queue = [spec[\"start\"]]\n    while queue:\n        n = queue.pop(0)\n        if n in rail_adj:\n            for t in rail_adj[n]:\n                if t not in rail_d:\n                    rail_d[t] = rail_d[n] + 1\n                    queue.append(t)\n    dr = road_d.get(spec[\"target\"], -1)\n    dl = rail_d.get(spec[\"target\"], -1)\n    if dr == -1:\n        return dl\n    if dl == -1:\n        return dr\n    if dr < dl:\n        return dr\n    return dl",
+   "jac": "edge Road {}\nedge Rail {}\nnode Junction { has name: str; has dr: int = -1; has dl: int = -1; has sr: bool = False; has sl: bool = False; }\n\nwalker RoadHops {\n    can step with Junction entry {\n        if not here.sr {\n            here.sr = True;\n            for nxt in [->:Road:->] { if nxt.dr == -1 { nxt.dr = here.dr + 1; } }\n            visit [->:Road:->];\n        }\n    }\n}\n\nwalker RailHops {\n    can step with Junction entry {\n        if not here.sl {\n            here.sl = True;\n            for nxt in [->:Rail:->] { if nxt.dl == -1 { nxt.dl = here.dl + 1; } }\n            visit [->:Rail:->];\n        }\n    }\n}\n\ndef faster_mode_hops(spec: dict) -> int {\n    reg: dict = {};\n    for nm in [spec[\"start\"], spec[\"target\"]] { if nm not in reg { reg[nm] = Junction(name=nm); } }\n    for pr in spec[\"roads\"] { for nm in pr { if nm not in reg { reg[nm] = Junction(name=nm); } } }\n    for pr in spec[\"rails\"] { for nm in pr { if nm not in reg { reg[nm] = Junction(name=nm); } } }\n    for pr in spec[\"roads\"] { reg[pr[0]] +>:Road:+> reg[pr[1]]; }\n    for pr in spec[\"rails\"] { reg[pr[0]] +>:Rail:+> reg[pr[1]]; }\n    base = reg[spec[\"start\"]];\n    base.dr = 0;\n    base.dl = 0;\n    wa = base spawn RoadHops();\n    wb = base spawn RailHops();\n    goal = reg[spec[\"target\"]];\n    if goal.dr == -1 { return goal.dl; }\n    if goal.dl == -1 { return goal.dr; }\n    if goal.dr < goal.dl { return goal.dr; }\n    return goal.dl;\n}\n\nwith entry { print(faster_mode_hops({\"roads\": [[\"a\", \"b\"], [\"b\", \"t\"]], \"rails\": [[\"a\", \"t\"]], \"start\": \"a\", \"target\": \"t\"})); }",
+   "expected_output": "1",
+   "cases": [
+    {
+     "input": {
+      "roads": [
+       [
+        "a",
+        "b"
+       ],
+       [
+        "b",
+        "t"
+       ]
+      ],
+      "rails": [
+       [
+        "a",
+        "t"
+       ]
+      ],
+      "start": "a",
+      "target": "t"
+     },
+     "output": "1"
+    },
+    {
+     "input": {
+      "roads": [
+       [
+        "a",
+        "b"
+       ],
+       [
+        "b",
+        "t"
+       ]
+      ],
+      "rails": [
+       [
+        "a",
+        "c"
+       ]
+      ],
+      "start": "a",
+      "target": "t"
+     },
+     "output": "2"
+    },
+    {
+     "input": {
+      "roads": [
+       [
+        "a",
+        "b"
+       ]
+      ],
+      "rails": [
+       [
+        "a",
+        "c"
+       ]
+      ],
+      "start": "a",
+      "target": "z"
+     },
+     "output": "-1"
+    },
+    {
+     "input": {
+      "roads": [
+       [
+        "a",
+        "b"
+       ]
+      ],
+      "rails": [],
+      "start": "a",
+      "target": "a"
+     },
+     "output": "0"
+    }
+   ]
+  }
+ ]
+}

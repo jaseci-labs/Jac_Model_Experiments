@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "5bfad2942fa9",
+    "verdict": "drop",
+    "reason": "Chunk is only a horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "8a4167c18793",
+    "verdict": "keep",
+    "reason": "Substantive intro to the Kubernetes sandbox provider."
+  },
+  {
+    "chunk_id": "31383bd5bee3",
+    "verdict": "keep",
+    "reason": "Canonical TOML config example for the kubernetes sandbox provider."
+  },
+  {
+    "chunk_id": "35752410b27d",
+    "verdict": "drop",
+    "reason": "Lone 'How it works:' heading fragment with no content."
+  },
+  {
+    "chunk_id": "dbea32a3c965",
+    "verdict": "keep",
+    "reason": "Detailed provisioning lifecycle steps, genuine unique content."
+  },
+  {
+    "chunk_id": "70ba22e10f78",
+    "verdict": "keep",
+    "reason": "Concrete pod-naming convention fact, non-redundant."
+  },
+  {
+    "chunk_id": "364f0a7cab88",
+    "verdict": "drop",
+    "reason": "Lone 'Pod labels:' heading fragment with no content."
+  },
+  {
+    "chunk_id": "9d7e5346273c",
+    "verdict": "keep",
+    "reason": "Flagged duplicate counterpart 4bc8c9639daf is not in this batch to compare, and the label table itself is genuine content, so keep rather than risk dropping both copies."
+  },
+  {
+    "chunk_id": "afbc349e7a6f",
+    "verdict": "drop",
+    "reason": "Lone heading fragment introducing a table that lives in the next chunk."
+  },
+  {
+    "chunk_id": "e8e6afb91fbe",
+    "verdict": "keep",
+    "reason": "Self-contained env-var table with variable names, values, and purposes."
+  },
+  {
+    "chunk_id": "dae99bd07ed7",
+    "verdict": "drop",
+    "reason": "Lone 'Resource configuration:' heading fragment with no content."
+  },
+  {
+    "chunk_id": "3f547efe42de",
+    "verdict": "keep",
+    "reason": "Concrete resource limit/request/TTL facts."
+  },
+  {
+    "chunk_id": "064bf1409bab",
+    "verdict": "drop",
+    "reason": "Lone 'Security context' heading fragment with no content."
+  },
+  {
+    "chunk_id": "049ce960bd09",
+    "verdict": "keep",
+    "reason": "Actual security-context settings, real content despite brevity."
+  },
+  {
+    "chunk_id": "30ba7ecfa2a4",
+    "verdict": "keep",
+    "reason": "Substantive ConfigMap size-limit and exclusion-rule details."
+  },
+  {
+    "chunk_id": "d80c73914b31",
+    "verdict": "keep",
+    "reason": "Substantive RBAC auto-provisioning behavior description."
+  },
+  {
+    "chunk_id": "026c9b6f8ee8",
+    "verdict": "keep",
+    "reason": "Carries a real fact (60-second cleanup interval), not just a heading."
+  },
+  {
+    "chunk_id": "4e025a6c2bb0",
+    "verdict": "keep",
+    "reason": "Concrete cleanup-thread behavior steps."
+  },
+  {
+    "chunk_id": "7e514b7f81ba",
+    "verdict": "drop",
+    "reason": "Chunk is only a horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "967ab18dfa36",
+    "verdict": "keep",
+    "reason": "Substantive section intro explaining the two routing modes."
+  },
+  {
+    "chunk_id": "39a67f1a6133",
+    "verdict": "keep",
+    "reason": "Introduces per-sandbox Ingress mode and states it is the default, real information."
+  },
+  {
+    "chunk_id": "ab83accb5e96",
+    "verdict": "keep",
+    "reason": "Canonical TOML config example for per-sandbox Ingress routing."
+  },
+  {
+    "chunk_id": "91e65c0926a6",
+    "verdict": "drop",
+    "reason": "Lone 'Traffic flow:' heading fragment with no content."
+  },
+  {
+    "chunk_id": "7f217cc23331",
+    "verdict": "keep",
+    "reason": "Concrete traffic-flow diagram for per-sandbox Ingress mode."
+  },
+  {
+    "chunk_id": "b4920354138d",
+    "verdict": "drop",
+    "reason": "Lone 'Each sandbox creates:' sentence fragment; the actual list is in the next chunk."
+  },
+  {
+    "chunk_id": "bc7519f15bc0",
+    "verdict": "keep",
+    "reason": "Concrete Service/Ingress resource naming facts."
+  },
+  {
+    "chunk_id": "a5f34b0c57ea",
+    "verdict": "drop",
+    "reason": "Lone 'Custom Ingress annotations:' heading fragment with no content."
+  },
+  {
+    "chunk_id": "753da069f692",
+    "verdict": "keep",
+    "reason": "Concrete annotation config example, non-redundant."
+  },
+  {
+    "chunk_id": "e4f93fe3ece0",
+    "verdict": "keep",
+    "reason": "Substantive TLS/cert-manager requirement details."
+  },
+  {
+    "chunk_id": "3e5c73e4e75c",
+    "verdict": "keep",
+    "reason": "Useful practical drawback note about per-sandbox Ingress latency."
+  },
+  {
+    "chunk_id": "72d23f691c79",
+    "verdict": "keep",
+    "reason": "Substantive intro defining proxy mode's core behavior."
+  },
+  {
+    "chunk_id": "13876d34b5fd",
+    "verdict": "keep",
+    "reason": "Canonical proxy-mode TOML config example."
+  },
+  {
+    "chunk_id": "86e0399d4c52",
+    "verdict": "drop",
+    "reason": "Lone 'Traffic flow:' heading fragment with no content."
+  },
+  {
+    "chunk_id": "f1ec5cfba8a9",
+    "verdict": "keep",
+    "reason": "Concrete traffic-flow diagram for proxy mode, distinct from the Ingress-mode diagram."
+  },
+  {
+    "chunk_id": "0e671644044f",
+    "verdict": "drop",
+    "reason": "Lone 'How it works:' heading fragment with no content."
+  },
+  {
+    "chunk_id": "1cfe4a95db15",
+    "verdict": "keep",
+    "reason": "Detailed proxy mechanism steps including Watch API and Host-header routing."
+  },
+  {
+    "chunk_id": "8f17d88fd021",
+    "verdict": "keep",
+    "reason": "Substantive loading-page behavior including content-negotiation detail."
+  },
+  {
+    "chunk_id": "acb5ab40e9ac",
+    "verdict": "drop",
+    "reason": "Lone heading fragment; the advantages list lives in the next chunk."
+  },
+  {
+    "chunk_id": "8483b023df19",
+    "verdict": "keep",
+    "reason": "Concrete list of proxy-mode advantages, real content."
+  },
+  {
+    "chunk_id": "33aae251f6d6",
+    "verdict": "drop",
+    "reason": "Lone 'Proxy environment variables:' heading fragment with no content."
+  },
+  {
+    "chunk_id": "6d89bee57374",
+    "verdict": "keep",
+    "reason": "Self-contained proxy env-var table with defaults and descriptions."
+  },
+  {
+    "chunk_id": "4ea01aa853cd",
+    "verdict": "keep",
+    "reason": "States where the proxy manifest templates live, real information."
+  },
+  {
+    "chunk_id": "b64a29fabc75",
+    "verdict": "keep",
+    "reason": "Concrete description of each proxy manifest template."
+  },
+  {
+    "chunk_id": "5b95cf20f4f6",
+    "verdict": "keep",
+    "reason": "Substantive note that the proxy is itself a Jac app and how its image is built."
+  },
+  {
+    "chunk_id": "868117026117",
+    "verdict": "keep",
+    "reason": "Complete Dockerfile example showing jac binary install and jac run usage."
+  },
+  {
+    "chunk_id": "cec10eda324d",
+    "verdict": "keep",
+    "reason": "Concrete health-check endpoint fact."
+  },
+  {
+    "chunk_id": "154db73c52ae",
+    "verdict": "drop",
+    "reason": "Chunk is only a horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "6fda79dab18c",
+    "verdict": "keep",
+    "reason": "Substantive intro explaining warm-pool purpose."
+  },
+  {
+    "chunk_id": "0c8e698fd403",
+    "verdict": "keep",
+    "reason": "Canonical warm-pool config example."
+  },
+  {
+    "chunk_id": "43f84f74ea18",
+    "verdict": "drop",
+    "reason": "Lone 'How it works:' heading fragment truncated before its content."
+  }
+]

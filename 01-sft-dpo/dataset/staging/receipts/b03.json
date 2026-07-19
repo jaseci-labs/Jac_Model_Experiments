@@ -1,0 +1,21 @@
+{
+  "batch_id": "b03",
+  "accepted": [
+    "join_chain_labels",
+    "alternating_chain_sum",
+    "doubled_chain_values",
+    "total_label_length",
+    "trace_route",
+    "sorted_reachable_vals",
+    "position_weighted_sum",
+    "sorted_label_csv",
+    "edge_weight_product",
+    "running_max_prefix",
+    "mean_reachable_val",
+    "toll_trip_balance",
+    "label_initial_histogram",
+    "budget_walk_labels"
+  ],
+  "rejected": [],
+  "accept_rate": 1.0
+}

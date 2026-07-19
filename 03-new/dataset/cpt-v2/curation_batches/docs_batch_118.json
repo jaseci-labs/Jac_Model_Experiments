@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "0ff8a9602a76",
+    "verdict": "keep",
+    "reason": "Substantive explanation of the warm-pool sandbox lifecycle in jac-scale."
+  },
+  {
+    "chunk_id": "ec32f3cb3778",
+    "verdict": "drop",
+    "reason": "Bare bold-label fragment with no content of its own."
+  },
+  {
+    "chunk_id": "ed8273f94d8d",
+    "verdict": "keep",
+    "reason": "Concrete label/value table documenting warm pod pool states."
+  },
+  {
+    "chunk_id": "d114337e7fdd",
+    "verdict": "drop",
+    "reason": "Bare 'Benefits:' label fragment, nav-only with no prose."
+  },
+  {
+    "chunk_id": "5bf35762a181",
+    "verdict": "keep",
+    "reason": "Genuine content listing concrete benefits of the warm-pool path."
+  },
+  {
+    "chunk_id": "11b625fac570",
+    "verdict": "keep",
+    "reason": "Documents the cold-start fallback behavior, real informational content."
+  },
+  {
+    "chunk_id": "8358e13fd2c0",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator only, pure boilerplate."
+  },
+  {
+    "chunk_id": "c77d8bbd4334",
+    "verdict": "keep",
+    "reason": "Heading plus a real sentence introducing HMR proxy behavior."
+  },
+  {
+    "chunk_id": "433f389d58cd",
+    "verdict": "keep",
+    "reason": "Architecture diagram of the HMR WebSocket relay path."
+  },
+  {
+    "chunk_id": "9315e602a689",
+    "verdict": "drop",
+    "reason": "Two-word lead-in fragment ('The proxy:') with no content."
+  },
+  {
+    "chunk_id": "f46fd6a7a0f5",
+    "verdict": "keep",
+    "reason": "Detailed list of proxy WebSocket handling behaviors."
+  },
+  {
+    "chunk_id": "008f3ba1f6bd",
+    "verdict": "keep",
+    "reason": "Explains a non-obvious polling requirement with its rationale."
+  },
+  {
+    "chunk_id": "cf80efdda2c3",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator only, pure boilerplate."
+  },
+  {
+    "chunk_id": "d132e0842ae8",
+    "verdict": "drop",
+    "reason": "Bare section heading with no accompanying prose."
+  },
+  {
+    "chunk_id": "9bb1232ab010",
+    "verdict": "keep",
+    "reason": "Troubleshooting entry with a concrete diagnostic command."
+  },
+  {
+    "chunk_id": "0de358b48ee2",
+    "verdict": "keep",
+    "reason": "Short but real guidance on interpreting pod events."
+  },
+  {
+    "chunk_id": "127bb053634f",
+    "verdict": "keep",
+    "reason": "Troubleshooting entry with concrete kubectl diagnostics."
+  },
+  {
+    "chunk_id": "40657656659f",
+    "verdict": "keep",
+    "reason": "Lists concrete failure causes, real diagnostic content."
+  },
+  {
+    "chunk_id": "f8830e4b4270",
+    "verdict": "keep",
+    "reason": "Introduces the 1MB ConfigMap limit problem, real content leading into fixes."
+  },
+  {
+    "chunk_id": "b615bf4504da",
+    "verdict": "keep",
+    "reason": "Concrete workarounds for the ConfigMap size limit."
+  },
+  {
+    "chunk_id": "3585535e5b00",
+    "verdict": "keep",
+    "reason": "Troubleshooting entry heading with a real instruction sentence."
+  },
+  {
+    "chunk_id": "3879f4ed28d8",
+    "verdict": "keep",
+    "reason": "Concrete proxy diagnostic commands including the health endpoint."
+  },
+  {
+    "chunk_id": "f9f535e70460",
+    "verdict": "keep",
+    "reason": "Concrete cleanup commands using the documented sandbox labels."
+  },
+  {
+    "chunk_id": "f1bdb71028e5",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator only, pure boilerplate."
+  },
+  {
+    "chunk_id": "f690843f7213",
+    "verdict": "drop",
+    "reason": "Title plus cross-link only, a nav-only fragment with no doc content."
+  },
+  {
+    "chunk_id": "4970ec710b0c",
+    "verdict": "keep",
+    "reason": "Core overview of Jac's storage abstraction and the store() builtin."
+  },
+  {
+    "chunk_id": "0688a51f8159",
+    "verdict": "keep",
+    "reason": "Explains store() builtin semantics and provider-backed behavior."
+  },
+  {
+    "chunk_id": "018aa46ddcd4",
+    "verdict": "keep",
+    "reason": "Canonical Jac code showing store() usage and glob declarations."
+  },
+  {
+    "chunk_id": "46cfd4ed3a2d",
+    "verdict": "keep",
+    "reason": "Parameter table for store(), real reference content."
+  },
+  {
+    "chunk_id": "78da4403dd38",
+    "verdict": "keep",
+    "reason": "Explains LocalStorage vs jac-scale backend resolution, distinct content."
+  },
+  {
+    "chunk_id": "9cd40275bcb7",
+    "verdict": "keep",
+    "reason": "Heading with a real sentence introducing the interface table."
+  },
+  {
+    "chunk_id": "282b52e7b4f5",
+    "verdict": "keep",
+    "reason": "Complete storage API method reference table, high-value content."
+  },
+  {
+    "chunk_id": "bfdba56802cf",
+    "verdict": "keep",
+    "reason": "Rich Jac example with walker, has fields, Root entry, and report -- strong language signal."
+  },
+  {
+    "chunk_id": "9953f356db45",
+    "verdict": "keep",
+    "reason": "Explains the S3Storage backend swap behind store(), distinct content."
+  },
+  {
+    "chunk_id": "7ff2be1f35c2",
+    "verdict": "keep",
+    "reason": "Introduces the [scale.storage] config section, distinct from the later [storage] section."
+  },
+  {
+    "chunk_id": "30c958ccffe7",
+    "verdict": "keep",
+    "reason": "S3 configuration key/env-var reference table, real content."
+  },
+  {
+    "chunk_id": "b8d90f0a35a8",
+    "verdict": "drop",
+    "reason": "Bare 'Example jac.toml:' label fragment with no content."
+  },
+  {
+    "chunk_id": "0258efedf683",
+    "verdict": "keep",
+    "reason": "Concrete S3 jac.toml configuration example."
+  },
+  {
+    "chunk_id": "d42f2fb22472",
+    "verdict": "keep",
+    "reason": "Heading plus real sentence introducing get_url() semantics."
+  },
+  {
+    "chunk_id": "4bbd74428800",
+    "verdict": "keep",
+    "reason": "Documents per-backend get_url() behavior differences, real content."
+  },
+  {
+    "chunk_id": "913f6d15714e",
+    "verdict": "keep",
+    "reason": "Jac example combining with-entry, walker, and storage API usage."
+  },
+  {
+    "chunk_id": "03c5dcc52c7a",
+    "verdict": "keep",
+    "reason": "Heading with a lead-in sentence for the local [storage] config, which differs from the [scale.storage] section."
+  },
+  {
+    "chunk_id": "63cb06dff031",
+    "verdict": "keep",
+    "reason": "Concrete local-storage jac.toml example, distinct from the S3 example."
+  },
+  {
+    "chunk_id": "f6f5f15e7b9d",
+    "verdict": "keep",
+    "reason": "Local storage option table; overlaps the store() param table only partially and adds the type key."
+  },
+  {
+    "chunk_id": "a1b277336ae2",
+    "verdict": "drop",
+    "reason": "Bare 'Environment Variables:' label fragment with no content."
+  },
+  {
+    "chunk_id": "927f2f696750",
+    "verdict": "keep",
+    "reason": "Env-var override reference table, real content."
+  },
+  {
+    "chunk_id": "e1dc427e4d9d",
+    "verdict": "keep",
+    "reason": "One sentence but states the config precedence rule, real information."
+  },
+  {
+    "chunk_id": "11c2b15b18a8",
+    "verdict": "keep",
+    "reason": "Heading plus real sentence introducing the StorageFactory alternative."
+  },
+  {
+    "chunk_id": "7f8f831e6b4d",
+    "verdict": "keep",
+    "reason": "Jac example showing import-from syntax and factory usage."
+  },
+  {
+    "chunk_id": "6fc0200c5887",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator only, pure boilerplate."
+  }
+]

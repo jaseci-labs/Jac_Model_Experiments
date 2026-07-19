@@ -1,0 +1,146 @@
+[
+  {
+    "id": "is_prime",
+    "output": "```python\ndef is_prime(n):\n    if n < 2:\n        return False\n    if n == 2:\n        return True\n    if n % 2 == 0:\n        return False\n    for i in range(3, int(n**0.5) + 1, 2):\n        if n % i == 0:\n            return False\n    return True\n```",
+    "code": "def is_prime(n):\n    if n < 2:\n        return False\n    if n == 2:\n        return True\n    if n % 2 == 0:\n        return False\n    for i in range(3, int(n**0.5) + 1, 2):\n        if n % i == 0:\n            return False\n    return True",
+    "pass": true,
+    "npass": 4,
+    "ntotal": 4,
+    "err": ""
+  },
+  {
+    "id": "reverse_string",
+    "output": "```python\ndef reverse_string(s):\n    return s[::-1]\n```",
+    "code": "def reverse_string(s):\n    return s[::-1]",
+    "pass": true,
+    "npass": 3,
+    "ntotal": 3,
+    "err": ""
+  },
+  {
+    "id": "fibonacci",
+    "output": "```python\ndef fibonacci(n):\n    if n <= 1:\n        return n\n    a, b = 0, 1\n    for _ in range(2, n + 1):\n        a, b = b, a + b\n    return b\n```",
+    "code": "def fibonacci(n):\n    if n <= 1:\n        return n\n    a, b = 0, 1\n    for _ in range(2, n + 1):\n        a, b = b, a + b\n    return b",
+    "pass": true,
+    "npass": 3,
+    "ntotal": 3,
+    "err": ""
+  },
+  {
+    "id": "factorial",
+    "output": "```python\ndef factorial(n):\n    if n < 0:\n        raise ValueError(\"Factorial is not defined for negative numbers\")\n    if n == 0 or n == 1:\n        return 1\n    result = 1\n    for i in range(2, n + 1):\n        result *= i\n    return result\n```",
+    "code": "def factorial(n):\n    if n < 0:\n        raise ValueError(\"Factorial is not defined for negative numbers\")\n    if n == 0 or n == 1:\n        return 1\n    result = 1\n    for i in range(2, n + 1):\n        result *= i\n    return result",
+    "pass": true,
+    "npass": 3,
+    "ntotal": 3,
+    "err": ""
+  },
+  {
+    "id": "is_palindrome",
+    "output": "```python\ndef is_palindrome(s):\n    return s == s[::-1]\n```",
+    "code": "def is_palindrome(s):\n    return s == s[::-1]",
+    "pass": true,
+    "npass": 3,
+    "ntotal": 3,
+    "err": ""
+  },
+  {
+    "id": "bubble_sort",
+    "output": "```python\ndef bubble_sort(lst):\n    # Create a copy of the list to avoid modifying the original\n    result = lst.copy()\n    n = len(result)\n    \n    # Bubble sort algorithm\n    for i in range(n):\n        # Flag to optimize - if no swaps occur, list is sorted\n        swapped = False\n        for j in range(0, n - i - 1):\n            # Compare adjacent elements\n            if result[j] > result[j + 1]:\n                # Swap elements\n                result[j], result[j + 1] = result[j + 1], result[j]\n                swapped = True\n        # If no swaps occurred, list is sorted\n        if not swapped:\n            break\n    \n    return result\n```",
+    "code": "def bubble_sort(lst):\n    # Create a copy of the list to avoid modifying the original\n    result = lst.copy()\n    n = len(result)\n    \n    # Bubble sort algorithm\n    for i in range(n):\n        # Flag to optimize - if no swaps occur, list is sorted\n        swapped = False\n        for j in range(0, n - i - 1):\n            # Compare adjacent elements\n            if result[j] > result[j + 1]:\n                # Swap elements\n                result[j], result[j + 1] = result[j + 1], result[j]\n                swapped = True\n        # If no swaps occurred, list is sorted\n        if not swapped:\n            break\n    \n    return result",
+    "pass": true,
+    "npass": 3,
+    "ntotal": 3,
+    "err": ""
+  },
+  {
+    "id": "count_vowels",
+    "output": "```python\ndef count_vowels(s):\n    vowels = \"aeiouAEIOU\"\n    count = 0\n    for char in s:\n        if char in vowels:\n            count += 1\n    return count\n```",
+    "code": "def count_vowels(s):\n    vowels = \"aeiouAEIOU\"\n    count = 0\n    for char in s:\n        if char in vowels:\n            count += 1\n    return count",
+    "pass": true,
+    "npass": 3,
+    "ntotal": 3,
+    "err": ""
+  },
+  {
+    "id": "max_of_list",
+    "output": "```python\ndef max_of_list(lst):\n    return max(lst)\n```",
+    "code": "def max_of_list(lst):\n    return max(lst)",
+    "pass": true,
+    "npass": 3,
+    "ntotal": 3,
+    "err": ""
+  },
+  {
+    "id": "flatten",
+    "output": "```python\ndef flatten(nested):\n    result = []\n    for sublist in nested:\n        result.extend(sublist)\n    return result\n```",
+    "code": "def flatten(nested):\n    result = []\n    for sublist in nested:\n        result.extend(sublist)\n    return result",
+    "pass": true,
+    "npass": 2,
+    "ntotal": 2,
+    "err": ""
+  },
+  {
+    "id": "remove_duplicates",
+    "output": "```python\ndef remove_duplicates(lst):\n    seen = set()\n    result = []\n    for item in lst:\n        if item not in seen:\n            seen.add(item)\n            result.append(item)\n    return result\n```",
+    "code": "def remove_duplicates(lst):\n    seen = set()\n    result = []\n    for item in lst:\n        if item not in seen:\n            seen.add(item)\n            result.append(item)\n    return result",
+    "pass": true,
+    "npass": 2,
+    "ntotal": 2,
+    "err": ""
+  },
+  {
+    "id": "gcd",
+    "output": "```python\ndef gcd(a, b):\n    while b:\n        a, b = b, a % b\n    return abs(a)\n```",
+    "code": "def gcd(a, b):\n    while b:\n        a, b = b, a % b\n    return abs(a)",
+    "pass": true,
+    "npass": 3,
+    "ntotal": 3,
+    "err": ""
+  },
+  {
+    "id": "binary_search",
+    "output": "```python\ndef binary_search(sorted_list, target):\n    left, right = 0, len(sorted_list) - 1\n    \n    while left <= right:\n        mid = (left + right) // 2\n        if sorted_list[mid] == target:\n            return mid\n        elif sorted_list[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    \n    return -1\n```",
+    "code": "def binary_search(sorted_list, target):\n    left, right = 0, len(sorted_list) - 1\n    \n    while left <= right:\n        mid = (left + right) // 2\n        if sorted_list[mid] == target:\n            return mid\n        elif sorted_list[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    \n    return -1",
+    "pass": true,
+    "npass": 3,
+    "ntotal": 3,
+    "err": ""
+  },
+  {
+    "id": "is_anagram",
+    "output": "```python\ndef is_anagram(s1, s2):\n    return sorted(s1.lower()) == sorted(s2.lower())\n```",
+    "code": "def is_anagram(s1, s2):\n    return sorted(s1.lower()) == sorted(s2.lower())",
+    "pass": true,
+    "npass": 2,
+    "ntotal": 2,
+    "err": ""
+  },
+  {
+    "id": "sum_digits",
+    "output": "```python\ndef sum_digits(n):\n    total = 0\n    while n > 0:\n        total += n % 10\n        n //= 10\n    return total\n```",
+    "code": "def sum_digits(n):\n    total = 0\n    while n > 0:\n        total += n % 10\n        n //= 10\n    return total",
+    "pass": true,
+    "npass": 3,
+    "ntotal": 3,
+    "err": ""
+  },
+  {
+    "id": "merge_dicts",
+    "output": "```python\ndef merge_dicts(d1, d2):\n    result = d1.copy()\n    result.update(d2)\n    return result\n```",
+    "code": "def merge_dicts(d1, d2):\n    result = d1.copy()\n    result.update(d2)\n    return result",
+    "pass": true,
+    "npass": 1,
+    "ntotal": 1,
+    "err": ""
+  },
+  {
+    "id": "caesar_cipher",
+    "output": "```python\ndef caesar_cipher(s, shift):\n    result = []\n    for char in s:\n        if 'a' <= char <= 'z':\n            shifted = (ord(char) - ord('a') + shift) % 26\n            result.append(chr(shifted + ord('a')))\n        else:\n            result.append(char)\n    return ''.join(result)\n```",
+    "code": "def caesar_cipher(s, shift):\n    result = []\n    for char in s:\n        if 'a' <= char <= 'z':\n            shifted = (ord(char) - ord('a') + shift) % 26\n            result.append(chr(shifted + ord('a')))\n        else:\n            result.append(char)\n    return ''.join(result)",
+    "pass": true,
+    "npass": 3,
+    "ntotal": 3,
+    "err": ""
+  }
+]

@@ -1,0 +1,247 @@
+[
+  {
+    "chunk_id": "98b74e1e62e3",
+    "verdict": "keep",
+    "reason": "Genuine description of jac db recover-all behavior."
+  },
+  {
+    "chunk_id": "e5a1e8fe180d",
+    "verdict": "keep",
+    "reason": "Concrete CLI command example."
+  },
+  {
+    "chunk_id": "d315542f7a65",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no prose content."
+  },
+  {
+    "chunk_id": "d61b7c43eb56",
+    "verdict": "keep",
+    "reason": "Real sample CLI output for the command."
+  },
+  {
+    "chunk_id": "8f329deb9b26",
+    "verdict": "keep",
+    "reason": "Explains alias-coverage reason for stuck rows."
+  },
+  {
+    "chunk_id": "d5b30683e809",
+    "verdict": "keep",
+    "reason": "Detailed sample output showing quarantine reporting."
+  },
+  {
+    "chunk_id": "13056a33b5d1",
+    "verdict": "keep",
+    "reason": "Documents jac db fsck semantics and violation categories."
+  },
+  {
+    "chunk_id": "860a4eae0b47",
+    "verdict": "keep",
+    "reason": "Concrete CLI command example."
+  },
+  {
+    "chunk_id": "1186bf869ad3",
+    "verdict": "drop",
+    "reason": "Label-only fragment; also duplicated in the source."
+  },
+  {
+    "chunk_id": "72e4b877c19b",
+    "verdict": "keep",
+    "reason": "Real fsck output illustrating integrity findings."
+  },
+  {
+    "chunk_id": "819281684281",
+    "verdict": "keep",
+    "reason": "Explains repair semantics and crash-atomic transaction behavior."
+  },
+  {
+    "chunk_id": "68d2d3eb51de",
+    "verdict": "keep",
+    "reason": "Concrete CLI command example."
+  },
+  {
+    "chunk_id": "bbe982c2834e",
+    "verdict": "keep",
+    "reason": "Sample repair output with meaningful counts."
+  },
+  {
+    "chunk_id": "d96fa224a298",
+    "verdict": "keep",
+    "reason": "Contextual prose introducing clean-database output."
+  },
+  {
+    "chunk_id": "b0343f2c75b9",
+    "verdict": "keep",
+    "reason": "Sample clean-database output."
+  },
+  {
+    "chunk_id": "e602accd8ae2",
+    "verdict": "keep",
+    "reason": "Explains automatic vs offline dangling-ref healing."
+  },
+  {
+    "chunk_id": "1d47bf0500a1",
+    "verdict": "keep",
+    "reason": "Documents jac db schema rules and __jac_schema__ registration."
+  },
+  {
+    "chunk_id": "ad39b390702e",
+    "verdict": "keep",
+    "reason": "Concrete CLI command example."
+  },
+  {
+    "chunk_id": "3d801b8b32a9",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no content."
+  },
+  {
+    "chunk_id": "9ce544f50abe",
+    "verdict": "keep",
+    "reason": "Sample drift-rules table output."
+  },
+  {
+    "chunk_id": "95caebf11bf3",
+    "verdict": "keep",
+    "reason": "Explains pre-deploy sanity-check use of schema rules."
+  },
+  {
+    "chunk_id": "3784476c6f9f",
+    "verdict": "keep",
+    "reason": "Complete typical rescue workflow with commands."
+  },
+  {
+    "chunk_id": "a688f82a4072",
+    "verdict": "keep",
+    "reason": "Clarifies expected post-workflow state."
+  },
+  {
+    "chunk_id": "a649c898dd4c",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "67c305bc9852",
+    "verdict": "drop",
+    "reason": "Section heading only."
+  },
+  {
+    "chunk_id": "fa46039af33f",
+    "verdict": "keep",
+    "reason": "Describes jac config command purpose."
+  },
+  {
+    "chunk_id": "780272b4c9bf",
+    "verdict": "keep",
+    "reason": "Command usage signature."
+  },
+  {
+    "chunk_id": "9d7f2bbfb039",
+    "verdict": "keep",
+    "reason": "Action reference table for jac config."
+  },
+  {
+    "chunk_id": "31220ec48671",
+    "verdict": "keep",
+    "reason": "Option reference table for jac config."
+  },
+  {
+    "chunk_id": "9a138efdadca",
+    "verdict": "drop",
+    "reason": "Label-only fragment."
+  },
+  {
+    "chunk_id": "02fd0cefbba1",
+    "verdict": "keep",
+    "reason": "Enumerates configuration groups with descriptions."
+  },
+  {
+    "chunk_id": "c150e3c7dd53",
+    "verdict": "drop",
+    "reason": "Label-only fragment."
+  },
+  {
+    "chunk_id": "12be9cda8dd7",
+    "verdict": "keep",
+    "reason": "Rich set of jac config usage examples."
+  },
+  {
+    "chunk_id": "1e6bbcc98f25",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "a5a57b809f3b",
+    "verdict": "drop",
+    "reason": "Section heading only."
+  },
+  {
+    "chunk_id": "d09405c8bbc6",
+    "verdict": "keep",
+    "reason": "Describes jac start --scale Kubernetes deployment."
+  },
+  {
+    "chunk_id": "9921931daf74",
+    "verdict": "keep",
+    "reason": "Concrete deploy/dry-run command examples."
+  },
+  {
+    "chunk_id": "fc1c98b39bee",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "d6f2b860e856",
+    "verdict": "keep",
+    "reason": "Introduces jac scale command and its two modes."
+  },
+  {
+    "chunk_id": "001f36b04202",
+    "verdict": "keep",
+    "reason": "Explains local vs platform scale action modes."
+  },
+  {
+    "chunk_id": "50aa5757278f",
+    "verdict": "keep",
+    "reason": "Clarifies initial deploy path for scale."
+  },
+  {
+    "chunk_id": "7462cf45d033",
+    "verdict": "keep",
+    "reason": "Command usage signature."
+  },
+  {
+    "chunk_id": "795361f7c57c",
+    "verdict": "keep",
+    "reason": "Option reference table for jac scale."
+  },
+  {
+    "chunk_id": "b3ee1a2d7b8d",
+    "verdict": "drop",
+    "reason": "Label-only fragment introducing output."
+  },
+  {
+    "chunk_id": "b7d11f7c5b23",
+    "verdict": "keep",
+    "reason": "Sample platform status output table."
+  },
+  {
+    "chunk_id": "c4f6e8c53001",
+    "verdict": "drop",
+    "reason": "Label-only fragment."
+  },
+  {
+    "chunk_id": "d89a6ba7d1b6",
+    "verdict": "keep",
+    "reason": "Status indicator symbol reference table."
+  },
+  {
+    "chunk_id": "790e4de80a56",
+    "verdict": "drop",
+    "reason": "Label-only fragment."
+  },
+  {
+    "chunk_id": "184a3e63717b",
+    "verdict": "keep",
+    "reason": "Comprehensive jac scale usage examples."
+  }
+]

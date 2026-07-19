@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "8b99c6dc3003",
+    "verdict": "keep",
+    "reason": "One sentence but carries a real fact (exception import location)."
+  },
+  {
+    "chunk_id": "7cbea5bef3fe",
+    "verdict": "keep",
+    "reason": "Complete exception quick-reference table, genuine API documentation."
+  },
+  {
+    "chunk_id": "060bf87700ac",
+    "verdict": "keep",
+    "reason": "Canonical Jac import syntax for byLLM exceptions."
+  },
+  {
+    "chunk_id": "213a189b567f",
+    "verdict": "keep",
+    "reason": "Python-side import counterpart; parallel-language content, not a redundant copy."
+  },
+  {
+    "chunk_id": "6e36dda9322c",
+    "verdict": "keep",
+    "reason": "Working example of catch-all error handling in Jac."
+  },
+  {
+    "chunk_id": "4b7f0c5de0e9",
+    "verdict": "keep",
+    "reason": "Distinct example showing per-exception handling and e.raw_output access."
+  },
+  {
+    "chunk_id": "a8ca12446aca",
+    "verdict": "keep",
+    "reason": "Explains raw_output semantics; prose that the following code chunk depends on."
+  },
+  {
+    "chunk_id": "871ac1574f80",
+    "verdict": "keep",
+    "reason": "Concrete OutputConversionError example with typed obj declaration."
+  },
+  {
+    "chunk_id": "1c0b98e6ea6b",
+    "verdict": "keep",
+    "reason": "Explains CompactionNotEffectiveError trigger condition, real content."
+  },
+  {
+    "chunk_id": "163fe28a627f",
+    "verdict": "keep",
+    "reason": "Recovery-options example with actionable guidance in comments."
+  },
+  {
+    "chunk_id": "58aecdec8040",
+    "verdict": "keep",
+    "reason": "Explains ConfigurationError timing (raised before any API call)."
+  },
+  {
+    "chunk_id": "9a070f55123f",
+    "verdict": "keep",
+    "reason": "Minimal but informative example of an invalid stream=True configuration."
+  },
+  {
+    "chunk_id": "277647761a2e",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "14bbc22b0a15",
+    "verdict": "keep",
+    "reason": "Introduces MockLLM sequential-output semantics, real prose."
+  },
+  {
+    "chunk_id": "3d9875c855cd",
+    "verdict": "keep",
+    "reason": "Flagged pair partner eb296dc19d9e is not in this batch and containment is only 0.53; this is a complete canonical MockLLM test example."
+  },
+  {
+    "chunk_id": "bb33024a076e",
+    "verdict": "drop",
+    "reason": "Six-word dangling lead-in ('MockLLM is useful for:') with no content of its own."
+  },
+  {
+    "chunk_id": "a7db2bdf131d",
+    "verdict": "keep",
+    "reason": "The bullet list itself carries the use-case content the lead-in pointed to."
+  },
+  {
+    "chunk_id": "df40a780b1b2",
+    "verdict": "keep",
+    "reason": "Documents the (payload, usage_dict) tuple mechanism for compaction tests."
+  },
+  {
+    "chunk_id": "dede81510edd",
+    "verdict": "keep",
+    "reason": "Working usage-injection example with MockToolCall, unique content."
+  },
+  {
+    "chunk_id": "4bdb84379f13",
+    "verdict": "keep",
+    "reason": "Short but states real default behavior (usage defaults to empty dict)."
+  },
+  {
+    "chunk_id": "f901cb6e4c0c",
+    "verdict": "keep",
+    "reason": "Explains why plain strings skip the parse path, motivating the wrappers."
+  },
+  {
+    "chunk_id": "ea49eaa5f551",
+    "verdict": "keep",
+    "reason": "Documents MockRawResponse, MockError, and seen_prompts semantics."
+  },
+  {
+    "chunk_id": "e96f984e3745",
+    "verdict": "keep",
+    "reason": "Complete retry-path test example exercising parse and corrective feedback."
+  },
+  {
+    "chunk_id": "63964a0ddf7d",
+    "verdict": "keep",
+    "reason": "Documents the subtle max_output_retries reset gotcha on bare by llm()."
+  },
+  {
+    "chunk_id": "dbb35adeda2e",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "9ce970a275b2",
+    "verdict": "keep",
+    "reason": "Explains type validation and coercion semantics for structured output."
+  },
+  {
+    "chunk_id": "a93b83ef7dff",
+    "verdict": "drop",
+    "reason": "Lone admonition header line ('??? example \"Resume Parser\"') with no prose or code."
+  },
+  {
+    "chunk_id": "7e09ece4dd60",
+    "verdict": "keep",
+    "reason": "Flagged pair partner 5145eed69a4f is not in this batch and containment is only 0.57; this is a complete nested-structured-output example."
+  },
+  {
+    "chunk_id": "7771ff63d02b",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "3601aab20d83",
+    "verdict": "keep",
+    "reason": "Introduces the telemetry system and what callbacks receive."
+  },
+  {
+    "chunk_id": "fb390e1ca4db",
+    "verdict": "keep",
+    "reason": "States the publish-only design fact (byLLM stores nothing)."
+  },
+  {
+    "chunk_id": "05a35ab04e33",
+    "verdict": "keep",
+    "reason": "Canonical register_agent_callback example in Jac."
+  },
+  {
+    "chunk_id": "25be72a8a4ac",
+    "verdict": "keep",
+    "reason": "Section heading plus the fact that callbacks receive a dict; contextualizes the fields table."
+  },
+  {
+    "chunk_id": "af99f2a80c25",
+    "verdict": "keep",
+    "reason": "Complete telemetry record field table including truncation limits."
+  },
+  {
+    "chunk_id": "8552874790d4",
+    "verdict": "keep",
+    "reason": "Explains the per-invocation vs per-API-call callback distinction."
+  },
+  {
+    "chunk_id": "6fa08e92b717",
+    "verdict": "keep",
+    "reason": "Full CustomLogger integration example; overlaps 6a6c5bd66852 but shows the fuller field set and correlation setup."
+  },
+  {
+    "chunk_id": "6a6c5bd66852",
+    "verdict": "keep",
+    "reason": "End-to-end runnable variant with summarize call and cost aggregation; complementary to the setup chunk despite shared class code."
+  },
+  {
+    "chunk_id": "3786931abca2",
+    "verdict": "drop",
+    "reason": "Bare 'Output (values vary by model):' lead-in line with no content."
+  },
+  {
+    "chunk_id": "10c54edf2d13",
+    "verdict": "keep",
+    "reason": "Sample telemetry output grounding the example's expected behavior."
+  },
+  {
+    "chunk_id": "94eb0283033f",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "a2eec043d4d7",
+    "verdict": "keep",
+    "reason": "Explains the LiteLLM proxy use case for enterprise deployments."
+  },
+  {
+    "chunk_id": "611192e0c885",
+    "verdict": "keep",
+    "reason": "Setup step with the deployment doc pointer; carries the step-1 instruction."
+  },
+  {
+    "chunk_id": "ae45afa3bc91",
+    "verdict": "drop",
+    "reason": "Bare numbered-step lead-in ('2. Connect byLLM to the proxy:') with no content."
+  },
+  {
+    "chunk_id": "902726218bf0",
+    "verdict": "keep",
+    "reason": "Canonical Jac proxy-connection Model config example."
+  },
+  {
+    "chunk_id": "119b2a194ef6",
+    "verdict": "keep",
+    "reason": "Python-side proxy config counterpart; parallel-language content, not redundant."
+  },
+  {
+    "chunk_id": "80b288be41a3",
+    "verdict": "keep",
+    "reason": "Parameter table including the api_base alias detail."
+  },
+  {
+    "chunk_id": "59fdcf63cda5",
+    "verdict": "keep",
+    "reason": "Single sentence but points to virtual-key generation, a real setup fact."
+  },
+  {
+    "chunk_id": "ce80f191695e",
+    "verdict": "keep",
+    "reason": "Documents automatic telemetry enablement under jac start."
+  },
+  {
+    "chunk_id": "726bc8146d4a",
+    "verdict": "drop",
+    "reason": "Bare lead-in ('The telemetry endpoints are:') with no content."
+  },
+  {
+    "chunk_id": "a5d4880fbd42",
+    "verdict": "keep",
+    "reason": "Complete REST endpoint table with query-filter details."
+  }
+]

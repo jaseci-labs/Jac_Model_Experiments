@@ -1,0 +1,237 @@
+[
+  {
+    "chunk_id": "3cbeaf0affec",
+    "verdict": "keep",
+    "reason": "Genuine tutorial prose introducing Jac list comprehensions."
+  },
+  {
+    "chunk_id": "bd9901acd76c",
+    "verdict": "drop",
+    "reason": "Bare HTML wrapper div with no documentation content."
+  },
+  {
+    "chunk_id": "bacaec91fbd7",
+    "verdict": "keep",
+    "reason": "Substantive Jac code example showing loop syntax and list comprehensions with conditions."
+  },
+  {
+    "chunk_id": "1471a2c3e7fc",
+    "verdict": "drop",
+    "reason": "Bare closing HTML tag, pure boilerplate."
+  },
+  {
+    "chunk_id": "1bb0985acde6",
+    "verdict": "keep",
+    "reason": "Practice exercise prompt that pairs with worked Jac solutions."
+  },
+  {
+    "chunk_id": "ec3d12978452",
+    "verdict": "keep",
+    "reason": "Exercise prompt providing context for the dictionary-iteration solution chunk."
+  },
+  {
+    "chunk_id": "c59060d6c5ee",
+    "verdict": "drop",
+    "reason": "Bare HTML wrapper div with no documentation content."
+  },
+  {
+    "chunk_id": "7d27a6f6e1dd",
+    "verdict": "keep",
+    "reason": "Worked Jac example of dict iteration, conditionals, and f-strings."
+  },
+  {
+    "chunk_id": "862cf793280f",
+    "verdict": "drop",
+    "reason": "Bare closing HTML tag, pure boilerplate."
+  },
+  {
+    "chunk_id": "c87a66d13edc",
+    "verdict": "drop",
+    "reason": "Lone horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "01fa699cce74",
+    "verdict": "keep",
+    "reason": "Section introduction explaining classes and objects in Jac."
+  },
+  {
+    "chunk_id": "c0375ca0c51e",
+    "verdict": "keep",
+    "reason": "Conceptual prose defining a class as a blueprint."
+  },
+  {
+    "chunk_id": "ab4ebbccae8c",
+    "verdict": "drop",
+    "reason": "Lone three-word label fragment with no standalone content."
+  },
+  {
+    "chunk_id": "811b4a37372f",
+    "verdict": "keep",
+    "reason": "Concise class-vs-object analogy with real explanatory content."
+  },
+  {
+    "chunk_id": "d721d09d9c36",
+    "verdict": "keep",
+    "reason": "Section heading introducing first-class creation; the heading text carries structure signal."
+  },
+  {
+    "chunk_id": "5eb2d0686e2d",
+    "verdict": "keep",
+    "reason": "Complete Jac class example with has fields, methods, and instantiation."
+  },
+  {
+    "chunk_id": "cbfa6e983124",
+    "verdict": "drop",
+    "reason": "Bare closing HTML tag, pure boilerplate."
+  },
+  {
+    "chunk_id": "9613e8786276",
+    "verdict": "drop",
+    "reason": "Lone lead-in label with no standalone content."
+  },
+  {
+    "chunk_id": "bf20554265b6",
+    "verdict": "keep",
+    "reason": "Explains class, has, def, and self syntax elements in Jac."
+  },
+  {
+    "chunk_id": "79a13e4af479",
+    "verdict": "keep",
+    "reason": "Documents Jac's auto-generated constructor from has attributes, a distinctive language feature."
+  },
+  {
+    "chunk_id": "f10dc845f67f",
+    "verdict": "drop",
+    "reason": "Bare HTML wrapper div with no documentation content."
+  },
+  {
+    "chunk_id": "7f20e9d80ea1",
+    "verdict": "keep",
+    "reason": "Jac obj example demonstrating keyword-argument construction and methods."
+  },
+  {
+    "chunk_id": "eb921d18e0f9",
+    "verdict": "drop",
+    "reason": "Bare closing HTML tag, pure boilerplate."
+  },
+  {
+    "chunk_id": "67ae77c0a6e3",
+    "verdict": "keep",
+    "reason": "Section heading with motivating subpoint on grouping related data."
+  },
+  {
+    "chunk_id": "cc50b3a8c859",
+    "verdict": "drop",
+    "reason": "Two-word lead-in plus HTML div, no substantive content."
+  },
+  {
+    "chunk_id": "917d8fc74c7a",
+    "verdict": "keep",
+    "reason": "Contrast example showing unstructured variables before introducing obj."
+  },
+  {
+    "chunk_id": "7264b0e1f4ec",
+    "verdict": "drop",
+    "reason": "Bare closing HTML tag, pure boilerplate."
+  },
+  {
+    "chunk_id": "2d24d1a001e2",
+    "verdict": "drop",
+    "reason": "One-word lead-in plus HTML div, no substantive content."
+  },
+  {
+    "chunk_id": "01f3fa4b0785",
+    "verdict": "keep",
+    "reason": "Jac obj example showing grouped data with keyword construction."
+  },
+  {
+    "chunk_id": "f8fe87d55325",
+    "verdict": "drop",
+    "reason": "Lone subheading label with no standalone content."
+  },
+  {
+    "chunk_id": "b2533448e5b1",
+    "verdict": "drop",
+    "reason": "Bare HTML wrapper div with no documentation content."
+  },
+  {
+    "chunk_id": "3650814ff6ff",
+    "verdict": "keep",
+    "reason": "BankAccount example bundling state and behavior with typed methods."
+  },
+  {
+    "chunk_id": "e0788c49d22d",
+    "verdict": "keep",
+    "reason": "Section introduction to inheritance in Jac."
+  },
+  {
+    "chunk_id": "010818f6424c",
+    "verdict": "drop",
+    "reason": "Bare HTML wrapper div with no documentation content."
+  },
+  {
+    "chunk_id": "0da3be570ce1",
+    "verdict": "keep",
+    "reason": "Full inheritance example with obj Dog(Animal) syntax, overriding, and new methods."
+  },
+  {
+    "chunk_id": "3824d99d515e",
+    "verdict": "drop",
+    "reason": "Bare closing HTML tag, pure boilerplate."
+  },
+  {
+    "chunk_id": "9c6f57918f45",
+    "verdict": "drop",
+    "reason": "Lone lead-in label with no standalone content."
+  },
+  {
+    "chunk_id": "de3f666c763e",
+    "verdict": "keep",
+    "reason": "Bullet summary of inheritance benefits, real explanatory prose."
+  },
+  {
+    "chunk_id": "3e620e9b758d",
+    "verdict": "keep",
+    "reason": "Section heading introducing the game-character worked example."
+  },
+  {
+    "chunk_id": "c4160888599e",
+    "verdict": "keep",
+    "reason": "Rich example covering inheritance, postinit, and typed method parameters in Jac."
+  },
+  {
+    "chunk_id": "94a8cc0a3b04",
+    "verdict": "drop",
+    "reason": "Bare closing HTML tag, pure boilerplate."
+  },
+  {
+    "chunk_id": "3b553947e592",
+    "verdict": "keep",
+    "reason": "Exercise prompt that contextualizes the Rectangle solution chunk."
+  },
+  {
+    "chunk_id": "654642995b55",
+    "verdict": "drop",
+    "reason": "Bare HTML wrapper div with no documentation content."
+  },
+  {
+    "chunk_id": "7cf8d2d40a2b",
+    "verdict": "keep",
+    "reason": "Rectangle example demonstrating return-type annotations on Jac methods."
+  },
+  {
+    "chunk_id": "83da00b5c7d8",
+    "verdict": "drop",
+    "reason": "Bare closing HTML tag, pure boilerplate."
+  },
+  {
+    "chunk_id": "f0d2c28e62a1",
+    "verdict": "keep",
+    "reason": "Exercise prompt that contextualizes the Student solution chunk."
+  },
+  {
+    "chunk_id": "cc6f658c66fd",
+    "verdict": "keep",
+    "reason": "Student example with list field defaults, methods, and guard against empty division."
+  }
+]

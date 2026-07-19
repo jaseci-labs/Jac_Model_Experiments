@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "fb2b5d345620",
+    "verdict": "keep",
+    "reason": "Concrete union type syntax example in Jac."
+  },
+  {
+    "chunk_id": "b3bc9a9e0192",
+    "verdict": "keep",
+    "reason": "Explains type references and OSP type-filter syntax."
+  },
+  {
+    "chunk_id": "78337d7ab46d",
+    "verdict": "keep",
+    "reason": "Edge-reference type-filter code example."
+  },
+  {
+    "chunk_id": "7eca8424a448",
+    "verdict": "drop",
+    "reason": "Bare section header with no prose or code."
+  },
+  {
+    "chunk_id": "170949ec50d4",
+    "verdict": "keep",
+    "reason": "Numeric literal syntax examples."
+  },
+  {
+    "chunk_id": "8edc374da614",
+    "verdict": "drop",
+    "reason": "Bare header label with no content."
+  },
+  {
+    "chunk_id": "d396b84d22b8",
+    "verdict": "keep",
+    "reason": "String literal forms example."
+  },
+  {
+    "chunk_id": "75d6c4f6bc7c",
+    "verdict": "keep",
+    "reason": "Introduces f-string format spec with explanatory prose."
+  },
+  {
+    "chunk_id": "40e78b37eba0",
+    "verdict": "drop",
+    "reason": "Bare header label with no content."
+  },
+  {
+    "chunk_id": "dcab4b9c18f0",
+    "verdict": "keep",
+    "reason": "Basic f-string interpolation example."
+  },
+  {
+    "chunk_id": "194dd93a6832",
+    "verdict": "drop",
+    "reason": "Bare header label with no content."
+  },
+  {
+    "chunk_id": "cb57c3ce1a9a",
+    "verdict": "keep",
+    "reason": "Width/alignment formatting example."
+  },
+  {
+    "chunk_id": "f4359dd95409",
+    "verdict": "drop",
+    "reason": "Bare header label with no content."
+  },
+  {
+    "chunk_id": "04580cd4980b",
+    "verdict": "keep",
+    "reason": "Detailed number formatting examples."
+  },
+  {
+    "chunk_id": "942185dd5cab",
+    "verdict": "drop",
+    "reason": "Bare header label with no content."
+  },
+  {
+    "chunk_id": "e9b70a82e56a",
+    "verdict": "keep",
+    "reason": "Sign and padding formatting example."
+  },
+  {
+    "chunk_id": "64091860840e",
+    "verdict": "drop",
+    "reason": "Bare header label with no content."
+  },
+  {
+    "chunk_id": "5f3c85a2bb57",
+    "verdict": "keep",
+    "reason": "Conversion flags (!r/!s/!a) example."
+  },
+  {
+    "chunk_id": "7c5e7e2a6825",
+    "verdict": "drop",
+    "reason": "Bare header label with no content."
+  },
+  {
+    "chunk_id": "816c5ef24c60",
+    "verdict": "keep",
+    "reason": "Nested/dynamic format expression example."
+  },
+  {
+    "chunk_id": "d82a2adfc45b",
+    "verdict": "drop",
+    "reason": "Bare header label with no content."
+  },
+  {
+    "chunk_id": "2eaba3bc7346",
+    "verdict": "keep",
+    "reason": "Full format-specification grammar reference."
+  },
+  {
+    "chunk_id": "00b8449d7a58",
+    "verdict": "drop",
+    "reason": "Bare header label with no content."
+  },
+  {
+    "chunk_id": "cf83dba8694f",
+    "verdict": "keep",
+    "reason": "Collection literal syntax examples."
+  },
+  {
+    "chunk_id": "5a53b2055d43",
+    "verdict": "keep",
+    "reason": "Runnable literals/comprehension example."
+  },
+  {
+    "chunk_id": "c4dd34c4182c",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator only."
+  },
+  {
+    "chunk_id": "e7dbcc0a05e8",
+    "verdict": "keep",
+    "reason": "Explains variable categories and has-vs-Python model."
+  },
+  {
+    "chunk_id": "9fbbf2ada3af",
+    "verdict": "keep",
+    "reason": "Local variable declaration examples."
+  },
+  {
+    "chunk_id": "5ee210b4e276",
+    "verdict": "keep",
+    "reason": "Explains has instance-variable declaration semantics."
+  },
+  {
+    "chunk_id": "cedbe37dbd45",
+    "verdict": "keep",
+    "reason": "Python-to-Jac mapping for has declarations."
+  },
+  {
+    "chunk_id": "1d908124fcc7",
+    "verdict": "keep",
+    "reason": "has field/default/static example."
+  },
+  {
+    "chunk_id": "3185a39a73ed",
+    "verdict": "drop",
+    "reason": "Bare header label with no content."
+  },
+  {
+    "chunk_id": "4edd87d60f61",
+    "verdict": "keep",
+    "reason": "Explains postinit field modifier usage."
+  },
+  {
+    "chunk_id": "39e69bffd3df",
+    "verdict": "keep",
+    "reason": "postinit deferred-initialization example."
+  },
+  {
+    "chunk_id": "5684ef9052bc",
+    "verdict": "keep",
+    "reason": "Documents strict declarative data-model rule."
+  },
+  {
+    "chunk_id": "67fb3516797f",
+    "verdict": "keep",
+    "reason": "Explains glob global-variable semantics."
+  },
+  {
+    "chunk_id": "46b1c9a3d544",
+    "verdict": "keep",
+    "reason": "Python-to-Jac mapping for globals."
+  },
+  {
+    "chunk_id": "897f5f33bdde",
+    "verdict": "keep",
+    "reason": "glob declaration example."
+  },
+  {
+    "chunk_id": "d48bdc3ba97b",
+    "verdict": "drop",
+    "reason": "Bare section/subheader with no content."
+  },
+  {
+    "chunk_id": "c218b0abdc33",
+    "verdict": "keep",
+    "reason": "Lead-in sentence framing the LEGB resolution list."
+  },
+  {
+    "chunk_id": "475956b53c7c",
+    "verdict": "keep",
+    "reason": "Defines the LEGB scope resolution order."
+  },
+  {
+    "chunk_id": "7350163d1f9d",
+    "verdict": "keep",
+    "reason": "Nested-scope shadowing example."
+  },
+  {
+    "chunk_id": "bb44a3a45a9c",
+    "verdict": "drop",
+    "reason": "Bare header label with no content."
+  },
+  {
+    "chunk_id": "59fae9539650",
+    "verdict": "keep",
+    "reason": "Explains assignment binding to nearest enclosing scope."
+  },
+  {
+    "chunk_id": "ebb5a363df6b",
+    "verdict": "keep",
+    "reason": "glob rebinding and nested-local example."
+  },
+  {
+    "chunk_id": "880cccc2a405",
+    "verdict": "keep",
+    "reason": "Clarifies which module-level names are rebindable."
+  },
+  {
+    "chunk_id": "b302053f0db9",
+    "verdict": "drop",
+    "reason": "Bare header label with no content."
+  },
+  {
+    "chunk_id": "16e1b44c863a",
+    "verdict": "keep",
+    "reason": "Explains typed-declaration shadowing rule."
+  },
+  {
+    "chunk_id": "d87787700269",
+    "verdict": "keep",
+    "reason": "Typed-local shadowing example."
+  },
+  {
+    "chunk_id": "4fc6136c7e67",
+    "verdict": "keep",
+    "reason": "Documents E0064 late-declaration error."
+  }
+]

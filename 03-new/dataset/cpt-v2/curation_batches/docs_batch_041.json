@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "1a434cccc27a",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "b8c9f0945f9d",
+    "verdict": "drop",
+    "reason": "Bare section heading with no prose."
+  },
+  {
+    "chunk_id": "d9807d505f51",
+    "verdict": "keep",
+    "reason": "Describes jac install two modes and --plan flag."
+  },
+  {
+    "chunk_id": "9027cd1437bc",
+    "verdict": "keep",
+    "reason": "Documents no-argument install mode syncing to jac.toml."
+  },
+  {
+    "chunk_id": "9cec6fb89a56",
+    "verdict": "keep",
+    "reason": "Documents package-mode install semantics and --global/--no-save."
+  },
+  {
+    "chunk_id": "b74b6a94baf3",
+    "verdict": "keep",
+    "reason": "Explains ecosystem flags for dependency recording."
+  },
+  {
+    "chunk_id": "9c971e098eb6",
+    "verdict": "keep",
+    "reason": "Comparison table of recorded vs ad-hoc install targets."
+  },
+  {
+    "chunk_id": "171cd5f8be9d",
+    "verdict": "keep",
+    "reason": "Command usage synopsis for jac install."
+  },
+  {
+    "chunk_id": "60924f32e3bb",
+    "verdict": "keep",
+    "reason": "Full option reference table for jac install."
+  },
+  {
+    "chunk_id": "9215861881cc",
+    "verdict": "drop",
+    "reason": "Bare 'Examples:' label with no content."
+  },
+  {
+    "chunk_id": "1349f0cb71ec",
+    "verdict": "keep",
+    "reason": "Concrete jac install command examples."
+  },
+  {
+    "chunk_id": "6f6baf340ccf",
+    "verdict": "keep",
+    "reason": "Explains private npm registry configuration."
+  },
+  {
+    "chunk_id": "7267cdd579a3",
+    "verdict": "keep",
+    "reason": "Points to optional-dependencies declaration in jac.toml."
+  },
+  {
+    "chunk_id": "0aa3623c930d",
+    "verdict": "keep",
+    "reason": "Explains self-contained bundled-pip install behavior."
+  },
+  {
+    "chunk_id": "4769a514632c",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "7c573a34399e",
+    "verdict": "keep",
+    "reason": "Documents jac x tool runner semantics."
+  },
+  {
+    "chunk_id": "0afec11dbedf",
+    "verdict": "keep",
+    "reason": "Explains jac x project-aware resolution and scripts."
+  },
+  {
+    "chunk_id": "3ea2f0538b0e",
+    "verdict": "keep",
+    "reason": "Documents jac x resolution-order tiers."
+  },
+  {
+    "chunk_id": "d842a7354869",
+    "verdict": "keep",
+    "reason": "Command usage synopsis for jac x."
+  },
+  {
+    "chunk_id": "a63bcaf42479",
+    "verdict": "keep",
+    "reason": "Full option reference table for jac x."
+  },
+  {
+    "chunk_id": "e2b6c852b042",
+    "verdict": "drop",
+    "reason": "Bare 'Examples:' label with no content."
+  },
+  {
+    "chunk_id": "a3d51e6b7422",
+    "verdict": "keep",
+    "reason": "Concrete jac x command examples."
+  },
+  {
+    "chunk_id": "443fbf88a561",
+    "verdict": "keep",
+    "reason": "Explains jac x runtime with no system Python/Node needed."
+  },
+  {
+    "chunk_id": "fad1f4eaf007",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "a68b72caa834",
+    "verdict": "keep",
+    "reason": "Documents jac remove command."
+  },
+  {
+    "chunk_id": "722655360ece",
+    "verdict": "keep",
+    "reason": "Command usage synopsis for jac remove."
+  },
+  {
+    "chunk_id": "fb03fe43c9a6",
+    "verdict": "keep",
+    "reason": "Option reference table for jac remove."
+  },
+  {
+    "chunk_id": "0adf6cc068e5",
+    "verdict": "drop",
+    "reason": "Bare label fragment with no content."
+  },
+  {
+    "chunk_id": "0b3d2ebb04e0",
+    "verdict": "keep",
+    "reason": "Documents --npm option for jac remove."
+  },
+  {
+    "chunk_id": "518672849431",
+    "verdict": "drop",
+    "reason": "Bare 'Examples:' label with no content."
+  },
+  {
+    "chunk_id": "d176801eeb2f",
+    "verdict": "keep",
+    "reason": "Concrete jac remove command examples."
+  },
+  {
+    "chunk_id": "bc1170fde88c",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "c106708b96b4",
+    "verdict": "keep",
+    "reason": "Documents jac update command and version write-back."
+  },
+  {
+    "chunk_id": "5de4b59ecb04",
+    "verdict": "keep",
+    "reason": "Command usage synopsis for jac update."
+  },
+  {
+    "chunk_id": "e7ad82b224b4",
+    "verdict": "keep",
+    "reason": "Option reference table for jac update."
+  },
+  {
+    "chunk_id": "7aaba6a736fa",
+    "verdict": "drop",
+    "reason": "Bare 'Examples:' label with no content."
+  },
+  {
+    "chunk_id": "06de52eb33ad",
+    "verdict": "keep",
+    "reason": "Concrete jac update command examples."
+  },
+  {
+    "chunk_id": "a6eb26836a90",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "d41ec2482054",
+    "verdict": "keep",
+    "reason": "Documents jac clean command."
+  },
+  {
+    "chunk_id": "4f9d66521bff",
+    "verdict": "keep",
+    "reason": "Command usage synopsis for jac clean."
+  },
+  {
+    "chunk_id": "3733fce7d222",
+    "verdict": "keep",
+    "reason": "Option reference table for jac clean."
+  },
+  {
+    "chunk_id": "9ca2e0522cce",
+    "verdict": "keep",
+    "reason": "States default jac clean behavior."
+  },
+  {
+    "chunk_id": "93705defa053",
+    "verdict": "drop",
+    "reason": "Bare 'Examples:' label with no content."
+  },
+  {
+    "chunk_id": "356002e65fd1",
+    "verdict": "keep",
+    "reason": "Concrete jac clean command examples."
+  },
+  {
+    "chunk_id": "600a839dee69",
+    "verdict": "keep",
+    "reason": "Troubleshooting guidance for stale cache errors."
+  },
+  {
+    "chunk_id": "ca59fde2d5e3",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "d4fa8da25746",
+    "verdict": "keep",
+    "reason": "Documents jac purge command."
+  },
+  {
+    "chunk_id": "1b547637ad99",
+    "verdict": "keep",
+    "reason": "Command usage synopsis for jac purge."
+  },
+  {
+    "chunk_id": "22488f63600d",
+    "verdict": "drop",
+    "reason": "Bare label fragment with no content."
+  },
+  {
+    "chunk_id": "0a7aea91ab7a",
+    "verdict": "keep",
+    "reason": "Lists when to use jac purge."
+  }
+]

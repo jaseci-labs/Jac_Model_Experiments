@@ -1,0 +1,571 @@
+{
+  "batch_id": "b15",
+  "generator": "fable-agent-v1",
+  "examples": [
+    {
+      "name": "keycode",
+      "category": "function",
+      "subcategory": "mined_lib_idiomatic",
+      "difficulty": "simple",
+      "py": "def keycode(code: str) -> int:\n    m = {\"KeyW\": 87, \"KeyA\": 65, \"KeyS\": 83, \"KeyD\": 68,\n         \"Space\": 32, \"ArrowUp\": 265, \"ArrowDown\": 264}\n    return m.get(code, 0)",
+      "jac": "def keycode(code: str) -> int {\n    match code {\n        case \"KeyW\":\n            return 87;\n        case \"KeyA\":\n            return 65;\n        case \"KeyS\":\n            return 83;\n        case \"KeyD\":\n            return 68;\n        case \"Space\":\n            return 32;\n        case \"ArrowUp\":\n            return 265;\n        case \"ArrowDown\":\n            return 264;\n        case _:\n            return 0;\n    }\n}\n\nwith entry { print(keycode('KeyW')); }",
+      "expected_output": "87",
+      "cases": [
+        {
+          "input": "KeyW",
+          "output": "87"
+        },
+        {
+          "input": "Space",
+          "output": "32"
+        },
+        {
+          "input": "Escape",
+          "output": "0"
+        }
+      ]
+    },
+    {
+      "name": "shade_rgb",
+      "category": "function",
+      "subcategory": "mined_lib_idiomatic",
+      "difficulty": "simple",
+      "py": "def shade_rgb(spec: dict) -> list:\n    pct = spec[\"pct\"]\n    out = []\n    for c in spec[\"rgb\"]:\n        v = c * pct // 100\n        out.append(v if v < 255 else 255)\n    return out",
+      "jac": "def shade_rgb(spec: dict) -> list {\n    pct = spec[\"pct\"];\n    return [min(c * pct // 100, 255) for c in spec[\"rgb\"]];\n}\n\nwith entry { print(shade_rgb({'rgb': [100, 200, 30], 'pct': 150})); }",
+      "expected_output": "[150, 255, 45]",
+      "cases": [
+        {
+          "input": {
+            "rgb": [
+              100,
+              200,
+              30
+            ],
+            "pct": 150
+          },
+          "output": "[150, 255, 45]"
+        },
+        {
+          "input": {
+            "rgb": [
+              10,
+              20,
+              30
+            ],
+            "pct": 50
+          },
+          "output": "[5, 10, 15]"
+        }
+      ]
+    },
+    {
+      "name": "active_matrix",
+      "category": "function",
+      "subcategory": "mined_lib_idiomatic",
+      "difficulty": "simple",
+      "py": "def active_matrix(state: dict) -> list:\n    if state[\"mode\"] == 0x1701:\n        return state[\"proj\"]\n    return state[\"mv\"]",
+      "jac": "obj MatrixStack {\n    has proj: list = [];\n    has mv: list = [];\n    has mode: int = 0;\n\n    def current -> list {\n        return self.proj if self.mode == 0x1701 else self.mv;\n    }\n}\n\ndef active_matrix(state: dict) -> list {\n    return MatrixStack(proj=state[\"proj\"], mv=state[\"mv\"], mode=state[\"mode\"]).current();\n}\n\nwith entry { print(active_matrix({'proj': [2.0, 0.0, 0.0, 1.0], 'mv': [1.0, 5.0, 5.0, 1.0], 'mode': 5889})); }",
+      "expected_output": "[2.0, 0.0, 0.0, 1.0]",
+      "cases": [
+        {
+          "input": {
+            "proj": [
+              2.0,
+              0.0,
+              0.0,
+              1.0
+            ],
+            "mv": [
+              1.0,
+              5.0,
+              5.0,
+              1.0
+            ],
+            "mode": 5889
+          },
+          "output": "[2.0, 0.0, 0.0, 1.0]"
+        },
+        {
+          "input": {
+            "proj": [
+              2.0,
+              0.0,
+              0.0,
+              1.0
+            ],
+            "mv": [
+              1.0,
+              5.0,
+              5.0,
+              1.0
+            ],
+            "mode": 5888
+          },
+          "output": "[1.0, 5.0, 5.0, 1.0]"
+        }
+      ]
+    },
+    {
+      "name": "translate_matrix",
+      "category": "function",
+      "subcategory": "mined_lib_idiomatic",
+      "difficulty": "simple",
+      "py": "def translate_matrix(v: list) -> list:\n    m = [1.0, 0.0, 0.0, 0.0,\n         0.0, 1.0, 0.0, 0.0,\n         0.0, 0.0, 1.0, 0.0,\n         0.0, 0.0, 0.0, 1.0]\n    m[12] = v[0]\n    m[13] = v[1]\n    m[14] = v[2]\n    return m",
+      "jac": "def translate_matrix(v: list) -> list {\n    m = [1.0 if i % 5 == 0 else 0.0 for i in range(16)];\n    m[12:15] = [v[0], v[1], v[2]];\n    return m;\n}\n\nwith entry { print(translate_matrix([2.0, 3.0, 4.0])); }",
+      "expected_output": "[1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 2.0, 3.0, 4.0, 1.0]",
+      "cases": [
+        {
+          "input": [
+            2.0,
+            3.0,
+            4.0
+          ],
+          "output": "[1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 2.0, 3.0, 4.0, 1.0]"
+        },
+        {
+          "input": [
+            -1.0,
+            0.5,
+            7.0
+          ],
+          "output": "[1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, -1.0, 0.5, 7.0, 1.0]"
+        }
+      ]
+    },
+    {
+      "name": "capture_summary",
+      "category": "function",
+      "subcategory": "mined_lib_idiomatic",
+      "difficulty": "composed",
+      "py": "def capture_summary(results: list) -> str:\n    oks = 0\n    skips = 0\n    for r in results:\n        if r[\"status\"] == \"ok\":\n            oks += 1\n        elif r[\"status\"] == \"skip\":\n            skips += 1\n    fails = len(results) - oks - skips\n    code = 0 if oks > 0 else 1\n    return \"ok=\" + str(oks) + \" skip=\" + str(skips) + \" fail=\" + str(fails) + \" exit=\" + str(code)",
+      "jac": "def capture_summary(results: list) -> str {\n    oks = len([r for r in results if r[\"status\"] == \"ok\"]);\n    skips = len([r for r in results if r[\"status\"] == \"skip\"]);\n    fails = len(results) - oks - skips;\n    return f\"ok={oks} skip={skips} fail={fails} exit={0 if oks > 0 else 1}\";\n}\n\nwith entry { print(capture_summary([{'step': 'compile', 'status': 'ok'}, {'step': 'lint', 'status': 'skip'}, {'step': 'run', 'status': 'fail'}])); }",
+      "expected_output": "ok=1 skip=1 fail=1 exit=0",
+      "cases": [
+        {
+          "input": [
+            {
+              "step": "compile",
+              "status": "ok"
+            },
+            {
+              "step": "lint",
+              "status": "skip"
+            },
+            {
+              "step": "run",
+              "status": "fail"
+            }
+          ],
+          "output": "ok=1 skip=1 fail=1 exit=0"
+        },
+        {
+          "input": [
+            {
+              "step": "boot",
+              "status": "fail"
+            },
+            {
+              "step": "probe",
+              "status": "fail"
+            }
+          ],
+          "output": "ok=0 skip=0 fail=2 exit=1"
+        },
+        {
+          "input": [],
+          "output": "ok=0 skip=0 fail=0 exit=1"
+        }
+      ]
+    },
+    {
+      "name": "blank_payload",
+      "category": "function",
+      "subcategory": "mined_lib_idiomatic",
+      "difficulty": "composed",
+      "py": "def blank_payload(spec: dict) -> dict:\n    return {\"path\": spec[\"path\"], \"lang\": \"\", \"html\": \"\", \"lines\": 0,\n            \"raw\": \"\", \"truncated\": False, \"error\": spec[\"error\"]}",
+      "jac": "obj FilePayload {\n    has path: str = \"\";\n    has lang: str = \"\";\n    has html: str = \"\";\n    has lines: int = 0;\n    has raw: str = \"\";\n    has truncated: bool = False;\n    has error: str = \"\";\n\n    def render -> dict {\n        return {\"path\": self.path, \"lang\": self.lang, \"html\": self.html,\n                \"lines\": self.lines, \"raw\": self.raw,\n                \"truncated\": self.truncated, \"error\": self.error};\n    }\n}\n\ndef blank_payload(spec: dict) -> dict {\n    return FilePayload(path=spec[\"path\"], error=spec[\"error\"]).render();\n}\n\nwith entry { print(blank_payload({'path': 'src/app.jac', 'error': 'not found'})); }",
+      "expected_output": "{'path': 'src/app.jac', 'lang': '', 'html': '', 'lines': 0, 'raw': '', 'truncated': False, 'error': 'not found'}",
+      "cases": [
+        {
+          "input": {
+            "path": "src/app.jac",
+            "error": "not found"
+          },
+          "output": "{'path': 'src/app.jac', 'lang': '', 'html': '', 'lines': 0, 'raw': '', 'truncated': False, 'error': 'not found'}"
+        },
+        {
+          "input": {
+            "path": "assets/logo.svg",
+            "error": "binary file"
+          },
+          "output": "{'path': 'assets/logo.svg', 'lang': '', 'html': '', 'lines': 0, 'raw': '', 'truncated': False, 'error': 'binary file'}"
+        }
+      ]
+    },
+    {
+      "name": "file_meta",
+      "category": "function",
+      "subcategory": "mined_lib_idiomatic",
+      "difficulty": "composed",
+      "py": "def file_meta(spec: dict) -> dict:\n    rel = spec[\"path\"]\n    langs = {\"jac\": \"Jac\", \"py\": \"Python\", \"md\": \"Markdown\", \"json\": \"JSON\", \"toml\": \"TOML\"}\n    if \"/\" in rel:\n        name = rel.rsplit(\"/\", 1)[-1]\n        folder = rel.rsplit(\"/\", 1)[0]\n    else:\n        name = rel\n        folder = \"\"\n    ext = name.rsplit(\".\", 1)[-1].lower() if \".\" in name else \"\"\n    return {\"path\": rel, \"name\": name, \"dir\": folder,\n            \"lang\": langs.get(ext, ext.upper() or \"Text\"), \"size\": spec[\"size\"]}",
+      "jac": "def file_meta(spec: dict) -> dict {\n    rel = spec[\"path\"];\n    langs = {\"jac\": \"Jac\", \"py\": \"Python\", \"md\": \"Markdown\", \"json\": \"JSON\", \"toml\": \"TOML\"};\n    name = rel.rsplit(\"/\", 1)[-1] if \"/\" in rel else rel;\n    folder = rel.rsplit(\"/\", 1)[0] if \"/\" in rel else \"\";\n    ext = name.rsplit(\".\", 1)[-1].lower() if \".\" in name else \"\";\n    return {\"path\": rel, \"name\": name, \"dir\": folder,\n            \"lang\": langs.get(ext, ext.upper() or \"Text\"), \"size\": spec[\"size\"]};\n}\n\nwith entry { print(file_meta({'path': 'client/pages/feed.jac', 'size': 2048})); }",
+      "expected_output": "{'path': 'client/pages/feed.jac', 'name': 'feed.jac', 'dir': 'client/pages', 'lang': 'Jac', 'size': 2048}",
+      "cases": [
+        {
+          "input": {
+            "path": "client/pages/feed.jac",
+            "size": 2048
+          },
+          "output": "{'path': 'client/pages/feed.jac', 'name': 'feed.jac', 'dir': 'client/pages', 'lang': 'Jac', 'size': 2048}"
+        },
+        {
+          "input": {
+            "path": "notes.rst",
+            "size": 96
+          },
+          "output": "{'path': 'notes.rst', 'name': 'notes.rst', 'dir': '', 'lang': 'RST', 'size': 96}"
+        },
+        {
+          "input": {
+            "path": "Makefile",
+            "size": 310
+          },
+          "output": "{'path': 'Makefile', 'name': 'Makefile', 'dir': '', 'lang': 'Text', 'size': 310}"
+        }
+      ]
+    },
+    {
+      "name": "keep_files",
+      "category": "function",
+      "subcategory": "mined_lib_idiomatic",
+      "difficulty": "composed",
+      "py": "def keep_files(paths: list) -> list:\n    binary = [\".png\", \".jpg\", \".gif\", \".wasm\", \".zip\", \".pyc\", \".so\"]\n    kept = []\n    for rel in paths:\n        name = rel.rsplit(\"/\", 1)[-1]\n        if \"__pycache__\" in rel or name.startswith(\".\"):\n            continue\n        ext = \".\" + name.rsplit(\".\", 1)[-1].lower() if \".\" in name else \"\"\n        if ext in binary:\n            continue\n        kept.append(rel)\n    return kept",
+      "jac": "def is_source(rel: str) -> bool {\n    name = rel.rsplit(\"/\", 1)[-1];\n    if \"__pycache__\" in rel or name.startswith(\".\") {\n        return False;\n    }\n    ext = \".\" + name.rsplit(\".\", 1)[-1].lower() if \".\" in name else \"\";\n    return ext not in [\".png\", \".jpg\", \".gif\", \".wasm\", \".zip\", \".pyc\", \".so\"];\n}\n\ndef keep_files(paths: list) -> list {\n    return [rel for rel in paths if is_source(rel)];\n}\n\nwith entry { print(keep_files(['src/main.jac', 'docs/logo.PNG', 'src/__pycache__/main.pyc', '.gitignore', 'README.md'])); }",
+      "expected_output": "['src/main.jac', 'README.md']",
+      "cases": [
+        {
+          "input": [
+            "src/main.jac",
+            "docs/logo.PNG",
+            "src/__pycache__/main.pyc",
+            ".gitignore",
+            "README.md"
+          ],
+          "output": "['src/main.jac', 'README.md']"
+        },
+        {
+          "input": [
+            "a.zip",
+            "b.jac",
+            "lib/c.so",
+            "lib/d.py"
+          ],
+          "output": "['b.jac', 'lib/d.py']"
+        }
+      ]
+    },
+    {
+      "name": "to_follow",
+      "category": "function",
+      "subcategory": "mined_lib_idiomatic",
+      "difficulty": "composed",
+      "py": "def to_follow(feed: dict) -> list:\n    names = []\n    for p in feed[\"profiles\"]:\n        if p[\"id\"] in feed[\"following\"]:\n            continue\n        if p[\"id\"] == feed[\"me\"]:\n            continue\n        names.append(p[\"name\"])\n    return names",
+      "jac": "obj UserView {\n    has id: str;\n    has name: str;\n}\n\ndef to_follow(feed: dict) -> list {\n    users = [UserView(id=p[\"id\"], name=p[\"name\"]) for p in feed[\"profiles\"]];\n    blocked = feed[\"following\"] + [feed[\"me\"]];\n    return [u.name for u in users if u.id not in blocked];\n}\n\nwith entry { print(to_follow({'profiles': [{'id': 'u1', 'name': 'ada'}, {'id': 'u2', 'name': 'grace'}, {'id': 'u3', 'name': 'linus'}], 'following': ['u2'], 'me': 'u1'})); }",
+      "expected_output": "['linus']",
+      "cases": [
+        {
+          "input": {
+            "profiles": [
+              {
+                "id": "u1",
+                "name": "ada"
+              },
+              {
+                "id": "u2",
+                "name": "grace"
+              },
+              {
+                "id": "u3",
+                "name": "linus"
+              }
+            ],
+            "following": [
+              "u2"
+            ],
+            "me": "u1"
+          },
+          "output": "['linus']"
+        },
+        {
+          "input": {
+            "profiles": [
+              {
+                "id": "a",
+                "name": "kim"
+              },
+              {
+                "id": "b",
+                "name": "lee"
+              }
+            ],
+            "following": [],
+            "me": "c"
+          },
+          "output": "['kim', 'lee']"
+        }
+      ]
+    },
+    {
+      "name": "lcg_series",
+      "category": "function",
+      "subcategory": "mined_lib_idiomatic",
+      "difficulty": "composed",
+      "py": "def lcg_series(spec: dict) -> list:\n    seed = spec[\"seed\"]\n    out = []\n    for _ in range(spec[\"n\"]):\n        seed = (seed * 1103515245 + 12345) % 2147483648\n        out.append(round(seed / 2147483648.0, 4))\n    return out",
+      "jac": "obj Lcg {\n    has seed: int;\n\n    def next01 -> float {\n        self.seed = (self.seed * 1103515245 + 12345) % 2147483648;\n        return self.seed / 2147483648.0;\n    }\n}\n\ndef lcg_series(spec: dict) -> list {\n    gen = Lcg(seed=spec[\"seed\"]);\n    return [round(gen.next01(), 4) for _ in range(spec[\"n\"])];\n}\n\nwith entry { print(lcg_series({'seed': 42, 'n': 3})); }",
+      "expected_output": "[0.5823, 0.5198, 0.466]",
+      "cases": [
+        {
+          "input": {
+            "seed": 42,
+            "n": 3
+          },
+          "output": "[0.5823, 0.5198, 0.466]"
+        },
+        {
+          "input": {
+            "seed": 987654321,
+            "n": 2
+          },
+          "output": "[0.4882, 0.2974]"
+        }
+      ]
+    },
+    {
+      "name": "ortho_matrix",
+      "category": "function",
+      "subcategory": "mined_lib_idiomatic",
+      "difficulty": "composed",
+      "py": "def ortho_matrix(box: dict) -> list:\n    l = box[\"l\"]\n    r = box[\"r\"]\n    b = box[\"b\"]\n    t = box[\"t\"]\n    n = box[\"n\"]\n    f = box[\"f\"]\n    return [2.0 / (r - l), 0.0, 0.0, 0.0,\n            0.0, 2.0 / (t - b), 0.0, 0.0,\n            0.0, 0.0, -2.0 / (f - n), 0.0,\n            -(r + l) / (r - l), -(t + b) / (t - b), -(f + n) / (f - n), 1.0]",
+      "jac": "obj OrthoBox {\n    has l: float;\n    has r: float;\n    has b: float;\n    has t: float;\n    has n: float;\n    has f: float;\n\n    def matrix -> list {\n        return [2.0 / (self.r - self.l), 0.0, 0.0, 0.0,\n                0.0, 2.0 / (self.t - self.b), 0.0, 0.0,\n                0.0, 0.0, -2.0 / (self.f - self.n), 0.0,\n                -(self.r + self.l) / (self.r - self.l),\n                -(self.t + self.b) / (self.t - self.b),\n                -(self.f + self.n) / (self.f - self.n), 1.0];\n    }\n}\n\ndef ortho_matrix(box: dict) -> list {\n    return OrthoBox(l=box[\"l\"], r=box[\"r\"], b=box[\"b\"],\n                    t=box[\"t\"], n=box[\"n\"], f=box[\"f\"]).matrix();\n}\n\nwith entry { print(ortho_matrix({'l': 0.0, 'r': 2.0, 'b': 1.0, 't': 3.0, 'n': 1.0, 'f': 3.0})); }",
+      "expected_output": "[1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, -1.0, -2.0, -2.0, 1.0]",
+      "cases": [
+        {
+          "input": {
+            "l": 0.0,
+            "r": 2.0,
+            "b": 1.0,
+            "t": 3.0,
+            "n": 1.0,
+            "f": 3.0
+          },
+          "output": "[1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, -1.0, -2.0, -2.0, 1.0]"
+        },
+        {
+          "input": {
+            "l": -1.0,
+            "r": 3.0,
+            "b": 0.0,
+            "t": 4.0,
+            "n": 0.0,
+            "f": 4.0
+          },
+          "output": "[0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, -0.5, 0.0, -0.5, -1.0, -1.0, 1.0]"
+        }
+      ]
+    },
+    {
+      "name": "mat4_mul",
+      "category": "function",
+      "subcategory": "mined_lib_idiomatic",
+      "difficulty": "advanced",
+      "py": "def mat4_mul(mats: dict) -> list:\n    a = mats[\"a\"]\n    b = mats[\"b\"]\n    c = [0.0] * 16\n    col = 0\n    while col < 4:\n        row = 0\n        while row < 4:\n            s = 0.0\n            k = 0\n            while k < 4:\n                s = s + a[row + 4 * k] * b[k + 4 * col]\n                k = k + 1\n            c[row + 4 * col] = s\n            row = row + 1\n        col = col + 1\n    return c",
+      "jac": "def mat4_mul(mats: dict) -> list {\n    a = mats[\"a\"];\n    b = mats[\"b\"];\n    return [sum([a[row + 4 * k] * b[k + 4 * col] for k in range(4)])\n            for col in range(4) for row in range(4)];\n}\n\nwith entry { print(mat4_mul({'a': [1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 2.0, 3.0, 4.0, 1.0], 'b': [2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0, 1.0]})); }",
+      "expected_output": "[2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 2.0, 3.0, 4.0, 1.0]",
+      "cases": [
+        {
+          "input": {
+            "a": [
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              2.0,
+              3.0,
+              4.0,
+              1.0
+            ],
+            "b": [
+              2.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              2.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              2.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          "output": "[2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 2.0, 3.0, 4.0, 1.0]"
+        },
+        {
+          "input": {
+            "a": [
+              1.0,
+              2.0,
+              0.0,
+              0.0,
+              3.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ],
+            "b": [
+              2.0,
+              1.0,
+              0.0,
+              0.0,
+              1.0,
+              2.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              5.0,
+              5.0,
+              0.0,
+              1.0
+            ]
+          },
+          "output": "[5.0, 5.0, 0.0, 0.0, 7.0, 4.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 20.0, 15.0, 0.0, 1.0]"
+        }
+      ]
+    },
+    {
+      "name": "resolve_hits",
+      "category": "function",
+      "subcategory": "mined_lib_idiomatic",
+      "difficulty": "advanced",
+      "py": "def resolve_hits(world: dict) -> int:\n    score = 0\n    alive = [True for _ in world[\"targets\"]]\n    for b in world[\"bullets\"]:\n        if b[\"life\"] <= 0.0:\n            continue\n        i = 0\n        while i < len(world[\"targets\"]):\n            t = world[\"targets\"][i]\n            if alive[i]:\n                dx = b[\"x\"] - t[\"x\"]\n                dy = b[\"y\"] - t[\"y\"]\n                dz = b[\"z\"] - t[\"z\"]\n                if dx * dx + dy * dy + dz * dz < 1.4:\n                    alive[i] = False\n                    score += 1\n                    break\n            i += 1\n    return score",
+      "jac": "obj Bullet {\n    has x: float;\n    has y: float;\n    has z: float;\n    has life: float;\n}\n\nobj Target {\n    has x: float;\n    has y: float;\n    has z: float;\n    has alive: bool = True;\n\n    def dist2(b: Bullet) -> float {\n        return (b.x - self.x) * (b.x - self.x)\n             + (b.y - self.y) * (b.y - self.y)\n             + (b.z - self.z) * (b.z - self.z);\n    }\n}\n\ndef resolve_hits(world: dict) -> int {\n    bullets = [Bullet(x=d[\"x\"], y=d[\"y\"], z=d[\"z\"], life=d[\"life\"]) for d in world[\"bullets\"]];\n    targets = [Target(x=d[\"x\"], y=d[\"y\"], z=d[\"z\"]) for d in world[\"targets\"]];\n    score = 0;\n    for b in bullets {\n        if b.life <= 0.0 {\n            continue;\n        }\n        for t in targets {\n            if t.alive and t.dist2(b) < 1.4 {\n                t.alive = False;\n                score += 1;\n                break;\n            }\n        }\n    }\n    return score;\n}\n\nwith entry { print(resolve_hits({'bullets': [{'x': 0.0, 'y': 1.0, 'z': 0.0, 'life': 1.5}, {'x': 9.0, 'y': 1.0, 'z': 9.0, 'life': 0.0}, {'x': 4.0, 'y': 2.0, 'z': -3.0, 'life': 0.8}], 'targets': [{'x': 0.5, 'y': 1.0, 'z': 0.0}, {'x': 4.0, 'y': 2.5, 'z': -3.0}, {'x': 9.0, 'y': 1.0, 'z': 9.0}]})); }",
+      "expected_output": "2",
+      "cases": [
+        {
+          "input": {
+            "bullets": [
+              {
+                "x": 0.0,
+                "y": 1.0,
+                "z": 0.0,
+                "life": 1.5
+              },
+              {
+                "x": 9.0,
+                "y": 1.0,
+                "z": 9.0,
+                "life": 0.0
+              },
+              {
+                "x": 4.0,
+                "y": 2.0,
+                "z": -3.0,
+                "life": 0.8
+              }
+            ],
+            "targets": [
+              {
+                "x": 0.5,
+                "y": 1.0,
+                "z": 0.0
+              },
+              {
+                "x": 4.0,
+                "y": 2.5,
+                "z": -3.0
+              },
+              {
+                "x": 9.0,
+                "y": 1.0,
+                "z": 9.0
+              }
+            ]
+          },
+          "output": "2"
+        },
+        {
+          "input": {
+            "bullets": [
+              {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0,
+                "life": 2.0
+              }
+            ],
+            "targets": [
+              {
+                "x": 8.0,
+                "y": 0.0,
+                "z": 0.0
+              },
+              {
+                "x": 0.0,
+                "y": 8.0,
+                "z": 0.0
+              }
+            ]
+          },
+          "output": "0"
+        }
+      ]
+    },
+    {
+      "name": "parse_bench",
+      "category": "function",
+      "subcategory": "mined_lib_idiomatic",
+      "difficulty": "advanced",
+      "py": "def parse_bench(text: str) -> dict:\n    marker = \"BENCH \"\n    for line in text.splitlines():\n        s = line.strip()\n        if not s.startswith(marker):\n            continue\n        fields = {}\n        for part in s[len(marker):].split(\";\"):\n            if \"=\" not in part:\n                continue\n            k = part.split(\"=\", 1)[0].strip()\n            v = part.split(\"=\", 1)[1].strip()\n            fields[k] = int(v) if v.lstrip(\"-\").isdigit() else v\n        return fields\n    return {}",
+      "jac": "def typed(v: str) -> any {\n    return int(v) if v.lstrip(\"-\").isdigit() else v;\n}\n\ndef parse_bench(text: str) -> dict {\n    marker = \"BENCH \";\n    hits = [ln.strip() for ln in text.splitlines() if ln.strip().startswith(marker)];\n    if not hits {\n        return {};\n    }\n    pairs = [p.split(\"=\", 1) for p in hits[0][len(marker):].split(\";\") if \"=\" in p];\n    return {kv[0].strip(): typed(kv[1].strip()) for kv in pairs};\n}\n\nwith entry { print(parse_bench('log start\\n  BENCH frames=240;avg_ms=-4;label=cpu draw\\ndone')); }",
+      "expected_output": "{'frames': 240, 'avg_ms': -4, 'label': 'cpu draw'}",
+      "cases": [
+        {
+          "input": "log start\n  BENCH frames=240;avg_ms=-4;label=cpu draw\ndone",
+          "output": "{'frames': 240, 'avg_ms': -4, 'label': 'cpu draw'}"
+        },
+        {
+          "input": "no marker here\njust noise",
+          "output": "{}"
+        },
+        {
+          "input": "BENCH n=12;mode=fast",
+          "output": "{'n': 12, 'mode': 'fast'}"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,372 @@
+{
+ "batch_id": "b14",
+ "generator": "fable-agent-v1",
+ "examples": [
+  {
+   "name": "tab_name",
+   "category": "function",
+   "subcategory": "mined_lib_idiomatic",
+   "difficulty": "simple",
+   "py": "def tab_name(t: str) -> str:\n    return (\"Home\" if t == \"feed\"\n            else (\"Explore\" if t == \"explore\"\n                  else (\"Channels\" if t == \"channels\" else \"Profile\")))",
+   "jac": "def tab_name(t: str) -> str {\n    match t {\n        case \"feed\":\n            return \"Home\";\n        case \"explore\":\n            return \"Explore\";\n        case \"channels\":\n            return \"Channels\";\n        case _:\n            return \"Profile\";\n    }\n}\n\nwith entry { print(tab_name('feed')); }",
+   "expected_output": "Home",
+   "cases": [
+    {
+     "input": "feed",
+     "output": "Home"
+    },
+    {
+     "input": "channels",
+     "output": "Channels"
+    },
+    {
+     "input": "settings",
+     "output": "Profile"
+    }
+   ]
+  },
+  {
+   "name": "display_username",
+   "category": "function",
+   "subcategory": "mined_lib_idiomatic",
+   "difficulty": "simple",
+   "py": "def display_username(handle: str) -> str:\n    return handle.split(\"@\")[0] if \"@\" in handle else handle",
+   "jac": "def display_username(handle: str) -> str {\n    return handle.split(\"@\")[0] if \"@\" in handle else handle;\n}\n\nwith entry { print(display_username('maya@jaseci.org')); }",
+   "expected_output": "maya",
+   "cases": [
+    {
+     "input": "maya@jaseci.org",
+     "output": "maya"
+    },
+    {
+     "input": "ponytail_dev",
+     "output": "ponytail_dev"
+    }
+   ]
+  },
+  {
+   "name": "signature_phrase",
+   "category": "function",
+   "subcategory": "mined_lib_idiomatic",
+   "difficulty": "simple",
+   "py": "def signature_phrase(signatures: int) -> str:\n    return f\"{signatures} signature{'s' if signatures != 1 else ''}\"",
+   "jac": "def signature_phrase(signatures: int) -> str {\n    return f\"{signatures} signature{'s' if signatures != 1 else ''}\";\n}\n\nwith entry { print(signature_phrase(1)); }",
+   "expected_output": "1 signature",
+   "cases": [
+    {
+     "input": 1,
+     "output": "1 signature"
+    },
+    {
+     "input": 12,
+     "output": "12 signatures"
+    }
+   ]
+  },
+  {
+   "name": "output_tail",
+   "category": "function",
+   "subcategory": "mined_lib_idiomatic",
+   "difficulty": "simple",
+   "py": "def output_tail(out: str) -> str:\n    return \"\\n\".join(out.strip().splitlines()[-8:])",
+   "jac": "def output_tail(out: str) -> str {\n    return \"\\n\".join(out.strip().splitlines()[-8:]);\n}\n\nwith entry { print(output_tail('l1\\nl2\\nl3\\nl4\\nl5\\nl6\\nl7\\nl8\\nl9\\nl10\\n')); }",
+   "expected_output": "l3\nl4\nl5\nl6\nl7\nl8\nl9\nl10",
+   "cases": [
+    {
+     "input": "l1\nl2\nl3\nl4\nl5\nl6\nl7\nl8\nl9\nl10\n",
+     "output": "l3\nl4\nl5\nl6\nl7\nl8\nl9\nl10"
+    },
+    {
+     "input": "boot ok\nready\n",
+     "output": "boot ok\nready"
+    }
+   ]
+  },
+  {
+   "name": "normalize_tags",
+   "category": "function",
+   "subcategory": "mined_lib_idiomatic",
+   "difficulty": "composed",
+   "py": "def normalize_tags(words: list) -> list:\n    cleaned = [w.lower().rstrip(\".,!?;:\") for w in words]\n    tags = []\n    for w in cleaned:\n        if w and w not in tags:\n            tags.append(w)\n    return tags",
+   "jac": "def normalize_tags(words: list) -> list {\n    cleaned = [w.lower().rstrip(\".,!?;:\") for w in words];\n    tags = [];\n    for w in cleaned {\n        if w and w not in tags {\n            tags.append(w);\n        }\n    }\n    return tags;\n}\n\nwith entry { print(normalize_tags(['Jac!', 'jac', 'ML.', '', 'Studio'])); }",
+   "expected_output": "['jac', 'ml', 'studio']",
+   "cases": [
+    {
+     "input": [
+      "Jac!",
+      "jac",
+      "ML.",
+      "",
+      "Studio"
+     ],
+     "output": "['jac', 'ml', 'studio']"
+    },
+    {
+     "input": [
+      "GO!!",
+      "Run,",
+      "go"
+     ],
+     "output": "['go', 'run']"
+    }
+   ]
+  },
+  {
+   "name": "search_filter",
+   "category": "function",
+   "subcategory": "mined_lib_idiomatic",
+   "difficulty": "composed",
+   "py": "def search_filter(spec: dict) -> list:\n    q = str(spec[\"query\"]).lower().strip()\n    return [c for c in spec[\"items\"] if q in str(c).lower()]",
+   "jac": "def search_filter(spec: dict) -> list {\n    q = str(spec[\"query\"]).lower().strip();\n    return [c for c in spec[\"items\"] if q in str(c).lower()];\n}\n\nwith entry { print(search_filter({'items': ['Jac Lang', 'Python', 'Jaseci'], 'query': ' ja '})); }",
+   "expected_output": "['Jac Lang', 'Jaseci']",
+   "cases": [
+    {
+     "input": {
+      "items": [
+       "Jac Lang",
+       "Python",
+       "Jaseci"
+      ],
+      "query": " ja "
+     },
+     "output": "['Jac Lang', 'Jaseci']"
+    },
+    {
+     "input": {
+      "items": [
+       "alpha",
+       "beta"
+      ],
+      "query": "ET"
+     },
+     "output": "['beta']"
+    }
+   ]
+  },
+  {
+   "name": "lang_label",
+   "category": "function",
+   "subcategory": "mined_lib_idiomatic",
+   "difficulty": "composed",
+   "py": "def lang_label(rel: str) -> str:\n    if rel.endswith(\".jac\"):\n        return \"Jac\"\n    table = {\"py\": \"Python\", \"css\": \"CSS\", \"toml\": \"TOML\", \"md\": \"Markdown\",\n             \"json\": \"JSON\", \"sh\": \"Shell\", \"ts\": \"TypeScript\",\n             \"js\": \"JavaScript\", \"html\": \"HTML\", \"txt\": \"Text\",\n             \"yml\": \"YAML\", \"yaml\": \"YAML\"}\n    base = rel.rsplit(\"/\", 1)[-1]\n    ext = base.rsplit(\".\", 1)[-1].lower() if \".\" in base else \"\"\n    return table.get(ext, ext.upper() or \"Text\")",
+   "jac": "glob LANG_TABLE: dict = {\"py\": \"Python\", \"css\": \"CSS\", \"toml\": \"TOML\", \"md\": \"Markdown\",\n                         \"json\": \"JSON\", \"sh\": \"Shell\", \"ts\": \"TypeScript\",\n                         \"js\": \"JavaScript\", \"html\": \"HTML\", \"txt\": \"Text\",\n                         \"yml\": \"YAML\", \"yaml\": \"YAML\"};\n\ndef lang_label(rel: str) -> str {\n    if rel.endswith(\".jac\") {\n        return \"Jac\";\n    }\n    base = rel.rsplit(\"/\", 1)[-1];\n    ext = base.rsplit(\".\", 1)[-1].lower() if \".\" in base else \"\";\n    return LANG_TABLE.get(ext, ext.upper() or \"Text\");\n}\n\nwith entry { print(lang_label('ui/app.jac')); }",
+   "expected_output": "Jac",
+   "cases": [
+    {
+     "input": "ui/app.jac",
+     "output": "Jac"
+    },
+    {
+     "input": "notes/README",
+     "output": "Text"
+    },
+    {
+     "input": "src/mod.rs",
+     "output": "RS"
+    },
+    {
+     "input": "docs/guide.md",
+     "output": "Markdown"
+    }
+   ]
+  },
+  {
+   "name": "truncate_note",
+   "category": "function",
+   "subcategory": "mined_lib_idiomatic",
+   "difficulty": "composed",
+   "py": "def truncate_note(spec: dict) -> tuple:\n    data = spec[\"data\"]\n    truncated = len(data) > spec[\"max_bytes\"]\n    data = data[:spec[\"max_bytes\"]] + \"\\n... (truncated)\\n\" if truncated else data\n    return (data.rstrip(\"\\n\"), truncated)",
+   "jac": "def truncate_note(spec: dict) -> tuple {\n    data = spec[\"data\"];\n    truncated = len(data) > spec[\"max_bytes\"];\n    data = data[:spec[\"max_bytes\"]] + \"\\n... (truncated)\\n\" if truncated else data;\n    return (data.rstrip(\"\\n\"), truncated);\n}\n\nwith entry { print(truncate_note({'data': 'abcdefghij', 'max_bytes': 4})); }",
+   "expected_output": "('abcd\\n... (truncated)', True)",
+   "cases": [
+    {
+     "input": {
+      "data": "abcdefghij",
+      "max_bytes": 4
+     },
+     "output": "('abcd\\n... (truncated)', True)"
+    },
+    {
+     "input": {
+      "data": "hi\n",
+      "max_bytes": 10
+     },
+     "output": "('hi', False)"
+    }
+   ]
+  },
+  {
+   "name": "capture_summary",
+   "category": "function",
+   "subcategory": "mined_lib_idiomatic",
+   "difficulty": "composed",
+   "py": "def capture_summary(results: list) -> str:\n    oks = len([r for r in results if r[\"status\"] == \"ok\"])\n    skips = len([r for r in results if r[\"status\"] == \"skip\"])\n    fails = len(results) - oks - skips\n    code = 0 if oks > 0 else 1\n    return f\"{oks} ok / {skips} skip / {fails} fail -> exit {code}\"",
+   "jac": "def capture_summary(results: list) -> str {\n    oks = len([r for r in results if r[\"status\"] == \"ok\"]);\n    skips = len([r for r in results if r[\"status\"] == \"skip\"]);\n    fails = len(results) - oks - skips;\n    code = 0 if oks > 0 else 1;\n    return f\"{oks} ok / {skips} skip / {fails} fail -> exit {code}\";\n}\n\nwith entry { print(capture_summary([{'status': 'ok'}, {'status': 'skip'}, {'status': 'fail'}])); }",
+   "expected_output": "1 ok / 1 skip / 1 fail -> exit 0",
+   "cases": [
+    {
+     "input": [
+      {
+       "status": "ok"
+      },
+      {
+       "status": "skip"
+      },
+      {
+       "status": "fail"
+      }
+     ],
+     "output": "1 ok / 1 skip / 1 fail -> exit 0"
+    },
+    {
+     "input": [
+      {
+       "status": "fail"
+      },
+      {
+       "status": "fail"
+      }
+     ],
+     "output": "0 ok / 0 skip / 2 fail -> exit 1"
+    }
+   ]
+  },
+  {
+   "name": "should_skip",
+   "category": "function",
+   "subcategory": "mined_lib_idiomatic",
+   "difficulty": "composed",
+   "py": "def should_skip(rel: str) -> bool:\n    if \"__pycache__\" in rel:\n        return True\n    base = rel.rsplit(\"/\", 1)[-1]\n    if base.startswith(\".\"):\n        return True\n    ext = (\".\" + base.rsplit(\".\", 1)[-1].lower()) if \".\" in base else \"\"\n    return ext in {\".png\", \".jpg\", \".gif\", \".woff\", \".zip\", \".pdf\", \".pyc\", \".so\"}",
+   "jac": "def should_skip(rel: str) -> bool {\n    if \"__pycache__\" in rel {\n        return True;\n    }\n    base = rel.rsplit(\"/\", 1)[-1];\n    if base.startswith(\".\") {\n        return True;\n    }\n    ext = (\".\" + base.rsplit(\".\", 1)[-1].lower()) if \".\" in base else \"\";\n    return ext in {\".png\", \".jpg\", \".gif\", \".woff\", \".zip\", \".pdf\", \".pyc\", \".so\"};\n}\n\nwith entry { print(should_skip('app/__pycache__/m.pyc')); }",
+   "expected_output": "True",
+   "cases": [
+    {
+     "input": "app/__pycache__/m.pyc",
+     "output": "True"
+    },
+    {
+     "input": "assets/logo.PNG",
+     "output": "True"
+    },
+    {
+     "input": "src/main.jac",
+     "output": "False"
+    },
+    {
+     "input": "src/.env",
+     "output": "True"
+    }
+   ]
+  },
+  {
+   "name": "shade_rgb",
+   "category": "function",
+   "subcategory": "mined_lib_idiomatic",
+   "difficulty": "composed",
+   "py": "def shade_rgb(spec: dict) -> list:\n    pct = spec[\"pct\"]\n    return [min(c * pct // 100, 255) for c in spec[\"rgb\"]]",
+   "jac": "def shade_rgb(spec: dict) -> list {\n    pct = spec[\"pct\"];\n    return [min(c * pct // 100, 255) for c in spec[\"rgb\"]];\n}\n\nwith entry { print(shade_rgb({'rgb': [100, 200, 40], 'pct': 150})); }",
+   "expected_output": "[150, 255, 60]",
+   "cases": [
+    {
+     "input": {
+      "rgb": [
+       100,
+       200,
+       40
+      ],
+      "pct": 150
+     },
+     "output": "[150, 255, 60]"
+    },
+    {
+     "input": {
+      "rgb": [
+       10,
+       20,
+       30
+      ],
+      "pct": 50
+     },
+     "output": "[5, 10, 15]"
+    }
+   ]
+  },
+  {
+   "name": "parse_bench_json",
+   "category": "function",
+   "subcategory": "mined_lib_idiomatic",
+   "difficulty": "advanced",
+   "py": "import json\n\ndef parse_bench_json(text: str) -> dict | None:\n    for line in text.splitlines():\n        s = line.strip()\n        if s.startswith(\"BENCH_JSON \"):\n            try:\n                return json.loads(s[len(\"BENCH_JSON \"):])\n            except Exception:\n                return None\n    return None",
+   "jac": "import json;\n\ndef parse_bench_json(text: str) -> dict | None {\n    for line in text.splitlines() {\n        s = line.strip();\n        if s.startswith(\"BENCH_JSON \") {\n            try {\n                return json.loads(s[len(\"BENCH_JSON \"):]);\n            } except Exception as e {\n                return None;\n            }\n        }\n    }\n    return None;\n}\n\nwith entry { print(parse_bench_json('warmup\\nBENCH_JSON {\"fps\": 60, \"frames\": 900}\\ndone')); }",
+   "expected_output": "{'fps': 60, 'frames': 900}",
+   "cases": [
+    {
+     "input": "warmup\nBENCH_JSON {\"fps\": 60, \"frames\": 900}\ndone",
+     "output": "{'fps': 60, 'frames': 900}"
+    },
+    {
+     "input": "no marker here",
+     "output": "None"
+    },
+    {
+     "input": "  BENCH_JSON [1, 2]",
+     "output": "[1, 2]"
+    }
+   ]
+  },
+  {
+   "name": "lcg_stream",
+   "category": "function",
+   "subcategory": "mined_lib_idiomatic",
+   "difficulty": "advanced",
+   "py": "def lcg_stream(spec: dict) -> list:\n    seed = spec[\"seed\"]\n    vals = []\n    for i in range(spec[\"n\"]):\n        seed = (seed * 1103515245 + 12345) % 2147483648\n        vals.append(float(seed) / 2147483648.0)\n    return vals",
+   "jac": "obj Lcg {\n    has seed: int;\n\n    def next01() -> float {\n        self.seed = (self.seed * 1103515245 + 12345) % 2147483648;\n        return float(self.seed) / 2147483648.0;\n    }\n}\n\ndef lcg_stream(spec: dict) -> list {\n    gen = Lcg(seed=spec[\"seed\"]);\n    return [gen.next01() for i in range(spec[\"n\"])];\n}\n\nwith entry { print(lcg_stream({'seed': 987654321, 'n': 2})); }",
+   "expected_output": "[0.4882413847371936, 0.29740918753668666]",
+   "cases": [
+    {
+     "input": {
+      "seed": 987654321,
+      "n": 2
+     },
+     "output": "[0.4882413847371936, 0.29740918753668666]"
+    },
+    {
+     "input": {
+      "seed": 42,
+      "n": 3
+     },
+     "output": "[0.5823075897060335, 0.5198187492787838, 0.46597642498090863]"
+    }
+   ]
+  },
+  {
+   "name": "fmt_bench_row",
+   "category": "function",
+   "subcategory": "mined_lib_idiomatic",
+   "difficulty": "advanced",
+   "py": "def fmt_bench_row(d: dict) -> str:\n    if d.get(\"avg\") is None:\n        return \"  \" + d[\"label\"].ljust(6) + \"n/a\".rjust(14) + \"n/a\".rjust(14) + \"n/a\".rjust(12)\n    avg = str(int(d[\"avg\"] * 10.0 + 0.5) / 10.0)\n    peak = str(int(d[\"max\"] * 10.0 + 0.5) / 10.0)\n    return \"  \" + d[\"label\"].ljust(6) + avg.rjust(14) + peak.rjust(14) + str(d[\"frames\"]).rjust(12)",
+   "jac": "obj BenchRow {\n    has label: str;\n    has avg: float = 0.0;\n    has peak: float = 0.0;\n    has frames: int = 0;\n    has missing: bool = False;\n\n    def one_dp(x: float) -> str {\n        return str(int(x * 10.0 + 0.5) / 10.0);\n    }\n\n    def render() -> str {\n        if self.missing {\n            return \"  \" + self.label.ljust(6) + \"n/a\".rjust(14) + \"n/a\".rjust(14) + \"n/a\".rjust(12);\n        }\n        return \"  \" + self.label.ljust(6) + self.one_dp(self.avg).rjust(14)\n            + self.one_dp(self.peak).rjust(14) + str(self.frames).rjust(12);\n    }\n}\n\ndef fmt_bench_row(d: dict) -> str {\n    if d.get(\"avg\") is None {\n        return BenchRow(label=d[\"label\"], missing=True).render();\n    }\n    return BenchRow(label=d[\"label\"], avg=float(d[\"avg\"]),\n                    peak=float(d[\"max\"]), frames=d[\"frames\"]).render();\n}\n\nwith entry { print(fmt_bench_row({'label': 'cpu', 'avg': 3.27, 'max': 9.81, 'frames': 600})); }",
+   "expected_output": "cpu              3.3           9.8         600",
+   "cases": [
+    {
+     "input": {
+      "label": "cpu",
+      "avg": 3.27,
+      "max": 9.81,
+      "frames": 600
+     },
+     "output": "cpu              3.3           9.8         600"
+    },
+    {
+     "input": {
+      "label": "gpu",
+      "avg": null,
+      "max": null,
+      "frames": 0
+     },
+     "output": "gpu              n/a           n/a         n/a"
+    }
+   ]
+  }
+ ]
+}

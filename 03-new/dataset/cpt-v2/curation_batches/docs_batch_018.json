@@ -1,0 +1,252 @@
+[
+ {
+  "chunk_id": "7fae8b2048bd",
+  "verdict": "drop",
+  "reason": "Bare version-header fragment with no prose (nav-only boilerplate)."
+ },
+ {
+  "chunk_id": "f2a6e043150a",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (New Features) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "77056f032541",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (Bug Fixes) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "34be83a6ce66",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (Refactors) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "a7c314957dc6",
+  "verdict": "drop",
+  "reason": "Bare version-header fragment with no prose (nav-only boilerplate)."
+ },
+ {
+  "chunk_id": "5b264396c288",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (New Features) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "5abaf2e38635",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (Bug Fixes) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "db1ecfd1af16",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (Refactors) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "f0278e5d120c",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (Documentation) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "9bdbd9e3d9dd",
+  "verdict": "drop",
+  "reason": "Bare version-header fragment with no prose (nav-only boilerplate)."
+ },
+ {
+  "chunk_id": "7f678c0667cb",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (New Features) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "79ed72b9631a",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (Bug Fixes) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "a9f53f1fefb2",
+  "verdict": "drop",
+  "reason": "Bare version-header fragment with no prose (nav-only boilerplate)."
+ },
+ {
+  "chunk_id": "8a20e1ba10bd",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (Breaking Changes) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "cd4015471a05",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (New Features) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "b99d165313ff",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (Bug Fixes) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "2676960ff2af",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (Refactors) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "06368b7a9b1d",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (Documentation) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "dfa50bbddc18",
+  "verdict": "drop",
+  "reason": "Bare version-header fragment with no prose (nav-only boilerplate)."
+ },
+ {
+  "chunk_id": "559788c87001",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (New Features) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "3df61e86c89d",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (Bug Fixes) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "15314573da5a",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (Refactors) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "0668e1aac93a",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (Documentation) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "13a7cef6e537",
+  "verdict": "drop",
+  "reason": "Bare version-header fragment with no prose (nav-only boilerplate)."
+ },
+ {
+  "chunk_id": "5ac16ee032fe",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (Breaking Changes) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "de637e33ea36",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (New Features) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "d64ee6fe4b17",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (Bug Fixes) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "4fa9fb0b8679",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (Refactors) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "99d59c819711",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (Documentation) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "55fd706bfebd",
+  "verdict": "drop",
+  "reason": "Bare version-header fragment with no prose (nav-only boilerplate)."
+ },
+ {
+  "chunk_id": "7b0a809e5831",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (Breaking Changes) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "0e9a697ba1d1",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (New Features) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "a199e979a86f",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (Bug Fixes) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "7fb082da9970",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (Documentation) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "16881c722c1b",
+  "verdict": "drop",
+  "reason": "Bare version-header fragment with no prose (nav-only boilerplate)."
+ },
+ {
+  "chunk_id": "0ce9472d4b33",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (Bug Fixes) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "920f955f46ab",
+  "verdict": "drop",
+  "reason": "Bare version-header fragment with no prose (nav-only boilerplate)."
+ },
+ {
+  "chunk_id": "bf0e6225cdc7",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (New Features) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "438039418728",
+  "verdict": "drop",
+  "reason": "Bare version-header fragment with no prose (nav-only boilerplate)."
+ },
+ {
+  "chunk_id": "f27346bb2076",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (Breaking Changes) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "dc98cd16df99",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (New Features) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "8cddced14417",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (Bug Fixes) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "f9588e643c38",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (Refactors) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "921eb81f1ad1",
+  "verdict": "drop",
+  "reason": "Bare version-header fragment with no prose (nav-only boilerplate)."
+ },
+ {
+  "chunk_id": "eca6763e365f",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (Breaking Changes) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "5e4e9e5733e6",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (New Features) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "b885d719fc40",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (Bug Fixes) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "ac4414d63c28",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (Refactors) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "97356df534ca",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (Documentation) documenting real Jac language/runtime behavior."
+ },
+ {
+  "chunk_id": "5fb39acdf459",
+  "verdict": "keep",
+  "reason": "Substantive release-note section (jaclang 0.14.0) documenting real Jac language/runtime behavior."
+ }
+]

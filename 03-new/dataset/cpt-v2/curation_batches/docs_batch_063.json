@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "427b0ee64d14",
+    "verdict": "keep",
+    "reason": "Complete worked example of objects, inheritance, and enums with runnable code."
+  },
+  {
+    "chunk_id": "30628bc43051",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "731c476b1187",
+    "verdict": "keep",
+    "reason": "Substantive prose introducing Jac's interface/implementation separation model."
+  },
+  {
+    "chunk_id": "18ecbe106a84",
+    "verdict": "keep",
+    "reason": "Explains module-wide symbol resolution and why forward declarations are unnecessary."
+  },
+  {
+    "chunk_id": "39d5c396911e",
+    "verdict": "keep",
+    "reason": "Code example demonstrating mutual type references in any order."
+  },
+  {
+    "chunk_id": "56d7e2c3b847",
+    "verdict": "keep",
+    "reason": "Documents the E0077 duplicate-declaration error and the decl+impl model, useful error-semantics signal."
+  },
+  {
+    "chunk_id": "ce2c37ff96fd",
+    "verdict": "keep",
+    "reason": "Prose explaining the impl keyword and when implementation blocks are useful."
+  },
+  {
+    "chunk_id": "6d78ab609e54",
+    "verdict": "keep",
+    "reason": "Flagged pair member but not truly redundant: shows decl+impl combined in a single file, distinct from the separate-file convention chunks."
+  },
+  {
+    "chunk_id": "aeb8074d62e8",
+    "verdict": "keep",
+    "reason": "Short but states the .impl.jac file-naming convention, real information."
+  },
+  {
+    "chunk_id": "ac8f4b602f32",
+    "verdict": "drop",
+    "reason": "Filename-label fragment with no standalone content."
+  },
+  {
+    "chunk_id": "676dc827acc7",
+    "verdict": "keep",
+    "reason": "Flagged pair member but serves a distinct purpose: the declaration half of the separate-file (.jac/.impl.jac) convention example."
+  },
+  {
+    "chunk_id": "7bf5050d21e9",
+    "verdict": "drop",
+    "reason": "Filename-label fragment with no standalone content."
+  },
+  {
+    "chunk_id": "6516d060cc24",
+    "verdict": "keep",
+    "reason": "Flagged pair member but not redundant in role: the .impl.jac half of the separate-file convention, complementing 676dc827acc7."
+  },
+  {
+    "chunk_id": "3767cfeef59d",
+    "verdict": "keep",
+    "reason": "Documents variant modules and the .sv/.cl/.na suffix system, Jac-specific core material."
+  },
+  {
+    "chunk_id": "c4152d41c676",
+    "verdict": "keep",
+    "reason": "Head-module precedence rules are unique, non-guessable Jac semantics."
+  },
+  {
+    "chunk_id": "6daced240eff",
+    "verdict": "keep",
+    "reason": "Directory-layout diagram showing how variant and impl files compose a module."
+  },
+  {
+    "chunk_id": "809b9e10bb3f",
+    "verdict": "keep",
+    "reason": "Explains per-variant symbol tables and cross-variant decl/impl linking."
+  },
+  {
+    "chunk_id": "935a8c4a1e33",
+    "verdict": "keep",
+    "reason": "Concrete impl-file matching rules including cross-variant matching and impl/ subdirectory."
+  },
+  {
+    "chunk_id": "56894d69153d",
+    "verdict": "drop",
+    "reason": "Filename-label fragment with no standalone content."
+  },
+  {
+    "chunk_id": "2b80ca529127",
+    "verdict": "keep",
+    "reason": "Head-module declaration code for the multi-variant example."
+  },
+  {
+    "chunk_id": "4dae382368c6",
+    "verdict": "drop",
+    "reason": "Filename-label fragment with no standalone content."
+  },
+  {
+    "chunk_id": "704253b09604",
+    "verdict": "keep",
+    "reason": "Server-variant declaration code for the multi-variant example."
+  },
+  {
+    "chunk_id": "869633a8cea9",
+    "verdict": "drop",
+    "reason": "Filename-label fragment with no standalone content."
+  },
+  {
+    "chunk_id": "9363d34fef4a",
+    "verdict": "keep",
+    "reason": "Client-variant declaration code for the multi-variant example."
+  },
+  {
+    "chunk_id": "7385d8b36565",
+    "verdict": "keep",
+    "reason": "Label carries real information: notes the impl file is cross-variant, covering head and client declarations."
+  },
+  {
+    "chunk_id": "42d7142bc32c",
+    "verdict": "keep",
+    "reason": "Code demonstrating cross-variant implementations in a head impl file."
+  },
+  {
+    "chunk_id": "0f8e8df0c545",
+    "verdict": "keep",
+    "reason": "Label carries real information: server-variant impl living in the shared impl/ folder."
+  },
+  {
+    "chunk_id": "874290f7c875",
+    "verdict": "keep",
+    "reason": "Code completing the server-variant impl example."
+  },
+  {
+    "chunk_id": "201c8bb66470",
+    "verdict": "keep",
+    "reason": "Documents .na.jac native compilation via LLVM/MCJIT and na blocks, unique Jac capability."
+  },
+  {
+    "chunk_id": "53318fa6488c",
+    "verdict": "drop",
+    "reason": "Heading-label fragment with no standalone content."
+  },
+  {
+    "chunk_id": "4ff4b61427c0",
+    "verdict": "keep",
+    "reason": "Explains C-library import syntax and path-vs-logical-name resolution for native code."
+  },
+  {
+    "chunk_id": "24a6108d7f59",
+    "verdict": "keep",
+    "reason": "Code example of extern C function declarations in a .na.jac file."
+  },
+  {
+    "chunk_id": "bdc0e91bab28",
+    "verdict": "keep",
+    "reason": "Explains extern declarations becoming LLVM declare statements and JIT-time symbol resolution."
+  },
+  {
+    "chunk_id": "b409e123b569",
+    "verdict": "keep",
+    "reason": "Native type-mapping rules (int to i64, fixed-width coercion) are precise, non-guessable semantics."
+  },
+  {
+    "chunk_id": "15e1d79e2901",
+    "verdict": "drop",
+    "reason": "Heading-label fragment with no standalone content."
+  },
+  {
+    "chunk_id": "3f0ea1e47616",
+    "verdict": "keep",
+    "reason": "Explains cross-platform logical-name resolution to .so/.dylib/.dll."
+  },
+  {
+    "chunk_id": "083481746cc2",
+    "verdict": "keep",
+    "reason": "Complete raylib FFI example showing a real native Jac program."
+  },
+  {
+    "chunk_id": "0a1434ef2767",
+    "verdict": "keep",
+    "reason": "Practical guidance on when to use implementations, variants, and native files."
+  },
+  {
+    "chunk_id": "88205d114bb2",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "ed67510928ed",
+    "verdict": "drop",
+    "reason": "Nav-only heading fragment for a link list."
+  },
+  {
+    "chunk_id": "a6c38a951269",
+    "verdict": "drop",
+    "reason": "Nav-only link list with no documentation prose."
+  },
+  {
+    "chunk_id": "6a52916cb9fb",
+    "verdict": "drop",
+    "reason": "Nav-only heading fragment for a link list."
+  },
+  {
+    "chunk_id": "09ab5394fd59",
+    "verdict": "drop",
+    "reason": "Nav-only link list with no documentation prose."
+  },
+  {
+    "chunk_id": "f838cc99bdc7",
+    "verdict": "drop",
+    "reason": "Title plus breadcrumb/related-links navigation with no substantive prose."
+  },
+  {
+    "chunk_id": "4d48be4f6ed5",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "97553e42bc37",
+    "verdict": "keep",
+    "reason": "Substantive introduction to library mode and the jaclang.lib package."
+  },
+  {
+    "chunk_id": "5449527ae767",
+    "verdict": "keep",
+    "reason": "Scopes library mode against Python integration and names the jac2py workflow."
+  },
+  {
+    "chunk_id": "aab66d14b564",
+    "verdict": "drop",
+    "reason": "One-line lead-in fragment with no content of its own."
+  },
+  {
+    "chunk_id": "268deb8062d2",
+    "verdict": "keep",
+    "reason": "Concrete audience/use-case list for library mode adoption."
+  },
+  {
+    "chunk_id": "baf90dbfd51f",
+    "verdict": "keep",
+    "reason": "Documents the root-as-keyword vs root()-as-function distinction and E0049, subtle high-value semantics."
+  }
+]

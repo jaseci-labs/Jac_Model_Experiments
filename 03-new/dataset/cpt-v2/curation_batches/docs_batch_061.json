@@ -1,0 +1,255 @@
+[
+  {
+    "chunk_id": "de388f1669d9",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "48617c0e1288",
+    "verdict": "drop",
+    "reason": "Nav-only heading fragment introducing a link list, no doc content."
+  },
+  {
+    "chunk_id": "69f43065991e",
+    "verdict": "drop",
+    "reason": "Pure cross-reference link list with no Jac prose."
+  },
+  {
+    "chunk_id": "711f08244a25",
+    "verdict": "drop",
+    "reason": "Nav label fragment only."
+  },
+  {
+    "chunk_id": "cd6ab281a360",
+    "verdict": "drop",
+    "reason": "Single cross-reference link line, nav-only."
+  },
+  {
+    "chunk_id": "2e654b975905",
+    "verdict": "drop",
+    "reason": "Part title plus TOC lead-in, no substantive content."
+  },
+  {
+    "chunk_id": "c0290f90db07",
+    "verdict": "drop",
+    "reason": "In-page table-of-contents anchor links only."
+  },
+  {
+    "chunk_id": "40b929a87d08",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "4c07ce12bf2a",
+    "verdict": "keep",
+    "reason": "Genuine overview prose on def/can/has/impl distinguishing Jac from Python."
+  },
+  {
+    "chunk_id": "0e9b0050c499",
+    "verdict": "keep",
+    "reason": "Substantive intro to functions and context-triggered abilities."
+  },
+  {
+    "chunk_id": "e051000c9979",
+    "verdict": "keep",
+    "reason": "Canonical function-declaration examples in the reference file; flagged twin is absent here and 0.5 containment suggests partial overlap only."
+  },
+  {
+    "chunk_id": "366f5ccd59b2",
+    "verdict": "keep",
+    "reason": "States the Jac-specific rule that docstrings precede declarations."
+  },
+  {
+    "chunk_id": "73485f1da4b0",
+    "verdict": "keep",
+    "reason": "Concrete docstring placement example."
+  },
+  {
+    "chunk_id": "18baf72ca535",
+    "verdict": "drop",
+    "reason": "Heading-plus-label stub with no prose or code."
+  },
+  {
+    "chunk_id": "44a0bb435d4d",
+    "verdict": "keep",
+    "reason": "Informative parameter-category reference table."
+  },
+  {
+    "chunk_id": "bfd2f5373aad",
+    "verdict": "drop",
+    "reason": "Bold label fragment only, no content."
+  },
+  {
+    "chunk_id": "2fc04110d3fd",
+    "verdict": "keep",
+    "reason": "Complete annotated example of parameter ordering rules."
+  },
+  {
+    "chunk_id": "9781a212428f",
+    "verdict": "drop",
+    "reason": "Bold label fragment only, no content."
+  },
+  {
+    "chunk_id": "fa12a4443de2",
+    "verdict": "keep",
+    "reason": "Working positional-only parameter example."
+  },
+  {
+    "chunk_id": "df1aaf9ffb06",
+    "verdict": "drop",
+    "reason": "Bold label fragment only, no content."
+  },
+  {
+    "chunk_id": "cb26955324eb",
+    "verdict": "keep",
+    "reason": "Working keyword-only parameter example."
+  },
+  {
+    "chunk_id": "6e73e5cdbd21",
+    "verdict": "drop",
+    "reason": "Bold label fragment only, no content."
+  },
+  {
+    "chunk_id": "79ccac4b1f43",
+    "verdict": "keep",
+    "reason": "Thorough args/kwargs example with expected output."
+  },
+  {
+    "chunk_id": "e3e5e6cc262b",
+    "verdict": "drop",
+    "reason": "Bold label fragment only, no content."
+  },
+  {
+    "chunk_id": "33a822f5e80a",
+    "verdict": "keep",
+    "reason": "Concrete argument-unpacking example."
+  },
+  {
+    "chunk_id": "2b1426498456",
+    "verdict": "upweight",
+    "reason": "Explains the can-vs-def split and event-driven ability triggering, a core OSP concept.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "630e8cba1171",
+    "verdict": "upweight",
+    "reason": "Comparison table covering walker entry/exit ability triggering semantics, core OSP.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "cbd4b6453330",
+    "verdict": "upweight",
+    "reason": "Walker example exercising visit [-->], here, report, and entry/exit abilities — core traversal mechanics.",
+    "weight": 3.5
+  },
+  {
+    "chunk_id": "123de9c38ca5",
+    "verdict": "drop",
+    "reason": "Pure cross-reference pointer to another part, nav-only."
+  },
+  {
+    "chunk_id": "6b0be3064d9d",
+    "verdict": "keep",
+    "reason": "Brief but real statement that def declares methods on archetypes."
+  },
+  {
+    "chunk_id": "f2c8ceedadc1",
+    "verdict": "keep",
+    "reason": "Concrete obj method example with has fields and self."
+  },
+  {
+    "chunk_id": "59a1533208ef",
+    "verdict": "keep",
+    "reason": "Explains the three method modifiers and their receivers."
+  },
+  {
+    "chunk_id": "f030c6f4176d",
+    "verdict": "keep",
+    "reason": "Working static/instance method example with static has."
+  },
+  {
+    "chunk_id": "f37cc1e93e92",
+    "verdict": "keep",
+    "reason": "Useful modifier-vs-receiver reference table."
+  },
+  {
+    "chunk_id": "ad1954c1bf18",
+    "verdict": "keep",
+    "reason": "Substantive lead-in explaining the static-def factory idiom."
+  },
+  {
+    "chunk_id": "5aec9f549ab1",
+    "verdict": "keep",
+    "reason": "Complete factory-method plus inheritance example."
+  },
+  {
+    "chunk_id": "45a91d03328c",
+    "verdict": "keep",
+    "reason": "Explains Self annotation for fluent/builder patterns."
+  },
+  {
+    "chunk_id": "f3e66772d487",
+    "verdict": "keep",
+    "reason": "Working Self-returning builder example."
+  },
+  {
+    "chunk_id": "81bcbdc73c1d",
+    "verdict": "keep",
+    "reason": "Small but informative table on what Self resolves to."
+  },
+  {
+    "chunk_id": "43009e3f1ee7",
+    "verdict": "keep",
+    "reason": "Genuine caveat about class-def Self and the type checker, useful tooling knowledge."
+  },
+  {
+    "chunk_id": "cb26d11e8203",
+    "verdict": "keep",
+    "reason": "Precise Jac-specific lambda syntax and implicit-return semantics."
+  },
+  {
+    "chunk_id": "928a5e653254",
+    "verdict": "keep",
+    "reason": "Comprehensive lambda examples covering Jac's braced-body forms."
+  },
+  {
+    "chunk_id": "84bed3cfdb57",
+    "verdict": "keep",
+    "reason": "Real explanatory prose on closures and per-call bindings."
+  },
+  {
+    "chunk_id": "ecec3200be3f",
+    "verdict": "keep",
+    "reason": "Concrete closure example demonstrating independent captured state."
+  },
+  {
+    "chunk_id": "303c121a8708",
+    "verdict": "keep",
+    "reason": "Actionable guidance on mutating state via configured objects vs rebinding captures."
+  },
+  {
+    "chunk_id": "0af5239dfb0c",
+    "verdict": "keep",
+    "reason": "Substantive intro defining the IIFE pattern and its uses."
+  },
+  {
+    "chunk_id": "ced413d6c467",
+    "verdict": "drop",
+    "reason": "Bold label fragment only, no content."
+  },
+  {
+    "chunk_id": "fbc8010682c3",
+    "verdict": "keep",
+    "reason": "Working lambda IIFE example."
+  },
+  {
+    "chunk_id": "1b9eee6eeb10",
+    "verdict": "drop",
+    "reason": "Bold label fragment only, no content."
+  },
+  {
+    "chunk_id": "fb762ca42784",
+    "verdict": "keep",
+    "reason": "Working multi-statement def IIFE example."
+  }
+]

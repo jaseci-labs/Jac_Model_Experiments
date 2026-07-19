@@ -1,0 +1,21 @@
+{
+  "batch_id": "b09",
+  "accepted": [
+    "flagged_census",
+    "min_max_product",
+    "tail_after_first_negative",
+    "indexed_labels",
+    "open_gate_run",
+    "best_meeting_point",
+    "portal_fanout_total",
+    "even_odd_depth_gap",
+    "leaves_to_half",
+    "overlap_report",
+    "sale_purchases",
+    "peak_radius_count",
+    "flagged_reach_total",
+    "top_k_harvest"
+  ],
+  "rejected": [],
+  "accept_rate": 1.0
+}

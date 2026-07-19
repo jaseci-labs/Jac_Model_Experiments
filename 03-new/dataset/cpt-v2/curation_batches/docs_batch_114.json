@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "6422da0599b6",
+    "verdict": "keep",
+    "reason": "Genuine CLI usage example for jac scale status."
+  },
+  {
+    "chunk_id": "980e70422a5c",
+    "verdict": "keep",
+    "reason": "Lead-in prose to the deployment status table, part of flowing doc content."
+  },
+  {
+    "chunk_id": "21eb8ec61b5d",
+    "verdict": "keep",
+    "reason": "Substantive list describing what deployment status reports."
+  },
+  {
+    "chunk_id": "54257b690824",
+    "verdict": "keep",
+    "reason": "Lead-in prose to the status values table."
+  },
+  {
+    "chunk_id": "465d4180fab2",
+    "verdict": "keep",
+    "reason": "Informative table of deployment status values and meanings."
+  },
+  {
+    "chunk_id": "92b8ad4fd073",
+    "verdict": "drop",
+    "reason": "Chunk is only a markdown horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "7219b91618c7",
+    "verdict": "keep",
+    "reason": "Explains the managed=jac-scale resource labeling convention."
+  },
+  {
+    "chunk_id": "673c0e7c5c5f",
+    "verdict": "keep",
+    "reason": "Concrete kubectl example for listing jac-scale managed resources."
+  },
+  {
+    "chunk_id": "efa07f33d26c",
+    "verdict": "keep",
+    "reason": "Enumerates the Kubernetes resource types jac-scale tags."
+  },
+  {
+    "chunk_id": "37fc8d1213aa",
+    "verdict": "drop",
+    "reason": "Chunk is only a markdown horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "5b2cdf74778b",
+    "verdict": "keep",
+    "reason": "Genuine CLI usage example for jac scale destroy."
+  },
+  {
+    "chunk_id": "672fd3eeab57",
+    "verdict": "keep",
+    "reason": "Important warning about destructive namespace deletion behavior."
+  },
+  {
+    "chunk_id": "910f2b11054e",
+    "verdict": "keep",
+    "reason": "Lead-in prose to the list of resources removed by destroy."
+  },
+  {
+    "chunk_id": "4252d81912cf",
+    "verdict": "keep",
+    "reason": "Substantive list of resources removed on destroy including data-loss note."
+  },
+  {
+    "chunk_id": "f15d72ca5d64",
+    "verdict": "drop",
+    "reason": "Chunk is only a markdown horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "8347e9bf9f7e",
+    "verdict": "keep",
+    "reason": "Introduces built-in health check endpoints for Kubernetes probes."
+  },
+  {
+    "chunk_id": "4f2b91bdcc0b",
+    "verdict": "keep",
+    "reason": "Documents the /health and /ready probe endpoints."
+  },
+  {
+    "chunk_id": "20dd5561a828",
+    "verdict": "keep",
+    "reason": "Prose transition introducing custom health walkers."
+  },
+  {
+    "chunk_id": "417007c24186",
+    "verdict": "keep",
+    "reason": "Section header prose introducing the health walker example."
+  },
+  {
+    "chunk_id": "497df5385758",
+    "verdict": "keep",
+    "reason": "Real Jac walker code example showing walker/can/report syntax."
+  },
+  {
+    "chunk_id": "cf9de91161a2",
+    "verdict": "keep",
+    "reason": "Documents the POST /walker/health endpoint mapping for walkers."
+  },
+  {
+    "chunk_id": "41323114930c",
+    "verdict": "keep",
+    "reason": "Substantive Jac walker example with conditional report logic."
+  },
+  {
+    "chunk_id": "42769f1b91d9",
+    "verdict": "drop",
+    "reason": "Chunk is only a markdown horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "89ee35c8b361",
+    "verdict": "keep",
+    "reason": "Explains built-in Prometheus metrics and the /metrics endpoint."
+  },
+  {
+    "chunk_id": "d557466851eb",
+    "verdict": "keep",
+    "reason": "Lead-in prose to the metrics configuration example."
+  },
+  {
+    "chunk_id": "ff8f4f2de375",
+    "verdict": "keep",
+    "reason": "Concrete jac.toml [scale.monitoring] configuration example."
+  },
+  {
+    "chunk_id": "4de77b22679e",
+    "verdict": "keep",
+    "reason": "Reference table of monitoring config options with defaults."
+  },
+  {
+    "chunk_id": "85f106ce6dc7",
+    "verdict": "keep",
+    "reason": "Useful note on how the metrics namespace default is derived."
+  },
+  {
+    "chunk_id": "aade794102db",
+    "verdict": "keep",
+    "reason": "Reference table of exposed Prometheus metrics with types and labels."
+  },
+  {
+    "chunk_id": "5f93c811113b",
+    "verdict": "keep",
+    "reason": "Explains admin authentication requirement for the /metrics endpoint."
+  },
+  {
+    "chunk_id": "d3ac7eb65b9f",
+    "verdict": "keep",
+    "reason": "Concrete curl example for authenticated metrics scraping."
+  },
+  {
+    "chunk_id": "5790fd83a50a",
+    "verdict": "keep",
+    "reason": "Explains 403 behavior and rationale for protecting metrics data."
+  },
+  {
+    "chunk_id": "11bb9bc26800",
+    "verdict": "keep",
+    "reason": "Describes the admin portal monitoring dashboard and its location."
+  },
+  {
+    "chunk_id": "9741acf21a58",
+    "verdict": "keep",
+    "reason": "Documents the /admin/metrics structured JSON endpoint."
+  },
+  {
+    "chunk_id": "f45cb5481013",
+    "verdict": "keep",
+    "reason": "Concrete curl example for the admin metrics endpoint."
+  },
+  {
+    "chunk_id": "131cb0661667",
+    "verdict": "keep",
+    "reason": "Lead-in prose to the JSON response format example."
+  },
+  {
+    "chunk_id": "1edce00dd309",
+    "verdict": "keep",
+    "reason": "Substantive JSON response schema example for admin metrics."
+  },
+  {
+    "chunk_id": "6e9a799ecb3d",
+    "verdict": "keep",
+    "reason": "Lead-in prose to the dashboard display feature list."
+  },
+  {
+    "chunk_id": "09d29f6f7c99",
+    "verdict": "keep",
+    "reason": "Substantive list of what the monitoring dashboard displays."
+  },
+  {
+    "chunk_id": "ecef32e0d98c",
+    "verdict": "keep",
+    "reason": "Useful detail that metrics endpoint requests are excluded from tracking."
+  },
+  {
+    "chunk_id": "94b5dfebc55f",
+    "verdict": "drop",
+    "reason": "Chunk is only a markdown horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "8de2ac5df981",
+    "verdict": "keep",
+    "reason": "Introduces the [scale.secrets] mechanism for Kubernetes secrets."
+  },
+  {
+    "chunk_id": "e40df6bcb0b4",
+    "verdict": "keep",
+    "reason": "Concrete jac.toml [scale.secrets] configuration example."
+  },
+  {
+    "chunk_id": "8e21ce5766a5",
+    "verdict": "keep",
+    "reason": "Explains env-var resolution and Kubernetes Secret injection semantics."
+  },
+  {
+    "chunk_id": "35fb05207378",
+    "verdict": "keep",
+    "reason": "Complete jac.toml secrets example with multiple keys."
+  },
+  {
+    "chunk_id": "cb077adebc44",
+    "verdict": "keep",
+    "reason": "Concrete shell workflow example for setting env vars and deploying."
+  },
+  {
+    "chunk_id": "336fc206791f",
+    "verdict": "keep",
+    "reason": "Explains the benefit of automatic secret creation over manual kubectl."
+  },
+  {
+    "chunk_id": "32dfc112aeb7",
+    "verdict": "drop",
+    "reason": "Chunk is only a markdown horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "27070046387d",
+    "verdict": "keep",
+    "reason": "Substantive explanation of jac-scale source distribution model across cluster types."
+  },
+  {
+    "chunk_id": "1e808f87e8b3",
+    "verdict": "keep",
+    "reason": "Genuine official documentation explaining the jac-scale Kubernetes secret lifecycle; informative plugin content but not core OSP material."
+  }
+]

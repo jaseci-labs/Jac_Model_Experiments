@@ -1,0 +1,253 @@
+[
+  {
+    "chunk_id": "e0f94ea670d7",
+    "verdict": "keep",
+    "reason": "Short but carries real information (default-on behavior and where to tune it) that contextualizes the following config table."
+  },
+  {
+    "chunk_id": "9cd20e546140",
+    "verdict": "keep",
+    "reason": "Genuine config reference table for Redis L1 invalidation keys and defaults."
+  },
+  {
+    "chunk_id": "f80a83cd18f9",
+    "verdict": "keep",
+    "reason": "Substantive prose on L1 invalidation limits and the check-then-create race, including real Jac graph-query syntax."
+  },
+  {
+    "chunk_id": "605afafc24d3",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "35efb2735183",
+    "verdict": "drop",
+    "reason": "Bare section heading with no prose or code."
+  },
+  {
+    "chunk_id": "db1e7445437f",
+    "verdict": "keep",
+    "reason": "Concrete allroots() builtin example in Jac code."
+  },
+  {
+    "chunk_id": "3017064ecf85",
+    "verdict": "keep",
+    "reason": "Concrete commit() builtin example in Jac code."
+  },
+  {
+    "chunk_id": "c47a90e1144d",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "d0412ba906d4",
+    "verdict": "keep",
+    "reason": "Core explanation of how Scale turns walkers into REST endpoints via jac start."
+  },
+  {
+    "chunk_id": "ade99354ada8",
+    "verdict": "keep",
+    "reason": "Genuine prose describing the --scale production deployment flow and page scope."
+  },
+  {
+    "chunk_id": "eda8cf16252a",
+    "verdict": "keep",
+    "reason": "Important packaging fact that Scale ships inside jaclang core, not as a separate package."
+  },
+  {
+    "chunk_id": "f9bfc84c8ad7",
+    "verdict": "drop",
+    "reason": "Nav-only sentence directing readers to other pages, no technical content."
+  },
+  {
+    "chunk_id": "3ae0e8715687",
+    "verdict": "drop",
+    "reason": "Auto-generated HTML/JS fragment-redirect boilerplate with no documentation value."
+  },
+  {
+    "chunk_id": "28f8f4353ef7",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "ae98b84ef87a",
+    "verdict": "keep",
+    "reason": "Substantive explanation of the optional-dependency model and jac install workflow."
+  },
+  {
+    "chunk_id": "4d8cd7b247b2",
+    "verdict": "keep",
+    "reason": "Concrete jac install command example tied to the dependency model."
+  },
+  {
+    "chunk_id": "6fbc676fc2a9",
+    "verdict": "keep",
+    "reason": "Real mapping of jac.toml config sections to resolved dependencies."
+  },
+  {
+    "chunk_id": "70f1b236400e",
+    "verdict": "keep",
+    "reason": "Useful error-message documentation for missing optional dependencies."
+  },
+  {
+    "chunk_id": "d7a122997fc7",
+    "verdict": "keep",
+    "reason": "Genuine capability-to-dependency reference table."
+  },
+  {
+    "chunk_id": "8a092c349232",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "1ce625fc26fc",
+    "verdict": "drop",
+    "reason": "Nav-only lead-in sentence announcing a page listing, no technical content."
+  },
+  {
+    "chunk_id": "65b18a9099c1",
+    "verdict": "keep",
+    "reason": "Index table, but its per-page descriptions enumerate Scale's feature surface with real informational content."
+  },
+  {
+    "chunk_id": "c35da82d70d8",
+    "verdict": "drop",
+    "reason": "Nav-only transition sentence pointing to tutorials."
+  },
+  {
+    "chunk_id": "330f2bb20193",
+    "verdict": "drop",
+    "reason": "Link list with no prose, pure navigation."
+  },
+  {
+    "chunk_id": "066faa6414e5",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "79a004fce47b",
+    "verdict": "keep",
+    "reason": "Genuine prose introducing Library Mode and its purpose for Python integration."
+  },
+  {
+    "chunk_id": "628b4a4903d4",
+    "verdict": "drop",
+    "reason": "Nav-only pointer to another page, no standalone content."
+  },
+  {
+    "chunk_id": "9928822ca27c",
+    "verdict": "drop",
+    "reason": "Bare '**Key Features:**' label with no content."
+  },
+  {
+    "chunk_id": "7ecdcd8e118c",
+    "verdict": "keep",
+    "reason": "Substantive feature list for Library Mode (jaclang.lib imports, decorators, tooling)."
+  },
+  {
+    "chunk_id": "cac607513955",
+    "verdict": "drop",
+    "reason": "Bare '**Quick Example:**' label with no content."
+  },
+  {
+    "chunk_id": "045821d6e44e",
+    "verdict": "upweight",
+    "reason": "Compact working example of core OSP mechanics (Node, Walker, on_entry, here, spawn on root) that directly teaches the traversal model.",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "a6f80ebd8331",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "7d1b26e44b05",
+    "verdict": "drop",
+    "reason": "Related-resources link list, pure navigation."
+  },
+  {
+    "chunk_id": "0e3f7126a4ba",
+    "verdict": "keep",
+    "reason": "Substantive intro explaining jac build --as wheel and PyPI publishing without setuptools."
+  },
+  {
+    "chunk_id": "1913c1659216",
+    "verdict": "drop",
+    "reason": "Single 'this page covers' sentence, nav-only filler."
+  },
+  {
+    "chunk_id": "aa5fa01063fc",
+    "verdict": "drop",
+    "reason": "Heading plus lead-in sentence with no content of its own; the steps live in the next chunk."
+  },
+  {
+    "chunk_id": "b45e42e0f245",
+    "verdict": "keep",
+    "reason": "The actual three-step publishing pipeline (declare, build, upload via twine)."
+  },
+  {
+    "chunk_id": "ba4b524216e4",
+    "verdict": "keep",
+    "reason": "Real detail on the wheel metadata files Jac generates and reproducibility."
+  },
+  {
+    "chunk_id": "0b4f46087c72",
+    "verdict": "keep",
+    "reason": "Explains required vs optional [project] metadata fields."
+  },
+  {
+    "chunk_id": "2ea99e53a4f0",
+    "verdict": "keep",
+    "reason": "Complete canonical jac.toml [project] metadata example."
+  },
+  {
+    "chunk_id": "96490ea75a2f",
+    "verdict": "keep",
+    "reason": "Genuine explanation of how classifiers map to wheel METADATA and PyPI display."
+  },
+  {
+    "chunk_id": "d3438b6d5b7f",
+    "verdict": "keep",
+    "reason": "Actionable warning about a real TOML type pitfall producing malformed metadata."
+  },
+  {
+    "chunk_id": "478925fe128d",
+    "verdict": "keep",
+    "reason": "Substantive mapping of [dependencies]/[dev-dependencies]/extras to Requires-Dist behavior."
+  },
+  {
+    "chunk_id": "a5edf88ff21f",
+    "verdict": "drop",
+    "reason": "Single cross-reference link sentence, nav-only."
+  },
+  {
+    "chunk_id": "35ebf53e6b77",
+    "verdict": "keep",
+    "reason": "Useful migration note for the [package] to [project] rename that models should know."
+  },
+  {
+    "chunk_id": "18d456a72892",
+    "verdict": "keep",
+    "reason": "Explains default package collection and how [project.include] overrides it."
+  },
+  {
+    "chunk_id": "4dd4e2ff59c0",
+    "verdict": "keep",
+    "reason": "Concrete [project.include] and data-file bundling example."
+  },
+  {
+    "chunk_id": "4979b54cab53",
+    "verdict": "keep",
+    "reason": "Real detail on default-included file types and always-excluded build artifacts."
+  },
+  {
+    "chunk_id": "804905544799",
+    "verdict": "keep",
+    "reason": "Actionable warning about the single-file module limitation and its workaround."
+  },
+  {
+    "chunk_id": "79a2a58758f0",
+    "verdict": "keep",
+    "reason": "Heading plus a real instruction introducing [entrypoints] console scripts."
+  }
+]

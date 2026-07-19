@@ -1,0 +1,254 @@
+[
+  {
+    "chunk_id": "7f2b16c28b54",
+    "verdict": "keep",
+    "reason": "Complete forward-pipe example with equivalence comment, genuine syntax content."
+  },
+  {
+    "chunk_id": "1e4b5fc0a2e1",
+    "verdict": "drop",
+    "reason": "Header-only fragment with no prose; the atomic-pipe content lives in adjacent chunks."
+  },
+  {
+    "chunk_id": "30466fc050e5",
+    "verdict": "keep",
+    "reason": "Substantive explanation of atomic pipe semantics and precedence versus |>."
+  },
+  {
+    "chunk_id": "17b613493de0",
+    "verdict": "keep",
+    "reason": "Working atomic-pipe code example with expected outputs."
+  },
+  {
+    "chunk_id": "b55ca2b8f104",
+    "verdict": "upweight",
+    "reason": "Documents a real spawn runtime pitfall correcting stale material, directly about walker spawn mechanics.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "c508868ae307",
+    "verdict": "upweight",
+    "reason": "Canonical minimal node/walker/spawn/here example, core OSP entry-ability semantics.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "9b98b1fc4b33",
+    "verdict": "drop",
+    "reason": "Header-only fragment with no content of its own."
+  },
+  {
+    "chunk_id": "ad3e894d6587",
+    "verdict": "keep",
+    "reason": "Short but genuine prose defining what dot pipes do."
+  },
+  {
+    "chunk_id": "4340891a9279",
+    "verdict": "keep",
+    "reason": "Full dot-pipe method-chaining example with equivalence shown."
+  },
+  {
+    "chunk_id": "4b0b275be6fc",
+    "verdict": "drop",
+    "reason": "Header-only fragment; the lambda-pipe example is in the next chunk."
+  },
+  {
+    "chunk_id": "b07c801780c7",
+    "verdict": "keep",
+    "reason": "Demonstrates lambdas inside pipe chains, non-trivial Jac-specific syntax."
+  },
+  {
+    "chunk_id": "db9464a9cf13",
+    "verdict": "drop",
+    "reason": "Header-only fragment; the comparison table itself is a separate chunk."
+  },
+  {
+    "chunk_id": "a97f68be4061",
+    "verdict": "keep",
+    "reason": "Reference table summarizing all six pipe operators, useful consolidated signal."
+  },
+  {
+    "chunk_id": "ae432fc73d05",
+    "verdict": "keep",
+    "reason": "Substantive prose introducing the by operator and Meaning Typed Programming."
+  },
+  {
+    "chunk_id": "c1b3c11722d4",
+    "verdict": "drop",
+    "reason": "Header-only fragment with no content."
+  },
+  {
+    "chunk_id": "6f7d20e97851",
+    "verdict": "keep",
+    "reason": "Example showing by-expression syntax and right-associativity."
+  },
+  {
+    "chunk_id": "112a1e2c8d1c",
+    "verdict": "drop",
+    "reason": "Header-only fragment; byllm content follows in later chunks."
+  },
+  {
+    "chunk_id": "fcf0fd01e8e5",
+    "verdict": "keep",
+    "reason": "Genuine sentence tying the by operator to the byllm plugin."
+  },
+  {
+    "chunk_id": "a6d18431b08f",
+    "verdict": "keep",
+    "reason": "Core by-llm plus sem example, distinctive Jac AI-integration syntax."
+  },
+  {
+    "chunk_id": "83bd2c101f68",
+    "verdict": "keep",
+    "reason": "Explains sem keyword semantics and prompt inclusion, important Jac-specific concept."
+  },
+  {
+    "chunk_id": "482bf1f05868",
+    "verdict": "keep",
+    "reason": "Example of sem on fields, functions, and parameters."
+  },
+  {
+    "chunk_id": "aea223a0c2fd",
+    "verdict": "keep",
+    "reason": "Actionable tip distinguishing sem from docstrings for LLM prompts."
+  },
+  {
+    "chunk_id": "eac39b7b710d",
+    "verdict": "drop",
+    "reason": "Nav-only cross-reference link with no documentation content."
+  },
+  {
+    "chunk_id": "2655bf1271e4",
+    "verdict": "keep",
+    "reason": "Substantive definition of the as cast operator and its type-erased semantics."
+  },
+  {
+    "chunk_id": "ef28dfe5b4c0",
+    "verdict": "keep",
+    "reason": "Code example of as casts including generic types."
+  },
+  {
+    "chunk_id": "ad4b64a6da50",
+    "verdict": "keep",
+    "reason": "Explains the cast's role as the gradual-typing escape hatch for walker reports."
+  },
+  {
+    "chunk_id": "ee809ffcd2d3",
+    "verdict": "keep",
+    "reason": "Practical spawn-report cast example bridging OSP and typing."
+  },
+  {
+    "chunk_id": "0e70cd33970a",
+    "verdict": "keep",
+    "reason": "Precise precedence and associativity rules for the as cast."
+  },
+  {
+    "chunk_id": "3bca2c97258d",
+    "verdict": "keep",
+    "reason": "Non-obvious parsing interaction of as with with/except aliases."
+  },
+  {
+    "chunk_id": "3da0355acfdf",
+    "verdict": "keep",
+    "reason": "Warning about unchecked casts, genuine guidance content."
+  },
+  {
+    "chunk_id": "e6b24ea01692",
+    "verdict": "keep",
+    "reason": "Section lead-in that frames the precedence table; minimal but coherent with it."
+  },
+  {
+    "chunk_id": "7cd6c4ba2ac9",
+    "verdict": "keep",
+    "reason": "Complete operator precedence table including Jac-specific spawn, pipes, and connection ops."
+  },
+  {
+    "chunk_id": "06f9d76176ec",
+    "verdict": "drop",
+    "reason": "Header-only fragment with no content."
+  },
+  {
+    "chunk_id": "a816ecbf73d4",
+    "verdict": "keep",
+    "reason": "Rich worked examples of precedence including pipes and walrus."
+  },
+  {
+    "chunk_id": "3691d4be0a93",
+    "verdict": "drop",
+    "reason": "Header-only fragment; the short-circuit content is in adjacent chunks."
+  },
+  {
+    "chunk_id": "451a1153bbcf",
+    "verdict": "keep",
+    "reason": "Genuine sentence stating short-circuit behavior of and/or."
+  },
+  {
+    "chunk_id": "47dfd3a39fd9",
+    "verdict": "keep",
+    "reason": "Example of short-circuit evaluation and the fallback idiom."
+  },
+  {
+    "chunk_id": "142f5f0d55ab",
+    "verdict": "keep",
+    "reason": "Runnable try-it example reinforcing operator syntax in with-entry form."
+  },
+  {
+    "chunk_id": "a0715c839716",
+    "verdict": "drop",
+    "reason": "Content-free horizontal-rule fragment."
+  },
+  {
+    "chunk_id": "e5fd3d534b20",
+    "verdict": "keep",
+    "reason": "Control-flow overview highlighting Jac-specific braces, semicolons, and C-style loops."
+  },
+  {
+    "chunk_id": "f8805fdeb814",
+    "verdict": "keep",
+    "reason": "Conditional and ternary syntax example in Jac brace style."
+  },
+  {
+    "chunk_id": "13a2d6c01344",
+    "verdict": "keep",
+    "reason": "While-loop example including the else clause."
+  },
+  {
+    "chunk_id": "c1cf91a2a04d",
+    "verdict": "keep",
+    "reason": "Explains Jac's C-style for-loop addition, distinctive language feature."
+  },
+  {
+    "chunk_id": "5c2a537fa3a7",
+    "verdict": "keep",
+    "reason": "For-loop examples covering Python-style, C-style, and for-else forms."
+  },
+  {
+    "chunk_id": "a26c751f5be7",
+    "verdict": "keep",
+    "reason": "Substantive introduction to pattern matching and when to use it."
+  },
+  {
+    "chunk_id": "542aa3fc8a6e",
+    "verdict": "keep",
+    "reason": "Important gotcha that match/case bodies use indentation, the exception in Jac."
+  },
+  {
+    "chunk_id": "5f625fa02650",
+    "verdict": "drop",
+    "reason": "Header-only fragment with no content."
+  },
+  {
+    "chunk_id": "66ad20186eb2",
+    "verdict": "keep",
+    "reason": "Comprehensive basic match patterns example including object destructuring."
+  },
+  {
+    "chunk_id": "d0ce242cd40e",
+    "verdict": "drop",
+    "reason": "Header-only fragment with no content."
+  },
+  {
+    "chunk_id": "9c3a3d41850a",
+    "verdict": "keep",
+    "reason": "Advanced match patterns example with spread, as-binding, and or-patterns."
+  }
+]

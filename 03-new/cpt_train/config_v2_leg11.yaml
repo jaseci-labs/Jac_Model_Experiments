@@ -1,0 +1,26 @@
+model: models/qwen-q4
+train: true
+fine_tune_type: lora
+num_layers: 16
+grad_checkpoint: true
+lora_parameters:
+  rank: 16
+  scale: 2.0
+  dropout: 0.05
+batch_size: 1
+learning_rate: 1.0e-05
+max_seq_length: 4096
+steps_per_eval: 50
+steps_per_report: 10
+val_batches: 20
+seed: 42
+data: 03-new/dataset/cpt-v2/packed
+adapter_path: 03-new/adapters/cpt-v2
+iters: 544
+lr_schedule:
+  name: cosine_decay
+  warmup: 652
+  arguments:
+  - 1.0e-05
+  - 6528
+  - 1.0e-06

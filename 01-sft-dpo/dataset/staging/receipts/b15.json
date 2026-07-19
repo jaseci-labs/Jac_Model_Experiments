@@ -1,0 +1,31 @@
+{
+  "batch_id": "b15",
+  "accepted": [
+    "keycode",
+    "active_matrix",
+    "translate_matrix",
+    "blank_payload",
+    "file_meta",
+    "keep_files",
+    "to_follow",
+    "ortho_matrix",
+    "mat4_mul",
+    "resolve_hits",
+    "parse_bench"
+  ],
+  "rejected": [
+    {
+      "name": "shade_rgb",
+      "reason": "dup vs existing sft.jsonl"
+    },
+    {
+      "name": "capture_summary",
+      "reason": "dup vs existing sft.jsonl"
+    },
+    {
+      "name": "lcg_series",
+      "reason": "dup vs existing sft.jsonl"
+    }
+  ],
+  "accept_rate": 0.7857142857142857
+}

@@ -1,0 +1,25 @@
+{
+  "batch_id": "b19",
+  "accepted": [
+    "sign_counts",
+    "clamp_scores",
+    "pairwise_diffs",
+    "grade_report",
+    "transpose_grid",
+    "invert_tags",
+    "group_by_initial",
+    "run_lengths",
+    "leaderboard",
+    "moving_avg",
+    "pivot_counts",
+    "shape_areas",
+    "restock_report"
+  ],
+  "rejected": [
+    {
+      "name": "even_odd_split",
+      "reason": "dup vs existing sft.jsonl"
+    }
+  ],
+  "accept_rate": 0.9285714285714286
+}

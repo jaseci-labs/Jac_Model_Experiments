@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "7584c83921d9",
+    "verdict": "keep",
+    "reason": "Genuine persistence-reference prose on schema-migration limitations and future work."
+  },
+  {
+    "chunk_id": "b721c30a642b",
+    "verdict": "keep",
+    "reason": "Substantive content on the schema_upgrade escape hatch and quarantine sidecar."
+  },
+  {
+    "chunk_id": "10eaf1bb83f6",
+    "verdict": "keep",
+    "reason": "Factual documentation of the plugin-system removal, useful for the model to learn current-vs-removed APIs."
+  },
+  {
+    "chunk_id": "a7d1b48391d5",
+    "verdict": "keep",
+    "reason": "Non-redundant detail on which former plugins are now core subsystems and how capabilities install."
+  },
+  {
+    "chunk_id": "aefbfbc6e532",
+    "verdict": "keep",
+    "reason": "Short but distinct statement of the third-party-plugin policy."
+  },
+  {
+    "chunk_id": "d5c62a505ef4",
+    "verdict": "keep",
+    "reason": "Concrete jac.toml configuration-table naming information."
+  },
+  {
+    "chunk_id": "a760aa25d62f",
+    "verdict": "keep",
+    "reason": "Substantive API content on custom persistence backend providers (set_persistent_memory_provider)."
+  },
+  {
+    "chunk_id": "88b24f1b660f",
+    "verdict": "keep",
+    "reason": "Core byLLM introduction explaining the by-llm delegation model."
+  },
+  {
+    "chunk_id": "df5a6d03f6be",
+    "verdict": "keep",
+    "reason": "Introduces MTP terminology; overlaps thematically with the MTP section but adds the reference scope statement."
+  },
+  {
+    "chunk_id": "553c83c180ba",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "3499cd18dfd9",
+    "verdict": "keep",
+    "reason": "Canonical explanation of Meaning Typed Programming, byLLM's core concept."
+  },
+  {
+    "chunk_id": "ef57c50270eb",
+    "verdict": "keep",
+    "reason": "Short conceptual framing (semantic intent as a first-class type) that leads the examples."
+  },
+  {
+    "chunk_id": "9e625edf447b",
+    "verdict": "keep",
+    "reason": "Core by-llm code example showing signature-as-specification."
+  },
+  {
+    "chunk_id": "2cecbcd012c0",
+    "verdict": "keep",
+    "reason": "Introduces the implicit-vs-explicit semantics distinction."
+  },
+  {
+    "chunk_id": "ff5a95dc69f0",
+    "verdict": "keep",
+    "reason": "Minimal but distinct implicit-semantics code example."
+  },
+  {
+    "chunk_id": "62ab663ab3bf",
+    "verdict": "keep",
+    "reason": "Lead-in introducing the sem keyword, paired with its example chunk."
+  },
+  {
+    "chunk_id": "a69fbbcdd747",
+    "verdict": "keep",
+    "reason": "Canonical sem-declaration code example, important byLLM syntax."
+  },
+  {
+    "chunk_id": "3f12ec61eeee",
+    "verdict": "keep",
+    "reason": "Introduces byLLM type-validation behavior."
+  },
+  {
+    "chunk_id": "fa06beb0f0ce",
+    "verdict": "keep",
+    "reason": "Substantive coercion/retry/error semantics for typed outputs."
+  },
+  {
+    "chunk_id": "f2d363e9d68c",
+    "verdict": "keep",
+    "reason": "Key claim that Jac type annotations act as the LLM output schema."
+  },
+  {
+    "chunk_id": "843d4b017f99",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "f05983344d4b",
+    "verdict": "keep",
+    "reason": "Canonical install command for byLLM."
+  },
+  {
+    "chunk_id": "081cbe4f0b03",
+    "verdict": "keep",
+    "reason": "Framing sentence for the two local-inference paths that follow."
+  },
+  {
+    "chunk_id": "9167383ce7e2",
+    "verdict": "keep",
+    "reason": "Complete Ollama setup path with config, GPU notes, and routing details."
+  },
+  {
+    "chunk_id": "609feb279269",
+    "verdict": "keep",
+    "reason": "Complete in-process local:* setup path with extras and tradeoffs."
+  },
+  {
+    "chunk_id": "221bc1d7a5cb",
+    "verdict": "keep",
+    "reason": "Lead-in sentence for the video-extra install command."
+  },
+  {
+    "chunk_id": "2c0f3e252f86",
+    "verdict": "keep",
+    "reason": "Concrete byllm[video] install command."
+  },
+  {
+    "chunk_id": "719a94aad01f",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "5111d8d380d3",
+    "verdict": "keep",
+    "reason": "Important explanation that llm is an ambient builtin configured via jac.toml."
+  },
+  {
+    "chunk_id": "bb022cc44346",
+    "verdict": "keep",
+    "reason": "Canonical jac.toml default-model configuration snippet."
+  },
+  {
+    "chunk_id": "c8d4793c9b2f",
+    "verdict": "keep",
+    "reason": "Usage example showing the project default powering by llm()."
+  },
+  {
+    "chunk_id": "8b7509006393",
+    "verdict": "keep",
+    "reason": "Practical guidance on the typical set-once default pattern with cross-references."
+  },
+  {
+    "chunk_id": "4450f9e42031",
+    "verdict": "keep",
+    "reason": "Explains when and why to use a per-module glob llm override."
+  },
+  {
+    "chunk_id": "1d0f9c936a66",
+    "verdict": "keep",
+    "reason": "Canonical glob llm = Model(...) override example."
+  },
+  {
+    "chunk_id": "c74cf73abce9",
+    "verdict": "keep",
+    "reason": "Module-scoping semantics of the glob shadowing the project default."
+  },
+  {
+    "chunk_id": "394fc2cf7c4f",
+    "verdict": "keep",
+    "reason": "Clarifies that by <name>() accepts any Model-valued glob, not just llm."
+  },
+  {
+    "chunk_id": "dce57b2a9c7b",
+    "verdict": "keep",
+    "reason": "Multi-model glob example showing per-call model selection."
+  },
+  {
+    "chunk_id": "6cff513ec465",
+    "verdict": "keep",
+    "reason": "Precise shadowing rule for the ambient llm builtin versus named globs."
+  },
+  {
+    "chunk_id": "8ce68b9e2afb",
+    "verdict": "keep",
+    "reason": "Model constructor parameter reference table."
+  },
+  {
+    "chunk_id": "bf15c0cd9b18",
+    "verdict": "drop",
+    "reason": "Heading-only fragment (a single bold label) with no content of its own."
+  },
+  {
+    "chunk_id": "033788778497",
+    "verdict": "keep",
+    "reason": "Config-dictionary option reference table with real API detail."
+  },
+  {
+    "chunk_id": "677996caf5c0",
+    "verdict": "drop",
+    "reason": "Heading-only fragment (a single bold label) with no content of its own."
+  },
+  {
+    "chunk_id": "ebc9d1741e54",
+    "verdict": "keep",
+    "reason": "Concrete Model config example with base_url and proxy."
+  },
+  {
+    "chunk_id": "1ef49ba9ba34",
+    "verdict": "keep",
+    "reason": "States the LiteLLM integration underpinning provider support."
+  },
+  {
+    "chunk_id": "449edcd05cf4",
+    "verdict": "keep",
+    "reason": "Distinct OpenAI provider setup snippet."
+  },
+  {
+    "chunk_id": "ac9ce2636ddf",
+    "verdict": "keep",
+    "reason": "Distinct Anthropic provider setup snippet."
+  },
+  {
+    "chunk_id": "79625bee4188",
+    "verdict": "keep",
+    "reason": "Distinct Google Gemini provider setup snippet."
+  },
+  {
+    "chunk_id": "67d18a2d4eb1",
+    "verdict": "drop",
+    "reason": "Flagged near-duplicate (0.8 containment) and the worse copy: a bare Ollama config tab fully superseded by the richer Ollama setup chunk 9167383ce7e2 in this same file."
+  },
+  {
+    "chunk_id": "90998561fe54",
+    "verdict": "keep",
+    "reason": "Distinct built-in local:* provider tab with GGUF/llama.cpp details not covered elsewhere."
+  },
+  {
+    "chunk_id": "419373f7a00b",
+    "verdict": "keep",
+    "reason": "Distinct HuggingFace provider setup snippet."
+  }
+]

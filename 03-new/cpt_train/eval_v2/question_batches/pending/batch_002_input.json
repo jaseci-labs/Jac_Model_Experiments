@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "7abcd4d35ea7",
+    "file": "reference/language/osp.md",
+    "text": "| Context | `self` | `here` | `visitor` | `root` |\n|---------|--------|--------|-----------|--------|\n| Walker ability | Walker instance | Current node | N/A | Graph root |\n| Node ability | Node instance | N/A | Visiting walker | Graph root |\n| Object method | Object instance | N/A | N/A | Graph root |\n| Free code | N/A | N/A | N/A | Graph root |"
+  },
+  {
+    "chunk_id": "f5f44dae59f9",
+    "file": "reference/testing.md",
+    "text": "### Testing Walker Reports\n\n```jac\nnode Person {\n    has name: str;\n    has age: int;\n}\n\nwalker FindAdults {\n    can check with Root entry {\n        for person in [-->][?:Person] {\n            if person.age >= 18 {\n                report person;\n            }\n        }\n    }\n}\n\ntest \"find adults\" {\n    root ++> Person(name=\"Alice\", age=30);\n    root ++> Person(name=\"Bob\", age=15);\n    root ++> Person(name=\"Carol\", age=25);\n\n    result = root spawn FindAdults();\n\n    assert len(result.reports) == 2;\n    names = [p.name for p in result.reports];\n    assert \"Alice\" in names;\n    assert \"Carol\" in names;\n    assert \"Bob\" not in names;\n}\n```"
+  },
+  {
+    "chunk_id": "cd8db587b0a0",
+    "file": "reference/language/primitives.md",
+    "text": "## Builtin Functions\n\nThese functions are available in every codespace. Each backend provides its own implementation, but the behavior is the same:"
+  },
+  {
+    "chunk_id": "5c2a537fa3a7",
+    "file": "reference/language/foundation.md",
+    "text": "```jac\ndef example() {\n    items = [1, 2, 3];\n\n    # Iterate over collection (Python-style)\n    for item in items {\n        print(item);\n    }\n\n    # With index\n    for (i, item) in enumerate(items) {\n        print(f\"{i}: {item}\");\n    }\n\n    # C-style for loop: for INIT; CONDITION; UPDATE\n    for i = 0 while i < 10 with i += 1 {\n        print(i);\n    }\n\n    # With else clause\n    for item in items {\n        if item == 5 {\n            break;\n        }\n    } else {\n        print(\"Not found\");\n    }\n}\n```"
+  },
+  {
+    "chunk_id": "f38fc324695f",
+    "file": "reference/language/library-mode.md",
+    "text": "```python\nclass Counter(Walker):\n    count: int = 0  # Simple state\n\n    @on_entry\n    def increment(self, here: Node) -> None:\n        self.count += 1\n```"
+  },
+  {
+    "chunk_id": "83c048f74a8c",
+    "file": "tutorials/language/coding_primer.md",
+    "text": "```jac\n# Define our graph structure\nnode User {\n    has username: str;\n    has age: int;\n    has interests: list;\n}\n\nedge Friendship {\n    has since: int;\n    has strength: int = 1;  # How close they are (1-10)\n}\n\n# Walker to recommend friends\nwalker FriendRecommender {\n    has recommendations: list = [];\n\n    can start with Root entry {\n        visit [-->];\n    }\n\n    # Start from a user\n    can find_recommendations with User entry {\n        print(f\"Finding recommendations for {here.username}...\");\n        # Visit friends of friends (2 hops)\n        potential_friends = [here ->:Friendship:-> ->:Friendship:->];\n\n        # Get current friends to exclude\n        current_friends = [here ->:Friendship:->];\n\n        for person in potential_friends {\n            # Don't recommend current friends or self\n            if person not in current_friends and person != here {\n                self.recommendations.append(person.username);\n            }\n        }\n        disengage;\n    }\n}\n\n# Walker to find users by interest\nwalker InterestMatcher {\n    has target_interest: str;\n    has matches: list = [];\n    has visited: list = [];\n\n    can start with Root entry {\n        visit [-->];\n    }\n\n    can find with User entry {\n        if here not in self.visited {\n            self.visited.append(here);\n            if self.target_interest in here.interests {\n                self.matches.append(here.username);\n            }\n        }\n    }\n}\n\nwith entry {\n    # Create users\n    alice = User(\n        username=\"alice\",\n        age=25,\n        interests=[\"coding\", \"hiking\", \"photography\"]\n    );\n\n    bob = User(\n        username=\"bob\",\n        age=28,\n        interests=[\"coding\", \"gaming\"]\n    );\n\n    charlie = User(\n        username=\"charlie\",\n        age=26,\n        interests=[\"hiking\", \"reading\"]\n    );\n\n    dana = User(\n        username=\"dana\",\n        age=27,\n        interests=[\"photography\", \"travel\"]\n    );\n\n    # Build social graph\n    root ++> alice;\n    root ++> bob;\n    root ++> charlie;\n    root ++> dana;\n\n    # Bidirectional friendships (two directed edges per pair)\n    alice +>:Friendship(since=2020, strength=8):+> bob;\n    bob +>:Friendship(since=2020, strength=8):+> alice;\n    bob +>:Friendship(since=2021, strength=6):+> charlie;\n    charlie +>:Friendship(since=2021, strength=6):+> bob;\n    alice +>:Friendship(since=2019, strength=9):+> dana;\n    dana +>:Friendship(since=2019, strength=9):+> alice;\n\n    # Find friend recommendations for Bob\n    recommender = FriendRecommender();\n    bob spawn recommender;\n    print(f\"Recommendations: {recommender.recommendations}\");\n\n    # Find users interested in hiking\n    matcher = InterestMatcher(target_interest=\"hiking\");\n    root spawn matcher;\n    print(f\"Users interested in hiking: {matcher.matches}\");\n}\n```"
+  },
+  {
+    "chunk_id": "2676960ff2af",
+    "file": "community/release_notes/jaclang.md",
+    "text": "### Refactors\n\n- **Refactor: Centralize call-kind classification**: Whether a call is a builtin, a class instantiation, a method, or a free function was decided independently in each backend by matching name strings, which meant a user symbol shadowing a builtin or class name (for example a local, or `def len(...)`) was silently ignored. Both the native and ecmascript backends now share a single resolved-symbol-based classifier, so user definitions correctly shadow same-named builtins.\n- **Refactor: Centralize primitive-type classification**: The resolver that maps an expression's type to a primitive name (str/int/list/...) was embedded in the ECMAScript codegen backend, and the native backend hardcoded each primitive's method-name set in inline tuples that duplicated the emitter contract. The resolver now lives in the shared type system (`type_utils.primitive_type_name_of`) and native primitive method dispatch derives each type's methods from its emitter, so both are defined in one place.\n- **Interop: unified cross-boundary analysis into one IR-resident table**: `InteropAnalysisPass` and `WalkerEffectsPass` are merged into a single front-end `BoundaryAnalysisPass` that runs once per module (server, client, and native) and produces one interop table (bindings, boundary types, endpoint effects, and per-symbol auth access). Codegen and the serve runtime now read that table instead of independently re-deriving the same facts; the runtime access AST-walk and EsastGen's standalone `sv import` resolver are removed.\n- **Refactor: Fold literals via AST `.lit_value` instead of re-parsing**: Compile-time literal value extraction was reimplemented by parsing raw token text in the native const/enum codegen and in the type-system enum helper, duplicating the AST nodes' own `.lit_value` getters. They now reuse `.lit_value`, which also fixes a compiler-wide bug where hex/oct/bin integer-enum values (e.g. `RED = 0xFF`) raised an error during type checking because they were parsed as base-10.\n- **Refactor: Single `@jac/runtime` surface contract**: The client runtime surface shared by bare-serve and jac-client is now declared in one place, so the compiler's import injection and the cross-runtime alignment check derive from a single source instead of separately maintained copies.\n- **Refactor: Native-speed archetype field writes**: Removed the per-write `__setattr__` dirty-field tracking on archetypes, which was redundant with the value-hash diff the memory backends already use to detect changes, restoring C-level attribute stores across the runtime.\n- **Refactor: Sv now uses the portable OSP kernel for sync traversal**: `JacWalker.spawn_call` / `JacWalker.visit` / `JacWalker.disengage` / `log_report` now lower to `osp_spawn` / `osp_visit` / `osp_disengage` / `osp_report` (kernel) via `make_sv_runtime`, and the sync legacy walker engine (`_execute_entries`, `_execute_exits`, `_visit_node_recursive`) is deleted. The kernel was extended to sv parity (DFS recursion, post-order exits, queue-FIFO entries across branches, `WalkScope.path`, `osp_visit` `insert_loc`, opt-in visit-once via `scope.ignores`, `osp_spawn` takes `starts: list` for edge spawn). The async walker engine still uses the legacy CallState/`OspHost` path; the kernel migration for async is future work."
+  },
+  {
+    "chunk_id": "c85053cf991d",
+    "file": "tutorials/language/coding_primer.md",
+    "text": "```jac\nnode Person {\n    has name: str;\n    has age: int;\n}\n\nwith entry {\n    # Create node instances\n    alice = Person(name=\"Alice\", age=25);\n    bob = Person(name=\"Bob\", age=30);\n    charlie = Person(name=\"Charlie\", age=28);\n\n    print(f\"{alice.name} is {alice.age} years old\");\n}\n```"
+  },
+  {
+    "chunk_id": "758448f31638",
+    "file": "community/release_notes/jaclang.md",
+    "text": "## Version 0.8.0\n\n- **`impl` Keyword for Implementation**: Introduced the `impl` keyword for a simpler, more explicit way to implement abilities and methods for objects, nodes, edges, and other types, replacing the previous colon-based syntax.\n- **Updated Inheritance Syntax**: Changed the syntax for specifying inheritance from colons to parentheses (e.g., `obj Car(Vehicle)`) for better alignment with common object-oriented programming languages.\n- **`def` Keyword for Functions**: The `def` keyword is now used for traditional Python-like functions and methods, while `can` is reserved for object-spatial abilities.\n- **`visitor` Keyword**: Introduced the `visitor` keyword to reference the walker context within nodes/edges, replacing the ambiguous use of `here` in such contexts. `here` is now used only in walker abilities to reference the current node/edge.\n- **Lambda Syntax Update**: The lambda syntax has been updated from `with x: int can x;` to `lambda x: int: x * x;`, aligning it more closely with Python's lambda syntax.\n- **Object-Spatial Arrow Notation Update**: Typed arrow notations `-:MyEdge:->` and `+:MyEdge:+>` are now `->:MyEdge:->` and `+>:MyEdge:+>` respectively, to avoid conflicts with Python-style list slicing.\n- **Import `from` Syntax Update**: The syntax for importing specific modules from a package now uses curly braces (e.g., `import from utils { helper, math_utils }`) for improved clarity.\n- **Auto-Resolved Imports**: Removed the need for explicit language annotations (`:py`, `:jac`) in import statements; the compiler now automatically resolves imports."
+  },
+  {
+    "chunk_id": "9cbcb549fb47",
+    "file": "tutorials/fullstack/npm-and-libraries.md",
+    "text": "- You need `useRef` for DOM element references or mutable values\n- You need `useCallback` to memoize event handlers\n- You need `useMemo` for expensive computations\n- You prefer the explicit React API over Jac's sugar syntax"
+  },
+  {
+    "chunk_id": "f1bcfe284a55",
+    "file": "reference/language/osp.md",
+    "text": "```jac\nnode Item {}\n\nwalker Visitor {\n    can go with Item entry {\n        visit [-->];                    # Visit all outgoing nodes\n        visit [<--];                    # Visit all incoming nodes\n        visit [<-->];                   # Visit both directions\n    }\n}\n```"
+  },
+  {
+    "chunk_id": "587a39d2b733",
+    "file": "reference/language/primitives.md",
+    "text": "If a backend has not yet implemented an operation, the emitter returns `None`, allowing the dispatch layer to fall back or raise an error at compile time."
+  },
+  {
+    "chunk_id": "17096af88c2c",
+    "file": "tutorials/production/kubernetes.md",
+    "text": "Auto-creating the SA + RoleBindings from `jac.toml` is on the roadmap but not yet shipped -- treat the SA as a prerequisite that lives outside the project repo for now."
+  },
+  {
+    "chunk_id": "f6fcd0af87d7",
+    "file": "reference/language/osp.md",
+    "text": "| Form | Triggers When |\n|------|---------------|\n| `with entry` | Any walker enters (no type filter) |\n| `with TypeName entry` | Walker of TypeName enters |\n| `with Root entry` | Walker of type Root visits (in node context, the type refers to the *walker* type) |\n| `with Type1 \\| Type2 entry` | Walker of either type enters |\n| `with exit` | Any walker exits |\n| `with TypeName exit` | Walker of TypeName exits |"
+  },
+  {
+    "chunk_id": "180a40bc43f4",
+    "file": "tutorials/fullstack/backend.md",
+    "text": "Both become HTTP endpoints automatically. Functions are simpler -- the frontend calls them directly with `await func()`. Walkers are more powerful -- they traverse the graph and report results, called with `root spawn Walker()`."
+  },
+  {
+    "chunk_id": "0002856f3499",
+    "file": "reference/plugins/jac-scale-http.md",
+    "text": "Alternatively, omit the env vars entirely and run `jac start order_service.jac` on its own. The consumer will find every service it `sv import`s from and bring them all up automatically (including transitive dependencies) before serving the first request. This is a supported deployment mode for **single-host** setups -- one process, many logical services. For **multi-host** deployments use the `JAC_SV_*_URL` path instead: automatically-started services bind `127.0.0.1` only and cannot serve traffic to other hosts."
+  },
+  {
+    "chunk_id": "5e5d96a411a3",
+    "file": "reference/language/osp.md",
+    "text": "### 3 The `visit` Statement\n\nThe `visit` statement tells the walker where to go next. It doesn't immediately move -- it queues nodes for the next step of traversal. This queue-based approach lets you control breadth-first vs depth-first traversal and handle cases where there's nowhere to go (using the `else` clause)."
+  },
+  {
+    "chunk_id": "8640574b11c2",
+    "file": "quick-guide/import-anything.md",
+    "text": "The same mechanism works for any third-party C library, and a C `import from` block can declare structs (as `obj`) alongside functions:"
+  },
+  {
+    "chunk_id": "57e2aab53a3b",
+    "file": "tutorials/language/coding_primer.md",
+    "text": "```jac\nnode Person {\n    has name: str;\n}\n\nwalker FindPerson {\n    has target: str;\n    has found: bool = False;\n\n    can start with Root entry {\n        visit [-->];\n    }\n\n    can search with Person entry {\n        if here.name == self.target {\n            print(f\"Found {here.name}!\");\n            self.found = True;\n            disengage;  # Stop immediately\n        }\n        visit [-->];\n    }\n}\n\nwith entry {\n    alice = Person(name=\"Alice\");\n    bob = Person(name=\"Bob\");\n    charlie = Person(name=\"Charlie\");\n\n    root ++> alice ++> bob ++> charlie;\n\n    finder = FindPerson(target=\"Bob\");\n    root spawn finder;\n\n    print(f\"Found: {finder.found}\");\n}\n```"
+  },
+  {
+    "chunk_id": "2bf15b344bae",
+    "file": "reference/language/osp.md",
+    "text": "## Edges\n\nEdges are first-class connections between nodes. Unlike simple object references, edges can carry their own data (like relationship strength or timestamps) and have their own types. This lets you model rich relationships -- \"Alice *knows* Bob *since 2020*\" becomes natural to express. Use typed edges when the relationship itself has meaningful attributes."
+  },
+  {
+    "chunk_id": "1fc2b75692c6",
+    "file": "jaseci-llmdocs/release/jac-llmdocs.md",
+    "text": "# PATTERN 1: Fullstack Counter (single-file with cl{} block)\n```jac\n# main.jac\nnode Counter { has count: int = 0; }\n\nwalker :pub GetCount {\n    can get with Root entry {\n        counters = [-->](?:Counter);\n        if counters { report counters[0].count; }\n        else { report 0; }\n    }\n}\n\nwalker :pub Increment {\n    can inc with Root entry {\n        counters = [-->](?:Counter);\n        if counters { counters[0].count += 1; report counters[0].count; }\n    }\n}\n\nwith entry {\n    root ++> Counter(count=0);\n}\n\ncl import from react { useEffect }\nsv import from __main__ { GetCount, Increment }\n\ncl {\n    def:pub app() -> JsxElement {\n        has count: int = 0;\n        has loading: bool = True;\n\n        async can with entry {\n            result = root spawn GetCount();\n            if result.reports { count = result.reports[0]; }\n            loading = False;\n        }\n\n        async def do_increment() -> None {\n            result = root spawn Increment();\n            if result.reports { count = result.reports[0]; }\n        }\n\n        if loading { return <p>Loading...</p>; }\n        return <div>\n            <h1>Count: {count}</h1>\n            <button onClick={lambda e: any -> None { do_increment(); }}>+1</button>\n        </div>;\n    }\n}\n```\n```toml\n# jac.toml\n[project]\nname = \"counter\"\nentry-point = \"main.jac\"\n[serve]\nbase_route_app = \"app\"\n```"
+  },
+  {
+    "chunk_id": "d381a8cf82dd",
+    "file": "tutorials/language/basics.md",
+    "text": "## Abilities with `can`\n\nInside archetypes like `node`, `obj`, and `walker`, you can define **abilities** using the `can` keyword. Abilities are methods that respond to events -- they fire when a walker enters or exits a node:"
+  },
+  {
+    "chunk_id": "4106b4a0ac60",
+    "file": "reference/language/osp.md",
+    "text": "### CRUD Walker\n\n```jac\n# Create\nwalker:priv CreateItem {\n    has name: str;\n    can create with Root entry {\n        new_item = here ++> Item(name=self.name);\n        report new_item;\n    }\n}\n\n# Read (List)\nwalker:priv ListItems {\n    has items: list = [];\n    can collect with Root entry { visit [-->]; }\n    can gather with Item entry { self.items.append(here); }\n    can finish with Root exit { report self.items; }\n}\n\n# Update\nwalker:priv UpdateItem {\n    has item_id: str;\n    has new_name: str;\n    can find with Root entry { visit [-->]; }\n    can update with Item entry {\n        if jid(here) == self.item_id {\n            here.name = self.new_name;\n            report here;\n        }\n    }\n}\n\n# Delete\nwalker:priv DeleteItem {\n    has item_id: str;\n    can find with Root entry { visit [-->]; }\n    can remove with Item entry {\n        if jid(here) == self.item_id {\n            del here;\n            report {\"deleted\": self.item_id};\n        }\n    }\n}\n```"
+  },
+  {
+    "chunk_id": "67e42ef69cb4",
+    "file": "tutorials/first-app/build-ai-day-planner.md",
+    "text": "Every Jac program has a built-in `root` node -- the entry point of the graph. This is a concept worth pausing on, because it's central to how Jac works. Just as `self` in an object method is a self-referential pointer to the *current instance*, `root` is a self-referential pointer to the *current runner* of the program -- whether that's you executing a script or an authenticated user making a request. And like `self`, `root` is ambiently available everywhere; you never import or declare it, it's just there in every code block. Think of it as the top of a tree of everything that should persist:"
+  },
+  {
+    "chunk_id": "cbd4b6453330",
+    "file": "reference/language/functions-objects.md",
+    "text": "```jac\nwalker ListItems {\n    has items: list = [];\n\n    # 'can' ability -- fires automatically when walker enters a Root node\n    can collect with Root entry {\n        visit [-->];\n    }\n\n    # 'can' ability -- fires on each Item node visited\n    can gather with Item entry {\n        self.items.append(here.value);\n    }\n\n    # 'can' ability -- fires when walker exits Root\n    can report_all with Root exit {\n        report self.items;\n    }\n}\n```"
+  },
+  {
+    "chunk_id": "cd48c7a93893",
+    "file": "reference/language/primitives.md",
+    "text": "| Operator | Meaning |\n|----------|---------|\n| `\\|` | Merge (returns new dict) |\n| `==` `!=` | Structural equality |\n| `in` | Key membership |\n| `\\|=` | Update in-place |"
+  },
+  {
+    "chunk_id": "dea822a8d3cd",
+    "file": "community/release_notes/jaclang.md",
+    "text": "## jaclang 0.10.3\n\n- **Fix: Type Narrowing in Loops**: Fixed type narrowing loss in loops and also improved CFG accuracy.\n- **Fix: Config Discovery from Target File Path**: Fixed `jac start` commands to discover `jac.toml` from the target file's directory instead of the current working directory when using absolute/relative paths.\n- **Fix: Unbound Method Call Type Checking**: Fixed \"Parameter already matched\" error when calling parent class methods with explicit `self` in inheritance patterns (e.g., `ParentClass.init(self, name=name)`). The type checker now correctly handles unbound method calls on `obj`/`node`/`walker`/`edge` types where `self` is implicit.\n- **Enhanced Type Narrowing**: Extended CFG-based type narrowing to support additional patterns: parenthesized isinstance `(isinstance(x, T))`, NOT expressions `not isinstance(x, T)`, compound AND/OR conditions, isinstance with tuple of types `isinstance(x, (A, B))`, truthiness narrowing `if x:` (excludes None), literal equality `x == \"lit\"`, and inheritance-aware isinstance that correctly narrows to subclasses in unions.\n- **Fix: Bare Callable Type Annotation**: Using `Callable` without type parameters (e.g., `fn: Callable`) no longer causes type errors.\n- **Type Inference for Tuple Unpacking**: The type evaluator now infers element types for variables in tuple/list unpacking assignments (e.g., `(row, col) = pos;` where `pos: tuple[int, int]`), eliminating the need for explicit pre-declarations before unpacking. Types that cannot be inferred still require explicit annotations.\n- **Fix: Display detailed syntax error messages**: Display detailed syntax error messages in `jac run` and `jac start` commands instead of generic import errors.\n- **Enum Type Checking**: Enums now have proper type checking. Accessing `.name` returns `str`, `.value` returns the correct type based on your enum values (int or str). Passing wrong types to functions expecting enums now shows type errors.\n- **Fix: False type errors on class-based enums**: Classes inheriting from `StrEnum`, `IntEnum`, or `IntFlag` no longer produce false type errors.\n- **Fix: LSP features in nested impl blocks**: Go-to-definition, hover, and syntax highlighting now work correctly for symbols inside if/while/for statements within impl blocks.\n- **Fix: JS useState scope bug**: Fixed `has` vars incorrectly triggering `setState()` in sibling functions with same variable name.\n- **Fix: Inherited field default override**: Fixed false \"missing required parameter\" error when a child class provides a default for a parent's required field.\n- **`parametrize()` Test Helper**: Added a `parametrize(base_name, params, test_func, id_fn=None)` runtime helper that registers one test per parameter via `JacTestCheck.add_test()`.\n- **Generic Primitive Emitter Interface**: Refactored the primitive codegen emitter contracts. Emitters are now stateless singletons with per-call context, and dispatch uses typed instance methods instead of static class-as-namespace calls.\n- **Human-Readable Tokens in Errors and Grammar Spec**: Parser error messages and `jac grammar` output now display actual token text (`\"{\"`, `\"if\"`, `\";\"`) instead of internal names (`LBRACE`, `KW_IF`, `SEMI`), making syntax errors and the grammar specification much more readable.\n- **Support Bare `type` Parameter Assignment**: Functions with `type` parameter annotations now correctly accept class types as arguments (e.g., `process(cls: type)` can be called with `process(MyClass)`).\n- **Operator Primitive Dispatch for ES Codegen**: Wired type-aware operator dispatch into the JavaScript code generation pass. Binary, comparison, unary, and augmented assignment operators now query the type evaluator and delegate to the appropriate primitive emitter, producing correct JS semantics for Python-style operators (e.g., `list + list` emits spread concatenation `[...a, ...b]`, `str * n` emits `.repeat(n)`, `x in list` emits `.includes(x)`).\n- 3 Minor refactors/changes.\n- **Fix: Lexer `<` Comparison vs JSX Tag Disambiguation**: Fixed an infinite loop where `i<points` in a for-loop caused the lexer to enter JSX tag mode. The lexer now tracks the previous token to distinguish `<` as a comparison operator (after values) from a JSX opening tag (after keywords like `return`, operators, or delimiters).\n- **Fix: Quoted JSX Text Produces Invalid JS**: Fixed JSX text containing quote characters (e.g., `<p>\"text\"</p>`) generating invalid double-double-quoted JavaScript (`\"\"text\"\"`). Inner quotes are now properly escaped in the emitted JS string literals.\n- **Fix: `unittest.mock.patch` Compatibility in Jac Tests**: Fixed `unittest.mock.patch` not intercepting calls in Jac test blocks.\n- **Modern Generics: `type` Aliases & Inline Type Parameters**: Added PEP 695-style `type` alias statements (`type JsonPrimitive = str | int | float | bool | None;`) and inline generic type parameters on archetypes (`obj Result[T, E = Exception] { ... }`). Supports bounded type vars (`T: Comparable`), default type values, and recursive type aliases. Compiles to native Python 3.12 `ast.TypeAlias` and `ast.TypeVar` nodes.\n- **Perf: Precompiled Bytecode for Zero Cold Start**: Ship precompiled `.jbc` bytecode per Python version (3.12, 3.13, 3.14) inside each Jac package wheel. Cold start (`jac purge && jac --help`) drops from ~29s to <1s.\n- **`jac run` Script Arguments**: `jac run` now passes arguments to the script using Python-like semantics - everything after the filename goes to the script (e.g., `jac run script.jac arg1 arg2`), accessible via `sys.argv[1:]`. Jac flags like `--no-cache` must come before the filename, just like `python -O script.py`.\n- **Fix: Operator Precedence for Bitwise vs Logical Operators**: Fixed operator precedence so bitwise operators (`|`, `^`, `&`, `<<`, `>>`) bind tighter than logical operators (`or`, `and`, `not`), matching Python's semantics. Previously `3 & 1 == 1` was parsed as `3 & (1 == 1)` instead of `(3 & 1) == 1`.\n- **Fix: `_jac` Primitive Runtime for ES Codegen**: Fixed unification of compiled JavaScript that uses Python-like primitive operations (`list.sort(key=...)`, `list.count()`, `str.capitalize()`, `int % int`, etc.).\n- 2 Minor refactors/changes."
+  },
+  {
+    "chunk_id": "45efae5659d9",
+    "file": "reference/persistence.md",
+    "text": "## What gets persisted\n\nEvery Jac archetype instance has a backing **anchor** that the runtime tracks. When an anchor is reachable from `root` (directly or via edges) and marked `persistent`, the runtime writes it to the configured storage backend on `commit()` (and at process exit)."
+  },
+  {
+    "chunk_id": "84bae0fe8de1",
+    "file": "internals/abstractions.md",
+    "text": "### scale (`jac/jaclang/scale/`, formerly the `jac-scale` plugin)\n\n[`jaclang/scale/persistence/lib.jac`](https://github.com/Jaseci-Labs/jaseci/blob/main/jac/jaclang/scale/persistence/lib.jac)\nis intentionally minimal -- a single `kvstore()` factory that returns a `Db`\ninstance backed by MongoDB or Redis. The substantive abstractions live in\n[`jaclang/scale/abstractions/`](https://github.com/Jaseci-Labs/jaseci/tree/main/jac/jaclang/scale/abstractions)\nas interface contracts:"
+  },
+  {
+    "chunk_id": "62c185089d9d",
+    "file": "reference/language/walker-responses.md",
+    "text": "The `with Root exit` ability fires after the walker has finished visiting all queued nodes and returns to root, making it the ideal place for a single consolidated report."
+  },
+  {
+    "chunk_id": "d00a89c16b64",
+    "file": "tutorials/fullstack/routing.md",
+    "text": "### Layout Pattern (Manual)\n\n```jac\ncl import from \"@jac/runtime\" { Router, Routes, Route, Outlet, Link }\n\ncl {\n    def:pub DashboardLayout() -> JsxElement {\n        return <div className=\"dashboard\">\n            <aside>\n                <Link to=\"/dashboard\">Overview</Link>\n                <Link to=\"/dashboard/settings\">Settings</Link>\n                <Link to=\"/dashboard/profile\">Profile</Link>\n            </aside>\n\n            <main>\n                <Outlet />\n            </main>\n        </div>;\n    }\n\n    def:pub DashboardHome() -> JsxElement {\n        return <h2>Dashboard Overview</h2>;\n    }\n\n    def:pub DashboardSettings() -> JsxElement {\n        return <h2>Settings</h2>;\n    }\n\n    def:pub DashboardProfile() -> JsxElement {\n        return <h2>Profile</h2>;\n    }\n\n    def:pub app() -> JsxElement {\n        return <Router>\n            <Routes>\n                <Route path=\"/dashboard\" element={<DashboardLayout />}>\n                    <Route index element={<DashboardHome />} />\n                    <Route path=\"settings\" element={<DashboardSettings />} />\n                    <Route path=\"profile\" element={<DashboardProfile />} />\n                </Route>\n            </Routes>\n        </Router>;\n    }\n}\n```"
+  },
+  {
+    "chunk_id": "ac9ce2636ddf",
+    "file": "reference/plugins/byllm.md",
+    "text": "=== \"Anthropic\"\n    ```toml\n    [byllm.model]\n    default_model = \"claude-sonnet-4-6\"\n    ```\n    ```bash\n    export ANTHROPIC_API_KEY=\"sk-ant-...\"\n    ```"
+  },
+  {
+    "chunk_id": "4ebeb5331f3d",
+    "file": "tutorials/language/coding_primer.md",
+    "text": "- `here` - The current node being visited\n- `self` - The walker itself\n- `visitor` - (In node abilities) The walker that's visiting"
+  },
+  {
+    "chunk_id": "8c9bad0d6244",
+    "file": "tutorials/language/basics.md",
+    "text": "### Collections\n\n```jac\nwith entry {\n    # Lists\n    numbers: list[int] = [1, 2, 3, 4, 5];\n    numbers.append(6);\n\n    # Dictionaries\n    person: dict[str, any] = {\n        \"name\": \"Alice\",\n        \"age\": 30\n    };\n\n    # Sets\n    unique: set[int] = {1, 2, 3};\n\n    # Tuples\n    point: tuple[int, int] = (10, 20);\n}\n```"
+  },
+  {
+    "chunk_id": "ce283daed83f",
+    "file": "reference/language/osp.md",
+    "text": "!!! warning \"Traversal Must Be Explicit\"\n    Without a `visit` statement in an ability, the walker stops at the current node. If a walker visits root and then reaches a `Person` node but the `Person` ability has no `visit [-->]`, the walker will not continue to the next person. Traversal must be explicitly requested at each step."
+  },
+  {
+    "chunk_id": "3612dbcc46bb",
+    "file": "tutorials/fullstack/backend.md",
+    "text": "### Understanding `root spawn` Results\n\n| Property | Type | Description |\n|----------|------|-------------|\n| `result.reports` | list | Array of reported values from walker |\n| `result.reports[0]` | any | First reported value (most common) |"
+  },
+  {
+    "chunk_id": "3cddcdb16e9b",
+    "file": "tutorials/fullstack/backend.md",
+    "text": "## Key Takeaways\n\n| Concept | Usage |\n|---------|-------|\n| Import walkers | `sv import from ...main { walker_name }` |\n| Call walker | `result = root spawn walker_name(args)` |\n| Get results | `result.reports[0]` |\n| Node spawn | `node_id spawn walker_name(args)` |\n| Error handling | `try { ... } except Exception as e { ... }` |"
+  },
+  {
+    "chunk_id": "9c8e7ebb182f",
+    "file": "tutorials/first-app/build-ai-day-planner.md",
+    "text": "That last point deserves emphasis. You didn't write any code to save data or load it on startup -- the data persisted automatically because the task nodes are connected to `root` in the graph. This is the persistence model you learned in Part 2 working seamlessly with the full-stack architecture."
+  },
+  {
+    "chunk_id": "6e8e6e4d7229",
+    "file": "tutorials/fullstack/state.md",
+    "text": "```jac\ncl {\n    def:pub ParentForm() -> JsxElement {\n        has inputRef: Ref[HTMLInputElement] = Ref();\n        return <FancyInput ref={inputRef} placeholder=\"Type here\" />;\n    }\n}\n```"
+  },
+  {
+    "chunk_id": "83b8a0f683a4",
+    "file": "quick-guide/what-makes-jac-different.md",
+    "text": "# Core Concepts\n\nMost of Jac will be recognizable if you are familiar with another programming language like Python -- Jac compiles to Python bytecode and shares many of its constructs, so functions, classes, imports, list comprehensions, and control flow all work as expected. You can explore those in depth in the [language reference](../reference/language/foundation.md)."
+  },
+  {
+    "chunk_id": "ebede2d4cc19",
+    "file": "tutorials/fullstack/routing.md",
+    "text": "```\npages/\n├── (public)/\n│   ├── login.jac      # Route: /login\n│   └── signup.jac     # Route: /signup\n├── (auth)/\n│   ├── index.jac      # Route: / (protected)\n│   └── settings.jac   # Route: /settings (protected)\n```"
+  },
+  {
+    "chunk_id": "2439b705e685",
+    "file": "community/breaking-changes.md",
+    "text": "**Behavior change:** `jac install <pkg>` now **records the dependency in `jac.toml`** (what `jac add` did) instead of installing without tracking. Pass the new `--no-save` flag for the old untracked behavior; `--global` and `--dry-run` continue to never touch `jac.toml`."
+  },
+  {
+    "chunk_id": "79a004fce47b",
+    "file": "reference/plugins/jac-scale.md",
+    "text": "## Library Mode\n\nFor teams preferring pure Python syntax or integrating Jac into existing Python codebases, Library Mode provides an alternative deployment approach. Instead of `.jac` files, you use Python files with Jac's runtime as a library."
+  },
+  {
+    "chunk_id": "db634d50615d",
+    "file": "community/release_notes/jaclang.md",
+    "text": "### Features and Improvements\n\n- **Console Plugin Architecture**: Refactored console system to use a plugin-based architecture, removing the `rich` dependency from core jaclang. The base `JacConsole` now uses pure Python `print()` for all output, keeping jaclang dependency-free. Plugins (like `jac-super`) can override the console implementation via the `get_console()` hook to provide Rich-enhanced output with themes, panels, tables, and spinners. This maintains backward compatibility while allowing optional aesthetic enhancements through plugins."
+  },
+  {
+    "chunk_id": "93b600d41f50",
+    "file": "tutorials/first-app/build-ai-day-planner.md",
+    "text": "<!-- jac-skip -->\n```jac\n# Extract titles from all Task nodes\n[t.title for t in [root-->][?:Task]]\n\n# With a filter condition\n[t.title for t in [root-->][?:Task] if not t.done]\n```"
+  },
+  {
+    "chunk_id": "4c829c2d1677",
+    "file": "tutorials/language/osp.md",
+    "text": "Wait, why only Alice? Because the walker visits root first (via `start`), then visits Alice (via `greet`), but doesn't continue to Bob. The walker needs to be told to continue traversing."
+  },
+  {
+    "chunk_id": "f15c6f3d96ae",
+    "file": "community/release_notes/jaclang.md",
+    "text": "## jaclang 0.13.4\n\n- **Native: Lambda Expressions**: Added lambda expression support in the `na` (native LLVM) codespace. Lambdas compile to anonymous LLVM IR functions returned as function pointers. Leverages the existing indirect function pointer call infrastructure for invocation.\n- **Type Checker: Expression-Based CFG Narrowing for Dotted Paths**: The type checker now narrows dotted attribute expressions (e.g., `obj.field`) through the CFG backward walk, not just simple variable names. Patterns like `if obj.speed is None { obj.speed = 0; } return obj.speed;` now correctly resolve `obj.speed` to `int` instead of `int | None`. Introduced `NarrowingTarget` abstraction to generalize the CFG narrowing pipeline for both symbols and expression keys, extended `affected_symbols` to track dotted paths, and removed scope-based narrowing for dotted paths in favor of the more precise CFG analysis that accounts for assignments inside branches.\n- **Refactor: Remove Scope-Based Narrowing for If/Match (CFG Handles It)**: Removed the redundant scope-based `push/pop_narrowing_scope` from if-statement and match-case handlers. The CFG backward walk now fully handles these via `_find_predicate_for` on IfStmt/MatchStmt predecessors. Also removed `promote_inverted_narrowings` and `_if_body_always_terminates`, as the CFG join logic naturally handles early-exit guard patterns. This fixes a false positive where `Any | str` was being mistyped as `int` by the old scope narrowing, and correctly reports previously-suppressed errors like attribute access on base types after isinstance guard returns.\n- **Refactor: Move AND/OR and Ternary Narrowing from Pass to Evaluator**: Progressive narrowing for AND/OR expressions (`x is not None and x.bark()`) and ternary branch narrowing (`x if isinstance(x, T) else y`) have been moved from `TypeCheckPass` enter/exit handlers into the type evaluator's expression evaluation. The pass now delegates via `prune()` + `get_type_of_expression()`, keeping all narrowing logic in one place. The scope stack is still used internally by the evaluator for these intra-expression narrowing cases, since the statement-level CFG cannot see between sub-expression operands.\n- **Type Checker: Ambient DOM Types for JSX Event Handlers**: Added `dom_types.pyi` with 39 ambient types covering DOM elements (`HTMLElement`, `HTMLInputElement`, `HTMLFormElement`, etc.) and events (`Event`, `ChangeEvent`, `KeyboardEvent`, `MouseEvent`, `FocusEvent`, `DragEvent`, etc.). These are available without import in all Jac modules, replacing the `e: any` workaround in JSX event handler lambdas with proper typed alternatives like `e: ChangeEvent` and `e: KeyboardEvent`.\n- **Fix: Filter Comprehension Type Inference**: `[root-->][?:Todo]` and `[-->[?:Todo]]` now correctly infer as `list[Todo]` instead of `Unknown`. Previously, the `FilterCompr` handler in the type evaluator was missing a return statement, and `AtomTrailer` had no branch for filter comprehension trailers, causing false E1002 return-type errors and cascading E1032 attribute-access errors on the filtered results.\n- **Type Checker: Centralized Ambient Builtins via `jac_builtins.pyi`**: All user-facing ambient names (`llm`, `jid`, `jobj`, `printgraph`, `grant`, `revoke`, `allroots`, `save`, `commit`, `store`, `destroy`, permission constants, `restspec`, `schedule`, `ScheduleTrigger`, `APIProtocol`) are now declared in `jac_builtins.pyi` as the single source of truth. The type checker resolves these through the builtins scope chain, eliminating false \"undefined name\" warnings (e.g., `llm` in `by llm()` expressions). Removed the redundant `TYPE_CHECKING` variable declarations from `builtin.jac`.\n- **Feat: Topology Index Persists Across Sessions**: The topology index (`topology_index_data` on root `NodeAnchor`) now survives Serializer round-trips via base64 encoding, enabling DB-backed graphs (MongoDB, SQLite) to retain the adjacency index across sessions instead of rebuilding from scratch. The index is excluded from `_compute_hash` dirty-checking since it's a derived cache, and serialization is scoped to root anchors only to avoid overhead on regular nodes.\n- **Type Checker: Bare Generic Iteration Defaults to `Any`**: Iterating over bare generic types like `list`, `dict`, or `set` (without type arguments) no longer produces false `E1032` \"Type is Unknown\" errors on attribute access. Bare generics are now treated as `list[Any]`, `dict[Any, Any]`, etc. per PEP 484, so iteration variables resolve to `Any` instead of `Unknown`. A new `W1036` warning is emitted to nudge users toward adding explicit type arguments (e.g., `list[Todo]` instead of bare `list`).\n- **Lint: W3037 Auto-Fix for Unnecessary `-> None`**: `jac lint --fix` now auto-removes redundant `-> None` return type annotations from functions and lambdas that have no return statement. Handles both regular abilities (`def add -> None { ... }` → `def add { ... }`) and paren-less lambdas (`lambda e: ChangeEvent -> None { ... }` → `lambda e: ChangeEvent { ... }`).\n- **Fix: False W2003 Warning on `by llm()` Parameters**: Parameters in GenAI abilities (`def foo(x: str) -> T by llm()`) no longer trigger spurious \"defined but never used\" warnings. The static analysis pass now recognizes `is_genai_ability` alongside `needs_impl` when skipping parameter usage checks.\n- **Lint: Lint Warnings in Compile/LSP Pipeline and `-> None` Check**: The linter now runs as part of the standard compile and LSP pipeline via a new `JacLintCheckPass` (report-only mode), so lint warnings like unnecessary pass, mutable defaults, and repeated conditions appear as editor warnings without modifying the AST. Added `W3037` (`unnecessary-none-return`): warns when a function or lambda has an explicit `-> None` return type annotation but no `return` statement in its body, since functions implicitly return `None`. The `jac lint` report also now displays warnings alongside errors.\n- **Fix: False W2003 Warning on `cl def` Has Variables**: Assignments to `has`-declared variables inside nested abilities of a `cl def` (e.g., `can with entry { items = get_items(); }`) no longer trigger spurious \"defined but never used\" warnings. The symbol table build pass now recognizes these as state mutations of the enclosing component's reactive `has` variables rather than new local variable definitions. Bare assignments to `has` names inside `obj` methods still correctly warn (use `self.x` instead).\n- **Type Checker: `callable()` Type Narrowing with Unified Condition Dispatch**: `callable(x)` now narrows union types in both true and false branches -- e.g., `Callable[[int], str] | str` narrows to `Callable[[int], str]` inside `if callable(x)` and to `str` in the else branch. Works with `not callable()`, early returns, explicit else, and multi-type unions including `None`. The narrowing system was also refactored into a unified condition dispatch: a single `classify_condition` classifier and `NarrowingKind` enum replace the duplicated if/elif chains that previously existed across 5 methods (`process_condition`, `process_negated_condition`, `_find_predicate_for`, `collect_narrowing_symbols`, plus leaf extractors). Adding a new narrowing kind now requires ~25 lines across 4 touch-points instead of copy-pasting AST matching across 5 scattered methods. The core `exclude_type_from_union` and `_type_matches_isinstance` utilities were also generalized to handle non-ClassType members (e.g., `FunctionType`) via identity comparison, so all narrowing kinds flow through the standard `_apply_narrowing` path without special flags.\n- **Type Checker: TypeAlias Resolution for Type Narrowing**: `TypeAlias`-annotated definitions (`glob MyType: TypeAlias = Foo | None`) are now resolved to their underlying types, enabling `isinstance()`, `callable()`, and `None`-check narrowing to work through type aliases. Detection uses symbol-based verification (`_SpecialForm` shared instance + name) rather than string matching. Expression RHS is evaluated directly; string RHS (forward references like `'Callable[[A], B] | C'`) is parsed via Python's `ast` module and recursively resolved against the Jac symbol table. Stub module (`.pyi`) TypeAlias evaluation suppresses diagnostics since stubs may reference types the Jac resolver cannot fully handle. Previously, parameters typed with a `TypeAlias` received the `_SpecialForm` class type instead of the aliased union, making all narrowing produce `<Unknown>`.\n- 1 small refactor/change.\n- **Cleanup: Remove Outdated `__specs__` from littleX Examples**: Removed deprecated `obj __specs__ { static has auth: bool = False; }` blocks from `load_user_profiles` walker in both `littleX.jac` and `littleX_single.jac`.\n- **ES Codegen: `jid()` Moved to Client Runtime**: `jid()` is now a proper runtime function (`_jac.builtin.jid()`) instead of an inline property access (`x._jac_id`). This provides clear, actionable error messages when called on `null` (e.g. server returned an error) or non-node objects, with stack traces pointing to the `.jac` source line. The `assert_no_jac_keywords` test was also improved to strip string literals before scanning, preventing false positives from English words in error messages."
+  },
+  {
+    "chunk_id": "b8d9802e01ec",
+    "file": "jaseci-llmdocs/release/jac-llmdocs.md",
+    "text": "# 8. ABILITIES\n```jac\nnode Gateway {\n    has name: str;\n    can on_any with entry { print(f\"entered {self.name}\"); }\n    can on_inspect with Inspector entry { if visitor.clearance < 5 { disengage; } }\n    can on_multi with Admin | Inspector entry { print(\"authorized\"); }\n    can on_leave with Inspector exit { print(\"leaving\"); }\n}\n```\n`self` = current archetype; `here` = current node (in walker ability); `visitor` = the walker (in node ability)\nRoot type: `Root` (capital R) in event clauses. WRONG: `` can act with `root entry ``\nUnion: `can process with Walker1 | Walker2 entry { }`"
+  },
+  {
+    "chunk_id": "d05e452935e5",
+    "file": "tutorials/language/coding_primer.md",
+    "text": "```jac\n# Jac OSP approach - Concise, declarative, type-safe\nnode Person {\n    has name: str;\n}\n\nedge Friend {\n}\n\nwalker FindFriends {\n    can start with Root entry {\n        visit [-->];\n    }\n\n    can find with Person entry {\n        report here.name;\n        visit [->:Friend:->];\n    }\n}\n\nwith entry {\n    alice = Person(name=\"Alice\");\n    bob = Person(name=\"Bob\");\n    charlie = Person(name=\"Charlie\");\n\n    root ++> alice;\n    alice +>:Friend:+> bob;\n    alice +>:Friend:+> charlie;\n\n    friends = root spawn FindFriends();\n    print(f\"Found friends: {friends.reports}\");\n}\n```"
+  },
+  {
+    "chunk_id": "ece7b2855fb6",
+    "file": "reference/language/functions-objects.md",
+    "text": "### 10 Access Modifiers\n\nFor a **top-level** `def`, the access tag controls cross-module visibility (a *project* is the directory tree rooted at its `jac.toml`):"
+  }
+]

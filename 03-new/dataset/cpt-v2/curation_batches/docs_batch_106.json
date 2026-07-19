@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "a327e958b587",
+    "verdict": "keep",
+    "reason": "Substantive SSO overview explaining provider support and identity storage model."
+  },
+  {
+    "chunk_id": "299014e384b6",
+    "verdict": "drop",
+    "reason": "Bare section lead-in with no content of its own."
+  },
+  {
+    "chunk_id": "fd9d5498299a",
+    "verdict": "keep",
+    "reason": "Complete step-by-step description of the SSO login flow."
+  },
+  {
+    "chunk_id": "696fd589c5aa",
+    "verdict": "keep",
+    "reason": "Substantive semantics of SSO profile population and overwrite rules."
+  },
+  {
+    "chunk_id": "1385d52bbe98",
+    "verdict": "drop",
+    "reason": "Bare heading fragment with no standalone content."
+  },
+  {
+    "chunk_id": "0d64d73e6c58",
+    "verdict": "keep",
+    "reason": "Canonical jac.toml SSO configuration example."
+  },
+  {
+    "chunk_id": "1ce6b88f69a4",
+    "verdict": "keep",
+    "reason": "Meaningful behavior detail about provider enablement and 501 responses."
+  },
+  {
+    "chunk_id": "ae07362575cc",
+    "verdict": "drop",
+    "reason": "Bare heading fragment with no standalone content."
+  },
+  {
+    "chunk_id": "ec7adb2e18f7",
+    "verdict": "keep",
+    "reason": "Endpoint reference table with real API surface information."
+  },
+  {
+    "chunk_id": "b9f368bec6ec",
+    "verdict": "keep",
+    "reason": "Short but carries the platform enumeration needed to read the endpoint table."
+  },
+  {
+    "chunk_id": "307bda7adfc1",
+    "verdict": "drop",
+    "reason": "Bare heading fragment with no standalone content."
+  },
+  {
+    "chunk_id": "96b1e545d310",
+    "verdict": "keep",
+    "reason": "Explains purpose and behavior of client_auth_callback_url."
+  },
+  {
+    "chunk_id": "463deb43143f",
+    "verdict": "keep",
+    "reason": "Concrete config example for the frontend callback redirect."
+  },
+  {
+    "chunk_id": "e7b6cc5e4159",
+    "verdict": "keep",
+    "reason": "Describes redirect behavior; connects config to the query-parameter contract."
+  },
+  {
+    "chunk_id": "917d321b3749",
+    "verdict": "keep",
+    "reason": "Specifies the success/failure callback URL formats."
+  },
+  {
+    "chunk_id": "7032e7b0806d",
+    "verdict": "drop",
+    "reason": "Bare heading fragment with no standalone content."
+  },
+  {
+    "chunk_id": "5b6f748eeaba",
+    "verdict": "keep",
+    "reason": "Substantive description of SSO link/unlink semantics."
+  },
+  {
+    "chunk_id": "63afca1077d6",
+    "verdict": "drop",
+    "reason": "Content-free 'Example:' label fragment."
+  },
+  {
+    "chunk_id": "40cba13392aa",
+    "verdict": "keep",
+    "reason": "Concrete curl usage example for SSO login endpoints."
+  },
+  {
+    "chunk_id": "a1871369f7a9",
+    "verdict": "keep",
+    "reason": "Introduces legacy migration with real context about when it applies."
+  },
+  {
+    "chunk_id": "2f51deb5a7d2",
+    "verdict": "keep",
+    "reason": "Detailed enumeration of migration behaviors including rehashing and collision handling."
+  },
+  {
+    "chunk_id": "40cb5b89a6fe",
+    "verdict": "keep",
+    "reason": "Meaningful detail on migration idempotency and SQLite exemption."
+  },
+  {
+    "chunk_id": "72ebc9023c64",
+    "verdict": "keep",
+    "reason": "Informative note on the removability of the SHA-256 migration path."
+  },
+  {
+    "chunk_id": "3fd923b1e805",
+    "verdict": "keep",
+    "reason": "Describes the /user/me endpoint's purpose and security property."
+  },
+  {
+    "chunk_id": "90ab7821d370",
+    "verdict": "keep",
+    "reason": "Concrete authenticated curl example for /user/me."
+  },
+  {
+    "chunk_id": "1636d13906a9",
+    "verdict": "drop",
+    "reason": "Content-free 'Returns (HTTP 200):' connective fragment."
+  },
+  {
+    "chunk_id": "a5875cff7be4",
+    "verdict": "keep",
+    "reason": "Full example response schema showing identity and profile structure."
+  },
+  {
+    "chunk_id": "52575488ec6f",
+    "verdict": "keep",
+    "reason": "Substantive detail on which internal fields are stripped from responses."
+  },
+  {
+    "chunk_id": "3fe2917c5cb2",
+    "verdict": "keep",
+    "reason": "Documents error semantics (401 vs 404) for the endpoint."
+  },
+  {
+    "chunk_id": "5d0d5b1756d7",
+    "verdict": "keep",
+    "reason": "Section overview tying identity management, verification, and reset together."
+  },
+  {
+    "chunk_id": "db2196b34caa",
+    "verdict": "drop",
+    "reason": "Bare 'Tokens are:' lead-in with no content of its own."
+  },
+  {
+    "chunk_id": "81841ffb0a74",
+    "verdict": "keep",
+    "reason": "Detailed token security properties (hashing, single-use, TTL, storage)."
+  },
+  {
+    "chunk_id": "d183ebfce03f",
+    "verdict": "keep",
+    "reason": "Brief but states what the following config controls (TTLs and email URLs)."
+  },
+  {
+    "chunk_id": "eca9de13d5b7",
+    "verdict": "keep",
+    "reason": "Concrete jac.toml example for auth token TTLs and URL templates."
+  },
+  {
+    "chunk_id": "ebfe96362176",
+    "verdict": "keep",
+    "reason": "Explains the {token} placeholder and empty-template dev behavior."
+  },
+  {
+    "chunk_id": "559c1b164ca2",
+    "verdict": "keep",
+    "reason": "Documents Add Identity semantics including the no-mail behavior."
+  },
+  {
+    "chunk_id": "029dd353c72f",
+    "verdict": "keep",
+    "reason": "Concrete curl example for the add-identity endpoint."
+  },
+  {
+    "chunk_id": "fa4a953ee1c4",
+    "verdict": "drop",
+    "reason": "Content-free 'Returns HTTP 200:' connective fragment."
+  },
+  {
+    "chunk_id": "b2bc9c965d2c",
+    "verdict": "keep",
+    "reason": "Example response body showing the add-identity result shape."
+  },
+  {
+    "chunk_id": "f753e64ecd24",
+    "verdict": "keep",
+    "reason": "Documents the endpoint's error codes."
+  },
+  {
+    "chunk_id": "377a451a2820",
+    "verdict": "keep",
+    "reason": "Substantive semantics of send-verification including idempotency and token revocation."
+  },
+  {
+    "chunk_id": "59d7a3b75dab",
+    "verdict": "keep",
+    "reason": "Concrete curl example for send-verification."
+  },
+  {
+    "chunk_id": "a2b65041a66a",
+    "verdict": "keep",
+    "reason": "Carries the 202-means-queued semantic beyond a bare status label."
+  },
+  {
+    "chunk_id": "ab4f1b692ab1",
+    "verdict": "keep",
+    "reason": "Example response for the pending-verification case."
+  },
+  {
+    "chunk_id": "6c9f496e6354",
+    "verdict": "keep",
+    "reason": "States the already-verified branch returns 200, which is real behavior info."
+  },
+  {
+    "chunk_id": "332f0c8a578a",
+    "verdict": "keep",
+    "reason": "Example response for the already-verified case."
+  },
+  {
+    "chunk_id": "dc7a292608a1",
+    "verdict": "keep",
+    "reason": "Documents the endpoint's full error-code set including EMAIL_DISABLED."
+  },
+  {
+    "chunk_id": "e1b7ada640fb",
+    "verdict": "keep",
+    "reason": "Explains verify-identity semantics: token-as-credential, no Bearer required."
+  },
+  {
+    "chunk_id": "b3282096df69",
+    "verdict": "keep",
+    "reason": "Concrete curl example for verify-identity."
+  },
+  {
+    "chunk_id": "ee05699b1898",
+    "verdict": "drop",
+    "reason": "Content-free 'Returns HTTP 200:' connective fragment."
+  }
+]

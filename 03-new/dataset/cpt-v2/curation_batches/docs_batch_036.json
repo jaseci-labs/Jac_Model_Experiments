@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "8aaa2243b249",
+    "verdict": "keep",
+    "reason": "Explains byLLM return-type enforcement as output contract, genuine concept content."
+  },
+  {
+    "chunk_id": "08552fe4523a",
+    "verdict": "keep",
+    "reason": "Introduces the sem construct for attaching semantics to bindings."
+  },
+  {
+    "chunk_id": "370c757a7bcf",
+    "verdict": "keep",
+    "reason": "Concrete sem/by-llm code example; near-dup partner 7a0ab9e9c29f is absent from this batch so nothing to dedupe against."
+  },
+  {
+    "chunk_id": "b21909158d8d",
+    "verdict": "keep",
+    "reason": "Explains the runtime effect of sem on LLM prompts, useful prose."
+  },
+  {
+    "chunk_id": "0824b2fbefde",
+    "verdict": "keep",
+    "reason": "Clarifies sem is a compiler directive, not a comment; core distinction."
+  },
+  {
+    "chunk_id": "eb0aee1a4ac7",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "1388058127a9",
+    "verdict": "keep",
+    "reason": "Summarizes how codespaces, OSP, and by/sem relate; genuine conceptual overview."
+  },
+  {
+    "chunk_id": "c64e822cfad0",
+    "verdict": "keep",
+    "reason": "Describes how walkers, LLM delegation, and client UI compose."
+  },
+  {
+    "chunk_id": "4c74e168efad",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "68bb09c576b4",
+    "verdict": "keep",
+    "reason": "Quick-reference syntax table covering OSP and AI constructs."
+  },
+  {
+    "chunk_id": "28ae88758e43",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "7dd606fc1fad",
+    "verdict": "drop",
+    "reason": "Next-steps navigation link list, no substantive prose."
+  },
+  {
+    "chunk_id": "6e5b216e3132",
+    "verdict": "keep",
+    "reason": "CLI reference intro describing the jac command's scope."
+  },
+  {
+    "chunk_id": "969f29b0a863",
+    "verdict": "keep",
+    "reason": "Describes built-in scale/client/byLLM CLI capabilities."
+  },
+  {
+    "chunk_id": "aa7cc65b2657",
+    "verdict": "keep",
+    "reason": "Genuine note about built-in Rich CLI output."
+  },
+  {
+    "chunk_id": "ab5be26aef00",
+    "verdict": "drop",
+    "reason": "Nav-only section intro pointing to the table that follows, no real content."
+  },
+  {
+    "chunk_id": "2fefed5d3daa",
+    "verdict": "keep",
+    "reason": "Task-to-command mapping table, substantive CLI reference."
+  },
+  {
+    "chunk_id": "cef2d83826f0",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "3ad448036cd6",
+    "verdict": "keep",
+    "reason": "Full quick-reference command table, dense CLI documentation."
+  },
+  {
+    "chunk_id": "ecc5da1dead9",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "194056e7d0ae",
+    "verdict": "keep",
+    "reason": "Documents the jac --version command."
+  },
+  {
+    "chunk_id": "5c4ae5acb458",
+    "verdict": "drop",
+    "reason": "Single lead-in caption fragment with no standalone value."
+  },
+  {
+    "chunk_id": "dfd99d7ed74d",
+    "verdict": "keep",
+    "reason": "Shows actual version banner output including links, real example."
+  },
+  {
+    "chunk_id": "1155c481a284",
+    "verdict": "keep",
+    "reason": "Explains why bundled subsystems report no separate version."
+  },
+  {
+    "chunk_id": "0fca11cc7e18",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "e7fdaf9346b0",
+    "verdict": "drop",
+    "reason": "Section header with no accompanying prose."
+  },
+  {
+    "chunk_id": "1728179dbb84",
+    "verdict": "keep",
+    "reason": "Describes what jac run executes."
+  },
+  {
+    "chunk_id": "143957845939",
+    "verdict": "keep",
+    "reason": "Notes the jac <file> shorthand equivalence."
+  },
+  {
+    "chunk_id": "3beaab3e3f61",
+    "verdict": "keep",
+    "reason": "jac run usage synopsis with flags."
+  },
+  {
+    "chunk_id": "ddbe92ee06d0",
+    "verdict": "keep",
+    "reason": "Full options table for jac run."
+  },
+  {
+    "chunk_id": "056a16507cff",
+    "verdict": "keep",
+    "reason": "Explains flag ordering relative to filename."
+  },
+  {
+    "chunk_id": "e8780befc224",
+    "verdict": "keep",
+    "reason": "Documents project-aware bare jac run behavior by kind."
+  },
+  {
+    "chunk_id": "b9d5846ba5a9",
+    "verdict": "drop",
+    "reason": "Bare header fragment with no content."
+  },
+  {
+    "chunk_id": "485451aa89dd",
+    "verdict": "keep",
+    "reason": "Diagnostics-modes table, substantive CLI reference."
+  },
+  {
+    "chunk_id": "886bb576acce",
+    "verdict": "keep",
+    "reason": "Explains diagnostics config and CLI precedence."
+  },
+  {
+    "chunk_id": "7e821ffe4c3c",
+    "verdict": "drop",
+    "reason": "Bare 'Examples:' header fragment."
+  },
+  {
+    "chunk_id": "d550ae9545e8",
+    "verdict": "keep",
+    "reason": "Multiple jac run usage examples."
+  },
+  {
+    "chunk_id": "604f6b7e47df",
+    "verdict": "keep",
+    "reason": "Explains --entry with node/root seeding."
+  },
+  {
+    "chunk_id": "e75b9470f173",
+    "verdict": "keep",
+    "reason": "jac run --entry usage examples."
+  },
+  {
+    "chunk_id": "51c868db8aed",
+    "verdict": "keep",
+    "reason": "Explains running a prebuilt sealed .jab artifact."
+  },
+  {
+    "chunk_id": "4f7b665ca560",
+    "verdict": "keep",
+    "reason": "Example of executing a sealed artifact."
+  },
+  {
+    "chunk_id": "87fc4e707716",
+    "verdict": "keep",
+    "reason": "Documents the --debug interactive debugger flag."
+  },
+  {
+    "chunk_id": "006028b440ff",
+    "verdict": "keep",
+    "reason": "Example of launching the debugger."
+  },
+  {
+    "chunk_id": "b5cfb177b340",
+    "verdict": "drop",
+    "reason": "Bare lead-in header fragment with no content."
+  },
+  {
+    "chunk_id": "27f50dc088d5",
+    "verdict": "drop",
+    "reason": "Single lead-in sentence fragment introducing the following code block."
+  },
+  {
+    "chunk_id": "8b236a7902bd",
+    "verdict": "keep",
+    "reason": "greet.jac sys.argv example code."
+  },
+  {
+    "chunk_id": "bdb9d72950ed",
+    "verdict": "keep",
+    "reason": "Example invocations showing argument passing."
+  },
+  {
+    "chunk_id": "96b11815542e",
+    "verdict": "keep",
+    "reason": "Explains sys.argv[0] and argparse usage."
+  },
+  {
+    "chunk_id": "9f6d1938e900",
+    "verdict": "keep",
+    "reason": "argparse example in Jac."
+  },
+  {
+    "chunk_id": "305b5fbe5b30",
+    "verdict": "keep",
+    "reason": "Example invoking the argparse script with a flag."
+  }
+]

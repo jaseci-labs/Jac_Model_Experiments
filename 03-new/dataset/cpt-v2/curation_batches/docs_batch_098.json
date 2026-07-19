@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "c5d360c7a578",
+    "verdict": "keep",
+    "reason": "Canonical annotated jac.toml overview example covering the plugin's config surface."
+  },
+  {
+    "chunk_id": "d3ca1816719a",
+    "verdict": "keep",
+    "reason": "Substantive prose explaining the [client.npm] section's purpose and generated .npmrc."
+  },
+  {
+    "chunk_id": "9c4509c030d8",
+    "verdict": "keep",
+    "reason": "Reference table defining the three [client.npm] keys."
+  },
+  {
+    "chunk_id": "6e6da100fe1b",
+    "verdict": "keep",
+    "reason": "Short but carries the fact that settings emit arbitrary .npmrc key-value pairs."
+  },
+  {
+    "chunk_id": "5dd99ca35d92",
+    "verdict": "keep",
+    "reason": "Concrete [client.npm.settings] example with keys not shown elsewhere (proxy, strict-ssl)."
+  },
+  {
+    "chunk_id": "ab6d597accbb",
+    "verdict": "keep",
+    "reason": "Lead-in stating scoped registries map @scope prefixes to registry URLs."
+  },
+  {
+    "chunk_id": "db254bd72102",
+    "verdict": "keep",
+    "reason": "Scoped-registry example extends the overview with a second registry mapping."
+  },
+  {
+    "chunk_id": "a80f5ef9a7dc",
+    "verdict": "keep",
+    "reason": "Carries the guidance to use environment variables for registry auth secrets."
+  },
+  {
+    "chunk_id": "e055b7af49b0",
+    "verdict": "keep",
+    "reason": "Auth-token TOML syntax example tied to its section context."
+  },
+  {
+    "chunk_id": "d2291a8c2ed3",
+    "verdict": "keep",
+    "reason": "Unique semantics of ${VAR} interpolation and literal pass-through behavior."
+  },
+  {
+    "chunk_id": "95209512b215",
+    "verdict": "keep",
+    "reason": "Documents where the generated .npmrc lives and when it is applied."
+  },
+  {
+    "chunk_id": "ddcaabaf0afc",
+    "verdict": "keep",
+    "reason": "Explains [client.paths] aliases and their dual Vite/TypeScript wiring."
+  },
+  {
+    "chunk_id": "2d16337cd254",
+    "verdict": "keep",
+    "reason": "Alias example showing both wildcard and exact patterns."
+  },
+  {
+    "chunk_id": "b3cabdc4f532",
+    "verdict": "keep",
+    "reason": "Brief bridge but names the .cl.jac / cl {} contexts where aliases apply."
+  },
+  {
+    "chunk_id": "04e6d449c516",
+    "verdict": "keep",
+    "reason": "Flagged duplicate pair, but partner 97fc0f3a634c is not in this batch, so this copy of the Jac alias-import example stays."
+  },
+  {
+    "chunk_id": "6bd745671e8d",
+    "verdict": "keep",
+    "reason": "Table explaining how aliases are applied across Vite, TypeScript, and the Jac module resolver."
+  },
+  {
+    "chunk_id": "dbda5ff5ac80",
+    "verdict": "keep",
+    "reason": "Defines wildcard versus exact alias pattern semantics."
+  },
+  {
+    "chunk_id": "ff9544611297",
+    "verdict": "keep",
+    "reason": "Introduces the two-step Vite plugin integration pattern."
+  },
+  {
+    "chunk_id": "eff81c911f63",
+    "verdict": "keep",
+    "reason": "The two-step declare-then-wire instructions completing the previous chunk."
+  },
+  {
+    "chunk_id": "615c14ff2a6e",
+    "verdict": "keep",
+    "reason": "Reference table for [client.vite] plugins and lib_imports keys."
+  },
+  {
+    "chunk_id": "933bed529efa",
+    "verdict": "keep",
+    "reason": "Explains how the keys are emitted into the generated vite.config.js."
+  },
+  {
+    "chunk_id": "df53209e0e1e",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no content of its own."
+  },
+  {
+    "chunk_id": "c3a8c2ca432b",
+    "verdict": "keep",
+    "reason": "Shows the jac install --npm --dev command form for adding Vite plugins."
+  },
+  {
+    "chunk_id": "065cf4bdd65f",
+    "verdict": "keep",
+    "reason": "Complete Tailwind v4 wiring example spanning [client.vite] and [dependencies.npm.dev]."
+  },
+  {
+    "chunk_id": "70a863be32ed",
+    "verdict": "keep",
+    "reason": "States the entry-CSS import plus className usage pattern for Tailwind."
+  },
+  {
+    "chunk_id": "a1221d2ce32e",
+    "verdict": "keep",
+    "reason": "Genuine Jac code example showing cl {} CSS import and JSX with Tailwind classes."
+  },
+  {
+    "chunk_id": "dfb986251cd0",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no content of its own."
+  },
+  {
+    "chunk_id": "be5af4f22cbe",
+    "verdict": "keep",
+    "reason": "Demonstrates multiple plugins with options, beyond the single-plugin example."
+  },
+  {
+    "chunk_id": "32a549171432",
+    "verdict": "keep",
+    "reason": "Introduces the [client.vite.build] override section."
+  },
+  {
+    "chunk_id": "455cbedfaca5",
+    "verdict": "keep",
+    "reason": "Concrete build-options example (sourcemap, minify, outDir)."
+  },
+  {
+    "chunk_id": "850453ede937",
+    "verdict": "keep",
+    "reason": "Introduces the [client.vite.server] dev-server section."
+  },
+  {
+    "chunk_id": "146de3f711ad",
+    "verdict": "keep",
+    "reason": "Concrete dev-server options example (port, host, cors)."
+  },
+  {
+    "chunk_id": "9f5414ade664",
+    "verdict": "keep",
+    "reason": "Explains [client.configs] generic config-file generation and its use cases."
+  },
+  {
+    "chunk_id": "e31f9b1ed30f",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no content of its own."
+  },
+  {
+    "chunk_id": "3d7a4b92acff",
+    "verdict": "keep",
+    "reason": "Install command for the Tailwind v3 + PostCSS toolchain."
+  },
+  {
+    "chunk_id": "abc68ce57144",
+    "verdict": "keep",
+    "reason": "Full Tailwind v3/PostCSS config example including nested theme extension."
+  },
+  {
+    "chunk_id": "736d6f316ef1",
+    "verdict": "keep",
+    "reason": "States the generated config file paths, completing the example."
+  },
+  {
+    "chunk_id": "7ebbc17ff838",
+    "verdict": "keep",
+    "reason": "Decision table for choosing [client.vite] versus [client.configs]."
+  },
+  {
+    "chunk_id": "aba541966048",
+    "verdict": "keep",
+    "reason": "Explains the [jac-shadcn] section and its offline resolution model."
+  },
+  {
+    "chunk_id": "af8a6df1aaf2",
+    "verdict": "keep",
+    "reason": "Documents the jac create/retheme/install --shadcn command interactions with this config."
+  },
+  {
+    "chunk_id": "23f7c410820b",
+    "verdict": "keep",
+    "reason": "Annotated [jac-shadcn] TOML example with all keys."
+  },
+  {
+    "chunk_id": "457bfad48ee4",
+    "verdict": "keep",
+    "reason": "Reference table enumerating shadcn style/theme/font/radius values."
+  },
+  {
+    "chunk_id": "4263d5f18e94",
+    "verdict": "keep",
+    "reason": "Explains semantic color tokens and links to the authoring tutorial."
+  },
+  {
+    "chunk_id": "87c0cd8f554f",
+    "verdict": "keep",
+    "reason": "Introduces the [client.ts] tsconfig override section."
+  },
+  {
+    "chunk_id": "81d445a8d28a",
+    "verdict": "keep",
+    "reason": "Concrete tsconfig override example with compilerOptions and include."
+  },
+  {
+    "chunk_id": "b6763b2e770b",
+    "verdict": "keep",
+    "reason": "Important semantics: compilerOptions merge but include/exclude replace defaults."
+  },
+  {
+    "chunk_id": "9cfbd3945764",
+    "verdict": "keep",
+    "reason": "Introduces [client.app_meta_data] for HTML head tags."
+  },
+  {
+    "chunk_id": "a66abddecbf4",
+    "verdict": "keep",
+    "reason": "Complete metadata example including OpenGraph keys."
+  },
+  {
+    "chunk_id": "f4c253699e01",
+    "verdict": "keep",
+    "reason": "Introduces the [client.api] base URL setting."
+  },
+  {
+    "chunk_id": "2d3a5a942a26",
+    "verdict": "keep",
+    "reason": "The base_url example completing the API section."
+  }
+]

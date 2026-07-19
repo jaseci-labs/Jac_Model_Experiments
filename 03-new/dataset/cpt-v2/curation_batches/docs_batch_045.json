@@ -1,0 +1,232 @@
+[
+  {
+    "chunk_id": "cbdc4032c2b9",
+    "verdict": "keep",
+    "reason": "Explains declaration/impl separation of what vs how."
+  },
+  {
+    "chunk_id": "a04ac0898fa5",
+    "verdict": "keep",
+    "reason": "Concrete real-world example of inline impl pattern."
+  },
+  {
+    "chunk_id": "3c8130705eae",
+    "verdict": "keep",
+    "reason": "Useful when-to-use guidance for inline pattern."
+  },
+  {
+    "chunk_id": "149c85c48b63",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no prose content."
+  },
+  {
+    "chunk_id": "d5995376064a",
+    "verdict": "keep",
+    "reason": "Describes side-by-side impl file auto-discovery mechanism."
+  },
+  {
+    "chunk_id": "c47bade59048",
+    "verdict": "keep",
+    "reason": "Section lead-in for declaration file example."
+  },
+  {
+    "chunk_id": "c2238f0ad0ff",
+    "verdict": "keep",
+    "reason": "Concrete Jac declaration code showing enum/obj/method signatures."
+  },
+  {
+    "chunk_id": "da01e3dbca05",
+    "verdict": "keep",
+    "reason": "Contextual lead-in to impl file example."
+  },
+  {
+    "chunk_id": "6826182c04b9",
+    "verdict": "keep",
+    "reason": "Jac impl-block code example."
+  },
+  {
+    "chunk_id": "7923608db50a",
+    "verdict": "keep",
+    "reason": "Explains declaration file as specification document."
+  },
+  {
+    "chunk_id": "8bbf77fb8fb8",
+    "verdict": "keep",
+    "reason": "Real compiler example of 1:1 impl split."
+  },
+  {
+    "chunk_id": "5d6a6c149445",
+    "verdict": "keep",
+    "reason": "When-to-use guidance for side-by-side impl pattern."
+  },
+  {
+    "chunk_id": "8f36ece26a61",
+    "verdict": "keep",
+    "reason": "Describes dominant shared impl/ directory pattern."
+  },
+  {
+    "chunk_id": "a45cb34fa68a",
+    "verdict": "keep",
+    "reason": "Shows directory layout for shared impl/ pattern."
+  },
+  {
+    "chunk_id": "cbeac16ba985",
+    "verdict": "keep",
+    "reason": "Real compiler example of shared impl/ layout."
+  },
+  {
+    "chunk_id": "41c947bae03b",
+    "verdict": "keep",
+    "reason": "Introduces command-catalog declaration example."
+  },
+  {
+    "chunk_id": "d26720de791c",
+    "verdict": "keep",
+    "reason": "Jac declaration code with decorator metadata."
+  },
+  {
+    "chunk_id": "dfcb8b980b4d",
+    "verdict": "keep",
+    "reason": "Lead-in to impl body example."
+  },
+  {
+    "chunk_id": "f0125d11f91a",
+    "verdict": "keep",
+    "reason": "Jac impl body code example."
+  },
+  {
+    "chunk_id": "8b5f4f52265b",
+    "verdict": "keep",
+    "reason": "Explains declaration-only readability of commands."
+  },
+  {
+    "chunk_id": "9ce300715857",
+    "verdict": "keep",
+    "reason": "Introduces compiler-wide usage survey."
+  },
+  {
+    "chunk_id": "c457d02c44cc",
+    "verdict": "keep",
+    "reason": "Table documenting pattern usage across compiler packages."
+  },
+  {
+    "chunk_id": "93f7a8178a57",
+    "verdict": "keep",
+    "reason": "When-to-use guidance for shared impl/ pattern."
+  },
+  {
+    "chunk_id": "92809e75ef31",
+    "verdict": "keep",
+    "reason": "Describes .impl/ directory 1:Many pattern."
+  },
+  {
+    "chunk_id": "6605fcdfe867",
+    "verdict": "keep",
+    "reason": "Explains conceptual decomposition benefit of pattern."
+  },
+  {
+    "chunk_id": "c10452f62e1d",
+    "verdict": "keep",
+    "reason": "Detailed directory layout for .impl/ pattern."
+  },
+  {
+    "chunk_id": "b7f2427d0320",
+    "verdict": "keep",
+    "reason": "Real LLVM IR-gen pass example."
+  },
+  {
+    "chunk_id": "eb9e4e1a0a4a",
+    "verdict": "keep",
+    "reason": "Jac declaration code with organized method signatures."
+  },
+  {
+    "chunk_id": "eea227182d70",
+    "verdict": "keep",
+    "reason": "Lead-in to domain-isolated impl example."
+  },
+  {
+    "chunk_id": "4b835f7b3150",
+    "verdict": "keep",
+    "reason": "Jac impl code isolating tuple codegen."
+  },
+  {
+    "chunk_id": "179e241bf126",
+    "verdict": "keep",
+    "reason": "Additional real example reference for the pattern."
+  },
+  {
+    "chunk_id": "33340aa2076d",
+    "verdict": "keep",
+    "reason": "When-to-use guidance for .impl/ pattern."
+  },
+  {
+    "chunk_id": "60979a314072",
+    "verdict": "keep",
+    "reason": "Describes pure-declaration data-module pattern."
+  },
+  {
+    "chunk_id": "088cd0e01f8d",
+    "verdict": "keep",
+    "reason": "Real ESTree pure-declaration example."
+  },
+  {
+    "chunk_id": "d1d118dc9783",
+    "verdict": "keep",
+    "reason": "Jac code showing obj type definitions."
+  },
+  {
+    "chunk_id": "c2dfc0337a37",
+    "verdict": "keep",
+    "reason": "Explains minimal impl for data modules."
+  },
+  {
+    "chunk_id": "608c03fef26a",
+    "verdict": "keep",
+    "reason": "Real re-export barrel example."
+  },
+  {
+    "chunk_id": "3d7f8b8f8cce",
+    "verdict": "keep",
+    "reason": "Jac re-export barrel code example."
+  },
+  {
+    "chunk_id": "c7e3e1074652",
+    "verdict": "keep",
+    "reason": "When-to-use guidance for pure declarations."
+  },
+  {
+    "chunk_id": "949254fbae89",
+    "verdict": "keep",
+    "reason": "Introduces pattern decision guide."
+  },
+  {
+    "chunk_id": "d856922c5071",
+    "verdict": "keep",
+    "reason": "Decision tree for choosing organization pattern."
+  },
+  {
+    "chunk_id": "f0c423a5d713",
+    "verdict": "keep",
+    "reason": "Explains how to use the decision tree."
+  },
+  {
+    "chunk_id": "fa546579e112",
+    "verdict": "keep",
+    "reason": "Useful note framing patterns as conventions."
+  },
+  {
+    "chunk_id": "72b5a84fb62a",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no prose content."
+  },
+  {
+    "chunk_id": "d89bb5168531",
+    "verdict": "keep",
+    "reason": "Explains Jac package model without __init__.jac."
+  },
+  {
+    "chunk_id": "69363b2ecb3e",
+    "verdict": "keep",
+    "reason": "Documents implicit package importing."
+  }
+]

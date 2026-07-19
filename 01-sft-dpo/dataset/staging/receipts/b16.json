@@ -1,0 +1,21 @@
+{
+  "batch_id": "b16",
+  "accepted": [
+    "count_ext",
+    "tree_size",
+    "prune_count",
+    "lang_report",
+    "ok_count",
+    "first_fail",
+    "failure_tail",
+    "free_slot",
+    "bullet_sweep",
+    "hit_score",
+    "combo_actions",
+    "sniff_lang",
+    "dead_pages",
+    "orphan_pages"
+  ],
+  "rejected": [],
+  "accept_rate": 1.0
+}

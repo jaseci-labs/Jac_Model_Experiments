@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the CPT dataset per 03-new/docs/cpt-dataset-design.md.
+"""Build the CPT dataset per 03-new/docs/cpt-1/cpt-dataset-design.md.
 
 Sources -> raw per-source JSONL -> decontam -> pack (EOS-join, 4096-token
 windows, 85/15 split) -> 03-new/dataset/cpt/.
@@ -18,8 +18,22 @@ import sys
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).parent))
+from text_shingles import shingles
+
 ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT / "03-new" / "dataset" / "cpt"
+
+
+def resolve_out_dir(out_arg) -> Path:
+    if out_arg:
+        return ROOT / out_arg if not Path(out_arg).is_absolute() else Path(out_arg)
+    return ROOT / "03-new" / "dataset" / "cpt"
+
+
+def rehearsal_target(jac_tokens: int, frac: float) -> int:
+    return int(jac_tokens * frac)
+
+
 JAC = ROOT / ".venv" / "bin" / "jac"
 TOKENIZER_DIR = ROOT / "models" / "qwen-q4"
 SEQ_LEN = 4096
@@ -137,6 +151,21 @@ def strip_frontmatter(text: str) -> str:
     return text
 
 
+def make_chunk_id(file: str, section: str, text: str) -> str:
+    """Stable per-row ID for curation (Task 7) and question-gen (Task 16) to
+    join verdicts/questions back to rows regardless of build re-ordering.
+    Keyed on file+section+FULL text, not row index -- a corpus rebuild that
+    reorders rows must not change existing chunk_ids. Must hash the full text
+    (not a prefix): a prefix-only key lets two rows that share the same
+    leading bytes but differ later (e.g. repeated '---' separator lines,
+    near-identical short diff/code snippets in the same file+section)
+    collide onto the same chunk_id despite being meaningfully different rows.
+    SHA1 has no real per-row cost concern here, so there's no performance
+    reason to truncate the input."""
+    key = f"{file}|{section}|{text}".encode("utf-8", errors="replace")
+    return hashlib.sha1(key).hexdigest()[:12]
+
+
 # ---------------------------------------------------------------- sources
 
 def build_docs(repos: Path):
@@ -155,7 +184,8 @@ def build_docs(repos: Path):
                     "meta": {"source": "jaseci_docs", "type": "official_doc",
                              "upsample_weight": 3,
                              "file": str(f.relative_to(base)),
-                             "section": first.lstrip("# ")[:120]},
+                             "section": first.lstrip("# ")[:120],
+                             "chunk_id": make_chunk_id(str(f.relative_to(base)), first.lstrip("# ")[:120], para)},
                 })
     llm = repos / "jaseci-llmdocs" / "release" / "jac-llmdocs.md"
     if llm.exists():
@@ -167,7 +197,8 @@ def build_docs(repos: Path):
                     "meta": {"source": "jaseci_docs", "type": "llm_doc",
                              "upsample_weight": 1,
                              "file": "jaseci-llmdocs/release/jac-llmdocs.md",
-                             "section": first.lstrip("# ")[:120]},
+                             "section": first.lstrip("# ")[:120],
+                             "chunk_id": make_chunk_id("jaseci-llmdocs/release/jac-llmdocs.md", first.lstrip("# ")[:120], para)},
                 })
     return rows
 
@@ -208,15 +239,18 @@ def build_paper(arxiv: Path):
                     "text": para,
                     "meta": {"source": "osp_paper", "type": "paper_section",
                              "upsample_weight": 1, "file": f.name,
-                             "section": (m.group(1) if m else "")[:120]},
+                             "section": (m.group(1) if m else "")[:120],
+                             "chunk_id": make_chunk_id(f.name, (m.group(1) if m else "")[:120], para)},
                 })
     lst = arxiv / "littlex.jac"
     if lst.exists():
+        listing_text = lst.read_text(errors="replace")
         rows.append({
-            "text": "# path: osp-paper/littlex.jac\n" + lst.read_text(errors="replace"),
+            "text": "# path: osp-paper/littlex.jac\n" + listing_text,
             "meta": {"source": "osp_paper", "type": "paper_listing",
                      "upsample_weight": 1, "file": "littlex.jac",
-                     "section": "littleX listing"},
+                     "section": "littleX listing",
+                     "chunk_id": make_chunk_id("littlex.jac", "littleX listing", listing_text)},
         })
     return rows
 
@@ -236,7 +270,8 @@ def build_blogs(repos: Path):
                              "upsample_weight": 1,
                              "url": f"https://blogs.jaseci.org/blog/{slug}",
                              "file": str(f.relative_to(base)),
-                             "section": first.lstrip("# ")[:120]},
+                             "section": first.lstrip("# ")[:120],
+                             "chunk_id": make_chunk_id(str(f.relative_to(base)), first.lstrip("# ")[:120], para)},
                 })
     return rows
 
@@ -338,7 +373,8 @@ def build_code(repos: Path):
                 "text": f"# path: {repo}/{rel}\n{body}",
                 "meta": {"source": "code", "type": "repo_file",
                          "upsample_weight": 1, "repo": f"jaseci-labs/{repo}",
-                         "path": str(rel)},
+                         "path": str(rel),
+                         "chunk_id": make_chunk_id(str(rel), "", body)},
             })
     return rows, gate_stats
 
@@ -369,7 +405,8 @@ def build_rehearsal(target_tokens: int, tok):
                      "upsample_weight": 1, "lang": "python",
                      "file": f"{ex.get('repo_name', 'unknown')}/{i}.py",
                      "stack_repo": ex.get("repo_name", ""),
-                     "license": ex.get("license", "")},
+                     "license": ex.get("license", ""),
+                     "chunk_id": make_chunk_id(f"{ex.get('repo_name', 'unknown')}/{i}.py", "", text)},
         })
         total += n
         if total >= target_tokens:
@@ -378,11 +415,6 @@ def build_rehearsal(target_tokens: int, tok):
 
 
 # ------------------------------------------------------------- decontam
-
-def shingles(text: str, n=14):
-    words = re.findall(r"\S+", text)
-    return {" ".join(words[i:i + n]) for i in range(len(words) - n + 1)}
-
 
 def load_holdout_shingles():
     """14-gram shingle sets for every RL holdout item (prompt + refbody)."""
@@ -524,7 +556,19 @@ def main():
                      help="Chunk ONE local .md file (header -> paragraph split) "
                           "and write dataset/cpt/single_md.jsonl for inspection. "
                           "Skips the full build -- no tokenizer, no repos needed.")
+    ap.add_argument("--out", type=str, default=None,
+                     help="Output dir, relative to repo root. Default: 03-new/dataset/cpt")
+    ap.add_argument("--drop-code", action="store_true",
+                     help="Skip the 17-repo code corpus entirely (CPT-v2: docs-dominant ablation).")
+    ap.add_argument("--rehearsal-frac", type=float, default=0.25,
+                     help="Rehearsal target as a fraction of jac_tokens (default 0.25, matches CPT-v1's hardcoded //4).")
+    ap.add_argument("--repack-only", action="store_true",
+                     help="Skip source building/decontam; read existing raw.jsonl from --out, optionally apply --curation, then pack.")
+    ap.add_argument("--curation", type=Path, default=None,
+                     help="curation.json to apply before packing (only used with --repack-only).")
     args = ap.parse_args()
+
+    out = resolve_out_dir(args.out)
 
     if args.debug_single_md:
         text = args.debug_single_md.read_text(errors="replace")
@@ -538,15 +582,15 @@ def main():
                              "file": str(args.debug_single_md),
                              "section": first.lstrip("# ")[:120]},
                 })
-        OUT.mkdir(parents=True, exist_ok=True)
-        outp = OUT / "single_md.jsonl"
+        out.mkdir(parents=True, exist_ok=True)
+        outp = out / "single_md.jsonl"
         with open(outp, "w") as f:
             for r in rows:
                 f.write(json.dumps(r, ensure_ascii=False) + "\n")
         log(f"debug: {len(rows)} paragraph rows -> {outp}")
         return 0
 
-    if not args.repos_dir or not args.arxiv_dir:
+    if not args.repack_only and (not args.repos_dir or not args.arxiv_dir):
         ap.error("--repos-dir and --arxiv-dir are required for a full build")
 
     from transformers import AutoTokenizer
@@ -555,48 +599,71 @@ def main():
     eos_id = tok.eos_token_id
     log(f"tokenizer: {TOKENIZER_DIR.name}, eos={eos!r} (id {eos_id})")
 
-    OUT.mkdir(parents=True, exist_ok=True)
+    out.mkdir(parents=True, exist_ok=True)
     manifest = {"seq_len": SEQ_LEN, "split": "85/15", "seed": SEED,
                 "tokenizer": str(TOKENIZER_DIR.relative_to(ROOT)),
                 "eos_token": eos,
                 "fim": "skipped: Qwen3-Coder-30B-A3B-Instruct tokenizer has no FIM special tokens; downstream hole-fill is chat-format, not FIM",
                 "repos": {}, "sources": {}}
-    for repo in CODE_REPOS + ["jaseci-llmdocs"]:
-        p = args.repos_dir / repo
-        if p.exists():
-            manifest["repos"][repo] = repo_sha(p)
 
-    log("== building sources ==")
-    sources = {
-        "docs": build_docs(args.repos_dir),
-        "osp_paper": build_paper(args.arxiv_dir),
-        "blogs": build_blogs(args.repos_dir),
-    }
-    code_rows, gate_stats = build_code(args.repos_dir)
-    sources["code"] = code_rows
-    manifest["code_gate"] = gate_stats
+    if args.repack_only:
+        log(f"== repack-only: reading existing raw.jsonl under {out} ==")
+        manifest["repack_only"] = True
+        sources = {}
+        for d in sorted(p for p in out.iterdir() if p.is_dir()):
+            if d.name == "packed":
+                continue
+            raw = d / "raw.jsonl"
+            if not raw.exists():
+                continue
+            rows = [json.loads(line) for line in raw.read_text().splitlines() if line.strip()]
+            sources[d.name] = rows
+            log(f"  {d.name}: {len(rows)} rows (from disk)")
 
-    log("== decontam ==")
-    holdout_sets = load_holdout_shingles()
-    log(f"  {len(holdout_sets)} holdout shingle sets")
-    drops = {}
-    for name in sources:
-        sources[name], dropped = decontam(sources[name], holdout_sets)
-        drops[name] = dropped
-        if dropped:
-            log(f"  {name}: dropped {len(dropped)}")
-    manifest["decontam"] = {k: len(v) for k, v in drops.items()}
-    manifest["decontam_dropped"] = drops
-    manifest["holdout_files_excluded"] = sorted(HOLDOUT_FILES)
+        if args.curation:
+            from apply_curation import apply_curation
+            curation_dict = json.loads(args.curation.read_text())
+            for name in sources:
+                sources[name] = apply_curation(sources[name], curation_dict)
+            manifest["curation"] = str(args.curation)
+    else:
+        for repo in CODE_REPOS + ["jaseci-llmdocs"]:
+            p = args.repos_dir / repo
+            if p.exists():
+                manifest["repos"][repo] = repo_sha(p)
 
-    log("== writing raw per-source jsonl ==")
-    for name, rows in sources.items():
-        d = OUT / name
-        d.mkdir(exist_ok=True)
-        with open(d / "raw.jsonl", "w") as f:
-            for r in rows:
-                f.write(json.dumps(r, ensure_ascii=False) + "\n")
-        log(f"  {name}: {len(rows)} rows")
+        log("== building sources ==")
+        sources = {
+            "docs": build_docs(args.repos_dir),
+            "osp_paper": build_paper(args.arxiv_dir),
+            "blogs": build_blogs(args.repos_dir),
+        }
+        if not args.drop_code:
+            code_rows, gate_stats = build_code(args.repos_dir)
+            sources["code"] = code_rows
+            manifest["code_gate"] = gate_stats
+
+        log("== decontam ==")
+        holdout_sets = load_holdout_shingles()
+        log(f"  {len(holdout_sets)} holdout shingle sets")
+        drops = {}
+        for name in sources:
+            sources[name], dropped = decontam(sources[name], holdout_sets)
+            drops[name] = dropped
+            if dropped:
+                log(f"  {name}: dropped {len(dropped)}")
+        manifest["decontam"] = {k: len(v) for k, v in drops.items()}
+        manifest["decontam_dropped"] = drops
+        manifest["holdout_files_excluded"] = sorted(HOLDOUT_FILES)
+
+        log("== writing raw per-source jsonl ==")
+        for name, rows in sources.items():
+            d = out / name
+            d.mkdir(exist_ok=True)
+            with open(d / "raw.jsonl", "w") as f:
+                for r in rows:
+                    f.write(json.dumps(r, ensure_ascii=False) + "\n")
+            log(f"  {name}: {len(rows)} rows")
 
     log("== packing ==")
     LINE_MODE_SOURCES = {"code", "rehearsal"}
@@ -610,13 +677,15 @@ def main():
                                      "windows": len(windows)}
         log(f"  {name}: {ntok} tokens -> {len(windows)} windows")
 
-    if not args.skip_rehearsal:
-        # rehearsal at ~20% of TOTAL tokens => 0.25 * jac tokens
-        target = jac_tokens // 4
+    if not args.skip_rehearsal and "rehearsal" not in sources:
+        # rehearsal at ~20% of TOTAL tokens => rehearsal_frac * jac tokens
+        # (repack-only with an existing rehearsal/raw.jsonl reuses those rows
+        # via the `sources` scan above instead of re-hitting HF here.)
+        target = rehearsal_target(jac_tokens, args.rehearsal_frac)
         log(f"== rehearsal (target {target} tokens) ==")
         try:
             rrows, rtok = build_rehearsal(target, tok)
-            d = OUT / "rehearsal"
+            d = out / "rehearsal"
             d.mkdir(exist_ok=True)
             with open(d / "raw.jsonl", "w") as f:
                 for r in rrows:
@@ -632,9 +701,9 @@ def main():
             manifest["sources"]["rehearsal"] = {"error": str(e)[:300]}
 
     log("== split 85/15 + write packed ==")
-    (OUT / "packed").mkdir(exist_ok=True)
-    train_f = open(OUT / "packed" / "train.jsonl", "w")
-    val_f = open(OUT / "packed" / "valid.jsonl", "w")
+    (out / "packed").mkdir(exist_ok=True)
+    train_f = open(out / "packed" / "train.jsonl", "w")
+    val_f = open(out / "packed" / "valid.jsonl", "w")
     counts = {"train": 0, "val": 0}
     rng = random.Random(SEED)
     order = []
@@ -652,10 +721,10 @@ def main():
     train_f.close(); val_f.close()
     manifest["packed"] = counts
 
-    with open(OUT / "manifest.json", "w") as f:
+    with open(out / "manifest.json", "w") as f:
         json.dump(manifest, f, indent=2, ensure_ascii=False)
     log(f"== done == train {counts['train']} / val {counts['val']} windows")
-    log(f"output: {OUT}")
+    log(f"output: {out}")
 
 
 if __name__ == "__main__":

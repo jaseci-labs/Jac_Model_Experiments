@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "88a55262dd94",
+    "verdict": "keep",
+    "reason": "Substantive prose explaining container image configuration and when to override."
+  },
+  {
+    "chunk_id": "a2e6cfcdfe35",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('Defaults:') with no content of its own."
+  },
+  {
+    "chunk_id": "d91d0e908836",
+    "verdict": "keep",
+    "reason": "Informative defaults table for python_image and busybox_image."
+  },
+  {
+    "chunk_id": "8e96a3aa9adc",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('To change in jac.toml:') with no content."
+  },
+  {
+    "chunk_id": "39b7f95da3d2",
+    "verdict": "keep",
+    "reason": "Concrete jac.toml configuration example for image overrides."
+  },
+  {
+    "chunk_id": "7fe33f58a68c",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "dfddc4a5bf84",
+    "verdict": "keep",
+    "reason": "Substantive explanation of system dependencies and where they are installed."
+  },
+  {
+    "chunk_id": "c9b945e2dbaa",
+    "verdict": "drop",
+    "reason": "Contextless one-line default stub, duplicated verbatim elsewhere in the file."
+  },
+  {
+    "chunk_id": "ade278cb3806",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('To add in jac.toml:') with no content."
+  },
+  {
+    "chunk_id": "46a2d03480b7",
+    "verdict": "keep",
+    "reason": "Concrete example of declaring apt system dependencies."
+  },
+  {
+    "chunk_id": "48c70c7aee1f",
+    "verdict": "keep",
+    "reason": "Useful Debian-only caveat and performance guidance about base images."
+  },
+  {
+    "chunk_id": "d021c5701868",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "e5d9c879e4f2",
+    "verdict": "keep",
+    "reason": "Explains additional_packages semantics and its contrast with dependencies.system."
+  },
+  {
+    "chunk_id": "a4a85fc4a06c",
+    "verdict": "drop",
+    "reason": "Contextless one-line default stub, duplicate of c9b945e2dbaa."
+  },
+  {
+    "chunk_id": "07727c041fcf",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('To add in jac.toml:') with no content."
+  },
+  {
+    "chunk_id": "57c143553892",
+    "verdict": "keep",
+    "reason": "Concrete additional_packages configuration example."
+  },
+  {
+    "chunk_id": "e1259788bed1",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "e3834aafdd6e",
+    "verdict": "keep",
+    "reason": "Substantive explanation of experimental source pinning and runtime provenance."
+  },
+  {
+    "chunk_id": "6ebef8e2dfc8",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('Defaults:') with no content."
+  },
+  {
+    "chunk_id": "b8b53bac2799",
+    "verdict": "keep",
+    "reason": "Informative defaults table for jaseci repo/branch/commit pinning keys."
+  },
+  {
+    "chunk_id": "49809a13c6f1",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('To change in jac.toml:') with no content."
+  },
+  {
+    "chunk_id": "a1542c5955b0",
+    "verdict": "keep",
+    "reason": "Concrete example of pinning branch and commit in jac.toml."
+  },
+  {
+    "chunk_id": "92e74176fd57",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "b7618e65386a",
+    "verdict": "keep",
+    "reason": "Explains package version pinning semantics including the 'none' skip value."
+  },
+  {
+    "chunk_id": "96871905e113",
+    "verdict": "keep",
+    "reason": "Important architectural note on host-provided jaclang runtime and the PyPI migration caveat."
+  },
+  {
+    "chunk_id": "4b3758826998",
+    "verdict": "keep",
+    "reason": "Short but carries real information: all plugin versions default to latest from PyPI."
+  },
+  {
+    "chunk_id": "05f2d35ef018",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('To configure in jac.toml:') with no content."
+  },
+  {
+    "chunk_id": "8e8d3b770fcc",
+    "verdict": "keep",
+    "reason": "Concrete plugin_versions example showing pin and skip syntax."
+  },
+  {
+    "chunk_id": "d17eea64c803",
+    "verdict": "keep",
+    "reason": "Clarifies which subsystems are built into the jac binary versus pinnable third-party plugins."
+  },
+  {
+    "chunk_id": "dd35ff7407d7",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "fc31770677a3",
+    "verdict": "keep",
+    "reason": "Substantive overview of the deployable monitoring stack."
+  },
+  {
+    "chunk_id": "8a27e56a842c",
+    "verdict": "keep",
+    "reason": "Informative component table describing each monitoring stack element."
+  },
+  {
+    "chunk_id": "59480022c1f7",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('Defaults:') with no content."
+  },
+  {
+    "chunk_id": "88d9f457be09",
+    "verdict": "keep",
+    "reason": "Informative defaults table for monitoring configuration keys."
+  },
+  {
+    "chunk_id": "39ce65e80997",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('To enable in jac.toml:') with no content."
+  },
+  {
+    "chunk_id": "526ba9b19703",
+    "verdict": "keep",
+    "reason": "Concrete monitoring-enable configuration example."
+  },
+  {
+    "chunk_id": "7c97f824a8bf",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('To also enable log aggregation:') with no content."
+  },
+  {
+    "chunk_id": "78af1651c5b4",
+    "verdict": "keep",
+    "reason": "Concrete loki_enabled configuration example."
+  },
+  {
+    "chunk_id": "efd2886e757a",
+    "verdict": "drop",
+    "reason": "Nav-only lead-in fragment ('After deployment, access:') with no content."
+  },
+  {
+    "chunk_id": "ea76c084103b",
+    "verdict": "keep",
+    "reason": "Carries the Grafana access URL and login details."
+  },
+  {
+    "chunk_id": "10961f64d5bc",
+    "verdict": "keep",
+    "reason": "Useful AWS-specific note on NLB exposure of Grafana."
+  },
+  {
+    "chunk_id": "f25d69edb444",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('Prometheus scrape targets:') with no content."
+  },
+  {
+    "chunk_id": "87097994dfda",
+    "verdict": "keep",
+    "reason": "Informative list of the actual Prometheus scrape targets."
+  },
+  {
+    "chunk_id": "9428e175df8a",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('Loki log pipeline:') with no content."
+  },
+  {
+    "chunk_id": "4ea051dbcc40",
+    "verdict": "drop",
+    "reason": "Contextless lead-in sentence fragment with no standalone information."
+  },
+  {
+    "chunk_id": "dd230ebeaabf",
+    "verdict": "keep",
+    "reason": "Detailed description of Loki and Grafana Alloy deployment behavior."
+  },
+  {
+    "chunk_id": "43351eff51e0",
+    "verdict": "keep",
+    "reason": "Describes the auto-added Pod Logs dashboard and its panels."
+  },
+  {
+    "chunk_id": "7cbe8deb8e21",
+    "verdict": "keep",
+    "reason": "Useful cross-reference note tying log collection to the metrics toggle."
+  },
+  {
+    "chunk_id": "66828d8b9806",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "9b43db8b9810",
+    "verdict": "keep",
+    "reason": "Section intro with real prose introducing deployment health checking."
+  }
+]

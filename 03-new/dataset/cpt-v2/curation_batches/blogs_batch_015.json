@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "37ccb77b25e3",
+    "verdict": "keep",
+    "reason": "Genuine prose on ecosystem adoption stats, non-redundant blog content."
+  },
+  {
+    "chunk_id": "a02fab75b57c",
+    "verdict": "drop",
+    "reason": "Acknowledgments boilerplate with no Jac technical or conceptual content."
+  },
+  {
+    "chunk_id": "8d81351dd8c2",
+    "verdict": "drop",
+    "reason": "Get-involved call-to-action boilerplate with no substantive content."
+  },
+  {
+    "chunk_id": "932c00a15d12",
+    "verdict": "drop",
+    "reason": "Nav-only single link bullet."
+  },
+  {
+    "chunk_id": "1a6257fa5741",
+    "verdict": "drop",
+    "reason": "Nav-only single link bullet."
+  },
+  {
+    "chunk_id": "eb0351482fed",
+    "verdict": "drop",
+    "reason": "Nav-only single link bullet."
+  },
+  {
+    "chunk_id": "c0490178bd24",
+    "verdict": "keep",
+    "reason": "One-liner but carries the canonical install command pip install jaclang."
+  },
+  {
+    "chunk_id": "6e68e9f00ba0",
+    "verdict": "drop",
+    "reason": "Closing platitude outro with no informational content."
+  },
+  {
+    "chunk_id": "ed6160a87f24",
+    "verdict": "keep",
+    "reason": "Substantive intro prose framing the hackathon and Jaseci stack usage."
+  },
+  {
+    "chunk_id": "2c4fdaaad307",
+    "verdict": "drop",
+    "reason": "HTML comment marker only, pure boilerplate."
+  },
+  {
+    "chunk_id": "a116c58df235",
+    "verdict": "keep",
+    "reason": "Real prose describing Jac, byLLM, and jac-client used in end-to-end projects."
+  },
+  {
+    "chunk_id": "400bb3479b16",
+    "verdict": "keep",
+    "reason": "Genuine context prose about developer feedback on the Jac stack."
+  },
+  {
+    "chunk_id": "cbf54561e667",
+    "verdict": "drop",
+    "reason": "One-sentence connective fragment with no standalone content."
+  },
+  {
+    "chunk_id": "ac49f6403e75",
+    "verdict": "keep",
+    "reason": "Substantive prose on developer satisfaction with Jac for agentic AI apps."
+  },
+  {
+    "chunk_id": "80d078b8c3e3",
+    "verdict": "keep",
+    "reason": "Genuine prose noting DX gaps around debugging and tooling."
+  },
+  {
+    "chunk_id": "56e31a25c1a6",
+    "verdict": "drop",
+    "reason": "One-sentence transitional fragment with no informational content."
+  },
+  {
+    "chunk_id": "16789db999fe",
+    "verdict": "drop",
+    "reason": "Image-tag-only fragment with no prose."
+  },
+  {
+    "chunk_id": "f0475c4b52c5",
+    "verdict": "drop",
+    "reason": "One-sentence caption fragment with no standalone content."
+  },
+  {
+    "chunk_id": "a7b0a1ef017c",
+    "verdict": "drop",
+    "reason": "Header plus image tag only, no prose content."
+  },
+  {
+    "chunk_id": "8fa6d7922d24",
+    "verdict": "keep",
+    "reason": "Conceptual prose on OSP separating graph structure from walker logic, useful semantic signal."
+  },
+  {
+    "chunk_id": "29e12e2abb80",
+    "verdict": "keep",
+    "reason": "Detailed testimonial explaining OSP separation of concerns and walker-based navigation."
+  },
+  {
+    "chunk_id": "ad76e52c8917",
+    "verdict": "keep",
+    "reason": "Short but substantive claim about Jac's graph-native modeling of relationships and agent flows."
+  },
+  {
+    "chunk_id": "7ef6f1da0971",
+    "verdict": "keep",
+    "reason": "Genuine prose on byLLM embedding LLM capabilities into application logic."
+  },
+  {
+    "chunk_id": "2a28f1475dc7",
+    "verdict": "keep",
+    "reason": "Testimonial quote positioning byLLM relative to LangChain."
+  },
+  {
+    "chunk_id": "248cfbe56e7a",
+    "verdict": "keep",
+    "reason": "Substantive framing of Jac as AI-native by design."
+  },
+  {
+    "chunk_id": "da8942b400aa",
+    "verdict": "keep",
+    "reason": "Genuine prose on jac-client removing backend/frontend friction."
+  },
+  {
+    "chunk_id": "f92a276bf0ac",
+    "verdict": "keep",
+    "reason": "Testimonial on Jac as a single full-stack language."
+  },
+  {
+    "chunk_id": "d3ceabd51a42",
+    "verdict": "keep",
+    "reason": "Genuine prose on development velocity with the stack."
+  },
+  {
+    "chunk_id": "71f0274ecbda",
+    "verdict": "drop",
+    "reason": "Header plus connective sentence, no standalone content."
+  },
+  {
+    "chunk_id": "e2b117b04eec",
+    "verdict": "drop",
+    "reason": "Image-tag-only fragment with no prose."
+  },
+  {
+    "chunk_id": "4a1a7268bbae",
+    "verdict": "keep",
+    "reason": "Section intro on debugging and runtime visibility that leads into the pain-point list."
+  },
+  {
+    "chunk_id": "cae694818c59",
+    "verdict": "keep",
+    "reason": "Concrete list of DX pain points including jac check output and walker execution tracing."
+  },
+  {
+    "chunk_id": "16624c753894",
+    "verdict": "keep",
+    "reason": "Substantive quote on Jac debugging and error-message improvements."
+  },
+  {
+    "chunk_id": "ca5cd735f8d0",
+    "verdict": "keep",
+    "reason": "Distinguishes OSP as a paradigm from its tooling gap, useful conceptual framing."
+  },
+  {
+    "chunk_id": "558b979f59b0",
+    "verdict": "keep",
+    "reason": "Genuine prose on the graph-thinking paradigm shift and learning curve."
+  },
+  {
+    "chunk_id": "bae95798b37d",
+    "verdict": "keep",
+    "reason": "Concrete list of documentation and onboarding needs."
+  },
+  {
+    "chunk_id": "a56e56fc722b",
+    "verdict": "keep",
+    "reason": "Substantive quote naming walker orchestration, state management, and scaling concepts."
+  },
+  {
+    "chunk_id": "679815b7099b",
+    "verdict": "drop",
+    "reason": "Header plus connective sentence, no standalone content."
+  },
+  {
+    "chunk_id": "4f3a59b44ce9",
+    "verdict": "keep",
+    "reason": "Summary prose tying together Jac graphs, byLLM, and jac-client value."
+  },
+  {
+    "chunk_id": "c6708e6a02fd",
+    "verdict": "keep",
+    "reason": "Genuine prose on debugging, walker execution tracing, and graph inspection needs."
+  },
+  {
+    "chunk_id": "aff3e98b164f",
+    "verdict": "drop",
+    "reason": "One-sentence summary fragment redundant with surrounding kept chunks."
+  },
+  {
+    "chunk_id": "c69b2a993bbf",
+    "verdict": "keep",
+    "reason": "Substantive closing prose on building AI-native applications with Jac."
+  },
+  {
+    "chunk_id": "e66cbfead9f1",
+    "verdict": "keep",
+    "reason": "Genuine prose on roadmap priorities for debugging and observability."
+  },
+  {
+    "chunk_id": "94cad61f42a7",
+    "verdict": "drop",
+    "reason": "Two-word connective fragment with no content."
+  },
+  {
+    "chunk_id": "2796f50f8062",
+    "verdict": "keep",
+    "reason": "Technical content on the new hand-written recursive descent Jac parser."
+  },
+  {
+    "chunk_id": "52dca0315ac2",
+    "verdict": "keep",
+    "reason": "Technical content on static analysis of .impl.jac modules during jac check."
+  },
+  {
+    "chunk_id": "3a78a947bdbf",
+    "verdict": "keep",
+    "reason": "Technical content on jac check warning surfacing improvements."
+  },
+  {
+    "chunk_id": "c3cd8a675d91",
+    "verdict": "keep",
+    "reason": "Technical content on compiler stack simplification and parser consolidation."
+  },
+  {
+    "chunk_id": "63f828519ed3",
+    "verdict": "keep",
+    "reason": "Genuine closing prose on ongoing tooling work and contribution paths."
+  },
+  {
+    "chunk_id": "0688c75ded3f",
+    "verdict": "drop",
+    "reason": "Nav-only link bullet, exact duplicate of the same bullet in the other post."
+  }
+]

@@ -1,0 +1,254 @@
+[
+  {
+    "chunk_id": "459e4671bd28",
+    "verdict": "keep",
+    "reason": "Genuine case-study prose setting up the memory-graph problem."
+  },
+  {
+    "chunk_id": "653cfb532c9a",
+    "verdict": "keep",
+    "reason": "Substantive prose on why memory context is relational."
+  },
+  {
+    "chunk_id": "fc096fa2f0ac",
+    "verdict": "keep",
+    "reason": "Explains the connected-data motivation that maps to graph modeling."
+  },
+  {
+    "chunk_id": "54d4759c4309",
+    "verdict": "drop",
+    "reason": "Figure HTML with no documentation prose."
+  },
+  {
+    "chunk_id": "309e7c841290",
+    "verdict": "drop",
+    "reason": "Pullquote near-verbatim duplicate of chunk 653cfb532c9a."
+  },
+  {
+    "chunk_id": "198e7dbd17e9",
+    "verdict": "keep",
+    "reason": "Genuine prose contrasting conventional backend architecture."
+  },
+  {
+    "chunk_id": "7be6ba4856aa",
+    "verdict": "keep",
+    "reason": "Continuation of the backend-mismatch argument, non-redundant."
+  },
+  {
+    "chunk_id": "05e5699234b4",
+    "verdict": "keep",
+    "reason": "Introduces OSP nodes/edges/walkers, though at marketing depth rather than core-doc depth."
+  },
+  {
+    "chunk_id": "654d721a025e",
+    "verdict": "keep",
+    "reason": "Short but genuine prose on graph modeling fit."
+  },
+  {
+    "chunk_id": "2e369232afc0",
+    "verdict": "keep",
+    "reason": "Substantive point about code structure matching product structure."
+  },
+  {
+    "chunk_id": "e3f9d62dc069",
+    "verdict": "keep",
+    "reason": "First occurrence of the demo/production timeline facts."
+  },
+  {
+    "chunk_id": "fdf10d683e5a",
+    "verdict": "drop",
+    "reason": "Pullquote restating chunk 2e369232afc0 nearly verbatim."
+  },
+  {
+    "chunk_id": "7656f177200a",
+    "verdict": "keep",
+    "reason": "Genuine section prose introducing by-llm usage."
+  },
+  {
+    "chunk_id": "95d54b459b71",
+    "verdict": "drop",
+    "reason": "Figure HTML with no documentation prose."
+  },
+  {
+    "chunk_id": "8b8fd6b72a61",
+    "verdict": "keep",
+    "reason": "Explains the prompt-engineering burden by-llm addresses."
+  },
+  {
+    "chunk_id": "2c4273749c8c",
+    "verdict": "keep",
+    "reason": "Describes the by-llm feature and its role, genuine content."
+  },
+  {
+    "chunk_id": "08f3626f777a",
+    "verdict": "drop",
+    "reason": "Pullquote restating the adjacent by-llm chunks with no new information."
+  },
+  {
+    "chunk_id": "637c1a73299a",
+    "verdict": "keep",
+    "reason": "Genuine prose introducing graph-based retrieval motivation."
+  },
+  {
+    "chunk_id": "561e0a80dee8",
+    "verdict": "keep",
+    "reason": "Substantive comparison of RAG chunking versus relational retrieval."
+  },
+  {
+    "chunk_id": "8b09fad047be",
+    "verdict": "keep",
+    "reason": "Best explanation in the file of graph-based retrieval mechanics."
+  },
+  {
+    "chunk_id": "62d8f2d83e6d",
+    "verdict": "drop",
+    "reason": "Pullquote duplicating the retrieval stats given with more context in chunk 0636679ef55a."
+  },
+  {
+    "chunk_id": "ac85ea7e2a71",
+    "verdict": "keep",
+    "reason": "Thin but genuine outcome-section prose."
+  },
+  {
+    "chunk_id": "e077f35bc9ff",
+    "verdict": "keep",
+    "reason": "Summary recap paragraph, not a verbatim duplicate."
+  },
+  {
+    "chunk_id": "0636679ef55a",
+    "verdict": "keep",
+    "reason": "Canonical statement of the retrieval accuracy results with context."
+  },
+  {
+    "chunk_id": "9f55fa0e2745",
+    "verdict": "keep",
+    "reason": "Genuine concluding prose tying together the case study."
+  },
+  {
+    "chunk_id": "366c7ea453b8",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule divider, pure boilerplate."
+  },
+  {
+    "chunk_id": "629bd9cb05c5",
+    "verdict": "drop",
+    "reason": "Orphaned one-line lead-in fragment with no standalone content."
+  },
+  {
+    "chunk_id": "9aa0c94c382b",
+    "verdict": "keep",
+    "reason": "Bibliographic citation carrying real factual content about the TOBUGraph paper."
+  },
+  {
+    "chunk_id": "76b7348a4059",
+    "verdict": "drop",
+    "reason": "Marketing CTA block, not documentation."
+  },
+  {
+    "chunk_id": "7745349e7296",
+    "verdict": "drop",
+    "reason": "CTA button markup only, boilerplate."
+  },
+  {
+    "chunk_id": "97d9055e57ec",
+    "verdict": "keep",
+    "reason": "Strong technical intro with real Jac graph-query examples and index motivation."
+  },
+  {
+    "chunk_id": "4d9ba2837006",
+    "verdict": "keep",
+    "reason": "Genuine prose on the original index's performance and correctness flaws."
+  },
+  {
+    "chunk_id": "b75aedfe3d94",
+    "verdict": "keep",
+    "reason": "Substantive summary of the rebuild's design changes."
+  },
+  {
+    "chunk_id": "5525edbd06a0",
+    "verdict": "drop",
+    "reason": "Blog excerpt marker comment only, boilerplate."
+  },
+  {
+    "chunk_id": "563d7cc53cb9",
+    "verdict": "keep",
+    "reason": "Section lead-in that pairs with the following code chunk."
+  },
+  {
+    "chunk_id": "97c5dda36ec2",
+    "verdict": "keep",
+    "reason": "Canonical Jac edge-typed query snippet referenced by surrounding prose."
+  },
+  {
+    "chunk_id": "cfc32c563fd7",
+    "verdict": "upweight",
+    "reason": "Precisely explains the semantics of typed edge traversal queries, core OSP graph-query material.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "76718cdad9ae",
+    "verdict": "keep",
+    "reason": "Genuine prose introducing the index's contents."
+  },
+  {
+    "chunk_id": "c6484591184b",
+    "verdict": "keep",
+    "reason": "Concrete description of the index data structures."
+  },
+  {
+    "chunk_id": "a314fbea2135",
+    "verdict": "keep",
+    "reason": "Explains query resolution flow and batch fetching, genuine content."
+  },
+  {
+    "chunk_id": "fcc9f75a4d47",
+    "verdict": "keep",
+    "reason": "Genuine detail on the wire-format source of truth."
+  },
+  {
+    "chunk_id": "82d77d960d65",
+    "verdict": "keep",
+    "reason": "Section lead-in paired with the following diagram chunk."
+  },
+  {
+    "chunk_id": "fc44f0c12b0d",
+    "verdict": "keep",
+    "reason": "Mermaid diagram documenting the v1 index structure."
+  },
+  {
+    "chunk_id": "bc428e7cd926",
+    "verdict": "keep",
+    "reason": "Genuine prose explaining v1 structure operations."
+  },
+  {
+    "chunk_id": "ebb3f8c6f030",
+    "verdict": "keep",
+    "reason": "Lead-in to the resolve_chain pseudocode, part of the technical narrative."
+  },
+  {
+    "chunk_id": "d004e0ac0050",
+    "verdict": "keep",
+    "reason": "Pseudocode showing the full-scan query loop, load-bearing technical content."
+  },
+  {
+    "chunk_id": "30f1721ef90b",
+    "verdict": "keep",
+    "reason": "Explains the O(edges) scan cost, genuine analysis."
+  },
+  {
+    "chunk_id": "3b2e334d4eac",
+    "verdict": "keep",
+    "reason": "Substantive design rationale for why the flat scan existed."
+  },
+  {
+    "chunk_id": "fb67f4084979",
+    "verdict": "keep",
+    "reason": "Lead-in to the inheritance-bug example, part of the narrative."
+  },
+  {
+    "chunk_id": "2fa2b309b77e",
+    "verdict": "upweight",
+    "reason": "Complete runnable Jac example showing node inheritance, edge connect operators, entry block, and typed graph queries.",
+    "weight": 2.5
+  }
+]

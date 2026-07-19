@@ -1,0 +1,673 @@
+{
+  "batch_id": "h01",
+  "tasks": [
+    {
+      "name": "graph_diameter",
+      "py": "def graph_diameter(spec: dict) -> int:\n    \"\"\"Diameter of an undirected connected graph: the largest shortest-path hop distance over all node pairs.\"\"\"\n    edges = spec[\"edges\"]\n    adj = {}\n    for pr in edges:\n        u, v = str(pr[0]), str(pr[1])\n        adj.setdefault(u, []).append(v)\n        adj.setdefault(v, []).append(u)\n    diam = 0\n    for s in sorted(adj.keys()):\n        dist = {s: 0}\n        frontier = [s]\n        while frontier:\n            nxt = []\n            for u in frontier:\n                for v in adj[u]:\n                    if v not in dist:\n                        dist[v] = dist[u] + 1\n                        nxt.append(v)\n            frontier = nxt\n        diam = max(diam, max(dist.values()))\n    return diam",
+      "jac_reference": "node Site { has name: str; has dist: int = -1; }\n\nwalker Sweep {\n    can step with Site entry {\n        nxt: list = [];\n        for nb in [-->] {\n            if nb.dist == -1 { nb.dist = here.dist + 1; nxt.append(nb); }\n        }\n        visit nxt;\n    }\n}\n\ndef graph_diameter(spec: dict) -> int {\n    edges: list = list(spec[\"edges\"]);\n    nodes: dict = {};\n    for pr in edges {\n        for nm in [str(pr[0]), str(pr[1])] {\n            if nm not in nodes { nodes[nm] = Site(name=nm); }\n        }\n    }\n    for pr in edges {\n        nodes[str(pr[0])] ++> nodes[str(pr[1])];\n        nodes[str(pr[1])] ++> nodes[str(pr[0])];\n    }\n    diam: int = 0;\n    for s in sorted(nodes.keys()) {\n        for nm in nodes.keys() { nodes[nm].dist = -1; }\n        nodes[s].dist = 0;\n        nodes[s] spawn Sweep();\n        for nm in nodes.keys() {\n            if nodes[nm].dist > diam { diam = nodes[nm].dist; }\n        }\n    }\n    return diam;\n}",
+      "cases": [
+        {
+          "input": {
+            "edges": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "b",
+                "c"
+              ],
+              [
+                "c",
+                "d"
+              ]
+            ]
+          },
+          "output": "3"
+        },
+        {
+          "input": {
+            "edges": [
+              [
+                "h",
+                "x"
+              ],
+              [
+                "h",
+                "y"
+              ],
+              [
+                "h",
+                "z"
+              ]
+            ]
+          },
+          "output": "2"
+        },
+        {
+          "input": {
+            "edges": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "b",
+                "c"
+              ],
+              [
+                "c",
+                "d"
+              ],
+              [
+                "d",
+                "e"
+              ],
+              [
+                "b",
+                "f"
+              ]
+            ]
+          },
+          "output": "4"
+        }
+      ]
+    },
+    {
+      "name": "count_cut_vertices",
+      "py": "def count_cut_vertices(spec: dict) -> int:\n    \"\"\"Count articulation points: nodes whose removal disconnects the undirected connected graph.\"\"\"\n    edges = spec[\"edges\"]\n    adj = {}\n    for pr in edges:\n        u, v = str(pr[0]), str(pr[1])\n        adj.setdefault(u, []).append(v)\n        adj.setdefault(v, []).append(u)\n    names = sorted(adj.keys())\n    n = len(names)\n    cut = 0\n    for c in names:\n        start = next(x for x in names if x != c)\n        seen = {start}\n        stack = [start]\n        while stack:\n            u = stack.pop()\n            for v in adj[u]:\n                if v != c and v not in seen:\n                    seen.add(v)\n                    stack.append(v)\n        if len(seen) != n - 1:\n            cut += 1\n    return cut",
+      "jac_reference": "node Spot { has name: str; has seen: bool = False; }\n\nwalker Probe {\n    has blocked: str;\n    has count: int = 0;\n    can step with Spot entry {\n        if here.name != self.blocked and not here.seen {\n            here.seen = True;\n            self.count += 1;\n            visit [-->];\n        }\n    }\n}\n\ndef count_cut_vertices(spec: dict) -> int {\n    edges: list = list(spec[\"edges\"]);\n    nodes: dict = {};\n    for pr in edges {\n        for nm in [str(pr[0]), str(pr[1])] {\n            if nm not in nodes { nodes[nm] = Spot(name=nm); }\n        }\n    }\n    for pr in edges {\n        nodes[str(pr[0])] ++> nodes[str(pr[1])];\n        nodes[str(pr[1])] ++> nodes[str(pr[0])];\n    }\n    names: list = sorted(nodes.keys());\n    n: int = len(names);\n    cut: int = 0;\n    for c in names {\n        for nm in names { nodes[nm].seen = False; }\n        start: str = \"\";\n        for x in names {\n            if x != c and start == \"\" { start = x; }\n        }\n        w = nodes[start] spawn Probe(blocked=c);\n        if w.count != n - 1 { cut += 1; }\n    }\n    return cut;\n}",
+      "cases": [
+        {
+          "input": {
+            "edges": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "b",
+                "c"
+              ]
+            ]
+          },
+          "output": "1"
+        },
+        {
+          "input": {
+            "edges": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "b",
+                "c"
+              ],
+              [
+                "c",
+                "d"
+              ]
+            ]
+          },
+          "output": "2"
+        },
+        {
+          "input": {
+            "edges": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "b",
+                "c"
+              ],
+              [
+                "c",
+                "d"
+              ],
+              [
+                "d",
+                "a"
+              ]
+            ]
+          },
+          "output": "0"
+        }
+      ]
+    },
+    {
+      "name": "weighted_median_stop",
+      "py": "def weighted_median_stop(spec: dict) -> str:\n    \"\"\"First stop along the route where the distance already travelled reaches at least half the total route length.\"\"\"\n    stops = spec[\"stops\"]\n    lengths = spec[\"lengths\"]\n    total = sum(lengths)\n    cum = 0\n    for i, s in enumerate(stops):\n        if 2 * cum >= total:\n            return s\n        cum += lengths[i]\n    return stops[-1]",
+      "jac_reference": "node Stop { has name: str; }\nedge Leg { has length: int; }\n\nwalker Median {\n    has total: int;\n    has acc: int = 0;\n    has result: str = \"\";\n    can step with Stop entry {\n        if self.acc * 2 >= self.total {\n            self.result = here.name;\n            disengage;\n        }\n        for e in [edge here -->] { self.acc += e.length; }\n        visit [-->];\n    }\n}\n\ndef weighted_median_stop(spec: dict) -> str {\n    stops: list = list(spec[\"stops\"]);\n    lengths: list = list(spec[\"lengths\"]);\n    nodes: dict = {};\n    for nm in stops { nodes[nm] = Stop(name=str(nm)); }\n    for i in range(len(lengths)) {\n        nodes[stops[i]] +>:Leg(length=int(lengths[i])):+> nodes[stops[i + 1]];\n    }\n    total: int = 0;\n    for x in lengths { total += int(x); }\n    w = nodes[stops[0]] spawn Median(total=total);\n    return w.result;\n}",
+      "cases": [
+        {
+          "input": {
+            "stops": [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "lengths": [
+              1,
+              1,
+              10
+            ]
+          },
+          "output": "d"
+        },
+        {
+          "input": {
+            "stops": [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "lengths": [
+              5,
+              1,
+              1
+            ]
+          },
+          "output": "b"
+        },
+        {
+          "input": {
+            "stops": [
+              "x",
+              "y",
+              "z"
+            ],
+            "lengths": [
+              3,
+              3
+            ]
+          },
+          "output": "y"
+        }
+      ]
+    },
+    {
+      "name": "cycle_length",
+      "py": "def cycle_length(spec: dict) -> int:\n    \"\"\"Follow the single successor of each node from start; return the length of the cycle eventually entered.\"\"\"\n    succ = spec[\"succ\"]\n    cur = spec[\"start\"]\n    order = {}\n    step = 0\n    while cur not in order:\n        order[cur] = step\n        step += 1\n        cur = succ[cur]\n    return step - order[cur]",
+      "jac_reference": "node Cell { has name: str; has idx: int = -1; }\n\nwalker Chase {\n    has tick: int = 0;\n    has result: int = 0;\n    can step with Cell entry {\n        if here.idx != -1 {\n            self.result = self.tick - here.idx;\n            disengage;\n        }\n        here.idx = self.tick;\n        self.tick += 1;\n        visit [-->];\n    }\n}\n\ndef cycle_length(spec: dict) -> int {\n    succ: dict = dict(spec[\"succ\"]);\n    start: str = str(spec[\"start\"]);\n    nodes: dict = {};\n    for nm in succ.keys() { nodes[nm] = Cell(name=str(nm)); }\n    for (s, t) in succ.items() { nodes[s] ++> nodes[t]; }\n    w = nodes[start] spawn Chase();\n    return w.result;\n}",
+      "cases": [
+        {
+          "input": {
+            "succ": {
+              "a": "b",
+              "b": "c",
+              "c": "a"
+            },
+            "start": "a"
+          },
+          "output": "3"
+        },
+        {
+          "input": {
+            "succ": {
+              "a": "b",
+              "b": "c",
+              "c": "d",
+              "d": "c"
+            },
+            "start": "a"
+          },
+          "output": "2"
+        },
+        {
+          "input": {
+            "succ": {
+              "a": "b",
+              "b": "b"
+            },
+            "start": "a"
+          },
+          "output": "1"
+        }
+      ]
+    },
+    {
+      "name": "count_st_paths",
+      "py": "def count_st_paths(spec: dict) -> int:\n    \"\"\"Count the distinct directed paths from start to target in a DAG.\"\"\"\n    adj = spec[\"adj\"]\n    target = spec[\"target\"]\n    def walk(u):\n        if u == target:\n            return 1\n        return sum(walk(v) for v in adj.get(u, []))\n    return walk(spec[\"start\"])",
+      "jac_reference": "node Way { has name: str; }\n\nwalker PathTally {\n    has target: str;\n    has count: int = 0;\n    can step with Way entry {\n        if here.name == self.target { self.count += 1; }\n        else { visit [-->]; }\n    }\n}\n\ndef count_st_paths(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]);\n    nodes: dict = {};\n    for nm in adj.keys() { nodes[nm] = Way(name=str(nm)); }\n    for (s, ts) in adj.items() {\n        for t in list(ts) {\n            if t not in nodes { nodes[t] = Way(name=str(t)); }\n        }\n    }\n    for (s, ts) in adj.items() {\n        for t in list(ts) { nodes[s] ++> nodes[t]; }\n    }\n    w = nodes[str(spec[\"start\"])] spawn PathTally(target=str(spec[\"target\"]));\n    return w.count;\n}",
+      "cases": [
+        {
+          "input": {
+            "adj": {
+              "a": [
+                "b",
+                "c"
+              ],
+              "b": [
+                "d"
+              ],
+              "c": [
+                "d"
+              ],
+              "d": []
+            },
+            "start": "a",
+            "target": "d"
+          },
+          "output": "2"
+        },
+        {
+          "input": {
+            "adj": {
+              "a": [
+                "b",
+                "c"
+              ],
+              "b": [
+                "d"
+              ],
+              "c": [
+                "d"
+              ],
+              "d": [
+                "e",
+                "f"
+              ],
+              "e": [
+                "g"
+              ],
+              "f": [
+                "g"
+              ],
+              "g": []
+            },
+            "start": "a",
+            "target": "g"
+          },
+          "output": "4"
+        },
+        {
+          "input": {
+            "adj": {
+              "a": [
+                "b"
+              ],
+              "b": [],
+              "c": []
+            },
+            "start": "a",
+            "target": "c"
+          },
+          "output": "0"
+        }
+      ]
+    },
+    {
+      "name": "is_bipartite",
+      "py": "def is_bipartite(spec: dict) -> str:\n    \"\"\"Return 'yes' if the undirected connected graph is 2-colorable, else 'no'.\"\"\"\n    edges = spec[\"edges\"]\n    adj = {}\n    for pr in edges:\n        u, v = str(pr[0]), str(pr[1])\n        adj.setdefault(u, []).append(v)\n        adj.setdefault(v, []).append(u)\n    start = sorted(adj.keys())[0]\n    color = {start: 0}\n    frontier = [start]\n    ok = True\n    while frontier:\n        nxt = []\n        for u in frontier:\n            for v in adj[u]:\n                if v not in color:\n                    color[v] = 1 - color[u]\n                    nxt.append(v)\n                elif color[v] == color[u]:\n                    ok = False\n        frontier = nxt\n    return \"yes\" if ok else \"no\"",
+      "jac_reference": "node Zone { has name: str; has color: int = -1; }\n\nwalker Paint {\n    has ok: bool = True;\n    can step with Zone entry {\n        nxt: list = [];\n        for nb in [-->] {\n            if nb.color == -1 { nb.color = 1 - here.color; nxt.append(nb); }\n            elif nb.color == here.color { self.ok = False; }\n        }\n        visit nxt;\n    }\n}\n\ndef is_bipartite(spec: dict) -> str {\n    edges: list = list(spec[\"edges\"]);\n    nodes: dict = {};\n    for pr in edges {\n        for nm in [str(pr[0]), str(pr[1])] {\n            if nm not in nodes { nodes[nm] = Zone(name=nm); }\n        }\n    }\n    for pr in edges {\n        nodes[str(pr[0])] ++> nodes[str(pr[1])];\n        nodes[str(pr[1])] ++> nodes[str(pr[0])];\n    }\n    start: str = sorted(nodes.keys())[0];\n    nodes[start].color = 0;\n    w = nodes[start] spawn Paint();\n    if w.ok { return \"yes\"; }\n    return \"no\";\n}",
+      "cases": [
+        {
+          "input": {
+            "edges": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "b",
+                "c"
+              ],
+              [
+                "c",
+                "d"
+              ],
+              [
+                "d",
+                "a"
+              ]
+            ]
+          },
+          "output": "yes"
+        },
+        {
+          "input": {
+            "edges": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "b",
+                "c"
+              ],
+              [
+                "c",
+                "a"
+              ]
+            ]
+          },
+          "output": "no"
+        },
+        {
+          "input": {
+            "edges": [
+              [
+                "h",
+                "x"
+              ],
+              [
+                "h",
+                "y"
+              ],
+              [
+                "h",
+                "z"
+              ],
+              [
+                "x",
+                "y"
+              ]
+            ]
+          },
+          "output": "no"
+        }
+      ]
+    },
+    {
+      "name": "critical_path_cost",
+      "py": "def critical_path_cost(spec: dict) -> int:\n    \"\"\"Maximum total edge weight over all directed paths that begin at start in a weighted DAG.\"\"\"\n    adj = spec[\"adj\"]\n    def walk(u):\n        best = 0\n        for pr in adj.get(u, []):\n            cand = int(pr[1]) + walk(str(pr[0]))\n            if cand > best:\n                best = cand\n        return best\n    return walk(spec[\"start\"])",
+      "jac_reference": "node Job { has name: str; has wts: dict; has best: int = 0; }\n\nwalker Relax {\n    can step with Job entry {\n        nxt: list = [];\n        for nb in [-->] {\n            cand: int = here.best + here.wts[nb.name];\n            if cand > nb.best { nb.best = cand; nxt.append(nb); }\n        }\n        visit nxt;\n    }\n}\n\ndef critical_path_cost(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]);\n    nodes: dict = {};\n    for nm in adj.keys() { nodes[nm] = Job(name=str(nm), wts={}); }\n    for (s, ts) in adj.items() {\n        for pr in list(ts) {\n            t: str = str(pr[0]);\n            if t not in nodes { nodes[t] = Job(name=t, wts={}); }\n            nodes[s].wts[t] = int(pr[1]);\n        }\n    }\n    for (s, ts) in adj.items() {\n        for pr in list(ts) { nodes[s] ++> nodes[str(pr[0])]; }\n    }\n    nodes[str(spec[\"start\"])] spawn Relax();\n    best: int = 0;\n    for nm in nodes.keys() {\n        if nodes[nm].best > best { best = nodes[nm].best; }\n    }\n    return best;\n}",
+      "cases": [
+        {
+          "input": {
+            "adj": {
+              "a": [
+                [
+                  "b",
+                  3
+                ],
+                [
+                  "c",
+                  1
+                ]
+              ],
+              "b": [
+                [
+                  "d",
+                  4
+                ]
+              ],
+              "c": [
+                [
+                  "d",
+                  10
+                ]
+              ],
+              "d": []
+            },
+            "start": "a"
+          },
+          "output": "11"
+        },
+        {
+          "input": {
+            "adj": {
+              "a": [
+                [
+                  "b",
+                  2
+                ]
+              ],
+              "b": [
+                [
+                  "c",
+                  2
+                ]
+              ],
+              "c": []
+            },
+            "start": "a"
+          },
+          "output": "4"
+        },
+        {
+          "input": {
+            "adj": {
+              "a": [
+                [
+                  "b",
+                  1
+                ]
+              ],
+              "b": [
+                [
+                  "c",
+                  5
+                ],
+                [
+                  "d",
+                  2
+                ]
+              ],
+              "c": [],
+              "d": [
+                [
+                  "e",
+                  9
+                ]
+              ],
+              "e": []
+            },
+            "start": "a"
+          },
+          "output": "12"
+        }
+      ]
+    },
+    {
+      "name": "kth_nearest",
+      "py": "def kth_nearest(spec: dict) -> str:\n    \"\"\"Name of the k-th nearest node reachable from start by hop distance (ties alphabetical, start excluded).\"\"\"\n    adj = spec[\"adj\"]\n    start = spec[\"start\"]\n    k = spec[\"k\"]\n    dist = {start: 0}\n    frontier = [start]\n    while frontier:\n        nxt = []\n        for u in frontier:\n            for v in adj.get(u, []):\n                if v not in dist:\n                    dist[v] = dist[u] + 1\n                    nxt.append(v)\n        frontier = nxt\n    ranked = sorted([d, n] for n, d in dist.items() if n != start)\n    return ranked[k - 1][1]",
+      "jac_reference": "node Place { has name: str; has dist: int = -1; }\n\nwalker Ripple {\n    can step with Place entry {\n        nxt: list = [];\n        for nb in [-->] {\n            if nb.dist == -1 { nb.dist = here.dist + 1; nxt.append(nb); }\n        }\n        visit nxt;\n    }\n}\n\ndef kth_nearest(spec: dict) -> str {\n    adj: dict = dict(spec[\"adj\"]);\n    nodes: dict = {};\n    for nm in adj.keys() { nodes[nm] = Place(name=str(nm)); }\n    for (s, ts) in adj.items() {\n        for t in list(ts) {\n            if t not in nodes { nodes[t] = Place(name=str(t)); }\n        }\n    }\n    for (s, ts) in adj.items() {\n        for t in list(ts) { nodes[s] ++> nodes[t]; }\n    }\n    start: str = str(spec[\"start\"]);\n    nodes[start].dist = 0;\n    nodes[start] spawn Ripple();\n    ranked: list = [];\n    for nm in nodes.keys() {\n        if nodes[nm].dist > 0 { ranked.append([nodes[nm].dist, nm]); }\n    }\n    ranked = sorted(ranked);\n    return ranked[int(spec[\"k\"]) - 1][1];\n}",
+      "cases": [
+        {
+          "input": {
+            "adj": {
+              "a": [
+                "b",
+                "c"
+              ],
+              "b": [
+                "d"
+              ],
+              "c": [
+                "d"
+              ],
+              "d": []
+            },
+            "start": "a",
+            "k": 3
+          },
+          "output": "d"
+        },
+        {
+          "input": {
+            "adj": {
+              "a": [
+                "c",
+                "b"
+              ],
+              "b": [
+                "d"
+              ],
+              "c": [
+                "d"
+              ],
+              "d": []
+            },
+            "start": "a",
+            "k": 2
+          },
+          "output": "c"
+        },
+        {
+          "input": {
+            "adj": {
+              "h": [
+                "m",
+                "z"
+              ],
+              "m": [
+                "q"
+              ],
+              "z": [
+                "q"
+              ],
+              "q": []
+            },
+            "start": "h",
+            "k": 1
+          },
+          "output": "m"
+        }
+      ]
+    },
+    {
+      "name": "euler_trail_check",
+      "py": "def euler_trail_check(spec: dict) -> str:\n    \"\"\"Return 'yes' if the undirected graph has an Euler trail: it is connected and has 0 or 2 odd-degree nodes.\"\"\"\n    edges = spec[\"edges\"]\n    adj = {}\n    for pr in edges:\n        u, v = str(pr[0]), str(pr[1])\n        adj.setdefault(u, []).append(v)\n        adj.setdefault(v, []).append(u)\n    names = sorted(adj.keys())\n    start = names[0]\n    seen = {start}\n    stack = [start]\n    while stack:\n        u = stack.pop()\n        for v in adj[u]:\n            if v not in seen:\n                seen.add(v)\n                stack.append(v)\n    if len(seen) != len(names):\n        return \"no\"\n    odd = sum(1 for n in names if len(adj[n]) % 2 == 1)\n    return \"yes\" if odd in (0, 2) else \"no\"",
+      "jac_reference": "node Port { has name: str; has seen: bool = False; }\n\nwalker Reach {\n    has count: int = 0;\n    can step with Port entry {\n        if not here.seen {\n            here.seen = True;\n            self.count += 1;\n            visit [-->];\n        }\n    }\n}\n\ndef euler_trail_check(spec: dict) -> str {\n    edges: list = list(spec[\"edges\"]);\n    nodes: dict = {};\n    for pr in edges {\n        for nm in [str(pr[0]), str(pr[1])] {\n            if nm not in nodes { nodes[nm] = Port(name=nm); }\n        }\n    }\n    for pr in edges {\n        nodes[str(pr[0])] ++> nodes[str(pr[1])];\n        nodes[str(pr[1])] ++> nodes[str(pr[0])];\n    }\n    names: list = sorted(nodes.keys());\n    w = nodes[names[0]] spawn Reach();\n    if w.count != len(names) { return \"no\"; }\n    odd: int = 0;\n    for nm in names {\n        nd = nodes[nm];\n        if len([nd -->]) % 2 == 1 { odd += 1; }\n    }\n    if odd == 0 or odd == 2 { return \"yes\"; }\n    return \"no\";\n}",
+      "cases": [
+        {
+          "input": {
+            "edges": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "b",
+                "c"
+              ]
+            ]
+          },
+          "output": "yes"
+        },
+        {
+          "input": {
+            "edges": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "a",
+                "c"
+              ],
+              [
+                "a",
+                "d"
+              ],
+              [
+                "b",
+                "c"
+              ],
+              [
+                "b",
+                "d"
+              ],
+              [
+                "c",
+                "d"
+              ]
+            ]
+          },
+          "output": "no"
+        },
+        {
+          "input": {
+            "edges": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "c",
+                "d"
+              ]
+            ]
+          },
+          "output": "no"
+        }
+      ]
+    },
+    {
+      "name": "longest_increasing_path",
+      "py": "def longest_increasing_path(spec: dict) -> int:\n    \"\"\"Most nodes on any path from start that only follows edges to strictly larger values.\"\"\"\n    adj = spec[\"adj\"]\n    vals = spec[\"vals\"]\n    def walk(u):\n        best = 1\n        for v in adj.get(u, []):\n            if vals[v] > vals[u]:\n                cand = 1 + walk(v)\n                if cand > best:\n                    best = cand\n        return best\n    return walk(spec[\"start\"])",
+      "jac_reference": "node Peak { has name: str; has val: int; has best: int = 0; }\n\nwalker Climb {\n    can step with Peak entry {\n        nxt: list = [];\n        for nb in [-->] {\n            if nb.val > here.val and here.best + 1 > nb.best {\n                nb.best = here.best + 1;\n                nxt.append(nb);\n            }\n        }\n        visit nxt;\n    }\n}\n\ndef longest_increasing_path(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]);\n    vals: dict = dict(spec[\"vals\"]);\n    nodes: dict = {};\n    for nm in vals.keys() { nodes[nm] = Peak(name=str(nm), val=int(vals[nm])); }\n    for (s, ts) in adj.items() {\n        for t in list(ts) { nodes[s] ++> nodes[t]; }\n    }\n    start: str = str(spec[\"start\"]);\n    nodes[start].best = 1;\n    nodes[start] spawn Climb();\n    best: int = 0;\n    for nm in nodes.keys() {\n        if nodes[nm].best > best { best = nodes[nm].best; }\n    }\n    return best;\n}",
+      "cases": [
+        {
+          "input": {
+            "adj": {
+              "a": [
+                "b",
+                "c"
+              ],
+              "b": [
+                "d"
+              ],
+              "c": [
+                "d"
+              ],
+              "d": []
+            },
+            "vals": {
+              "a": 1,
+              "b": 5,
+              "c": 2,
+              "d": 3
+            },
+            "start": "a"
+          },
+          "output": "3"
+        },
+        {
+          "input": {
+            "adj": {
+              "a": [
+                "b"
+              ],
+              "b": [
+                "c"
+              ],
+              "c": [
+                "a"
+              ]
+            },
+            "vals": {
+              "a": 1,
+              "b": 2,
+              "c": 0
+            },
+            "start": "a"
+          },
+          "output": "2"
+        },
+        {
+          "input": {
+            "adj": {
+              "s": [
+                "t"
+              ],
+              "t": []
+            },
+            "vals": {
+              "s": 5,
+              "t": 5
+            },
+            "start": "s"
+          },
+          "output": "1"
+        }
+      ]
+    }
+  ]
+}

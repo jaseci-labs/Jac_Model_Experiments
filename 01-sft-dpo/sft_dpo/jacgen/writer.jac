@@ -48,8 +48,13 @@ def run_jac(jac_code: str, timeout: int = 30) -> tuple[int, str, str] {
         f = Path(str(d)) / "snippet.jac";
         f.write_text(jac_code);
         try {
+            # cwd=d scopes jac's persistent root store (.jac/data/snippet.db) to
+            # this tempdir. Without it, every run_jac call shares one
+            # basename-keyed db at the caller's cwd -- any example that
+            # touches `root` leaks state into later, unrelated calls (found
+            # via cross-class deserialization failures during b11 ingestion).
             p = subprocess.run(
-                ["jac", "run", str(f)], capture_output=True, text=True, timeout=timeout
+                ["jac", "run", str(f)], capture_output=True, text=True, timeout=timeout, cwd=str(d)
             );
             return (p.returncode, p.stdout, p.stderr);
         } except (subprocess.SubprocessError, OSError) as e {

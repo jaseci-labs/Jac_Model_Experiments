@@ -1,0 +1,480 @@
+{
+  "batch_id": "b18",
+  "generator": "fable-agent-v1",
+  "examples": [
+    {
+      "name": "circle_metrics",
+      "category": "function",
+      "subcategory": "obj_archetype",
+      "difficulty": "simple",
+      "py": "def circle_metrics(r: float) -> list:\n    pi = 3.14159\n    area = round(pi * r * r, 2)\n    circ = round(2.0 * pi * r, 2)\n    return [area, circ]",
+      "jac": "obj Circle {\n    has r: float = 0.0;\n    has pi: float = 3.14159;\n\n    def area -> float {\n        return round(self.pi * self.r * self.r, 2);\n    }\n\n    def circumference -> float {\n        return round(2.0 * self.pi * self.r, 2);\n    }\n}\n\ndef circle_metrics(r: float) -> list {\n    c = Circle(r=r);\n    return [c.area(), c.circumference()];\n}\n\nwith entry { print(circle_metrics(1.5)); }",
+      "expected_output": "[7.07, 9.42]",
+      "cases": [
+        {
+          "input": 1.5,
+          "output": "[7.07, 9.42]"
+        },
+        {
+          "input": 3.0,
+          "output": "[28.27, 18.85]"
+        }
+      ]
+    },
+    {
+      "name": "badge_label",
+      "category": "function",
+      "subcategory": "typed_has_fields",
+      "difficulty": "simple",
+      "py": "def badge_label(user: dict) -> str:\n    points = user.get(\"points\", 0)\n    if points >= 100:\n        tier = \"gold\"\n    elif points >= 50:\n        tier = \"silver\"\n    else:\n        tier = \"bronze\"\n    return user[\"name\"] + \" [\" + tier + \"]\"",
+      "jac": "obj Member {\n    has name: str = \"\";\n    has points: int = 0;\n\n    def tier -> str {\n        if self.points >= 100 {\n            return \"gold\";\n        } elif self.points >= 50 {\n            return \"silver\";\n        }\n        return \"bronze\";\n    }\n}\n\ndef badge_label(user: dict) -> str {\n    m = Member(name=user[\"name\"], points=user.get(\"points\", 0));\n    return f\"{m.name} [{m.tier()}]\";\n}\n\nwith entry { print(badge_label({'name': 'Ana', 'points': 120})); }",
+      "expected_output": "Ana [gold]",
+      "cases": [
+        {
+          "input": {
+            "name": "Ana",
+            "points": 120
+          },
+          "output": "Ana [gold]"
+        },
+        {
+          "input": {
+            "name": "Bo",
+            "points": 10
+          },
+          "output": "Bo [bronze]"
+        },
+        {
+          "input": {
+            "name": "Kim",
+            "points": 60
+          },
+          "output": "Kim [silver]"
+        }
+      ]
+    },
+    {
+      "name": "stack_depth",
+      "category": "function",
+      "subcategory": "obj_archetype",
+      "difficulty": "simple",
+      "py": "def stack_depth(ops: list) -> int:\n    items = []\n    for op in ops:\n        if isinstance(op, str):\n            if items:\n                items.pop()\n        else:\n            items.append(op)\n    return len(items)",
+      "jac": "obj Stack {\n    has items: list = [];\n\n    def push(v: int) -> None {\n        self.items.append(v);\n    }\n\n    def pop_safe -> None {\n        if self.items {\n            self.items.pop();\n        }\n    }\n\n    def depth -> int {\n        return len(self.items);\n    }\n}\n\ndef stack_depth(ops: list) -> int {\n    s = Stack();\n    for op in ops {\n        if isinstance(op, str) {\n            s.pop_safe();\n        } else {\n            s.push(op);\n        }\n    }\n    return s.depth();\n}\n\nwith entry { print(stack_depth([1, 2, 'pop', 5])); }",
+      "expected_output": "2",
+      "cases": [
+        {
+          "input": [
+            1,
+            2,
+            "pop",
+            5
+          ],
+          "output": "2"
+        },
+        {
+          "input": [
+            7,
+            "pop",
+            "pop"
+          ],
+          "output": "0"
+        },
+        {
+          "input": [
+            4,
+            5,
+            6
+          ],
+          "output": "3"
+        }
+      ]
+    },
+    {
+      "name": "invoice_total",
+      "category": "function",
+      "subcategory": "typed_has_fields",
+      "difficulty": "simple",
+      "py": "def invoice_total(order: dict) -> int:\n    prices = order[\"prices\"]\n    total = 0\n    for sku, qty in order[\"qty\"].items():\n        total += prices.get(sku, 0) * qty\n    return total",
+      "jac": "obj Invoice {\n    has prices: dict = {};\n    has qty: dict = {};\n\n    def total -> int {\n        t = 0;\n        for (sku, n) in self.qty.items() {\n            t += self.prices.get(sku, 0) * n;\n        }\n        return t;\n    }\n}\n\ndef invoice_total(order: dict) -> int {\n    return Invoice(prices=order[\"prices\"], qty=order[\"qty\"]).total();\n}\n\nwith entry { print(invoice_total({'prices': {'pen': 3, 'pad': 7}, 'qty': {'pen': 4, 'pad': 2}})); }",
+      "expected_output": "26",
+      "cases": [
+        {
+          "input": {
+            "prices": {
+              "pen": 3,
+              "pad": 7
+            },
+            "qty": {
+              "pen": 4,
+              "pad": 2
+            }
+          },
+          "output": "26"
+        },
+        {
+          "input": {
+            "prices": {
+              "usb": 12
+            },
+            "qty": {
+              "usb": 1,
+              "hub": 5
+            }
+          },
+          "output": "12"
+        }
+      ]
+    },
+    {
+      "name": "parse_semver",
+      "category": "function",
+      "subcategory": "obj_factory",
+      "difficulty": "composed",
+      "py": "def parse_semver(s: str) -> str:\n    parts = s.split(\".\")\n    major = int(parts[0])\n    minor = int(parts[1])\n    patch = int(parts[2])\n    kind = \"stable\" if major >= 1 else \"preview\"\n    return str(major) + \".\" + str(minor) + \".\" + str(patch) + \" (\" + kind + \")\"",
+      "jac": "obj Version {\n    has major: int = 0;\n    has minor: int = 0;\n    has patch: int = 0;\n\n    def is_stable -> bool {\n        return self.major >= 1;\n    }\n\n    def tag -> str {\n        kind = \"stable\" if self.is_stable() else \"preview\";\n        return f\"{self.major}.{self.minor}.{self.patch} ({kind})\";\n    }\n}\n\ndef from_string(s: str) -> Version {\n    parts = s.split(\".\");\n    return Version(major=int(parts[0]), minor=int(parts[1]), patch=int(parts[2]));\n}\n\ndef parse_semver(s: str) -> str {\n    return from_string(s).tag();\n}\n\nwith entry { print(parse_semver('1.4.2')); }",
+      "expected_output": "1.4.2 (stable)",
+      "cases": [
+        {
+          "input": "1.4.2",
+          "output": "1.4.2 (stable)"
+        },
+        {
+          "input": "0.9.10",
+          "output": "0.9.10 (preview)"
+        }
+      ]
+    },
+    {
+      "name": "cart_total",
+      "category": "function",
+      "subcategory": "nested_obj",
+      "difficulty": "composed",
+      "py": "def cart_total(items: list) -> float:\n    total = 0.0\n    for it in items:\n        total += it[\"qty\"] * it[\"unit\"]\n    if total >= 100.0:\n        total = total * 0.9\n    return round(total, 2)",
+      "jac": "obj LineItem {\n    has name: str = \"\";\n    has qty: int = 1;\n    has unit: float = 0.0;\n\n    def subtotal -> float {\n        return self.qty * self.unit;\n    }\n}\n\nobj Cart {\n    has items: list = [];\n\n    def add(it: LineItem) -> None {\n        self.items.append(it);\n    }\n\n    def total -> float {\n        raw = sum([it.subtotal() for it in self.items]);\n        return round(raw * 0.9 if raw >= 100.0 else raw, 2);\n    }\n}\n\ndef cart_total(items: list) -> float {\n    cart = Cart();\n    for it in items {\n        cart.add(LineItem(name=it[\"name\"], qty=it[\"qty\"], unit=it[\"unit\"]));\n    }\n    return cart.total();\n}\n\nwith entry { print(cart_total([{'name': 'kb', 'qty': 2, 'unit': 45.0}, {'name': 'mouse', 'qty': 1, 'unit': 30.0}])); }",
+      "expected_output": "108.0",
+      "cases": [
+        {
+          "input": [
+            {
+              "name": "kb",
+              "qty": 2,
+              "unit": 45.0
+            },
+            {
+              "name": "mouse",
+              "qty": 1,
+              "unit": 30.0
+            }
+          ],
+          "output": "108.0"
+        },
+        {
+          "input": [
+            {
+              "name": "cable",
+              "qty": 3,
+              "unit": 10.0
+            }
+          ],
+          "output": "30.0"
+        }
+      ]
+    },
+    {
+      "name": "validate_signup",
+      "category": "function",
+      "subcategory": "validation_method",
+      "difficulty": "composed",
+      "py": "def validate_signup(rec: dict) -> str:\n    errors = []\n    if len(rec.get(\"username\", \"\")) < 3:\n        errors.append(\"username too short\")\n    if \"@\" not in rec.get(\"email\", \"\"):\n        errors.append(\"invalid email\")\n    age = rec.get(\"age\", 0)\n    if age < 13 or age > 120:\n        errors.append(\"age out of range\")\n    return \"; \".join(errors) if errors else \"ok\"",
+      "jac": "obj Signup {\n    has username: str = \"\";\n    has email: str = \"\";\n    has age: int = 0;\n\n    def errors -> list {\n        found = [];\n        if len(self.username) < 3 {\n            found.append(\"username too short\");\n        }\n        if \"@\" not in self.email {\n            found.append(\"invalid email\");\n        }\n        if self.age < 13 or self.age > 120 {\n            found.append(\"age out of range\");\n        }\n        return found;\n    }\n}\n\ndef validate_signup(rec: dict) -> str {\n    s = Signup(\n        username=rec.get(\"username\", \"\"),\n        email=rec.get(\"email\", \"\"),\n        age=rec.get(\"age\", 0)\n    );\n    errs = s.errors();\n    return \"; \".join(errs) if errs else \"ok\";\n}\n\nwith entry { print(validate_signup({'username': 'carol', 'email': 'c@x.io', 'age': 30})); }",
+      "expected_output": "ok",
+      "cases": [
+        {
+          "input": {
+            "username": "carol",
+            "email": "c@x.io",
+            "age": 30
+          },
+          "output": "ok"
+        },
+        {
+          "input": {
+            "username": "al",
+            "email": "nope",
+            "age": 30
+          },
+          "output": "username too short; invalid email"
+        },
+        {
+          "input": {
+            "username": "dana",
+            "email": "d@y.co",
+            "age": 7
+          },
+          "output": "age out of range"
+        }
+      ]
+    },
+    {
+      "name": "token_bucket",
+      "category": "function",
+      "subcategory": "obj_archetype",
+      "difficulty": "composed",
+      "py": "def token_bucket(times: list) -> list:\n    capacity = 3\n    tokens = 3\n    last = 0\n    out = []\n    for t in times:\n        tokens = min(capacity, tokens + (t - last))\n        last = t\n        if tokens > 0:\n            tokens -= 1\n            out.append(True)\n        else:\n            out.append(False)\n    return out",
+      "jac": "obj Bucket {\n    has capacity: int = 3;\n    has tokens: int = 3;\n    has last: int = 0;\n\n    def allow(t: int) -> bool {\n        self.tokens = min(self.capacity, self.tokens + (t - self.last));\n        self.last = t;\n        if self.tokens > 0 {\n            self.tokens -= 1;\n            return True;\n        }\n        return False;\n    }\n}\n\ndef token_bucket(times: list) -> list {\n    b = Bucket();\n    return [b.allow(t) for t in times];\n}\n\nwith entry { print(token_bucket([0, 0, 0, 0, 5])); }",
+      "expected_output": "[True, True, True, False, True]",
+      "cases": [
+        {
+          "input": [
+            0,
+            0,
+            0,
+            0,
+            5
+          ],
+          "output": "[True, True, True, False, True]"
+        },
+        {
+          "input": [
+            0,
+            1,
+            2
+          ],
+          "output": "[True, True, True]"
+        }
+      ]
+    },
+    {
+      "name": "grade_report",
+      "category": "function",
+      "subcategory": "obj_archetype",
+      "difficulty": "composed",
+      "py": "def grade_report(rec: dict) -> str:\n    scores = rec[\"scores\"]\n    avg = round(sum(scores) / len(scores), 1)\n    if avg >= 90:\n        letter = \"A\"\n    elif avg >= 80:\n        letter = \"B\"\n    elif avg >= 70:\n        letter = \"C\"\n    else:\n        letter = \"F\"\n    return rec[\"name\"] + \": \" + str(avg) + \" (\" + letter + \")\"",
+      "jac": "obj Student {\n    has name: str = \"\";\n    has scores: list = [];\n\n    def average -> float {\n        return round(sum(self.scores) / len(self.scores), 1);\n    }\n\n    def letter -> str {\n        avg = self.average();\n        if avg >= 90 {\n            return \"A\";\n        } elif avg >= 80 {\n            return \"B\";\n        } elif avg >= 70 {\n            return \"C\";\n        }\n        return \"F\";\n    }\n\n    def report -> str {\n        return f\"{self.name}: {self.average()} ({self.letter()})\";\n    }\n}\n\ndef grade_report(rec: dict) -> str {\n    return Student(name=rec[\"name\"], scores=rec[\"scores\"]).report();\n}\n\nwith entry { print(grade_report({'name': 'Ann', 'scores': [90, 85, 88]})); }",
+      "expected_output": "Ann: 87.7 (B)",
+      "cases": [
+        {
+          "input": {
+            "name": "Ann",
+            "scores": [
+              90,
+              85,
+              88
+            ]
+          },
+          "output": "Ann: 87.7 (B)"
+        },
+        {
+          "input": {
+            "name": "Raj",
+            "scores": [
+              95,
+              98
+            ]
+          },
+          "output": "Raj: 96.5 (A)"
+        },
+        {
+          "input": {
+            "name": "Lee",
+            "scores": [
+              60,
+              62
+            ]
+          },
+          "output": "Lee: 61.0 (F)"
+        }
+      ]
+    },
+    {
+      "name": "apply_settings",
+      "category": "function",
+      "subcategory": "typed_has_fields",
+      "difficulty": "composed",
+      "py": "def apply_settings(overrides: dict) -> str:\n    cfg = {\"theme\": \"light\", \"font_size\": 12, \"autosave\": True}\n    for k, v in overrides.items():\n        if k in cfg:\n            cfg[k] = v\n    return \"theme=\" + str(cfg[\"theme\"]) + \" size=\" + str(cfg[\"font_size\"]) + \" autosave=\" + str(cfg[\"autosave\"])",
+      "jac": "obj Settings {\n    has theme: str = \"light\";\n    has font_size: int = 12;\n    has autosave: bool = True;\n\n    def merge(overrides: dict) -> None {\n        if \"theme\" in overrides {\n            self.theme = overrides[\"theme\"];\n        }\n        if \"font_size\" in overrides {\n            self.font_size = overrides[\"font_size\"];\n        }\n        if \"autosave\" in overrides {\n            self.autosave = overrides[\"autosave\"];\n        }\n    }\n\n    def summary -> str {\n        return f\"theme={self.theme} size={self.font_size} autosave={self.autosave}\";\n    }\n}\n\ndef apply_settings(overrides: dict) -> str {\n    s = Settings();\n    s.merge(overrides);\n    return s.summary();\n}\n\nwith entry { print(apply_settings({'theme': 'dark'})); }",
+      "expected_output": "theme=dark size=12 autosave=True",
+      "cases": [
+        {
+          "input": {
+            "theme": "dark"
+          },
+          "output": "theme=dark size=12 autosave=True"
+        },
+        {
+          "input": {
+            "font_size": 16,
+            "autosave": false
+          },
+          "output": "theme=light size=16 autosave=False"
+        },
+        {
+          "input": {
+            "cursor": "block"
+          },
+          "output": "theme=light size=12 autosave=True"
+        }
+      ]
+    },
+    {
+      "name": "bounding_box",
+      "category": "function",
+      "subcategory": "obj_archetype",
+      "difficulty": "composed",
+      "py": "def bounding_box(points: list) -> list:\n    min_x = points[0][0]\n    max_x = points[0][0]\n    min_y = points[0][1]\n    max_y = points[0][1]\n    for p in points[1:]:\n        min_x = min(min_x, p[0])\n        max_x = max(max_x, p[0])\n        min_y = min(min_y, p[1])\n        max_y = max(max_y, p[1])\n    return [max_x - min_x, max_y - min_y]",
+      "jac": "obj BBox {\n    has min_x: int = 0;\n    has min_y: int = 0;\n    has max_x: int = 0;\n    has max_y: int = 0;\n\n    def expand(p: list) -> None {\n        self.min_x = min(self.min_x, p[0]);\n        self.max_x = max(self.max_x, p[0]);\n        self.min_y = min(self.min_y, p[1]);\n        self.max_y = max(self.max_y, p[1]);\n    }\n\n    def dims -> list {\n        return [self.max_x - self.min_x, self.max_y - self.min_y];\n    }\n}\n\ndef bounding_box(points: list) -> list {\n    box = BBox(\n        min_x=points[0][0], max_x=points[0][0],\n        min_y=points[0][1], max_y=points[0][1]\n    );\n    for p in points[1:] {\n        box.expand(p);\n    }\n    return box.dims();\n}\n\nwith entry { print(bounding_box([[1, 2], [4, 6], [-2, 3]])); }",
+      "expected_output": "[6, 4]",
+      "cases": [
+        {
+          "input": [
+            [
+              1,
+              2
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              -2,
+              3
+            ]
+          ],
+          "output": "[6, 4]"
+        },
+        {
+          "input": [
+            [
+              0,
+              0
+            ],
+            [
+              10,
+              1
+            ]
+          ],
+          "output": "[10, 1]"
+        }
+      ]
+    },
+    {
+      "name": "running_stats",
+      "category": "function",
+      "subcategory": "obj_archetype",
+      "difficulty": "advanced",
+      "py": "def running_stats(values: list) -> list:\n    n = 0\n    mean = 0.0\n    m2 = 0.0\n    for x in values:\n        n += 1\n        delta = x - mean\n        mean += delta / n\n        m2 += delta * (x - mean)\n    var = m2 / n if n else 0.0\n    return [n, round(mean, 3), round(var, 3)]",
+      "jac": "obj RunningStats {\n    has n: int = 0;\n    has mean: float = 0.0;\n    has m2: float = 0.0;\n\n    def add(x: float) -> None {\n        self.n += 1;\n        delta = x - self.mean;\n        self.mean += delta / self.n;\n        self.m2 += delta * (x - self.mean);\n    }\n\n    def variance -> float {\n        return self.m2 / self.n if self.n else 0.0;\n    }\n\n    def snapshot -> list {\n        return [self.n, round(self.mean, 3), round(self.variance(), 3)];\n    }\n}\n\ndef running_stats(values: list) -> list {\n    rs = RunningStats();\n    for x in values {\n        rs.add(x);\n    }\n    return rs.snapshot();\n}\n\nwith entry { print(running_stats([2.0, 4.0, 4.0, 4.0, 5.0, 5.0, 7.0, 9.0])); }",
+      "expected_output": "[8, 5.0, 4.0]",
+      "cases": [
+        {
+          "input": [
+            2.0,
+            4.0,
+            4.0,
+            4.0,
+            5.0,
+            5.0,
+            7.0,
+            9.0
+          ],
+          "output": "[8, 5.0, 4.0]"
+        },
+        {
+          "input": [
+            1.0,
+            2.0
+          ],
+          "output": "[2, 1.5, 0.25]"
+        },
+        {
+          "input": [
+            3.5
+          ],
+          "output": "[1, 3.5, 0.0]"
+        }
+      ]
+    },
+    {
+      "name": "process_ledger",
+      "category": "function",
+      "subcategory": "validation_method",
+      "difficulty": "advanced",
+      "py": "def process_ledger(ops: list) -> list:\n    balance = 0\n    rejected = 0\n    history = []\n    for op in ops:\n        if op[\"kind\"] == \"dep\":\n            balance += op[\"amt\"]\n            history.append(op[\"amt\"])\n        elif op[\"kind\"] == \"wd\":\n            if op[\"amt\"] > balance:\n                rejected += 1\n            else:\n                balance -= op[\"amt\"]\n                history.append(-op[\"amt\"])\n    return [balance, rejected, len(history)]",
+      "jac": "obj Account {\n    has balance: int = 0;\n    has rejected: int = 0;\n    has history: list = [];\n\n    def apply(op: dict) -> None {\n        match op[\"kind\"] {\n            case \"dep\":\n                self.balance += op[\"amt\"];\n                self.history.append(op[\"amt\"]);\n            case \"wd\":\n                if op[\"amt\"] > self.balance {\n                    self.rejected += 1;\n                } else {\n                    self.balance -= op[\"amt\"];\n                    self.history.append(-op[\"amt\"]);\n                }\n        }\n    }\n\n    def summary -> list {\n        return [self.balance, self.rejected, len(self.history)];\n    }\n}\n\ndef process_ledger(ops: list) -> list {\n    acct = Account();\n    for op in ops {\n        acct.apply(op);\n    }\n    return acct.summary();\n}\n\nwith entry { print(process_ledger([{'kind': 'dep', 'amt': 100}, {'kind': 'wd', 'amt': 30}, {'kind': 'wd', 'amt': 200}])); }",
+      "expected_output": "[70, 1, 2]",
+      "cases": [
+        {
+          "input": [
+            {
+              "kind": "dep",
+              "amt": 100
+            },
+            {
+              "kind": "wd",
+              "amt": 30
+            },
+            {
+              "kind": "wd",
+              "amt": 200
+            }
+          ],
+          "output": "[70, 1, 2]"
+        },
+        {
+          "input": [
+            {
+              "kind": "dep",
+              "amt": 50
+            },
+            {
+              "kind": "dep",
+              "amt": 25
+            }
+          ],
+          "output": "[75, 0, 2]"
+        }
+      ]
+    },
+    {
+      "name": "poly_at",
+      "category": "function",
+      "subcategory": "obj_factory",
+      "difficulty": "advanced",
+      "py": "def poly_at(spec: dict) -> list:\n    coeffs = spec[\"coeffs\"]\n    x = spec[\"x\"]\n    total = 0\n    p = 1\n    for c in coeffs:\n        total += c * p\n        p *= x\n    deriv = [i * coeffs[i] for i in range(1, len(coeffs))]\n    dtotal = 0\n    p = 1\n    for c in deriv:\n        dtotal += c * p\n        p *= x\n    return [total, dtotal]",
+      "jac": "obj Poly {\n    has coeffs: list = [];\n\n    def value_at(x: int) -> int {\n        total = 0;\n        p = 1;\n        for c in self.coeffs {\n            total += c * p;\n            p *= x;\n        }\n        return total;\n    }\n\n    def derive -> Poly {\n        return Poly(coeffs=[i * self.coeffs[i] for i in range(1, len(self.coeffs))]);\n    }\n}\n\ndef poly_at(spec: dict) -> list {\n    p = Poly(coeffs=spec[\"coeffs\"]);\n    x = spec[\"x\"];\n    return [p.value_at(x), p.derive().value_at(x)];\n}\n\nwith entry { print(poly_at({'coeffs': [1, 0, 2], 'x': 3})); }",
+      "expected_output": "[19, 12]",
+      "cases": [
+        {
+          "input": {
+            "coeffs": [
+              1,
+              0,
+              2
+            ],
+            "x": 3
+          },
+          "output": "[19, 12]"
+        },
+        {
+          "input": {
+            "coeffs": [
+              5,
+              3
+            ],
+            "x": 2
+          },
+          "output": "[11, 3]"
+        },
+        {
+          "input": {
+            "coeffs": [
+              4
+            ],
+            "x": 10
+          },
+          "output": "[4, 0]"
+        }
+      ]
+    }
+  ]
+}

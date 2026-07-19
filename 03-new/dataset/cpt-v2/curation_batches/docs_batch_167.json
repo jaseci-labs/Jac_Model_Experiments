@@ -1,0 +1,252 @@
+[
+ {
+  "chunk_id": "b7275d380585",
+  "verdict": "drop",
+  "reason": "Bare \"---\" horizontal-rule separator with no content."
+ },
+ {
+  "chunk_id": "fe9c251237d4",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "08ad8f0dbf37",
+  "verdict": "keep",
+  "reason": "Kept as canonical side of near-dup pair; counterpart 448d460c6da1 was already dropped in batch 112."
+ },
+ {
+  "chunk_id": "5a4970ce06f5",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "f6f1e7958cb5",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "404595a5ca07",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "df772277029b",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "e41a04153efb",
+  "verdict": "drop",
+  "reason": "Bare \"---\" horizontal-rule separator with no content."
+ },
+ {
+  "chunk_id": "669ba046ca41",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "980ab326c677",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "b76867ecd530",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "cb732d28e05f",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "e2bb8917ff65",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "8567d751d91c",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "c4277b8ea1b7",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "68e8e406bbfb",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "db70ed884123",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "598e4783cf4b",
+  "verdict": "drop",
+  "reason": "Bare \"---\" horizontal-rule separator with no content."
+ },
+ {
+  "chunk_id": "16c1b7ff51c1",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "6eb604281f7b",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "ffb672db5256",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "73d14f122700",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "870647deefa3",
+  "verdict": "drop",
+  "reason": "Bare \"---\" horizontal-rule separator with no content."
+ },
+ {
+  "chunk_id": "bd927c1a02b1",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "6e19fa5455cf",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "84cff160d925",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "17096af88c2c",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "b69cc7289136",
+  "verdict": "drop",
+  "reason": "Bare \"---\" horizontal-rule separator with no content."
+ },
+ {
+  "chunk_id": "1736925455f6",
+  "verdict": "drop",
+  "reason": "Heading-only nav fragment (\"## Managing Your Deployment\") with no prose."
+ },
+ {
+  "chunk_id": "0ec767904013",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "6c133750605a",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "45d999b7805b",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "ed4d6d1d8511",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "3fd70861a34b",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "6c20c9e55d64",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "ea8ab0051d8e",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "2bc1b696b9ca",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "ecefc693e992",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "292cd84918a5",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "c06d6a6d288d",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "25bfa3f536ab",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "ad380763a261",
+  "verdict": "drop",
+  "reason": "Bare \"---\" horizontal-rule separator with no content."
+ },
+ {
+  "chunk_id": "e277b63b0114",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "f7cb5213f250",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "cb7a161fd323",
+  "verdict": "keep",
+  "reason": "Genuine Kubernetes deployment/scale documentation content (config, commands, or explanatory prose); deployment-ops material, not OSP core concepts, so no upweight."
+ },
+ {
+  "chunk_id": "ba3c03a2ca50",
+  "verdict": "drop",
+  "reason": "Bare \"---\" horizontal-rule separator with no content."
+ },
+ {
+  "chunk_id": "a033f410ae63",
+  "verdict": "drop",
+  "reason": "Heading-only nav fragment (\"## Setting Up Kubernetes\") with no prose."
+ },
+ {
+  "chunk_id": "aeab03bbdbeb",
+  "verdict": "keep",
+  "reason": "Kept as canonical side of near-dup pair; counterpart 10eb0197768e was already dropped in batch 115."
+ },
+ {
+  "chunk_id": "5561d271bf34",
+  "verdict": "keep",
+  "reason": "Kept as canonical side of near-dup pair; counterpart 75af2527d0e5 was already dropped in batch 115."
+ },
+ {
+  "chunk_id": "4584460a469b",
+  "verdict": "keep",
+  "reason": "Kept as canonical side of near-dup pair; counterpart aeccfbafbb35 was already dropped in batch 115."
+ }
+]

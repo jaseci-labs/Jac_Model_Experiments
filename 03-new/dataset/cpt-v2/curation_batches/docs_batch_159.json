@@ -1,0 +1,267 @@
+[
+  {
+    "chunk_id": "c4baaa9da041",
+    "verdict": "drop",
+    "reason": "Bare closing HTML div tag with no documentation content."
+  },
+  {
+    "chunk_id": "783e6d8ac1fe",
+    "verdict": "drop",
+    "reason": "Orphaned two-word caption fragment with no standalone content."
+  },
+  {
+    "chunk_id": "891a3d92bde9",
+    "verdict": "keep",
+    "reason": "Mermaid diagram illustrating the directed graph structure of the example."
+  },
+  {
+    "chunk_id": "9c415a6c7d24",
+    "verdict": "upweight",
+    "reason": "Canonical reference table for the ++>, <++, <++> connection operators, core graph-building semantics.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "058fcccf0b99",
+    "verdict": "drop",
+    "reason": "Bare opening HTML div wrapper, pure boilerplate."
+  },
+  {
+    "chunk_id": "5b81ff697bc8",
+    "verdict": "upweight",
+    "reason": "Compact working example of node declaration and bidirectional connection operator.",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "95ab32be66f8",
+    "verdict": "drop",
+    "reason": "Bare closing HTML div tag with no documentation content."
+  },
+  {
+    "chunk_id": "d3f953643e35",
+    "verdict": "drop",
+    "reason": "Orphaned one-word caption fragment with no standalone content."
+  },
+  {
+    "chunk_id": "e182c600b793",
+    "verdict": "keep",
+    "reason": "Mermaid diagram showing the bidirectional edge from the preceding example."
+  },
+  {
+    "chunk_id": "dad8f71e7dbb",
+    "verdict": "keep",
+    "reason": "Section intro motivating typed edges as meaningful relationships."
+  },
+  {
+    "chunk_id": "65240e423be1",
+    "verdict": "drop",
+    "reason": "Bare opening HTML div wrapper, pure boilerplate."
+  },
+  {
+    "chunk_id": "d00625ab7cb8",
+    "verdict": "upweight",
+    "reason": "Complete typed-edge example with edge fields and +>:Edge(...):+> syntax, core edge semantics.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "bd90d7abefc2",
+    "verdict": "drop",
+    "reason": "Bare closing HTML div tag with no documentation content."
+  },
+  {
+    "chunk_id": "43553d6e92ad",
+    "verdict": "keep",
+    "reason": "Genuine prose contrasting first-class edges with OOP relationship modeling."
+  },
+  {
+    "chunk_id": "28818ae95ddb",
+    "verdict": "keep",
+    "reason": "Section header introducing walkers, ties surrounding chunks together."
+  },
+  {
+    "chunk_id": "e58118d54119",
+    "verdict": "upweight",
+    "reason": "One-sentence canonical definition of walkers as mobile computation over the graph.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "f9e4a241e5f7",
+    "verdict": "drop",
+    "reason": "Bare opening HTML div wrapper, pure boilerplate."
+  },
+  {
+    "chunk_id": "f073f2065da5",
+    "verdict": "upweight",
+    "reason": "Complete walker example covering spawn, Root/Person entry abilities, here, and visit -- the heart of OSP.",
+    "weight": 3.5
+  },
+  {
+    "chunk_id": "a088720babab",
+    "verdict": "drop",
+    "reason": "Bare closing HTML div tag with no documentation content."
+  },
+  {
+    "chunk_id": "61413497344d",
+    "verdict": "drop",
+    "reason": "Orphaned rhetorical lead-in with no standalone content."
+  },
+  {
+    "chunk_id": "5309c09d2ba6",
+    "verdict": "upweight",
+    "reason": "Step-by-step trace of walker spawn, ability triggering, and traversal order -- core execution-model semantics.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "8b8f0f19f796",
+    "verdict": "keep",
+    "reason": "Section intro defining abilities as event-triggered methods."
+  },
+  {
+    "chunk_id": "fe05648b2983",
+    "verdict": "drop",
+    "reason": "Bare opening HTML div wrapper, pure boilerplate."
+  },
+  {
+    "chunk_id": "0a25821c4166",
+    "verdict": "upweight",
+    "reason": "Annotated example of ability trigger points (Root entry, typed node entry, exit) with here/self semantics.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "97110401fb85",
+    "verdict": "drop",
+    "reason": "Bare closing HTML div tag with no documentation content."
+  },
+  {
+    "chunk_id": "fa80b2699c1c",
+    "verdict": "keep",
+    "reason": "Lead-in line for the special-references list that follows."
+  },
+  {
+    "chunk_id": "4ebeb5331f3d",
+    "verdict": "upweight",
+    "reason": "Canonical definitions of here, self, and visitor -- fundamental OSP reference semantics.",
+    "weight": 3.5
+  },
+  {
+    "chunk_id": "26cacbcfda75",
+    "verdict": "keep",
+    "reason": "Section intro stating what the visit statement does."
+  },
+  {
+    "chunk_id": "48d1c97f0f9a",
+    "verdict": "drop",
+    "reason": "Bare opening HTML div wrapper, pure boilerplate."
+  },
+  {
+    "chunk_id": "0343aa110bfc",
+    "verdict": "upweight",
+    "reason": "Example enumerating visit direction patterns [-->], [<--], [<-->] -- core traversal mechanics.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "3de76631928b",
+    "verdict": "drop",
+    "reason": "Bare closing HTML div tag with no documentation content."
+  },
+  {
+    "chunk_id": "abaa6fe92955",
+    "verdict": "keep",
+    "reason": "Section intro for edge-reference query syntax."
+  },
+  {
+    "chunk_id": "2180373db062",
+    "verdict": "drop",
+    "reason": "Bare opening HTML div wrapper, pure boilerplate."
+  },
+  {
+    "chunk_id": "d002d833b5ce",
+    "verdict": "upweight",
+    "reason": "Complete graph-query example covering [-->], typed-edge filters, and edge-property filters.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "b5a27170c842",
+    "verdict": "drop",
+    "reason": "Bare closing HTML div tag with no documentation content."
+  },
+  {
+    "chunk_id": "8118fbcf7045",
+    "verdict": "upweight",
+    "reason": "Key conceptual distinction between querying ([]) and building (++>) the graph.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "97da6ee7a8d5",
+    "verdict": "keep",
+    "reason": "Section intro to bidirectional polymorphism between nodes and walkers."
+  },
+  {
+    "chunk_id": "1f6e0452c52b",
+    "verdict": "drop",
+    "reason": "Bare opening HTML div wrapper, pure boilerplate."
+  },
+  {
+    "chunk_id": "6fe794ebca45",
+    "verdict": "upweight",
+    "reason": "Example showing node-side and walker-side abilities firing on the same visit -- distinctive OSP semantics.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "0c64d79e41d8",
+    "verdict": "drop",
+    "reason": "Bare closing HTML div tag with no documentation content."
+  },
+  {
+    "chunk_id": "46386393b6df",
+    "verdict": "keep",
+    "reason": "Prose clarifying that both node and walker abilities execute on a visit."
+  },
+  {
+    "chunk_id": "ffd7705717c8",
+    "verdict": "upweight",
+    "reason": "Defines report vs return semantics for streaming results from a walker.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "27de3b4f491e",
+    "verdict": "drop",
+    "reason": "Bare opening HTML div wrapper, pure boilerplate."
+  },
+  {
+    "chunk_id": "f4cdf52b5ce6",
+    "verdict": "upweight",
+    "reason": "Working example of report collecting values while traversal continues, including .reports access.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "3760cab72257",
+    "verdict": "drop",
+    "reason": "Bare closing HTML div tag with no documentation content."
+  },
+  {
+    "chunk_id": "9ea34bf81ab4",
+    "verdict": "keep",
+    "reason": "Section intro stating that disengage stops the walker."
+  },
+  {
+    "chunk_id": "4ecd9b2412a8",
+    "verdict": "drop",
+    "reason": "Bare opening HTML div wrapper, pure boilerplate."
+  },
+  {
+    "chunk_id": "57e2aab53a3b",
+    "verdict": "upweight",
+    "reason": "Complete search-walker example demonstrating disengage for early termination.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "6c82c5a7a7fa",
+    "verdict": "drop",
+    "reason": "Bare closing HTML div tag with no documentation content."
+  },
+  {
+    "chunk_id": "c2c4890cd06c",
+    "verdict": "keep",
+    "reason": "Section intro for the complete social-network OSP example."
+  }
+]

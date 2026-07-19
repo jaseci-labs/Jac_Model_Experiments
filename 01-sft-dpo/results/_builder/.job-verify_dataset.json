@@ -1,0 +1,1 @@
+{"name": "verify_dataset", "mode": "builder", "run_id": "3a3e0701", "pid": 18845, "stamp": "Sun Jul 19 03:49:51 2026", "status": "done", "started": "2026-07-19 03:49:51", "cmd": "/Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.venv/bin/jac run 01-sft-dpo/sft_dpo/jacgen/verify_dataset.jac"}

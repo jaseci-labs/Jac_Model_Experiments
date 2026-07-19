@@ -1,0 +1,23 @@
+  reuse models/qwen-q4
+  reuse models/qwen-q8
+>>> base eval: already done
+>>> found checkpoint at step 600 -> resuming
+>>> training: already complete (600/600)
+>>> fuse: reuse models/qwen-jac-fused-q8
+>>> learning curve: already done
+>>> finetuned eval: already done
+  wrote 01-sft-dpo/results/qwen/train_loss.png
+  wrote 01-sft-dpo/results/qwen/val_loss.png
+  wrote 01-sft-dpo/results/qwen/learning_rate.png
+  wrote 01-sft-dpo/results/qwen/tokens_per_sec.png
+  wrote 01-sft-dpo/results/qwen/iters_per_sec.png
+  wrote 01-sft-dpo/results/qwen/trained_tokens.png
+  wrote 01-sft-dpo/results/qwen/peak_mem.png
+  wrote 01-sft-dpo/results/qwen/learning_curve.png
+graphs in 01-sft-dpo/results/qwen/
+=== done ===
+  base:      01-sft-dpo/results/qwen/base.txt
+  finetuned: 01-sft-dpo/results/qwen/finetuned.txt
+  graphs:    01-sft-dpo/results/qwen/*.png  (learning curve = 01-sft-dpo/results/qwen/learning_curve.png)
+  (re-running is safe: finished stages skip, training resumes from last checkpoint)
+__EXIT__ 58ebbbb1 0

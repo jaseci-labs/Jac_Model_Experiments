@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "7dbdc3ea51ae",
+    "verdict": "keep",
+    "reason": "Explains the self-contained binary projection, genuine doc content."
+  },
+  {
+    "chunk_id": "33d32f1fc459",
+    "verdict": "keep",
+    "reason": "Canonical build command for binary projection."
+  },
+  {
+    "chunk_id": "681eb179469b",
+    "verdict": "keep",
+    "reason": "Explains --as native LLVM path and binary-vs-native trade-off."
+  },
+  {
+    "chunk_id": "adc29256cc66",
+    "verdict": "keep",
+    "reason": "Section lead-in describing what the binary embeds."
+  },
+  {
+    "chunk_id": "6e493666b4cc",
+    "verdict": "keep",
+    "reason": "Substantive list of embedded runtime subsystems."
+  },
+  {
+    "chunk_id": "437d81aaa827",
+    "verdict": "keep",
+    "reason": "Documents first-launch runtime unpacking behavior."
+  },
+  {
+    "chunk_id": "9dcc6fc01a4d",
+    "verdict": "keep",
+    "reason": "Explains dependency resolution and jac install model."
+  },
+  {
+    "chunk_id": "35f01b94f202",
+    "verdict": "keep",
+    "reason": "Quick-start workflow, useful concrete commands."
+  },
+  {
+    "chunk_id": "4112f7f6995f",
+    "verdict": "keep",
+    "reason": "Describes zero-to-full-stack flow and adding AI."
+  },
+  {
+    "chunk_id": "5393efc8f1a7",
+    "verdict": "keep",
+    "reason": "Overview of one-language/three-runtime model, core framing."
+  },
+  {
+    "chunk_id": "b5973174ec17",
+    "verdict": "keep",
+    "reason": "Genuine transitional prose introducing examples."
+  },
+  {
+    "chunk_id": "d3bdd0262ef7",
+    "verdict": "keep",
+    "reason": "Install command, meaningful setup content."
+  },
+  {
+    "chunk_id": "bef71e7c4397",
+    "verdict": "keep",
+    "reason": "Notes the self-contained binary requires no Python/pip."
+  },
+  {
+    "chunk_id": "34de4ad84b7e",
+    "verdict": "keep",
+    "reason": "Explains kind-aware jac run semantics, useful detail."
+  },
+  {
+    "chunk_id": "ce9d98badfa0",
+    "verdict": "keep",
+    "reason": "Frames the recipes-as-composition model."
+  },
+  {
+    "chunk_id": "b2a7958f088c",
+    "verdict": "keep",
+    "reason": "Describes batteries-included toolchain, genuine content."
+  },
+  {
+    "chunk_id": "58f2475b2cb5",
+    "verdict": "keep",
+    "reason": "Prose describing guided build tracks."
+  },
+  {
+    "chunk_id": "c3c012d31065",
+    "verdict": "keep",
+    "reason": "Reference table mapping recipes to runtime blocks."
+  },
+  {
+    "chunk_id": "6c467657b3a5",
+    "verdict": "keep",
+    "reason": "Legend explaining table symbols and composition axes."
+  },
+  {
+    "chunk_id": "e54f5c1aab74",
+    "verdict": "keep",
+    "reason": "Footnotes with real toolchain/setup detail."
+  },
+  {
+    "chunk_id": "f45c6a43296d",
+    "verdict": "keep",
+    "reason": "Explains composition-as-point reading of the table."
+  },
+  {
+    "chunk_id": "0db883b0174e",
+    "verdict": "keep",
+    "reason": "Section intro on shipping projections."
+  },
+  {
+    "chunk_id": "92f8fb44c68c",
+    "verdict": "keep",
+    "reason": "Describes the sealed .jab bundle, genuine content."
+  },
+  {
+    "chunk_id": "ae1b871f304f",
+    "verdict": "drop",
+    "reason": "Near-duplicate (containment 1.0) of the canonical jab-command block; cookbook copy is redundant."
+  },
+  {
+    "chunk_id": "4c4a9b89a3ea",
+    "verdict": "keep",
+    "reason": "Explains the self-contained executable projection."
+  },
+  {
+    "chunk_id": "0c1d0696c511",
+    "verdict": "keep",
+    "reason": "Build command for binary projection, not flagged."
+  },
+  {
+    "chunk_id": "4d9fce0d223d",
+    "verdict": "keep",
+    "reason": "Clarifies --as binary vs --as native distinction."
+  },
+  {
+    "chunk_id": "561ed99b14c2",
+    "verdict": "drop",
+    "reason": "Horizontal rule only, no content."
+  },
+  {
+    "chunk_id": "5e1b6b6a2c8d",
+    "verdict": "drop",
+    "reason": "Section heading fragment only, no prose."
+  },
+  {
+    "chunk_id": "8527e77ef649",
+    "verdict": "keep",
+    "reason": "Describes CLI tool kind and graph-native scripting."
+  },
+  {
+    "chunk_id": "09046ea6dfa3",
+    "verdict": "drop",
+    "reason": "Near-duplicate (containment 1.0) of the hello.jac OSP example; cookbook copy is redundant."
+  },
+  {
+    "chunk_id": "47c67e61b1a2",
+    "verdict": "keep",
+    "reason": "Run command for the example."
+  },
+  {
+    "chunk_id": "f39240dab229",
+    "verdict": "keep",
+    "reason": "Expected output completing the example."
+  },
+  {
+    "chunk_id": "ecb0b88ca991",
+    "verdict": "keep",
+    "reason": "Explains root persistence, a genuine concept."
+  },
+  {
+    "chunk_id": "6e78a5dbf2d7",
+    "verdict": "drop",
+    "reason": "Navigation link fragment only."
+  },
+  {
+    "chunk_id": "b0fdba0bd818",
+    "verdict": "keep",
+    "reason": "Explains native binary kind and the na subset constraints."
+  },
+  {
+    "chunk_id": "32f7d3658002",
+    "verdict": "keep",
+    "reason": "Partial overlap (0.765) only; distinct na compute example worth keeping."
+  },
+  {
+    "chunk_id": "69b17480c465",
+    "verdict": "keep",
+    "reason": "nacompile command for the native example."
+  },
+  {
+    "chunk_id": "8e49cd42f21a",
+    "verdict": "keep",
+    "reason": "Expected output completing the native example."
+  },
+  {
+    "chunk_id": "01f4257cc458",
+    "verdict": "keep",
+    "reason": "Explains the native binary result and full-app alternative."
+  },
+  {
+    "chunk_id": "08c923a24b9f",
+    "verdict": "drop",
+    "reason": "Navigation link fragment only."
+  },
+  {
+    "chunk_id": "dcd305855435",
+    "verdict": "keep",
+    "reason": "Partial overlap (0.696) only; explains walker:pub REST exposure, keep."
+  },
+  {
+    "chunk_id": "8e676ed6c846",
+    "verdict": "drop",
+    "reason": "Near-duplicate (containment 1.0) of the api.jac walker example; cookbook copy is redundant."
+  },
+  {
+    "chunk_id": "dcf9ec4ebc56",
+    "verdict": "keep",
+    "reason": "Command to serve a pure API."
+  },
+  {
+    "chunk_id": "b04104dfd029",
+    "verdict": "drop",
+    "reason": "Near-duplicate (containment 1.0) of the --no-client/endpoint prose."
+  },
+  {
+    "chunk_id": "173bd629f657",
+    "verdict": "keep",
+    "reason": "Concrete curl examples for the API endpoints."
+  },
+  {
+    "chunk_id": "30a1dffb308a",
+    "verdict": "keep",
+    "reason": "Documents Swagger docs and live graph endpoints."
+  },
+  {
+    "chunk_id": "a931d883ea2a",
+    "verdict": "drop",
+    "reason": "Navigation link fragment only."
+  },
+  {
+    "chunk_id": "9cf4c0e2f0ca",
+    "verdict": "drop",
+    "reason": "Near-duplicate (containment 0.946) of the microservices sv-import prose; cookbook copy is redundant."
+  },
+  {
+    "chunk_id": "79e48b27226b",
+    "verdict": "keep",
+    "reason": "Partial overlap (0.684) only; distinct math_service provider example worth keeping."
+  }
+]

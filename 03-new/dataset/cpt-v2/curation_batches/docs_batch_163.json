@@ -1,0 +1,267 @@
+[
+  {
+    "chunk_id": "06af767840f3",
+    "verdict": "keep",
+    "reason": "Useful framing tip that distinguishes the hands-on tutorial from the authoritative OSP reference."
+  },
+  {
+    "chunk_id": "09600212017c",
+    "verdict": "keep",
+    "reason": "Genuine operational knowledge about jac run graph persistence and jac clean --all."
+  },
+  {
+    "chunk_id": "1111d4ee4e6c",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "c79f4ce86224",
+    "verdict": "keep",
+    "reason": "Sets up the OOP-vs-OSP contrast that motivates the paradigm."
+  },
+  {
+    "chunk_id": "63c621cc7ca3",
+    "verdict": "upweight",
+    "reason": "Core one-sentence definition of OSP: sending computation (walkers) to data in a graph.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "1f3e17b4d569",
+    "verdict": "keep",
+    "reason": "Mermaid diagram illustrating the OOP-vs-OSP mental model; supports surrounding prose."
+  },
+  {
+    "chunk_id": "425cbabe8c38",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "3847b3d59ca9",
+    "verdict": "keep",
+    "reason": "Section header introducing nodes as graph-connectable classes."
+  },
+  {
+    "chunk_id": "28db4302d0b4",
+    "verdict": "upweight",
+    "reason": "Canonical node declaration example showing has fields, methods, and object-like usage.",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "9e8e0c8704a3",
+    "verdict": "keep",
+    "reason": "Key conceptual point that nodes are full classes with dormant graph capability."
+  },
+  {
+    "chunk_id": "ca67bf78b954",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "884ea74c2770",
+    "verdict": "keep",
+    "reason": "Section header introducing the ++> connect operator."
+  },
+  {
+    "chunk_id": "b98c868c82fc",
+    "verdict": "upweight",
+    "reason": "Core example of connecting nodes with ++> including root as the default starting node.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "9c3a83ce47f6",
+    "verdict": "keep",
+    "reason": "Short connective prose leading into the graph diagram; harmless glue for the example."
+  },
+  {
+    "chunk_id": "6a19196ed134",
+    "verdict": "keep",
+    "reason": "Diagram showing the resulting graph structure of the ++> example."
+  },
+  {
+    "chunk_id": "3f870478d4d5",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "083bf1c998ad",
+    "verdict": "keep",
+    "reason": "Section header introducing typed edges with data."
+  },
+  {
+    "chunk_id": "8a9fb77b7286",
+    "verdict": "upweight",
+    "reason": "Core typed-edge example with the +>: Edge(...) :+> connection operator syntax.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "6585456e0baa",
+    "verdict": "keep",
+    "reason": "Explains edge-carried data semantics and points to the full edges reference."
+  },
+  {
+    "chunk_id": "3d90836498ed",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "eb066925c885",
+    "verdict": "keep",
+    "reason": "Section header introducing spatial query operators."
+  },
+  {
+    "chunk_id": "33d95cce78d6",
+    "verdict": "upweight",
+    "reason": "Core graph-query example covering [root --> ] edge references and [?:Person] type filtering.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "597af2122579",
+    "verdict": "upweight",
+    "reason": "Dense summary of edge-reference query grammar: edge-type, node-type, attribute filters, and chained hops.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "80d34bcd06cd",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "de552da28f58",
+    "verdict": "upweight",
+    "reason": "Core Root-type vs root-instance distinction essential for walker ability declarations and spawn expressions.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "dc5eaca1707b",
+    "verdict": "keep",
+    "reason": "One-line definition of walkers as graph-traversing computation."
+  },
+  {
+    "chunk_id": "ab0898927263",
+    "verdict": "upweight",
+    "reason": "Canonical walker example demonstrating spawn, visit [--> ], here, and per-node-type abilities.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "88ae00596294",
+    "verdict": "drop",
+    "reason": "Content-free 'Output:' label fragment with no prose or code."
+  },
+  {
+    "chunk_id": "584fc8f9c10f",
+    "verdict": "keep",
+    "reason": "Expected-output block showing the walker only greets Alice, grounding the traversal lesson."
+  },
+  {
+    "chunk_id": "4ee7fc01ee1a",
+    "verdict": "upweight",
+    "reason": "Critical semantic warning that spawned walkers do not auto-traverse without an explicit visit ability.",
+    "weight": 3.5
+  },
+  {
+    "chunk_id": "4c829c2d1677",
+    "verdict": "upweight",
+    "reason": "Explains the walker traversal semantics behind the surprising output, a core visit-model insight.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "2406e639c79c",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "27dbd7aa2fdd",
+    "verdict": "keep",
+    "reason": "Section header introducing continued traversal via visit."
+  },
+  {
+    "chunk_id": "e6e7d3b3ff2c",
+    "verdict": "upweight",
+    "reason": "Core example of recursive traversal with visit [--> ] inside a node-entry ability.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "dedd5153e2e8",
+    "verdict": "drop",
+    "reason": "Content-free 'Output:' label fragment with no prose or code."
+  },
+  {
+    "chunk_id": "f1dd1ab20a59",
+    "verdict": "keep",
+    "reason": "Expected-output block confirming full-graph traversal behavior."
+  },
+  {
+    "chunk_id": "bb47152e9420",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "616b027f42b1",
+    "verdict": "upweight",
+    "reason": "Core special-reference semantics: here vs self vs visitor and where each is valid.",
+    "weight": 3.5
+  },
+  {
+    "chunk_id": "dc1de76d660f",
+    "verdict": "upweight",
+    "reason": "Compact example demonstrating walker state (self) versus current node (here) during traversal.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "23218a1579aa",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "5e0936f0469c",
+    "verdict": "keep",
+    "reason": "Section header introducing report for collecting walker results."
+  },
+  {
+    "chunk_id": "9799274e1f50",
+    "verdict": "upweight",
+    "reason": "Core report example showing result collection via result.reports from a spawned walker.",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "73387ba9cd2b",
+    "verdict": "drop",
+    "reason": "Content-free 'Output:' label fragment with no prose or code."
+  },
+  {
+    "chunk_id": "57e2b24c15a9",
+    "verdict": "keep",
+    "reason": "Expected-output block showing report's console printing and collected results."
+  },
+  {
+    "chunk_id": "71d04d01a0d9",
+    "verdict": "keep",
+    "reason": "Explains the dual behavior of report: console print plus result.reports storage."
+  },
+  {
+    "chunk_id": "03cca2f53189",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "4ba8bf042adf",
+    "verdict": "keep",
+    "reason": "Section header explaining when to stop traversal with disengage."
+  },
+  {
+    "chunk_id": "c88187f9381f",
+    "verdict": "upweight",
+    "reason": "Core disengage example demonstrating early walker termination during traversal.",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "404446c26391",
+    "verdict": "drop",
+    "reason": "Content-free 'Output:' label fragment with no prose or code."
+  },
+  {
+    "chunk_id": "5fe96e053f22",
+    "verdict": "keep",
+    "reason": "Expected-output block confirming disengage stops after the first match."
+  }
+]

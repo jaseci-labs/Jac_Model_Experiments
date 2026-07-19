@@ -1,0 +1,17 @@
+{
+  "batch_id": "h02",
+  "accepted": [
+    "greedy_color_count",
+    "component_size_histogram",
+    "shortest_path_count",
+    "tree_mis",
+    "tree_centroid",
+    "bridge_count",
+    "indegree_ranking",
+    "lca_name",
+    "degree_profile_match",
+    "eulerian_path_feasible"
+  ],
+  "rejected": [],
+  "accept_rate": 1.0
+}

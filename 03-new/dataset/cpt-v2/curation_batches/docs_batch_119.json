@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "943cefb8ff78",
+    "verdict": "drop",
+    "reason": "Bare section heading with no prose; nav-only fragment carrying no training signal."
+  },
+  {
+    "chunk_id": "56a9df7af4c2",
+    "verdict": "keep",
+    "reason": "Concrete API endpoint definition for graph traversal over persisted graphs."
+  },
+  {
+    "chunk_id": "2dacbc613488",
+    "verdict": "keep",
+    "reason": "Complete parameter table for the traverse endpoint; genuine reference content."
+  },
+  {
+    "chunk_id": "789bae7e657c",
+    "verdict": "keep",
+    "reason": "Working curl example demonstrating traverse endpoint usage."
+  },
+  {
+    "chunk_id": "831950c572eb",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator only; no content."
+  },
+  {
+    "chunk_id": "5c50deb17ae0",
+    "verdict": "keep",
+    "reason": "Real Jac code showing async walker syntax with entry ability and report; useful but plugin-scoped, not core OSP fundamentals."
+  },
+  {
+    "chunk_id": "ce5a8149e71d",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator only; no content."
+  },
+  {
+    "chunk_id": "652ca8c385f0",
+    "verdict": "keep",
+    "reason": "Substantive intro explaining kvstore's role and supported backends."
+  },
+  {
+    "chunk_id": "7a0b3f2a2bc1",
+    "verdict": "keep",
+    "reason": "Canonical kvstore construction example across all three backends."
+  },
+  {
+    "chunk_id": "d6930b392c3f",
+    "verdict": "keep",
+    "reason": "Parameter spec including the URI resolution priority order; non-redundant reference detail."
+  },
+  {
+    "chunk_id": "b056125bd4bf",
+    "verdict": "keep",
+    "reason": "Concrete jac.toml configuration snippet for Firestore."
+  },
+  {
+    "chunk_id": "f65b98505afd",
+    "verdict": "drop",
+    "reason": "Orphaned one-line connective phrase with no standalone content."
+  },
+  {
+    "chunk_id": "514ac813aa32",
+    "verdict": "keep",
+    "reason": "Environment-variable configuration example with subsystem override; genuine content."
+  },
+  {
+    "chunk_id": "adfa5e696a50",
+    "verdict": "keep",
+    "reason": "Explains the FIREBASE_PROJECT_ID fallback semantics; unique prose."
+  },
+  {
+    "chunk_id": "6194c035cdff",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator only; no content."
+  },
+  {
+    "chunk_id": "902735aa354f",
+    "verdict": "keep",
+    "reason": "Flagged pair is not redundant: MongoDB method list differs from Firestore's (includes find_nodes and covers a different backend)."
+  },
+  {
+    "chunk_id": "450701492816",
+    "verdict": "drop",
+    "reason": "Bare 'Example:' label fragment; no content."
+  },
+  {
+    "chunk_id": "db7f89793c4f",
+    "verdict": "keep",
+    "reason": "Full MongoDB CRUD example in Jac; strong idiomatic-usage signal."
+  },
+  {
+    "chunk_id": "16c275413a34",
+    "verdict": "keep",
+    "reason": "MongoDB query operator list; compact but real reference content."
+  },
+  {
+    "chunk_id": "3f71b03e076d",
+    "verdict": "keep",
+    "reason": "Explains find_nodes, the bridge between kvstore and persisted graph nodes."
+  },
+  {
+    "chunk_id": "de75faeae354",
+    "verdict": "keep",
+    "reason": "Code example for querying persisted nodes by type and filter."
+  },
+  {
+    "chunk_id": "a85956c0fa32",
+    "verdict": "keep",
+    "reason": "find_nodes parameter spec including the _anchors default collection; unique detail."
+  },
+  {
+    "chunk_id": "2dc18e15c1cf",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator only; no content."
+  },
+  {
+    "chunk_id": "6ed89ba9aebf",
+    "verdict": "keep",
+    "reason": "Not a true duplicate of the MongoDB chunk: distinct backend section whose method set deliberately lacks find_nodes; both halves of the pair kept."
+  },
+  {
+    "chunk_id": "a867affb22c4",
+    "verdict": "drop",
+    "reason": "Bare 'Example:' label fragment; no content."
+  },
+  {
+    "chunk_id": "5b3acd7d5678",
+    "verdict": "keep",
+    "reason": "Full Firestore CRUD example including update_by_id flow; distinct from the MongoDB example."
+  },
+  {
+    "chunk_id": "3d36179859ac",
+    "verdict": "keep",
+    "reason": "Firestore-supported operator list, which differs from MongoDB's ($nin present, $or absent)."
+  },
+  {
+    "chunk_id": "ef22644da3be",
+    "verdict": "drop",
+    "reason": "Bare 'Notes:' label fragment; no content."
+  },
+  {
+    "chunk_id": "c99477c89938",
+    "verdict": "keep",
+    "reason": "Important Firestore caveats: namespacing, _id query limitation, and find_nodes unavailability."
+  },
+  {
+    "chunk_id": "0c98beabd337",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator only; no content."
+  },
+  {
+    "chunk_id": "e48f730160ef",
+    "verdict": "keep",
+    "reason": "Redis-specific method list including the atomic lock primitives; distinct from other backend sections."
+  },
+  {
+    "chunk_id": "930f45cde0cb",
+    "verdict": "drop",
+    "reason": "Bare 'Example:' label fragment; no content."
+  },
+  {
+    "chunk_id": "8bdcb1ee2022",
+    "verdict": "keep",
+    "reason": "Redis usage example covering TTL, incr, scan, and expire."
+  },
+  {
+    "chunk_id": "99fce6061e82",
+    "verdict": "keep",
+    "reason": "Documents NotImplementedError behavior on wrong backend; small but real semantic fact."
+  },
+  {
+    "chunk_id": "6644436191c6",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator only; no content."
+  },
+  {
+    "chunk_id": "a098fabc6bde",
+    "verdict": "keep",
+    "reason": "Substantive motivation prose for distributed locks in multi-replica jac-scale deployments."
+  },
+  {
+    "chunk_id": "2a08413a32a3",
+    "verdict": "keep",
+    "reason": "Precise acquire-primitive semantics mapping to Redis SET NX EX."
+  },
+  {
+    "chunk_id": "90391c747e3d",
+    "verdict": "keep",
+    "reason": "Explains why TTL is mandatory (crash-safety); unique reasoning prose."
+  },
+  {
+    "chunk_id": "fc1a8ad0fc2a",
+    "verdict": "keep",
+    "reason": "Release-primitive semantics including the Lua-script atomicity detail."
+  },
+  {
+    "chunk_id": "e6ece537b7e5",
+    "verdict": "keep",
+    "reason": "Fence-token correctness argument; genuine conceptual content."
+  },
+  {
+    "chunk_id": "5a08e76d735c",
+    "verdict": "keep",
+    "reason": "Long, idiomatic Jac example of a cross-pod mutex with retry, try/finally, and compare-and-delete."
+  },
+  {
+    "chunk_id": "ba5557e6413e",
+    "verdict": "keep",
+    "reason": "Explains the debounce use of set_nx_with_ttl; distinct pattern from the mutex."
+  },
+  {
+    "chunk_id": "0f0840881051",
+    "verdict": "keep",
+    "reason": "Code example for cluster-wide debounce; complements the prose chunk."
+  },
+  {
+    "chunk_id": "87e3ac8d5148",
+    "verdict": "keep",
+    "reason": "States when the debounce pattern applies; short but non-boilerplate guidance."
+  },
+  {
+    "chunk_id": "af121c33ce04",
+    "verdict": "keep",
+    "reason": "Decision table mapping needs to primitives; high-value summary content."
+  },
+  {
+    "chunk_id": "b7f046c8af5c",
+    "verdict": "keep",
+    "reason": "Documents that lock primitives are Redis-only and error elsewhere; real constraint."
+  },
+  {
+    "chunk_id": "a0c7b5fffca8",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator only; no content."
+  },
+  {
+    "chunk_id": "b4e568d3c979",
+    "verdict": "keep",
+    "reason": "Substantive overview of the event-streaming broker's delivery guarantees and features."
+  },
+  {
+    "chunk_id": "45fb84669244",
+    "verdict": "drop",
+    "reason": "One-line connective lead-in with no standalone content."
+  },
+  {
+    "chunk_id": "a971910bd92d",
+    "verdict": "keep",
+    "reason": "Describes both event-stream implementations and their auto-selection rules."
+  }
+]

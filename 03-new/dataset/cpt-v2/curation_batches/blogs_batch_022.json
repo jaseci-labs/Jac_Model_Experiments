@@ -1,0 +1,259 @@
+[
+  {
+    "chunk_id": "075c853461d6",
+    "verdict": "upweight",
+    "reason": "Explains walkers-spawning-walkers pattern and spawn semantics, core OSP mechanics.",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "6e52939eb663",
+    "verdict": "drop",
+    "reason": "Bare admonition header with no content, repeated verbatim four times in this file."
+  },
+  {
+    "chunk_id": "45382f5777fa",
+    "verdict": "keep",
+    "reason": "Substantive prose on how context splits and merges across walker layers."
+  },
+  {
+    "chunk_id": "d892820b8a30",
+    "verdict": "drop",
+    "reason": "Lone horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "e05de9da15b3",
+    "verdict": "drop",
+    "reason": "Section heading plus empty admonition stub, nav-only fragment with no prose."
+  },
+  {
+    "chunk_id": "598b043f7b8b",
+    "verdict": "keep",
+    "reason": "One-line pattern summary that states the walker-carries-context model."
+  },
+  {
+    "chunk_id": "c0f561d87ec5",
+    "verdict": "keep",
+    "reason": "Concrete example prose showing walker spawn at root and LLM-driven visit routing."
+  },
+  {
+    "chunk_id": "a8b4040123d4",
+    "verdict": "drop",
+    "reason": "Figure/image embed markup with only a caption, no training-worthy prose."
+  },
+  {
+    "chunk_id": "3f7cf3634a3c",
+    "verdict": "upweight",
+    "reason": "Core statement of node-vs-walker state semantics (stateless nodes, walker as memory).",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "0c1f2aa0854b",
+    "verdict": "drop",
+    "reason": "Bare collapsible-example header line with no content."
+  },
+  {
+    "chunk_id": "5237131d754e",
+    "verdict": "upweight",
+    "reason": "Complete Jac code sketch exercising walker, visit [-->] by llm, visitor, node abilities, ++> and spawn root.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "c76e7a8b33ac",
+    "verdict": "keep",
+    "reason": "Genuine conceptual prose framing walker traversal as the reasoning trace."
+  },
+  {
+    "chunk_id": "0358d70db747",
+    "verdict": "keep",
+    "reason": "Explains why graph structure acts as guardrails for tool selection, real content."
+  },
+  {
+    "chunk_id": "f5eee53f31f0",
+    "verdict": "drop",
+    "reason": "Duplicate bare admonition header with no content."
+  },
+  {
+    "chunk_id": "c9e1990a47ad",
+    "verdict": "keep",
+    "reason": "Concise statement of walker-accumulates/nodes-forget context model."
+  },
+  {
+    "chunk_id": "1ea32c7732f1",
+    "verdict": "drop",
+    "reason": "Bare admonition header line with no content, repeated in file."
+  },
+  {
+    "chunk_id": "cc0f4a170471",
+    "verdict": "keep",
+    "reason": "Short but genuine when-to-use guidance for the Traveler pattern."
+  },
+  {
+    "chunk_id": "d280b07dacc3",
+    "verdict": "keep",
+    "reason": "Reference link with descriptive prose naming the visit [-->] by llm() routing mechanism."
+  },
+  {
+    "chunk_id": "edd3ba5cd58f",
+    "verdict": "drop",
+    "reason": "Lone horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "452538f75b80",
+    "verdict": "drop",
+    "reason": "Section heading plus empty admonition stub, nav-only fragment."
+  },
+  {
+    "chunk_id": "392d0546bd18",
+    "verdict": "keep",
+    "reason": "One-line pattern summary distinguishing stateful nodes from courier walker."
+  },
+  {
+    "chunk_id": "5be2a9e2dcd7",
+    "verdict": "keep",
+    "reason": "Concrete example prose motivating stateful expert nodes."
+  },
+  {
+    "chunk_id": "daf9ff64940d",
+    "verdict": "drop",
+    "reason": "Figure/image embed markup with only a caption, no prose value."
+  },
+  {
+    "chunk_id": "c8fe7f8305f8",
+    "verdict": "keep",
+    "reason": "Substantive contrast of node state persistence versus stateless Traveler nodes."
+  },
+  {
+    "chunk_id": "0d7ff8f34dbc",
+    "verdict": "drop",
+    "reason": "Bare collapsible-example header line with no content."
+  },
+  {
+    "chunk_id": "c10ef131bc83",
+    "verdict": "upweight",
+    "reason": "Complete Jac code sketch showing stateful node abilities, visitor access, visit by llm and spawn.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "58f1f50bfcf5",
+    "verdict": "keep",
+    "reason": "Transition prose setting up the before/after node-state example."
+  },
+  {
+    "chunk_id": "3a609045d7f2",
+    "verdict": "keep",
+    "reason": "Example dialogue illustrating node behavior on first visit."
+  },
+  {
+    "chunk_id": "af22b38b52e9",
+    "verdict": "keep",
+    "reason": "Transition prose tying the second example to accumulated node state."
+  },
+  {
+    "chunk_id": "845367f92931",
+    "verdict": "keep",
+    "reason": "Example dialogue illustrating adapted behavior from accumulated node knowledge."
+  },
+  {
+    "chunk_id": "5e24dce36d5b",
+    "verdict": "keep",
+    "reason": "Genuine takeaway prose on node-as-expert and applicable use cases."
+  },
+  {
+    "chunk_id": "5735376e23d4",
+    "verdict": "drop",
+    "reason": "Duplicate bare admonition header with no content."
+  },
+  {
+    "chunk_id": "83f95e0106e0",
+    "verdict": "keep",
+    "reason": "Concise statement of context-in-nodes semantics for the Expert pattern."
+  },
+  {
+    "chunk_id": "dd0148ced1ae",
+    "verdict": "drop",
+    "reason": "Lone horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "2f5e8189b233",
+    "verdict": "drop",
+    "reason": "Section heading plus empty admonition stub, nav-only fragment."
+  },
+  {
+    "chunk_id": "3ffda9772c02",
+    "verdict": "keep",
+    "reason": "One-line pattern summary of peer nodes, edge-defined workflow, and feedback loops."
+  },
+  {
+    "chunk_id": "b44a2eb4f194",
+    "verdict": "keep",
+    "reason": "Concrete example prose showing decentralized peer routing via graph edges."
+  },
+  {
+    "chunk_id": "e77e936ef8c0",
+    "verdict": "drop",
+    "reason": "Figure/image embed markup with only a caption, no prose value."
+  },
+  {
+    "chunk_id": "8ff939817d24",
+    "verdict": "keep",
+    "reason": "Substantive prose on edges defining workflow and contrast with orchestrator frameworks."
+  },
+  {
+    "chunk_id": "92f4c0c972d0",
+    "verdict": "drop",
+    "reason": "Bare collapsible-example header line with no content."
+  },
+  {
+    "chunk_id": "dc383b0b0072",
+    "verdict": "upweight",
+    "reason": "Rich Jac code sketch demonstrating typed edge-filtered visits [-->](?:Writer), node abilities, visitor mutation, and graph wiring.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "521d09c0fd97",
+    "verdict": "upweight",
+    "reason": "Explains routing-inside-abilities and typed visit filtering, core OSP traversal semantics.",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "59b0eb29d51d",
+    "verdict": "drop",
+    "reason": "Duplicate bare admonition header with no content."
+  },
+  {
+    "chunk_id": "483b97a6539e",
+    "verdict": "keep",
+    "reason": "Concise statement of distributed-context semantics across peer nodes."
+  },
+  {
+    "chunk_id": "c2e35f53bc7e",
+    "verdict": "drop",
+    "reason": "Duplicate bare admonition header with no content."
+  },
+  {
+    "chunk_id": "56752a08ee8c",
+    "verdict": "keep",
+    "reason": "Genuine when-to-use guidance for the Collab pattern."
+  },
+  {
+    "chunk_id": "d263495d587c",
+    "verdict": "drop",
+    "reason": "Lone horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "ea5e9580e4ff",
+    "verdict": "keep",
+    "reason": "Section intro prose framing the four-pattern comparison."
+  },
+  {
+    "chunk_id": "380bebd9519b",
+    "verdict": "upweight",
+    "reason": "Summary table mapping each pattern to its Jac OSP feature (spawn, visit by llm, node state, peer visit).",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "66f75be3b363",
+    "verdict": "keep",
+    "reason": "Closing prose summarizing the distinct context shapes of the four patterns."
+  }
+]

@@ -1,0 +1,234 @@
+[
+  {
+    "chunk_id": "1e781e7f934d",
+    "verdict": "keep",
+    "reason": "Section heading introducing the decorators example, useful context for the adjacent code chunk."
+  },
+  {
+    "chunk_id": "ae89f3a54810",
+    "verdict": "drop",
+    "reason": "Bare HTML div wrapper with no documentation content."
+  },
+  {
+    "chunk_id": "a2fe083f355a",
+    "verdict": "keep",
+    "reason": "Genuine Jac decorator syntax example."
+  },
+  {
+    "chunk_id": "9ad9ab69398e",
+    "verdict": "drop",
+    "reason": "Bare closing div tag, pure HTML boilerplate."
+  },
+  {
+    "chunk_id": "0796f6366bce",
+    "verdict": "keep",
+    "reason": "Section heading for the context-managers example, gives context to adjacent code."
+  },
+  {
+    "chunk_id": "b6a4dd8894f2",
+    "verdict": "drop",
+    "reason": "Build annotation comment plus HTML wrapper, no doc content."
+  },
+  {
+    "chunk_id": "cf69bb0d5557",
+    "verdict": "drop",
+    "reason": "Example uses Python 'with open' syntax explicitly flagged as not supported in Jac, so it would train invalid Jac."
+  },
+  {
+    "chunk_id": "e01c7c53acce",
+    "verdict": "keep",
+    "reason": "Section heading for advanced edge filtering, context for the OSP snippet."
+  },
+  {
+    "chunk_id": "13125b11fb63",
+    "verdict": "drop",
+    "reason": "Build annotation comment plus HTML wrapper, no doc content."
+  },
+  {
+    "chunk_id": "92a6285c74fa",
+    "verdict": "upweight",
+    "reason": "Core OSP graph-traversal syntax: multi-hop typed edge filtering with field conditions.",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "b90c7dcfe614",
+    "verdict": "keep",
+    "reason": "Section heading for semantic strings, context for the byllm example."
+  },
+  {
+    "chunk_id": "5590451cf5f2",
+    "verdict": "keep",
+    "reason": "Genuine byllm 'by llm()' example, distinctive Jac feature."
+  },
+  {
+    "chunk_id": "19030b29cbfb",
+    "verdict": "keep",
+    "reason": "Heading introducing practice project lists."
+  },
+  {
+    "chunk_id": "92b8d25f2b60",
+    "verdict": "keep",
+    "reason": "Genuine tutorial content listing beginner project ideas."
+  },
+  {
+    "chunk_id": "42b798709ef7",
+    "verdict": "keep",
+    "reason": "Heading tying the following project list to OSP concepts."
+  },
+  {
+    "chunk_id": "d2397ec03180",
+    "verdict": "keep",
+    "reason": "Project ideas mapping OSP concepts (nodes, edges, walkers, traversal) to applications."
+  },
+  {
+    "chunk_id": "f32817dfd39f",
+    "verdict": "keep",
+    "reason": "Heading for advanced project list."
+  },
+  {
+    "chunk_id": "47e40e65939e",
+    "verdict": "keep",
+    "reason": "Genuine advanced project ideas content."
+  },
+  {
+    "chunk_id": "df0050cf9c2b",
+    "verdict": "keep",
+    "reason": "Heading introducing learning resources."
+  },
+  {
+    "chunk_id": "ae3f2e4e2940",
+    "verdict": "keep",
+    "reason": "Points to reference examples in the repo, useful navigational prose with substance."
+  },
+  {
+    "chunk_id": "7f0712dbe4c6",
+    "verdict": "keep",
+    "reason": "Heading for key-files list."
+  },
+  {
+    "chunk_id": "282b5bb7a865",
+    "verdict": "keep",
+    "reason": "Describes key reference docs including archetypes and OSP files."
+  },
+  {
+    "chunk_id": "24c58b30c2a9",
+    "verdict": "keep",
+    "reason": "Heading introducing the paradigm summary."
+  },
+  {
+    "chunk_id": "42cf33e524e3",
+    "verdict": "keep",
+    "reason": "Summarizes the two paradigms including the OSP node-edge-walker progression."
+  },
+  {
+    "chunk_id": "df794f1b3768",
+    "verdict": "keep",
+    "reason": "Connective prose leading into the capability list."
+  },
+  {
+    "chunk_id": "d1de487bd0c4",
+    "verdict": "keep",
+    "reason": "Genuine prose on what traditional and graph-based paradigms enable."
+  },
+  {
+    "chunk_id": "9b75062c6c7a",
+    "verdict": "upweight",
+    "reason": "The canonical OSP thesis statement: send computation to where the data lives.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "61a031ef2b54",
+    "verdict": "keep",
+    "reason": "Prose reinforcing the OSP motivation."
+  },
+  {
+    "chunk_id": "11e840c6e7a9",
+    "verdict": "keep",
+    "reason": "Brief closing prose, genuine tutorial content though low signal."
+  },
+  {
+    "chunk_id": "9b848fe603ab",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "aebe07983631",
+    "verdict": "keep",
+    "reason": "Appendix heading anchoring the quick-reference section."
+  },
+  {
+    "chunk_id": "4512a5bab6d6",
+    "verdict": "keep",
+    "reason": "Heading for the basic-syntax reference despite trailing HTML wrapper."
+  },
+  {
+    "chunk_id": "0fc9bf7305e8",
+    "verdict": "keep",
+    "reason": "Canonical quick-reference for comments, with entry, semicolons, and brace blocks."
+  },
+  {
+    "chunk_id": "e6e034754912",
+    "verdict": "drop",
+    "reason": "Bare closing div tag, pure HTML boilerplate."
+  },
+  {
+    "chunk_id": "1c221cda83e4",
+    "verdict": "keep",
+    "reason": "Heading for the data-types reference despite trailing HTML wrapper."
+  },
+  {
+    "chunk_id": "879763fadb7c",
+    "verdict": "keep",
+    "reason": "Genuine Jac data-types reference with typed declarations and collections."
+  },
+  {
+    "chunk_id": "07ab0358c773",
+    "verdict": "drop",
+    "reason": "Bare closing div tag, pure HTML boilerplate."
+  },
+  {
+    "chunk_id": "ab857991b625",
+    "verdict": "keep",
+    "reason": "Heading for the control-flow reference despite trailing HTML wrapper."
+  },
+  {
+    "chunk_id": "243769072163",
+    "verdict": "keep",
+    "reason": "Genuine reference covering if/elif/else, while, and Jac's distinctive 'for i = 0 while ... with' loop."
+  },
+  {
+    "chunk_id": "e29ca2f16c8f",
+    "verdict": "drop",
+    "reason": "Bare closing div tag, pure HTML boilerplate."
+  },
+  {
+    "chunk_id": "8f69a6fedd9b",
+    "verdict": "keep",
+    "reason": "Heading for the functions reference despite trailing HTML wrapper."
+  },
+  {
+    "chunk_id": "fa6130467fbc",
+    "verdict": "keep",
+    "reason": "Genuine Jac function-definition reference with typed params, returns, and defaults."
+  },
+  {
+    "chunk_id": "3e3be6440d4b",
+    "verdict": "drop",
+    "reason": "Bare closing div tag, pure HTML boilerplate."
+  },
+  {
+    "chunk_id": "062b2dd089c7",
+    "verdict": "keep",
+    "reason": "Heading for the classes reference despite trailing HTML wrapper."
+  },
+  {
+    "chunk_id": "89798751335c",
+    "verdict": "keep",
+    "reason": "Genuine Jac obj archetype example with has fields and methods."
+  },
+  {
+    "chunk_id": "caab0bc7bb00",
+    "verdict": "drop",
+    "reason": "Bare closing div tag, pure HTML boilerplate."
+  }
+]

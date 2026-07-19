@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "fb21ad45cf5e",
+    "verdict": "keep",
+    "reason": "Concrete bug description of parent-type filter semantics in `[?:BaseContent]` queries."
+  },
+  {
+    "chunk_id": "a2d47056e12a",
+    "verdict": "keep",
+    "reason": "Root-cause explanation of the type-table inheritance bug, genuine technical prose."
+  },
+  {
+    "chunk_id": "f4041d00ca45",
+    "verdict": "keep",
+    "reason": "Explains why the bug was masked in dev vs production, useful narrative context."
+  },
+  {
+    "chunk_id": "1e8adf2d5f11",
+    "verdict": "keep",
+    "reason": "Section intro framing the type-keyed bucket redesign requirements."
+  },
+  {
+    "chunk_id": "7c4fb96d3dd6",
+    "verdict": "keep",
+    "reason": "Mermaid diagram documenting the v2 TopologyIndex structure with concrete example data."
+  },
+  {
+    "chunk_id": "c17bed1e3df6",
+    "verdict": "keep",
+    "reason": "Explains adj_list as source of truth vs buckets as derived in-memory index."
+  },
+  {
+    "chunk_id": "e5e08e657682",
+    "verdict": "keep",
+    "reason": "Core bucket schema line that anchors the surrounding explanation."
+  },
+  {
+    "chunk_id": "e118e82c2cd3",
+    "verdict": "drop",
+    "reason": "Four-word lead-in fragment with no standalone content."
+  },
+  {
+    "chunk_id": "1f8ab5b6d0d9",
+    "verdict": "keep",
+    "reason": "Defines the n:/e: col_key vocabulary used throughout the post."
+  },
+  {
+    "chunk_id": "74a4caec4976",
+    "verdict": "keep",
+    "reason": "Explains MRO fan-out, the key mechanism making parent-type queries fast."
+  },
+  {
+    "chunk_id": "06ac0194863e",
+    "verdict": "keep",
+    "reason": "Documents type_mro_ids storage and truncation at runtime base archetypes."
+  },
+  {
+    "chunk_id": "12a57776c9f1",
+    "verdict": "keep",
+    "reason": "Short but names resolve_chain and its algorithmic change, coherent with adjacent code."
+  },
+  {
+    "chunk_id": "37cf500d2d4b",
+    "verdict": "keep",
+    "reason": "Pseudocode for the resolve_chain lookup-and-intersect algorithm."
+  },
+  {
+    "chunk_id": "506605dea311",
+    "verdict": "keep",
+    "reason": "States the complexity result: cost scales with matches not graph size."
+  },
+  {
+    "chunk_id": "fee48e89c33a",
+    "verdict": "drop",
+    "reason": "Contentless one-line transition sentence into the next diagram."
+  },
+  {
+    "chunk_id": "2571db848cf4",
+    "verdict": "keep",
+    "reason": "Flowchart of multi-filter column intersection with concrete sets."
+  },
+  {
+    "chunk_id": "af4fc2a378a2",
+    "verdict": "keep",
+    "reason": "Explains edge-plus-node filter intersection as a single set operation."
+  },
+  {
+    "chunk_id": "e66af6a59c4f",
+    "verdict": "keep",
+    "reason": "Sets up the concrete star-graph comparison case with a real Jac query."
+  },
+  {
+    "chunk_id": "e290f32c4ca1",
+    "verdict": "keep",
+    "reason": "Sequence diagram contrasting v1 scan vs v2 bucket lookup."
+  },
+  {
+    "chunk_id": "82b0e44e6335",
+    "verdict": "keep",
+    "reason": "Summarizes the v1 vs v2 work-envelope contrast."
+  },
+  {
+    "chunk_id": "ac940db0f1c2",
+    "verdict": "keep",
+    "reason": "Introduces the planner bypass, a substantive design decision."
+  },
+  {
+    "chunk_id": "c6e6b6c6f69f",
+    "verdict": "keep",
+    "reason": "Minimal but shows real Jac unfiltered-traversal syntax referenced by neighbors."
+  },
+  {
+    "chunk_id": "3bcb037bf201",
+    "verdict": "keep",
+    "reason": "Explains why the index is a regression for unfiltered traversals."
+  },
+  {
+    "chunk_id": "671af64f020b",
+    "verdict": "keep",
+    "reason": "Names plan_query and its role; short but anchors the following flowchart."
+  },
+  {
+    "chunk_id": "204cbfb801a8",
+    "verdict": "keep",
+    "reason": "Decision flowchart for plan_query index-vs-natural-walk routing."
+  },
+  {
+    "chunk_id": "2bb9145abc83",
+    "verdict": "drop",
+    "reason": "Three-word lead-in fragment with no standalone content."
+  },
+  {
+    "chunk_id": "808683d51bc3",
+    "verdict": "keep",
+    "reason": "Enumerates the four planner bypass cases with Jac predicate examples."
+  },
+  {
+    "chunk_id": "87450687a01e",
+    "verdict": "keep",
+    "reason": "Short but states the bytecode-inspection mechanism introduced by the next chunk."
+  },
+  {
+    "chunk_id": "ee1e9ef4750f",
+    "verdict": "keep",
+    "reason": "Jac impl code for opcode-based predicate detection."
+  },
+  {
+    "chunk_id": "6832fd957b82",
+    "verdict": "keep",
+    "reason": "Explains which opcodes trigger the bypass and why isinstance is safe."
+  },
+  {
+    "chunk_id": "4a63d64290b0",
+    "verdict": "keep",
+    "reason": "Motivates the on-disk v1-to-v2 migration constraint."
+  },
+  {
+    "chunk_id": "a297bae37a51",
+    "verdict": "keep",
+    "reason": "Describes the byte-level type-table header migration strategy."
+  },
+  {
+    "chunk_id": "366f6c7cba7e",
+    "verdict": "keep",
+    "reason": "Explains lazy real-MRO installation via _ensure_type after migration."
+  },
+  {
+    "chunk_id": "670875d890a0",
+    "verdict": "keep",
+    "reason": "Flowchart of the migration lifecycle from v1 blob to real MRO chains."
+  },
+  {
+    "chunk_id": "509b9a2cb8ad",
+    "verdict": "keep",
+    "reason": "Short but introduces the longer-chain-wins safety property shown in the next code."
+  },
+  {
+    "chunk_id": "d84d44ae5f3b",
+    "verdict": "keep",
+    "reason": "Jac code for the longer-chain-wins upgrade logic in _ensure_type."
+  },
+  {
+    "chunk_id": "17e0c1b183c3",
+    "verdict": "keep",
+    "reason": "Explains stub-vs-real chain lengths and per-type warm-up semantics."
+  },
+  {
+    "chunk_id": "59dedca1dd05",
+    "verdict": "keep",
+    "reason": "Documents the partial-results trade-off after migration and the tracking issue."
+  },
+  {
+    "chunk_id": "457c892d4606",
+    "verdict": "keep",
+    "reason": "Performance section setup with benchmark methodology and correctness check."
+  },
+  {
+    "chunk_id": "de051da104c3",
+    "verdict": "keep",
+    "reason": "1-hop selectivity benchmark table with real numbers."
+  },
+  {
+    "chunk_id": "7970377c4133",
+    "verdict": "keep",
+    "reason": "Interprets the selectivity results and the 43x headline win."
+  },
+  {
+    "chunk_id": "601699425f60",
+    "verdict": "keep",
+    "reason": "Fanout scaling benchmark table, non-redundant with the selectivity table."
+  },
+  {
+    "chunk_id": "a7bfcf390cef",
+    "verdict": "keep",
+    "reason": "Introduces the 2-hop compounding benchmark with the actual Jac chain query."
+  },
+  {
+    "chunk_id": "a6c4454c733c",
+    "verdict": "keep",
+    "reason": "2-hop benchmark table showing compounding speedup."
+  },
+  {
+    "chunk_id": "38aa542a666a",
+    "verdict": "keep",
+    "reason": "Explains frontier-proportional work, the architectural takeaway of the benchmarks."
+  },
+  {
+    "chunk_id": "af452e1215ed",
+    "verdict": "keep",
+    "reason": "Memory and encoded-size trade-off table."
+  },
+  {
+    "chunk_id": "c10e6489f1db",
+    "verdict": "keep",
+    "reason": "Explains memory growth vs unchanged wire format."
+  },
+  {
+    "chunk_id": "001d8ac4512c",
+    "verdict": "keep",
+    "reason": "Documents the hub-node mutation-cost surprise, genuine analysis."
+  },
+  {
+    "chunk_id": "c146d89a918f",
+    "verdict": "keep",
+    "reason": "Short but frames the following O(n) bucket-helper code as the original flawed version."
+  },
+  {
+    "chunk_id": "29c245b1a3e5",
+    "verdict": "keep",
+    "reason": "Jac code showing the O(n) list helpers behind the hub-node cost problem."
+  }
+]

@@ -1,0 +1,259 @@
+[
+  {
+    "chunk_id": "e7886f1589ed",
+    "verdict": "keep",
+    "reason": "Genuine prose explaining obj/has/def semantics vs Python."
+  },
+  {
+    "chunk_id": "801181df51e5",
+    "verdict": "keep",
+    "reason": "Canonical basic obj definition example with has fields and methods."
+  },
+  {
+    "chunk_id": "475372443511",
+    "verdict": "keep",
+    "reason": "Complete inheritance example, non-redundant syntax coverage."
+  },
+  {
+    "chunk_id": "d3946b4192bc",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "c561468cba07",
+    "verdict": "keep",
+    "reason": "Enum syntax example with plain and valued members."
+  },
+  {
+    "chunk_id": "647d63b835f3",
+    "verdict": "keep",
+    "reason": "Prose explaining typed-base enum desugaring to IntEnum/StrEnum."
+  },
+  {
+    "chunk_id": "3423edef797b",
+    "verdict": "keep",
+    "reason": "In-context typed-enum code example that pairs with the preceding prose; its near-duplicate c9404a50a477 is not in this batch, so keep this copy."
+  },
+  {
+    "chunk_id": "3c3e261c2215",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "cefd8deec55e",
+    "verdict": "keep",
+    "reason": "Try/except/finally syntax example; 0.52 containment with 028cd17f5362 is too low to be truly redundant."
+  },
+  {
+    "chunk_id": "f20ad7cac40a",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "39bb65295799",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose or code."
+  },
+  {
+    "chunk_id": "54d428353d73",
+    "verdict": "keep",
+    "reason": "Python-library import example, distinct syntax content."
+  },
+  {
+    "chunk_id": "0a31cb09ef3e",
+    "verdict": "keep",
+    "reason": "From-import brace syntax example, distinct from plain imports."
+  },
+  {
+    "chunk_id": "294103b460b4",
+    "verdict": "keep",
+    "reason": "Jac-module cross-file import example."
+  },
+  {
+    "chunk_id": "70a790f77211",
+    "verdict": "keep",
+    "reason": "Prose motivating type-only imports for circular-import breaking."
+  },
+  {
+    "chunk_id": "121eea62e84a",
+    "verdict": "keep",
+    "reason": "Import-type code example anchored by surrounding prose here; its exact duplicate a960184f4777 is not in this batch, so this canonical copy stays."
+  },
+  {
+    "chunk_id": "91dfaa32576d",
+    "verdict": "keep",
+    "reason": "Substantive explanation of TYPE_CHECKING lowering and decorator caveats."
+  },
+  {
+    "chunk_id": "aac7cd17f0be",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "38e24089343c",
+    "verdict": "keep",
+    "reason": "Prose explaining the glob keyword for module-level state."
+  },
+  {
+    "chunk_id": "8bbd5e08b5b1",
+    "verdict": "keep",
+    "reason": "Glob variable code example complementing the prose."
+  },
+  {
+    "chunk_id": "68398a5ffa7b",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "d381a8cf82dd",
+    "verdict": "upweight",
+    "reason": "Introduces can abilities and entry/exit event semantics, core OSP mechanics.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "18184fb73fcf",
+    "verdict": "upweight",
+    "reason": "Minimal node-with-entry-ability example, core walker-event pattern.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "9e07b319c607",
+    "verdict": "keep",
+    "reason": "Connective prose distinguishing def from can, genuine content."
+  },
+  {
+    "chunk_id": "283f64c90963",
+    "verdict": "upweight",
+    "reason": "def-vs-can distinction table, foundational OSP concept.",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "48c0c4fbb665",
+    "verdict": "drop",
+    "reason": "Nav-only cross-reference sentence with no instructional content."
+  },
+  {
+    "chunk_id": "83f3e44ea44a",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "b07c69239a9d",
+    "verdict": "keep",
+    "reason": "Prose introducing the three access modifiers and their scope."
+  },
+  {
+    "chunk_id": "ceb75f36407b",
+    "verdict": "keep",
+    "reason": "Code example of pub/protect/priv on top-level functions."
+  },
+  {
+    "chunk_id": "7b26a8eed811",
+    "verdict": "keep",
+    "reason": "Visibility table summarizing modifier semantics."
+  },
+  {
+    "chunk_id": "15a2e88dd67a",
+    "verdict": "keep",
+    "reason": "Important nuance on context-dependent modifier meanings including HTTP auth."
+  },
+  {
+    "chunk_id": "d29c79f4c0d7",
+    "verdict": "keep",
+    "reason": "Brief but genuine note extending modifiers to walkers."
+  },
+  {
+    "chunk_id": "74640bba59c2",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "fe89b1cee4b4",
+    "verdict": "upweight",
+    "reason": "Introduces node/edge/walker graph-native model, core OSP fundamentals.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "3c44929def0a",
+    "verdict": "upweight",
+    "reason": "Core example of node creation, root connection with ++>, and typed graph queries.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "43ce1ac70078",
+    "verdict": "keep",
+    "reason": "Lead-in sentence to the node-vs-obj bullets, genuine connective prose."
+  },
+  {
+    "chunk_id": "9a47c6f44e2d",
+    "verdict": "upweight",
+    "reason": "Concise semantics of node, root persistence, [root--<] queries, and type filters.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "f0bbb11b95a4",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "744e7f29a1c8",
+    "verdict": "keep",
+    "reason": "Python-to-Jac concept mapping table, useful summary signal."
+  },
+  {
+    "chunk_id": "ec35467018bb",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "1ba666604eb9",
+    "verdict": "drop",
+    "reason": "Nav-only next-steps link list with no instructional content."
+  },
+  {
+    "chunk_id": "a1c76806d7d4",
+    "verdict": "keep",
+    "reason": "Guide title and framing prose, sets context for the primer."
+  },
+  {
+    "chunk_id": "27038b2789e1",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "3c151b0b2af7",
+    "verdict": "drop",
+    "reason": "Table of contents, nav-only anchor links with no prose."
+  },
+  {
+    "chunk_id": "99a91905dd00",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "b1019c678dcb",
+    "verdict": "keep",
+    "reason": "Genuine introductory prose on what programming is."
+  },
+  {
+    "chunk_id": "e30135c8c74f",
+    "verdict": "keep",
+    "reason": "Lead-in prose framing Jac's two programming paradigms."
+  },
+  {
+    "chunk_id": "955cf8e0da4f",
+    "verdict": "keep",
+    "reason": "Names the traditional-vs-OSP paradigm split, genuine content."
+  },
+  {
+    "chunk_id": "a742c48fee17",
+    "verdict": "keep",
+    "reason": "Short connective prose leading into the OSP analogy."
+  },
+  {
+    "chunk_id": "a0fbdccbd67a",
+    "verdict": "upweight",
+    "reason": "The data-to-computation vs computation-to-data analogy is the core OSP intuition.",
+    "weight": 2.0
+  }
+]

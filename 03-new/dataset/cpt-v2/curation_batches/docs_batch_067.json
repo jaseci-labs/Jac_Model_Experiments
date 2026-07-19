@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "063124afee4c",
+    "verdict": "keep",
+    "reason": "Concrete runnable Jac example of native math module usage."
+  },
+  {
+    "chunk_id": "9d5e9422baf6",
+    "verdict": "keep",
+    "reason": "Genuine prose documenting time module lowering semantics."
+  },
+  {
+    "chunk_id": "420f819969bc",
+    "verdict": "keep",
+    "reason": "Informative feature table for the native time module."
+  },
+  {
+    "chunk_id": "ba2a0b456096",
+    "verdict": "keep",
+    "reason": "Informative feature table for sys module on the native pathway."
+  },
+  {
+    "chunk_id": "424e79a77b12",
+    "verdict": "keep",
+    "reason": "Short but substantive note on sys.argv behavior across autonative and nacompile."
+  },
+  {
+    "chunk_id": "05356822a3f3",
+    "verdict": "keep",
+    "reason": "Genuine prose on os/os.path lowering and getenv None semantics."
+  },
+  {
+    "chunk_id": "d8969ef5335b",
+    "verdict": "keep",
+    "reason": "Informative os function table with return types and behavior."
+  },
+  {
+    "chunk_id": "c827a635648e",
+    "verdict": "keep",
+    "reason": "Informative os.path function table with implementation notes."
+  },
+  {
+    "chunk_id": "ea9af55089a6",
+    "verdict": "keep",
+    "reason": "One line but carries real coverage information (functions not yet lowered)."
+  },
+  {
+    "chunk_id": "25b1c771a255",
+    "verdict": "keep",
+    "reason": "Substantive documentation of MT19937 reproducibility across pathways."
+  },
+  {
+    "chunk_id": "97b32df9a5d0",
+    "verdict": "keep",
+    "reason": "Informative random module feature table with algorithmic details."
+  },
+  {
+    "chunk_id": "6f9419a93b35",
+    "verdict": "keep",
+    "reason": "Concrete Jac example demonstrating seeded random reproducibility."
+  },
+  {
+    "chunk_id": "349bf3b16575",
+    "verdict": "keep",
+    "reason": "Concrete Jac example of sys.argv iteration and membership test."
+  },
+  {
+    "chunk_id": "3c204594ca01",
+    "verdict": "keep",
+    "reason": "Shell session showing nacompile build and argv output, pairs with the example."
+  },
+  {
+    "chunk_id": "559aa21289be",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "a126f177c63c",
+    "verdict": "keep",
+    "reason": "Genuine section intro explaining C library interop via import from."
+  },
+  {
+    "chunk_id": "f03b34372186",
+    "verdict": "keep",
+    "reason": "Concrete Jac example of C FFI import from libm with typed declarations."
+  },
+  {
+    "chunk_id": "b42b97d1bed0",
+    "verdict": "keep",
+    "reason": "Substantive explanation of ABI fixed-width types vs standard Jac types."
+  },
+  {
+    "chunk_id": "1283254fd93b",
+    "verdict": "keep",
+    "reason": "Genuine prose on logical library names and cross-platform resolution."
+  },
+  {
+    "chunk_id": "36548d2392e9",
+    "verdict": "keep",
+    "reason": "Concrete Jac example of logical-name FFI declarations for raylib."
+  },
+  {
+    "chunk_id": "4baad7803bac",
+    "verdict": "keep",
+    "reason": "Substantive explanation of per-platform library name resolution and runpath behavior."
+  },
+  {
+    "chunk_id": "4bea1b5cfb7e",
+    "verdict": "keep",
+    "reason": "Real detail on str lowering to i8* for C-string parameters."
+  },
+  {
+    "chunk_id": "d8aad0e9ec85",
+    "verdict": "drop",
+    "reason": "One-line transitional lead-in with no standalone content."
+  },
+  {
+    "chunk_id": "ef408fb381cf",
+    "verdict": "keep",
+    "reason": "Informative table of relative FFI import forms and search scopes."
+  },
+  {
+    "chunk_id": "2c665eceda4a",
+    "verdict": "keep",
+    "reason": "Substantive explanation of dotted relative library lookup semantics."
+  },
+  {
+    "chunk_id": "4ecfaa45b64d",
+    "verdict": "keep",
+    "reason": "Genuine section intro on pinned literal library paths."
+  },
+  {
+    "chunk_id": "1b82bc71c3c8",
+    "verdict": "keep",
+    "reason": "Concrete Jac example of a pinned versioned library import."
+  },
+  {
+    "chunk_id": "e22a3c1eeebb",
+    "verdict": "keep",
+    "reason": "Real guidance contrasting logical-name and explicit-path forms."
+  },
+  {
+    "chunk_id": "0eb0bc66d9f3",
+    "verdict": "keep",
+    "reason": "Substantive admonition on when to prefer each import form."
+  },
+  {
+    "chunk_id": "83e6a4c6e80c",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "d8888270052e",
+    "verdict": "keep",
+    "reason": "Informative platform support matrix for native compilation."
+  },
+  {
+    "chunk_id": "c2d0a9898919",
+    "verdict": "keep",
+    "reason": "Real detail on auto-detected targets and self-contained binary formats."
+  },
+  {
+    "chunk_id": "defe0811c06d",
+    "verdict": "keep",
+    "reason": "Substantive note on automatic ad-hoc code signing on Apple Silicon."
+  },
+  {
+    "chunk_id": "ab5649c964d1",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "1095ccd24e26",
+    "verdict": "keep",
+    "reason": "Genuine intro to native memory management and gc mode selection."
+  },
+  {
+    "chunk_id": "66f37a6b9fe8",
+    "verdict": "keep",
+    "reason": "Informative table detailing what each gc mode emits."
+  },
+  {
+    "chunk_id": "67572cca5921",
+    "verdict": "keep",
+    "reason": "Substantive explanation of refcount lifecycle, drop hooks, and JAC_NO_GC."
+  },
+  {
+    "chunk_id": "c9d17319b630",
+    "verdict": "keep",
+    "reason": "Real detail on arena region allocation composing with reference counting."
+  },
+  {
+    "chunk_id": "d3139af9ffb6",
+    "verdict": "keep",
+    "reason": "Genuine intro to zero-RC ownership compilation as a compile-time contract."
+  },
+  {
+    "chunk_id": "d2118dc1ddb0",
+    "verdict": "keep",
+    "reason": "Substantive detail on nogc enforcement, headerless codegen, and assert-no-rc."
+  },
+  {
+    "chunk_id": "e1c0224d0eaf",
+    "verdict": "keep",
+    "reason": "Concrete command line demonstrating the zero-RC build flags."
+  },
+  {
+    "chunk_id": "cb6a70497fdc",
+    "verdict": "drop",
+    "reason": "One-line transitional lead-in with no standalone content."
+  },
+  {
+    "chunk_id": "ab0787f5ea4a",
+    "verdict": "keep",
+    "reason": "Dense substantive notes on the managed() membrane, region rejection, and grandfathering."
+  },
+  {
+    "chunk_id": "883a3aa35093",
+    "verdict": "keep",
+    "reason": "Real documentation of the JAC_RC_STATS coverage output."
+  },
+  {
+    "chunk_id": "4a859f8384ad",
+    "verdict": "keep",
+    "reason": "Concrete example of the rc-stats output line, pairs with its prose."
+  },
+  {
+    "chunk_id": "450078cbf96f",
+    "verdict": "keep",
+    "reason": "Real detail linking the rc-free tag to the assert-no-rc check."
+  },
+  {
+    "chunk_id": "c5caf7d159bc",
+    "verdict": "keep",
+    "reason": "Substantive documentation of reserved __rc_* intrinsic dispatch semantics."
+  },
+  {
+    "chunk_id": "1d926f446bb5",
+    "verdict": "keep",
+    "reason": "Real detail on native-only hooks and Python-backend diagnostics."
+  },
+  {
+    "chunk_id": "713a9969a26d",
+    "verdict": "keep",
+    "reason": "Substantive explanation of move-based refcount elision semantics."
+  },
+  {
+    "chunk_id": "5d495d07d491",
+    "verdict": "keep",
+    "reason": "Real compiler-internals detail on RcFactsPass liveness proof and lowering."
+  }
+]

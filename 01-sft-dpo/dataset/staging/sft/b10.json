@@ -1,0 +1,850 @@
+{
+ "batch_id": "b10",
+ "generator": "fable-agent-v1",
+ "examples": [
+  {
+   "name": "subtree_node_count",
+   "category": "graph_osp",
+   "subcategory": "recursive_spawn",
+   "difficulty": "simple",
+   "py": "def subtree_node_count(spec: dict) -> int:\n    \"\"\"Count the nodes in the subtree rooted at base.\"\"\"\n    total = 1\n    for c in spec[\"kids\"].get(spec[\"base\"], []):\n        total += subtree_node_count({\"kids\": spec[\"kids\"], \"base\": c})\n    return total",
+   "jac": "node Limb { has name: str; }\n\nwalker LimbCount {\n    has count: int = 0;\n    can tally with Limb entry {\n        self.count = 1;\n        for c in [-->] { self.count += (c spawn LimbCount()).count; }\n    }\n}\n\ndef subtree_node_count(spec: dict) -> int {\n    kids: dict = dict(spec[\"kids\"]);\n    nodes: dict = {};\n    for (p, cs) in kids.items() {\n        if p not in nodes { nodes[p] = Limb(name=str(p)); }\n        for c in cs { if c not in nodes { nodes[c] = Limb(name=str(c)); } }\n    }\n    base: str = str(spec[\"base\"]);\n    if base not in nodes { nodes[base] = Limb(name=base); }\n    for (p, cs) in kids.items() { for c in cs { nodes[p] ++> nodes[c]; } }\n    return (nodes[base] spawn LimbCount()).count;\n}\n\nwith entry { print(subtree_node_count({\"kids\": {\"a\": [\"b\", \"c\"], \"b\": [\"d\"]}, \"base\": \"a\"})); }",
+   "expected_output": "4",
+   "cases": [
+    {
+     "input": {
+      "kids": {
+       "a": [
+        "b",
+        "c"
+       ],
+       "b": [
+        "d"
+       ]
+      },
+      "base": "a"
+     },
+     "output": "4"
+    },
+    {
+     "input": {
+      "kids": {
+       "a": [
+        "b",
+        "c"
+       ],
+       "b": [
+        "d"
+       ]
+      },
+      "base": "b"
+     },
+     "output": "2"
+    },
+    {
+     "input": {
+      "kids": {
+       "solo": []
+      },
+      "base": "solo"
+     },
+     "output": "1"
+    }
+   ]
+  },
+  {
+   "name": "branch_total",
+   "category": "graph_osp",
+   "subcategory": "subtree_aggregate",
+   "difficulty": "simple",
+   "py": "def branch_total(spec: dict) -> int:\n    \"\"\"Sum the values across the subtree rooted at base.\"\"\"\n    total = spec[\"vals\"][spec[\"base\"]]\n    for c in spec[\"kids\"].get(spec[\"base\"], []):\n        total += branch_total({\"kids\": spec[\"kids\"], \"vals\": spec[\"vals\"], \"base\": c})\n    return total",
+   "jac": "node Bough { has name: str; has val: int; }\n\nwalker BoughSum {\n    has total: int = 0;\n    can add with Bough entry {\n        self.total = here.val;\n        for c in [-->] { self.total += (c spawn BoughSum()).total; }\n    }\n}\n\ndef branch_total(spec: dict) -> int {\n    kids: dict = dict(spec[\"kids\"]); vals: dict = dict(spec[\"vals\"]);\n    nodes: dict = {};\n    for nm in vals.keys() { nodes[nm] = Bough(name=str(nm), val=int(vals[nm])); }\n    for (p, cs) in kids.items() { for c in cs { nodes[p] ++> nodes[c]; } }\n    return (nodes[spec[\"base\"]] spawn BoughSum()).total;\n}\n\nwith entry { print(branch_total({\"kids\": {\"m\": [\"p\", \"q\"], \"q\": [\"r\"]}, \"vals\": {\"m\": 5, \"p\": 3, \"q\": 2, \"r\": 10}, \"base\": \"m\"})); }",
+   "expected_output": "20",
+   "cases": [
+    {
+     "input": {
+      "kids": {
+       "m": [
+        "p",
+        "q"
+       ],
+       "q": [
+        "r"
+       ]
+      },
+      "vals": {
+       "m": 5,
+       "p": 3,
+       "q": 2,
+       "r": 10
+      },
+      "base": "m"
+     },
+     "output": "20"
+    },
+    {
+     "input": {
+      "kids": {
+       "m": [
+        "p",
+        "q"
+       ],
+       "q": [
+        "r"
+       ]
+      },
+      "vals": {
+       "m": 5,
+       "p": 3,
+       "q": 2,
+       "r": 10
+      },
+      "base": "q"
+     },
+     "output": "12"
+    },
+    {
+     "input": {
+      "kids": {
+       "x": [
+        "y"
+       ]
+      },
+      "vals": {
+       "x": -4,
+       "y": 9
+      },
+      "base": "x"
+     },
+     "output": "5"
+    }
+   ]
+  },
+  {
+   "name": "tree_height",
+   "category": "graph_osp",
+   "subcategory": "recursive_spawn",
+   "difficulty": "simple",
+   "py": "def tree_height(spec: dict) -> int:\n    \"\"\"Number of nodes on the longest downward path from base.\"\"\"\n    best = 0\n    for c in spec[\"kids\"].get(spec[\"base\"], []):\n        h = tree_height({\"kids\": spec[\"kids\"], \"base\": c})\n        if h > best:\n            best = h\n    return best + 1",
+   "jac": "node Rise { has name: str; }\n\nwalker HeightProbe {\n    has h: int = 0;\n    can climb with Rise entry {\n        best = 0;\n        for c in [-->] {\n            d = (c spawn HeightProbe()).h;\n            if d > best { best = d; }\n        }\n        self.h = best + 1;\n    }\n}\n\ndef tree_height(spec: dict) -> int {\n    kids: dict = dict(spec[\"kids\"]);\n    nodes: dict = {};\n    for (p, cs) in kids.items() {\n        if p not in nodes { nodes[p] = Rise(name=str(p)); }\n        for c in cs { if c not in nodes { nodes[c] = Rise(name=str(c)); } }\n    }\n    base: str = str(spec[\"base\"]);\n    if base not in nodes { nodes[base] = Rise(name=base); }\n    for (p, cs) in kids.items() { for c in cs { nodes[p] ++> nodes[c]; } }\n    return (nodes[base] spawn HeightProbe()).h;\n}\n\nwith entry { print(tree_height({\"kids\": {\"t\": [\"u\", \"v\"], \"v\": [\"w\"], \"w\": [\"x\"]}, \"base\": \"t\"})); }",
+   "expected_output": "4",
+   "cases": [
+    {
+     "input": {
+      "kids": {
+       "t": [
+        "u",
+        "v"
+       ],
+       "v": [
+        "w"
+       ],
+       "w": [
+        "x"
+       ]
+      },
+      "base": "t"
+     },
+     "output": "4"
+    },
+    {
+     "input": {
+      "kids": {
+       "t": [
+        "u",
+        "v"
+       ],
+       "v": [
+        "w"
+       ],
+       "w": [
+        "x"
+       ]
+      },
+      "base": "v"
+     },
+     "output": "3"
+    },
+    {
+     "input": {
+      "kids": {
+       "one": []
+      },
+      "base": "one"
+     },
+     "output": "1"
+    }
+   ]
+  },
+  {
+   "name": "leaf_tally",
+   "category": "graph_osp",
+   "subcategory": "recursive_spawn",
+   "difficulty": "simple",
+   "py": "def leaf_tally(spec: dict) -> int:\n    \"\"\"Count the leaf nodes in the subtree rooted at base.\"\"\"\n    kids = spec[\"kids\"].get(spec[\"base\"], [])\n    if not kids:\n        return 1\n    total = 0\n    for c in kids:\n        total += leaf_tally({\"kids\": spec[\"kids\"], \"base\": c})\n    return total",
+   "jac": "node Twig { has name: str; }\n\nwalker LeafScan {\n    has n: int = 0;\n    can scan with Twig entry {\n        children = [-->];\n        if not children { self.n = 1; }\n        else {\n            for c in children { self.n += (c spawn LeafScan()).n; }\n        }\n    }\n}\n\ndef leaf_tally(spec: dict) -> int {\n    kids: dict = dict(spec[\"kids\"]);\n    nodes: dict = {};\n    for (p, cs) in kids.items() {\n        if p not in nodes { nodes[p] = Twig(name=str(p)); }\n        for c in cs { if c not in nodes { nodes[c] = Twig(name=str(c)); } }\n    }\n    base: str = str(spec[\"base\"]);\n    if base not in nodes { nodes[base] = Twig(name=base); }\n    for (p, cs) in kids.items() { for c in cs { nodes[p] ++> nodes[c]; } }\n    return (nodes[base] spawn LeafScan()).n;\n}\n\nwith entry { print(leaf_tally({\"kids\": {\"a\": [\"b\", \"c\", \"d\"], \"c\": [\"e\", \"f\"]}, \"base\": \"a\"})); }",
+   "expected_output": "4",
+   "cases": [
+    {
+     "input": {
+      "kids": {
+       "a": [
+        "b",
+        "c",
+        "d"
+       ],
+       "c": [
+        "e",
+        "f"
+       ]
+      },
+      "base": "a"
+     },
+     "output": "4"
+    },
+    {
+     "input": {
+      "kids": {
+       "a": [
+        "b",
+        "c",
+        "d"
+       ],
+       "c": [
+        "e",
+        "f"
+       ]
+      },
+      "base": "c"
+     },
+     "output": "2"
+    },
+    {
+     "input": {
+      "kids": {
+       "z": []
+      },
+      "base": "z"
+     },
+     "output": "1"
+    }
+   ]
+  },
+  {
+   "name": "best_root_leaf_sum",
+   "category": "graph_osp",
+   "subcategory": "divide_conquer",
+   "difficulty": "composed",
+   "py": "def best_root_leaf_sum(spec: dict) -> int:\n    \"\"\"Largest base-to-leaf path sum in the subtree rooted at base.\"\"\"\n    v = spec[\"vals\"][spec[\"base\"]]\n    kids = spec[\"kids\"].get(spec[\"base\"], [])\n    if not kids:\n        return v\n    best = None\n    for c in kids:\n        s = best_root_leaf_sum({\"kids\": spec[\"kids\"], \"vals\": spec[\"vals\"], \"base\": c})\n        if best is None or s > best:\n            best = s\n    return v + best",
+   "jac": "node Crest { has name: str; has val: int; }\n\nwalker CrestMax {\n    has best: int = 0;\n    can rise with Crest entry {\n        children = [-->];\n        if not children { self.best = here.val; }\n        else {\n            top = (children[0] spawn CrestMax()).best;\n            for c in children[1:] {\n                s = (c spawn CrestMax()).best;\n                if s > top { top = s; }\n            }\n            self.best = here.val + top;\n        }\n    }\n}\n\ndef best_root_leaf_sum(spec: dict) -> int {\n    kids: dict = dict(spec[\"kids\"]); vals: dict = dict(spec[\"vals\"]);\n    nodes: dict = {};\n    for nm in vals.keys() { nodes[nm] = Crest(name=str(nm), val=int(vals[nm])); }\n    for (p, cs) in kids.items() { for c in cs { nodes[p] ++> nodes[c]; } }\n    return (nodes[spec[\"base\"]] spawn CrestMax()).best;\n}\n\nwith entry { print(best_root_leaf_sum({\"kids\": {\"a\": [\"b\", \"c\"], \"b\": [\"d\"]}, \"vals\": {\"a\": 1, \"b\": 2, \"c\": 10, \"d\": 100}, \"base\": \"a\"})); }",
+   "expected_output": "103",
+   "cases": [
+    {
+     "input": {
+      "kids": {
+       "a": [
+        "b",
+        "c"
+       ],
+       "b": [
+        "d"
+       ]
+      },
+      "vals": {
+       "a": 1,
+       "b": 2,
+       "c": 10,
+       "d": 100
+      },
+      "base": "a"
+     },
+     "output": "103"
+    },
+    {
+     "input": {
+      "kids": {
+       "a": [
+        "b",
+        "c"
+       ],
+       "b": [
+        "d"
+       ]
+      },
+      "vals": {
+       "a": 1,
+       "b": 2,
+       "c": 10,
+       "d": 3
+      },
+      "base": "a"
+     },
+     "output": "11"
+    },
+    {
+     "input": {
+      "kids": {
+       "r": [
+        "s"
+       ]
+      },
+      "vals": {
+       "r": 5,
+       "s": -2
+      },
+      "base": "r"
+     },
+     "output": "3"
+    }
+   ]
+  },
+  {
+   "name": "deepest_leaf_name",
+   "category": "graph_osp",
+   "subcategory": "divide_conquer",
+   "difficulty": "composed",
+   "py": "def deepest_leaf_name(spec: dict) -> str:\n    \"\"\"Name of the deepest leaf under base; ties break to the smaller name.\"\"\"\n    kids = spec[\"kids\"]\n    stack = [(spec[\"base\"], 0)]\n    best_d = -1\n    best_n = \"\"\n    while stack:\n        cur, d = stack.pop()\n        cs = kids.get(cur, [])\n        if not cs:\n            if d > best_d or (d == best_d and cur < best_n):\n                best_d = d\n                best_n = cur\n        else:\n            for c in cs:\n                stack.append((c, d + 1))\n    return best_n",
+   "jac": "node Frond { has name: str; }\n\nwalker DeepProbe {\n    has depth: int = 0;\n    has leaf: str = \"\";\n    can seek with Frond entry {\n        children = [-->];\n        if not children { self.depth = 0; self.leaf = here.name; }\n        else {\n            bd = -1; bn = \"\";\n            for c in children {\n                w = c spawn DeepProbe();\n                cd = w.depth + 1;\n                if cd > bd or (cd == bd and w.leaf < bn) { bd = cd; bn = w.leaf; }\n            }\n            self.depth = bd; self.leaf = bn;\n        }\n    }\n}\n\ndef deepest_leaf_name(spec: dict) -> str {\n    kids: dict = dict(spec[\"kids\"]);\n    nodes: dict = {};\n    for (p, cs) in kids.items() {\n        if p not in nodes { nodes[p] = Frond(name=str(p)); }\n        for c in cs { if c not in nodes { nodes[c] = Frond(name=str(c)); } }\n    }\n    base: str = str(spec[\"base\"]);\n    if base not in nodes { nodes[base] = Frond(name=base); }\n    for (p, cs) in kids.items() { for c in cs { nodes[p] ++> nodes[c]; } }\n    return (nodes[base] spawn DeepProbe()).leaf;\n}\n\nwith entry { print(deepest_leaf_name({\"kids\": {\"a\": [\"b\", \"c\"], \"b\": [\"d\"], \"c\": [\"e\"]}, \"base\": \"a\"})); }",
+   "expected_output": "d",
+   "cases": [
+    {
+     "input": {
+      "kids": {
+       "a": [
+        "b",
+        "c"
+       ],
+       "b": [
+        "d"
+       ],
+       "c": [
+        "e"
+       ]
+      },
+      "base": "a"
+     },
+     "output": "d"
+    },
+    {
+     "input": {
+      "kids": {
+       "a": [
+        "b",
+        "c"
+       ],
+       "c": [
+        "e"
+       ],
+       "e": [
+        "f"
+       ]
+      },
+      "base": "a"
+     },
+     "output": "f"
+    },
+    {
+     "input": {
+      "kids": {
+       "m": []
+      },
+      "base": "m"
+     },
+     "output": "m"
+    }
+   ]
+  },
+  {
+   "name": "child_branch_sums",
+   "category": "graph_osp",
+   "subcategory": "subtree_aggregate",
+   "difficulty": "composed",
+   "py": "def child_branch_sums(spec: dict) -> dict:\n    \"\"\"Map each direct child of base to the value sum of its subtree.\"\"\"\n    kids = spec[\"kids\"]\n    vals = spec[\"vals\"]\n    out = {}\n    for ch in sorted(kids.get(spec[\"base\"], [])):\n        total = 0\n        stack = [ch]\n        while stack:\n            cur = stack.pop()\n            total += vals[cur]\n            stack.extend(kids.get(cur, []))\n        out[ch] = total\n    return out",
+   "jac": "node Arm { has name: str; has val: int; }\n\nwalker ArmSum {\n    has total: int = 0;\n    can add with Arm entry {\n        self.total = here.val;\n        for c in [-->] { self.total += (c spawn ArmSum()).total; }\n    }\n}\n\ndef child_branch_sums(spec: dict) -> dict {\n    kids: dict = dict(spec[\"kids\"]); vals: dict = dict(spec[\"vals\"]);\n    nodes: dict = {};\n    for nm in vals.keys() { nodes[nm] = Arm(name=str(nm), val=int(vals[nm])); }\n    for (p, cs) in kids.items() { for c in cs { nodes[p] ++> nodes[c]; } }\n    out: dict = {};\n    for ch in sorted(kids.get(spec[\"base\"], [])) {\n        out[ch] = (nodes[ch] spawn ArmSum()).total;\n    }\n    return out;\n}\n\nwith entry { print(child_branch_sums({\"kids\": {\"h\": [\"p\", \"q\"], \"p\": [\"x\"]}, \"vals\": {\"h\": 1, \"p\": 2, \"x\": 3, \"q\": 7}, \"base\": \"h\"})); }",
+   "expected_output": "{'p': 5, 'q': 7}",
+   "cases": [
+    {
+     "input": {
+      "kids": {
+       "h": [
+        "p",
+        "q"
+       ],
+       "p": [
+        "x"
+       ]
+      },
+      "vals": {
+       "h": 1,
+       "p": 2,
+       "x": 3,
+       "q": 7
+      },
+      "base": "h"
+     },
+     "output": "{'p': 5, 'q': 7}"
+    },
+    {
+     "input": {
+      "kids": {
+       "h": [
+        "b",
+        "a"
+       ]
+      },
+      "vals": {
+       "h": 0,
+       "a": 4,
+       "b": 6
+      },
+      "base": "h"
+     },
+     "output": "{'a': 4, 'b': 6}"
+    },
+    {
+     "input": {
+      "kids": {
+       "solo": []
+      },
+      "vals": {
+       "solo": 9
+      },
+      "base": "solo"
+     },
+     "output": "{}"
+    }
+   ]
+  },
+  {
+   "name": "arms_balanced",
+   "category": "graph_osp",
+   "subcategory": "subtree_aggregate",
+   "difficulty": "composed",
+   "py": "def arms_balanced(spec: dict) -> bool:\n    \"\"\"True when every direct child of base heads a subtree of the same node count.\"\"\"\n    kids = spec[\"kids\"]\n    sizes = []\n    for ch in kids.get(spec[\"base\"], []):\n        n = 0\n        stack = [ch]\n        while stack:\n            cur = stack.pop()\n            n += 1\n            stack.extend(kids.get(cur, []))\n        sizes.append(n)\n    return len(set(sizes)) <= 1",
+   "jac": "node Prong { has name: str; }\n\nwalker ProngSize {\n    has n: int = 0;\n    can count with Prong entry {\n        self.n = 1;\n        for c in [-->] { self.n += (c spawn ProngSize()).n; }\n    }\n}\n\ndef arms_balanced(spec: dict) -> bool {\n    kids: dict = dict(spec[\"kids\"]);\n    nodes: dict = {};\n    for (p, cs) in kids.items() {\n        if p not in nodes { nodes[p] = Prong(name=str(p)); }\n        for c in cs { if c not in nodes { nodes[c] = Prong(name=str(c)); } }\n    }\n    base: str = str(spec[\"base\"]);\n    if base not in nodes { nodes[base] = Prong(name=base); }\n    for (p, cs) in kids.items() { for c in cs { nodes[p] ++> nodes[c]; } }\n    sizes: list = [];\n    for ch in kids.get(base, []) { sizes.append((nodes[ch] spawn ProngSize()).n); }\n    return len(set(sizes)) <= 1;\n}\n\nwith entry { print(arms_balanced({\"kids\": {\"c\": [\"l\", \"r\"], \"l\": [\"l1\"], \"r\": [\"r1\"]}, \"base\": \"c\"})); }",
+   "expected_output": "True",
+   "cases": [
+    {
+     "input": {
+      "kids": {
+       "c": [
+        "l",
+        "r"
+       ],
+       "l": [
+        "l1"
+       ],
+       "r": [
+        "r1"
+       ]
+      },
+      "base": "c"
+     },
+     "output": "True"
+    },
+    {
+     "input": {
+      "kids": {
+       "c": [
+        "l",
+        "r"
+       ],
+       "l": [
+        "l1",
+        "l2"
+       ]
+      },
+      "base": "c"
+     },
+     "output": "False"
+    },
+    {
+     "input": {
+      "kids": {
+       "lone": []
+      },
+      "base": "lone"
+     },
+     "output": "True"
+    }
+   ]
+  },
+  {
+   "name": "positive_branch_sum",
+   "category": "graph_osp",
+   "subcategory": "divide_conquer",
+   "difficulty": "composed",
+   "py": "def positive_branch_sum(spec: dict) -> int:\n    \"\"\"Subtree sum where any child branch with a non-positive total is pruned.\"\"\"\n    total = spec[\"vals\"][spec[\"base\"]]\n    for c in spec[\"kids\"].get(spec[\"base\"], []):\n        sub = positive_branch_sum({\"kids\": spec[\"kids\"], \"vals\": spec[\"vals\"], \"base\": c})\n        if sub > 0:\n            total += sub\n    return total",
+   "jac": "node Vine { has name: str; has val: int; }\n\nwalker VineSum {\n    has total: int = 0;\n    can add with Vine entry {\n        self.total = here.val;\n        for c in [-->] {\n            s = (c spawn VineSum()).total;\n            if s > 0 { self.total += s; }\n        }\n    }\n}\n\ndef positive_branch_sum(spec: dict) -> int {\n    kids: dict = dict(spec[\"kids\"]); vals: dict = dict(spec[\"vals\"]);\n    nodes: dict = {};\n    for nm in vals.keys() { nodes[nm] = Vine(name=str(nm), val=int(vals[nm])); }\n    for (p, cs) in kids.items() { for c in cs { nodes[p] ++> nodes[c]; } }\n    return (nodes[spec[\"base\"]] spawn VineSum()).total;\n}\n\nwith entry { print(positive_branch_sum({\"kids\": {\"a\": [\"b\", \"c\"]}, \"vals\": {\"a\": 10, \"b\": -5, \"c\": 3}, \"base\": \"a\"})); }",
+   "expected_output": "13",
+   "cases": [
+    {
+     "input": {
+      "kids": {
+       "a": [
+        "b",
+        "c"
+       ]
+      },
+      "vals": {
+       "a": 10,
+       "b": -5,
+       "c": 3
+      },
+      "base": "a"
+     },
+     "output": "13"
+    },
+    {
+     "input": {
+      "kids": {
+       "a": [
+        "b"
+       ],
+       "b": [
+        "c"
+       ]
+      },
+      "vals": {
+       "a": 1,
+       "b": -10,
+       "c": 4
+      },
+      "base": "a"
+     },
+     "output": "1"
+    },
+    {
+     "input": {
+      "kids": {
+       "a": [
+        "b"
+       ]
+      },
+      "vals": {
+       "a": 2,
+       "b": 2
+      },
+      "base": "a"
+     },
+     "output": "4"
+    }
+   ]
+  },
+  {
+   "name": "level_signed_sum",
+   "category": "graph_osp",
+   "subcategory": "spawn_dispatch",
+   "difficulty": "composed",
+   "py": "def level_signed_sum(spec: dict) -> int:\n    \"\"\"Alternating-level sum: the base level adds, the next subtracts, and so on.\"\"\"\n    total = 0\n    stack = [(spec[\"base\"], 1)]\n    while stack:\n        cur, sign = stack.pop()\n        total += sign * spec[\"vals\"][cur]\n        for c in spec[\"kids\"].get(cur, []):\n            stack.append((c, -sign))\n    return total",
+   "jac": "node Tier { has name: str; has val: int; }\n\nwalker WaveSum {\n    has sign: int = 1;\n    has total: int = 0;\n    can sweep with Tier entry {\n        self.total = self.sign * here.val;\n        for c in [-->] { self.total += (c spawn WaveSum(sign=-self.sign)).total; }\n    }\n}\n\ndef level_signed_sum(spec: dict) -> int {\n    kids: dict = dict(spec[\"kids\"]); vals: dict = dict(spec[\"vals\"]);\n    nodes: dict = {};\n    for nm in vals.keys() { nodes[nm] = Tier(name=str(nm), val=int(vals[nm])); }\n    for (p, cs) in kids.items() { for c in cs { nodes[p] ++> nodes[c]; } }\n    return (nodes[spec[\"base\"]] spawn WaveSum(sign=1)).total;\n}\n\nwith entry { print(level_signed_sum({\"kids\": {\"a\": [\"b\", \"c\"], \"b\": [\"d\"]}, \"vals\": {\"a\": 10, \"b\": 1, \"c\": 2, \"d\": 5}, \"base\": \"a\"})); }",
+   "expected_output": "12",
+   "cases": [
+    {
+     "input": {
+      "kids": {
+       "a": [
+        "b",
+        "c"
+       ],
+       "b": [
+        "d"
+       ]
+      },
+      "vals": {
+       "a": 10,
+       "b": 1,
+       "c": 2,
+       "d": 5
+      },
+      "base": "a"
+     },
+     "output": "12"
+    },
+    {
+     "input": {
+      "kids": {
+       "a": [
+        "b",
+        "c"
+       ],
+       "b": [
+        "d"
+       ]
+      },
+      "vals": {
+       "a": 10,
+       "b": 1,
+       "c": 2,
+       "d": 5
+      },
+      "base": "b"
+     },
+     "output": "-4"
+    },
+    {
+     "input": {
+      "kids": {
+       "n": []
+      },
+      "vals": {
+       "n": 7
+      },
+      "base": "n"
+     },
+     "output": "7"
+    }
+   ]
+  },
+  {
+   "name": "leaf_label_merge",
+   "category": "graph_osp",
+   "subcategory": "subtree_aggregate",
+   "difficulty": "composed",
+   "py": "def leaf_label_merge(spec: dict) -> list:\n    \"\"\"Sorted names of every leaf in the subtree rooted at base.\"\"\"\n    kids = spec[\"kids\"].get(spec[\"base\"], [])\n    if not kids:\n        return [spec[\"base\"]]\n    out = []\n    for c in kids:\n        out.extend(leaf_label_merge({\"kids\": spec[\"kids\"], \"base\": c}))\n    return sorted(out)",
+   "jac": "node Sprig { has name: str; }\n\nwalker LeafGather {\n    has found: list = [];\n    can gather with Sprig entry {\n        children = [-->];\n        if not children { self.found = [here.name]; }\n        else {\n            acc = [];\n            for c in children { acc.extend((c spawn LeafGather()).found); }\n            self.found = sorted(acc);\n        }\n    }\n}\n\ndef leaf_label_merge(spec: dict) -> list {\n    kids: dict = dict(spec[\"kids\"]);\n    nodes: dict = {};\n    for (p, cs) in kids.items() {\n        if p not in nodes { nodes[p] = Sprig(name=str(p)); }\n        for c in cs { if c not in nodes { nodes[c] = Sprig(name=str(c)); } }\n    }\n    base: str = str(spec[\"base\"]);\n    if base not in nodes { nodes[base] = Sprig(name=base); }\n    for (p, cs) in kids.items() { for c in cs { nodes[p] ++> nodes[c]; } }\n    return (nodes[base] spawn LeafGather()).found;\n}\n\nwith entry { print(leaf_label_merge({\"kids\": {\"a\": [\"c\", \"b\"], \"c\": [\"e\", \"d\"]}, \"base\": \"a\"})); }",
+   "expected_output": "['b', 'd', 'e']",
+   "cases": [
+    {
+     "input": {
+      "kids": {
+       "a": [
+        "c",
+        "b"
+       ],
+       "c": [
+        "e",
+        "d"
+       ]
+      },
+      "base": "a"
+     },
+     "output": "['b', 'd', 'e']"
+    },
+    {
+     "input": {
+      "kids": {
+       "a": [
+        "c",
+        "b"
+       ],
+       "c": [
+        "e",
+        "d"
+       ]
+      },
+      "base": "c"
+     },
+     "output": "['d', 'e']"
+    },
+    {
+     "input": {
+      "kids": {
+       "w": []
+      },
+      "base": "w"
+     },
+     "output": "['w']"
+    }
+   ]
+  },
+  {
+   "name": "unique_dep_cost",
+   "category": "graph_osp",
+   "subcategory": "dag_memo_spawn",
+   "difficulty": "advanced",
+   "py": "def unique_dep_cost(spec: dict) -> int:\n    \"\"\"Total cost of base plus all transitive deps, each package counted once.\"\"\"\n    deps = spec[\"deps\"]\n    cost = spec[\"cost\"]\n    seen = set()\n    stack = [spec[\"base\"]]\n    total = 0\n    while stack:\n        cur = stack.pop()\n        if cur in seen:\n            continue\n        seen.add(cur)\n        total += cost[cur]\n        stack.extend(deps.get(cur, []))\n    return total",
+   "jac": "node Pkg { has name: str; has cost: int; has counted: bool = False; }\n\nwalker CostUp {\n    has total: int = 0;\n    can add with Pkg entry {\n        if not here.counted {\n            here.counted = True;\n            t = here.cost;\n            for c in [-->] { t += (c spawn CostUp()).total; }\n            self.total = t;\n        }\n    }\n}\n\ndef unique_dep_cost(spec: dict) -> int {\n    deps: dict = dict(spec[\"deps\"]); cost: dict = dict(spec[\"cost\"]);\n    nodes: dict = {};\n    for nm in cost.keys() { nodes[nm] = Pkg(name=str(nm), cost=int(cost[nm]), counted=False); }\n    for (p, cs) in deps.items() { for c in cs { nodes[p] ++> nodes[c]; } }\n    return (nodes[spec[\"base\"]] spawn CostUp()).total;\n}\n\nwith entry { print(unique_dep_cost({\"deps\": {\"app\": [\"lib\", \"ui\"], \"lib\": [\"core\"], \"ui\": [\"core\"]}, \"cost\": {\"app\": 1, \"lib\": 2, \"ui\": 4, \"core\": 8}, \"base\": \"app\"})); }",
+   "expected_output": "15",
+   "cases": [
+    {
+     "input": {
+      "deps": {
+       "app": [
+        "lib",
+        "ui"
+       ],
+       "lib": [
+        "core"
+       ],
+       "ui": [
+        "core"
+       ]
+      },
+      "cost": {
+       "app": 1,
+       "lib": 2,
+       "ui": 4,
+       "core": 8
+      },
+      "base": "app"
+     },
+     "output": "15"
+    },
+    {
+     "input": {
+      "deps": {
+       "app": [
+        "lib",
+        "ui"
+       ],
+       "lib": [
+        "core"
+       ],
+       "ui": [
+        "core"
+       ]
+      },
+      "cost": {
+       "app": 1,
+       "lib": 2,
+       "ui": 4,
+       "core": 8
+      },
+      "base": "ui"
+     },
+     "output": "12"
+    },
+    {
+     "input": {
+      "deps": {
+       "solo": []
+      },
+      "cost": {
+       "solo": 3
+      },
+      "base": "solo"
+     },
+     "output": "3"
+    }
+   ]
+  },
+  {
+   "name": "eval_op_tree",
+   "category": "graph_osp",
+   "subcategory": "divide_conquer",
+   "difficulty": "advanced",
+   "py": "def eval_op_tree(spec: dict) -> int:\n    \"\"\"Evaluate an expression tree of '+' and '*' nodes over integer leaves.\"\"\"\n    kids = spec[\"kids\"].get(spec[\"base\"], [])\n    if not kids:\n        return spec[\"vals\"][spec[\"base\"]]\n    parts = []\n    for c in kids:\n        parts.append(eval_op_tree({\"kids\": spec[\"kids\"], \"ops\": spec[\"ops\"], \"vals\": spec[\"vals\"], \"base\": c}))\n    if spec[\"ops\"][spec[\"base\"]] == \"+\":\n        return sum(parts)\n    out = 1\n    for p in parts:\n        out *= p\n    return out",
+   "jac": "node OpCell { has name: str; has op: str; has val: int; }\n\nwalker EvalCell {\n    has result: int = 0;\n    can fold with OpCell entry {\n        children = [-->];\n        if not children { self.result = here.val; }\n        else {\n            parts = [];\n            for c in children { parts.append((c spawn EvalCell()).result); }\n            if here.op == \"+\" { self.result = sum(parts); }\n            else {\n                r = 1;\n                for p in parts { r *= p; }\n                self.result = r;\n            }\n        }\n    }\n}\n\ndef eval_op_tree(spec: dict) -> int {\n    kids: dict = dict(spec[\"kids\"]); ops: dict = dict(spec[\"ops\"]); vals: dict = dict(spec[\"vals\"]);\n    nodes: dict = {};\n    for (p, cs) in kids.items() {\n        if p not in nodes { nodes[p] = OpCell(name=str(p), op=str(ops.get(p, \"\")), val=int(vals.get(p, 0))); }\n        for c in cs {\n            if c not in nodes { nodes[c] = OpCell(name=str(c), op=str(ops.get(c, \"\")), val=int(vals.get(c, 0))); }\n        }\n    }\n    base: str = str(spec[\"base\"]);\n    if base not in nodes { nodes[base] = OpCell(name=base, op=str(ops.get(base, \"\")), val=int(vals.get(base, 0))); }\n    for (p, cs) in kids.items() { for c in cs { nodes[p] ++> nodes[c]; } }\n    return (nodes[base] spawn EvalCell()).result;\n}\n\nwith entry { print(eval_op_tree({\"kids\": {\"e\": [\"f\", \"g\"], \"f\": [\"x\", \"y\"]}, \"ops\": {\"e\": \"+\", \"f\": \"*\"}, \"vals\": {\"x\": 2, \"y\": 3, \"g\": 4}, \"base\": \"e\"})); }",
+   "expected_output": "10",
+   "cases": [
+    {
+     "input": {
+      "kids": {
+       "e": [
+        "f",
+        "g"
+       ],
+       "f": [
+        "x",
+        "y"
+       ]
+      },
+      "ops": {
+       "e": "+",
+       "f": "*"
+      },
+      "vals": {
+       "x": 2,
+       "y": 3,
+       "g": 4
+      },
+      "base": "e"
+     },
+     "output": "10"
+    },
+    {
+     "input": {
+      "kids": {
+       "e": [
+        "f",
+        "g"
+       ],
+       "f": [
+        "x",
+        "y"
+       ]
+      },
+      "ops": {
+       "e": "*",
+       "f": "+"
+      },
+      "vals": {
+       "x": 2,
+       "y": 3,
+       "g": 4
+      },
+      "base": "e"
+     },
+     "output": "20"
+    },
+    {
+     "input": {
+      "kids": {
+       "n": []
+      },
+      "ops": {},
+      "vals": {
+       "n": 6
+      },
+      "base": "n"
+     },
+     "output": "6"
+    }
+   ]
+  },
+  {
+   "name": "heavy_subtree_count",
+   "category": "graph_osp",
+   "subcategory": "two_phase_spawn",
+   "difficulty": "advanced",
+   "py": "def heavy_subtree_count(spec: dict) -> int:\n    \"\"\"Count nodes whose subtree holds at least half of all nodes under base.\"\"\"\n    kids = spec[\"kids\"]\n    order = []\n    stack = [spec[\"base\"]]\n    while stack:\n        cur = stack.pop()\n        order.append(cur)\n        stack.extend(kids.get(cur, []))\n    size = {}\n    for cur in reversed(order):\n        size[cur] = 1 + sum(size[c] for c in kids.get(cur, []))\n    total = size[spec[\"base\"]]\n    return sum(1 for n in order if 2 * size[n] >= total)",
+   "jac": "node Stone { has name: str; has size: int = 0; }\n\nwalker SizeStamp {\n    has n: int = 0;\n    can mark with Stone entry {\n        t = 1;\n        for c in [-->] { t += (c spawn SizeStamp()).n; }\n        here.size = t;\n        self.n = t;\n    }\n}\n\ndef heavy_subtree_count(spec: dict) -> int {\n    kids: dict = dict(spec[\"kids\"]);\n    nodes: dict = {};\n    for (p, cs) in kids.items() {\n        if p not in nodes { nodes[p] = Stone(name=str(p)); }\n        for c in cs { if c not in nodes { nodes[c] = Stone(name=str(c)); } }\n    }\n    base: str = str(spec[\"base\"]);\n    if base not in nodes { nodes[base] = Stone(name=base); }\n    for (p, cs) in kids.items() { for c in cs { nodes[p] ++> nodes[c]; } }\n    total: int = (nodes[base] spawn SizeStamp()).n;\n    heavy: int = 0;\n    for nd in nodes.values() { if 2 * nd.size >= total { heavy += 1; } }\n    return heavy;\n}\n\nwith entry { print(heavy_subtree_count({\"kids\": {\"a\": [\"b\", \"c\"], \"b\": [\"d\", \"e\"]}, \"base\": \"a\"})); }",
+   "expected_output": "2",
+   "cases": [
+    {
+     "input": {
+      "kids": {
+       "a": [
+        "b",
+        "c"
+       ],
+       "b": [
+        "d",
+        "e"
+       ]
+      },
+      "base": "a"
+     },
+     "output": "2"
+    },
+    {
+     "input": {
+      "kids": {
+       "a": [
+        "b"
+       ],
+       "b": [
+        "c"
+       ],
+       "c": [
+        "d"
+       ]
+      },
+      "base": "a"
+     },
+     "output": "3"
+    },
+    {
+     "input": {
+      "kids": {
+       "s": []
+      },
+      "base": "s"
+     },
+     "output": "1"
+    }
+   ]
+  }
+ ]
+}

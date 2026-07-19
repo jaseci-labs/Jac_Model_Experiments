@@ -1,0 +1,1059 @@
+{
+ "batch_id": "b16",
+ "generator": "fable-agent-v1",
+ "examples": [
+  {
+   "name": "count_ext",
+   "category": "graph_osp",
+   "subcategory": "file_tree",
+   "difficulty": "simple",
+   "py": "def count_ext(spec: dict) -> int:\n    \"\"\"Count files across all folders whose name ends with the extension.\"\"\"\n    total = 0\n    for folder in spec[\"folders\"]:\n        for fname, size in folder[\"files\"]:\n            if fname.endswith(spec[\"ext\"]):\n                total += 1\n    return total",
+   "jac": "node Repo {}\nnode Folder { has name: str; }\nnode File { has name: str, size: int; }\n\nwalker ExtCount {\n    has ext: str;\n    has total: int = 0;\n    can start with Repo entry { visit [-->][?:Folder]; }\n    can scan with Folder entry {\n        for f in [-->][?:File] {\n            if f.name.endswith(self.ext) { self.total += 1; }\n        }\n    }\n}\n\ndef count_ext(spec: dict) -> int {\n    repo = Repo();\n    for folder in spec[\"folders\"] {\n        fo = Folder(name=str(folder[\"name\"]));\n        repo ++> fo;\n        for (fname, size) in folder[\"files\"] {\n            fo ++> File(name=str(fname), size=int(size));\n        }\n    }\n    return (repo spawn ExtCount(ext=str(spec[\"ext\"]))).total;\n}\n\nwith entry { print(count_ext({'folders': [{'name': 'src', 'files': [['main.py', 120], ['util.py', 80], ['notes.md', 10]]}, {'name': 'docs', 'files': [['index.md', 5], ['app.py', 64]]}], 'ext': '.py'})); }",
+   "expected_output": "3",
+   "cases": [
+    {
+     "input": {
+      "folders": [
+       {
+        "name": "src",
+        "files": [
+         [
+          "main.py",
+          120
+         ],
+         [
+          "util.py",
+          80
+         ],
+         [
+          "notes.md",
+          10
+         ]
+        ]
+       },
+       {
+        "name": "docs",
+        "files": [
+         [
+          "index.md",
+          5
+         ],
+         [
+          "app.py",
+          64
+         ]
+        ]
+       }
+      ],
+      "ext": ".py"
+     },
+     "output": "3"
+    },
+    {
+     "input": {
+      "folders": [
+       {
+        "name": "src",
+        "files": [
+         [
+          "a.md",
+          1
+         ],
+         [
+          "b.md",
+          2
+         ]
+        ]
+       }
+      ],
+      "ext": ".py"
+     },
+     "output": "0"
+    },
+    {
+     "input": {
+      "folders": [
+       {
+        "name": "lib",
+        "files": [
+         [
+          "x.md",
+          4
+         ]
+        ]
+       },
+       {
+        "name": "pkg",
+        "files": [
+         [
+          "y.md",
+          6
+         ],
+         [
+          "z.py",
+          9
+         ]
+        ]
+       }
+      ],
+      "ext": ".md"
+     },
+     "output": "2"
+    }
+   ]
+  },
+  {
+   "name": "tree_size",
+   "category": "graph_osp",
+   "subcategory": "file_tree",
+   "difficulty": "composed",
+   "py": "def tree_size(spec: dict) -> int:\n    \"\"\"Total size in bytes of every file in the nested directory tree.\"\"\"\n    total = 0\n    stack = [spec[\"tree\"]]\n    while stack:\n        d = stack.pop()\n        for _, size in d[\"files\"]:\n            total += size\n        stack.extend(d[\"dirs\"])\n    return total",
+   "jac": "node Folder { has name: str; }\nnode File { has name: str, size: int; }\n\nwalker SizeSum {\n    has total: int = 0;\n    can scan with Folder entry {\n        for f in [-->][?:File] { self.total += f.size; }\n        visit [-->][?:Folder];\n    }\n}\n\ndef tree_size(spec: dict) -> int {\n    top = Folder(name=str(spec[\"tree\"][\"name\"]));\n    stack: list = [(spec[\"tree\"], top)];\n    while len(stack) > 0 {\n        item = stack.pop();\n        d = item[0];\n        parent = item[1];\n        for (fname, size) in d[\"files\"] { parent ++> File(name=str(fname), size=int(size)); }\n        for sub in d[\"dirs\"] {\n            child = Folder(name=str(sub[\"name\"]));\n            parent ++> child;\n            stack.append((sub, child));\n        }\n    }\n    return (top spawn SizeSum()).total;\n}\n\nwith entry { print(tree_size({'tree': {'name': 'root', 'files': [['readme.md', 10]], 'dirs': [{'name': 'src', 'files': [['main.py', 120], ['util.py', 20]], 'dirs': [{'name': 'core', 'files': [['engine.py', 200]], 'dirs': []}]}, {'name': 'assets', 'files': [['logo.png', 50]], 'dirs': []}]}})); }",
+   "expected_output": "400",
+   "cases": [
+    {
+     "input": {
+      "tree": {
+       "name": "root",
+       "files": [
+        [
+         "readme.md",
+         10
+        ]
+       ],
+       "dirs": [
+        {
+         "name": "src",
+         "files": [
+          [
+           "main.py",
+           120
+          ],
+          [
+           "util.py",
+           20
+          ]
+         ],
+         "dirs": [
+          {
+           "name": "core",
+           "files": [
+            [
+             "engine.py",
+             200
+            ]
+           ],
+           "dirs": []
+          }
+         ]
+        },
+        {
+         "name": "assets",
+         "files": [
+          [
+           "logo.png",
+           50
+          ]
+         ],
+         "dirs": []
+        }
+       ]
+      }
+     },
+     "output": "400"
+    },
+    {
+     "input": {
+      "tree": {
+       "name": "solo",
+       "files": [
+        [
+         "a.txt",
+         7
+        ],
+        [
+         "b.txt",
+         8
+        ]
+       ],
+       "dirs": []
+      }
+     },
+     "output": "15"
+    },
+    {
+     "input": {
+      "tree": {
+       "name": "empty",
+       "files": [],
+       "dirs": [
+        {
+         "name": "sub",
+         "files": [
+          [
+           "x.bin",
+           999
+          ]
+         ],
+         "dirs": []
+        }
+       ]
+      }
+     },
+     "output": "999"
+    }
+   ]
+  },
+  {
+   "name": "prune_count",
+   "category": "graph_osp",
+   "subcategory": "file_tree",
+   "difficulty": "composed",
+   "py": "def prune_count(spec: dict) -> int:\n    \"\"\"Count files in the tree, skipping excluded folders and their whole subtrees.\"\"\"\n    exclude = set(spec[\"exclude\"])\n    total = 0\n    stack = [spec[\"tree\"]]\n    while stack:\n        d = stack.pop()\n        if d[\"name\"] in exclude:\n            continue\n        total += len(d[\"files\"])\n        stack.extend(d[\"dirs\"])\n    return total",
+   "jac": "node Folder { has name: str; }\nnode File { has name: str; }\n\nwalker PruneCount {\n    has exclude: list;\n    has total: int = 0;\n    can scan with Folder entry {\n        if here.name not in self.exclude {\n            self.total += len([-->][?:File]);\n            visit [-->][?:Folder];\n        }\n    }\n}\n\ndef prune_count(spec: dict) -> int {\n    top = Folder(name=str(spec[\"tree\"][\"name\"]));\n    stack: list = [(spec[\"tree\"], top)];\n    while len(stack) > 0 {\n        item = stack.pop();\n        d = item[0];\n        parent = item[1];\n        for fname in d[\"files\"] { parent ++> File(name=str(fname)); }\n        for sub in d[\"dirs\"] {\n            child = Folder(name=str(sub[\"name\"]));\n            parent ++> child;\n            stack.append((sub, child));\n        }\n    }\n    exclude: list = [str(x) for x in spec[\"exclude\"]];\n    return (top spawn PruneCount(exclude=exclude)).total;\n}\n\nwith entry { print(prune_count({'tree': {'name': 'repo', 'files': ['README.md'], 'dirs': [{'name': 'node_modules', 'files': ['a.js', 'b.js', 'c.js'], 'dirs': [{'name': 'lodash', 'files': ['index.js'], 'dirs': []}]}, {'name': 'src', 'files': ['app.js', 'db.js'], 'dirs': [{'name': '.git', 'files': ['HEAD'], 'dirs': []}]}]}, 'exclude': ['node_modules', '.git']})); }",
+   "expected_output": "3",
+   "cases": [
+    {
+     "input": {
+      "tree": {
+       "name": "repo",
+       "files": [
+        "README.md"
+       ],
+       "dirs": [
+        {
+         "name": "node_modules",
+         "files": [
+          "a.js",
+          "b.js",
+          "c.js"
+         ],
+         "dirs": [
+          {
+           "name": "lodash",
+           "files": [
+            "index.js"
+           ],
+           "dirs": []
+          }
+         ]
+        },
+        {
+         "name": "src",
+         "files": [
+          "app.js",
+          "db.js"
+         ],
+         "dirs": [
+          {
+           "name": ".git",
+           "files": [
+            "HEAD"
+           ],
+           "dirs": []
+          }
+         ]
+        }
+       ]
+      },
+      "exclude": [
+       "node_modules",
+       ".git"
+      ]
+     },
+     "output": "3"
+    },
+    {
+     "input": {
+      "tree": {
+       "name": "repo",
+       "files": [
+        "README.md"
+       ],
+       "dirs": [
+        {
+         "name": "src",
+         "files": [
+          "app.js"
+         ],
+         "dirs": []
+        }
+       ]
+      },
+      "exclude": []
+     },
+     "output": "2"
+    },
+    {
+     "input": {
+      "tree": {
+       "name": "repo",
+       "files": [
+        "README.md"
+       ],
+       "dirs": []
+      },
+      "exclude": [
+       "repo"
+      ]
+     },
+     "output": "0"
+    }
+   ]
+  },
+  {
+   "name": "lang_report",
+   "category": "graph_osp",
+   "subcategory": "file_tree",
+   "difficulty": "advanced",
+   "py": "def lang_report(spec: dict) -> str:\n    \"\"\"Per-extension byte totals for the whole tree, sorted by extension.\"\"\"\n    totals = {}\n    stack = [spec[\"tree\"]]\n    while stack:\n        d = stack.pop()\n        for fname, size in d[\"files\"]:\n            if \".\" in fname:\n                ext = fname.rsplit(\".\", 1)[1]\n            else:\n                ext = \"plain\"\n            totals[ext] = totals.get(ext, 0) + size\n        stack.extend(d[\"dirs\"])\n    parts = []\n    for ext in sorted(totals):\n        parts.append(ext + \"=\" + str(totals[ext]))\n    return \", \".join(parts)",
+   "jac": "node Folder { has name: str; }\nnode File { has name: str, size: int; }\n\nwalker LangTally {\n    has totals: dict = {}, report: str = \"\";\n    can scan with Folder entry { visit [-->]; }\n    can note with File entry {\n        if \".\" in here.name { ext = here.name.rsplit(\".\", 1)[1]; }\n        else { ext = \"plain\"; }\n        self.totals[ext] = self.totals.get(ext, 0) + here.size;\n    }\n    can fmt with exit {\n        parts: list = [];\n        for ext in sorted(self.totals.keys()) {\n            parts.append(ext + \"=\" + str(self.totals[ext]));\n        }\n        self.report = \", \".join(parts);\n    }\n}\n\ndef lang_report(spec: dict) -> str {\n    top = Folder(name=str(spec[\"tree\"][\"name\"]));\n    stack: list = [(spec[\"tree\"], top)];\n    while len(stack) > 0 {\n        item = stack.pop();\n        d = item[0];\n        parent = item[1];\n        for (fname, size) in d[\"files\"] { parent ++> File(name=str(fname), size=int(size)); }\n        for sub in d[\"dirs\"] {\n            child = Folder(name=str(sub[\"name\"]));\n            parent ++> child;\n            stack.append((sub, child));\n        }\n    }\n    return (top spawn LangTally()).report;\n}\n\nwith entry { print(lang_report({'tree': {'name': 'root', 'files': [['readme.md', 10], ['LICENSE', 3]], 'dirs': [{'name': 'src', 'files': [['main.py', 120], ['util.py', 20], ['notes.md', 5]], 'dirs': []}]}})); }",
+   "expected_output": "md=15, plain=3, py=140",
+   "cases": [
+    {
+     "input": {
+      "tree": {
+       "name": "root",
+       "files": [
+        [
+         "readme.md",
+         10
+        ],
+        [
+         "LICENSE",
+         3
+        ]
+       ],
+       "dirs": [
+        {
+         "name": "src",
+         "files": [
+          [
+           "main.py",
+           120
+          ],
+          [
+           "util.py",
+           20
+          ],
+          [
+           "notes.md",
+           5
+          ]
+         ],
+         "dirs": []
+        }
+       ]
+      }
+     },
+     "output": "md=15, plain=3, py=140"
+    },
+    {
+     "input": {
+      "tree": {
+       "name": "root",
+       "files": [
+        [
+         "a.js",
+         30
+        ]
+       ],
+       "dirs": [
+        {
+         "name": "v",
+         "files": [
+          [
+           "b.js",
+           12
+          ]
+         ],
+         "dirs": []
+        }
+       ]
+      }
+     },
+     "output": "js=42"
+    },
+    {
+     "input": {
+      "tree": {
+       "name": "root",
+       "files": [],
+       "dirs": []
+      }
+     },
+     "output": ""
+    }
+   ]
+  },
+  {
+   "name": "ok_count",
+   "category": "graph_osp",
+   "subcategory": "ci_results",
+   "difficulty": "simple",
+   "py": "def ok_count(spec: dict) -> int:\n    \"\"\"Count benchmark results whose status is ok.\"\"\"\n    n = 0\n    for r in spec[\"results\"]:\n        if r[\"status\"] == \"ok\":\n            n += 1\n    return n",
+   "jac": "node Runner {}\nnode Result { has name: str, status: str; }\n\nwalker OkCount {\n    has n: int = 0;\n    can start with Runner entry { visit [-->][?:Result]; }\n    can check with Result entry {\n        if here.status == \"ok\" { self.n += 1; }\n    }\n}\n\ndef ok_count(spec: dict) -> int {\n    runner = Runner();\n    for r in spec[\"results\"] {\n        runner ++> Result(name=str(r[\"name\"]), status=str(r[\"status\"]));\n    }\n    return (runner spawn OkCount()).n;\n}\n\nwith entry { print(ok_count({'results': [{'name': 'core_draw', 'status': 'ok'}, {'name': 'core_input', 'status': 'fail'}, {'name': 'core_audio', 'status': 'ok'}, {'name': 'shapes_rect', 'status': 'ok'}]})); }",
+   "expected_output": "3",
+   "cases": [
+    {
+     "input": {
+      "results": [
+       {
+        "name": "core_draw",
+        "status": "ok"
+       },
+       {
+        "name": "core_input",
+        "status": "fail"
+       },
+       {
+        "name": "core_audio",
+        "status": "ok"
+       },
+       {
+        "name": "shapes_rect",
+        "status": "ok"
+       }
+      ]
+     },
+     "output": "3"
+    },
+    {
+     "input": {
+      "results": [
+       {
+        "name": "core_draw",
+        "status": "timeout"
+       },
+       {
+        "name": "core_input",
+        "status": "fail"
+       }
+      ]
+     },
+     "output": "0"
+    },
+    {
+     "input": {
+      "results": [
+       {
+        "name": "solo",
+        "status": "ok"
+       }
+      ]
+     },
+     "output": "1"
+    }
+   ]
+  },
+  {
+   "name": "first_fail",
+   "category": "graph_osp",
+   "subcategory": "ci_results",
+   "difficulty": "composed",
+   "py": "def first_fail(spec: dict) -> str:\n    \"\"\"Name of the first non-ok result in run order, or PASS if all passed.\"\"\"\n    for r in spec[\"results\"]:\n        if r[\"status\"] != \"ok\":\n            return r[\"name\"]\n    return \"PASS\"",
+   "jac": "node Runner {}\nnode Result { has name: str, status: str; }\n\nwalker FirstFail {\n    has found: str = \"PASS\";\n    can start with Runner entry { visit [-->][?:Result]; }\n    can check with Result entry {\n        if self.found == \"PASS\" {\n            if here.status != \"ok\" { self.found = here.name; }\n            else { visit [-->][?:Result]; }\n        }\n    }\n}\n\ndef first_fail(spec: dict) -> str {\n    runner = Runner();\n    prev = runner;\n    for r in spec[\"results\"] {\n        res = Result(name=str(r[\"name\"]), status=str(r[\"status\"]));\n        prev ++> res;\n        prev = res;\n    }\n    return (runner spawn FirstFail()).found;\n}\n\nwith entry { print(first_fail({'results': [{'name': 'core_draw', 'status': 'ok'}, {'name': 'core_input', 'status': 'fail'}, {'name': 'core_audio', 'status': 'fail'}]})); }",
+   "expected_output": "core_input",
+   "cases": [
+    {
+     "input": {
+      "results": [
+       {
+        "name": "core_draw",
+        "status": "ok"
+       },
+       {
+        "name": "core_input",
+        "status": "fail"
+       },
+       {
+        "name": "core_audio",
+        "status": "fail"
+       }
+      ]
+     },
+     "output": "core_input"
+    },
+    {
+     "input": {
+      "results": [
+       {
+        "name": "core_draw",
+        "status": "ok"
+       },
+       {
+        "name": "core_audio",
+        "status": "ok"
+       }
+      ]
+     },
+     "output": "PASS"
+    },
+    {
+     "input": {
+      "results": [
+       {
+        "name": "boot",
+        "status": "crash"
+       },
+       {
+        "name": "core_draw",
+        "status": "ok"
+       }
+      ]
+     },
+     "output": "boot"
+    }
+   ]
+  },
+  {
+   "name": "failure_tail",
+   "category": "graph_osp",
+   "subcategory": "ci_results",
+   "difficulty": "composed",
+   "py": "def failure_tail(spec: dict) -> list:\n    \"\"\"The last k failing result names, in run order.\"\"\"\n    fails = [r[\"name\"] for r in spec[\"results\"] if r[\"status\"] != \"ok\"]\n    k = spec[\"k\"]\n    if k <= 0:\n        return []\n    start = len(fails) - k\n    if start < 0:\n        start = 0\n    return fails[start:]",
+   "jac": "node Runner {}\nnode Result { has name: str, status: str; }\n\nwalker FailTail {\n    has k: int;\n    has fails: list = [], tail: list = [];\n    can start with Runner entry { visit [-->][?:Result]; }\n    can check with Result entry {\n        if here.status != \"ok\" { self.fails.append(here.name); }\n        visit [-->][?:Result];\n    }\n    can trim with exit {\n        if self.k > 0 {\n            start = len(self.fails) - self.k;\n            if start < 0 { start = 0; }\n            self.tail = self.fails[start:];\n        }\n    }\n}\n\ndef failure_tail(spec: dict) -> list {\n    runner = Runner();\n    prev = runner;\n    for r in spec[\"results\"] {\n        res = Result(name=str(r[\"name\"]), status=str(r[\"status\"]));\n        prev ++> res;\n        prev = res;\n    }\n    return (runner spawn FailTail(k=int(spec[\"k\"]))).tail;\n}\n\nwith entry { print(failure_tail({'results': [{'name': 'boot', 'status': 'fail'}, {'name': 'draw', 'status': 'ok'}, {'name': 'input', 'status': 'timeout'}, {'name': 'audio', 'status': 'fail'}, {'name': 'quit', 'status': 'fail'}], 'k': 2})); }",
+   "expected_output": "['audio', 'quit']",
+   "cases": [
+    {
+     "input": {
+      "results": [
+       {
+        "name": "boot",
+        "status": "fail"
+       },
+       {
+        "name": "draw",
+        "status": "ok"
+       },
+       {
+        "name": "input",
+        "status": "timeout"
+       },
+       {
+        "name": "audio",
+        "status": "fail"
+       },
+       {
+        "name": "quit",
+        "status": "fail"
+       }
+      ],
+      "k": 2
+     },
+     "output": "['audio', 'quit']"
+    },
+    {
+     "input": {
+      "results": [
+       {
+        "name": "boot",
+        "status": "fail"
+       },
+       {
+        "name": "draw",
+        "status": "ok"
+       }
+      ],
+      "k": 5
+     },
+     "output": "['boot']"
+    },
+    {
+     "input": {
+      "results": [
+       {
+        "name": "boot",
+        "status": "ok"
+       },
+       {
+        "name": "draw",
+        "status": "ok"
+       }
+      ],
+      "k": 3
+     },
+     "output": "[]"
+    }
+   ]
+  },
+  {
+   "name": "free_slot",
+   "category": "graph_osp",
+   "subcategory": "game_state",
+   "difficulty": "simple",
+   "py": "def free_slot(spec: dict) -> int:\n    \"\"\"Index of the first free (dead) slot in the bullet pool, or -1.\"\"\"\n    for i, alive in enumerate(spec[\"slots\"]):\n        if not alive:\n            return i\n    return -1",
+   "jac": "node Pool {}\nnode Slot { has idx: int, alive: bool; }\n\nwalker FreeScan {\n    has dead: list = [], result: int = -1;\n    can start with Pool entry { visit [-->][?:Slot]; }\n    can check with Slot entry {\n        if not here.alive { self.dead.append(here.idx); }\n    }\n    can pick with exit {\n        if len(self.dead) > 0 { self.result = min(self.dead); }\n    }\n}\n\ndef free_slot(spec: dict) -> int {\n    pool = Pool();\n    i = 0;\n    for alive in spec[\"slots\"] {\n        pool ++> Slot(idx=i, alive=bool(alive));\n        i += 1;\n    }\n    return (pool spawn FreeScan()).result;\n}\n\nwith entry { print(free_slot({'slots': [True, True, False, True, False]})); }",
+   "expected_output": "2",
+   "cases": [
+    {
+     "input": {
+      "slots": [
+       true,
+       true,
+       false,
+       true,
+       false
+      ]
+     },
+     "output": "2"
+    },
+    {
+     "input": {
+      "slots": [
+       true,
+       true,
+       true
+      ]
+     },
+     "output": "-1"
+    },
+    {
+     "input": {
+      "slots": [
+       false,
+       true
+      ]
+     },
+     "output": "0"
+    }
+   ]
+  },
+  {
+   "name": "bullet_sweep",
+   "category": "graph_osp",
+   "subcategory": "game_state",
+   "difficulty": "composed",
+   "py": "def bullet_sweep(spec: dict) -> int:\n    \"\"\"Advance every bullet one tick; count those still inside the arena.\"\"\"\n    live = 0\n    for b in spec[\"bullets\"]:\n        nx = b[\"x\"] + b[\"v\"]\n        if 0 <= nx < spec[\"arena\"]:\n            live += 1\n    return live",
+   "jac": "node Arena { has bound: int; }\nnode Bullet { has x: int, v: int; }\n\nwalker Sweep {\n    has bound: int = 0, live: int = 0;\n    can start with Arena entry {\n        self.bound = here.bound;\n        visit [-->][?:Bullet];\n    }\n    can advance with Bullet entry {\n        here.x += here.v;\n        if here.x >= 0 and here.x < self.bound { self.live += 1; }\n    }\n}\n\ndef bullet_sweep(spec: dict) -> int {\n    arena = Arena(bound=int(spec[\"arena\"]));\n    for b in spec[\"bullets\"] {\n        arena ++> Bullet(x=int(b[\"x\"]), v=int(b[\"v\"]));\n    }\n    return (arena spawn Sweep()).live;\n}\n\nwith entry { print(bullet_sweep({'arena': 100, 'bullets': [{'x': 10, 'v': 5}, {'x': 98, 'v': 4}, {'x': 2, 'v': -3}, {'x': 50, 'v': 20}]})); }",
+   "expected_output": "2",
+   "cases": [
+    {
+     "input": {
+      "arena": 100,
+      "bullets": [
+       {
+        "x": 10,
+        "v": 5
+       },
+       {
+        "x": 98,
+        "v": 4
+       },
+       {
+        "x": 2,
+        "v": -3
+       },
+       {
+        "x": 50,
+        "v": 20
+       }
+      ]
+     },
+     "output": "2"
+    },
+    {
+     "input": {
+      "arena": 20,
+      "bullets": [
+       {
+        "x": 19,
+        "v": 1
+       },
+       {
+        "x": 0,
+        "v": -1
+       }
+      ]
+     },
+     "output": "0"
+    },
+    {
+     "input": {
+      "arena": 50,
+      "bullets": [
+       {
+        "x": 25,
+        "v": 0
+       }
+      ]
+     },
+     "output": "1"
+    }
+   ]
+  },
+  {
+   "name": "hit_score",
+   "category": "graph_osp",
+   "subcategory": "game_state",
+   "difficulty": "advanced",
+   "py": "def hit_score(spec: dict) -> int:\n    \"\"\"Total score from targets whose cell lies on any bullet's swept path.\"\"\"\n    total = 0\n    for t in spec[\"targets\"]:\n        hit = False\n        for b in spec[\"bullets\"]:\n            if b[\"x\"] <= t[\"cell\"] <= b[\"x\"] + b[\"v\"]:\n                hit = True\n        if hit:\n            total += t[\"score\"]\n    return total",
+   "jac": "node Arena {}\nnode Bullet { has x: int, v: int; }\nnode Target { has cell: int, score: int; }\n\nwalker HitScan {\n    has shots: list = [], marks: list = [], total: int = 0;\n    can start with Arena entry { visit [-->]; }\n    can trace with Bullet entry { self.shots.append((here.x, here.x + here.v)); }\n    can sight with Target entry { self.marks.append((here.cell, here.score)); }\n    can tally with exit {\n        for (cell, score) in self.marks {\n            hit = False;\n            for (lo, hi) in self.shots {\n                if lo <= cell and cell <= hi { hit = True; }\n            }\n            if hit { self.total += score; }\n        }\n    }\n}\n\ndef hit_score(spec: dict) -> int {\n    arena = Arena();\n    for b in spec[\"bullets\"] { arena ++> Bullet(x=int(b[\"x\"]), v=int(b[\"v\"])); }\n    for t in spec[\"targets\"] { arena ++> Target(cell=int(t[\"cell\"]), score=int(t[\"score\"])); }\n    return (arena spawn HitScan()).total;\n}\n\nwith entry { print(hit_score({'bullets': [{'x': 0, 'v': 5}, {'x': 10, 'v': 2}], 'targets': [{'cell': 3, 'score': 10}, {'cell': 11, 'score': 25}, {'cell': 20, 'score': 100}]})); }",
+   "expected_output": "35",
+   "cases": [
+    {
+     "input": {
+      "bullets": [
+       {
+        "x": 0,
+        "v": 5
+       },
+       {
+        "x": 10,
+        "v": 2
+       }
+      ],
+      "targets": [
+       {
+        "cell": 3,
+        "score": 10
+       },
+       {
+        "cell": 11,
+        "score": 25
+       },
+       {
+        "cell": 20,
+        "score": 100
+       }
+      ]
+     },
+     "output": "35"
+    },
+    {
+     "input": {
+      "bullets": [
+       {
+        "x": 4,
+        "v": 0
+       }
+      ],
+      "targets": [
+       {
+        "cell": 4,
+        "score": 7
+       },
+       {
+        "cell": 5,
+        "score": 9
+       }
+      ]
+     },
+     "output": "7"
+    },
+    {
+     "input": {
+      "bullets": [],
+      "targets": [
+       {
+        "cell": 1,
+        "score": 50
+       }
+      ]
+     },
+     "output": "0"
+    }
+   ]
+  },
+  {
+   "name": "combo_actions",
+   "category": "graph_osp",
+   "subcategory": "input_bindings",
+   "difficulty": "composed",
+   "py": "def combo_actions(spec: dict) -> str:\n    \"\"\"Translate a key sequence into its bound action names, joined by >.\"\"\"\n    table = {k: a for k, a in spec[\"bindings\"]}\n    actions = []\n    for k in spec[\"keys\"]:\n        actions.append(table.get(k, \"noop\"))\n    return \">\".join(actions)",
+   "jac": "node Keymap {}\nnode Binding { has key: str, action: str; }\n\nwalker Translate {\n    has keys: list;\n    has table: dict = {}, combo: str = \"\";\n    can start with Keymap entry { visit [-->][?:Binding]; }\n    can learn with Binding entry { self.table[here.key] = here.action; }\n    can build with exit {\n        actions: list = [];\n        for k in self.keys { actions.append(self.table.get(k, \"noop\")); }\n        self.combo = \">\".join(actions);\n    }\n}\n\ndef combo_actions(spec: dict) -> str {\n    keymap = Keymap();\n    for b in spec[\"bindings\"] {\n        keymap ++> Binding(key=str(b[0]), action=str(b[1]));\n    }\n    keys: list = [str(k) for k in spec[\"keys\"]];\n    return (keymap spawn Translate(keys=keys)).combo;\n}\n\nwith entry { print(combo_actions({'bindings': [['w', 'forward'], ['s', 'back'], ['a', 'left'], ['d', 'right'], ['sp', 'fire']], 'keys': ['w', 'w', 'sp', 'q']})); }",
+   "expected_output": "forward>forward>fire>noop",
+   "cases": [
+    {
+     "input": {
+      "bindings": [
+       [
+        "w",
+        "forward"
+       ],
+       [
+        "s",
+        "back"
+       ],
+       [
+        "a",
+        "left"
+       ],
+       [
+        "d",
+        "right"
+       ],
+       [
+        "sp",
+        "fire"
+       ]
+      ],
+      "keys": [
+       "w",
+       "w",
+       "sp",
+       "q"
+      ]
+     },
+     "output": "forward>forward>fire>noop"
+    },
+    {
+     "input": {
+      "bindings": [
+       [
+        "w",
+        "forward"
+       ]
+      ],
+      "keys": [
+       "x",
+       "y"
+      ]
+     },
+     "output": "noop>noop"
+    },
+    {
+     "input": {
+      "bindings": [
+       [
+        "a",
+        "left"
+       ],
+       [
+        "d",
+        "right"
+       ]
+      ],
+      "keys": [
+       "d",
+       "a"
+      ]
+     },
+     "output": "right>left"
+    }
+   ]
+  },
+  {
+   "name": "sniff_lang",
+   "category": "graph_osp",
+   "subcategory": "lexer_sniff",
+   "difficulty": "advanced",
+   "py": "def sniff_lang(spec: dict) -> str:\n    \"\"\"Best-scoring language for the text; ties alphabetical, no match is unknown.\"\"\"\n    scores = {}\n    for r in spec[\"rules\"]:\n        if r[\"token\"] in spec[\"text\"]:\n            scores[r[\"lang\"]] = scores.get(r[\"lang\"], 0) + r[\"weight\"]\n    best = \"unknown\"\n    best_score = 0\n    for lang in sorted(scores):\n        if scores[lang] > best_score:\n            best = lang\n            best_score = scores[lang]\n    return best",
+   "jac": "node Sniffer { has text: str; }\nnode Rule { has lang: str, token: str, weight: int; }\n\nwalker Sniff {\n    has text: str = \"\", scores: dict = {}, best: str = \"unknown\";\n    can start with Sniffer entry {\n        self.text = here.text;\n        visit [-->][?:Rule];\n    }\n    can score with Rule entry {\n        if here.token in self.text {\n            self.scores[here.lang] = self.scores.get(here.lang, 0) + here.weight;\n        }\n    }\n    can judge with exit {\n        best_score = 0;\n        for lang in sorted(self.scores.keys()) {\n            if self.scores[lang] > best_score {\n                self.best = lang;\n                best_score = self.scores[lang];\n            }\n        }\n    }\n}\n\ndef sniff_lang(spec: dict) -> str {\n    sniffer = Sniffer(text=str(spec[\"text\"]));\n    for r in spec[\"rules\"] {\n        sniffer ++> Rule(lang=str(r[\"lang\"]), token=str(r[\"token\"]), weight=int(r[\"weight\"]));\n    }\n    return (sniffer spawn Sniff()).best;\n}\n\nwith entry { print(sniff_lang({'rules': [{'lang': 'python', 'token': 'def ', 'weight': 2}, {'lang': 'python', 'token': 'import ', 'weight': 1}, {'lang': 'javascript', 'token': 'function ', 'weight': 2}, {'lang': 'javascript', 'token': 'const ', 'weight': 1}], 'text': 'import os\\\\ndef main():\\\\n    pass'})); }",
+   "expected_output": "python",
+   "cases": [
+    {
+     "input": {
+      "rules": [
+       {
+        "lang": "python",
+        "token": "def ",
+        "weight": 2
+       },
+       {
+        "lang": "python",
+        "token": "import ",
+        "weight": 1
+       },
+       {
+        "lang": "javascript",
+        "token": "function ",
+        "weight": 2
+       },
+       {
+        "lang": "javascript",
+        "token": "const ",
+        "weight": 1
+       }
+      ],
+      "text": "import os\\ndef main():\\n    pass"
+     },
+     "output": "python"
+    },
+    {
+     "input": {
+      "rules": [
+       {
+        "lang": "python",
+        "token": "def ",
+        "weight": 2
+       },
+       {
+        "lang": "javascript",
+        "token": "const ",
+        "weight": 2
+       }
+      ],
+      "text": "SELECT * FROM users;"
+     },
+     "output": "unknown"
+    },
+    {
+     "input": {
+      "rules": [
+       {
+        "lang": "c",
+        "token": "#include",
+        "weight": 3
+       },
+       {
+        "lang": "cpp",
+        "token": "#include",
+        "weight": 3
+       }
+      ],
+      "text": "#include <stdio.h>"
+     },
+     "output": "c"
+    }
+   ]
+  },
+  {
+   "name": "dead_pages",
+   "category": "graph_osp",
+   "subcategory": "web_analytics",
+   "difficulty": "simple",
+   "py": "def dead_pages(spec: dict) -> int:\n    \"\"\"Count pages with no outgoing links (dead ends).\"\"\"\n    pages = set(spec[\"pages\"])\n    sources = set()\n    for src, dst in spec[\"links\"]:\n        if src in pages and dst in pages:\n            sources.add(src)\n    n = 0\n    for p in spec[\"pages\"]:\n        if p not in sources:\n            n += 1\n    return n",
+   "jac": "edge Contains {}\nedge LinksTo {}\n\nnode Site {}\nnode Page { has name: str; }\n\nwalker DeadEnds {\n    has n: int = 0;\n    can start with Site entry { visit [->:Contains:->]; }\n    can check with Page entry {\n        if len([->:LinksTo:->]) == 0 { self.n += 1; }\n    }\n}\n\ndef dead_pages(spec: dict) -> int {\n    site = Site();\n    pnodes: dict = {};\n    for p in spec[\"pages\"] {\n        pg = Page(name=str(p));\n        site +>:Contains:+> pg;\n        pnodes[p] = pg;\n    }\n    for lk in spec[\"links\"] {\n        if lk[0] in pnodes and lk[1] in pnodes {\n            pnodes[lk[0]] +>:LinksTo:+> pnodes[lk[1]];\n        }\n    }\n    return (site spawn DeadEnds()).n;\n}\n\nwith entry { print(dead_pages({'pages': ['home', 'about', 'blog', 'contact'], 'links': [['home', 'about'], ['home', 'blog'], ['blog', 'home']]})); }",
+   "expected_output": "2",
+   "cases": [
+    {
+     "input": {
+      "pages": [
+       "home",
+       "about",
+       "blog",
+       "contact"
+      ],
+      "links": [
+       [
+        "home",
+        "about"
+       ],
+       [
+        "home",
+        "blog"
+       ],
+       [
+        "blog",
+        "home"
+       ]
+      ]
+     },
+     "output": "2"
+    },
+    {
+     "input": {
+      "pages": [
+       "home"
+      ],
+      "links": []
+     },
+     "output": "1"
+    },
+    {
+     "input": {
+      "pages": [
+       "a",
+       "b",
+       "c"
+      ],
+      "links": [
+       [
+        "a",
+        "b"
+       ],
+       [
+        "b",
+        "c"
+       ],
+       [
+        "c",
+        "a"
+       ]
+      ]
+     },
+     "output": "0"
+    }
+   ]
+  },
+  {
+   "name": "orphan_pages",
+   "category": "graph_osp",
+   "subcategory": "web_analytics",
+   "difficulty": "composed",
+   "py": "def orphan_pages(spec: dict) -> list:\n    \"\"\"Alphabetical list of pages unreachable from the start page.\"\"\"\n    adj = {p: [] for p in spec[\"pages\"]}\n    for src, dst in spec[\"links\"]:\n        if src in adj and dst in adj:\n            adj[src].append(dst)\n    seen = set()\n    stack = [spec[\"start\"]]\n    while stack:\n        p = stack.pop()\n        if p in seen or p not in adj:\n            continue\n        seen.add(p)\n        stack.extend(adj[p])\n    return sorted(p for p in spec[\"pages\"] if p not in seen)",
+   "jac": "edge LinksTo {}\n\nnode Page { has name: str; has seen: bool = False; }\n\nwalker Crawl {\n    can step with Page entry {\n        if not here.seen {\n            here.seen = True;\n            visit [->:LinksTo:->];\n        }\n    }\n}\n\ndef orphan_pages(spec: dict) -> list {\n    pnodes: dict = {};\n    for p in spec[\"pages\"] { pnodes[p] = Page(name=str(p)); }\n    for lk in spec[\"links\"] {\n        if lk[0] in pnodes and lk[1] in pnodes {\n            pnodes[lk[0]] +>:LinksTo:+> pnodes[lk[1]];\n        }\n    }\n    start: str = str(spec[\"start\"]);\n    if start in pnodes { pnodes[start] spawn Crawl(); }\n    orphans: list = [];\n    for p in spec[\"pages\"] {\n        if not pnodes[p].seen { orphans.append(str(p)); }\n    }\n    return sorted(orphans);\n}\n\nwith entry { print(orphan_pages({'pages': ['home', 'about', 'blog', 'legacy', 'archive'], 'links': [['home', 'about'], ['about', 'home'], ['home', 'blog'], ['legacy', 'archive']], 'start': 'home'})); }",
+   "expected_output": "['archive', 'legacy']",
+   "cases": [
+    {
+     "input": {
+      "pages": [
+       "home",
+       "about",
+       "blog",
+       "legacy",
+       "archive"
+      ],
+      "links": [
+       [
+        "home",
+        "about"
+       ],
+       [
+        "about",
+        "home"
+       ],
+       [
+        "home",
+        "blog"
+       ],
+       [
+        "legacy",
+        "archive"
+       ]
+      ],
+      "start": "home"
+     },
+     "output": "['archive', 'legacy']"
+    },
+    {
+     "input": {
+      "pages": [
+       "a",
+       "b",
+       "c"
+      ],
+      "links": [
+       [
+        "a",
+        "b"
+       ],
+       [
+        "b",
+        "c"
+       ],
+       [
+        "c",
+        "a"
+       ]
+      ],
+      "start": "a"
+     },
+     "output": "[]"
+    },
+    {
+     "input": {
+      "pages": [
+       "x",
+       "y"
+      ],
+      "links": [],
+      "start": "x"
+     },
+     "output": "['y']"
+    }
+   ]
+  }
+ ]
+}

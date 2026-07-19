@@ -1,0 +1,21 @@
+{
+  "batch_id": "b17",
+  "accepted": [
+    "spawn_points",
+    "key_lookup",
+    "pipeline_exit",
+    "biggest_source",
+    "shade_corridor",
+    "step_marks",
+    "bench_payload",
+    "count_kept_files",
+    "lang_census",
+    "dir_usage",
+    "capped_docs",
+    "score_tally",
+    "transform_point",
+    "matrix_stack"
+  ],
+  "rejected": [],
+  "accept_rate": 1.0
+}

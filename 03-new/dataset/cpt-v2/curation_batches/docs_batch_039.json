@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "1ec947654627",
+    "verdict": "keep",
+    "reason": "Describes the jac ai command purpose."
+  },
+  {
+    "chunk_id": "d89d649e72d4",
+    "verdict": "keep",
+    "reason": "Command synopsis for jac ai."
+  },
+  {
+    "chunk_id": "d49f51da630b",
+    "verdict": "keep",
+    "reason": "Full option table for jac ai."
+  },
+  {
+    "chunk_id": "a417dd7f30f2",
+    "verdict": "drop",
+    "reason": "Nav-only fragment containing just an 'Examples:' label."
+  },
+  {
+    "chunk_id": "4fb4fa4f0937",
+    "verdict": "keep",
+    "reason": "Concrete jac ai usage examples."
+  },
+  {
+    "chunk_id": "e1538b1ebfde",
+    "verdict": "keep",
+    "reason": "Describes jac code structural query command."
+  },
+  {
+    "chunk_id": "f9a5f5bae19a",
+    "verdict": "keep",
+    "reason": "Command synopsis for jac code."
+  },
+  {
+    "chunk_id": "dad42ffa6aa1",
+    "verdict": "keep",
+    "reason": "Action table for jac code including walker/node query semantics."
+  },
+  {
+    "chunk_id": "343822deeb06",
+    "verdict": "drop",
+    "reason": "Nav-only fragment containing just an 'Examples:' label."
+  },
+  {
+    "chunk_id": "91e633818f36",
+    "verdict": "keep",
+    "reason": "Concrete jac code usage examples."
+  },
+  {
+    "chunk_id": "0e0d100e331d",
+    "verdict": "keep",
+    "reason": "Describes jac mcp server command."
+  },
+  {
+    "chunk_id": "372fc053a6cf",
+    "verdict": "keep",
+    "reason": "Command synopsis for jac mcp."
+  },
+  {
+    "chunk_id": "36f24a76cd2d",
+    "verdict": "keep",
+    "reason": "Option table for jac mcp."
+  },
+  {
+    "chunk_id": "2581fecf42f2",
+    "verdict": "keep",
+    "reason": "Cross-reference pointer to MCP reference; minimal but useful prose."
+  },
+  {
+    "chunk_id": "b393a85b6b61",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "33b82e97b69a",
+    "verdict": "keep",
+    "reason": "Explains local model cache and jac model command."
+  },
+  {
+    "chunk_id": "2579fffe2ae3",
+    "verdict": "keep",
+    "reason": "Describes jac model command."
+  },
+  {
+    "chunk_id": "07b6c62cbc9f",
+    "verdict": "keep",
+    "reason": "Command synopsis for jac model."
+  },
+  {
+    "chunk_id": "52b39920c7d8",
+    "verdict": "keep",
+    "reason": "Action table for jac model."
+  },
+  {
+    "chunk_id": "f3e2d041f4a2",
+    "verdict": "keep",
+    "reason": "Argument table for jac model."
+  },
+  {
+    "chunk_id": "6b1a076ecbbc",
+    "verdict": "drop",
+    "reason": "Nav-only fragment containing just an 'Examples:' label."
+  },
+  {
+    "chunk_id": "69dd31b720c6",
+    "verdict": "keep",
+    "reason": "Concrete jac model usage examples."
+  },
+  {
+    "chunk_id": "bd90ec4c4d42",
+    "verdict": "drop",
+    "reason": "Standalone caption label with no substantive content."
+  },
+  {
+    "chunk_id": "210bd48a9a96",
+    "verdict": "keep",
+    "reason": "Sample output illustrating jac model cache listing."
+  },
+  {
+    "chunk_id": "362de1100f20",
+    "verdict": "keep",
+    "reason": "Useful note on CI/non-TTY download behavior and env vars."
+  },
+  {
+    "chunk_id": "85d7c186204c",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "881322fef1a8",
+    "verdict": "keep",
+    "reason": "Explains jac db command group and backend support."
+  },
+  {
+    "chunk_id": "62ff7be846a7",
+    "verdict": "keep",
+    "reason": "Cross-reference to persistence architecture background."
+  },
+  {
+    "chunk_id": "07829322ebca",
+    "verdict": "keep",
+    "reason": "Explains jac db backend dispatch."
+  },
+  {
+    "chunk_id": "b7d9f40b939d",
+    "verdict": "keep",
+    "reason": "Describes app-path resolution for jac db."
+  },
+  {
+    "chunk_id": "ec832f506568",
+    "verdict": "keep",
+    "reason": "Explains backend import behavior for jac db."
+  },
+  {
+    "chunk_id": "3255e7c8662f",
+    "verdict": "keep",
+    "reason": "Explicit and implicit jac db invocation examples."
+  },
+  {
+    "chunk_id": "41c0370fa58f",
+    "verdict": "keep",
+    "reason": "Describes jac db inspect command."
+  },
+  {
+    "chunk_id": "600f9557f204",
+    "verdict": "keep",
+    "reason": "Command synopsis for jac db inspect."
+  },
+  {
+    "chunk_id": "f2e75a2bce6a",
+    "verdict": "drop",
+    "reason": "Standalone 'Output:' label with no content."
+  },
+  {
+    "chunk_id": "01516ec5f904",
+    "verdict": "keep",
+    "reason": "Sample jac db inspect output with anchor table."
+  },
+  {
+    "chunk_id": "1f86ba7b350c",
+    "verdict": "keep",
+    "reason": "Explains the inspect summary line fields."
+  },
+  {
+    "chunk_id": "4f08b0847c39",
+    "verdict": "keep",
+    "reason": "Describes jac db quarantine list command."
+  },
+  {
+    "chunk_id": "7047d9ccc166",
+    "verdict": "keep",
+    "reason": "Usage examples for quarantine list with limits."
+  },
+  {
+    "chunk_id": "0a6f31202a5c",
+    "verdict": "keep",
+    "reason": "Explains sorting and UUID-prefix behavior."
+  },
+  {
+    "chunk_id": "d3426e6743ea",
+    "verdict": "keep",
+    "reason": "Describes jac db quarantine show command."
+  },
+  {
+    "chunk_id": "11c43c7eaf71",
+    "verdict": "keep",
+    "reason": "Example invocation of quarantine show."
+  },
+  {
+    "chunk_id": "2cdfada168a0",
+    "verdict": "keep",
+    "reason": "Explains prefix disambiguation behavior."
+  },
+  {
+    "chunk_id": "3e64f44347ba",
+    "verdict": "keep",
+    "reason": "Describes jac db alias add/list/remove and persistence."
+  },
+  {
+    "chunk_id": "fd6f5de0837d",
+    "verdict": "keep",
+    "reason": "Usage examples for db alias commands."
+  },
+  {
+    "chunk_id": "3c887ee13997",
+    "verdict": "keep",
+    "reason": "Explains fully-qualified module naming for aliases."
+  },
+  {
+    "chunk_id": "504880fdf5c3",
+    "verdict": "keep",
+    "reason": "Compares decorator vs CLI alias approaches."
+  },
+  {
+    "chunk_id": "218025097f30",
+    "verdict": "keep",
+    "reason": "Describes jac db recover command and re-stamping."
+  },
+  {
+    "chunk_id": "d25423b61768",
+    "verdict": "keep",
+    "reason": "Example invocation of jac db recover."
+  },
+  {
+    "chunk_id": "e5a2ee4c396f",
+    "verdict": "keep",
+    "reason": "Explains archetype registration requirement for recovery."
+  }
+]

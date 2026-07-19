@@ -1,0 +1,1124 @@
+{
+ "batch_id": "b04",
+ "generator": "fable-agent-v1",
+ "examples": [
+  {
+   "name": "any_over_limit",
+   "category": "graph_osp",
+   "subcategory": "predicate_any",
+   "difficulty": "simple",
+   "py": "def any_over_limit(spec: dict) -> bool:\n    \"\"\"Return True if any node reachable from start has a reading above limit.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]; start = spec[\"start\"]; limit = spec[\"limit\"]\n    seen = set(); stack = [start]\n    while stack:\n        n = stack.pop()\n        if n in seen: continue\n        seen.add(n)\n        if vals[n] > limit: return True\n        stack.extend(adj.get(n, []))\n    return False",
+   "jac": "node Meter { has name: str; has reading: int; has probed: bool = False; }\n\nwalker Scan {\n    has limit: int;\n    has hit: bool = False;\n    can probe with Meter entry {\n        if not here.probed {\n            here.probed = True;\n            if here.reading > self.limit { self.hit = True; disengage; }\n            visit [-->];\n        }\n    }\n}\n\ndef any_over_limit(spec: dict) -> bool {\n    adj: dict = spec[\"adj\"]; vals: dict = spec[\"vals\"];\n    reg: dict = {};\n    for (src, outs) in adj.items() {\n        if src not in reg { reg[src] = Meter(name=src, reading=vals[src]); }\n        for o in outs { if o not in reg { reg[o] = Meter(name=o, reading=vals[o]); } }\n    }\n    for (src, outs) in adj.items() { for o in outs { reg[src] ++> reg[o]; } }\n    agent = reg[spec[\"start\"]] spawn Scan(limit=spec[\"limit\"]);\n    return agent.hit;\n}\n\nwith entry { print(any_over_limit({\"adj\": {\"a\": [\"b\", \"c\"], \"b\": [\"d\"], \"c\": [], \"d\": []}, \"vals\": {\"a\": 2, \"b\": 3, \"c\": 4, \"d\": 9}, \"start\": \"a\", \"limit\": 5})); }",
+   "expected_output": "True",
+   "cases": [
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b",
+        "c"
+       ],
+       "b": [
+        "d"
+       ],
+       "c": [],
+       "d": []
+      },
+      "vals": {
+       "a": 2,
+       "b": 3,
+       "c": 4,
+       "d": 9
+      },
+      "start": "a",
+      "limit": 5
+     },
+     "output": "True"
+    },
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b",
+        "c"
+       ],
+       "b": [
+        "d"
+       ],
+       "c": [],
+       "d": []
+      },
+      "vals": {
+       "a": 2,
+       "b": 3,
+       "c": 4,
+       "d": 9
+      },
+      "start": "a",
+      "limit": 10
+     },
+     "output": "False"
+    },
+    {
+     "input": {
+      "adj": {
+       "x": [
+        "y"
+       ],
+       "y": [],
+       "z": []
+      },
+      "vals": {
+       "x": 1,
+       "y": 2,
+       "z": 50
+      },
+      "start": "x",
+      "limit": 5
+     },
+     "output": "False"
+    }
+   ]
+  },
+  {
+   "name": "all_flags_set",
+   "category": "graph_osp",
+   "subcategory": "predicate_all",
+   "difficulty": "simple",
+   "py": "def all_flags_set(spec: dict) -> bool:\n    \"\"\"Return True if every node reachable from start has its flag turned on.\"\"\"\n    adj = spec[\"adj\"]; flags = spec[\"flags\"]; start = spec[\"start\"]\n    seen = set(); stack = [start]\n    while stack:\n        n = stack.pop()\n        if n in seen: continue\n        seen.add(n)\n        if not flags[n]: return False\n        stack.extend(adj.get(n, []))\n    return True",
+   "jac": "node Switch { has name: str; has on_state: bool; has checked: bool = False; }\n\nwalker Verify {\n    has ok: bool = True;\n    can check with Switch entry {\n        if not here.checked {\n            here.checked = True;\n            if not here.on_state { self.ok = False; disengage; }\n            visit [-->];\n        }\n    }\n}\n\ndef all_flags_set(spec: dict) -> bool {\n    adj: dict = spec[\"adj\"]; flags: dict = spec[\"flags\"];\n    found: list = list(adj.keys());\n    for group in adj.values() { for g in group { if g not in found { found.append(g); } } }\n    sw: dict = {};\n    for nm in found { sw[nm] = Switch(name=nm, on_state=flags[nm]); }\n    for (src, group) in adj.items() { for g in group { sw[src] ++> sw[g]; } }\n    w = sw[spec[\"start\"]] spawn Verify();\n    return w.ok;\n}\n\nwith entry { print(all_flags_set({\"adj\": {\"a\": [\"b\"], \"b\": [\"c\"], \"c\": []}, \"flags\": {\"a\": True, \"b\": True, \"c\": True}, \"start\": \"a\"})); }",
+   "expected_output": "True",
+   "cases": [
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b"
+       ],
+       "b": [
+        "c"
+       ],
+       "c": []
+      },
+      "flags": {
+       "a": true,
+       "b": true,
+       "c": true
+      },
+      "start": "a"
+     },
+     "output": "True"
+    },
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b"
+       ],
+       "b": [
+        "c"
+       ],
+       "c": []
+      },
+      "flags": {
+       "a": true,
+       "b": false,
+       "c": true
+      },
+      "start": "a"
+     },
+     "output": "False"
+    },
+    {
+     "input": {
+      "adj": {
+       "r": [
+        "s",
+        "t"
+       ],
+       "s": [],
+       "t": [],
+       "u": []
+      },
+      "flags": {
+       "r": true,
+       "s": true,
+       "t": true,
+       "u": false
+      },
+      "start": "r"
+     },
+     "output": "True"
+    }
+   ]
+  },
+  {
+   "name": "count_label_matches",
+   "category": "graph_osp",
+   "subcategory": "category_count",
+   "difficulty": "simple",
+   "py": "def count_label_matches(spec: dict) -> int:\n    \"\"\"Count nodes reachable from start whose label equals the target label.\"\"\"\n    adj = spec[\"adj\"]; labels = spec[\"labels\"]; start = spec[\"start\"]; target = spec[\"target\"]\n    seen = set(); stack = [start]; hits = 0\n    while stack:\n        n = stack.pop()\n        if n in seen: continue\n        seen.add(n)\n        if labels[n] == target: hits += 1\n        stack.extend(adj.get(n, []))\n    return hits",
+   "jac": "node Card { has name: str; has label: str; has used: bool = False; }\n\nwalker Tally {\n    has target: str;\n    has hits: int = 0;\n    can mark with Card entry {\n        if not here.used {\n            here.used = True;\n            if here.label == self.target { self.hits += 1; }\n            visit [-->];\n        }\n    }\n}\n\ndef count_label_matches(spec: dict) -> int {\n    adj: dict = spec[\"adj\"]; labels: dict = spec[\"labels\"];\n    names: list = list(adj.keys());\n    for tgts in adj.values() { for t in tgts { if t not in names { names.append(t); } } }\n    cards: dict = {};\n    for nm in names { cards[nm] = Card(name=nm, label=labels[nm]); }\n    for (src, tgts) in adj.items() { for t in tgts { cards[src] ++> cards[t]; } }\n    wk = cards[spec[\"start\"]] spawn Tally(target=spec[\"target\"]);\n    return wk.hits;\n}\n\nwith entry { print(count_label_matches({\"adj\": {\"a\": [\"b\", \"c\"], \"b\": [], \"c\": [\"d\"], \"d\": []}, \"labels\": {\"a\": \"red\", \"b\": \"blue\", \"c\": \"red\", \"d\": \"red\"}, \"start\": \"a\", \"target\": \"red\"})); }",
+   "expected_output": "3",
+   "cases": [
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b",
+        "c"
+       ],
+       "b": [],
+       "c": [
+        "d"
+       ],
+       "d": []
+      },
+      "labels": {
+       "a": "red",
+       "b": "blue",
+       "c": "red",
+       "d": "red"
+      },
+      "start": "a",
+      "target": "red"
+     },
+     "output": "3"
+    },
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b",
+        "c"
+       ],
+       "b": [],
+       "c": [
+        "d"
+       ],
+       "d": []
+      },
+      "labels": {
+       "a": "red",
+       "b": "blue",
+       "c": "red",
+       "d": "red"
+      },
+      "start": "a",
+      "target": "blue"
+     },
+     "output": "1"
+    },
+    {
+     "input": {
+      "adj": {
+       "p": [
+        "q"
+       ],
+       "q": []
+      },
+      "labels": {
+       "p": "red",
+       "q": "blue"
+      },
+      "start": "p",
+      "target": "green"
+     },
+     "output": "0"
+    }
+   ]
+  },
+  {
+   "name": "min_over_positive",
+   "category": "graph_osp",
+   "subcategory": "predicate_min",
+   "difficulty": "simple",
+   "py": "def min_over_positive(spec: dict) -> int:\n    \"\"\"Return the smallest positive value among reachable nodes, or -1 if none.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]; start = spec[\"start\"]\n    seen = set(); stack = [start]; best = -1\n    while stack:\n        n = stack.pop()\n        if n in seen: continue\n        seen.add(n); v = vals[n]\n        if v > 0 and (best == -1 or v < best): best = v\n        stack.extend(adj.get(n, []))\n    return best",
+   "jac": "node Pod { has name: str; has load: int; has toured: bool = False; }\n\nwalker Seek {\n    has best: int = -1;\n    can weigh with Pod entry {\n        if not here.toured {\n            here.toured = True;\n            if here.load > 0 and (self.best == -1 or here.load < self.best) { self.best = here.load; }\n            visit [-->];\n        }\n    }\n}\n\ndef min_over_positive(spec: dict) -> int {\n    adj: dict = spec[\"adj\"]; vals: dict = spec[\"vals\"];\n    pods: dict = {};\n    for (src, outs) in adj.items() {\n        if src not in pods { pods[src] = Pod(name=src, load=vals[src]); }\n        for o in outs { if o not in pods { pods[o] = Pod(name=o, load=vals[o]); } }\n    }\n    for (src, outs) in adj.items() { for o in outs { pods[src] ++> pods[o]; } }\n    agent = pods[spec[\"start\"]] spawn Seek();\n    return agent.best;\n}\n\nwith entry { print(min_over_positive({\"adj\": {\"a\": [\"b\", \"c\"], \"b\": [\"d\"], \"c\": [\"d\"], \"d\": []}, \"vals\": {\"a\": 7, \"b\": -2, \"c\": 3, \"d\": 0}, \"start\": \"a\"})); }",
+   "expected_output": "3",
+   "cases": [
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b",
+        "c"
+       ],
+       "b": [
+        "d"
+       ],
+       "c": [
+        "d"
+       ],
+       "d": []
+      },
+      "vals": {
+       "a": 7,
+       "b": -2,
+       "c": 3,
+       "d": 0
+      },
+      "start": "a"
+     },
+     "output": "3"
+    },
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b"
+       ],
+       "b": []
+      },
+      "vals": {
+       "a": -4,
+       "b": 0
+      },
+      "start": "a"
+     },
+     "output": "-1"
+    },
+    {
+     "input": {
+      "adj": {
+       "m": [
+        "n",
+        "o"
+       ],
+       "n": [],
+       "o": []
+      },
+      "vals": {
+       "m": 9,
+       "n": 5,
+       "o": 12
+      },
+      "start": "m"
+     },
+     "output": "5"
+    }
+   ]
+  },
+  {
+   "name": "sign_bucket_counts",
+   "category": "graph_osp",
+   "subcategory": "bucket_count",
+   "difficulty": "composed",
+   "py": "def sign_bucket_counts(spec: dict) -> dict:\n    \"\"\"Bucket reachable nodes by the sign of their value and count each bucket.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]; start = spec[\"start\"]\n    seen = set(); stack = [start]\n    buckets = {\"neg\": 0, \"zero\": 0, \"pos\": 0}\n    while stack:\n        n = stack.pop()\n        if n in seen: continue\n        seen.add(n); v = vals[n]\n        if v < 0: buckets[\"neg\"] += 1\n        elif v == 0: buckets[\"zero\"] += 1\n        else: buckets[\"pos\"] += 1\n        stack.extend(adj.get(n, []))\n    return buckets",
+   "jac": "node Reading { has name: str; has amt: int; has taken: bool = False; }\n\nwalker Bucket {\n    has neg: int = 0;\n    has zero: int = 0;\n    has pos: int = 0;\n    can sort_one with Reading entry {\n        if not here.taken {\n            here.taken = True;\n            if here.amt < 0 { self.neg += 1; }\n            elif here.amt == 0 { self.zero += 1; }\n            else { self.pos += 1; }\n            visit [-->];\n        }\n    }\n}\n\ndef sign_bucket_counts(spec: dict) -> dict {\n    adj: dict = spec[\"adj\"]; vals: dict = spec[\"vals\"];\n    pool: dict = {};\n    for (frm, dests) in adj.items() {\n        if frm not in pool { pool[frm] = Reading(name=frm, amt=vals[frm]); }\n        for d in dests { if d not in pool { pool[d] = Reading(name=d, amt=vals[d]); } }\n    }\n    for (frm, dests) in adj.items() { for d in dests { pool[frm] ++> pool[d]; } }\n    w = pool[spec[\"start\"]] spawn Bucket();\n    return {\"neg\": w.neg, \"zero\": w.zero, \"pos\": w.pos};\n}\n\nwith entry { print(sign_bucket_counts({\"adj\": {\"a\": [\"b\", \"c\"], \"b\": [\"d\"], \"c\": [\"d\"], \"d\": []}, \"vals\": {\"a\": -2, \"b\": 0, \"c\": 5, \"d\": 7}, \"start\": \"a\"})); }",
+   "expected_output": "{'neg': 1, 'zero': 1, 'pos': 2}",
+   "cases": [
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b",
+        "c"
+       ],
+       "b": [
+        "d"
+       ],
+       "c": [
+        "d"
+       ],
+       "d": []
+      },
+      "vals": {
+       "a": -2,
+       "b": 0,
+       "c": 5,
+       "d": 7
+      },
+      "start": "a"
+     },
+     "output": "{'neg': 1, 'zero': 1, 'pos': 2}"
+    },
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b"
+       ],
+       "b": [
+        "c"
+       ],
+       "c": [
+        "d"
+       ],
+       "d": []
+      },
+      "vals": {
+       "a": -1,
+       "b": -3,
+       "c": -8,
+       "d": 4
+      },
+      "start": "a"
+     },
+     "output": "{'neg': 3, 'zero': 0, 'pos': 1}"
+    },
+    {
+     "input": {
+      "adj": {
+       "n": []
+      },
+      "vals": {
+       "n": 0
+      },
+      "start": "n"
+     },
+     "output": "{'neg': 0, 'zero': 1, 'pos': 0}"
+    }
+   ]
+  },
+  {
+   "name": "label_histogram",
+   "category": "graph_osp",
+   "subcategory": "bucket_count",
+   "difficulty": "composed",
+   "py": "def label_histogram(spec: dict) -> dict:\n    \"\"\"Count reachable nodes per label, returned as a dict with sorted keys.\"\"\"\n    adj = spec[\"adj\"]; labels = spec[\"labels\"]; start = spec[\"start\"]\n    seen = set(); stack = [start]; counts = {}\n    while stack:\n        n = stack.pop()\n        if n in seen: continue\n        seen.add(n); tag = labels[n]\n        counts[tag] = counts.get(tag, 0) + 1\n        stack.extend(adj.get(n, []))\n    out = {}\n    for k in sorted(counts): out[k] = counts[k]\n    return out",
+   "jac": "node Doc { has name: str; has tag: str; has read: bool = False; }\n\nwalker Histo {\n    has counts: dict = {};\n    can log_tag with Doc entry {\n        if not here.read {\n            here.read = True;\n            if here.tag in self.counts { self.counts[here.tag] += 1; }\n            else { self.counts[here.tag] = 1; }\n            visit [-->];\n        }\n    }\n}\n\ndef label_histogram(spec: dict) -> dict {\n    adj: dict = spec[\"adj\"]; labels: dict = spec[\"labels\"];\n    all_names: list = list(adj.keys());\n    for ends in adj.values() { for e in ends { if e not in all_names { all_names.append(e); } } }\n    docs: dict = {};\n    for nm in all_names { docs[nm] = Doc(name=nm, tag=labels[nm]); }\n    for (src, ends) in adj.items() { for e in ends { docs[src] ++> docs[e]; } }\n    wk = docs[spec[\"start\"]] spawn Histo();\n    out: dict = {};\n    for k in sorted(wk.counts.keys()) { out[k] = wk.counts[k]; }\n    return out;\n}\n\nwith entry { print(label_histogram({\"adj\": {\"a\": [\"b\", \"c\"], \"b\": [\"d\"], \"c\": [], \"d\": []}, \"labels\": {\"a\": \"red\", \"b\": \"blue\", \"c\": \"red\", \"d\": \"blue\"}, \"start\": \"a\"})); }",
+   "expected_output": "{'blue': 2, 'red': 2}",
+   "cases": [
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b",
+        "c"
+       ],
+       "b": [
+        "d"
+       ],
+       "c": [],
+       "d": []
+      },
+      "labels": {
+       "a": "red",
+       "b": "blue",
+       "c": "red",
+       "d": "blue"
+      },
+      "start": "a"
+     },
+     "output": "{'blue': 2, 'red': 2}"
+    },
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b"
+       ],
+       "b": []
+      },
+      "labels": {
+       "a": "green",
+       "b": "green"
+      },
+      "start": "a"
+     },
+     "output": "{'green': 2}"
+    },
+    {
+     "input": {
+      "adj": {
+       "r": [
+        "s",
+        "t"
+       ],
+       "s": [],
+       "t": [],
+       "z": []
+      },
+      "labels": {
+       "r": "ops",
+       "s": "dev",
+       "t": "ops",
+       "z": "dev"
+      },
+      "start": "r"
+     },
+     "output": "{'dev': 1, 'ops': 2}"
+    }
+   ]
+  },
+  {
+   "name": "avg_over_threshold",
+   "category": "graph_osp",
+   "subcategory": "predicate_avg",
+   "difficulty": "composed",
+   "py": "def avg_over_threshold(spec: dict) -> float:\n    \"\"\"Return the mean of reachable values strictly above cutoff, or 0.0 if none.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]; start = spec[\"start\"]; cutoff = spec[\"cutoff\"]\n    seen = set(); stack = [start]; total = 0; cnt = 0\n    while stack:\n        n = stack.pop()\n        if n in seen: continue\n        seen.add(n); v = vals[n]\n        if v > cutoff:\n            total += v; cnt += 1\n        stack.extend(adj.get(n, []))\n    if cnt == 0: return 0.0\n    return total / cnt",
+   "jac": "node Sensor { has name: str; has temp: int; has polled: bool = False; }\n\nwalker Mean {\n    has cutoff: int;\n    has total: int = 0;\n    has cnt: int = 0;\n    can poll with Sensor entry {\n        if not here.polled {\n            here.polled = True;\n            if here.temp > self.cutoff { self.total += here.temp; self.cnt += 1; }\n            visit [-->];\n        }\n    }\n}\n\ndef avg_over_threshold(spec: dict) -> float {\n    adj: dict = spec[\"adj\"]; vals: dict = spec[\"vals\"];\n    grid: dict = {};\n    for key in adj.keys() { grid[key] = Sensor(name=key, temp=vals[key]); }\n    for ends in adj.values() { for e in ends { if e not in grid { grid[e] = Sensor(name=e, temp=vals[e]); } } }\n    for (a, ends) in adj.items() { for e in ends { grid[a] ++> grid[e]; } }\n    m = grid[spec[\"start\"]] spawn Mean(cutoff=spec[\"cutoff\"]);\n    if m.cnt == 0 { return 0.0; }\n    return m.total / m.cnt;\n}\n\nwith entry { print(avg_over_threshold({\"adj\": {\"a\": [\"b\", \"c\"], \"b\": [\"d\"], \"c\": [\"d\"], \"d\": []}, \"vals\": {\"a\": 4, \"b\": 8, \"c\": 9, \"d\": 2}, \"start\": \"a\", \"cutoff\": 5})); }",
+   "expected_output": "8.5",
+   "cases": [
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b",
+        "c"
+       ],
+       "b": [
+        "d"
+       ],
+       "c": [
+        "d"
+       ],
+       "d": []
+      },
+      "vals": {
+       "a": 4,
+       "b": 8,
+       "c": 9,
+       "d": 2
+      },
+      "start": "a",
+      "cutoff": 5
+     },
+     "output": "8.5"
+    },
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b"
+       ],
+       "b": []
+      },
+      "vals": {
+       "a": 1,
+       "b": 3
+      },
+      "start": "a",
+      "cutoff": 5
+     },
+     "output": "0.0"
+    },
+    {
+     "input": {
+      "adj": {
+       "m": [
+        "n",
+        "o"
+       ],
+       "n": [],
+       "o": []
+      },
+      "vals": {
+       "m": 7,
+       "n": 12,
+       "o": 4
+      },
+      "start": "m",
+      "cutoff": 6
+     },
+     "output": "9.5"
+    }
+   ]
+  },
+  {
+   "name": "names_passing",
+   "category": "graph_osp",
+   "subcategory": "predicate_collect",
+   "difficulty": "composed",
+   "py": "def names_passing(spec: dict) -> list:\n    \"\"\"Return the sorted names of reachable nodes whose score is at least cutoff.\"\"\"\n    adj = spec[\"adj\"]; scores = spec[\"scores\"]; start = spec[\"start\"]; cutoff = spec[\"cutoff\"]\n    seen = set(); stack = [start]; keep = []\n    while stack:\n        n = stack.pop()\n        if n in seen: continue\n        seen.add(n)\n        if scores[n] >= cutoff: keep.append(n)\n        stack.extend(adj.get(n, []))\n    return sorted(keep)",
+   "jac": "node Player { has name: str; has score: int; has rated: bool = False; }\n\nwalker Roster {\n    has cutoff: int;\n    has keep: list = [];\n    can rate with Player entry {\n        if not here.rated {\n            here.rated = True;\n            if here.score >= self.cutoff { self.keep.append(here.name); }\n            visit [-->];\n        }\n    }\n}\n\ndef names_passing(spec: dict) -> list {\n    adj: dict = spec[\"adj\"]; scores: dict = spec[\"scores\"];\n    roster_names: list = list(adj.keys());\n    for group in adj.values() { for g in group { if g not in roster_names { roster_names.append(g); } } }\n    team: dict = {};\n    for nm in roster_names { team[nm] = Player(name=nm, score=scores[nm]); }\n    for (src, group) in adj.items() { for g in group { team[src] ++> team[g]; } }\n    w = team[spec[\"start\"]] spawn Roster(cutoff=spec[\"cutoff\"]);\n    return sorted(w.keep);\n}\n\nwith entry { print(names_passing({\"adj\": {\"a\": [\"b\", \"c\"], \"b\": [\"d\"], \"c\": [], \"d\": []}, \"scores\": {\"a\": 80, \"b\": 45, \"c\": 60, \"d\": 91}, \"start\": \"a\", \"cutoff\": 60})); }",
+   "expected_output": "['a', 'c', 'd']",
+   "cases": [
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b",
+        "c"
+       ],
+       "b": [
+        "d"
+       ],
+       "c": [],
+       "d": []
+      },
+      "scores": {
+       "a": 80,
+       "b": 45,
+       "c": 60,
+       "d": 91
+      },
+      "start": "a",
+      "cutoff": 60
+     },
+     "output": "['a', 'c', 'd']"
+    },
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b",
+        "c"
+       ],
+       "b": [
+        "d"
+       ],
+       "c": [],
+       "d": []
+      },
+      "scores": {
+       "a": 80,
+       "b": 45,
+       "c": 60,
+       "d": 91
+      },
+      "start": "a",
+      "cutoff": 90
+     },
+     "output": "['d']"
+    },
+    {
+     "input": {
+      "adj": {
+       "x": [
+        "y"
+       ],
+       "y": []
+      },
+      "scores": {
+       "x": 10,
+       "y": 20
+      },
+      "start": "x",
+      "cutoff": 50
+     },
+     "output": "[]"
+    }
+   ]
+  },
+  {
+   "name": "count_even_leaves",
+   "category": "graph_osp",
+   "subcategory": "multi_predicate",
+   "difficulty": "composed",
+   "py": "def count_even_leaves(spec: dict) -> int:\n    \"\"\"Count reachable nodes that are leaves (no children) with an even value.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]; start = spec[\"start\"]\n    seen = set(); stack = [start]; hits = 0\n    while stack:\n        n = stack.pop()\n        if n in seen: continue\n        seen.add(n); kids = adj.get(n, [])\n        if len(kids) == 0 and vals[n] % 2 == 0: hits += 1\n        stack.extend(kids)\n    return hits",
+   "jac": "node Twig { has name: str; has size: int; has passed: bool = False; }\n\nwalker LeafScan {\n    has hits: int = 0;\n    can inspect with Twig entry {\n        if not here.passed {\n            here.passed = True;\n            if len([-->]) == 0 and here.size % 2 == 0 { self.hits += 1; }\n            visit [-->];\n        }\n    }\n}\n\ndef count_even_leaves(spec: dict) -> int {\n    adj: dict = spec[\"adj\"]; vals: dict = spec[\"vals\"];\n    built: dict = {};\n    for (u, vs) in adj.items() {\n        if u not in built { built[u] = Twig(name=u, size=vals[u]); }\n        for v in vs { if v not in built { built[v] = Twig(name=v, size=vals[v]); } }\n    }\n    for (u, vs) in adj.items() { for v in vs { built[u] ++> built[v]; } }\n    wk = built[spec[\"start\"]] spawn LeafScan();\n    return wk.hits;\n}\n\nwith entry { print(count_even_leaves({\"adj\": {\"a\": [\"b\", \"c\"], \"b\": [\"d\"], \"c\": [\"e\"], \"d\": [], \"e\": []}, \"vals\": {\"a\": 2, \"b\": 3, \"c\": 5, \"d\": 4, \"e\": 7}, \"start\": \"a\"})); }",
+   "expected_output": "1",
+   "cases": [
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b",
+        "c"
+       ],
+       "b": [
+        "d"
+       ],
+       "c": [
+        "e"
+       ],
+       "d": [],
+       "e": []
+      },
+      "vals": {
+       "a": 2,
+       "b": 3,
+       "c": 5,
+       "d": 4,
+       "e": 7
+      },
+      "start": "a"
+     },
+     "output": "1"
+    },
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b",
+        "c"
+       ],
+       "b": [],
+       "c": []
+      },
+      "vals": {
+       "a": 8,
+       "b": 6,
+       "c": 2
+      },
+      "start": "a"
+     },
+     "output": "2"
+    },
+    {
+     "input": {
+      "adj": {
+       "n": []
+      },
+      "vals": {
+       "n": 3
+      },
+      "start": "n"
+     },
+     "output": "0"
+    }
+   ]
+  },
+  {
+   "name": "max_under_cap",
+   "category": "graph_osp",
+   "subcategory": "predicate_max",
+   "difficulty": "composed",
+   "py": "def max_under_cap(spec: dict) -> int:\n    \"\"\"Return the largest reachable value strictly below cap, or -1 if none.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]; start = spec[\"start\"]; cap = spec[\"cap\"]\n    seen = set(); stack = [start]; best = -1\n    while stack:\n        n = stack.pop()\n        if n in seen: continue\n        seen.add(n); v = vals[n]\n        if v < cap and v > best: best = v\n        stack.extend(adj.get(n, []))\n    return best",
+   "jac": "node Crate { has name: str; has weight: int; has lifted: bool = False; }\n\nwalker CapMax {\n    has cap: int;\n    has best: int = -1;\n    can lift with Crate entry {\n        if not here.lifted {\n            here.lifted = True;\n            if here.weight < self.cap and here.weight > self.best { self.best = here.weight; }\n            visit [-->];\n        }\n    }\n}\n\ndef max_under_cap(spec: dict) -> int {\n    adj: dict = spec[\"adj\"]; vals: dict = spec[\"vals\"];\n    all_names: list = list(adj.keys());\n    for ends in adj.values() { for e in ends { if e not in all_names { all_names.append(e); } } }\n    crates: dict = {};\n    for nm in all_names { crates[nm] = Crate(name=nm, weight=vals[nm]); }\n    for (src, ends) in adj.items() { for e in ends { crates[src] ++> crates[e]; } }\n    agent = crates[spec[\"start\"]] spawn CapMax(cap=spec[\"cap\"]);\n    return agent.best;\n}\n\nwith entry { print(max_under_cap({\"adj\": {\"a\": [\"b\", \"c\"], \"b\": [\"d\"], \"c\": [\"d\"], \"d\": []}, \"vals\": {\"a\": 12, \"b\": 7, \"c\": 20, \"d\": 9}, \"start\": \"a\", \"cap\": 10})); }",
+   "expected_output": "9",
+   "cases": [
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b",
+        "c"
+       ],
+       "b": [
+        "d"
+       ],
+       "c": [
+        "d"
+       ],
+       "d": []
+      },
+      "vals": {
+       "a": 12,
+       "b": 7,
+       "c": 20,
+       "d": 9
+      },
+      "start": "a",
+      "cap": 10
+     },
+     "output": "9"
+    },
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b"
+       ],
+       "b": []
+      },
+      "vals": {
+       "a": 30,
+       "b": 25
+      },
+      "start": "a",
+      "cap": 10
+     },
+     "output": "-1"
+    },
+    {
+     "input": {
+      "adj": {
+       "m": [
+        "n"
+       ],
+       "n": [
+        "o"
+       ],
+       "o": []
+      },
+      "vals": {
+       "m": 3,
+       "n": 14,
+       "o": 6
+      },
+      "start": "m",
+      "cap": 15
+     },
+     "output": "14"
+    }
+   ]
+  },
+  {
+   "name": "gated_count",
+   "category": "graph_osp",
+   "subcategory": "gated_traversal",
+   "difficulty": "composed",
+   "py": "def gated_count(spec: dict) -> int:\n    \"\"\"Count reached nodes when children are explored only from nodes meeting the gate.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]; start = spec[\"start\"]; gate = spec[\"gate\"]\n    seen = set(); queue = [start]; reached = 0\n    while queue:\n        n = queue.pop(0)\n        if n in seen: continue\n        seen.add(n); reached += 1\n        if vals[n] >= gate:\n            for m in adj.get(n, []): queue.append(m)\n    return reached",
+   "jac": "node Room { has name: str; has level: int; has entered: bool = False; }\n\nwalker Explore {\n    has gate: int;\n    has reached: int = 0;\n    can enter with Room entry {\n        if not here.entered {\n            here.entered = True;\n            self.reached += 1;\n            if here.level >= self.gate { visit [-->]; }\n        }\n    }\n}\n\ndef gated_count(spec: dict) -> int {\n    adj: dict = spec[\"adj\"]; vals: dict = spec[\"vals\"];\n    known: list = list(adj.keys());\n    for group in adj.values() { for g in group { if g not in known { known.append(g); } } }\n    rooms: dict = {};\n    for nm in known { rooms[nm] = Room(name=nm, level=vals[nm]); }\n    for (src, group) in adj.items() { for g in group { rooms[src] ++> rooms[g]; } }\n    w = rooms[spec[\"start\"]] spawn Explore(gate=spec[\"gate\"]);\n    return w.reached;\n}\n\nwith entry { print(gated_count({\"adj\": {\"a\": [\"b\", \"c\"], \"b\": [\"d\"], \"c\": [\"e\"], \"d\": [], \"e\": []}, \"vals\": {\"a\": 5, \"b\": 1, \"c\": 6, \"d\": 9, \"e\": 2}, \"start\": \"a\", \"gate\": 4})); }",
+   "expected_output": "4",
+   "cases": [
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b",
+        "c"
+       ],
+       "b": [
+        "d"
+       ],
+       "c": [
+        "e"
+       ],
+       "d": [],
+       "e": []
+      },
+      "vals": {
+       "a": 5,
+       "b": 1,
+       "c": 6,
+       "d": 9,
+       "e": 2
+      },
+      "start": "a",
+      "gate": 4
+     },
+     "output": "4"
+    },
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b",
+        "c"
+       ],
+       "b": [
+        "d"
+       ],
+       "c": [
+        "e"
+       ],
+       "d": [],
+       "e": []
+      },
+      "vals": {
+       "a": 5,
+       "b": 1,
+       "c": 6,
+       "d": 9,
+       "e": 2
+      },
+      "start": "a",
+      "gate": 6
+     },
+     "output": "1"
+    },
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b",
+        "c"
+       ],
+       "b": [
+        "d"
+       ],
+       "c": [
+        "e"
+       ],
+       "d": [],
+       "e": []
+      },
+      "vals": {
+       "a": 5,
+       "b": 1,
+       "c": 6,
+       "d": 9,
+       "e": 2
+      },
+      "start": "a",
+      "gate": 0
+     },
+     "output": "5"
+    }
+   ]
+  },
+  {
+   "name": "sum_unblocked",
+   "category": "graph_osp",
+   "subcategory": "skip_branch_sum",
+   "difficulty": "advanced",
+   "py": "def sum_unblocked(spec: dict) -> int:\n    \"\"\"Sum values along paths from start, pruning any blocked node and its subtree.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]; blocked = spec[\"blocked\"]; start = spec[\"start\"]\n    seen = set(); stack = [start]; total = 0\n    while stack:\n        n = stack.pop()\n        if n in seen: continue\n        seen.add(n)\n        if blocked[n]: continue\n        total += vals[n]\n        stack.extend(adj.get(n, []))\n    return total",
+   "jac": "node Pipe { has name: str; has flow: int; has shut: bool; has traced: bool = False; }\n\nwalker Flow {\n    has total: int = 0;\n    can trace with Pipe entry {\n        if not here.traced {\n            here.traced = True;\n            if not here.shut {\n                self.total += here.flow;\n                visit [-->];\n            }\n        }\n    }\n}\n\ndef sum_unblocked(spec: dict) -> int {\n    adj: dict = spec[\"adj\"]; vals: dict = spec[\"vals\"]; blocked: dict = spec[\"blocked\"];\n    built: dict = {};\n    for (u, vs) in adj.items() {\n        if u not in built { built[u] = Pipe(name=u, flow=vals[u], shut=blocked[u]); }\n        for v in vs { if v not in built { built[v] = Pipe(name=v, flow=vals[v], shut=blocked[v]); } }\n    }\n    for (u, vs) in adj.items() { for v in vs { built[u] ++> built[v]; } }\n    wk = built[spec[\"start\"]] spawn Flow();\n    return wk.total;\n}\n\nwith entry { print(sum_unblocked({\"adj\": {\"a\": [\"b\", \"c\"], \"b\": [\"d\"], \"c\": [\"d\"], \"d\": []}, \"vals\": {\"a\": 1, \"b\": 10, \"c\": 2, \"d\": 4}, \"blocked\": {\"a\": False, \"b\": True, \"c\": False, \"d\": False}, \"start\": \"a\"})); }",
+   "expected_output": "7",
+   "cases": [
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b",
+        "c"
+       ],
+       "b": [
+        "d"
+       ],
+       "c": [
+        "d"
+       ],
+       "d": []
+      },
+      "vals": {
+       "a": 1,
+       "b": 10,
+       "c": 2,
+       "d": 4
+      },
+      "blocked": {
+       "a": false,
+       "b": true,
+       "c": false,
+       "d": false
+      },
+      "start": "a"
+     },
+     "output": "7"
+    },
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b",
+        "c"
+       ],
+       "b": [
+        "d"
+       ],
+       "c": [
+        "d"
+       ],
+       "d": []
+      },
+      "vals": {
+       "a": 1,
+       "b": 10,
+       "c": 2,
+       "d": 4
+      },
+      "blocked": {
+       "a": false,
+       "b": true,
+       "c": true,
+       "d": false
+      },
+      "start": "a"
+     },
+     "output": "1"
+    },
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b"
+       ],
+       "b": []
+      },
+      "vals": {
+       "a": 6,
+       "b": 9
+      },
+      "blocked": {
+       "a": true,
+       "b": false
+      },
+      "start": "a"
+     },
+     "output": "0"
+    }
+   ]
+  },
+  {
+   "name": "strong_edge_max",
+   "category": "graph_osp",
+   "subcategory": "edge_gated_max",
+   "difficulty": "advanced",
+   "py": "def strong_edge_max(spec: dict) -> int:\n    \"\"\"Return the max value reachable from start crossing only edges with weight >= min_w.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]; start = spec[\"start\"]; min_w = spec[\"min_w\"]\n    seen = set(); stack = [start]; best = None\n    while stack:\n        n = stack.pop()\n        if n in seen: continue\n        seen.add(n)\n        if best is None or vals[n] > best: best = vals[n]\n        for pair in adj.get(n, []):\n            if pair[1] >= min_w: stack.append(pair[0])\n    return best",
+   "jac": "edge Wire { has w: int; }\nnode Hub { has name: str; has power: int; has lit: bool = False; }\n\nwalker Surge {\n    has min_w: int;\n    has best: int = -2147483648;\n    can spread with Hub entry {\n        if not here.lit {\n            here.lit = True;\n            if here.power > self.best { self.best = here.power; }\n            visit [->:Wire:w >= self.min_w:->];\n        }\n    }\n}\n\ndef strong_edge_max(spec: dict) -> int {\n    adj: dict = spec[\"adj\"]; vals: dict = spec[\"vals\"];\n    reg: dict = {};\n    for (src, pairs) in adj.items() {\n        if src not in reg { reg[src] = Hub(name=src, power=vals[src]); }\n        for pr in pairs { if pr[0] not in reg { reg[pr[0]] = Hub(name=pr[0], power=vals[pr[0]]); } }\n    }\n    for (src, pairs) in adj.items() { for pr in pairs { reg[src] +>:Wire(w=pr[1]):+> reg[pr[0]]; } }\n    agent = reg[spec[\"start\"]] spawn Surge(min_w=spec[\"min_w\"]);\n    return agent.best;\n}\n\nwith entry { print(strong_edge_max({\"adj\": {\"a\": [[\"b\", 5], [\"c\", 1]], \"b\": [[\"d\", 4]], \"c\": [], \"d\": []}, \"vals\": {\"a\": 3, \"b\": 6, \"c\": 99, \"d\": 8}, \"start\": \"a\", \"min_w\": 3})); }",
+   "expected_output": "8",
+   "cases": [
+    {
+     "input": {
+      "adj": {
+       "a": [
+        [
+         "b",
+         5
+        ],
+        [
+         "c",
+         1
+        ]
+       ],
+       "b": [
+        [
+         "d",
+         4
+        ]
+       ],
+       "c": [],
+       "d": []
+      },
+      "vals": {
+       "a": 3,
+       "b": 6,
+       "c": 99,
+       "d": 8
+      },
+      "start": "a",
+      "min_w": 3
+     },
+     "output": "8"
+    },
+    {
+     "input": {
+      "adj": {
+       "a": [
+        [
+         "b",
+         5
+        ],
+        [
+         "c",
+         1
+        ]
+       ],
+       "b": [
+        [
+         "d",
+         4
+        ]
+       ],
+       "c": [],
+       "d": []
+      },
+      "vals": {
+       "a": 3,
+       "b": 6,
+       "c": 99,
+       "d": 8
+      },
+      "start": "a",
+      "min_w": 5
+     },
+     "output": "6"
+    },
+    {
+     "input": {
+      "adj": {
+       "a": [
+        [
+         "b",
+         5
+        ],
+        [
+         "c",
+         1
+        ]
+       ],
+       "b": [
+        [
+         "d",
+         4
+        ]
+       ],
+       "c": [],
+       "d": []
+      },
+      "vals": {
+       "a": 3,
+       "b": 6,
+       "c": 99,
+       "d": 8
+      },
+      "start": "a",
+      "min_w": 10
+     },
+     "output": "3"
+    }
+   ]
+  },
+  {
+   "name": "deepest_hit",
+   "category": "graph_osp",
+   "subcategory": "depth_predicate",
+   "difficulty": "advanced",
+   "py": "def deepest_hit(spec: dict) -> int:\n    \"\"\"Return the BFS depth of the deepest reachable node with value above mark, or -1.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]; start = spec[\"start\"]; mark = spec[\"mark\"]\n    depth = {start: 0}; queue = [start]\n    best = 0 if vals[start] > mark else -1\n    while queue:\n        n = queue.pop(0)\n        for m in adj.get(n, []):\n            if m not in depth:\n                depth[m] = depth[n] + 1\n                if vals[m] > mark and depth[m] > best: best = depth[m]\n                queue.append(m)\n    return best",
+   "jac": "node Floor { has name: str; has val: int; has lvl: int = -1; has swept: bool = False; }\n\nwalker Diver {\n    has mark: int;\n    has best: int = -1;\n    can sink with Floor entry {\n        if not here.swept {\n            here.swept = True;\n            if here.val > self.mark and here.lvl > self.best { self.best = here.lvl; }\n            for nxt in [-->] { if nxt.lvl == -1 { nxt.lvl = here.lvl + 1; } }\n            visit [-->];\n        }\n    }\n}\n\ndef deepest_hit(spec: dict) -> int {\n    adj: dict = spec[\"adj\"]; vals: dict = spec[\"vals\"];\n    all_names: list = list(adj.keys());\n    for ends in adj.values() { for e in ends { if e not in all_names { all_names.append(e); } } }\n    floors: dict = {};\n    for nm in all_names { floors[nm] = Floor(name=nm, val=vals[nm]); }\n    for (src, ends) in adj.items() { for e in ends { floors[src] ++> floors[e]; } }\n    floors[spec[\"start\"]].lvl = 0;\n    w = floors[spec[\"start\"]] spawn Diver(mark=spec[\"mark\"]);\n    return w.best;\n}\n\nwith entry { print(deepest_hit({\"adj\": {\"a\": [\"b\"], \"b\": [\"c\"], \"c\": [\"d\"], \"d\": []}, \"vals\": {\"a\": 1, \"b\": 9, \"c\": 2, \"d\": 7}, \"start\": \"a\", \"mark\": 5})); }",
+   "expected_output": "3",
+   "cases": [
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b"
+       ],
+       "b": [
+        "c"
+       ],
+       "c": [
+        "d"
+       ],
+       "d": []
+      },
+      "vals": {
+       "a": 1,
+       "b": 9,
+       "c": 2,
+       "d": 7
+      },
+      "start": "a",
+      "mark": 5
+     },
+     "output": "3"
+    },
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b"
+       ],
+       "b": [
+        "c"
+       ],
+       "c": [
+        "d"
+       ],
+       "d": []
+      },
+      "vals": {
+       "a": 1,
+       "b": 9,
+       "c": 2,
+       "d": 7
+      },
+      "start": "a",
+      "mark": 8
+     },
+     "output": "1"
+    },
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b"
+       ],
+       "b": [
+        "c"
+       ],
+       "c": [
+        "d"
+       ],
+       "d": []
+      },
+      "vals": {
+       "a": 1,
+       "b": 9,
+       "c": 2,
+       "d": 7
+      },
+      "start": "a",
+      "mark": 100
+     },
+     "output": "-1"
+    }
+   ]
+  }
+ ]
+}

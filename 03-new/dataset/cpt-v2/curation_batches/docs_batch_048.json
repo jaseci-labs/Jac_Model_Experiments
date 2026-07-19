@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "199e07340e02",
+    "verdict": "keep",
+    "reason": "Concrete lint config toml example."
+  },
+  {
+    "chunk_id": "b698e9d14cbe",
+    "verdict": "keep",
+    "reason": "Explains strip-comments/docstrings behavior and precommit interaction."
+  },
+  {
+    "chunk_id": "03c226320f2e",
+    "verdict": "drop",
+    "reason": "Bold section-label fragment with no prose."
+  },
+  {
+    "chunk_id": "d3331f1ba1d1",
+    "verdict": "keep",
+    "reason": "Describes the exclude glob mechanism."
+  },
+  {
+    "chunk_id": "830a083b14a7",
+    "verdict": "keep",
+    "reason": "Concrete exclude config toml example."
+  },
+  {
+    "chunk_id": "ed74ec41853c",
+    "verdict": "keep",
+    "reason": "Explains glob pattern matching semantics."
+  },
+  {
+    "chunk_id": "64572a7a8aa1",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator boilerplate."
+  },
+  {
+    "chunk_id": "acc399db63de",
+    "verdict": "keep",
+    "reason": "Documents the [dot] config section."
+  },
+  {
+    "chunk_id": "4ddaf943cd30",
+    "verdict": "keep",
+    "reason": "Documented dot config toml with field comments."
+  },
+  {
+    "chunk_id": "ecd582f0bf16",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator boilerplate."
+  },
+  {
+    "chunk_id": "c9107297ce83",
+    "verdict": "keep",
+    "reason": "Documents the [cache] config section."
+  },
+  {
+    "chunk_id": "7cd1a577c905",
+    "verdict": "keep",
+    "reason": "Documented cache config toml example."
+  },
+  {
+    "chunk_id": "8272e76fcd9d",
+    "verdict": "keep",
+    "reason": "Substantial explanation of format-cache invalidation semantics."
+  },
+  {
+    "chunk_id": "aaf9e1d60d0d",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator boilerplate."
+  },
+  {
+    "chunk_id": "a3638959ab6b",
+    "verdict": "keep",
+    "reason": "Documents [storage] section and scale subsystem note."
+  },
+  {
+    "chunk_id": "b5a6cd7d9b2e",
+    "verdict": "drop",
+    "reason": "Bare lead-in label with no content."
+  },
+  {
+    "chunk_id": "68b9d7b5b064",
+    "verdict": "keep",
+    "reason": "Storage config toml example."
+  },
+  {
+    "chunk_id": "a957eeff49a6",
+    "verdict": "keep",
+    "reason": "Storage field reference table."
+  },
+  {
+    "chunk_id": "7b83ff950c5e",
+    "verdict": "drop",
+    "reason": "Bold section-label fragment with no prose."
+  },
+  {
+    "chunk_id": "124f997ba437",
+    "verdict": "keep",
+    "reason": "Environment variable override reference table."
+  },
+  {
+    "chunk_id": "b53e211b661c",
+    "verdict": "keep",
+    "reason": "States config resolution priority order."
+  },
+  {
+    "chunk_id": "fccf164be041",
+    "verdict": "drop",
+    "reason": "Nav-only cross-reference link."
+  },
+  {
+    "chunk_id": "df368d1094f3",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator boilerplate."
+  },
+  {
+    "chunk_id": "0f44e4c6fb7d",
+    "verdict": "keep",
+    "reason": "Explains capability-settings table convention."
+  },
+  {
+    "chunk_id": "e41142b253bc",
+    "verdict": "keep",
+    "reason": "Comprehensive byLLM/scale/client config toml example."
+  },
+  {
+    "chunk_id": "44d6e6c26d43",
+    "verdict": "drop",
+    "reason": "Bold section-label fragment with no prose."
+  },
+  {
+    "chunk_id": "dc3c4535da83",
+    "verdict": "keep",
+    "reason": "Prometheus monitoring config toml example."
+  },
+  {
+    "chunk_id": "f8209606f07d",
+    "verdict": "drop",
+    "reason": "Nav-only cross-reference link."
+  },
+  {
+    "chunk_id": "fef4ebcc34bc",
+    "verdict": "drop",
+    "reason": "Bold section-label fragment with no prose."
+  },
+  {
+    "chunk_id": "a535e42ccc97",
+    "verdict": "keep",
+    "reason": "Kubernetes secrets config toml example."
+  },
+  {
+    "chunk_id": "de04aa050f54",
+    "verdict": "drop",
+    "reason": "Nav-only cross-reference link."
+  },
+  {
+    "chunk_id": "e70182bf97e5",
+    "verdict": "drop",
+    "reason": "Nav-only cross-reference links."
+  },
+  {
+    "chunk_id": "772e342fb445",
+    "verdict": "drop",
+    "reason": "Bold section-label fragment with no prose."
+  },
+  {
+    "chunk_id": "5e73c6bcd624",
+    "verdict": "keep",
+    "reason": "Documented local-model config toml example."
+  },
+  {
+    "chunk_id": "77bab04068bf",
+    "verdict": "keep",
+    "reason": "Explains bundled alias download/caching behavior."
+  },
+  {
+    "chunk_id": "282a332a30e4",
+    "verdict": "drop",
+    "reason": "Bold section-label fragment with no prose."
+  },
+  {
+    "chunk_id": "1a6df1110199",
+    "verdict": "keep",
+    "reason": "Client framework config toml example."
+  },
+  {
+    "chunk_id": "10c174598fda",
+    "verdict": "keep",
+    "reason": "Explains the framework compiler-target setting."
+  },
+  {
+    "chunk_id": "17716b297e7c",
+    "verdict": "keep",
+    "reason": "Framework option status reference table."
+  },
+  {
+    "chunk_id": "ede135b77844",
+    "verdict": "keep",
+    "reason": "Explains framework-switching side effects and cache cleanup."
+  },
+  {
+    "chunk_id": "7928b74c517f",
+    "verdict": "keep",
+    "reason": "Warning documenting experimental Solid support limits."
+  },
+  {
+    "chunk_id": "f8f3b9f2c879",
+    "verdict": "drop",
+    "reason": "Bold section-label fragment with no prose."
+  },
+  {
+    "chunk_id": "ed51511583d1",
+    "verdict": "keep",
+    "reason": "Import path aliases config toml example."
+  },
+  {
+    "chunk_id": "437eac54c058",
+    "verdict": "keep",
+    "reason": "Explains where path aliases are applied."
+  },
+  {
+    "chunk_id": "c2d89c2dc0b1",
+    "verdict": "drop",
+    "reason": "Bold section-label fragment with no prose."
+  },
+  {
+    "chunk_id": "2449737709b8",
+    "verdict": "keep",
+    "reason": "NPM scoped-registry config toml example."
+  },
+  {
+    "chunk_id": "b7821f038454",
+    "verdict": "keep",
+    "reason": "Explains .npmrc generation for scoped packages."
+  },
+  {
+    "chunk_id": "f4d6ccb02de4",
+    "verdict": "drop",
+    "reason": "Bold section-label fragment with no prose."
+  },
+  {
+    "chunk_id": "8f4023e178bb",
+    "verdict": "keep",
+    "reason": "Explains build-time constant replacement via vite.define."
+  },
+  {
+    "chunk_id": "6c0deaa26600",
+    "verdict": "keep",
+    "reason": "Build-time constants config toml example."
+  }
+]

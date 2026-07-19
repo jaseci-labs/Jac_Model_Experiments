@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "9e3365d90200",
+    "verdict": "keep",
+    "reason": "Small but valid Jac entry-block code example."
+  },
+  {
+    "chunk_id": "0502377c545b",
+    "verdict": "keep",
+    "reason": "Section header framing a Python-to-Jac comparison."
+  },
+  {
+    "chunk_id": "6c64e1105738",
+    "verdict": "keep",
+    "reason": "Python side of a module-level variable comparison, provides contrast context."
+  },
+  {
+    "chunk_id": "9d56f4e7bf05",
+    "verdict": "drop",
+    "reason": "Bare label fragment with no content."
+  },
+  {
+    "chunk_id": "c0b048b32886",
+    "verdict": "keep",
+    "reason": "Genuine Jac glob variable declaration example."
+  },
+  {
+    "chunk_id": "bf28f80e3354",
+    "verdict": "keep",
+    "reason": "Section header introducing error-handling comparison."
+  },
+  {
+    "chunk_id": "1521ef121fd3",
+    "verdict": "keep",
+    "reason": "Python try/except example providing contrast for Jac equivalent."
+  },
+  {
+    "chunk_id": "81f2b0b19476",
+    "verdict": "drop",
+    "reason": "Bare label fragment with no content."
+  },
+  {
+    "chunk_id": "028cd17f5362",
+    "verdict": "keep",
+    "reason": "Canonical Jac try/except/finally example; duplicate pair partner not in this batch."
+  },
+  {
+    "chunk_id": "e7c03208c0ac",
+    "verdict": "keep",
+    "reason": "Useful Jac rule that module-level statements need a with-entry block."
+  },
+  {
+    "chunk_id": "d02e5f4cc164",
+    "verdict": "drop",
+    "reason": "Nav-only cross-reference link with no prose."
+  },
+  {
+    "chunk_id": "c5253004458a",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "27550a5cfbc3",
+    "verdict": "keep",
+    "reason": "LLM provider reference table, genuine reference content."
+  },
+  {
+    "chunk_id": "fbd6dd2e63de",
+    "verdict": "drop",
+    "reason": "Bare label fragment with no content."
+  },
+  {
+    "chunk_id": "8eaef699e672",
+    "verdict": "keep",
+    "reason": "Model-name format examples, genuine reference content."
+  },
+  {
+    "chunk_id": "efdd4721e9eb",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "69f954c51ac6",
+    "verdict": "drop",
+    "reason": "Document-information boilerplate header."
+  },
+  {
+    "chunk_id": "575ef4533df4",
+    "verdict": "drop",
+    "reason": "Version/date boilerplate metadata."
+  },
+  {
+    "chunk_id": "23e5ecc28890",
+    "verdict": "drop",
+    "reason": "Validation-status boilerplate metadata."
+  },
+  {
+    "chunk_id": "56ad55375533",
+    "verdict": "drop",
+    "reason": "Bare label fragment with no content."
+  },
+  {
+    "chunk_id": "1674c073db06",
+    "verdict": "drop",
+    "reason": "Nav-only list of external resource links."
+  },
+  {
+    "chunk_id": "d615117e5d5e",
+    "verdict": "keep",
+    "reason": "Part title introducing the concurrency section."
+  },
+  {
+    "chunk_id": "92006cb1514c",
+    "verdict": "drop",
+    "reason": "Nav-only table-of-contents link list."
+  },
+  {
+    "chunk_id": "5d773eb694b5",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "e7695a86abb6",
+    "verdict": "keep",
+    "reason": "Substantive intro motivating Jac's two concurrency models."
+  },
+  {
+    "chunk_id": "3d605202f1b3",
+    "verdict": "keep",
+    "reason": "Explains async/await cooperative concurrency model in Jac."
+  },
+  {
+    "chunk_id": "f88ec34df71d",
+    "verdict": "keep",
+    "reason": "Explains flow/wait thread-based concurrency model."
+  },
+  {
+    "chunk_id": "fc9ebdfecc9a",
+    "verdict": "keep",
+    "reason": "Important warning on flow and the GIL limitation."
+  },
+  {
+    "chunk_id": "bba0a37eb4e5",
+    "verdict": "keep",
+    "reason": "Clarifies the key distinction between the two models."
+  },
+  {
+    "chunk_id": "36768ed3066e",
+    "verdict": "keep",
+    "reason": "Explains await context restriction with entry blocks."
+  },
+  {
+    "chunk_id": "8241be8107ef",
+    "verdict": "keep",
+    "reason": "Working Jac asyncio.run example."
+  },
+  {
+    "chunk_id": "9d4cc1ab6322",
+    "verdict": "keep",
+    "reason": "Explains async/await semantics including async walkers."
+  },
+  {
+    "chunk_id": "eaf6b50c5bed",
+    "verdict": "keep",
+    "reason": "Describes async functions and coroutine behavior."
+  },
+  {
+    "chunk_id": "773cc30c70ec",
+    "verdict": "keep",
+    "reason": "Note clarifying placeholder usage in examples."
+  },
+  {
+    "chunk_id": "149eeb2a5a7b",
+    "verdict": "keep",
+    "reason": "Genuine Jac async function code example."
+  },
+  {
+    "chunk_id": "02346b47a863",
+    "verdict": "keep",
+    "reason": "Explains async walkers for non-blocking graph traversal."
+  },
+  {
+    "chunk_id": "f2bf27bdbcc2",
+    "verdict": "keep",
+    "reason": "Async walker Jac code example combining OSP and concurrency."
+  },
+  {
+    "chunk_id": "3ce7c34051c7",
+    "verdict": "keep",
+    "reason": "Explains async for loops over async iterators."
+  },
+  {
+    "chunk_id": "5230c63fb2d5",
+    "verdict": "keep",
+    "reason": "Genuine Jac async-for code example."
+  },
+  {
+    "chunk_id": "28fdc09cface",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "4d750b479cf6",
+    "verdict": "keep",
+    "reason": "Describes the flow/wait concurrent-expression model."
+  },
+  {
+    "chunk_id": "1567ff905f74",
+    "verdict": "keep",
+    "reason": "Explains the flow/wait mental model."
+  },
+  {
+    "chunk_id": "4628926e1910",
+    "verdict": "keep",
+    "reason": "Describes the flow keyword and background task launch."
+  },
+  {
+    "chunk_id": "ac1b4d054dc8",
+    "verdict": "keep",
+    "reason": "Important warning on flow's deferred evaluation and loop-variable capture."
+  },
+  {
+    "chunk_id": "23aa2afdb447",
+    "verdict": "keep",
+    "reason": "Jac code showing correct loop-variable pinning with flow."
+  },
+  {
+    "chunk_id": "166511578cea",
+    "verdict": "keep",
+    "reason": "Basic flow/wait Jac code example."
+  },
+  {
+    "chunk_id": "d85a1f42a95f",
+    "verdict": "keep",
+    "reason": "Explains parallel operations with flow/wait."
+  },
+  {
+    "chunk_id": "f016279e7fe4",
+    "verdict": "keep",
+    "reason": "Jac code example launching multiple flow tasks in parallel."
+  },
+  {
+    "chunk_id": "e9d68a8d7e33",
+    "verdict": "keep",
+    "reason": "Introduces the flow-vs-async comparison."
+  },
+  {
+    "chunk_id": "13cc0d0c7165",
+    "verdict": "keep",
+    "reason": "Comparison table of async/await vs flow/wait tradeoffs."
+  }
+]

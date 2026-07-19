@@ -1,0 +1,264 @@
+[
+  {
+    "chunk_id": "3ab666638534",
+    "verdict": "keep",
+    "reason": "Genuine prose on move-elision conservatism in the native pathway."
+  },
+  {
+    "chunk_id": "36038b1e0409",
+    "verdict": "keep",
+    "reason": "Detailed, non-redundant specification of move-elision conditions."
+  },
+  {
+    "chunk_id": "3022e0fc4e75",
+    "verdict": "keep",
+    "reason": "Substantive detail on move-site-scoped elision proof."
+  },
+  {
+    "chunk_id": "b04a2967681d",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "4a73bc2a9d42",
+    "verdict": "keep",
+    "reason": "Genuine documentation of native test compilation and semantics."
+  },
+  {
+    "chunk_id": "aca1d21c61ad",
+    "verdict": "keep",
+    "reason": "Concrete native test code example."
+  },
+  {
+    "chunk_id": "ee7c08ce07aa",
+    "verdict": "keep",
+    "reason": "Short but genuine jac test invocation tied to the preceding example."
+  },
+  {
+    "chunk_id": "610790c803ef",
+    "verdict": "keep",
+    "reason": "Substantive detail on native test failure handling and runner options."
+  },
+  {
+    "chunk_id": "f4da20ead94a",
+    "verdict": "keep",
+    "reason": "Genuine caveat about assert messages in native tests."
+  },
+  {
+    "chunk_id": "4831d1041aac",
+    "verdict": "keep",
+    "reason": "Important process-isolation warning for native tests."
+  },
+  {
+    "chunk_id": "9d471c2c3a8e",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "e6939377d031",
+    "verdict": "drop",
+    "reason": "Header-only fragment with no prose."
+  },
+  {
+    "chunk_id": "a18d13516323",
+    "verdict": "keep",
+    "reason": "Genuine debugging documentation for JAC_DUMP_IR."
+  },
+  {
+    "chunk_id": "6eba0cff21ce",
+    "verdict": "keep",
+    "reason": "Concrete command example for dumping LLVM IR."
+  },
+  {
+    "chunk_id": "aabbf8769333",
+    "verdict": "keep",
+    "reason": "Useful prose on inspecting the generated .ll output."
+  },
+  {
+    "chunk_id": "52e39e1f3eb1",
+    "verdict": "keep",
+    "reason": "Genuine documentation of bytecode cache locations."
+  },
+  {
+    "chunk_id": "49a78f560dce",
+    "verdict": "keep",
+    "reason": "Concrete cache-clearing commands tied to the preceding prose."
+  },
+  {
+    "chunk_id": "c97f12d5dc8f",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "9bb6f45f511c",
+    "verdict": "keep",
+    "reason": "Introduces the native-codespace limitations section."
+  },
+  {
+    "chunk_id": "b190e60e7ff0",
+    "verdict": "keep",
+    "reason": "Substantive feature-limitation table for the native codespace."
+  },
+  {
+    "chunk_id": "7347c8ab1a35",
+    "verdict": "keep",
+    "reason": "Genuine guidance on mixing codespaces around missing features."
+  },
+  {
+    "chunk_id": "125b5d678288",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "1c02ef9cc5b1",
+    "verdict": "drop",
+    "reason": "Header-only fragment with no prose."
+  },
+  {
+    "chunk_id": "d3207e5f269b",
+    "verdict": "keep",
+    "reason": "Concrete native Fibonacci example."
+  },
+  {
+    "chunk_id": "8bee70a3a700",
+    "verdict": "keep",
+    "reason": "Concrete lazy-iterator example with map/filter/enumerate/zip."
+  },
+  {
+    "chunk_id": "b7e17e83c8df",
+    "verdict": "keep",
+    "reason": "Concrete objects-and-inheritance example in native Jac."
+  },
+  {
+    "chunk_id": "6326b809cd35",
+    "verdict": "keep",
+    "reason": "Concrete exception-handling example in native Jac."
+  },
+  {
+    "chunk_id": "24d8948a45c5",
+    "verdict": "keep",
+    "reason": "Concrete sys.argv CLI example in native Jac."
+  },
+  {
+    "chunk_id": "050f1478506c",
+    "verdict": "keep",
+    "reason": "Compile-and-run transcript completing the greeter example."
+  },
+  {
+    "chunk_id": "a77ad915ba73",
+    "verdict": "keep",
+    "reason": "Concrete example of mixing native and Python codespaces."
+  },
+  {
+    "chunk_id": "a2ced7053e87",
+    "verdict": "keep",
+    "reason": "Genuine pointer to the comprehensive chess-engine tutorial."
+  },
+  {
+    "chunk_id": "45b129ab5c6d",
+    "verdict": "drop",
+    "reason": "Title-plus-lead-in fragment with no actual content."
+  },
+  {
+    "chunk_id": "b6efdba1bd72",
+    "verdict": "drop",
+    "reason": "Nav-only table-of-contents link list."
+  },
+  {
+    "chunk_id": "44adcddf7c00",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "f62ba33e9285",
+    "verdict": "drop",
+    "reason": "Nav-only related-sections link block."
+  },
+  {
+    "chunk_id": "d76a3d87a180",
+    "verdict": "drop",
+    "reason": "Header-only fragment with no prose."
+  },
+  {
+    "chunk_id": "4c5156f23ffa",
+    "verdict": "upweight",
+    "reason": "Core OSP definition: graphs as data and walkers as mobile computation.",
+    "weight": 3.5
+  },
+  {
+    "chunk_id": "29d454d3fcd3",
+    "verdict": "upweight",
+    "reason": "Core motivation for OSP including spatial context of here/visitor.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "78cae43472c0",
+    "verdict": "upweight",
+    "reason": "Canonical table of node/edge/walker/root/here/visitor concepts.",
+    "weight": 3.5
+  },
+  {
+    "chunk_id": "80da1d99e83a",
+    "verdict": "upweight",
+    "reason": "Complete canonical example covering spawn, visit, here, and edge connection syntax.",
+    "weight": 4.0
+  },
+  {
+    "chunk_id": "7bd51e2598b2",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "2f85934fd37b",
+    "verdict": "upweight",
+    "reason": "Core explanation of node semantics and how nodes react to visits.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "d3c007c45d74",
+    "verdict": "upweight",
+    "reason": "Canonical node declaration syntax with a visitor-triggered ability.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "753a22fccff1",
+    "verdict": "upweight",
+    "reason": "Introduces core entry/exit ability semantics on nodes.",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "3b039895edcc",
+    "verdict": "upweight",
+    "reason": "Canonical event-clause syntax for node abilities.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "04ed0126bf0b",
+    "verdict": "upweight",
+    "reason": "Core rule that an omitted type expression triggers for all walkers.",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "84bd86974ef7",
+    "verdict": "upweight",
+    "reason": "Rich example of typed entry/exit abilities, visitor access, and disengage.",
+    "weight": 3.5
+  },
+  {
+    "chunk_id": "4b61b4dc6665",
+    "verdict": "drop",
+    "reason": "Bare label fragment with no content."
+  },
+  {
+    "chunk_id": "f6fcd0af87d7",
+    "verdict": "upweight",
+    "reason": "Canonical reference table of event-clause forms and their trigger semantics.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "ce370b4eeb6b",
+    "verdict": "upweight",
+    "reason": "Core node-inheritance syntax for graph modeling.",
+    "weight": 2.0
+  }
+]

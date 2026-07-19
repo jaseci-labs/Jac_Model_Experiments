@@ -1,0 +1,266 @@
+[
+  {
+    "chunk_id": "f08a4a55232b",
+    "verdict": "upweight",
+    "reason": "Core walker spawn mechanics (spawn at node, parameters, reports) — central OSP fundamental.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "d3feb1a75a21",
+    "verdict": "keep",
+    "reason": "Genuine intro prose framing the walkers-vs-functions design decision."
+  },
+  {
+    "chunk_id": "029326e810be",
+    "verdict": "keep",
+    "reason": "Substantive comparison table of def:pub functions vs walkers, useful non-core content."
+  },
+  {
+    "chunk_id": "817efd0a111d",
+    "verdict": "keep",
+    "reason": "Flagged pair partner b61da39de394 is not in this batch and containment is only 0.583; this tip is complete and canonical, so keep it."
+  },
+  {
+    "chunk_id": "2b3034448410",
+    "verdict": "keep",
+    "reason": "Short but real section lead explaining walkers auto-become HTTP endpoints."
+  },
+  {
+    "chunk_id": "51af9bdff39d",
+    "verdict": "keep",
+    "reason": "Canonical reference-doc copy of the todo walker example; the 0.955-containment partner is absent from this batch, so the drop belongs to that copy if anywhere."
+  },
+  {
+    "chunk_id": "503175b97c3d",
+    "verdict": "keep",
+    "reason": "This is the canonical reference/language copy of the entry-point note; its 1.0-containment duplicate is outside this batch and should be the one dropped."
+  },
+  {
+    "chunk_id": "4acd6d508dce",
+    "verdict": "keep",
+    "reason": "Canonical copy of the jac start + curl example; the exact duplicate (7f698bd74c80) is outside this batch, and both must not be dropped."
+  },
+  {
+    "chunk_id": "2ddd4eb171aa",
+    "verdict": "keep",
+    "reason": "Explains the request/response mapping for walker endpoints — real content despite cross-links."
+  },
+  {
+    "chunk_id": "ed639f7b8b8c",
+    "verdict": "keep",
+    "reason": "Genuine walker inheritance example, useful but not core traversal semantics."
+  },
+  {
+    "chunk_id": "02b1ce97bc8c",
+    "verdict": "keep",
+    "reason": "Brief but real section lead-in for special references; keeps the following tables coherent."
+  },
+  {
+    "chunk_id": "064bedd85326",
+    "verdict": "upweight",
+    "reason": "The self/here/visitor/root reference table is core OSP semantics the model must internalize.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "3fac55a3377b",
+    "verdict": "drop",
+    "reason": "Bare '**Usage examples:**' label with no content — boilerplate fragment."
+  },
+  {
+    "chunk_id": "19d05da746a9",
+    "verdict": "upweight",
+    "reason": "Canonical worked example disambiguating here/visitor/self/root in walker and node abilities.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "cf1d8894da67",
+    "verdict": "drop",
+    "reason": "Bare '**When each reference is valid:**' label with no content — boilerplate fragment."
+  },
+  {
+    "chunk_id": "7abcd4d35ea7",
+    "verdict": "upweight",
+    "reason": "Context-validity matrix for self/here/visitor/root — dense core-semantics signal.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "4e6f94d3cc76",
+    "verdict": "drop",
+    "reason": "Chunk is only a horizontal rule '---' — pure boilerplate."
+  },
+  {
+    "chunk_id": "300e1048f26e",
+    "verdict": "drop",
+    "reason": "Heading-only fragment '## Graph Construction' with no prose — nav-only."
+  },
+  {
+    "chunk_id": "ad3c6282f093",
+    "verdict": "upweight",
+    "reason": "Node creation and root ++> connection basics — foundational graph-construction semantics.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "133f7a8c6b9a",
+    "verdict": "keep",
+    "reason": "Useful note on ++> return-value semantics, genuine non-redundant content."
+  },
+  {
+    "chunk_id": "ef62c1c5dd55",
+    "verdict": "keep",
+    "reason": "Small but real code fragment completing the preceding ++> note."
+  },
+  {
+    "chunk_id": "de9b44f7442b",
+    "verdict": "upweight",
+    "reason": "Typed/untyped/bidirectional edge creation syntax — core node/edge semantics.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "3ff3d5738f6e",
+    "verdict": "keep",
+    "reason": "Genuine chained-construction example, useful extension of edge basics."
+  },
+  {
+    "chunk_id": "9a623d610203",
+    "verdict": "keep",
+    "reason": "Real deletion-syntax documentation including del-from-walker pattern."
+  },
+  {
+    "chunk_id": "00282aeade41",
+    "verdict": "keep",
+    "reason": "Short lead-in for cascade deletion that gives the following code its meaning."
+  },
+  {
+    "chunk_id": "67b9c63c4a0f",
+    "verdict": "keep",
+    "reason": "Genuine cascade-deletion walker example, practical but not core-concept material."
+  },
+  {
+    "chunk_id": "7ed57fe7ca5e",
+    "verdict": "keep",
+    "reason": "Built-in graph function reference table (jid, grant, commit, on_commit) — real unique content."
+  },
+  {
+    "chunk_id": "8f0de9340164",
+    "verdict": "keep",
+    "reason": "Cross-reference prose with substantive pointers on persistence and replay semantics."
+  },
+  {
+    "chunk_id": "313335855222",
+    "verdict": "keep",
+    "reason": "Small but genuine example exercising jid/save/printgraph."
+  },
+  {
+    "chunk_id": "a104641b8828",
+    "verdict": "keep",
+    "reason": "Real documentation of root.shared resolution and purpose."
+  },
+  {
+    "chunk_id": "9ec6c56a7799",
+    "verdict": "keep",
+    "reason": "Genuine shared-root walker example with grant semantics."
+  },
+  {
+    "chunk_id": "5a0a31942db8",
+    "verdict": "keep",
+    "reason": "Substantive prose on shared-root default permission policy."
+  },
+  {
+    "chunk_id": "3baa1684d41d",
+    "verdict": "keep",
+    "reason": "Real ownership/permission-level guidance for shared-graph content."
+  },
+  {
+    "chunk_id": "e663046a565f",
+    "verdict": "keep",
+    "reason": "Genuine lockdown-policy detail for root.shared permissions."
+  },
+  {
+    "chunk_id": "85331d8852d1",
+    "verdict": "keep",
+    "reason": "One sentence but a real semantic fact: root.shared == root outside a server."
+  },
+  {
+    "chunk_id": "e8a0e9787060",
+    "verdict": "drop",
+    "reason": "Chunk is only a horizontal rule '---' — pure boilerplate."
+  },
+  {
+    "chunk_id": "6f8ec712803b",
+    "verdict": "drop",
+    "reason": "Heading-only fragment '## Graph Traversal' with no prose — nav-only."
+  },
+  {
+    "chunk_id": "5d86d77a7492",
+    "verdict": "upweight",
+    "reason": "States the core traversal model (queue-based, BFS-like) — small but foundational.",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "23cc28f6ec0e",
+    "verdict": "upweight",
+    "reason": "Canonical basic-traversal walker with visit [-->] — core spawn/visit mechanics.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "ad9928feebfe",
+    "verdict": "upweight",
+    "reason": "Deferred-exit LIFO semantics are a subtle core part of the traversal model.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "9965d7a1b08f",
+    "verdict": "upweight",
+    "reason": "Worked entry/exit-ordering example demonstrating post-order exit execution.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "efdc2893f333",
+    "verdict": "keep",
+    "reason": "Short follow-on prose explaining when deferred exits are useful — real content."
+  },
+  {
+    "chunk_id": "d0701b1bb523",
+    "verdict": "upweight",
+    "reason": "Filtered traversal by node type, edge type, and edge attribute — core visit semantics.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "5537f1b2fa1d",
+    "verdict": "keep",
+    "reason": "Genuine tip about type inference from typed edge endpoints."
+  },
+  {
+    "chunk_id": "fba516514931",
+    "verdict": "upweight",
+    "reason": "Node-side entry/exit abilities triggered by walkers — core node/walker interaction semantics.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "fd6d82cf77a9",
+    "verdict": "drop",
+    "reason": "Chunk is only a horizontal rule '---' — pure boilerplate."
+  },
+  {
+    "chunk_id": "d5ded06e3559",
+    "verdict": "drop",
+    "reason": "Heading-only fragment '## Object Spatial Queries' with no prose — nav-only."
+  },
+  {
+    "chunk_id": "75e2b7ba6b87",
+    "verdict": "upweight",
+    "reason": "Comprehensive edge-reference syntax catalog ([-->], typed, filtered, edge objects) — core graph-query semantics.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "9255b200ac3b",
+    "verdict": "keep",
+    "reason": "One-sentence but genuine guidance on when to use [edge -->]."
+  },
+  {
+    "chunk_id": "cb2ee7ef3393",
+    "verdict": "upweight",
+    "reason": "Node- vs edge-attribute filtering syntax — core query semantics worth extra signal.",
+    "weight": 2.0
+  }
+]

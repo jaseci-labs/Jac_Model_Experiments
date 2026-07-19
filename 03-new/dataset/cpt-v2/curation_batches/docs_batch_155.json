@@ -1,0 +1,242 @@
+[
+  {
+    "chunk_id": "daf55e3cbfb7",
+    "verdict": "keep",
+    "reason": "Genuine tutorial heading with prose introducing Jac's for-in loop."
+  },
+  {
+    "chunk_id": "9f0192eccd5f",
+    "verdict": "drop",
+    "reason": "Content-free HTML wrapper fragment (div class=\"code-block\") with no documentation value."
+  },
+  {
+    "chunk_id": "0b8c8243f321",
+    "verdict": "keep",
+    "reason": "Valid Jac for-in loop code example demonstrating list iteration syntax."
+  },
+  {
+    "chunk_id": "1777fd5deffe",
+    "verdict": "drop",
+    "reason": "Bare closing div tag, pure HTML boilerplate."
+  },
+  {
+    "chunk_id": "d714665e7f59",
+    "verdict": "keep",
+    "reason": "Tutorial heading with prose introducing break semantics."
+  },
+  {
+    "chunk_id": "030d94d7201e",
+    "verdict": "drop",
+    "reason": "Content-free HTML wrapper fragment with no documentation value."
+  },
+  {
+    "chunk_id": "714534f4f917",
+    "verdict": "keep",
+    "reason": "Jac code example showing the distinctive for-while-with loop syntax plus break."
+  },
+  {
+    "chunk_id": "7acdcacb71ee",
+    "verdict": "drop",
+    "reason": "Bare closing div tag, pure HTML boilerplate."
+  },
+  {
+    "chunk_id": "2eaf30d9b44b",
+    "verdict": "keep",
+    "reason": "Tutorial heading with prose introducing continue semantics."
+  },
+  {
+    "chunk_id": "7d279369b74d",
+    "verdict": "drop",
+    "reason": "Content-free HTML wrapper fragment with no documentation value."
+  },
+  {
+    "chunk_id": "1fa386f0d512",
+    "verdict": "keep",
+    "reason": "Jac code example demonstrating continue inside the for-while-with loop form."
+  },
+  {
+    "chunk_id": "16d3b849d89f",
+    "verdict": "drop",
+    "reason": "Bare closing div tag, pure HTML boilerplate."
+  },
+  {
+    "chunk_id": "a7a341dbfae0",
+    "verdict": "keep",
+    "reason": "Practice-exercise prose that gives context for the following solution code."
+  },
+  {
+    "chunk_id": "7d6bcb1df5be",
+    "verdict": "drop",
+    "reason": "Content-free HTML wrapper fragment with no documentation value."
+  },
+  {
+    "chunk_id": "77b38599b4b6",
+    "verdict": "keep",
+    "reason": "Jac solution code showing step-increment loop syntax (for i = 3 while ... with i += 3)."
+  },
+  {
+    "chunk_id": "8daa915e2b31",
+    "verdict": "drop",
+    "reason": "Bare closing div tag, pure HTML boilerplate."
+  },
+  {
+    "chunk_id": "868cb1296daa",
+    "verdict": "keep",
+    "reason": "Exercise prose providing context for the countdown solution example."
+  },
+  {
+    "chunk_id": "7251c8c9e6b5",
+    "verdict": "keep",
+    "reason": "Jac while-loop code example with valid syntax and semantics."
+  },
+  {
+    "chunk_id": "29139b0ef784",
+    "verdict": "drop",
+    "reason": "Lone horizontal-rule marker with zero content."
+  },
+  {
+    "chunk_id": "28b900f95ea5",
+    "verdict": "keep",
+    "reason": "Section intro prose explaining the purpose of functions in Jac."
+  },
+  {
+    "chunk_id": "cfe3ad9a05a5",
+    "verdict": "keep",
+    "reason": "Section heading carrying real structure (first function) despite trailing div tag."
+  },
+  {
+    "chunk_id": "14dd702da8fb",
+    "verdict": "keep",
+    "reason": "Jac code showing def and function-call syntax within with entry."
+  },
+  {
+    "chunk_id": "dde4297fb60d",
+    "verdict": "drop",
+    "reason": "Bare closing div tag, pure HTML boilerplate."
+  },
+  {
+    "chunk_id": "2b9beb546b8e",
+    "verdict": "keep",
+    "reason": "Tutorial heading with prose introducing function parameters."
+  },
+  {
+    "chunk_id": "7adf5d4aee13",
+    "verdict": "drop",
+    "reason": "Content-free HTML wrapper fragment with no documentation value."
+  },
+  {
+    "chunk_id": "186b3d941065",
+    "verdict": "keep",
+    "reason": "Jac code example of a typed single-parameter function."
+  },
+  {
+    "chunk_id": "d3810c4c0c66",
+    "verdict": "drop",
+    "reason": "Bare closing div tag, pure HTML boilerplate."
+  },
+  {
+    "chunk_id": "5ffc4f95f1cc",
+    "verdict": "drop",
+    "reason": "Orphaned 'Breaking it down:' label with no explanatory content of its own."
+  },
+  {
+    "chunk_id": "3662dd65b86c",
+    "verdict": "keep",
+    "reason": "Substantive prose explaining parameter and type-annotation syntax."
+  },
+  {
+    "chunk_id": "ee0c6ade7ce1",
+    "verdict": "keep",
+    "reason": "Tutorial heading with prose introducing multiple parameters."
+  },
+  {
+    "chunk_id": "f242e38951d9",
+    "verdict": "drop",
+    "reason": "Content-free HTML wrapper fragment with no documentation value."
+  },
+  {
+    "chunk_id": "6d4b67cf3bbc",
+    "verdict": "keep",
+    "reason": "Jac code example of a multi-parameter function with typed args."
+  },
+  {
+    "chunk_id": "7617cf17fcdb",
+    "verdict": "drop",
+    "reason": "Bare closing div tag, pure HTML boilerplate."
+  },
+  {
+    "chunk_id": "2dbc23a95d2b",
+    "verdict": "keep",
+    "reason": "Tutorial heading with prose introducing return values."
+  },
+  {
+    "chunk_id": "f03d2b2eaaec",
+    "verdict": "drop",
+    "reason": "Content-free HTML wrapper fragment with no documentation value."
+  },
+  {
+    "chunk_id": "a06d89673c3b",
+    "verdict": "keep",
+    "reason": "Jac code demonstrating return-type annotation and return statement usage."
+  },
+  {
+    "chunk_id": "1b49896ddcec",
+    "verdict": "drop",
+    "reason": "Bare closing div tag, pure HTML boilerplate."
+  },
+  {
+    "chunk_id": "6543ddd9a4b4",
+    "verdict": "drop",
+    "reason": "Orphaned 'Breaking it down:' label with no explanatory content of its own."
+  },
+  {
+    "chunk_id": "3224ac4b736e",
+    "verdict": "keep",
+    "reason": "Substantive prose explaining return-type annotation and return semantics."
+  },
+  {
+    "chunk_id": "9246512b8580",
+    "verdict": "keep",
+    "reason": "Tutorial heading with prose introducing default parameter values."
+  },
+  {
+    "chunk_id": "78ef47511723",
+    "verdict": "drop",
+    "reason": "Content-free HTML wrapper fragment with no documentation value."
+  },
+  {
+    "chunk_id": "b865e7f22fcf",
+    "verdict": "keep",
+    "reason": "Jac code demonstrating default and named parameters, a genuine syntax example."
+  },
+  {
+    "chunk_id": "67306e80b4f9",
+    "verdict": "drop",
+    "reason": "Bare closing div tag, pure HTML boilerplate."
+  },
+  {
+    "chunk_id": "cbbb146638fa",
+    "verdict": "keep",
+    "reason": "Section heading with prose starting the motivation for functions."
+  },
+  {
+    "chunk_id": "1321fb103a89",
+    "verdict": "drop",
+    "reason": "Bare 'Bad:' label plus HTML wrapper, no standalone documentation content."
+  },
+  {
+    "chunk_id": "9cc791bd03c0",
+    "verdict": "keep",
+    "reason": "Anti-pattern code example illustrating repetition that functions eliminate."
+  },
+  {
+    "chunk_id": "77308a96778c",
+    "verdict": "drop",
+    "reason": "Bare closing div tag, pure HTML boilerplate."
+  },
+  {
+    "chunk_id": "248918cff4f2",
+    "verdict": "drop",
+    "reason": "Bare 'Good:' label plus HTML wrapper, no standalone documentation content."
+  }
+]

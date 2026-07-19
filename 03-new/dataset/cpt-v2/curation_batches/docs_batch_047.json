@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "3930cc0ef670",
+    "verdict": "keep",
+    "reason": "Concrete jac install extras command examples."
+  },
+  {
+    "chunk_id": "38b017df8509",
+    "verdict": "keep",
+    "reason": "Documents version specifier rules for dependencies."
+  },
+  {
+    "chunk_id": "6a7133be941f",
+    "verdict": "drop",
+    "reason": "Bare label fragment with no prose content."
+  },
+  {
+    "chunk_id": "49e40f6bd1b6",
+    "verdict": "keep",
+    "reason": "Explains group-expansion semantics for optional-dependencies."
+  },
+  {
+    "chunk_id": "21931a6379f1",
+    "verdict": "keep",
+    "reason": "Documents third-party extras passthrough syntax."
+  },
+  {
+    "chunk_id": "c1d761e6bd29",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "d8ff391f8748",
+    "verdict": "keep",
+    "reason": "Introduces the [run] config section."
+  },
+  {
+    "chunk_id": "c59b5f762abd",
+    "verdict": "keep",
+    "reason": "Full [run] config defaults with annotations."
+  },
+  {
+    "chunk_id": "81726c7dfaca",
+    "verdict": "keep",
+    "reason": "Introduces diagnostics reporting setting."
+  },
+  {
+    "chunk_id": "d7792214b6c8",
+    "verdict": "keep",
+    "reason": "Table of diagnostics values and behaviors."
+  },
+  {
+    "chunk_id": "9a4be9b1a3ef",
+    "verdict": "keep",
+    "reason": "Documents CLI flag override for diagnostics."
+  },
+  {
+    "chunk_id": "b89cfc105fa7",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "5f2a3dbfa242",
+    "verdict": "keep",
+    "reason": "Introduces the [serve] config section."
+  },
+  {
+    "chunk_id": "dc5d322f31e0",
+    "verdict": "keep",
+    "reason": "Full [serve] config with concurrency policy annotations."
+  },
+  {
+    "chunk_id": "747dc7b1a9d0",
+    "verdict": "keep",
+    "reason": "Explains on_conflict retry/fail semantics."
+  },
+  {
+    "chunk_id": "00208f6e90c9",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "b9733df14887",
+    "verdict": "keep",
+    "reason": "Introduces the [build] config section."
+  },
+  {
+    "chunk_id": "c1f5fc8ed986",
+    "verdict": "keep",
+    "reason": "Build config defaults with annotations."
+  },
+  {
+    "chunk_id": "62291d15d95c",
+    "verdict": "keep",
+    "reason": "Introduces the dir build-artifacts setting."
+  },
+  {
+    "chunk_id": "1b916748ced3",
+    "verdict": "keep",
+    "reason": "Enumerates build artifact subdirectories."
+  },
+  {
+    "chunk_id": "83837b9cc520",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "f6ad9934fa9e",
+    "verdict": "keep",
+    "reason": "Introduces the [gc] native-compilation section."
+  },
+  {
+    "chunk_id": "8b7a8d3f4463",
+    "verdict": "keep",
+    "reason": "GC config defaults and enforce subtable."
+  },
+  {
+    "chunk_id": "e9202d0bc9e5",
+    "verdict": "keep",
+    "reason": "Explains gc default memory-management modes."
+  },
+  {
+    "chunk_id": "212787a6a391",
+    "verdict": "keep",
+    "reason": "Documents nogc enforcement patterns and semantics."
+  },
+  {
+    "chunk_id": "f833217db839",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "5da58bcb0c31",
+    "verdict": "keep",
+    "reason": "Introduces the [test] config section."
+  },
+  {
+    "chunk_id": "0ae4e09df389",
+    "verdict": "keep",
+    "reason": "Test config defaults with annotations."
+  },
+  {
+    "chunk_id": "c3262ffa9d19",
+    "verdict": "keep",
+    "reason": "Explains test directory scoping behavior."
+  },
+  {
+    "chunk_id": "0799ae811ee2",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "af6eec328e5e",
+    "verdict": "keep",
+    "reason": "Introduces the [format] config section."
+  },
+  {
+    "chunk_id": "5d482ca56847",
+    "verdict": "keep",
+    "reason": "Format config defaults."
+  },
+  {
+    "chunk_id": "68cf8a557d3e",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator, no content."
+  },
+  {
+    "chunk_id": "be8ef52200f1",
+    "verdict": "keep",
+    "reason": "Introduces the [check] config section."
+  },
+  {
+    "chunk_id": "29ce2eed207e",
+    "verdict": "keep",
+    "reason": "Check config defaults with untyped-external option."
+  },
+  {
+    "chunk_id": "bf3f154f8507",
+    "verdict": "keep",
+    "reason": "Explains untyped-external diagnostic escalation."
+  },
+  {
+    "chunk_id": "310771aa5e6f",
+    "verdict": "keep",
+    "reason": "Introduces check.lint select/ignore model."
+  },
+  {
+    "chunk_id": "ae644b950e1b",
+    "verdict": "keep",
+    "reason": "Documents default vs all lint group keywords."
+  },
+  {
+    "chunk_id": "b2728d632c02",
+    "verdict": "keep",
+    "reason": "Example check.lint config block."
+  },
+  {
+    "chunk_id": "383283513fa8",
+    "verdict": "keep",
+    "reason": "Intro prose for enabling all lint rules."
+  },
+  {
+    "chunk_id": "f66502041614",
+    "verdict": "keep",
+    "reason": "Example config selecting all lint rules."
+  },
+  {
+    "chunk_id": "b8ee9f8825c7",
+    "verdict": "keep",
+    "reason": "Intro prose for adding rules on top of defaults."
+  },
+  {
+    "chunk_id": "757ecc06c631",
+    "verdict": "keep",
+    "reason": "Example config adding no-print to defaults."
+  },
+  {
+    "chunk_id": "f885a94c996e",
+    "verdict": "keep",
+    "reason": "Intro prose for enabling only specific rules."
+  },
+  {
+    "chunk_id": "c6d180d506db",
+    "verdict": "keep",
+    "reason": "Example config selecting specific lint rules."
+  },
+  {
+    "chunk_id": "ae343f01e5bb",
+    "verdict": "drop",
+    "reason": "Bare label fragment with no prose content."
+  },
+  {
+    "chunk_id": "2fb92d86be9b",
+    "verdict": "keep",
+    "reason": "Full table of available lint rules and codes."
+  },
+  {
+    "chunk_id": "229ce6b5f111",
+    "verdict": "keep",
+    "reason": "Documents inline diagnostic suppression syntax."
+  },
+  {
+    "chunk_id": "d18bd08562dc",
+    "verdict": "drop",
+    "reason": "Bare label fragment with no prose content."
+  },
+  {
+    "chunk_id": "30db8f63e148",
+    "verdict": "keep",
+    "reason": "Explains destructive opt-in deslop rule behavior."
+  }
+]

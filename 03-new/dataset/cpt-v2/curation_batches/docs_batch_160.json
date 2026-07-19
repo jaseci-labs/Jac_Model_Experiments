@@ -1,0 +1,251 @@
+[
+  {
+    "chunk_id": "f341493532c2",
+    "verdict": "drop",
+    "reason": "Nav-only HTML wrapper fragment with no documentation content."
+  },
+  {
+    "chunk_id": "83c048f74a8c",
+    "verdict": "upweight",
+    "reason": "Complete social-graph example exercising core OSP mechanics: node/edge definitions, walker state, spawn, visit, here, multi-hop edge references, and disengage.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "68e27afb57ef",
+    "verdict": "drop",
+    "reason": "Closing HTML div tag only, no content."
+  },
+  {
+    "chunk_id": "6e8aa1f8377e",
+    "verdict": "keep",
+    "reason": "Section heading that frames the OOP-vs-OSP contrast for the following code blocks."
+  },
+  {
+    "chunk_id": "82699ce81fe0",
+    "verdict": "keep",
+    "reason": "Genuine contrast example showing the traditional OOP approach that motivates OSP."
+  },
+  {
+    "chunk_id": "932c20293c39",
+    "verdict": "drop",
+    "reason": "Closing HTML div tag only, no content."
+  },
+  {
+    "chunk_id": "58e73596fe5e",
+    "verdict": "drop",
+    "reason": "Two-word label plus HTML wrapper, no substantive content."
+  },
+  {
+    "chunk_id": "d05e452935e5",
+    "verdict": "upweight",
+    "reason": "Canonical minimal OSP example showing node/edge/walker, spawn, visit, here, and report semantics side-by-side with the OOP version.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "f81928740d1f",
+    "verdict": "drop",
+    "reason": "Two-word label fragment with no content."
+  },
+  {
+    "chunk_id": "85359ce5e873",
+    "verdict": "upweight",
+    "reason": "Concise prose statement of OSP fundamentals: first-class edges, visit-driven traversal, type-dispatched abilities, and report streaming.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "64807e1cd912",
+    "verdict": "keep",
+    "reason": "Heading introducing the OSP-vs-OOP decision guidance that follows."
+  },
+  {
+    "chunk_id": "fecb16f723b8",
+    "verdict": "keep",
+    "reason": "Genuine guidance on when OSP is the right modeling choice."
+  },
+  {
+    "chunk_id": "deee62175719",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no content of its own."
+  },
+  {
+    "chunk_id": "92de0f78e9dc",
+    "verdict": "keep",
+    "reason": "Genuine guidance on when traditional OOP is preferable."
+  },
+  {
+    "chunk_id": "cd4ad20eb651",
+    "verdict": "keep",
+    "reason": "Short but genuine prose noting OSP and OOP coexist in one program."
+  },
+  {
+    "chunk_id": "59aa5452cbc3",
+    "verdict": "drop",
+    "reason": "Horizontal-rule markup only, no content."
+  },
+  {
+    "chunk_id": "ca4e47175c98",
+    "verdict": "drop",
+    "reason": "Bare section heading with no prose, nav-only."
+  },
+  {
+    "chunk_id": "a94ba8bf739e",
+    "verdict": "keep",
+    "reason": "Example title heading that contextualizes the family-tree code block."
+  },
+  {
+    "chunk_id": "2fdcb40fa39e",
+    "verdict": "keep",
+    "reason": "Complete working OSP example demonstrating reverse-edge traversal and walker-controlled depth."
+  },
+  {
+    "chunk_id": "4ecb883637d4",
+    "verdict": "drop",
+    "reason": "Closing HTML div tag only, no content."
+  },
+  {
+    "chunk_id": "df5831d86c47",
+    "verdict": "keep",
+    "reason": "Example title heading that contextualizes the course-prerequisites code block."
+  },
+  {
+    "chunk_id": "f02bc064f8ae",
+    "verdict": "keep",
+    "reason": "Complete working example with two walkers, edge-typed traversal, and disengage."
+  },
+  {
+    "chunk_id": "09f4b7a70ab2",
+    "verdict": "drop",
+    "reason": "Closing HTML div tag only, no content."
+  },
+  {
+    "chunk_id": "303953019e90",
+    "verdict": "keep",
+    "reason": "Example title heading that contextualizes the recommendation-system code block."
+  },
+  {
+    "chunk_id": "de6cdecf03c4",
+    "verdict": "keep",
+    "reason": "Complete working example featuring filtered edge references and multi-hop queries."
+  },
+  {
+    "chunk_id": "aabcfc0c40bb",
+    "verdict": "drop",
+    "reason": "Closing HTML div tag only, no content."
+  },
+  {
+    "chunk_id": "596486ecbfef",
+    "verdict": "keep",
+    "reason": "Example title heading that contextualizes the task-manager code block."
+  },
+  {
+    "chunk_id": "ab444d440ce6",
+    "verdict": "keep",
+    "reason": "Complete working example with dependency edges, node mutation from a walker, and disengage."
+  },
+  {
+    "chunk_id": "198fa7f9b1ca",
+    "verdict": "drop",
+    "reason": "Closing HTML div tag only, no content."
+  },
+  {
+    "chunk_id": "b43b38406bb1",
+    "verdict": "drop",
+    "reason": "Horizontal-rule markup only, no content."
+  },
+  {
+    "chunk_id": "9d1970e7a191",
+    "verdict": "keep",
+    "reason": "Genuine transitional prose introducing the chapter recap."
+  },
+  {
+    "chunk_id": "acf6018105e4",
+    "verdict": "keep",
+    "reason": "Recap list of traditional programming concepts covered in the tutorial."
+  },
+  {
+    "chunk_id": "bc56c0ca8c95",
+    "verdict": "keep",
+    "reason": "Recap list naming the OSP concepts unique to Jac."
+  },
+  {
+    "chunk_id": "28618d4e4fab",
+    "verdict": "keep",
+    "reason": "Heading introducing the learning-progression recap section."
+  },
+  {
+    "chunk_id": "e543c0733d88",
+    "verdict": "keep",
+    "reason": "One-line but genuine recap content for the data level."
+  },
+  {
+    "chunk_id": "3e51b5db9d46",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no content."
+  },
+  {
+    "chunk_id": "2ee5f9e9b7bd",
+    "verdict": "keep",
+    "reason": "One-line but genuine recap content for the functions level."
+  },
+  {
+    "chunk_id": "91764d8f1941",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no content."
+  },
+  {
+    "chunk_id": "b6892e9ad8ea",
+    "verdict": "keep",
+    "reason": "Genuine recap of the OOP-level concepts."
+  },
+  {
+    "chunk_id": "aee7f3d0adc3",
+    "verdict": "drop",
+    "reason": "Label-only fragment with no content."
+  },
+  {
+    "chunk_id": "29979e6105a3",
+    "verdict": "upweight",
+    "reason": "Compact statement of OSP fundamentals: nodes as data locations, first-class edges, walkers as mobile computation, type-triggered abilities.",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "8e35982d9c78",
+    "verdict": "keep",
+    "reason": "Genuine prose introducing the advanced-topics section."
+  },
+  {
+    "chunk_id": "0a1009e69558",
+    "verdict": "drop",
+    "reason": "Numbered label fragment with no content."
+  },
+  {
+    "chunk_id": "522168c3d5b7",
+    "verdict": "keep",
+    "reason": "Brief but genuine note that pattern matching exists and where to find current syntax."
+  },
+  {
+    "chunk_id": "d2fee22c0bc1",
+    "verdict": "drop",
+    "reason": "Python-syntax placeholder explicitly not current Jac syntax; risks teaching wrong forms."
+  },
+  {
+    "chunk_id": "1280b3893fd8",
+    "verdict": "drop",
+    "reason": "Numbered label fragment with no content."
+  },
+  {
+    "chunk_id": "ae89f3a54810",
+    "verdict": "drop",
+    "reason": "Nav-only HTML wrapper fragment with no content."
+  },
+  {
+    "chunk_id": "9c03de14a4f6",
+    "verdict": "keep",
+    "reason": "Small but genuine Jac snippet showing async def signature syntax."
+  },
+  {
+    "chunk_id": "9ad9ab69398e",
+    "verdict": "drop",
+    "reason": "Closing HTML div tag only, no content."
+  }
+]

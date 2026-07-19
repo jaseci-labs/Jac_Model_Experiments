@@ -1,0 +1,242 @@
+[
+  {
+    "chunk_id": "e0037b83fa83",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "3d37bcace970",
+    "verdict": "drop",
+    "reason": "Nav-only related-links footer."
+  },
+  {
+    "chunk_id": "d99cc6dc8568",
+    "verdict": "keep",
+    "reason": "Page title and tagline introducing Jac."
+  },
+  {
+    "chunk_id": "1b0ca4967526",
+    "verdict": "keep",
+    "reason": "Substantive overview of what Jac is and does."
+  },
+  {
+    "chunk_id": "b7aae7190be9",
+    "verdict": "keep",
+    "reason": "Complete full-stack example; near-dup partner not in this batch so not redundant here."
+  },
+  {
+    "chunk_id": "81196cf65294",
+    "verdict": "keep",
+    "reason": "Explains what the single-file example accomplishes."
+  },
+  {
+    "chunk_id": "a04702a4aa00",
+    "verdict": "keep",
+    "reason": "Runnable-example setup instruction."
+  },
+  {
+    "chunk_id": "b139210a009a",
+    "verdict": "keep",
+    "reason": "Genuine jac.toml config example; near-dup partner absent from batch."
+  },
+  {
+    "chunk_id": "5e6878299696",
+    "verdict": "drop",
+    "reason": "Transitional one-line fragment with no standalone content."
+  },
+  {
+    "chunk_id": "4b212e4a1135",
+    "verdict": "keep",
+    "reason": "Install and run bash commands."
+  },
+  {
+    "chunk_id": "b5b562152d63",
+    "verdict": "keep",
+    "reason": "Model-provider options and run instructions."
+  },
+  {
+    "chunk_id": "e4bfb521b015",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "0ebaf5803666",
+    "verdict": "keep",
+    "reason": "Vision prose motivating Jac's design."
+  },
+  {
+    "chunk_id": "667616df57c8",
+    "verdict": "keep",
+    "reason": "Explains Jac's complexity-into-runtime philosophy."
+  },
+  {
+    "chunk_id": "5f4ae9044c03",
+    "verdict": "drop",
+    "reason": "Transitional filler sentence."
+  },
+  {
+    "chunk_id": "9834ff219f9c",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "baf75adf359a",
+    "verdict": "drop",
+    "reason": "Section heading plus grid markup, no prose."
+  },
+  {
+    "chunk_id": "5db12be0d471",
+    "verdict": "drop",
+    "reason": "Card-title fragment only."
+  },
+  {
+    "chunk_id": "e7425ada7ebd",
+    "verdict": "drop",
+    "reason": "Card divider markup fragment."
+  },
+  {
+    "chunk_id": "7a2d1cc49956",
+    "verdict": "keep",
+    "reason": "Explains the codespace sv/cl/na targeting model."
+  },
+  {
+    "chunk_id": "d82f315cb2b7",
+    "verdict": "drop",
+    "reason": "Nav-only link list."
+  },
+  {
+    "chunk_id": "7123ebb04dc0",
+    "verdict": "drop",
+    "reason": "Card-title fragment only."
+  },
+  {
+    "chunk_id": "528ea576fcf2",
+    "verdict": "keep",
+    "reason": "Explains by llm() and agentic graph/walker model."
+  },
+  {
+    "chunk_id": "a067c02171f6",
+    "verdict": "drop",
+    "reason": "Nav-only link list."
+  },
+  {
+    "chunk_id": "eb2b2d74e019",
+    "verdict": "drop",
+    "reason": "Card-title fragment only."
+  },
+  {
+    "chunk_id": "d916d4284684",
+    "verdict": "keep",
+    "reason": "Explains node/root persistence and scale deployment."
+  },
+  {
+    "chunk_id": "0612acffec27",
+    "verdict": "drop",
+    "reason": "Nav-only link list."
+  },
+  {
+    "chunk_id": "eb3044c3b3ba",
+    "verdict": "drop",
+    "reason": "Closing div markup only."
+  },
+  {
+    "chunk_id": "fb7d65fc40d9",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "4a9aa78b2fc1",
+    "verdict": "keep",
+    "reason": "Describes the Build Anything project kinds and tracks."
+  },
+  {
+    "chunk_id": "d78dbf6ed607",
+    "verdict": "keep",
+    "reason": "Points to core-concepts explanation of the pillars."
+  },
+  {
+    "chunk_id": "0e2097247a13",
+    "verdict": "drop",
+    "reason": "Nav-only link fragment."
+  },
+  {
+    "chunk_id": "0324812a07b5",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "c02cc2948bbf",
+    "verdict": "drop",
+    "reason": "Section heading only."
+  },
+  {
+    "chunk_id": "c458d8db24a4",
+    "verdict": "keep",
+    "reason": "Install step with bash command."
+  },
+  {
+    "chunk_id": "7b17cb6599c2",
+    "verdict": "keep",
+    "reason": "Explains what the jac binary bundles and how to add deps."
+  },
+  {
+    "chunk_id": "fc863f214d66",
+    "verdict": "drop",
+    "reason": "Transitional one-line fragment."
+  },
+  {
+    "chunk_id": "1fa70602de44",
+    "verdict": "keep",
+    "reason": "Version-check command."
+  },
+  {
+    "chunk_id": "59f2c94ce6c9",
+    "verdict": "keep",
+    "reason": "Notes cache-warming behavior of the command."
+  },
+  {
+    "chunk_id": "3668f6c4fed4",
+    "verdict": "keep",
+    "reason": "Step to create first program with file intro."
+  },
+  {
+    "chunk_id": "5582a79c57c0",
+    "verdict": "keep",
+    "reason": "Hello-world Jac code example."
+  },
+  {
+    "chunk_id": "16c081871ce6",
+    "verdict": "keep",
+    "reason": "Run step with jac command."
+  },
+  {
+    "chunk_id": "939b1b027821",
+    "verdict": "keep",
+    "reason": "Notes jac is shorthand for jac run."
+  },
+  {
+    "chunk_id": "349826e3e162",
+    "verdict": "keep",
+    "reason": "Tip on -e all for type-check diagnostics."
+  },
+  {
+    "chunk_id": "c1ea16feaf18",
+    "verdict": "drop",
+    "reason": "Congratulatory filler sentence."
+  },
+  {
+    "chunk_id": "2b947d712abe",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "8496709f67f0",
+    "verdict": "keep",
+    "reason": "Explains who Jac is for."
+  },
+  {
+    "chunk_id": "3e4f7926b9d8",
+    "verdict": "keep",
+    "reason": "Audience-to-benefit table with real content."
+  }
+]

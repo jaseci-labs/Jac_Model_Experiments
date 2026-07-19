@@ -1,0 +1,1002 @@
+{
+  "batch_id": "b02",
+  "generator": "fable-agent-v1",
+  "examples": [
+    {
+      "name": "count_within_depth",
+      "category": "graph_osp",
+      "subcategory": "depth_limit",
+      "difficulty": "simple",
+      "py": "def count_within_depth(spec: dict) -> int:\n    \"\"\"Count nodes whose BFS depth from start is at most the limit.\"\"\"\n    adj = spec[\"adj\"]; start = spec[\"start\"]; limit = spec[\"depth\"]\n    depth = {start: 0}; queue = [start]; i = 0\n    while i < len(queue):\n        n = queue[i]; i += 1\n        if depth[n] < limit:\n            for t in adj.get(n, []):\n                if t not in depth:\n                    depth[t] = depth[n] + 1\n                    queue.append(t)\n    return len(depth)",
+      "jac": "node Spot { has name: str; has lvl: int = -1; }\n\nwalker DepthCounter {\n    has limit: int;\n    has seen: int = 0;\n    can tally with Spot entry {\n        self.seen += 1;\n        if here.lvl >= self.limit { return; }\n        for nb in [-->(?lvl == -1)] {\n            nb.lvl = here.lvl + 1;\n            visit nb;\n        }\n    }\n}\n\ndef count_within_depth(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]);\n    union: dict = {};\n    for (src, outs) in adj.items() {\n        union[src] = 1;\n        for dst in outs { union[dst] = 1; }\n    }\n    spots: dict = {};\n    for nm in union.keys() { spots[nm] = Spot(name=str(nm)); }\n    for (src, outs) in adj.items() { for dst in outs { spots[src] ++> spots[dst]; } }\n    origin = spots[spec[\"start\"]];\n    origin.lvl = 0;\n    w = origin spawn DepthCounter(limit=int(spec[\"depth\"]));\n    return w.seen;\n}\n\nwith entry { print(count_within_depth({'adj': {'a': ['b', 'c'], 'b': ['d'], 'c': ['d'], 'd': ['e'], 'e': []}, 'start': 'a', 'depth': 1})); }",
+      "expected_output": "3",
+      "cases": [
+        {
+          "input": {
+            "adj": {
+              "a": [
+                "b",
+                "c"
+              ],
+              "b": [
+                "d"
+              ],
+              "c": [
+                "d"
+              ],
+              "d": [
+                "e"
+              ],
+              "e": []
+            },
+            "start": "a",
+            "depth": 1
+          },
+          "output": "3"
+        },
+        {
+          "input": {
+            "adj": {
+              "a": [
+                "b",
+                "c"
+              ],
+              "b": [
+                "d"
+              ],
+              "c": [
+                "d"
+              ],
+              "d": [
+                "e"
+              ],
+              "e": []
+            },
+            "start": "a",
+            "depth": 2
+          },
+          "output": "4"
+        },
+        {
+          "input": {
+            "adj": {
+              "a": [
+                "b"
+              ],
+              "b": [
+                "c"
+              ],
+              "c": [
+                "a"
+              ]
+            },
+            "start": "a",
+            "depth": 9
+          },
+          "output": "3"
+        },
+        {
+          "input": {
+            "adj": {
+              "x": [
+                "y",
+                "z"
+              ],
+              "y": [],
+              "z": []
+            },
+            "start": "x",
+            "depth": 0
+          },
+          "output": "1"
+        }
+      ]
+    },
+    {
+      "name": "can_reach",
+      "category": "graph_osp",
+      "subcategory": "disengage_search",
+      "difficulty": "simple",
+      "py": "def can_reach(spec: dict) -> bool:\n    \"\"\"Return True if target can be reached from start along directed edges.\"\"\"\n    target = spec[\"target\"]\n    adj = {}\n    for u, v in spec[\"edges\"]:\n        adj.setdefault(u, []).append(v)\n    seen = set()\n    stack = [spec[\"start\"]]\n    while stack:\n        n = stack.pop()\n        if n in seen:\n            continue\n        seen.add(n)\n        if n == target:\n            return True\n        stack.extend(adj.get(n, []))\n    return False",
+      "jac": "node Post { has label: str; has done: bool = False; }\n\nwalker Scout {\n    has goal: str;\n    has hit: bool = False;\n    can probe with Post entry {\n        if here.done { return; }\n        here.done = True;\n        if here.label == self.goal { self.hit = True; disengage; }\n        visit [-->(?done == False)];\n    }\n}\n\ndef can_reach(spec: dict) -> bool {\n    reg: dict = {};\n    for pr in list(spec[\"edges\"]) {\n        u: str = str(pr[0]); v: str = str(pr[1]);\n        if u not in reg { reg[u] = Post(label=u); }\n        if v not in reg { reg[v] = Post(label=v); }\n        reg[u] ++> reg[v];\n    }\n    start: str = str(spec[\"start\"]);\n    if start not in reg { reg[start] = Post(label=start); }\n    w = Scout(goal=str(spec[\"target\"])) spawn reg[start];\n    return w.hit;\n}\n\nwith entry { print(can_reach({'edges': [['a', 'b'], ['b', 'c']], 'start': 'a', 'target': 'c'})); }",
+      "expected_output": "True",
+      "cases": [
+        {
+          "input": {
+            "edges": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "b",
+                "c"
+              ]
+            ],
+            "start": "a",
+            "target": "c"
+          },
+          "output": "True"
+        },
+        {
+          "input": {
+            "edges": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "c",
+                "a"
+              ]
+            ],
+            "start": "a",
+            "target": "c"
+          },
+          "output": "False"
+        },
+        {
+          "input": {
+            "edges": [
+              [
+                "m",
+                "n"
+              ],
+              [
+                "n",
+                "m"
+              ]
+            ],
+            "start": "m",
+            "target": "m"
+          },
+          "output": "True"
+        }
+      ]
+    },
+    {
+      "name": "sum_first_k",
+      "category": "graph_osp",
+      "subcategory": "early_stop_chain",
+      "difficulty": "simple",
+      "py": "def sum_first_k(spec: dict) -> int:\n    \"\"\"Sum the first k values of the sequence.\"\"\"\n    items = spec[\"items\"]; k = spec[\"k\"]\n    total = 0\n    for i, v in enumerate(items):\n        if i >= k:\n            break\n        total += v\n    return total",
+      "jac": "node Bead { has amt: int; }\n\nwalker Taker {\n    has quota: int;\n    has taken: int = 0;\n    has acc: int = 0;\n    can grab with Bead entry {\n        if self.taken >= self.quota { disengage; }\n        self.acc += here.amt;\n        self.taken += 1;\n        visit [-->];\n    }\n}\n\ndef sum_first_k(spec: dict) -> int {\n    seq: list = list(spec[\"items\"]);\n    if not seq { return 0; }\n    head = Bead(amt=int(seq[0]));\n    tail = head;\n    for v in seq[1:] {\n        nxt = Bead(amt=int(v));\n        tail ++> nxt;\n        tail = nxt;\n    }\n    w = head spawn Taker(quota=int(spec[\"k\"]));\n    return w.acc;\n}\n\nwith entry { print(sum_first_k({'items': [5, 2, 9, 4], 'k': 2})); }",
+      "expected_output": "7",
+      "cases": [
+        {
+          "input": {
+            "items": [
+              5,
+              2,
+              9,
+              4
+            ],
+            "k": 2
+          },
+          "output": "7"
+        },
+        {
+          "input": {
+            "items": [
+              5,
+              2,
+              9,
+              4
+            ],
+            "k": 10
+          },
+          "output": "20"
+        },
+        {
+          "input": {
+            "items": [
+              3,
+              -1,
+              6
+            ],
+            "k": 0
+          },
+          "output": "0"
+        },
+        {
+          "input": {
+            "items": [],
+            "k": 3
+          },
+          "output": "0"
+        }
+      ]
+    },
+    {
+      "name": "first_leaf_name",
+      "category": "graph_osp",
+      "subcategory": "first_match",
+      "difficulty": "simple",
+      "py": "def first_leaf_name(spec: dict) -> str:\n    \"\"\"Breadth-first from the root of a parent map, return the first childless node.\"\"\"\n    parent = spec[\"parent\"]; root = spec[\"root\"]\n    children = {}\n    for c, p in parent.items():\n        children.setdefault(p, []).append(c)\n    seen = set(); queue = [root]; i = 0\n    while i < len(queue):\n        n = queue[i]; i += 1\n        if n in seen:\n            continue\n        seen.add(n)\n        kids = children.get(n, [])\n        if not kids:\n            return n\n        queue.extend(kids)\n    return \"none\"",
+      "jac": "node Fork { has tag: str; has met: bool = False; }\n\nwalker LeafSeek {\n    has answer: str = \"none\";\n    can inspect with Fork entry {\n        if here.met { return; }\n        here.met = True;\n        if len([-->]) == 0 { self.answer = here.tag; disengage; }\n        visit [-->];\n    }\n}\n\ndef first_leaf_name(spec: dict) -> str {\n    base: str = str(spec[\"root\"]);\n    forks: dict = {base: Fork(tag=base)};\n    for (c, p) in dict(spec[\"parent\"]).items() {\n        if p not in forks { forks[p] = Fork(tag=str(p)); }\n        if c not in forks { forks[c] = Fork(tag=str(c)); }\n        forks[p] ++> forks[c];\n    }\n    w = forks[base] spawn LeafSeek();\n    return w.answer;\n}\n\nwith entry { print(first_leaf_name({'parent': {'b': 'a', 'c': 'a', 'd': 'b'}, 'root': 'a'})); }",
+      "expected_output": "c",
+      "cases": [
+        {
+          "input": {
+            "parent": {
+              "b": "a",
+              "c": "a",
+              "d": "b"
+            },
+            "root": "a"
+          },
+          "output": "c"
+        },
+        {
+          "input": {
+            "parent": {
+              "x": "r"
+            },
+            "root": "r"
+          },
+          "output": "x"
+        },
+        {
+          "input": {
+            "parent": {
+              "a": "b",
+              "b": "a"
+            },
+            "root": "a"
+          },
+          "output": "none"
+        },
+        {
+          "input": {
+            "parent": {},
+            "root": "solo"
+          },
+          "output": "solo"
+        }
+      ]
+    },
+    {
+      "name": "hops_to_target",
+      "category": "graph_osp",
+      "subcategory": "shortest_hops",
+      "difficulty": "composed",
+      "py": "def hops_to_target(spec: dict) -> int:\n    \"\"\"Fewest hops from start to target, or -1 if unreachable.\"\"\"\n    adj = spec[\"adj\"]; start = spec[\"start\"]; target = spec[\"target\"]\n    depth = {start: 0}; queue = [start]; i = 0\n    while i < len(queue):\n        n = queue[i]; i += 1\n        if n == target:\n            return depth[n]\n        for t in adj.get(n, []):\n            if t not in depth:\n                depth[t] = depth[n] + 1\n                queue.append(t)\n    return -1",
+      "jac": "node Way { has ident: str; has hops: int = -1; }\n\nwalker HopFinder {\n    has goal: str;\n    has dist: int = -1;\n    can advance with Way entry {\n        if here.ident == self.goal { self.dist = here.hops; disengage; }\n        for nb in [-->] {\n            if nb.hops == -1 { nb.hops = here.hops + 1; visit nb; }\n        }\n    }\n}\n\ndef hops_to_target(spec: dict) -> int {\n    ways: dict = {};\n    for (s, ts) in dict(spec[\"adj\"]).items() {\n        if s not in ways { ways[s] = Way(ident=str(s)); }\n        for t in list(ts) {\n            if t not in ways { ways[t] = Way(ident=str(t)); }\n            ways[s] ++> ways[t];\n        }\n    }\n    ways[spec[\"start\"]].hops = 0;\n    w = HopFinder(goal=str(spec[\"target\"])) spawn ways[spec[\"start\"]];\n    return w.dist;\n}\n\nwith entry { print(hops_to_target({'adj': {'a': ['b', 'c'], 'b': ['d'], 'c': ['d'], 'd': []}, 'start': 'a', 'target': 'd'})); }",
+      "expected_output": "2",
+      "cases": [
+        {
+          "input": {
+            "adj": {
+              "a": [
+                "b",
+                "c"
+              ],
+              "b": [
+                "d"
+              ],
+              "c": [
+                "d"
+              ],
+              "d": []
+            },
+            "start": "a",
+            "target": "d"
+          },
+          "output": "2"
+        },
+        {
+          "input": {
+            "adj": {
+              "a": [
+                "b",
+                "c"
+              ],
+              "b": [
+                "d"
+              ],
+              "c": [
+                "d"
+              ],
+              "d": []
+            },
+            "start": "a",
+            "target": "b"
+          },
+          "output": "1"
+        },
+        {
+          "input": {
+            "adj": {
+              "a": [
+                "b"
+              ],
+              "b": [],
+              "z": [
+                "a"
+              ]
+            },
+            "start": "a",
+            "target": "z"
+          },
+          "output": "-1"
+        },
+        {
+          "input": {
+            "adj": {
+              "s": [
+                "s"
+              ]
+            },
+            "start": "s",
+            "target": "s"
+          },
+          "output": "0"
+        }
+      ]
+    },
+    {
+      "name": "sum_within_depth",
+      "category": "graph_osp",
+      "subcategory": "depth_limit",
+      "difficulty": "composed",
+      "py": "def sum_within_depth(spec: dict) -> int:\n    \"\"\"Sum node values lying at most 'depth' hops from start.\"\"\"\n    nodes = spec[\"nodes\"]; start = spec[\"start\"]; cap = spec[\"depth\"]\n    depth = {start: 0}; queue = [start]; i = 0; total = 0\n    while i < len(queue):\n        n = queue[i]; i += 1\n        total += nodes[n][\"val\"]\n        if depth[n] < cap:\n            for t in nodes[n][\"to\"]:\n                if t not in depth:\n                    depth[t] = depth[n] + 1\n                    queue.append(t)\n    return total",
+      "jac": "node Cache { has key: str; has amount: int; has tier: int = -1; }\n\nwalker BudgetScan {\n    has cap: int;\n    has total: int = 0;\n    can gather with Cache entry {\n        self.total += here.amount;\n        if here.tier >= self.cap { return; }\n        for nb in [-->(?tier == -1)] {\n            nb.tier = here.tier + 1;\n            visit nb;\n        }\n    }\n}\n\ndef sum_within_depth(spec: dict) -> int {\n    plan: dict = dict(spec[\"nodes\"]);\n    caches: dict = {};\n    for (nm, info) in plan.items() { caches[nm] = Cache(key=str(nm), amount=int(info[\"val\"])); }\n    for (nm, info) in plan.items() { for t in list(info[\"to\"]) { caches[nm] ++> caches[t]; } }\n    caches[spec[\"start\"]].tier = 0;\n    w = caches[spec[\"start\"]] spawn BudgetScan(cap=int(spec[\"depth\"]));\n    return w.total;\n}\n\nwith entry { print(sum_within_depth({'nodes': {'a': {'val': 1, 'to': ['b', 'c']}, 'b': {'val': 2, 'to': ['d']}, 'c': {'val': 3, 'to': []}, 'd': {'val': 40, 'to': []}}, 'start': 'a', 'depth': 1})); }",
+      "expected_output": "6",
+      "cases": [
+        {
+          "input": {
+            "nodes": {
+              "a": {
+                "val": 1,
+                "to": [
+                  "b",
+                  "c"
+                ]
+              },
+              "b": {
+                "val": 2,
+                "to": [
+                  "d"
+                ]
+              },
+              "c": {
+                "val": 3,
+                "to": []
+              },
+              "d": {
+                "val": 40,
+                "to": []
+              }
+            },
+            "start": "a",
+            "depth": 1
+          },
+          "output": "6"
+        },
+        {
+          "input": {
+            "nodes": {
+              "a": {
+                "val": 1,
+                "to": [
+                  "b",
+                  "c"
+                ]
+              },
+              "b": {
+                "val": 2,
+                "to": [
+                  "d"
+                ]
+              },
+              "c": {
+                "val": 3,
+                "to": []
+              },
+              "d": {
+                "val": 40,
+                "to": []
+              }
+            },
+            "start": "a",
+            "depth": 2
+          },
+          "output": "46"
+        },
+        {
+          "input": {
+            "nodes": {
+              "u": {
+                "val": 7,
+                "to": [
+                  "v"
+                ]
+              },
+              "v": {
+                "val": -3,
+                "to": [
+                  "u"
+                ]
+              }
+            },
+            "start": "u",
+            "depth": 5
+          },
+          "output": "4"
+        },
+        {
+          "input": {
+            "nodes": {
+              "q": {
+                "val": 9,
+                "to": [
+                  "r"
+                ]
+              },
+              "r": {
+                "val": 100,
+                "to": []
+              }
+            },
+            "start": "q",
+            "depth": 0
+          },
+          "output": "9"
+        }
+      ]
+    },
+    {
+      "name": "frontier_size",
+      "category": "graph_osp",
+      "subcategory": "bounded_frontier",
+      "difficulty": "composed",
+      "py": "def frontier_size(spec: dict) -> int:\n    \"\"\"Count nodes sitting exactly 'depth' hops from start.\"\"\"\n    adj = spec[\"adj\"]; start = spec[\"start\"]; d = spec[\"depth\"]\n    depth = {start: 0}; queue = [start]; i = 0; count = 0\n    while i < len(queue):\n        n = queue[i]; i += 1\n        if depth[n] == d:\n            count += 1\n        elif depth[n] < d:\n            for t in adj.get(n, []):\n                if t not in depth:\n                    depth[t] = depth[n] + 1\n                    queue.append(t)\n    return count",
+      "jac": "node Zone { has zid: str; has ring: int = -1; }\n\nwalker RingCounter {\n    has d: int;\n    has size: int = 0;\n    can expand with Zone entry {\n        if here.ring == self.d {\n            self.size += 1;\n        } elif here.ring < self.d {\n            for nb in [-->] {\n                if nb.ring == -1 { nb.ring = here.ring + 1; visit nb; }\n            }\n        }\n    }\n}\n\ndef frontier_size(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]);\n    zones: dict = {};\n    for s in adj.keys() {\n        if s not in zones { zones[s] = Zone(zid=str(s)); }\n        for t in adj[s] {\n            if t not in zones { zones[t] = Zone(zid=str(t)); }\n        }\n    }\n    for s in adj.keys() { for t in adj[s] { zones[s] ++> zones[t]; } }\n    zones[spec[\"start\"]].ring = 0;\n    w = zones[spec[\"start\"]] spawn RingCounter(d=int(spec[\"depth\"]));\n    return w.size;\n}\n\nwith entry { print(frontier_size({'adj': {'a': ['b', 'c'], 'b': ['d'], 'c': ['d', 'e'], 'd': [], 'e': []}, 'start': 'a', 'depth': 1})); }",
+      "expected_output": "2",
+      "cases": [
+        {
+          "input": {
+            "adj": {
+              "a": [
+                "b",
+                "c"
+              ],
+              "b": [
+                "d"
+              ],
+              "c": [
+                "d",
+                "e"
+              ],
+              "d": [],
+              "e": []
+            },
+            "start": "a",
+            "depth": 1
+          },
+          "output": "2"
+        },
+        {
+          "input": {
+            "adj": {
+              "a": [
+                "b",
+                "c"
+              ],
+              "b": [
+                "d"
+              ],
+              "c": [
+                "d",
+                "e"
+              ],
+              "d": [],
+              "e": []
+            },
+            "start": "a",
+            "depth": 2
+          },
+          "output": "2"
+        },
+        {
+          "input": {
+            "adj": {
+              "a": [
+                "b"
+              ],
+              "b": []
+            },
+            "start": "a",
+            "depth": 0
+          },
+          "output": "1"
+        },
+        {
+          "input": {
+            "adj": {
+              "a": [
+                "b"
+              ],
+              "b": []
+            },
+            "start": "a",
+            "depth": 4
+          },
+          "output": "0"
+        }
+      ]
+    },
+    {
+      "name": "count_with_walls",
+      "category": "graph_osp",
+      "subcategory": "blocked_expansion",
+      "difficulty": "composed",
+      "py": "def count_with_walls(spec: dict) -> int:\n    \"\"\"Count nodes reachable from start; wall nodes are entered but never expanded.\"\"\"\n    adj = spec[\"adj\"]; start = spec[\"start\"]; walls = set(spec[\"walls\"])\n    seen = set(); stack = [start]\n    while stack:\n        n = stack.pop()\n        if n in seen:\n            continue\n        seen.add(n)\n        if n in walls:\n            continue\n        stack.extend(adj.get(n, []))\n    return len(seen)",
+      "jac": "node Room { has code: str; has solid: bool; has toured: bool = False; }\n\nwalker Tour {\n    has rooms: int = 0;\n    can roam with Room entry {\n        if here.toured { return; }\n        here.toured = True;\n        self.rooms += 1;\n        if here.solid { return; }\n        visit [-->(?toured == False)];\n    }\n}\n\ndef count_with_walls(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]); walls: list = list(spec[\"walls\"]);\n    roster: list = [];\n    for a in adj.keys() { roster.append(a); }\n    for (a, outs) in adj.items() { for b in outs { if b not in roster { roster.append(b); } } }\n    rooms: dict = {nm: Room(code=str(nm), solid=(nm in walls)) for nm in roster};\n    for (a, outs) in adj.items() { for b in outs { rooms[a] ++> rooms[b]; } }\n    w = Tour() spawn rooms[spec[\"start\"]];\n    return w.rooms;\n}\n\nwith entry { print(count_with_walls({'adj': {'a': ['b', 'c'], 'b': ['d'], 'c': ['e'], 'd': [], 'e': []}, 'walls': ['b'], 'start': 'a'})); }",
+      "expected_output": "4",
+      "cases": [
+        {
+          "input": {
+            "adj": {
+              "a": [
+                "b",
+                "c"
+              ],
+              "b": [
+                "d"
+              ],
+              "c": [
+                "e"
+              ],
+              "d": [],
+              "e": []
+            },
+            "walls": [
+              "b"
+            ],
+            "start": "a"
+          },
+          "output": "4"
+        },
+        {
+          "input": {
+            "adj": {
+              "a": [
+                "b",
+                "c"
+              ],
+              "b": [
+                "d"
+              ],
+              "c": [
+                "e"
+              ],
+              "d": [],
+              "e": []
+            },
+            "walls": [],
+            "start": "a"
+          },
+          "output": "5"
+        },
+        {
+          "input": {
+            "adj": {
+              "a": [
+                "b"
+              ],
+              "b": [
+                "c"
+              ],
+              "c": [
+                "d"
+              ],
+              "d": []
+            },
+            "walls": [
+              "a"
+            ],
+            "start": "a"
+          },
+          "output": "1"
+        }
+      ]
+    },
+    {
+      "name": "names_within_depth",
+      "category": "graph_osp",
+      "subcategory": "depth_limit",
+      "difficulty": "composed",
+      "py": "def names_within_depth(spec: dict) -> list:\n    \"\"\"Sorted names of nodes at most 'depth' hops from start of an edge-list graph.\"\"\"\n    start = spec[\"start\"]; cap = spec[\"depth\"]\n    adj = {}\n    for u, v in spec[\"edges\"]:\n        adj.setdefault(u, []).append(v)\n    depth = {start: 0}; queue = [start]; i = 0\n    while i < len(queue):\n        n = queue[i]; i += 1\n        if depth[n] < cap:\n            for t in adj.get(n, []):\n                if t not in depth:\n                    depth[t] = depth[n] + 1\n                    queue.append(t)\n    return sorted(depth.keys())",
+      "jac": "node Town { has title: str; has band: int = -1; }\n\nwalker Mapper {\n    has cap: int;\n    has found: list = [];\n    can chart with Town entry {\n        self.found.append(here.title);\n        if here.band < self.cap {\n            for nb in [-->] {\n                if nb.band == -1 { nb.band = here.band + 1; visit nb; }\n            }\n        }\n    }\n}\n\ndef names_within_depth(spec: dict) -> list {\n    towns: dict = {};\n    for pr in list(spec[\"edges\"]) {\n        u: str = str(pr[0]); v: str = str(pr[1]);\n        if u not in towns { towns[u] = Town(title=u); }\n        if v not in towns { towns[v] = Town(title=v); }\n        towns[u] ++> towns[v];\n    }\n    start: str = str(spec[\"start\"]);\n    if start not in towns { towns[start] = Town(title=start); }\n    towns[start].band = 0;\n    w = towns[start] spawn Mapper(cap=int(spec[\"depth\"]));\n    return sorted(w.found);\n}\n\nwith entry { print(names_within_depth({'edges': [['c', 'a'], ['c', 'b'], ['a', 'd']], 'start': 'c', 'depth': 1})); }",
+      "expected_output": "['a', 'b', 'c']",
+      "cases": [
+        {
+          "input": {
+            "edges": [
+              [
+                "c",
+                "a"
+              ],
+              [
+                "c",
+                "b"
+              ],
+              [
+                "a",
+                "d"
+              ]
+            ],
+            "start": "c",
+            "depth": 1
+          },
+          "output": "['a', 'b', 'c']"
+        },
+        {
+          "input": {
+            "edges": [
+              [
+                "c",
+                "a"
+              ],
+              [
+                "c",
+                "b"
+              ],
+              [
+                "a",
+                "d"
+              ]
+            ],
+            "start": "c",
+            "depth": 2
+          },
+          "output": "['a', 'b', 'c', 'd']"
+        },
+        {
+          "input": {
+            "edges": [
+              [
+                "k",
+                "k"
+              ]
+            ],
+            "start": "k",
+            "depth": 3
+          },
+          "output": "['k']"
+        }
+      ]
+    },
+    {
+      "name": "sum_until_negative",
+      "category": "graph_osp",
+      "subcategory": "early_stop_chain",
+      "difficulty": "composed",
+      "py": "def sum_until_negative(spec: dict) -> int:\n    \"\"\"Sum sequence values, stopping before the first negative one.\"\"\"\n    total = 0\n    for v in spec[\"items\"]:\n        if v < 0:\n            break\n        total += v\n    return total",
+      "jac": "node Crate { has load: int; }\n\nwalker Hauler {\n    has carried: int = 0;\n    can lift with Crate entry {\n        if here.load < 0 { disengage; }\n        self.carried += here.load;\n        visit [-->];\n    }\n}\n\ndef sum_until_negative(spec: dict) -> int {\n    stuff: list = list(spec[\"items\"]);\n    if not stuff { return 0; }\n    crates: list = [Crate(load=int(x)) for x in stuff];\n    j: int = len(crates) - 1;\n    while j > 0 { crates[j - 1] ++> crates[j]; j -= 1; }\n    w = Hauler() spawn crates[0];\n    return w.carried;\n}\n\nwith entry { print(sum_until_negative({'items': [4, 6, -2, 50]})); }",
+      "expected_output": "10",
+      "cases": [
+        {
+          "input": {
+            "items": [
+              4,
+              6,
+              -2,
+              50
+            ]
+          },
+          "output": "10"
+        },
+        {
+          "input": {
+            "items": [
+              1,
+              2,
+              3
+            ]
+          },
+          "output": "6"
+        },
+        {
+          "input": {
+            "items": [
+              -5,
+              8
+            ]
+          },
+          "output": "0"
+        },
+        {
+          "input": {
+            "items": []
+          },
+          "output": "0"
+        }
+      ]
+    },
+    {
+      "name": "word_position",
+      "category": "graph_osp",
+      "subcategory": "first_match",
+      "difficulty": "composed",
+      "py": "def word_position(spec: dict) -> int:\n    \"\"\"Index of the first occurrence of target in words, or -1.\"\"\"\n    words = spec[\"words\"]; target = spec[\"target\"]\n    for i, w in enumerate(words):\n        if w == target:\n            return i\n    return -1",
+      "jac": "node Slip { has text: str; }\n\nwalker Locator {\n    has want: str;\n    has idx: int = 0;\n    has found_at: int = -1;\n    can scan with Slip entry {\n        if here.text == self.want { self.found_at = self.idx; disengage; }\n        self.idx += 1;\n        visit [-->];\n    }\n}\n\ndef word_position(spec: dict) -> int {\n    words: list = list(spec[\"words\"]);\n    if len(words) == 0 { return -1; }\n    slips: dict = {};\n    pos: int = 0;\n    for wd in words { slips[pos] = Slip(text=str(wd)); pos += 1; }\n    for j in range(1, len(words)) { slips[j - 1] ++> slips[j]; }\n    w = Locator(want=str(spec[\"target\"])) spawn slips[0];\n    return w.found_at;\n}\n\nwith entry { print(word_position({'words': ['red', 'blue', 'green', 'blue'], 'target': 'blue'})); }",
+      "expected_output": "1",
+      "cases": [
+        {
+          "input": {
+            "words": [
+              "red",
+              "blue",
+              "green",
+              "blue"
+            ],
+            "target": "blue"
+          },
+          "output": "1"
+        },
+        {
+          "input": {
+            "words": [
+              "red",
+              "blue",
+              "green"
+            ],
+            "target": "gold"
+          },
+          "output": "-1"
+        },
+        {
+          "input": {
+            "words": [
+              "sun"
+            ],
+            "target": "sun"
+          },
+          "output": "0"
+        },
+        {
+          "input": {
+            "words": [],
+            "target": "x"
+          },
+          "output": "-1"
+        }
+      ]
+    },
+    {
+      "name": "nearest_flagged",
+      "category": "graph_osp",
+      "subcategory": "shortest_hops",
+      "difficulty": "advanced",
+      "py": "def nearest_flagged(spec: dict) -> int:\n    \"\"\"Fewest hops from start to any lit node, or -1 if none reachable.\"\"\"\n    adj = spec[\"adj\"]; lit = set(spec[\"lit\"]); start = spec[\"start\"]\n    depth = {start: 0}; queue = [start]; i = 0\n    while i < len(queue):\n        n = queue[i]; i += 1\n        if n in lit:\n            return depth[n]\n        for t in adj.get(n, []):\n            if t not in depth:\n                depth[t] = depth[n] + 1\n                queue.append(t)\n    return -1",
+      "jac": "node Beacon { has bid: str; has lit: bool; has span: int = -1; }\n\nwalker Radar {\n    has best: int = -1;\n    can sweep with Beacon entry {\n        if here.lit { self.best = here.span; disengage; }\n        for nb in [-->(?span == -1)] {\n            nb.span = here.span + 1;\n            visit nb;\n        }\n    }\n}\n\ndef nearest_flagged(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]); glow: list = list(spec[\"lit\"]);\n    beacons: dict = {nm: Beacon(bid=str(nm), lit=(nm in glow)) for nm in adj.keys()};\n    for (s, ts) in adj.items() { for t in list(ts) { beacons[s] ++> beacons[t]; } }\n    beacons[spec[\"start\"]].span = 0;\n    w = Radar() spawn beacons[spec[\"start\"]];\n    return w.best;\n}\n\nwith entry { print(nearest_flagged({'adj': {'a': ['b', 'c'], 'b': ['d'], 'c': [], 'd': []}, 'lit': ['d'], 'start': 'a'})); }",
+      "expected_output": "2",
+      "cases": [
+        {
+          "input": {
+            "adj": {
+              "a": [
+                "b",
+                "c"
+              ],
+              "b": [
+                "d"
+              ],
+              "c": [],
+              "d": []
+            },
+            "lit": [
+              "d"
+            ],
+            "start": "a"
+          },
+          "output": "2"
+        },
+        {
+          "input": {
+            "adj": {
+              "a": [
+                "b",
+                "c"
+              ],
+              "b": [
+                "d"
+              ],
+              "c": [],
+              "d": []
+            },
+            "lit": [
+              "a"
+            ],
+            "start": "a"
+          },
+          "output": "0"
+        },
+        {
+          "input": {
+            "adj": {
+              "a": [
+                "b"
+              ],
+              "b": [
+                "a"
+              ],
+              "c": []
+            },
+            "lit": [
+              "c"
+            ],
+            "start": "a"
+          },
+          "output": "-1"
+        },
+        {
+          "input": {
+            "adj": {
+              "a": [
+                "b",
+                "c"
+              ],
+              "b": [],
+              "c": []
+            },
+            "lit": [
+              "c"
+            ],
+            "start": "a"
+          },
+          "output": "1"
+        }
+      ]
+    },
+    {
+      "name": "bounded_leaf_names",
+      "category": "graph_osp",
+      "subcategory": "depth_limit",
+      "difficulty": "advanced",
+      "py": "def bounded_leaf_names(spec: dict) -> list:\n    \"\"\"Sorted names of dead-end nodes found at most 'depth' hops from start.\"\"\"\n    adj = spec[\"adj\"]; start = spec[\"start\"]; cap = spec[\"depth\"]\n    depth = {start: 0}; queue = [start]; i = 0; leaves = []\n    while i < len(queue):\n        n = queue[i]; i += 1\n        if not adj.get(n, []):\n            leaves.append(n)\n        if depth[n] < cap:\n            for t in adj.get(n, []):\n                if t not in depth:\n                    depth[t] = depth[n] + 1\n                    queue.append(t)\n    return sorted(leaves)",
+      "jac": "node Twig { has label: str; has deep: int = -1; }\n\nwalker Pruner {\n    has fence: int;\n    has picks: list = [];\n    can clip with Twig entry {\n        if len([-->]) == 0 { self.picks.append(here.label); }\n        if here.deep >= self.fence { return; }\n        for branch in [-->(?deep == -1)] {\n            branch.deep = here.deep + 1;\n            visit branch;\n        }\n    }\n}\n\ndef bounded_leaf_names(spec: dict) -> list {\n    twigs: dict = {};\n    for (par, kids) in dict(spec[\"adj\"]).items() {\n        if par not in twigs { twigs[par] = Twig(label=str(par)); }\n        for kid in kids {\n            if kid not in twigs { twigs[kid] = Twig(label=str(kid)); }\n            twigs[par] ++> twigs[kid];\n        }\n    }\n    entrance = twigs[spec[\"start\"]];\n    entrance.deep = 0;\n    w = entrance spawn Pruner(fence=int(spec[\"depth\"]));\n    return sorted(w.picks);\n}\n\nwith entry { print(bounded_leaf_names({'adj': {'a': ['b', 'c'], 'b': ['d', 'e'], 'c': [], 'd': [], 'e': []}, 'start': 'a', 'depth': 1})); }",
+      "expected_output": "['c']",
+      "cases": [
+        {
+          "input": {
+            "adj": {
+              "a": [
+                "b",
+                "c"
+              ],
+              "b": [
+                "d",
+                "e"
+              ],
+              "c": [],
+              "d": [],
+              "e": []
+            },
+            "start": "a",
+            "depth": 1
+          },
+          "output": "['c']"
+        },
+        {
+          "input": {
+            "adj": {
+              "a": [
+                "b",
+                "c"
+              ],
+              "b": [
+                "d",
+                "e"
+              ],
+              "c": [],
+              "d": [],
+              "e": []
+            },
+            "start": "a",
+            "depth": 2
+          },
+          "output": "['c', 'd', 'e']"
+        },
+        {
+          "input": {
+            "adj": {
+              "a": [
+                "b"
+              ],
+              "b": [
+                "a"
+              ]
+            },
+            "start": "a",
+            "depth": 6
+          },
+          "output": "[]"
+        }
+      ]
+    },
+    {
+      "name": "min_hops_to_threshold",
+      "category": "graph_osp",
+      "subcategory": "depth_limit",
+      "difficulty": "advanced",
+      "py": "def min_hops_to_threshold(spec: dict) -> int:\n    \"\"\"Fewest hops (at most 'limit') to a node worth at least the threshold, or -1.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]; start = spec[\"start\"]\n    limit = spec[\"limit\"]; threshold = spec[\"threshold\"]\n    depth = {start: 0}; queue = [start]; i = 0\n    while i < len(queue):\n        n = queue[i]; i += 1\n        if vals[n] >= threshold:\n            return depth[n]\n        if depth[n] < limit:\n            for t in adj.get(n, []):\n                if t not in depth:\n                    depth[t] = depth[n] + 1\n                    queue.append(t)\n    return -1",
+      "jac": "node Vault { has vid: str; has worth: int; has stage: int = -1; }\n\nwalker Quest {\n    has bar: int;\n    has cap: int;\n    has result: int = -1;\n    can dig with Vault entry {\n        if here.worth >= self.bar { self.result = here.stage; disengage; }\n        if here.stage < self.cap {\n            for nb in [-->] {\n                if nb.stage == -1 { nb.stage = here.stage + 1; visit nb; }\n            }\n        }\n    }\n}\n\ndef min_hops_to_threshold(spec: dict) -> int {\n    riches: dict = dict(spec[\"vals\"]);\n    vaults: dict = {};\n    for (nm, v) in riches.items() { vaults[nm] = Vault(vid=str(nm), worth=int(v)); }\n    for (s, ts) in dict(spec[\"adj\"]).items() { for t in list(ts) { vaults[s] ++> vaults[t]; } }\n    vaults[spec[\"start\"]].stage = 0;\n    w = vaults[spec[\"start\"]] spawn Quest(bar=int(spec[\"threshold\"]), cap=int(spec[\"limit\"]));\n    return w.result;\n}\n\nwith entry { print(min_hops_to_threshold({'adj': {'a': ['b'], 'b': ['c'], 'c': ['d'], 'd': []}, 'vals': {'a': 1, 'b': 2, 'c': 50, 'd': 99}, 'start': 'a', 'limit': 3, 'threshold': 40})); }",
+      "expected_output": "2",
+      "cases": [
+        {
+          "input": {
+            "adj": {
+              "a": [
+                "b"
+              ],
+              "b": [
+                "c"
+              ],
+              "c": [
+                "d"
+              ],
+              "d": []
+            },
+            "vals": {
+              "a": 1,
+              "b": 2,
+              "c": 50,
+              "d": 99
+            },
+            "start": "a",
+            "limit": 3,
+            "threshold": 40
+          },
+          "output": "2"
+        },
+        {
+          "input": {
+            "adj": {
+              "a": [
+                "b"
+              ],
+              "b": [
+                "c"
+              ],
+              "c": [
+                "d"
+              ],
+              "d": []
+            },
+            "vals": {
+              "a": 1,
+              "b": 2,
+              "c": 3,
+              "d": 99
+            },
+            "start": "a",
+            "limit": 2,
+            "threshold": 40
+          },
+          "output": "-1"
+        },
+        {
+          "input": {
+            "adj": {
+              "a": [
+                "b"
+              ],
+              "b": []
+            },
+            "vals": {
+              "a": 77,
+              "b": 5
+            },
+            "start": "a",
+            "limit": 1,
+            "threshold": 40
+          },
+          "output": "0"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "batch_id": "b13",
+  "accepted": [
+    "total_signatures",
+    "active_days",
+    "longest_message",
+    "latest_metric_sum",
+    "visitor_streak",
+    "repeat_visitors",
+    "daily_deltas",
+    "stage_funnel",
+    "alert_paths",
+    "first_return_day",
+    "peak_hour",
+    "guestbook_report",
+    "retention_percent",
+    "metric_spikes"
+  ],
+  "rejected": [],
+  "accept_rate": 1.0
+}

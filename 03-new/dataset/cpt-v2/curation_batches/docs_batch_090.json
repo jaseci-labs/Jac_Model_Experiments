@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "ccd965b34486",
+    "verdict": "keep",
+    "reason": "Substantive description of byLLM's typed-output retry algorithm."
+  },
+  {
+    "chunk_id": "a0b0d4b1f9dd",
+    "verdict": "keep",
+    "reason": "Explains the corrective-message mechanism, unique content."
+  },
+  {
+    "chunk_id": "e20013ad3636",
+    "verdict": "keep",
+    "reason": "Short but a genuine, non-obvious behavioral fact about str returns."
+  },
+  {
+    "chunk_id": "76d8007d9a97",
+    "verdict": "keep",
+    "reason": "Documents max_output_retries semantics and defaults."
+  },
+  {
+    "chunk_id": "f7367c6a3a49",
+    "verdict": "keep",
+    "reason": "Config resolution order is real reference content."
+  },
+  {
+    "chunk_id": "6b043b23e49d",
+    "verdict": "keep",
+    "reason": "Idiomatic Jac code example of per-call retry configuration."
+  },
+  {
+    "chunk_id": "ccbb5d4246d0",
+    "verdict": "keep",
+    "reason": "jac.toml configuration example, non-redundant with the per-call example."
+  },
+  {
+    "chunk_id": "cf8a4593f314",
+    "verdict": "keep",
+    "reason": "Describes exhaustion behavior and error chaining."
+  },
+  {
+    "chunk_id": "3eddd3124f25",
+    "verdict": "keep",
+    "reason": "Concrete error-message example that pairs with the preceding chunk."
+  },
+  {
+    "chunk_id": "6321c81ecadf",
+    "verdict": "keep",
+    "reason": "Documents raw_output access on the exception, genuine API detail."
+  },
+  {
+    "chunk_id": "4f82c0315f00",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "115858796de8",
+    "verdict": "keep",
+    "reason": "Section lead-in that anchors the parameter table that follows."
+  },
+  {
+    "chunk_id": "fa501c39c0af",
+    "verdict": "keep",
+    "reason": "Dense canonical reference table for all by llm() invocation parameters."
+  },
+  {
+    "chunk_id": "1724080142cb",
+    "verdict": "keep",
+    "reason": "Deprecation notice for the method parameter is important corrective signal."
+  },
+  {
+    "chunk_id": "509ed0283964",
+    "verdict": "keep",
+    "reason": "Rich set of idiomatic by llm() usage examples in Jac syntax."
+  },
+  {
+    "chunk_id": "8784d9bb1177",
+    "verdict": "keep",
+    "reason": "Explains in-place conversation-list mutation, unique behavior detail."
+  },
+  {
+    "chunk_id": "dac50d5252a2",
+    "verdict": "keep",
+    "reason": "Concrete message-dict format example for the conversation feature."
+  },
+  {
+    "chunk_id": "3462de7e17a4",
+    "verdict": "keep",
+    "reason": "Non-obvious detail about system-prompt exclusion and serializability."
+  },
+  {
+    "chunk_id": "55266c4c9f7d",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "d6a3de0903d9",
+    "verdict": "keep",
+    "reason": "Introduces the sem keyword, a core Jac-specific language feature."
+  },
+  {
+    "chunk_id": "1a4fcd0e054b",
+    "verdict": "keep",
+    "reason": "Key sem-vs-docstring distinction that models frequently get wrong."
+  },
+  {
+    "chunk_id": "37c17f503841",
+    "verdict": "keep",
+    "reason": "Canonical sem syntax example covering object, attribute, and enum levels."
+  },
+  {
+    "chunk_id": "82b77d87f825",
+    "verdict": "keep",
+    "reason": "Parameter- and return-level sem syntax, distinct from the object example."
+  },
+  {
+    "chunk_id": "e0e0978c92eb",
+    "verdict": "keep",
+    "reason": "Multiline sem with structured return type, non-redundant example."
+  },
+  {
+    "chunk_id": "705425bb0428",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "8afedc4f91eb",
+    "verdict": "keep",
+    "reason": "Section heading that gives context to the tool-calling chunks following it."
+  },
+  {
+    "chunk_id": "392970b65688",
+    "verdict": "keep",
+    "reason": "Explains tool definition via sem, reinforcing a Jac-specific pattern."
+  },
+  {
+    "chunk_id": "b5074095c5ac",
+    "verdict": "keep",
+    "reason": "Complete idiomatic Jac tool definitions with sem annotations."
+  },
+  {
+    "chunk_id": "0d5580cfa8a5",
+    "verdict": "keep",
+    "reason": "Minimal tools= usage example, distinct from the definitions chunk."
+  },
+  {
+    "chunk_id": "317cd428c722",
+    "verdict": "keep",
+    "reason": "Method tools via self.method is a distinct, non-obvious pattern."
+  },
+  {
+    "chunk_id": "f3ed69bf3f1d",
+    "verdict": "keep",
+    "reason": "Introduces on_iteration loop control, unique feature."
+  },
+  {
+    "chunk_id": "58def57e3fa1",
+    "verdict": "keep",
+    "reason": "Full Jac example of an iteration hook with imports and enum usage."
+  },
+  {
+    "chunk_id": "5ff2e842b2d4",
+    "verdict": "keep",
+    "reason": "One-line lead-in that names the table following it."
+  },
+  {
+    "chunk_id": "b889c386b99f",
+    "verdict": "keep",
+    "reason": "IterationContext field reference table, genuine API detail."
+  },
+  {
+    "chunk_id": "d92585c2fb8c",
+    "verdict": "keep",
+    "reason": "One-line lead-in that names the IterationAction table."
+  },
+  {
+    "chunk_id": "220201877a95",
+    "verdict": "keep",
+    "reason": "IterationAction behavior table, genuine API detail."
+  },
+  {
+    "chunk_id": "81785488f417",
+    "verdict": "keep",
+    "reason": "Clarifies callback timing between iterations vs tool calls, non-obvious."
+  },
+  {
+    "chunk_id": "42a65f3ccf95",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "faaa5658e5c4",
+    "verdict": "keep",
+    "reason": "Introduces parallel tool calling with real explanatory prose."
+  },
+  {
+    "chunk_id": "ecf69f2856c4",
+    "verdict": "keep",
+    "reason": "Sequential-vs-parallel timing diagram aids the concept."
+  },
+  {
+    "chunk_id": "795abe5d9824",
+    "verdict": "keep",
+    "reason": "Clarifies that the LLM controls batching, non-obvious semantics."
+  },
+  {
+    "chunk_id": "7a0026611355",
+    "verdict": "keep",
+    "reason": "Lead-in framing the three configuration levels that follow."
+  },
+  {
+    "chunk_id": "f363e074075b",
+    "verdict": "keep",
+    "reason": "jac.toml parallel config example, one of three distinct levels."
+  },
+  {
+    "chunk_id": "a60bdfe40e0f",
+    "verdict": "keep",
+    "reason": "Environment-variable override, distinct config level."
+  },
+  {
+    "chunk_id": "fd4bbd883633",
+    "verdict": "keep",
+    "reason": "Per-call parallelize override, distinct config level."
+  },
+  {
+    "chunk_id": "617eaf7e86bf",
+    "verdict": "keep",
+    "reason": "States the sequential default, a load-bearing fact despite brevity."
+  },
+  {
+    "chunk_id": "54259fbe6ef2",
+    "verdict": "keep",
+    "reason": "Introduces mark_serialize for side-effecting tools."
+  },
+  {
+    "chunk_id": "b701290d69ef",
+    "verdict": "keep",
+    "reason": "Lead-in for the dispatch_batch rules chunk that follows."
+  },
+  {
+    "chunk_id": "0a9d2cb3f668",
+    "verdict": "keep",
+    "reason": "The actual batch-serialization rules, core to the feature."
+  },
+  {
+    "chunk_id": "79a6aa2c3436",
+    "verdict": "keep",
+    "reason": "Global scope of mark_serialize is a non-obvious constraint."
+  }
+]

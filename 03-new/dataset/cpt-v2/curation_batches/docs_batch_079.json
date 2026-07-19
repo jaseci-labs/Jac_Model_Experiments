@@ -1,0 +1,247 @@
+[
+  {
+    "chunk_id": "6a2cd75ad947",
+    "verdict": "drop",
+    "reason": "Closing </details> markup tag with no documentation content."
+  },
+  {
+    "chunk_id": "13198dcfd09a",
+    "verdict": "drop",
+    "reason": "Bare <details>/<summary> markup wrapper with no prose beyond a section label."
+  },
+  {
+    "chunk_id": "b3ea400416b6",
+    "verdict": "keep",
+    "reason": "Genuine lead-in prose explaining HTTP vs stdio client context for the SSE command."
+  },
+  {
+    "chunk_id": "13c592a5c63f",
+    "verdict": "keep",
+    "reason": "Concrete jac mcp SSE invocation command, useful CLI usage signal."
+  },
+  {
+    "chunk_id": "28b1e0f71812",
+    "verdict": "keep",
+    "reason": "Connective prose tying the SSE command to the endpoint configuration that follows."
+  },
+  {
+    "chunk_id": "7b387f566f98",
+    "verdict": "keep",
+    "reason": "Specific SSE and message endpoint URLs, real configuration content."
+  },
+  {
+    "chunk_id": "ed03c4fd7ade",
+    "verdict": "keep",
+    "reason": "Practical tip about the jac binary PATH resolution, genuine documentation."
+  },
+  {
+    "chunk_id": "011dd3e69b83",
+    "verdict": "keep",
+    "reason": "CLI reference heading with the jac mcp command synopsis."
+  },
+  {
+    "chunk_id": "f4f0301684c2",
+    "verdict": "keep",
+    "reason": "Complete options table for jac mcp with defaults and descriptions."
+  },
+  {
+    "chunk_id": "188a78b53bc0",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('**Examples:**') with no content of its own."
+  },
+  {
+    "chunk_id": "958f3cc1d70e",
+    "verdict": "keep",
+    "reason": "Rich commented example block covering all jac mcp transport invocations."
+  },
+  {
+    "chunk_id": "98e10f85fe18",
+    "verdict": "keep",
+    "reason": "Configuration section intro pointing to jac.toml customization."
+  },
+  {
+    "chunk_id": "b602c7107b61",
+    "verdict": "keep",
+    "reason": "Full annotated [mcp] jac.toml configuration block, high-value reference content."
+  },
+  {
+    "chunk_id": "a7dedcd0806f",
+    "verdict": "keep",
+    "reason": "Transport comparison table with flags and use cases, substantive reference material."
+  },
+  {
+    "chunk_id": "77968f5ca28e",
+    "verdict": "drop",
+    "reason": "Label-only lead-in sentence fragment with no informational content."
+  },
+  {
+    "chunk_id": "34844d1a721d",
+    "verdict": "keep",
+    "reason": "Endpoint-per-transport table with concrete HTTP routes."
+  },
+  {
+    "chunk_id": "3904769b7c9e",
+    "verdict": "keep",
+    "reason": "Explains the jac:// resource URI scheme and the role of MCP resources."
+  },
+  {
+    "chunk_id": "98785f75e813",
+    "verdict": "keep",
+    "reason": "Grammar resource URI table documenting spec and token resources."
+  },
+  {
+    "chunk_id": "12fd20dcdfbf",
+    "verdict": "keep",
+    "reason": "Getting-started resource URI table with descriptive entries, not an empty index."
+  },
+  {
+    "chunk_id": "16653da4ce28",
+    "verdict": "keep",
+    "reason": "Language-spec resource table mapping URIs to core Jac topics including OSP docs."
+  },
+  {
+    "chunk_id": "112a24a7e539",
+    "verdict": "keep",
+    "reason": "Tutorial resource URI table with meaningful descriptions."
+  },
+  {
+    "chunk_id": "983d5dbd16f3",
+    "verdict": "keep",
+    "reason": "AI-integration resource table documenting byLLM and AI tutorial URIs."
+  },
+  {
+    "chunk_id": "0a2a59d99346",
+    "verdict": "keep",
+    "reason": "Full-stack resource URI table with per-entry descriptions."
+  },
+  {
+    "chunk_id": "76bf8ed644c9",
+    "verdict": "keep",
+    "reason": "Deployment and scaling resource table with substantive descriptions."
+  },
+  {
+    "chunk_id": "0c6a883b2062",
+    "verdict": "keep",
+    "reason": "Developer-workflow resource table covering CLI, config, testing, debugging URIs."
+  },
+  {
+    "chunk_id": "21a0b373a6c1",
+    "verdict": "keep",
+    "reason": "Python integration resource table, genuine reference content."
+  },
+  {
+    "chunk_id": "6c76afd6e8e0",
+    "verdict": "keep",
+    "reason": "Quick-reference resource table documenting walker-responses and appendices URIs."
+  },
+  {
+    "chunk_id": "6e7252d39078",
+    "verdict": "keep",
+    "reason": "Guides and examples table explaining pitfalls, patterns, and example resources."
+  },
+  {
+    "chunk_id": "5adc00b44739",
+    "verdict": "keep",
+    "reason": "Tools section intro explaining what MCP tools do for Jac code."
+  },
+  {
+    "chunk_id": "a5681046e92f",
+    "verdict": "keep",
+    "reason": "validate_jac tool description explaining full type-check compilation behavior."
+  },
+  {
+    "chunk_id": "bbb476713981",
+    "verdict": "keep",
+    "reason": "Parameter table for validate_jac with types and defaults."
+  },
+  {
+    "chunk_id": "9b05d6096891",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('**Example input:**') with no content."
+  },
+  {
+    "chunk_id": "3f5adcdd26fa",
+    "verdict": "keep",
+    "reason": "Concrete JSON input example including valid Jac obj syntax."
+  },
+  {
+    "chunk_id": "fee9a81c5459",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('**Example output (valid):**') with no content."
+  },
+  {
+    "chunk_id": "e971b57e38ec",
+    "verdict": "keep",
+    "reason": "Concrete valid-output JSON schema example for validate_jac."
+  },
+  {
+    "chunk_id": "5724c9cb4e7d",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('**Example output (error):**') with no content."
+  },
+  {
+    "chunk_id": "55519ca371c2",
+    "verdict": "keep",
+    "reason": "Error-output JSON example showing diagnostic structure and a real Jac error message."
+  },
+  {
+    "chunk_id": "fca750c42337",
+    "verdict": "keep",
+    "reason": "check_syntax tool description contrasting parse-only check with full validation."
+  },
+  {
+    "chunk_id": "aa0239b49321",
+    "verdict": "keep",
+    "reason": "Parameter table for check_syntax."
+  },
+  {
+    "chunk_id": "ab4cf5b25585",
+    "verdict": "keep",
+    "reason": "lint_jac tool description including auto_fix behavior."
+  },
+  {
+    "chunk_id": "b11163a0cd90",
+    "verdict": "keep",
+    "reason": "Parameter table for lint_jac with auto_fix default."
+  },
+  {
+    "chunk_id": "d073aa73ba35",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('**Example output (no violations):**') with no content."
+  },
+  {
+    "chunk_id": "18cf7886f5a6",
+    "verdict": "keep",
+    "reason": "Clean-lint JSON output example showing the response schema."
+  },
+  {
+    "chunk_id": "7cf2aa22527d",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('**Example output (violations found):**') with no content."
+  },
+  {
+    "chunk_id": "6787f8f47445",
+    "verdict": "keep",
+    "reason": "Violations JSON example showing real lint rules like combine-has and severity handling."
+  },
+  {
+    "chunk_id": "8412cf1e50a3",
+    "verdict": "drop",
+    "reason": "Label-only fragment ('**Example output (with auto_fix: true):**') with no content."
+  },
+  {
+    "chunk_id": "9e5d44780ee5",
+    "verdict": "keep",
+    "reason": "auto_fix output example including corrected Jac has-declaration code."
+  },
+  {
+    "chunk_id": "82cacc14745b",
+    "verdict": "keep",
+    "reason": "Substantive note clarifying severity-field semantics in lint output."
+  },
+  {
+    "chunk_id": "826a4e631399",
+    "verdict": "keep",
+    "reason": "format_jac tool description, genuine tool reference content."
+  }
+]

@@ -24,3 +24,6 @@ results/_evals/
 02-rl-grpo/presentation/main.out
 02-rl-grpo/presentation/main.snm
 02-rl-grpo/presentation/main.toc
+
+# vendored external clone (jac-gpt oracle for CPT-v2 endpoint discovery, Task 14)
+03-new/cpt_train/jac_gpt_oracle/

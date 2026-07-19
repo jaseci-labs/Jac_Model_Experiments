@@ -1,0 +1,256 @@
+[
+  {
+    "chunk_id": "f85fdbc8f1f6",
+    "verdict": "upweight",
+    "reason": "Multi-hop traversal, mixed edge types, and filter chaining are core graph-traversal-model material.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "48258726cbbe",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "7ffb53911ccc",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose."
+  },
+  {
+    "chunk_id": "56bd0cf02b20",
+    "verdict": "upweight",
+    "reason": "Explains typed-context-block dispatch, a core walker-semantics mechanism for heterogeneous graphs.",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "4eadc9cf7dab",
+    "verdict": "keep",
+    "reason": "Short but load-bearing syntax note introducing the ->Type{} form."
+  },
+  {
+    "chunk_id": "1f43923cf16d",
+    "verdict": "keep",
+    "reason": "Genuine runnable example of typed context blocks with inheritance."
+  },
+  {
+    "chunk_id": "53b5e77ea789",
+    "verdict": "drop",
+    "reason": "Bare '**Syntax Notes:**' label fragment with no content."
+  },
+  {
+    "chunk_id": "54273b2fda26",
+    "verdict": "keep",
+    "reason": "Substantive syntax rules including the unsupported wildcard caveat."
+  },
+  {
+    "chunk_id": "2a0f010d0569",
+    "verdict": "keep",
+    "reason": "Introduces union-based ability dispatch, genuine non-redundant content."
+  },
+  {
+    "chunk_id": "8c772ccd8548",
+    "verdict": "keep",
+    "reason": "Concrete example of union-typed entry abilities."
+  },
+  {
+    "chunk_id": "877d258e7400",
+    "verdict": "upweight",
+    "reason": "Node-side abilities reacting to walkers is core node/walker interaction semantics.",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "5e835618012d",
+    "verdict": "keep",
+    "reason": "Example demonstrating anonymous node ability and the visitor reference."
+  },
+  {
+    "chunk_id": "31d90d462c27",
+    "verdict": "keep",
+    "reason": "Brief but contextual lead-in to the inheritance-dispatch example."
+  },
+  {
+    "chunk_id": "efd69f0ba1d7",
+    "verdict": "keep",
+    "reason": "Genuine worked example combining typed blocks, here, and visit."
+  },
+  {
+    "chunk_id": "39073ce010cb",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "8dfa44dc6429",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose."
+  },
+  {
+    "chunk_id": "4106b4a0ac60",
+    "verdict": "upweight",
+    "reason": "CRUD walker patterns exercise visit, entry/exit, ++>, jid, and report -- the core walker mechanics in canonical form.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "3d96376b13aa",
+    "verdict": "keep",
+    "reason": "Genuine search-walker pattern with traversal and exit reporting."
+  },
+  {
+    "chunk_id": "98c427e24916",
+    "verdict": "keep",
+    "reason": "Carries the important caveat that the following example is conceptual pseudocode."
+  },
+  {
+    "chunk_id": "2bab94fbe10e",
+    "verdict": "keep",
+    "reason": "Genuine doc content; adjacent chunks flag it as pseudocode so it stays interpretable."
+  },
+  {
+    "chunk_id": "9df1bec99d50",
+    "verdict": "keep",
+    "reason": "Explicit pseudocode disclaimer that prevents the prior example from teaching invalid syntax."
+  },
+  {
+    "chunk_id": "869c4cddbe58",
+    "verdict": "keep",
+    "reason": "Genuine aggregate-walker pattern using entry/exit accumulation."
+  },
+  {
+    "chunk_id": "8ed17b12ba97",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "f1bfa836389d",
+    "verdict": "keep",
+    "reason": "Substantive best-practices prose about walker design."
+  },
+  {
+    "chunk_id": "cb193dfb28a6",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "ee0ae2862819",
+    "verdict": "drop",
+    "reason": "Nav-only See Also link list with no instructional prose."
+  },
+  {
+    "chunk_id": "8da8d35f6d40",
+    "verdict": "keep",
+    "reason": "Genuine overview of the opt-in ownership/borrow-checking surface."
+  },
+  {
+    "chunk_id": "f43c1abd0760",
+    "verdict": "keep",
+    "reason": "Substantive compiler-pass and diagnostics detail unique to this doc."
+  },
+  {
+    "chunk_id": "aa29f86c99ff",
+    "verdict": "keep",
+    "reason": "Genuine example introducing own bindings and use-after-move."
+  },
+  {
+    "chunk_id": "b641dff8443e",
+    "verdict": "keep",
+    "reason": "Substantive move-semantics rules with the E1301 diagnostic."
+  },
+  {
+    "chunk_id": "e7ac6a6392e3",
+    "verdict": "keep",
+    "reason": "Genuine example showing reassignment revives a moved binding."
+  },
+  {
+    "chunk_id": "9ac844b934a8",
+    "verdict": "keep",
+    "reason": "Explains affine-vs-linear semantics, unique content."
+  },
+  {
+    "chunk_id": "e9ffa519b4bf",
+    "verdict": "keep",
+    "reason": "Example demonstrating that an unmoved own binding drops without error."
+  },
+  {
+    "chunk_id": "dddda7eabfb7",
+    "verdict": "keep",
+    "reason": "Documents the planned linear marker and E1305, non-redundant."
+  },
+  {
+    "chunk_id": "51b8c1f145de",
+    "verdict": "keep",
+    "reason": "Brief but substantive rule on own parameters and moves at call sites."
+  },
+  {
+    "chunk_id": "6b363a81e499",
+    "verdict": "keep",
+    "reason": "Explains the one-way membrane into managed storage, key conceptual content."
+  },
+  {
+    "chunk_id": "92268b50c5a2",
+    "verdict": "keep",
+    "reason": "Concrete example of sealing an owned value into a managed field."
+  },
+  {
+    "chunk_id": "5f69473eb458",
+    "verdict": "keep",
+    "reason": "Explains why borrows never touch graph objects, unique conceptual content."
+  },
+  {
+    "chunk_id": "e0eefd911356",
+    "verdict": "keep",
+    "reason": "Introduces shared and mutable borrows and the borrow type tag."
+  },
+  {
+    "chunk_id": "e10c387bc6ed",
+    "verdict": "keep",
+    "reason": "Flagged duplicate partner 5edd8d3b2093 is not in this batch and containment is only 0.517; this is a complete canonical E1303 example."
+  },
+  {
+    "chunk_id": "25324c77d8f0",
+    "verdict": "keep",
+    "reason": "States the core shared-xor-mutable borrow rule."
+  },
+  {
+    "chunk_id": "593808030d43",
+    "verdict": "keep",
+    "reason": "Example demonstrating the E1302 conflicting-mutable-borrow error."
+  },
+  {
+    "chunk_id": "caac7f2a26c1",
+    "verdict": "keep",
+    "reason": "States the borrow-must-not-outlive-owner rule with E1304."
+  },
+  {
+    "chunk_id": "9c4ed676ae4a",
+    "verdict": "keep",
+    "reason": "Example showing a borrow outliving its owner's scope."
+  },
+  {
+    "chunk_id": "e57b387a3ba2",
+    "verdict": "keep",
+    "reason": "Explains second-class borrows and the E1306 escape rule."
+  },
+  {
+    "chunk_id": "c86d2488e8a7",
+    "verdict": "keep",
+    "reason": "Example of a borrow escaping via return."
+  },
+  {
+    "chunk_id": "8cf8cc1e3798",
+    "verdict": "keep",
+    "reason": "Documents the passthrough exception to the escape rule."
+  },
+  {
+    "chunk_id": "2b96b80d481f",
+    "verdict": "keep",
+    "reason": "Example of a legitimate borrowed-parameter passthrough."
+  },
+  {
+    "chunk_id": "d98492a6ba56",
+    "verdict": "keep",
+    "reason": "Lead-in introducing the imm and linear markers section."
+  },
+  {
+    "chunk_id": "5fab464e15b3",
+    "verdict": "keep",
+    "reason": "Substantive definition of deep-immutable imm bindings and E1309."
+  }
+]

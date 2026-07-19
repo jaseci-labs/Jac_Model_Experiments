@@ -1,0 +1,253 @@
+[
+  {
+    "chunk_id": "6971a4b92322",
+    "verdict": "keep",
+    "reason": "Mermaid diagram illustrating pure-Jac project module structure, genuine content."
+  },
+  {
+    "chunk_id": "eb4b441c6b9c",
+    "verdict": "keep",
+    "reason": "Substantive prose on all-Jac adoption and compiler visibility benefits."
+  },
+  {
+    "chunk_id": "e2fc0438f92e",
+    "verdict": "upweight",
+    "reason": "Complete runnable Jac example exercising node, walker, spawn, visit, here, root, ++>, and disengage — core OSP mechanics.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "a956ded101a6",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no content."
+  },
+  {
+    "chunk_id": "a3d8ca7b2723",
+    "verdict": "keep",
+    "reason": "Explains how the adoption patterns interoperate, useful non-redundant prose."
+  },
+  {
+    "chunk_id": "97ac97e307d2",
+    "verdict": "keep",
+    "reason": "Explains runtime library role in providing Jac's extended semantics."
+  },
+  {
+    "chunk_id": "a82f5af47087",
+    "verdict": "keep",
+    "reason": "Sequence diagram of compiler-runtime-VM pipeline, informative architecture content."
+  },
+  {
+    "chunk_id": "17b9632c84d1",
+    "verdict": "keep",
+    "reason": "Describes runtime-mediated scaling features, genuine content."
+  },
+  {
+    "chunk_id": "f2376e05f8b3",
+    "verdict": "keep",
+    "reason": "Explains Jac leveraging Python bindings for system control, non-redundant."
+  },
+  {
+    "chunk_id": "4e62bd6a81cd",
+    "verdict": "keep",
+    "reason": "Introduces the plugin architecture modeled on pytest, substantive."
+  },
+  {
+    "chunk_id": "7bd99d60d294",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no content."
+  },
+  {
+    "chunk_id": "1d8ea70db7f4",
+    "verdict": "drop",
+    "reason": "Single lead-in sentence with no standalone informational content."
+  },
+  {
+    "chunk_id": "22103c715b63",
+    "verdict": "keep",
+    "reason": "Diagram of core plus official plugins (byLLM, jac-cloud, jac-streamlit), informative."
+  },
+  {
+    "chunk_id": "1049d38f060d",
+    "verdict": "keep",
+    "reason": "Explains byLLM plugin and the by keyword as a first-class AI construct."
+  },
+  {
+    "chunk_id": "4ab9068c2084",
+    "verdict": "keep",
+    "reason": "Describes jac-cloud write-once-scale-anywhere goal, genuine content."
+  },
+  {
+    "chunk_id": "6af5a585373a",
+    "verdict": "keep",
+    "reason": "Section intro framing practical benefits for Python developers, has prose."
+  },
+  {
+    "chunk_id": "020dc33b8968",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no content."
+  },
+  {
+    "chunk_id": "d151a7688d0c",
+    "verdict": "keep",
+    "reason": "Discusses language-level constructs for AI and distribution, substantive."
+  },
+  {
+    "chunk_id": "8b5697209535",
+    "verdict": "keep",
+    "reason": "Contrasts compile-time versus runtime benefits across adoption patterns."
+  },
+  {
+    "chunk_id": "5f1843b391b0",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no content."
+  },
+  {
+    "chunk_id": "9a08e8076136",
+    "verdict": "keep",
+    "reason": "Explains bytecode generation with embedded runtime calls enabling optimization."
+  },
+  {
+    "chunk_id": "28ab412e6592",
+    "verdict": "keep",
+    "reason": "Describes cross-module compiler analysis and service boundary detection."
+  },
+  {
+    "chunk_id": "bf7dccb9c7f9",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no content."
+  },
+  {
+    "chunk_id": "7b345f0d8f53",
+    "verdict": "keep",
+    "reason": "Explains full Python ecosystem interoperability from Jac code."
+  },
+  {
+    "chunk_id": "e13eec2dfa10",
+    "verdict": "keep",
+    "reason": "Diagram mapping developer choices to abstraction levels and benefits."
+  },
+  {
+    "chunk_id": "3184259a3e09",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no content."
+  },
+  {
+    "chunk_id": "a1edc2f3416a",
+    "verdict": "keep",
+    "reason": "Describes system-level ambitions of runtime and plugin system, genuine prose."
+  },
+  {
+    "chunk_id": "b98f4a2f1dd7",
+    "verdict": "keep",
+    "reason": "Motivational framing of modern complexity Jac targets, substantive."
+  },
+  {
+    "chunk_id": "e647d5adf788",
+    "verdict": "keep",
+    "reason": "Discusses backward compatibility and incremental adoption philosophy."
+  },
+  {
+    "chunk_id": "265797270227",
+    "verdict": "keep",
+    "reason": "Describes semantic-information-driven optimizations being explored."
+  },
+  {
+    "chunk_id": "2cd0c9ad26e8",
+    "verdict": "keep",
+    "reason": "Concluding synthesis of the Python-extension approach, still substantive prose."
+  },
+  {
+    "chunk_id": "d50be6428d44",
+    "verdict": "keep",
+    "reason": "Discusses architecture choices for adoption, non-redundant prose."
+  },
+  {
+    "chunk_id": "ff2a36e75824",
+    "verdict": "keep",
+    "reason": "Closing prose on Jac's value for Python developers, genuine content."
+  },
+  {
+    "chunk_id": "fa6e7db71916",
+    "verdict": "drop",
+    "reason": "YouTube link section with no documentation content."
+  },
+  {
+    "chunk_id": "c16e2468b5f5",
+    "verdict": "drop",
+    "reason": "Video thumbnail link only, no documentation content."
+  },
+  {
+    "chunk_id": "51a69766d690",
+    "verdict": "keep",
+    "reason": "Intro to the N+1 traversal performance story, substantive engineering prose."
+  },
+  {
+    "chunk_id": "c013b25d0189",
+    "verdict": "drop",
+    "reason": "Bare more-marker comment, pure boilerplate."
+  },
+  {
+    "chunk_id": "be07356e1ffa",
+    "verdict": "keep",
+    "reason": "Explains Jac's tiered memory hierarchy (L1/L2/L3) and anchor storage."
+  },
+  {
+    "chunk_id": "404e8d3e3d11",
+    "verdict": "keep",
+    "reason": "Explains runtime edge-stub populate mechanics behind [-->] traversal."
+  },
+  {
+    "chunk_id": "e616984fac92",
+    "verdict": "keep",
+    "reason": "Quantifies the N+1 query cost of edge traversal, concrete and useful."
+  },
+  {
+    "chunk_id": "02818d52bdff",
+    "verdict": "keep",
+    "reason": "Extends the query-count analysis to 500 edges, complements adjacent chunk."
+  },
+  {
+    "chunk_id": "ab6dc37cfcf7",
+    "verdict": "keep",
+    "reason": "Describes the structured metadata column approach attempted, substantive."
+  },
+  {
+    "chunk_id": "5b6efab0575c",
+    "verdict": "keep",
+    "reason": "Implementation details of schema changes and indexes, genuine content."
+  },
+  {
+    "chunk_id": "20649ff02140",
+    "verdict": "drop",
+    "reason": "Single transitional sentence with no informational content."
+  },
+  {
+    "chunk_id": "23b069df6b9c",
+    "verdict": "keep",
+    "reason": "SQLite benchmark table with concrete traversal results."
+  },
+  {
+    "chunk_id": "e1db4a231b39",
+    "verdict": "keep",
+    "reason": "MongoDB benchmark table showing the regression, concrete data."
+  },
+  {
+    "chunk_id": "bda27ac789da",
+    "verdict": "keep",
+    "reason": "Analysis of the MongoDB write regression magnitude, substantive."
+  },
+  {
+    "chunk_id": "0b3216e6cb06",
+    "verdict": "keep",
+    "reason": "Root-cause explanation of why the metadata approach regressed, valuable."
+  },
+  {
+    "chunk_id": "67650a644d35",
+    "verdict": "keep",
+    "reason": "Lead-in to raw-database verification with methodological content."
+  },
+  {
+    "chunk_id": "9b51b36fa35a",
+    "verdict": "keep",
+    "reason": "Aggregation-versus-N+1 speedup table, concrete performance data."
+  }
+]

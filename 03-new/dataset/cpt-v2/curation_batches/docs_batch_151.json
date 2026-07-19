@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "086714d3629c",
+    "verdict": "keep",
+    "reason": "Substantive rule about Ref field construction and E2025 diagnostic."
+  },
+  {
+    "chunk_id": "cc262f08e5a4",
+    "verdict": "keep",
+    "reason": "Explains ref forwarding semantics and the trailing Ref parameter convention."
+  },
+  {
+    "chunk_id": "ed339fac1d8e",
+    "verdict": "keep",
+    "reason": "Canonical code example of a ref-forwarding component."
+  },
+  {
+    "chunk_id": "7c8b563aa722",
+    "verdict": "keep",
+    "reason": "Explains the forwardRef lowering, connecting Jac syntax to React output."
+  },
+  {
+    "chunk_id": "6e8e6e4d7229",
+    "verdict": "keep",
+    "reason": "Parent-side usage example completing the ref-forwarding pattern."
+  },
+  {
+    "chunk_id": "15e64836d9b4",
+    "verdict": "keep",
+    "reason": "Precise rules for the trailing Ref parameter and auto-import behavior."
+  },
+  {
+    "chunk_id": "0064ad37d593",
+    "verdict": "keep",
+    "reason": "Explains why forwarding matters for radix asChild triggers, a real failure mode."
+  },
+  {
+    "chunk_id": "8ddd4a6a0c5d",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "34fe1d444e2f",
+    "verdict": "drop",
+    "reason": "Bare section heading with no prose or code."
+  },
+  {
+    "chunk_id": "08ea92a8b3e3",
+    "verdict": "keep",
+    "reason": "Complete useContext provider/consumer example in Jac syntax."
+  },
+  {
+    "chunk_id": "68fd0cc0efc0",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "ce4d54ceff5a",
+    "verdict": "keep",
+    "reason": "Brief but introduces the custom hooks concept preceding the example."
+  },
+  {
+    "chunk_id": "1654a4dd2890",
+    "verdict": "keep",
+    "reason": "Full custom hook example showing useEffect and tuple returns in Jac."
+  },
+  {
+    "chunk_id": "a0d9d4c373cb",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "659f650dd266",
+    "verdict": "drop",
+    "reason": "Bare section heading with no prose or code."
+  },
+  {
+    "chunk_id": "aafdd43e4dc6",
+    "verdict": "keep",
+    "reason": "Loading-state pattern example with Jac has-field state."
+  },
+  {
+    "chunk_id": "42956b223510",
+    "verdict": "keep",
+    "reason": "Form-state pattern with validation, dict spread, and event handlers in Jac."
+  },
+  {
+    "chunk_id": "496cc86bfb8d",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "cc4206ad24e8",
+    "verdict": "keep",
+    "reason": "High-value Jac-to-React concept mapping table (has, can with entry, etc.)."
+  },
+  {
+    "chunk_id": "dbe26a1fcc91",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "ed85ffa17ccb",
+    "verdict": "drop",
+    "reason": "Nav-only next-steps link list with no documentation content."
+  },
+  {
+    "chunk_id": "95990a749090",
+    "verdict": "keep",
+    "reason": "Substantive intro framing Jac's key differences from Python."
+  },
+  {
+    "chunk_id": "51935699d75a",
+    "verdict": "keep",
+    "reason": "Tutorial framing sentence listing the covered language features; harmless connective prose."
+  },
+  {
+    "chunk_id": "6188ae5d292e",
+    "verdict": "drop",
+    "reason": "Prerequisites/time metadata block, nav-style boilerplate with no language content."
+  },
+  {
+    "chunk_id": "fa9ae3066c52",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "c528bdee560b",
+    "verdict": "keep",
+    "reason": "Explains Jac's Python-bytecode relationship and paradigm extensions."
+  },
+  {
+    "chunk_id": "61de93a9fd9f",
+    "verdict": "keep",
+    "reason": "Core Python-to-Jac syntax mapping table (braces, semicolons, obj)."
+  },
+  {
+    "chunk_id": "3ee6275bd499",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "0c46b255f642",
+    "verdict": "keep",
+    "reason": "Explains Jac's type system parity with Python and annotation benefits."
+  },
+  {
+    "chunk_id": "63d6611ed662",
+    "verdict": "keep",
+    "reason": "Explains with entry as the program entry point, a core Jac construct."
+  },
+  {
+    "chunk_id": "4e022dfb4ec6",
+    "verdict": "keep",
+    "reason": "Practical tip on jac run -e for inline type checking."
+  },
+  {
+    "chunk_id": "77b25b82dac3",
+    "verdict": "keep",
+    "reason": "Basic variable declaration and annotation example in Jac syntax."
+  },
+  {
+    "chunk_id": "8c9bad0d6244",
+    "verdict": "keep",
+    "reason": "Collection types example showing Jac generic annotations."
+  },
+  {
+    "chunk_id": "9d355ae96114",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "ef2c6a837604",
+    "verdict": "keep",
+    "reason": "Explains def vs can distinction, important Jac-specific guidance."
+  },
+  {
+    "chunk_id": "ff3979821d45",
+    "verdict": "keep",
+    "reason": "Basic function definition example in Jac syntax."
+  },
+  {
+    "chunk_id": "9840d470ecf3",
+    "verdict": "keep",
+    "reason": "Continuation of the function example; valid Jac code."
+  },
+  {
+    "chunk_id": "f45d53455b2f",
+    "verdict": "keep",
+    "reason": "Entry-block usage completing the function examples."
+  },
+  {
+    "chunk_id": "cbe3c282afde",
+    "verdict": "keep",
+    "reason": "Default parameter example in Jac syntax."
+  },
+  {
+    "chunk_id": "950f08be5595",
+    "verdict": "keep",
+    "reason": "Brief lead-in stating def is used for methods inside objects."
+  },
+  {
+    "chunk_id": "5c586dd56fb3",
+    "verdict": "keep",
+    "reason": "Flagged near-duplicate's counterpart (bad74da19a3d) is not in this batch to compare, and this is a complete canonical obj/has/self example, so it is retained."
+  },
+  {
+    "chunk_id": "8d55db97f317",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  },
+  {
+    "chunk_id": "78ac8e3da105",
+    "verdict": "drop",
+    "reason": "Bare section heading with no prose or code."
+  },
+  {
+    "chunk_id": "72322efe0096",
+    "verdict": "keep",
+    "reason": "If/elif/else example showing Jac brace syntax."
+  },
+  {
+    "chunk_id": "98d7a2a74ddb",
+    "verdict": "keep",
+    "reason": "For-loop patterns including enumerate tuple destructuring in Jac."
+  },
+  {
+    "chunk_id": "4f292a7c1d4b",
+    "verdict": "keep",
+    "reason": "While-loop example in Jac syntax."
+  },
+  {
+    "chunk_id": "a35876e1238a",
+    "verdict": "keep",
+    "reason": "Important warning that match/case is the sole indentation exception to brace syntax."
+  },
+  {
+    "chunk_id": "8c2d38fee6c1",
+    "verdict": "keep",
+    "reason": "One-line restatement, but not a flagged duplicate and serves as the code-block lead-in."
+  },
+  {
+    "chunk_id": "b0a996fce9f0",
+    "verdict": "keep",
+    "reason": "Match statement example showing case syntax and or-patterns."
+  },
+  {
+    "chunk_id": "69add4a623fc",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment with no content."
+  }
+]

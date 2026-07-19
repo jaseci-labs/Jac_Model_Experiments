@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "26e0e031b923",
+    "verdict": "keep",
+    "reason": "Documents cache-clearing command scopes, genuine CLI reference."
+  },
+  {
+    "chunk_id": "893792ec60cd",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "72355f117c4f",
+    "verdict": "keep",
+    "reason": "Substantive description of jac build's type-check gate and artifact model."
+  },
+  {
+    "chunk_id": "d8cbab950e82",
+    "verdict": "keep",
+    "reason": "Canonical usage/synopsis for jac build."
+  },
+  {
+    "chunk_id": "28a5c33b9611",
+    "verdict": "keep",
+    "reason": "Complete options table for jac build."
+  },
+  {
+    "chunk_id": "f4af41b0329f",
+    "verdict": "drop",
+    "reason": "Bold label header with no prose content."
+  },
+  {
+    "chunk_id": "5dfa77d00013",
+    "verdict": "keep",
+    "reason": "Projections mapping table, informative reference."
+  },
+  {
+    "chunk_id": "5e437eb05689",
+    "verdict": "keep",
+    "reason": "Explains type-check gate behavior and CI flags."
+  },
+  {
+    "chunk_id": "d7ba846876fa",
+    "verdict": "keep",
+    "reason": "Explains the .jab artifact format and load semantics."
+  },
+  {
+    "chunk_id": "47362e573f6a",
+    "verdict": "keep",
+    "reason": "Introduces binary-vs-native distinction with real prose."
+  },
+  {
+    "chunk_id": "beb52a50044d",
+    "verdict": "keep",
+    "reason": "Detailed comparison of binary and native projections."
+  },
+  {
+    "chunk_id": "13120c61f309",
+    "verdict": "keep",
+    "reason": "Explains --fat vendoring of Python dependency closure."
+  },
+  {
+    "chunk_id": "1bea1c0398e0",
+    "verdict": "keep",
+    "reason": "Concrete fat-build command examples."
+  },
+  {
+    "chunk_id": "b1af827b46c6",
+    "verdict": "keep",
+    "reason": "Substantive detail on offline materialization and vendoring."
+  },
+  {
+    "chunk_id": "78ae0516fa5c",
+    "verdict": "drop",
+    "reason": "Bold label header with no prose content."
+  },
+  {
+    "chunk_id": "380a842b6893",
+    "verdict": "keep",
+    "reason": "Concrete wheel-build command examples."
+  },
+  {
+    "chunk_id": "5e74f0b6699d",
+    "verdict": "keep",
+    "reason": "Explains twine upload workflow, informative."
+  },
+  {
+    "chunk_id": "1aeb465ca385",
+    "verdict": "keep",
+    "reason": "Command example combining build and twine upload."
+  },
+  {
+    "chunk_id": "cb789134b9be",
+    "verdict": "drop",
+    "reason": "Bold label header with no prose content."
+  },
+  {
+    "chunk_id": "ea5c9c808634",
+    "verdict": "keep",
+    "reason": "npm tarball build command example."
+  },
+  {
+    "chunk_id": "a85ac35ad0d4",
+    "verdict": "keep",
+    "reason": "Full sentence clarifying dual wheel+npm builds."
+  },
+  {
+    "chunk_id": "7d8f8355593c",
+    "verdict": "keep",
+    "reason": "Command example for dual wheel/npm build."
+  },
+  {
+    "chunk_id": "d6c6702592e3",
+    "verdict": "drop",
+    "reason": "Bold label header with no prose content."
+  },
+  {
+    "chunk_id": "0956af82f6e6",
+    "verdict": "keep",
+    "reason": "Command examples for native and source builds."
+  },
+  {
+    "chunk_id": "f0ffdbb87038",
+    "verdict": "drop",
+    "reason": "Bold label header with no prose content."
+  },
+  {
+    "chunk_id": "be531557693d",
+    "verdict": "keep",
+    "reason": "Client-shell build command examples."
+  },
+  {
+    "chunk_id": "c76b939099b9",
+    "verdict": "keep",
+    "reason": "Note on jac.toml include settings and publishing references."
+  },
+  {
+    "chunk_id": "e456a8783a80",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "235360622483",
+    "verdict": "drop",
+    "reason": "Bare section header with no content."
+  },
+  {
+    "chunk_id": "86bcf37fe9c1",
+    "verdict": "keep",
+    "reason": "Explains jacpack folding into jac create."
+  },
+  {
+    "chunk_id": "b009b9cafbaa",
+    "verdict": "keep",
+    "reason": "Command examples for packing and listing templates."
+  },
+  {
+    "chunk_id": "bae7bef600f8",
+    "verdict": "drop",
+    "reason": "Bold label header with no prose content."
+  },
+  {
+    "chunk_id": "94a19e92e593",
+    "verdict": "drop",
+    "reason": "Trivial lead-in fragment with no standalone content."
+  },
+  {
+    "chunk_id": "630f1927f953",
+    "verdict": "keep",
+    "reason": "Lists required template directory contents."
+  },
+  {
+    "chunk_id": "b81688676eec",
+    "verdict": "keep",
+    "reason": "Explains making a project packable via jacpack section."
+  },
+  {
+    "chunk_id": "0ef862e6ca93",
+    "verdict": "drop",
+    "reason": "Bold label header with no prose content."
+  },
+  {
+    "chunk_id": "7f166edbdeea",
+    "verdict": "keep",
+    "reason": "Full example jac.toml for a template, informative."
+  },
+  {
+    "chunk_id": "e67f584f92e0",
+    "verdict": "drop",
+    "reason": "Bold label header with no prose content."
+  },
+  {
+    "chunk_id": "27b3d8ca043e",
+    "verdict": "keep",
+    "reason": "Command examples for template listing and packing."
+  },
+  {
+    "chunk_id": "d09c1ec136a0",
+    "verdict": "drop",
+    "reason": "Bold label header with no prose content."
+  },
+  {
+    "chunk_id": "b74dc9312303",
+    "verdict": "keep",
+    "reason": "Instructional sentence on using --use flag with templates."
+  },
+  {
+    "chunk_id": "6fb90935ddc7",
+    "verdict": "keep",
+    "reason": "Command example for creating from a template."
+  },
+  {
+    "chunk_id": "bf241d11b66a",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "a02d5ae0dbb1",
+    "verdict": "keep",
+    "reason": "Explains jac eject folding into jac build --as source."
+  },
+  {
+    "chunk_id": "1b4643bd14c6",
+    "verdict": "keep",
+    "reason": "Command examples for source ejection."
+  },
+  {
+    "chunk_id": "a854d2ff8b29",
+    "verdict": "drop",
+    "reason": "Bold label header with no prose content."
+  },
+  {
+    "chunk_id": "6932ecdd4987",
+    "verdict": "keep",
+    "reason": "Details what source ejection emits, substantive."
+  },
+  {
+    "chunk_id": "7d761097aec4",
+    "verdict": "keep",
+    "reason": "Explains persistence options for ejected backends."
+  },
+  {
+    "chunk_id": "2d34fa300cd9",
+    "verdict": "keep",
+    "reason": "Warning about runtime provisioning migration, useful caveat."
+  },
+  {
+    "chunk_id": "5e192d42b25b",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  }
+]

@@ -1,0 +1,693 @@
+{
+  "batch_id": "b03",
+  "generator": "fable-agent-v1",
+  "examples": [
+    {
+      "name": "join_chain_labels",
+      "category": "graph_osp",
+      "subcategory": "walker_accumulate",
+      "difficulty": "simple",
+      "py": "def join_chain_labels(spec: dict) -> str:\n    \"\"\"Join the labels in the chain with dashes, in order.\"\"\"\n    labels = spec[\"labels\"]\n    parts = []\n    for lb in labels:\n        parts.append(lb)\n    return \"-\".join(parts)",
+      "jac": "node Tag { has text: str; }\n\nwalker JoinTags {\n    has joined: str = \"\";\n    can read with Tag entry {\n        if self.joined == \"\" { self.joined = here.text; }\n        else { self.joined = self.joined + \"-\" + here.text; }\n        visit [-->];\n    }\n}\n\ndef join_chain_labels(spec: dict) -> str {\n    labels: list = list(spec[\"labels\"]);\n    if not labels { return \"\"; }\n    head = Tag(text=str(labels[0]));\n    prev = head;\n    for lb in labels[1:] {\n        nxt = Tag(text=str(lb));\n        prev ++> nxt;\n        prev = nxt;\n    }\n    return (head spawn JoinTags()).joined;\n}\n\nwith entry { print(join_chain_labels({\"labels\": [\"red\", \"green\", \"blue\"]})); }",
+      "expected_output": "red-green-blue",
+      "cases": [
+        {
+          "input": {
+            "labels": [
+              "red",
+              "green",
+              "blue"
+            ]
+          },
+          "output": "red-green-blue"
+        },
+        {
+          "input": {
+            "labels": [
+              "sun"
+            ]
+          },
+          "output": "sun"
+        },
+        {
+          "input": {
+            "labels": [
+              "up",
+              "down",
+              "up",
+              "down"
+            ]
+          },
+          "output": "up-down-up-down"
+        }
+      ]
+    },
+    {
+      "name": "alternating_chain_sum",
+      "category": "graph_osp",
+      "subcategory": "walker_accumulate",
+      "difficulty": "simple",
+      "py": "def alternating_chain_sum(spec: dict) -> int:\n    \"\"\"Add and subtract the chain values with alternating sign.\"\"\"\n    nums = spec[\"nums\"]\n    total = 0\n    sign = 1\n    for n in nums:\n        total += sign * n\n        sign = -sign\n    return total",
+      "jac": "walker AltSum { has balance: int = 0; has flip: int = 1; }\n\nnode Beat {\n    has amt: int;\n    can strike with AltSum entry {\n        visitor.balance += visitor.flip * self.amt;\n        visitor.flip = -visitor.flip;\n        visit [-->];\n    }\n}\n\ndef alternating_chain_sum(spec: dict) -> int {\n    beats: list = [Beat(amt=int(v)) for v in spec[\"nums\"]];\n    if not beats { return 0; }\n    for (x, y) in zip(beats, beats[1:]) { x ++> y; }\n    return (beats[0] spawn AltSum()).balance;\n}\n\nwith entry { print(alternating_chain_sum({\"nums\": [10, 3, 2]})); }",
+      "expected_output": "9",
+      "cases": [
+        {
+          "input": {
+            "nums": [
+              10,
+              3,
+              2
+            ]
+          },
+          "output": "9"
+        },
+        {
+          "input": {
+            "nums": [
+              1,
+              2,
+              3,
+              4
+            ]
+          },
+          "output": "-2"
+        },
+        {
+          "input": {
+            "nums": [
+              7
+            ]
+          },
+          "output": "7"
+        }
+      ]
+    },
+    {
+      "name": "doubled_chain_values",
+      "category": "graph_osp",
+      "subcategory": "gather_transform",
+      "difficulty": "simple",
+      "py": "def doubled_chain_values(spec: dict) -> list:\n    \"\"\"Collect each chain value doubled, in visit order.\"\"\"\n    values = spec[\"values\"]\n    out = []\n    for v in values:\n        out.append(v * 2)\n    return out",
+      "jac": "walker Doubler { has picked: list = []; }\n\nnode Slot {\n    has q: int;\n    can serve with Doubler entry {\n        visitor.picked.append(self.q * 2);\n        visit [-->];\n    }\n}\n\ndef doubled_chain_values(spec: dict) -> list {\n    slots: list = [];\n    for raw in spec[\"values\"] {\n        cell = Slot(q=int(raw));\n        slots.append(cell);\n        if len(slots) > 1 { slots[-2] ++> cell; }\n    }\n    if not slots { return []; }\n    runner = slots[0] spawn Doubler();\n    return runner.picked;\n}\n\nwith entry { print(doubled_chain_values({\"values\": [3, 1, 4]})); }",
+      "expected_output": "[6, 2, 8]",
+      "cases": [
+        {
+          "input": {
+            "values": [
+              3,
+              1,
+              4
+            ]
+          },
+          "output": "[6, 2, 8]"
+        },
+        {
+          "input": {
+            "values": [
+              0,
+              5
+            ]
+          },
+          "output": "[0, 10]"
+        },
+        {
+          "input": {
+            "values": [
+              -2,
+              6,
+              -1
+            ]
+          },
+          "output": "[-4, 12, -2]"
+        }
+      ]
+    },
+    {
+      "name": "total_label_length",
+      "category": "graph_osp",
+      "subcategory": "walker_accumulate",
+      "difficulty": "simple",
+      "py": "def total_label_length(spec: dict) -> int:\n    \"\"\"Sum the character counts of every word along the chain.\"\"\"\n    words = spec[\"words\"]\n    total = 0\n    for wd in words:\n        total += len(wd)\n    return total",
+      "jac": "node Card { has word: str; }\n\nwalker LenCount {\n    has chars: int = 0;\n    can weigh with Card entry { self.chars += len(here.word); visit [-->]; }\n}\n\ndef link_cards(words: list, at: int) -> Card {\n    c = Card(word=str(words[at]));\n    if at + 1 < len(words) { c ++> link_cards(words, at + 1); }\n    return c;\n}\n\ndef total_label_length(spec: dict) -> int {\n    if not spec[\"words\"] { return 0; }\n    head = link_cards(list(spec[\"words\"]), 0);\n    counter = head spawn LenCount();\n    return counter.chars;\n}\n\nwith entry { print(total_label_length({\"words\": [\"hi\", \"there\"]})); }",
+      "expected_output": "7",
+      "cases": [
+        {
+          "input": {
+            "words": [
+              "hi",
+              "there"
+            ]
+          },
+          "output": "7"
+        },
+        {
+          "input": {
+            "words": [
+              "a",
+              "bb",
+              "ccc"
+            ]
+          },
+          "output": "6"
+        },
+        {
+          "input": {
+            "words": [
+              "jac"
+            ]
+          },
+          "output": "3"
+        }
+      ]
+    },
+    {
+      "name": "trace_route",
+      "category": "graph_osp",
+      "subcategory": "path_concat",
+      "difficulty": "composed",
+      "py": "def trace_route(spec: dict) -> str:\n    \"\"\"Follow single-successor links from start, joining stop names with slashes.\"\"\"\n    nxt = spec[\"next\"]\n    cur = spec[\"start\"]\n    parts = []\n    while cur:\n        parts.append(cur)\n        cur = nxt.get(cur, \"\")\n    return \"/\".join(parts)",
+      "jac": "node Stop { has name: str; }\n\nwalker Tracer {\n    has path: list = [];\n    can log with Stop entry { self.path.append(here.name); visit [-->]; }\n}\n\ndef trace_route(spec: dict) -> str {\n    nxt: dict = dict(spec[\"next\"]);\n    cur: str = str(spec[\"start\"]);\n    first = Stop(name=cur);\n    tip = first;\n    while nxt.get(cur, \"\") != \"\" {\n        cur = str(nxt[cur]);\n        hop = Stop(name=cur);\n        tip ++> hop;\n        tip = hop;\n    }\n    return \"/\".join((first spawn Tracer()).path);\n}\n\nwith entry { print(trace_route({\"next\": {\"dock\": \"gate\", \"gate\": \"hall\", \"hall\": \"\"}, \"start\": \"dock\"})); }",
+      "expected_output": "dock/gate/hall",
+      "cases": [
+        {
+          "input": {
+            "next": {
+              "dock": "gate",
+              "gate": "hall",
+              "hall": ""
+            },
+            "start": "dock"
+          },
+          "output": "dock/gate/hall"
+        },
+        {
+          "input": {
+            "next": {
+              "a": "b",
+              "b": "c",
+              "c": ""
+            },
+            "start": "b"
+          },
+          "output": "b/c"
+        },
+        {
+          "input": {
+            "next": {
+              "x": ""
+            },
+            "start": "x"
+          },
+          "output": "x"
+        }
+      ]
+    },
+    {
+      "name": "sorted_reachable_vals",
+      "category": "graph_osp",
+      "subcategory": "gather_transform",
+      "difficulty": "composed",
+      "py": "def sorted_reachable_vals(spec: dict) -> list:\n    \"\"\"Gather the values of all nodes reachable from start, sorted ascending.\"\"\"\n    adj = spec[\"adj\"]\n    vals = spec[\"vals\"]\n    seen = set()\n    stack = [spec[\"start\"]]\n    bag = []\n    while stack:\n        n = stack.pop()\n        if n in seen:\n            continue\n        seen.add(n)\n        bag.append(vals[n])\n        stack.extend(adj.get(n, []))\n    return sorted(bag)",
+      "jac": "walker LevelPick { has bag: list = []; }\n\nnode Meter {\n    has level: float;\n    has done: bool = False;\n    can share with LevelPick entry {\n        if not self.done {\n            self.done = True;\n            visitor.bag.append(self.level);\n            visit [-->];\n        }\n    }\n}\n\ndef sorted_reachable_vals(spec: dict) -> list {\n    meters: dict = {k: Meter(level=float(v)) for (k, v) in spec[\"vals\"].items()};\n    for (frm, tos) in spec[\"adj\"].items() {\n        for t in tos { meters[frm] ++> meters[t]; }\n    }\n    picker = meters[str(spec[\"start\"])] spawn LevelPick();\n    return sorted(picker.bag);\n}\n\nwith entry { print(sorted_reachable_vals({\"adj\": {\"a\": [\"b\", \"c\"], \"b\": [\"d\"], \"c\": [\"d\"], \"d\": []}, \"vals\": {\"a\": 1.5, \"b\": 0.25, \"c\": 3.0, \"d\": 2.5}, \"start\": \"a\"})); }",
+      "expected_output": "[0.25, 1.5, 2.5, 3.0]",
+      "cases": [
+        {
+          "input": {
+            "adj": {
+              "a": [
+                "b",
+                "c"
+              ],
+              "b": [
+                "d"
+              ],
+              "c": [
+                "d"
+              ],
+              "d": []
+            },
+            "vals": {
+              "a": 1.5,
+              "b": 0.25,
+              "c": 3.0,
+              "d": 2.5
+            },
+            "start": "a"
+          },
+          "output": "[0.25, 1.5, 2.5, 3.0]"
+        },
+        {
+          "input": {
+            "adj": {
+              "p": [
+                "q"
+              ],
+              "q": [],
+              "r": [
+                "p"
+              ]
+            },
+            "vals": {
+              "p": 9.5,
+              "q": 4.0,
+              "r": 100.0
+            },
+            "start": "p"
+          },
+          "output": "[4.0, 9.5]"
+        },
+        {
+          "input": {
+            "adj": {
+              "m": []
+            },
+            "vals": {
+              "m": 7.75
+            },
+            "start": "m"
+          },
+          "output": "[7.75]"
+        }
+      ]
+    },
+    {
+      "name": "position_weighted_sum",
+      "category": "graph_osp",
+      "subcategory": "walker_accumulate",
+      "difficulty": "composed",
+      "py": "def position_weighted_sum(spec: dict) -> int:\n    \"\"\"Sum each chain value multiplied by its 1-based position.\"\"\"\n    nums = spec[\"nums\"]\n    total = 0\n    pos = 1\n    for n in nums:\n        total += n * pos\n        pos += 1\n    return total",
+      "jac": "node Rung { has load: int; }\n\nwalker DepthSum {\n    has acc: int = 0;\n    has rung_no: int = 0;\n    can climb with Rung entry {\n        self.rung_no += 1;\n        self.acc += here.load * self.rung_no;\n        visit [-->];\n    }\n}\n\ndef position_weighted_sum(spec: dict) -> int {\n    tail = None;\n    for n in reversed(spec[\"nums\"]) {\n        rung = Rung(load=int(n));\n        if tail is not None { rung ++> tail; }\n        tail = rung;\n    }\n    if tail is None { return 0; }\n    climber = tail spawn DepthSum();\n    return climber.acc;\n}\n\nwith entry { print(position_weighted_sum({\"nums\": [2, 3, 4]})); }",
+      "expected_output": "20",
+      "cases": [
+        {
+          "input": {
+            "nums": [
+              2,
+              3,
+              4
+            ]
+          },
+          "output": "20"
+        },
+        {
+          "input": {
+            "nums": [
+              1,
+              1,
+              1,
+              1
+            ]
+          },
+          "output": "10"
+        },
+        {
+          "input": {
+            "nums": [
+              5
+            ]
+          },
+          "output": "5"
+        }
+      ]
+    },
+    {
+      "name": "sorted_label_csv",
+      "category": "graph_osp",
+      "subcategory": "gather_transform",
+      "difficulty": "composed",
+      "py": "def sorted_label_csv(spec: dict) -> str:\n    \"\"\"Collect the names of all nodes reachable from start, comma-joined in sorted order.\"\"\"\n    adj = spec[\"adj\"]\n    seen = set()\n    stack = [spec[\"start\"]]\n    found = []\n    while stack:\n        n = stack.pop()\n        if n in seen:\n            continue\n        seen.add(n)\n        found.append(n)\n        stack.extend(adj.get(n, []))\n    return \",\".join(sorted(found))",
+      "jac": "node Site { has tag: str; has hit: bool = False; }\n\nwalker TagPick {\n    has tags: list = [];\n    can mark with Site entry {\n        if not here.hit {\n            here.hit = True;\n            self.tags.append(here.tag);\n            visit [-->];\n        }\n    }\n}\n\ndef sorted_label_csv(spec: dict) -> str {\n    sites: dict = {};\n    for (origin, outs) in spec[\"adj\"].items() {\n        if origin not in sites { sites[origin] = Site(tag=str(origin)); }\n        for target in list(outs) {\n            if target not in sites { sites[target] = Site(tag=str(target)); }\n            sites[origin] ++> sites[target];\n        }\n    }\n    entry_key: str = str(spec[\"start\"]);\n    crawler = sites[entry_key] spawn TagPick();\n    return \",\".join(sorted(crawler.tags));\n}\n\nwith entry { print(sorted_label_csv({\"adj\": {\"m\": [\"k\", \"z\"], \"k\": [], \"z\": [\"b\"], \"b\": []}, \"start\": \"m\"})); }",
+      "expected_output": "b,k,m,z",
+      "cases": [
+        {
+          "input": {
+            "adj": {
+              "m": [
+                "k",
+                "z"
+              ],
+              "k": [],
+              "z": [
+                "b"
+              ],
+              "b": []
+            },
+            "start": "m"
+          },
+          "output": "b,k,m,z"
+        },
+        {
+          "input": {
+            "adj": {
+              "a": [
+                "b"
+              ],
+              "b": [],
+              "q": [
+                "a"
+              ]
+            },
+            "start": "a"
+          },
+          "output": "a,b"
+        },
+        {
+          "input": {
+            "adj": {
+              "solo": []
+            },
+            "start": "solo"
+          },
+          "output": "solo"
+        }
+      ]
+    },
+    {
+      "name": "edge_weight_product",
+      "category": "graph_osp",
+      "subcategory": "edge_accumulate",
+      "difficulty": "composed",
+      "py": "def edge_weight_product(spec: dict) -> int:\n    \"\"\"Multiply together the fee on every toll gate along the chain of posts.\"\"\"\n    tolls = spec[\"tolls\"]\n    prod = 1\n    for t in tolls:\n        prod *= t\n    return prod",
+      "jac": "node Post {}\nedge TollGate { has fee: int; }\n\nwalker FeeProd {\n    has prod: int = 1;\n    can pay with TollGate entry { self.prod *= here.fee; }\n    can advance with Post entry { visit [edge -->]; }\n}\n\ndef edge_weight_product(spec: dict) -> int {\n    tolls: list = list(spec[\"tolls\"]);\n    posts: list = [Post() for _ in range(len(tolls) + 1)];\n    k: int = len(tolls);\n    while k > 0 {\n        posts[k - 1] +>:TollGate(fee=int(tolls[k - 1])):+> posts[k];\n        k -= 1;\n    }\n    return (posts[0] spawn FeeProd()).prod;\n}\n\nwith entry { print(edge_weight_product({\"tolls\": [2, 3, 4]})); }",
+      "expected_output": "24",
+      "cases": [
+        {
+          "input": {
+            "tolls": [
+              2,
+              3,
+              4
+            ]
+          },
+          "output": "24"
+        },
+        {
+          "input": {
+            "tolls": [
+              5,
+              5
+            ]
+          },
+          "output": "25"
+        },
+        {
+          "input": {
+            "tolls": []
+          },
+          "output": "1"
+        }
+      ]
+    },
+    {
+      "name": "running_max_prefix",
+      "category": "graph_osp",
+      "subcategory": "gather_transform",
+      "difficulty": "composed",
+      "py": "def running_max_prefix(spec: dict) -> list:\n    \"\"\"Collect the running maximum seen so far at each step of the chain.\"\"\"\n    nums = spec[\"nums\"]\n    trail = []\n    best = None\n    for n in nums:\n        if best is None or n > best:\n            best = n\n        trail.append(best)\n    return trail",
+      "jac": "node Gauge { has v: int; }\n\nwalker PeakTrail {\n    has trail: list = [];\n    can note with Gauge entry {\n        if not self.trail { self.trail.append(here.v); }\n        elif here.v > self.trail[-1] { self.trail.append(here.v); }\n        else { self.trail.append(self.trail[-1]); }\n        visit [-->];\n    }\n}\n\ndef running_max_prefix(spec: dict) -> list {\n    if len(spec[\"nums\"]) == 0 { return []; }\n    gauges: list = [Gauge(v=int(n)) for n in spec[\"nums\"]];\n    for i in range(1, len(gauges)) { gauges[i - 1] ++> gauges[i]; }\n    hiker = gauges[0] spawn PeakTrail();\n    return hiker.trail;\n}\n\nwith entry { print(running_max_prefix({\"nums\": [3, 1, 4, 1, 5]})); }",
+      "expected_output": "[3, 3, 4, 4, 5]",
+      "cases": [
+        {
+          "input": {
+            "nums": [
+              3,
+              1,
+              4,
+              1,
+              5
+            ]
+          },
+          "output": "[3, 3, 4, 4, 5]"
+        },
+        {
+          "input": {
+            "nums": [
+              -5,
+              -2,
+              -9
+            ]
+          },
+          "output": "[-5, -2, -2]"
+        },
+        {
+          "input": {
+            "nums": [
+              8,
+              8,
+              2
+            ]
+          },
+          "output": "[8, 8, 8]"
+        }
+      ]
+    },
+    {
+      "name": "mean_reachable_val",
+      "category": "graph_osp",
+      "subcategory": "gather_transform",
+      "difficulty": "composed",
+      "py": "def mean_reachable_val(spec: dict) -> float:\n    \"\"\"Average the values of all nodes reachable from start, rounded to 2 places.\"\"\"\n    adj = spec[\"adj\"]\n    vals = spec[\"vals\"]\n    seen = set()\n    queue = [spec[\"start\"]]\n    readings = []\n    while queue:\n        n = queue.pop(0)\n        if n in seen:\n            continue\n        seen.add(n)\n        readings.append(vals[n])\n        queue.extend(adj.get(n, []))\n    return round(sum(readings) / len(readings), 2)",
+      "jac": "node Sensor { has sid: str; has reading: int; }\n\nwalker AvgReader {\n    has seen: list = [];\n    has readings: list = [];\n    has mean: float = 0.0;\n    can poll with Sensor entry {\n        if here.sid in self.seen { return; }\n        self.seen.append(here.sid);\n        self.readings.append(here.reading);\n        visit [-->];\n    }\n    can wrap with exit {\n        self.mean = round(sum(self.readings) / len(self.readings), 2);\n    }\n}\n\ndef mean_reachable_val(spec: dict) -> float {\n    vals: dict = dict(spec[\"vals\"]);\n    adj: dict = dict(spec[\"adj\"]);\n    grid: dict = {};\n    for sid in vals.keys() { grid[sid] = Sensor(sid=str(sid), reading=int(vals[sid])); }\n    for a in adj.keys() {\n        for b in adj[a] { grid[a] ++> grid[b]; }\n    }\n    return (grid[str(spec[\"start\"])] spawn AvgReader()).mean;\n}\n\nwith entry { print(mean_reachable_val({\"adj\": {\"a\": [\"b\", \"c\"], \"b\": [], \"c\": []}, \"vals\": {\"a\": 3, \"b\": 4, \"c\": 6}, \"start\": \"a\"})); }",
+      "expected_output": "4.33",
+      "cases": [
+        {
+          "input": {
+            "adj": {
+              "a": [
+                "b",
+                "c"
+              ],
+              "b": [],
+              "c": []
+            },
+            "vals": {
+              "a": 3,
+              "b": 4,
+              "c": 6
+            },
+            "start": "a"
+          },
+          "output": "4.33"
+        },
+        {
+          "input": {
+            "adj": {
+              "x": [
+                "y"
+              ],
+              "y": []
+            },
+            "vals": {
+              "x": 2,
+              "y": 4
+            },
+            "start": "x"
+          },
+          "output": "3.0"
+        },
+        {
+          "input": {
+            "adj": {
+              "n": []
+            },
+            "vals": {
+              "n": 9
+            },
+            "start": "n"
+          },
+          "output": "9.0"
+        }
+      ]
+    },
+    {
+      "name": "toll_trip_balance",
+      "category": "graph_osp",
+      "subcategory": "edge_accumulate",
+      "difficulty": "advanced",
+      "py": "def toll_trip_balance(spec: dict) -> int:\n    \"\"\"Walk the chain of towns adding each gain and paying each road toll; return the final balance.\"\"\"\n    gains = spec[\"gains\"]\n    tolls = spec[\"tolls\"]\n    bal = 0\n    i = 0\n    while i < len(gains):\n        bal += gains[i]\n        if i < len(tolls):\n            bal -= tolls[i]\n        i += 1\n    return bal",
+      "jac": "node Town { has gain: int; }\nedge Road { has toll: int; }\n\nwalker TripLedger {\n    has bal: int = 0;\n    can settle with Town entry {\n        self.bal += here.gain;\n        for e in [edge here -->] { self.bal -= e.toll; }\n        visit [-->];\n    }\n}\n\ndef toll_trip_balance(spec: dict) -> int {\n    towns: list = [Town(gain=int(g)) for g in spec[\"gains\"]];\n    for (i, fee) in enumerate(spec[\"tolls\"]) {\n        towns[i] +>:Road(toll=int(fee)):+> towns[i + 1];\n    }\n    ledger = towns[0] spawn TripLedger();\n    return ledger.bal;\n}\n\nwith entry { print(toll_trip_balance({\"gains\": [5, 3, 8], \"tolls\": [2, 4]})); }",
+      "expected_output": "10",
+      "cases": [
+        {
+          "input": {
+            "gains": [
+              5,
+              3,
+              8
+            ],
+            "tolls": [
+              2,
+              4
+            ]
+          },
+          "output": "10"
+        },
+        {
+          "input": {
+            "gains": [
+              1,
+              1
+            ],
+            "tolls": [
+              5
+            ]
+          },
+          "output": "-3"
+        },
+        {
+          "input": {
+            "gains": [
+              10
+            ],
+            "tolls": []
+          },
+          "output": "10"
+        }
+      ]
+    },
+    {
+      "name": "label_initial_histogram",
+      "category": "graph_osp",
+      "subcategory": "gather_transform",
+      "difficulty": "advanced",
+      "py": "def label_initial_histogram(spec: dict) -> list:\n    \"\"\"Count reachable node labels by first letter; return sorted [letter, count] pairs.\"\"\"\n    adj = spec[\"adj\"]\n    labels = spec[\"labels\"]\n    seen = set()\n    stack = [spec[\"start\"]]\n    counts = {}\n    while stack:\n        n = stack.pop()\n        if n in seen:\n            continue\n        seen.add(n)\n        ch = labels[n][0]\n        counts[ch] = counts.get(ch, 0) + 1\n        stack.extend(adj.get(n, []))\n    out = []\n    for k in sorted(counts):\n        out.append([k, counts[k]])\n    return out",
+      "jac": "node Page { has word: str; has taken: bool = False; }\n\nwalker InitialScan {\n    has letters: list = [];\n    has counts: list = [];\n    can skim with Page entry {\n        if here.taken { return; }\n        here.taken = True;\n        letter: str = here.word[0];\n        if letter in self.letters {\n            idx: int = self.letters.index(letter);\n            self.counts[idx] += 1;\n        } else {\n            self.letters.append(letter);\n            self.counts.append(1);\n        }\n        visit [-->];\n    }\n}\n\ndef label_initial_histogram(spec: dict) -> list {\n    book: dict = {};\n    for (nid, wd) in spec[\"labels\"].items() { book[nid] = Page(word=str(wd)); }\n    for a_id in spec[\"adj\"] {\n        for b_id in spec[\"adj\"][a_id] { book[a_id] ++> book[b_id]; }\n    }\n    origin: str = str(spec[\"start\"]);\n    scanner = book[origin] spawn InitialScan();\n    pairs: list = [];\n    for (lt, ct) in zip(scanner.letters, scanner.counts) { pairs.append([lt, ct]); }\n    pairs.sort();\n    return pairs;\n}\n\nwith entry { print(label_initial_histogram({\"adj\": {\"n1\": [\"n2\", \"n3\"], \"n2\": [], \"n3\": [\"n4\"], \"n4\": []}, \"labels\": {\"n1\": \"apple\", \"n2\": \"ant\", \"n3\": \"berry\", \"n4\": \"avocado\"}, \"start\": \"n1\"})); }",
+      "expected_output": "[['a', 3], ['b', 1]]",
+      "cases": [
+        {
+          "input": {
+            "adj": {
+              "n1": [
+                "n2",
+                "n3"
+              ],
+              "n2": [],
+              "n3": [
+                "n4"
+              ],
+              "n4": []
+            },
+            "labels": {
+              "n1": "apple",
+              "n2": "ant",
+              "n3": "berry",
+              "n4": "avocado"
+            },
+            "start": "n1"
+          },
+          "output": "[['a', 3], ['b', 1]]"
+        },
+        {
+          "input": {
+            "adj": {
+              "u": [
+                "v"
+              ],
+              "v": [],
+              "z": [
+                "u"
+              ]
+            },
+            "labels": {
+              "u": "cat",
+              "v": "dog",
+              "z": "cow"
+            },
+            "start": "u"
+          },
+          "output": "[['c', 1], ['d', 1]]"
+        },
+        {
+          "input": {
+            "adj": {
+              "p": [
+                "q",
+                "r"
+              ],
+              "q": [],
+              "r": []
+            },
+            "labels": {
+              "p": "mint",
+              "q": "mango",
+              "r": "moss"
+            },
+            "start": "p"
+          },
+          "output": "[['m', 3]]"
+        }
+      ]
+    },
+    {
+      "name": "budget_walk_labels",
+      "category": "graph_osp",
+      "subcategory": "early_stop_accumulate",
+      "difficulty": "advanced",
+      "py": "def budget_walk_labels(spec: dict) -> list:\n    \"\"\"Visit chain stops in order, collecting labels while total cost stays within budget.\"\"\"\n    stops = spec[\"stops\"]\n    budget = spec[\"budget\"]\n    spent = 0\n    names = []\n    for label, cost in stops:\n        if spent + cost > budget:\n            break\n        spent += cost\n        names.append(label)\n    return names",
+      "jac": "node Kiosk { has label: str; has cost: int; }\n\nwalker BudgetWalk {\n    has budget: int = 0;\n    has spent: int = 0;\n    has names: list = [];\n    can shop with Kiosk entry {\n        if self.spent + here.cost > self.budget { disengage; }\n        self.spent += here.cost;\n        self.names.append(here.label);\n        visit [-->];\n    }\n}\n\ndef budget_walk_labels(spec: dict) -> list {\n    kiosks: list = [Kiosk(label=str(pr[0]), cost=int(pr[1])) for pr in spec[\"stops\"]];\n    if len(kiosks) == 0 { return []; }\n    k: int = 0;\n    while k + 1 < len(kiosks) { kiosks[k] ++> kiosks[k + 1]; k += 1; }\n    shopper = kiosks[0] spawn BudgetWalk(budget=int(spec[\"budget\"]));\n    return shopper.names;\n}\n\nwith entry { print(budget_walk_labels({\"stops\": [[\"a\", 3], [\"b\", 4], [\"c\", 9], [\"d\", 1]], \"budget\": 8})); }",
+      "expected_output": "['a', 'b']",
+      "cases": [
+        {
+          "input": {
+            "stops": [
+              [
+                "a",
+                3
+              ],
+              [
+                "b",
+                4
+              ],
+              [
+                "c",
+                9
+              ],
+              [
+                "d",
+                1
+              ]
+            ],
+            "budget": 8
+          },
+          "output": "['a', 'b']"
+        },
+        {
+          "input": {
+            "stops": [
+              [
+                "a",
+                3
+              ],
+              [
+                "b",
+                4
+              ],
+              [
+                "c",
+                9
+              ],
+              [
+                "d",
+                1
+              ]
+            ],
+            "budget": 20
+          },
+          "output": "['a', 'b', 'c', 'd']"
+        },
+        {
+          "input": {
+            "stops": [
+              [
+                "x",
+                5
+              ]
+            ],
+            "budget": 2
+          },
+          "output": "[]"
+        }
+      ]
+    }
+  ]
+}

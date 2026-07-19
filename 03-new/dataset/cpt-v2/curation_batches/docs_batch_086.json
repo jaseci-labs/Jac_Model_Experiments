@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "392920dadadc",
+    "verdict": "keep",
+    "reason": "Genuine operational prose introducing DB-resident alias rescue."
+  },
+  {
+    "chunk_id": "2287d2f8cbd0",
+    "verdict": "keep",
+    "reason": "Concrete jac db alias command example paired with surrounding prose."
+  },
+  {
+    "chunk_id": "14e57b98f84f",
+    "verdict": "keep",
+    "reason": "Substantive detail on where DB-resident aliases live and the recover-all follow-up."
+  },
+  {
+    "chunk_id": "5e3ee18484d6",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "e7623b0ba883",
+    "verdict": "keep",
+    "reason": "Section intro explaining the motivation and semantics of __jac_schema__ drift rules."
+  },
+  {
+    "chunk_id": "97d0802bcc22",
+    "verdict": "keep",
+    "reason": "Explains the decl/impl split used by the schema hook, connecting to a core Jac idiom."
+  },
+  {
+    "chunk_id": "f7642d69209e",
+    "verdict": "keep",
+    "reason": "Canonical Jac code example of declaring the __jac_schema__ hook on a node."
+  },
+  {
+    "chunk_id": "dd9ebf12cde2",
+    "verdict": "keep",
+    "reason": "Rich Jac impl example showing all four schema builders in use."
+  },
+  {
+    "chunk_id": "99cf99de3603",
+    "verdict": "keep",
+    "reason": "Non-redundant fact that the builders are ambient builtins scoped to the hook."
+  },
+  {
+    "chunk_id": "e8c30881f06a",
+    "verdict": "keep",
+    "reason": "Core reference table defining the four schema builders and their load-time effects."
+  },
+  {
+    "chunk_id": "6647b642ea8e",
+    "verdict": "keep",
+    "reason": "Important design explanation of shape-matched, idempotent rule application."
+  },
+  {
+    "chunk_id": "2ad915b16b96",
+    "verdict": "keep",
+    "reason": "Explains engine placement in the core Serializer and backend uniformity."
+  },
+  {
+    "chunk_id": "95c4ada08489",
+    "verdict": "keep",
+    "reason": "Introduces startup-time rule validation semantics."
+  },
+  {
+    "chunk_id": "f6f63f4d4e48",
+    "verdict": "keep",
+    "reason": "Concrete validation rules and failure conditions for schema builders."
+  },
+  {
+    "chunk_id": "fa52a6f996a3",
+    "verdict": "keep",
+    "reason": "Non-obvious inheritance semantics of field rules versus schema_was."
+  },
+  {
+    "chunk_id": "b7997829d043",
+    "verdict": "keep",
+    "reason": "Introduces the attic preservation model for removed fields."
+  },
+  {
+    "chunk_id": "8191569b9e49",
+    "verdict": "keep",
+    "reason": "Concrete JSON example of the __jac_attic__ stored shape."
+  },
+  {
+    "chunk_id": "5d933026c7d6",
+    "verdict": "keep",
+    "reason": "Substantive guarantee about attic round-tripping and rollback safety."
+  },
+  {
+    "chunk_id": "3c0c4659a595",
+    "verdict": "keep",
+    "reason": "Explains dual-write behavior for rolling deploys."
+  },
+  {
+    "chunk_id": "e8e6aa73cc40",
+    "verdict": "keep",
+    "reason": "Detailed shadow-resolution semantics on load, including conflict handling."
+  },
+  {
+    "chunk_id": "fde134fc2f47",
+    "verdict": "keep",
+    "reason": "Reference table for the JAC_SCHEMA_REPAIR modes."
+  },
+  {
+    "chunk_id": "b3cee4982506",
+    "verdict": "keep",
+    "reason": "Section intro tying repair to the scale Mongo backend."
+  },
+  {
+    "chunk_id": "be8b8c6f6fa2",
+    "verdict": "keep",
+    "reason": "Dense unique content on read-repair write-back, quarantine reason codes, and auto-retry."
+  },
+  {
+    "chunk_id": "0d8b9d112da5",
+    "verdict": "keep",
+    "reason": "v1 code of a complete worked rename example."
+  },
+  {
+    "chunk_id": "781832bae307",
+    "verdict": "keep",
+    "reason": "Connective prose advancing the worked example to v2."
+  },
+  {
+    "chunk_id": "592b7d9480e4",
+    "verdict": "keep",
+    "reason": "v2 Jac code demonstrating schema_alias and schema_drop in practice."
+  },
+  {
+    "chunk_id": "25bcd1859845",
+    "verdict": "keep",
+    "reason": "Expected output showing repair log and attic contents."
+  },
+  {
+    "chunk_id": "72449d5c4ad5",
+    "verdict": "keep",
+    "reason": "Concluding summary of the rename example's outcome."
+  },
+  {
+    "chunk_id": "a4f7f5878fe2",
+    "verdict": "keep",
+    "reason": "Documents the jac db schema rules inspection command."
+  },
+  {
+    "chunk_id": "ba0a8b2927bc",
+    "verdict": "keep",
+    "reason": "Concrete CLI output example for registered drift rules."
+  },
+  {
+    "chunk_id": "38557548aa33",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "f49951927239",
+    "verdict": "keep",
+    "reason": "Explains the backend-agnostic PersistentMemory contract."
+  },
+  {
+    "chunk_id": "6963114e016a",
+    "verdict": "keep",
+    "reason": "Short connective prose leading into the guarantee list; harmless glue."
+  },
+  {
+    "chunk_id": "86274ac0e40a",
+    "verdict": "keep",
+    "reason": "Enumerates the cross-backend persistence guarantees."
+  },
+  {
+    "chunk_id": "e72a52084a71",
+    "verdict": "keep",
+    "reason": "Clarifies which extras are Mongo-backend-specific."
+  },
+  {
+    "chunk_id": "84745d86debc",
+    "verdict": "keep",
+    "reason": "Points to the custom-backend plugin API, naming set_persistent_memory_provider."
+  },
+  {
+    "chunk_id": "a4859cf516e3",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "fcec6ad83376",
+    "verdict": "keep",
+    "reason": "Heading and lead-in for the survivable schema change example."
+  },
+  {
+    "chunk_id": "8ed6d5b89eeb",
+    "verdict": "keep",
+    "reason": "Complete Jac example with nodes and walkers showing v1 persisted state."
+  },
+  {
+    "chunk_id": "ed51442ce8c0",
+    "verdict": "keep",
+    "reason": "Run command establishing the persisted baseline for the example."
+  },
+  {
+    "chunk_id": "e98c3fc32cbc",
+    "verdict": "keep",
+    "reason": "Transition prose describing the three simultaneous schema edits."
+  },
+  {
+    "chunk_id": "6305d53ec435",
+    "verdict": "keep",
+    "reason": "v2 code demonstrating @archetype_alias plus type change and new field."
+  },
+  {
+    "chunk_id": "3f18b430baa8",
+    "verdict": "keep",
+    "reason": "Output showing coercion, defaulting, and alias resolution working together."
+  },
+  {
+    "chunk_id": "b09b797bdb2d",
+    "verdict": "keep",
+    "reason": "Summary sentence naming the three automatic drift repairs."
+  },
+  {
+    "chunk_id": "8379e96a032b",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "fedba2ad0b64",
+    "verdict": "keep",
+    "reason": "Introduces the quarantine inspection and rescue workflow."
+  },
+  {
+    "chunk_id": "8e0afaa0d1cd",
+    "verdict": "keep",
+    "reason": "Full six-step operator CLI workflow for inspecting and rescuing data."
+  },
+  {
+    "chunk_id": "a5827988d167",
+    "verdict": "keep",
+    "reason": "Useful cross-references to the CLI reference and dangling-ref section."
+  },
+  {
+    "chunk_id": "07e5659e56b9",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "bb56fc031ab0",
+    "verdict": "keep",
+    "reason": "Limitations section header with framing prose about planned work."
+  }
+]

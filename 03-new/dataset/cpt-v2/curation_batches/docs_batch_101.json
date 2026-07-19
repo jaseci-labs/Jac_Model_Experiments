@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "624ba07586e8",
+    "verdict": "keep",
+    "reason": "Substantive prose on what the React Native target reuses from the web pipeline."
+  },
+  {
+    "chunk_id": "80debe20d9c2",
+    "verdict": "drop",
+    "reason": "Nav-only cross-reference link with no standalone content."
+  },
+  {
+    "chunk_id": "049f21e1c473",
+    "verdict": "keep",
+    "reason": "Section intro with a real one-line description of the PWA target."
+  },
+  {
+    "chunk_id": "a80fc004aaa5",
+    "verdict": "drop",
+    "reason": "Bare 'Features:' label fragment with no content."
+  },
+  {
+    "chunk_id": "5c9416803b4a",
+    "verdict": "keep",
+    "reason": "Genuine feature list for the PWA target (service worker, manifest, icons)."
+  },
+  {
+    "chunk_id": "e073eeb70116",
+    "verdict": "drop",
+    "reason": "Bare 'Setup & Build:' label fragment with no content."
+  },
+  {
+    "chunk_id": "9241f8ab8a82",
+    "verdict": "keep",
+    "reason": "Concrete jac CLI commands for PWA setup, build, dev, and production."
+  },
+  {
+    "chunk_id": "3cfe163559b8",
+    "verdict": "keep",
+    "reason": "Short but informative statement of PWA build outputs."
+  },
+  {
+    "chunk_id": "e824c9d06dca",
+    "verdict": "drop",
+    "reason": "Bare 'Configuration in jac.toml:' label fragment with no content."
+  },
+  {
+    "chunk_id": "ff5a15ab49f7",
+    "verdict": "keep",
+    "reason": "Real jac.toml PWA configuration example."
+  },
+  {
+    "chunk_id": "a4a223081f5a",
+    "verdict": "keep",
+    "reason": "Concrete instruction for supplying custom PWA icons."
+  },
+  {
+    "chunk_id": "1313ffd00215",
+    "verdict": "keep",
+    "reason": "Substantive intro describing the automatic PWA install banner behavior."
+  },
+  {
+    "chunk_id": "6ea3b4f1678a",
+    "verdict": "drop",
+    "reason": "Bare 'Features:' label fragment, duplicate boilerplate."
+  },
+  {
+    "chunk_id": "da1ac63af7a6",
+    "verdict": "keep",
+    "reason": "Detailed banner behavior list (beforeinstallprompt, iOS flow, backoff policy)."
+  },
+  {
+    "chunk_id": "1f6df6fc99eb",
+    "verdict": "drop",
+    "reason": "Bare configuration heading label with no content."
+  },
+  {
+    "chunk_id": "e6d817898b4c",
+    "verdict": "keep",
+    "reason": "Real install-banner jac.toml settings with defaults documented inline."
+  },
+  {
+    "chunk_id": "5b410b8a9bd9",
+    "verdict": "drop",
+    "reason": "Bare 'Programmatic Control (Optional):' label fragment."
+  },
+  {
+    "chunk_id": "714e24a23db9",
+    "verdict": "drop",
+    "reason": "Lead-in sentence fragment with no standalone informational content."
+  },
+  {
+    "chunk_id": "4259fcb50fdf",
+    "verdict": "keep",
+    "reason": "Genuine Jac code example using the @jac/pwa runtime module and lambdas."
+  },
+  {
+    "chunk_id": "9d4d5d4f6aad",
+    "verdict": "keep",
+    "reason": "API table documenting usePwaInstall and PwaInstallButton exports."
+  },
+  {
+    "chunk_id": "d4304c1a2e0f",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment, pure boilerplate."
+  },
+  {
+    "chunk_id": "3dce6bbcbda0",
+    "verdict": "keep",
+    "reason": "Substantive explanation of automatic endpoint caching via endpoint_effects metadata."
+  },
+  {
+    "chunk_id": "4a5070e78037",
+    "verdict": "drop",
+    "reason": "Bare 'How it works:' label fragment with no content."
+  },
+  {
+    "chunk_id": "3739c8e35aa4",
+    "verdict": "keep",
+    "reason": "Detailed reader/writer cache semantics including LRU size, TTL, and invalidation rules."
+  },
+  {
+    "chunk_id": "5bee1c2fad70",
+    "verdict": "keep",
+    "reason": "Useful consequence summary of caching behavior for walker spawns."
+  },
+  {
+    "chunk_id": "b128f70b992d",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment, pure boilerplate."
+  },
+  {
+    "chunk_id": "950eb50f1ed3",
+    "verdict": "keep",
+    "reason": "Substantive description of BrowserRouter clean-URL routing."
+  },
+  {
+    "chunk_id": "16f189d69a0b",
+    "verdict": "keep",
+    "reason": "Important SPA catch-all detail including reserved API prefixes."
+  },
+  {
+    "chunk_id": "15606519d7cf",
+    "verdict": "keep",
+    "reason": "Small but real detail about Vite appType spa fallback in development."
+  },
+  {
+    "chunk_id": "8347f811e4a6",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment, pure boilerplate."
+  },
+  {
+    "chunk_id": "dec1e0892697",
+    "verdict": "keep",
+    "reason": "Substantive intro to structured build error diagnostics."
+  },
+  {
+    "chunk_id": "1cf745494e8d",
+    "verdict": "keep",
+    "reason": "Real list of diagnostic components (codes, snippets, hints)."
+  },
+  {
+    "chunk_id": "c74c7113b3ff",
+    "verdict": "keep",
+    "reason": "Error-code reference table with concrete fixes."
+  },
+  {
+    "chunk_id": "9814e0ca38b1",
+    "verdict": "keep",
+    "reason": "Concrete debug-mode configuration via jac.toml or JAC_DEBUG env var."
+  },
+  {
+    "chunk_id": "09b813b40405",
+    "verdict": "keep",
+    "reason": "Useful note on debug default and production recommendation."
+  },
+  {
+    "chunk_id": "7a7a4ec76f50",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment, pure boilerplate."
+  },
+  {
+    "chunk_id": "1ea7afcfbd8e",
+    "verdict": "keep",
+    "reason": "Substantive intro to build-time constants via client.vite.define."
+  },
+  {
+    "chunk_id": "d805feb160e6",
+    "verdict": "keep",
+    "reason": "Real toml example of build-time constant definitions."
+  },
+  {
+    "chunk_id": "73995b9808b6",
+    "verdict": "keep",
+    "reason": "Explains Vite inlining and the JSON-encoding requirement for string values."
+  },
+  {
+    "chunk_id": "aa3ee5d17b99",
+    "verdict": "keep",
+    "reason": "Better copy of the flagged duplicate: it completes the canonical jac-client.md Build-Time Constants section, while df9c89b58ef3 is the same snippet in a config/index.md cross-reference summary."
+  },
+  {
+    "chunk_id": "c22d70ed086c",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment, pure boilerplate."
+  },
+  {
+    "chunk_id": "b90de1c9e8b1",
+    "verdict": "drop",
+    "reason": "Bare section heading 'Development Server' with no content."
+  },
+  {
+    "chunk_id": "ed2ce735d6af",
+    "verdict": "keep",
+    "reason": "Substantive prerequisites detail: bundled Bun runtime and JAC_BUN override."
+  },
+  {
+    "chunk_id": "e993e5caf782",
+    "verdict": "keep",
+    "reason": "Concrete jac start command variants including dev, no-client, and desktop."
+  },
+  {
+    "chunk_id": "5a1f0f2e46a8",
+    "verdict": "keep",
+    "reason": "Brief but real statement that dev mode auto-proxies API routes."
+  },
+  {
+    "chunk_id": "bebc67160498",
+    "verdict": "keep",
+    "reason": "Concrete list of proxied API route prefixes."
+  },
+  {
+    "chunk_id": "ac276ddbbbfb",
+    "verdict": "drop",
+    "reason": "Horizontal-rule-only fragment, pure boilerplate."
+  },
+  {
+    "chunk_id": "fc593c7a4821",
+    "verdict": "keep",
+    "reason": "Substantive intro to ambient DOM event types for type-safe handlers."
+  },
+  {
+    "chunk_id": "b87d14ae5f00",
+    "verdict": "keep",
+    "reason": "Genuine Jac form example showing typed event handlers and lambda syntax."
+  },
+  {
+    "chunk_id": "efc0b6c555ae",
+    "verdict": "keep",
+    "reason": "Real explanation that ambient DOM types need no import statement."
+  }
+]

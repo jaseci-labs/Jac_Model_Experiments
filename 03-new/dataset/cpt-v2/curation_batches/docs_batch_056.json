@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "5b99e9516d75",
+    "verdict": "keep",
+    "reason": "Jac-specific E0067 backtick/reserved-word rule, genuine content."
+  },
+  {
+    "chunk_id": "3bc6a6b0b386",
+    "verdict": "keep",
+    "reason": "Documents built-in references self/root/here/visitor, useful language detail."
+  },
+  {
+    "chunk_id": "098ee1214b33",
+    "verdict": "keep",
+    "reason": "Explains entry point variants, genuine documentation."
+  },
+  {
+    "chunk_id": "b4c280fc876b",
+    "verdict": "keep",
+    "reason": "Python-to-Jac entry mapping tip, useful."
+  },
+  {
+    "chunk_id": "15170b0d7402",
+    "verdict": "keep",
+    "reason": "Working code example of entry blocks."
+  },
+  {
+    "chunk_id": "27b85c02fb36",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no prose."
+  },
+  {
+    "chunk_id": "b6d29b1821f8",
+    "verdict": "keep",
+    "reason": "Intro to Jac static typing model."
+  },
+  {
+    "chunk_id": "37a781d867f0",
+    "verdict": "keep",
+    "reason": "Builtin types reference table."
+  },
+  {
+    "chunk_id": "477aad288af0",
+    "verdict": "keep",
+    "reason": "Section lead-in for fixed-width types."
+  },
+  {
+    "chunk_id": "334ef932ff61",
+    "verdict": "keep",
+    "reason": "Fixed-width type/C-equivalent reference table."
+  },
+  {
+    "chunk_id": "75f9384c8430",
+    "verdict": "keep",
+    "reason": "Explains type coercion in .na.jac interop; duplicate partner not in batch."
+  },
+  {
+    "chunk_id": "bb8e551ac564",
+    "verdict": "keep",
+    "reason": "Type annotation requirement section header/intro."
+  },
+  {
+    "chunk_id": "9975ed4d7aa1",
+    "verdict": "keep",
+    "reason": "obj field annotation code example."
+  },
+  {
+    "chunk_id": "0b7d1fa1b125",
+    "verdict": "keep",
+    "reason": "Introduces ambient typing names."
+  },
+  {
+    "chunk_id": "3b2aff0f72a0",
+    "verdict": "keep",
+    "reason": "List of ambient typing names, reference content."
+  },
+  {
+    "chunk_id": "de113306b244",
+    "verdict": "keep",
+    "reason": "Callable annotation code example."
+  },
+  {
+    "chunk_id": "3084c4dbaecc",
+    "verdict": "keep",
+    "reason": "Explains Python/JS codegen behavior for typing imports."
+  },
+  {
+    "chunk_id": "b357d20af5a6",
+    "verdict": "keep",
+    "reason": "Lead-in to skipped-names table."
+  },
+  {
+    "chunk_id": "cb632042fdbb",
+    "verdict": "keep",
+    "reason": "Don't-write/use-instead typing table, practical guidance."
+  },
+  {
+    "chunk_id": "aadff446e170",
+    "verdict": "keep",
+    "reason": "Lists non-ambient runtime typing values."
+  },
+  {
+    "chunk_id": "4494563e0f51",
+    "verdict": "keep",
+    "reason": "Explains import type semantics."
+  },
+  {
+    "chunk_id": "a960184f4777",
+    "verdict": "keep",
+    "reason": "import type code example; duplicate partner not in batch."
+  },
+  {
+    "chunk_id": "66bbdb7f3bd3",
+    "verdict": "keep",
+    "reason": "Caption tying to generated-Python example that follows."
+  },
+  {
+    "chunk_id": "bd49be6484f3",
+    "verdict": "keep",
+    "reason": "Generated Python for import type, illustrative."
+  },
+  {
+    "chunk_id": "b9fd7821e245",
+    "verdict": "keep",
+    "reason": "Explains breaking circular imports, substantive content."
+  },
+  {
+    "chunk_id": "c06e36abf9ed",
+    "verdict": "keep",
+    "reason": "Lead-in to when-not-to-use guidance."
+  },
+  {
+    "chunk_id": "2be0e1d6563c",
+    "verdict": "keep",
+    "reason": "Detailed rules on when import type fails, valuable."
+  },
+  {
+    "chunk_id": "c56191e6fa9c",
+    "verdict": "keep",
+    "reason": "Clarifies import type is opt-in."
+  },
+  {
+    "chunk_id": "c341d2347f5c",
+    "verdict": "keep",
+    "reason": "Explains any type and gradual typing rule."
+  },
+  {
+    "chunk_id": "3ffcc7a923aa",
+    "verdict": "keep",
+    "reason": "States the strict-any assignment rule; duplicate partner not in batch."
+  },
+  {
+    "chunk_id": "bcdbeb2dcd5f",
+    "verdict": "keep",
+    "reason": "Lists sites where any-check fires; duplicate partner not in batch."
+  },
+  {
+    "chunk_id": "1aeedc337636",
+    "verdict": "keep",
+    "reason": "Explains element-wise container recursion of any-check; duplicate partner not in batch."
+  },
+  {
+    "chunk_id": "46fa5b87bf4f",
+    "verdict": "keep",
+    "reason": "Lead-in to permissive-destination exceptions."
+  },
+  {
+    "chunk_id": "28126ba3c22c",
+    "verdict": "keep",
+    "reason": "Details inferred-local and explicit-any exceptions."
+  },
+  {
+    "chunk_id": "b20dba283a71",
+    "verdict": "keep",
+    "reason": "Explains any->object/TypeVar permissive flow."
+  },
+  {
+    "chunk_id": "c1779998f7c0",
+    "verdict": "keep",
+    "reason": "Clarifies PEP 484 semantics in .py/.pyi files."
+  },
+  {
+    "chunk_id": "b16b91899de4",
+    "verdict": "keep",
+    "reason": "Lead-in to migration-pattern table."
+  },
+  {
+    "chunk_id": "dab7a0ac3ac2",
+    "verdict": "keep",
+    "reason": "Migration approaches table, practical guidance."
+  },
+  {
+    "chunk_id": "00d74905fd76",
+    "verdict": "keep",
+    "reason": "Full example of narrowing any before typed use."
+  },
+  {
+    "chunk_id": "cce499649456",
+    "verdict": "keep",
+    "reason": "Introduces generic types with PEP 695 syntax."
+  },
+  {
+    "chunk_id": "846be0e3744d",
+    "verdict": "keep",
+    "reason": "Generic function/object code example."
+  },
+  {
+    "chunk_id": "151103231793",
+    "verdict": "keep",
+    "reason": "Lead-in to generic limitation note."
+  },
+  {
+    "chunk_id": "b0aa7ea1fc64",
+    "verdict": "keep",
+    "reason": "Documents type-parameter default limitation, important gotcha."
+  },
+  {
+    "chunk_id": "09a04cb8c168",
+    "verdict": "keep",
+    "reason": "Explains type-parameter inference and cast override."
+  },
+  {
+    "chunk_id": "c55837488fda",
+    "verdict": "keep",
+    "reason": "Backtick escaping tip for built-in any()."
+  },
+  {
+    "chunk_id": "1869e7cde491",
+    "verdict": "keep",
+    "reason": "Explains the Self type versus self."
+  },
+  {
+    "chunk_id": "9648b5a87827",
+    "verdict": "keep",
+    "reason": "Self-return builder method example."
+  },
+  {
+    "chunk_id": "e712049e0e52",
+    "verdict": "keep",
+    "reason": "Lead-in on recursive type annotations."
+  },
+  {
+    "chunk_id": "f478a814960c",
+    "verdict": "keep",
+    "reason": "LinkedNode recursive-type code example."
+  },
+  {
+    "chunk_id": "b39fe23bd049",
+    "verdict": "keep",
+    "reason": "Cross-reference to static methods with useful context."
+  }
+]

@@ -1,0 +1,260 @@
+[
+  {
+    "chunk_id": "decb56e269ea",
+    "verdict": "keep",
+    "reason": "Genuine blog prose arguing the design rationale against meta-packages."
+  },
+  {
+    "chunk_id": "6df30b3f18f0",
+    "verdict": "keep",
+    "reason": "Substantive prose on npm meta-package failure modes motivating the jac.toml change."
+  },
+  {
+    "chunk_id": "4301f471fef9",
+    "verdict": "keep",
+    "reason": "Concluding design-philosophy prose, genuine and non-redundant."
+  },
+  {
+    "chunk_id": "965e26abd06e",
+    "verdict": "keep",
+    "reason": "Describes the concrete PR change and its backward-compat migration behavior for jac.toml."
+  },
+  {
+    "chunk_id": "536223028d5e",
+    "verdict": "drop",
+    "reason": "One-line sign-off slogan with no documentation content."
+  },
+  {
+    "chunk_id": "da63594093d3",
+    "verdict": "keep",
+    "reason": "Title and subtitle framing the agentic OSP patterns article."
+  },
+  {
+    "chunk_id": "9ece40260f76",
+    "verdict": "keep",
+    "reason": "Thesis sentence distinguishing agents from chatbots via context."
+  },
+  {
+    "chunk_id": "c545b9650b2e",
+    "verdict": "drop",
+    "reason": "Bare '<!-- more -->' excerpt marker, pure markup boilerplate."
+  },
+  {
+    "chunk_id": "e8a4cf25a2a1",
+    "verdict": "keep",
+    "reason": "Genuine prose explaining accumulated context as the basis of agent intelligence."
+  },
+  {
+    "chunk_id": "ee176d8d5de1",
+    "verdict": "keep",
+    "reason": "Motivating prose on why context storage shape matters."
+  },
+  {
+    "chunk_id": "ebae4454426c",
+    "verdict": "drop",
+    "reason": "Contentless lead-in sentence fragment with no standalone value."
+  },
+  {
+    "chunk_id": "89d91d46af96",
+    "verdict": "drop",
+    "reason": "Empty admonition markup fragment with no content."
+  },
+  {
+    "chunk_id": "3d8fb787afeb",
+    "verdict": "keep",
+    "reason": "The article's central framing question, genuine content."
+  },
+  {
+    "chunk_id": "ba728c3f8e83",
+    "verdict": "keep",
+    "reason": "Prose connecting the question to OSP and the four patterns."
+  },
+  {
+    "chunk_id": "26c48547239d",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule markup, no content."
+  },
+  {
+    "chunk_id": "89af8651bb24",
+    "verdict": "drop",
+    "reason": "Transition sentence fragment with no documentation content."
+  },
+  {
+    "chunk_id": "f09bafde08ac",
+    "verdict": "upweight",
+    "reason": "Concise OSP definition: graph-shaped context, spatial relationships, code living with data.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "7fab1161835c",
+    "verdict": "drop",
+    "reason": "Two-word lead-in fragment with no standalone content."
+  },
+  {
+    "chunk_id": "b225dae94be3",
+    "verdict": "upweight",
+    "reason": "Core primitives table defining walker/node/edge roles, foundational OSP semantics.",
+    "weight": 3.5
+  },
+  {
+    "chunk_id": "fd78fdfa9a54",
+    "verdict": "keep",
+    "reason": "Short lead-in tying Jac to OSP before the code example."
+  },
+  {
+    "chunk_id": "5b6ca640d368",
+    "verdict": "upweight",
+    "reason": "Canonical minimal code showing node/walker declaration, root ++> connection, and spawn.",
+    "weight": 3.5
+  },
+  {
+    "chunk_id": "720047ffd9c5",
+    "verdict": "upweight",
+    "reason": "Explains node-state/walker-traversal/edge semantics as direct architecture description.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "0e1d59d0e97c",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule markup, no content."
+  },
+  {
+    "chunk_id": "8a90dbff7cd5",
+    "verdict": "keep",
+    "reason": "Introduces by llm() function delegation, genuine Jac feature documentation."
+  },
+  {
+    "chunk_id": "7468c730dd2d",
+    "verdict": "keep",
+    "reason": "Minimal by llm() code example, genuine syntax content."
+  },
+  {
+    "chunk_id": "cddaa40d1a85",
+    "verdict": "keep",
+    "reason": "Explains signature-as-prompt semantics of by llm()."
+  },
+  {
+    "chunk_id": "7923586a312c",
+    "verdict": "keep",
+    "reason": "Explains tools turning by llm() into a ReAct agent."
+  },
+  {
+    "chunk_id": "d6b21e2ce5dd",
+    "verdict": "keep",
+    "reason": "Code example of by llm() with tools, genuine syntax content."
+  },
+  {
+    "chunk_id": "3f1c6d8870dd",
+    "verdict": "keep",
+    "reason": "Names and defines Meaning-Typed Programming, genuine concept prose."
+  },
+  {
+    "chunk_id": "e32fbc3c8189",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule markup, no content."
+  },
+  {
+    "chunk_id": "0e999d4de441",
+    "verdict": "upweight",
+    "reason": "Core visit-mechanics material: LLM-driven walker navigation replacing routing logic.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "122be541ccaa",
+    "verdict": "upweight",
+    "reason": "Canonical visit [-->] by llm() syntax example, core traversal mechanics.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "b7d98a15cd4c",
+    "verdict": "upweight",
+    "reason": "Explains visit-by-llm destination selection and graph extensibility semantics.",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "07d4fd1adcae",
+    "verdict": "keep",
+    "reason": "Prose on graph topology replacing orchestration code."
+  },
+  {
+    "chunk_id": "0221a67a6308",
+    "verdict": "drop",
+    "reason": "Admonition header markup with no body content."
+  },
+  {
+    "chunk_id": "20ad8f272641",
+    "verdict": "keep",
+    "reason": "Clarifies visit by llm() is composable sugar independent of the patterns."
+  },
+  {
+    "chunk_id": "a1ba83c56000",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule markup, no content."
+  },
+  {
+    "chunk_id": "23fa8e271999",
+    "verdict": "keep",
+    "reason": "Frames the four architecture patterns built from OSP primitives."
+  },
+  {
+    "chunk_id": "fcc8ad2d3a3e",
+    "verdict": "drop",
+    "reason": "Empty admonition markup fragment with no content."
+  },
+  {
+    "chunk_id": "0b5da2372b44",
+    "verdict": "keep",
+    "reason": "The organizing question for the four patterns, genuine content."
+  },
+  {
+    "chunk_id": "d83580834c8d",
+    "verdict": "drop",
+    "reason": "Admonition header markup with no body content."
+  },
+  {
+    "chunk_id": "d9323bd27fec",
+    "verdict": "keep",
+    "reason": "Diagram legend prose that gives context for the pattern figures."
+  },
+  {
+    "chunk_id": "26ca0944c5e8",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule markup, no content."
+  },
+  {
+    "chunk_id": "42ae39c78b3f",
+    "verdict": "drop",
+    "reason": "Heading plus empty admonition markup, nav-only fragment."
+  },
+  {
+    "chunk_id": "756f342cf85a",
+    "verdict": "keep",
+    "reason": "One-line summary of the Worker Bee pattern's walker-spawning semantics."
+  },
+  {
+    "chunk_id": "2211bf589c99",
+    "verdict": "keep",
+    "reason": "Concrete trip-planner example describing walker-space spawn relationships."
+  },
+  {
+    "chunk_id": "e1a88a5d896e",
+    "verdict": "drop",
+    "reason": "Figure/image markup fragment whose caption adds negligible prose."
+  },
+  {
+    "chunk_id": "85d7e3bbb6e6",
+    "verdict": "keep",
+    "reason": "Prose on child walkers reporting back for parent synthesis."
+  },
+  {
+    "chunk_id": "a49fab298357",
+    "verdict": "drop",
+    "reason": "Collapsible-example header markup with no content."
+  },
+  {
+    "chunk_id": "29cbf2cb42e3",
+    "verdict": "upweight",
+    "reason": "Full working sketch of walker spawning, Root entry abilities, and by llm() composition.",
+    "weight": 2.5
+  }
+]

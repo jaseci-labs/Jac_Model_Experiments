@@ -1,0 +1,257 @@
+[
+  {
+    "chunk_id": "87c9474aef7e",
+    "verdict": "keep",
+    "reason": "Genuine prose explaining the jac2py transpilation command and its output guarantees."
+  },
+  {
+    "chunk_id": "5ba62a34e6b4",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "010e6003b4a1",
+    "verdict": "keep",
+    "reason": "Section intro framing the friends-network example of the object-spatial model."
+  },
+  {
+    "chunk_id": "f978e193732f",
+    "verdict": "keep",
+    "reason": "Contextual lead-in describing what the following example implements."
+  },
+  {
+    "chunk_id": "e93d0b02949f",
+    "verdict": "upweight",
+    "reason": "Complete canonical Jac program exercising node/edge/walker declarations, edge-typed connections, abilities, here/visitor, visit, and spawn together.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "36590f02b645",
+    "verdict": "keep",
+    "reason": "Short but genuine lead-in tying the jac2py command to the generated output."
+  },
+  {
+    "chunk_id": "602b89c26058",
+    "verdict": "keep",
+    "reason": "Full generated Python equivalent showing how OSP constructs map onto the jaclang.lib API."
+  },
+  {
+    "chunk_id": "d9e752a524d5",
+    "verdict": "keep",
+    "reason": "Substantive note clarifying the internal vs public import path for the library API."
+  },
+  {
+    "chunk_id": "dca04ef2bac1",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "861c3d453cb2",
+    "verdict": "keep",
+    "reason": "Prose explaining the purpose and orientation of the Jac-to-library-mode mappings."
+  },
+  {
+    "chunk_id": "07f74bed0055",
+    "verdict": "keep",
+    "reason": "Section heading naming the nodes-and-edges mapping topic; minimal but carries structure."
+  },
+  {
+    "chunk_id": "2f591a9f82c3",
+    "verdict": "keep",
+    "reason": "Canonical minimal node/edge declaration snippet in Jac."
+  },
+  {
+    "chunk_id": "ab19c04d9b2e",
+    "verdict": "drop",
+    "reason": "Three-word connective label with no content, repeated identically six times across the file."
+  },
+  {
+    "chunk_id": "847c0abe07a8",
+    "verdict": "keep",
+    "reason": "Library-mode Python equivalent for node/edge declaration."
+  },
+  {
+    "chunk_id": "6d5003534fca",
+    "verdict": "keep",
+    "reason": "Explanatory sentence on subclassing Node and Edge with typed fields."
+  },
+  {
+    "chunk_id": "485423a32366",
+    "verdict": "keep",
+    "reason": "Section heading naming the walkers mapping topic; carries document structure."
+  },
+  {
+    "chunk_id": "70cba0ad2926",
+    "verdict": "keep",
+    "reason": "Canonical minimal walker declaration snippet in Jac."
+  },
+  {
+    "chunk_id": "a4432e103513",
+    "verdict": "drop",
+    "reason": "Duplicate content-free 'In Library Mode:' label fragment."
+  },
+  {
+    "chunk_id": "a63c9bd58e9f",
+    "verdict": "keep",
+    "reason": "Library-mode Python equivalent for a walker class."
+  },
+  {
+    "chunk_id": "7980cab471be",
+    "verdict": "keep",
+    "reason": "Explanatory sentence defining walkers as traversal agents."
+  },
+  {
+    "chunk_id": "3989e44b94fc",
+    "verdict": "keep",
+    "reason": "Section heading naming the abilities mapping topic; carries document structure."
+  },
+  {
+    "chunk_id": "6ce2e5bcaaed",
+    "verdict": "keep",
+    "reason": "Canonical Jac ability snippet showing 'can ... with Person entry' and here usage."
+  },
+  {
+    "chunk_id": "937037f59501",
+    "verdict": "drop",
+    "reason": "Duplicate content-free 'In Library Mode:' label fragment."
+  },
+  {
+    "chunk_id": "aa717fb2843a",
+    "verdict": "keep",
+    "reason": "Library-mode Python equivalent using the @on_entry decorator."
+  },
+  {
+    "chunk_id": "bf9e42873f25",
+    "verdict": "upweight",
+    "reason": "Core OSP semantics prose defining entry/exit abilities and the here vs visitor roles.",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "f3ec61996885",
+    "verdict": "keep",
+    "reason": "Section heading naming the node-connection mapping topic; carries document structure."
+  },
+  {
+    "chunk_id": "47d17e73f017",
+    "verdict": "upweight",
+    "reason": "Canonical annotated examples of the ++> and +>:Edge:+> connection operators including multi-target connects.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "2bf1472ea948",
+    "verdict": "drop",
+    "reason": "Duplicate content-free 'In Library Mode:' label fragment."
+  },
+  {
+    "chunk_id": "5b3200704dbb",
+    "verdict": "keep",
+    "reason": "Library-mode connect() equivalents for the Jac connection operators."
+  },
+  {
+    "chunk_id": "909736047186",
+    "verdict": "keep",
+    "reason": "Explanatory sentence on connect() semantics, edge classes, and list targets."
+  },
+  {
+    "chunk_id": "333660f67634",
+    "verdict": "keep",
+    "reason": "Section heading naming the walker-spawning mapping topic; carries document structure."
+  },
+  {
+    "chunk_id": "90204d4007bb",
+    "verdict": "upweight",
+    "reason": "Canonical spawn-on-root Jac pattern with a Root-entry ability and visit [-->], core walker-launch mechanics.",
+    "weight": 2.0
+  },
+  {
+    "chunk_id": "f7228801d14a",
+    "verdict": "drop",
+    "reason": "Duplicate content-free 'In Library Mode:' label fragment."
+  },
+  {
+    "chunk_id": "2c972d8bb676",
+    "verdict": "keep",
+    "reason": "Library-mode spawn()/root() equivalent snippet."
+  },
+  {
+    "chunk_id": "dde4a4b6b87f",
+    "verdict": "keep",
+    "reason": "Explanatory sentence on spawn() return semantics and root()."
+  },
+  {
+    "chunk_id": "7099b3fab84b",
+    "verdict": "keep",
+    "reason": "Section heading naming the visiting-nodes mapping topic; carries document structure."
+  },
+  {
+    "chunk_id": "72504446408c",
+    "verdict": "upweight",
+    "reason": "Canonical visit statements contrasting visit [-->] with edge-typed visit [->:Family:->], core traversal syntax.",
+    "weight": 2.5
+  },
+  {
+    "chunk_id": "ae7deadbdcc4",
+    "verdict": "drop",
+    "reason": "Duplicate content-free 'In Library Mode:' label fragment."
+  },
+  {
+    "chunk_id": "e70f8d92f2b3",
+    "verdict": "keep",
+    "reason": "Library-mode visit()/refs()/OPath equivalent snippet."
+  },
+  {
+    "chunk_id": "68cac7ba65a5",
+    "verdict": "keep",
+    "reason": "Explanatory prose on OPath path building and refs() resolution."
+  },
+  {
+    "chunk_id": "4bb3a28085ee",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator with no content."
+  },
+  {
+    "chunk_id": "010867e605d6",
+    "verdict": "keep",
+    "reason": "Substantive API-scope warning distinguishing public imports from internal runtime functions."
+  },
+  {
+    "chunk_id": "7be8d33eecf1",
+    "verdict": "keep",
+    "reason": "Reference table of type aliases and constants with real descriptions."
+  },
+  {
+    "chunk_id": "d6d038b7699b",
+    "verdict": "keep",
+    "reason": "Reference table of base archetype classes including Node, Edge, Walker, Root, OPath."
+  },
+  {
+    "chunk_id": "5af6bad17c11",
+    "verdict": "keep",
+    "reason": "Reference table for @on_entry, @on_exit, and @sem decorators."
+  },
+  {
+    "chunk_id": "6858133b286b",
+    "verdict": "keep",
+    "reason": "Reference table for graph-construction functions with parameter details."
+  },
+  {
+    "chunk_id": "f81844bb3bc1",
+    "verdict": "keep",
+    "reason": "Reference table for spawn/visit/disengage and traversal-related functions."
+  },
+  {
+    "chunk_id": "5583a8b7591d",
+    "verdict": "keep",
+    "reason": "Reference table of OPath chainable path-building methods."
+  },
+  {
+    "chunk_id": "eae54eed6b8b",
+    "verdict": "keep",
+    "reason": "Reference table for edge query and detachment operations."
+  },
+  {
+    "chunk_id": "a8a97569040f",
+    "verdict": "keep",
+    "reason": "Reference table for root access, object lookup, and persistence functions."
+  }
+]

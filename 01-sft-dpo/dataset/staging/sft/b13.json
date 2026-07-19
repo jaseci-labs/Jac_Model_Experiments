@@ -1,0 +1,978 @@
+{
+ "batch_id": "b13",
+ "generator": "fable-agent-v1",
+ "examples": [
+  {
+   "name": "total_signatures",
+   "category": "graph_osp",
+   "subcategory": "visitor_tally",
+   "difficulty": "simple",
+   "py": "def total_signatures(spec: dict) -> int:\n    \"\"\"Total guestbook signatures across all days.\"\"\"\n    total = 0\n    for day in spec[\"days\"]:\n        total += len(day[\"visitors\"])\n    return total",
+   "jac": "node Hub {}\nnode Day { has date: str; }\nnode Visitor { has name: str; }\n\nwalker Tally {\n    has total: int = 0;\n    can fan with Hub entry { visit [-->][?:Day]; }\n    can count with Day entry { self.total += len([-->][?:Visitor]); }\n}\n\ndef total_signatures(spec: dict) -> int {\n    hub = Hub();\n    for day in spec[\"days\"] {\n        d = Day(date=str(day[\"date\"]));\n        hub ++> d;\n        for nm in day[\"visitors\"] { d ++> Visitor(name=str(nm)); }\n    }\n    return (hub spawn Tally()).total;\n}\n\nwith entry { print(total_signatures({\"days\": [{\"date\": \"d1\", \"visitors\": [\"ana\", \"bo\"]}, {\"date\": \"d2\", \"visitors\": [\"cy\"]}]})); }",
+   "expected_output": "3",
+   "cases": [
+    {
+     "input": {
+      "days": [
+       {
+        "date": "d1",
+        "visitors": [
+         "ana",
+         "bo"
+        ]
+       },
+       {
+        "date": "d2",
+        "visitors": [
+         "cy"
+        ]
+       }
+      ]
+     },
+     "output": "3"
+    },
+    {
+     "input": {
+      "days": [
+       {
+        "date": "d1",
+        "visitors": []
+       },
+       {
+        "date": "d2",
+        "visitors": [
+         "max",
+         "ivy",
+         "leo",
+         "zed"
+        ]
+       }
+      ]
+     },
+     "output": "4"
+    },
+    {
+     "input": {
+      "days": []
+     },
+     "output": "0"
+    }
+   ]
+  },
+  {
+   "name": "active_days",
+   "category": "graph_osp",
+   "subcategory": "day_filter",
+   "difficulty": "simple",
+   "py": "def active_days(spec: dict) -> list:\n    \"\"\"Sorted dates that drew at least min_count signatures.\"\"\"\n    out = []\n    for day in spec[\"days\"]:\n        if len(day[\"visitors\"]) >= spec[\"min_count\"]:\n            out.append(day[\"date\"])\n    return sorted(out)",
+   "jac": "node Book {}\nnode Day { has date: str; }\nnode Visitor { has name: str; }\n\nwalker ActiveScan {\n    has min_count: int;\n    has dates: list = [];\n    can start with Book entry { visit [-->][?:Day]; }\n    can check with Day entry {\n        if len([-->][?:Visitor]) >= self.min_count { self.dates.append(here.date); }\n    }\n    can finish with exit { self.dates.sort(); }\n}\n\ndef active_days(spec: dict) -> list {\n    book = Book();\n    for day in spec[\"days\"] {\n        d = Day(date=str(day[\"date\"]));\n        book ++> d;\n        for nm in day[\"visitors\"] { d ++> Visitor(name=str(nm)); }\n    }\n    return (book spawn ActiveScan(min_count=int(spec[\"min_count\"]))).dates;\n}\n\nwith entry { print(active_days({\"days\": [{\"date\": \"d2\", \"visitors\": [\"a\", \"b\"]}, {\"date\": \"d1\", \"visitors\": [\"c\", \"d\", \"e\"]}, {\"date\": \"d3\", \"visitors\": [\"f\"]}], \"min_count\": 2})); }",
+   "expected_output": "['d1', 'd2']",
+   "cases": [
+    {
+     "input": {
+      "days": [
+       {
+        "date": "d2",
+        "visitors": [
+         "a",
+         "b"
+        ]
+       },
+       {
+        "date": "d1",
+        "visitors": [
+         "c",
+         "d",
+         "e"
+        ]
+       },
+       {
+        "date": "d3",
+        "visitors": [
+         "f"
+        ]
+       }
+      ],
+      "min_count": 2
+     },
+     "output": "['d1', 'd2']"
+    },
+    {
+     "input": {
+      "days": [
+       {
+        "date": "m1",
+        "visitors": [
+         "x"
+        ]
+       }
+      ],
+      "min_count": 2
+     },
+     "output": "[]"
+    },
+    {
+     "input": {
+      "days": [
+       {
+        "date": "w2",
+        "visitors": [
+         "a"
+        ]
+       },
+       {
+        "date": "w1",
+        "visitors": [
+         "b"
+        ]
+       }
+      ],
+      "min_count": 1
+     },
+     "output": "['w1', 'w2']"
+    }
+   ]
+  },
+  {
+   "name": "longest_message",
+   "category": "graph_osp",
+   "subcategory": "message_scan",
+   "difficulty": "simple",
+   "py": "def longest_message(spec: dict) -> str:\n    \"\"\"Longest guestbook message (ties -> alphabetically first).\"\"\"\n    best = \"\"\n    for msg in sorted(e[\"message\"] for e in spec[\"entries\"]):\n        if len(msg) > len(best):\n            best = msg\n    return best",
+   "jac": "node Book {}\nnode Visitor { has name: str, message: str; }\n\nwalker LongScan {\n    has msgs: list = [], best: str = \"\";\n    can start with Book entry { visit [-->][?:Visitor]; }\n    can grab with Visitor entry { self.msgs.append(here.message); }\n    can pick with exit {\n        self.msgs.sort();\n        for m in self.msgs { if len(m) > len(self.best) { self.best = m; } }\n    }\n}\n\ndef longest_message(spec: dict) -> str {\n    book = Book();\n    for e in spec[\"entries\"] {\n        book ++> Visitor(name=str(e[\"name\"]), message=str(e[\"message\"]));\n    }\n    return (book spawn LongScan()).best;\n}\n\nwith entry { print(longest_message({\"entries\": [{\"name\": \"ana\", \"message\": \"hello there\"}, {\"name\": \"bo\", \"message\": \"hi\"}, {\"name\": \"cy\", \"message\": \"great site\"}]})); }",
+   "expected_output": "hello there",
+   "cases": [
+    {
+     "input": {
+      "entries": [
+       {
+        "name": "ana",
+        "message": "hello there"
+       },
+       {
+        "name": "bo",
+        "message": "hi"
+       },
+       {
+        "name": "cy",
+        "message": "great site"
+       }
+      ]
+     },
+     "output": "hello there"
+    },
+    {
+     "input": {
+      "entries": [
+       {
+        "name": "a",
+        "message": "zzz"
+       },
+       {
+        "name": "b",
+        "message": "aaa"
+       }
+      ]
+     },
+     "output": "aaa"
+    },
+    {
+     "input": {
+      "entries": []
+     },
+     "output": ""
+    }
+   ]
+  },
+  {
+   "name": "latest_metric_sum",
+   "category": "graph_osp",
+   "subcategory": "dashboard_rollup",
+   "difficulty": "simple",
+   "py": "def latest_metric_sum(spec: dict) -> int:\n    \"\"\"Sum the most recent reading of every metric.\"\"\"\n    total = 0\n    for m in spec[\"metrics\"]:\n        if m[\"values\"]:\n            total += m[\"values\"][-1]\n    return total",
+   "jac": "node Board {}\nnode Metric { has name: str, latest: int; }\n\nwalker LatestSum {\n    has total: int = 0;\n    can fan with Board entry { visit [-->][?:Metric]; }\n    can add with Metric entry { self.total += here.latest; }\n}\n\ndef latest_metric_sum(spec: dict) -> int {\n    board = Board();\n    for m in spec[\"metrics\"] {\n        vals: list = list(m[\"values\"]);\n        if vals { board ++> Metric(name=str(m[\"name\"]), latest=int(vals[-1])); }\n    }\n    return (board spawn LatestSum()).total;\n}\n\nwith entry { print(latest_metric_sum({\"metrics\": [{\"name\": \"cpu\", \"values\": [10, 20, 30]}, {\"name\": \"mem\", \"values\": [5]}, {\"name\": \"disk\", \"values\": []}]})); }",
+   "expected_output": "35",
+   "cases": [
+    {
+     "input": {
+      "metrics": [
+       {
+        "name": "cpu",
+        "values": [
+         10,
+         20,
+         30
+        ]
+       },
+       {
+        "name": "mem",
+        "values": [
+         5
+        ]
+       },
+       {
+        "name": "disk",
+        "values": []
+       }
+      ]
+     },
+     "output": "35"
+    },
+    {
+     "input": {
+      "metrics": [
+       {
+        "name": "a",
+        "values": [
+         1,
+         2
+        ]
+       },
+       {
+        "name": "b",
+        "values": [
+         3,
+         4
+        ]
+       }
+      ]
+     },
+     "output": "6"
+    },
+    {
+     "input": {
+      "metrics": []
+     },
+     "output": "0"
+    }
+   ]
+  },
+  {
+   "name": "visitor_streak",
+   "category": "graph_osp",
+   "subcategory": "day_chain",
+   "difficulty": "composed",
+   "py": "def visitor_streak(spec: dict) -> int:\n    \"\"\"Longest run of consecutive days with at least min_count signatures.\"\"\"\n    best = 0\n    cur = 0\n    for day in spec[\"days\"]:\n        if len(day[\"visitors\"]) >= spec[\"min_count\"]:\n            cur += 1\n            if cur > best:\n                best = cur\n        else:\n            cur = 0\n    return best",
+   "jac": "node Hub {}\nnode Day { has date: str; }\nnode Visitor { has name: str; }\n\nwalker StreakScan {\n    has min_count: int;\n    has cur: int = 0, best: int = 0;\n    can start with Hub entry { visit [-->][?:Day]; }\n    can step with Day entry {\n        if len([-->][?:Visitor]) >= self.min_count {\n            self.cur += 1;\n            if self.cur > self.best { self.best = self.cur; }\n        } else { self.cur = 0; }\n        visit [-->][?:Day];\n    }\n}\n\ndef visitor_streak(spec: dict) -> int {\n    hub = Hub();\n    days: list = [];\n    for d in spec[\"days\"] {\n        day = Day(date=str(d[\"date\"]));\n        for nm in d[\"visitors\"] { day ++> Visitor(name=str(nm)); }\n        days.append(day);\n    }\n    if days {\n        hub ++> days[0];\n        for i in range(1, len(days)) { days[i-1] ++> days[i]; }\n    }\n    return (hub spawn StreakScan(min_count=int(spec[\"min_count\"]))).best;\n}\n\nwith entry { print(visitor_streak({\"days\": [{\"date\": \"d1\", \"visitors\": [\"a\", \"b\"]}, {\"date\": \"d2\", \"visitors\": [\"c\", \"d\", \"e\"]}, {\"date\": \"d3\", \"visitors\": []}, {\"date\": \"d4\", \"visitors\": [\"f\", \"g\"]}], \"min_count\": 2})); }",
+   "expected_output": "2",
+   "cases": [
+    {
+     "input": {
+      "days": [
+       {
+        "date": "d1",
+        "visitors": [
+         "a",
+         "b"
+        ]
+       },
+       {
+        "date": "d2",
+        "visitors": [
+         "c",
+         "d",
+         "e"
+        ]
+       },
+       {
+        "date": "d3",
+        "visitors": []
+       },
+       {
+        "date": "d4",
+        "visitors": [
+         "f",
+         "g"
+        ]
+       }
+      ],
+      "min_count": 2
+     },
+     "output": "2"
+    },
+    {
+     "input": {
+      "days": [
+       {
+        "date": "a",
+        "visitors": [
+         "x"
+        ]
+       },
+       {
+        "date": "b",
+        "visitors": [
+         "y"
+        ]
+       },
+       {
+        "date": "c",
+        "visitors": [
+         "z"
+        ]
+       }
+      ],
+      "min_count": 1
+     },
+     "output": "3"
+    },
+    {
+     "input": {
+      "days": [
+       {
+        "date": "a",
+        "visitors": []
+       }
+      ],
+      "min_count": 1
+     },
+     "output": "0"
+    }
+   ]
+  },
+  {
+   "name": "repeat_visitors",
+   "category": "graph_osp",
+   "subcategory": "visitor_overlap",
+   "difficulty": "composed",
+   "py": "def repeat_visitors(spec: dict) -> list:\n    \"\"\"Names that signed on more than one distinct day, sorted.\"\"\"\n    days_by = {}\n    for day in spec[\"days\"]:\n        for name in day[\"visitors\"]:\n            days_by.setdefault(name, set()).add(day[\"date\"])\n    return sorted(n for n in days_by if len(days_by[n]) > 1)",
+   "jac": "node Book {}\nnode Day { has date: str; }\nnode Visitor { has name: str, day: str; }\n\nwalker RepeatScan {\n    has pairs: list = [], result: list = [];\n    can start with Book entry { visit [-->][?:Day]; }\n    can descend with Day entry { visit [-->][?:Visitor]; }\n    can collect with Visitor entry { self.pairs.append((here.name, here.day)); }\n    can merge with exit {\n        by_name: dict = {};\n        for (nm, dt) in self.pairs {\n            if nm not in by_name { by_name[nm] = []; }\n            if dt not in by_name[nm] { by_name[nm].append(dt); }\n        }\n        for (nm, ds) in by_name.items() {\n            if len(ds) > 1 { self.result.append(nm); }\n        }\n        self.result.sort();\n    }\n}\n\ndef repeat_visitors(spec: dict) -> list {\n    book = Book();\n    for day in spec[\"days\"] {\n        d = Day(date=str(day[\"date\"]));\n        book ++> d;\n        for nm in day[\"visitors\"] { d ++> Visitor(name=str(nm), day=str(day[\"date\"])); }\n    }\n    return (book spawn RepeatScan()).result;\n}\n\nwith entry { print(repeat_visitors({\"days\": [{\"date\": \"d1\", \"visitors\": [\"ana\", \"bo\"]}, {\"date\": \"d2\", \"visitors\": [\"bo\", \"cy\"]}, {\"date\": \"d3\", \"visitors\": [\"ana\", \"bo\"]}]})); }",
+   "expected_output": "['ana', 'bo']",
+   "cases": [
+    {
+     "input": {
+      "days": [
+       {
+        "date": "d1",
+        "visitors": [
+         "ana",
+         "bo"
+        ]
+       },
+       {
+        "date": "d2",
+        "visitors": [
+         "bo",
+         "cy"
+        ]
+       },
+       {
+        "date": "d3",
+        "visitors": [
+         "ana",
+         "bo"
+        ]
+       }
+      ]
+     },
+     "output": "['ana', 'bo']"
+    },
+    {
+     "input": {
+      "days": [
+       {
+        "date": "d1",
+        "visitors": [
+         "max",
+         "max"
+        ]
+       },
+       {
+        "date": "d2",
+        "visitors": [
+         "ivy"
+        ]
+       }
+      ]
+     },
+     "output": "[]"
+    },
+    {
+     "input": {
+      "days": [
+       {
+        "date": "d1",
+        "visitors": [
+         "zed"
+        ]
+       },
+       {
+        "date": "d2",
+        "visitors": [
+         "zed"
+        ]
+       }
+      ]
+     },
+     "output": "['zed']"
+    }
+   ]
+  },
+  {
+   "name": "daily_deltas",
+   "category": "graph_osp",
+   "subcategory": "day_chain",
+   "difficulty": "composed",
+   "py": "def daily_deltas(spec: dict) -> list:\n    \"\"\"Signature-count change between consecutive days, in order.\"\"\"\n    counts = [len(d[\"visitors\"]) for d in spec[\"days\"]]\n    deltas = []\n    for i in range(1, len(counts)):\n        deltas.append(counts[i] - counts[i - 1])\n    return deltas",
+   "jac": "node Hub {}\nnode Day { has date: str; }\nnode Visitor { has name: str; }\n\nwalker DeltaScan {\n    has counts: list = [], deltas: list = [];\n    can start with Hub entry { visit [-->][?:Day]; }\n    can tally with Day entry {\n        self.counts.append(len([-->][?:Visitor]));\n        visit [-->][?:Day];\n    }\n    can diff with exit {\n        for i in range(1, len(self.counts)) {\n            self.deltas.append(self.counts[i] - self.counts[i-1]);\n        }\n    }\n}\n\ndef daily_deltas(spec: dict) -> list {\n    hub = Hub();\n    days: list = [];\n    for d in spec[\"days\"] {\n        day = Day(date=str(d[\"date\"]));\n        for nm in d[\"visitors\"] { day ++> Visitor(name=str(nm)); }\n        days.append(day);\n    }\n    if days {\n        hub ++> days[0];\n        for i in range(1, len(days)) { days[i-1] ++> days[i]; }\n    }\n    return (hub spawn DeltaScan()).deltas;\n}\n\nwith entry { print(daily_deltas({\"days\": [{\"date\": \"d1\", \"visitors\": [\"a\"]}, {\"date\": \"d2\", \"visitors\": [\"b\", \"c\", \"d\"]}, {\"date\": \"d3\", \"visitors\": [\"e\", \"f\"]}]})); }",
+   "expected_output": "[2, -1]",
+   "cases": [
+    {
+     "input": {
+      "days": [
+       {
+        "date": "d1",
+        "visitors": [
+         "a"
+        ]
+       },
+       {
+        "date": "d2",
+        "visitors": [
+         "b",
+         "c",
+         "d"
+        ]
+       },
+       {
+        "date": "d3",
+        "visitors": [
+         "e",
+         "f"
+        ]
+       }
+      ]
+     },
+     "output": "[2, -1]"
+    },
+    {
+     "input": {
+      "days": [
+       {
+        "date": "d1",
+        "visitors": []
+       }
+      ]
+     },
+     "output": "[]"
+    },
+    {
+     "input": {
+      "days": [
+       {
+        "date": "d1",
+        "visitors": [
+         "a",
+         "b"
+        ]
+       },
+       {
+        "date": "d2",
+        "visitors": []
+       },
+       {
+        "date": "d3",
+        "visitors": []
+       },
+       {
+        "date": "d4",
+        "visitors": [
+         "c"
+        ]
+       }
+      ]
+     },
+     "output": "[-2, 0, 1]"
+    }
+   ]
+  },
+  {
+   "name": "stage_funnel",
+   "category": "graph_osp",
+   "subcategory": "event_funnel",
+   "difficulty": "composed",
+   "py": "def stage_funnel(spec: dict) -> list:\n    \"\"\"Event count for each funnel stage, in the given stage order.\"\"\"\n    counts = []\n    for stage in spec[\"stages\"]:\n        n = 0\n        for ev in spec[\"events\"]:\n            if ev == stage:\n                n += 1\n        counts.append(n)\n    return counts",
+   "jac": "node Funnel {}\nnode Event { has stage: str; }\n\nwalker FunnelCount {\n    has stages: list;\n    has tally: dict = {}, result: list = [];\n    can start with Funnel entry { visit [-->][?:Event]; }\n    can count with Event entry {\n        self.tally[here.stage] = self.tally.get(here.stage, 0) + 1;\n    }\n    can arrange with exit {\n        for s in self.stages { self.result.append(self.tally.get(s, 0)); }\n    }\n}\n\ndef stage_funnel(spec: dict) -> list {\n    funnel = Funnel();\n    for ev in spec[\"events\"] { funnel ++> Event(stage=str(ev)); }\n    stages: list = [str(s) for s in spec[\"stages\"]];\n    return (funnel spawn FunnelCount(stages=stages)).result;\n}\n\nwith entry { print(stage_funnel({\"events\": [\"view\", \"view\", \"signup\", \"view\", \"purchase\", \"signup\"], \"stages\": [\"view\", \"signup\", \"purchase\"]})); }",
+   "expected_output": "[3, 2, 1]",
+   "cases": [
+    {
+     "input": {
+      "events": [
+       "view",
+       "view",
+       "signup",
+       "view",
+       "purchase",
+       "signup"
+      ],
+      "stages": [
+       "view",
+       "signup",
+       "purchase"
+      ]
+     },
+     "output": "[3, 2, 1]"
+    },
+    {
+     "input": {
+      "events": [
+       "ping"
+      ],
+      "stages": [
+       "view",
+       "signup"
+      ]
+     },
+     "output": "[0, 0]"
+    },
+    {
+     "input": {
+      "events": [
+       "a",
+       "b",
+       "b"
+      ],
+      "stages": [
+       "b",
+       "a"
+      ]
+     },
+     "output": "[2, 1]"
+    }
+   ]
+  },
+  {
+   "name": "alert_paths",
+   "category": "graph_osp",
+   "subcategory": "dashboard_alerts",
+   "difficulty": "composed",
+   "py": "def alert_paths(spec: dict) -> list:\n    \"\"\"Sorted panel/metric paths whose value exceeds its threshold.\"\"\"\n    out = []\n    for p in spec[\"panels\"]:\n        for m in p[\"metrics\"]:\n            if m[\"value\"] > m[\"threshold\"]:\n                out.append(p[\"name\"] + \"/\" + m[\"name\"])\n    return sorted(out)",
+   "jac": "node Dash {}\nnode Panel { has name: str; }\nnode Gauge { has name: str, value: int, threshold: int; }\n\nwalker AlertScan {\n    has result: list = [];\n    can start with Dash entry { visit [-->][?:Panel]; }\n    can descend with Panel entry { visit [-->][?:Gauge]; }\n    can check with Gauge entry {\n        if here.value > here.threshold {\n            owners = [<--][?:Panel];\n            self.result.append(owners[0].name + \"/\" + here.name);\n        }\n    }\n    can finish with exit { self.result.sort(); }\n}\n\ndef alert_paths(spec: dict) -> list {\n    dash = Dash();\n    for p in spec[\"panels\"] {\n        panel = Panel(name=str(p[\"name\"]));\n        dash ++> panel;\n        for m in p[\"metrics\"] {\n            panel ++> Gauge(name=str(m[\"name\"]), value=int(m[\"value\"]), threshold=int(m[\"threshold\"]));\n        }\n    }\n    return (dash spawn AlertScan()).result;\n}\n\nwith entry { print(alert_paths({\"panels\": [{\"name\": \"sys\", \"metrics\": [{\"name\": \"cpu\", \"value\": 91, \"threshold\": 80}, {\"name\": \"mem\", \"value\": 40, \"threshold\": 50}]}, {\"name\": \"net\", \"metrics\": [{\"name\": \"lag\", \"value\": 120, \"threshold\": 100}]}]})); }",
+   "expected_output": "['net/lag', 'sys/cpu']",
+   "cases": [
+    {
+     "input": {
+      "panels": [
+       {
+        "name": "sys",
+        "metrics": [
+         {
+          "name": "cpu",
+          "value": 91,
+          "threshold": 80
+         },
+         {
+          "name": "mem",
+          "value": 40,
+          "threshold": 50
+         }
+        ]
+       },
+       {
+        "name": "net",
+        "metrics": [
+         {
+          "name": "lag",
+          "value": 120,
+          "threshold": 100
+         }
+        ]
+       }
+      ]
+     },
+     "output": "['net/lag', 'sys/cpu']"
+    },
+    {
+     "input": {
+      "panels": [
+       {
+        "name": "app",
+        "metrics": [
+         {
+          "name": "err",
+          "value": 1,
+          "threshold": 5
+         }
+        ]
+       }
+      ]
+     },
+     "output": "[]"
+    },
+    {
+     "input": {
+      "panels": [
+       {
+        "name": "db",
+        "metrics": [
+         {
+          "name": "io",
+          "value": 9,
+          "threshold": 2
+         },
+         {
+          "name": "cx",
+          "value": 80,
+          "threshold": 10
+         }
+        ]
+       }
+      ]
+     },
+     "output": "['db/cx', 'db/io']"
+    }
+   ]
+  },
+  {
+   "name": "first_return_day",
+   "category": "graph_osp",
+   "subcategory": "visitor_overlap",
+   "difficulty": "composed",
+   "py": "def first_return_day(spec: dict) -> str:\n    \"\"\"Date of the first day when a past signer signs again ('' if none).\"\"\"\n    seen = set()\n    for day in spec[\"days\"]:\n        todays = set(day[\"visitors\"])\n        if todays & seen:\n            return day[\"date\"]\n        seen |= todays\n    return \"\"",
+   "jac": "node Hub {}\nnode Day { has date: str; }\nnode Visitor { has name: str; }\n\nwalker ReturnScan {\n    has seen: list = [], result: str = \"\";\n    can start with Hub entry { visit [-->][?:Day]; }\n    can check with Day entry {\n        names: list = [];\n        for v in [-->][?:Visitor] { names.append(v.name); }\n        hit = False;\n        for nm in names { if nm in self.seen { hit = True; } }\n        if hit {\n            self.result = here.date;\n            disengage;\n        }\n        for nm in names { if nm not in self.seen { self.seen.append(nm); } }\n        visit [-->][?:Day];\n    }\n}\n\ndef first_return_day(spec: dict) -> str {\n    hub = Hub();\n    days: list = [];\n    for d in spec[\"days\"] {\n        day = Day(date=str(d[\"date\"]));\n        for nm in d[\"visitors\"] { day ++> Visitor(name=str(nm)); }\n        days.append(day);\n    }\n    if days {\n        hub ++> days[0];\n        for i in range(1, len(days)) { days[i-1] ++> days[i]; }\n    }\n    return (hub spawn ReturnScan()).result;\n}\n\nwith entry { print(first_return_day({\"days\": [{\"date\": \"d1\", \"visitors\": [\"ana\", \"bo\"]}, {\"date\": \"d2\", \"visitors\": [\"cy\"]}, {\"date\": \"d3\", \"visitors\": [\"bo\"]}]})); }",
+   "expected_output": "d3",
+   "cases": [
+    {
+     "input": {
+      "days": [
+       {
+        "date": "d1",
+        "visitors": [
+         "ana",
+         "bo"
+        ]
+       },
+       {
+        "date": "d2",
+        "visitors": [
+         "cy"
+        ]
+       },
+       {
+        "date": "d3",
+        "visitors": [
+         "bo"
+        ]
+       }
+      ]
+     },
+     "output": "d3"
+    },
+    {
+     "input": {
+      "days": [
+       {
+        "date": "d1",
+        "visitors": [
+         "ana"
+        ]
+       },
+       {
+        "date": "d2",
+        "visitors": [
+         "bo"
+        ]
+       }
+      ]
+     },
+     "output": ""
+    },
+    {
+     "input": {
+      "days": [
+       {
+        "date": "m1",
+        "visitors": [
+         "zed"
+        ]
+       },
+       {
+        "date": "m2",
+        "visitors": [
+         "zed",
+         "ivy"
+        ]
+       },
+       {
+        "date": "m3",
+        "visitors": [
+         "ivy"
+        ]
+       }
+      ]
+     },
+     "output": "m2"
+    }
+   ]
+  },
+  {
+   "name": "peak_hour",
+   "category": "graph_osp",
+   "subcategory": "event_histogram",
+   "difficulty": "composed",
+   "py": "def peak_hour(spec: dict) -> str:\n    \"\"\"Busiest event hour as 'hour:count' (ties -> earliest hour).\"\"\"\n    tally = {}\n    for e in spec[\"events\"]:\n        tally[e[\"hour\"]] = tally.get(e[\"hour\"], 0) + 1\n    if not tally:\n        return \"none\"\n    best_h = -1\n    best_n = -1\n    for h in sorted(tally):\n        if tally[h] > best_n:\n            best_h = h\n            best_n = tally[h]\n    return str(best_h) + \":\" + str(best_n)",
+   "jac": "node Feed {}\nnode Event { has hour: int; }\n\nwalker PeakScan {\n    has tally: dict = {}, result: str = \"none\";\n    can start with Feed entry { visit [-->][?:Event]; }\n    can count with Event entry {\n        self.tally[here.hour] = self.tally.get(here.hour, 0) + 1;\n    }\n    can pick with exit {\n        if self.tally {\n            best_h = -1;\n            best_n = -1;\n            for h in sorted(self.tally) {\n                if self.tally[h] > best_n { best_h = h; best_n = self.tally[h]; }\n            }\n            self.result = str(best_h) + \":\" + str(best_n);\n        }\n    }\n}\n\ndef peak_hour(spec: dict) -> str {\n    feed = Feed();\n    for e in spec[\"events\"] { feed ++> Event(hour=int(e[\"hour\"])); }\n    return (feed spawn PeakScan()).result;\n}\n\nwith entry { print(peak_hour({\"events\": [{\"hour\": 9}, {\"hour\": 14}, {\"hour\": 9}, {\"hour\": 17}, {\"hour\": 14}, {\"hour\": 9}]})); }",
+   "expected_output": "9:3",
+   "cases": [
+    {
+     "input": {
+      "events": [
+       {
+        "hour": 9
+       },
+       {
+        "hour": 14
+       },
+       {
+        "hour": 9
+       },
+       {
+        "hour": 17
+       },
+       {
+        "hour": 14
+       },
+       {
+        "hour": 9
+       }
+      ]
+     },
+     "output": "9:3"
+    },
+    {
+     "input": {
+      "events": []
+     },
+     "output": "none"
+    },
+    {
+     "input": {
+      "events": [
+       {
+        "hour": 12
+       },
+       {
+        "hour": 8
+       },
+       {
+        "hour": 12
+       },
+       {
+        "hour": 8
+       }
+      ]
+     },
+     "output": "8:2"
+    }
+   ]
+  },
+  {
+   "name": "guestbook_report",
+   "category": "graph_osp",
+   "subcategory": "dashboard_report",
+   "difficulty": "advanced",
+   "py": "def guestbook_report(spec: dict) -> str:\n    \"\"\"One-line dashboard summary of the guestbook.\"\"\"\n    days = spec[\"days\"]\n    total = 0\n    best_d = \"none\"\n    best_n = -1\n    for day in sorted(days, key=lambda x: x[\"date\"]):\n        n = len(day[\"visitors\"])\n        total += n\n        if n > best_n:\n            best_d = day[\"date\"]\n            best_n = n\n    return \"days=\" + str(len(days)) + \" visitors=\" + str(total) + \" busiest=\" + best_d",
+   "jac": "node Book {}\nnode Day { has date: str; }\nnode Visitor { has name: str; }\n\nwalker ReportScan {\n    has pairs: list = [], day_count: int = 0, result: str = \"\";\n    can start with Book entry { visit [-->][?:Day]; }\n    can size with Day entry {\n        self.day_count += 1;\n        self.pairs.append((here.date, len([-->][?:Visitor])));\n    }\n    can render with exit {\n        self.pairs.sort();\n        total = 0;\n        best_d = \"none\";\n        best_n = -1;\n        for (dt, n) in self.pairs {\n            total += n;\n            if n > best_n { best_d = dt; best_n = n; }\n        }\n        self.result = f\"days={self.day_count} visitors={total} busiest={best_d}\";\n    }\n}\n\ndef guestbook_report(spec: dict) -> str {\n    book = Book();\n    for day in spec[\"days\"] {\n        d = Day(date=str(day[\"date\"]));\n        book ++> d;\n        for nm in day[\"visitors\"] { d ++> Visitor(name=str(nm)); }\n    }\n    return (book spawn ReportScan()).result;\n}\n\nwith entry { print(guestbook_report({\"days\": [{\"date\": \"d1\", \"visitors\": [\"ana\", \"bo\"]}, {\"date\": \"d2\", \"visitors\": [\"cy\", \"dee\", \"eli\"]}, {\"date\": \"d3\", \"visitors\": [\"fay\"]}]})); }",
+   "expected_output": "days=3 visitors=6 busiest=d2",
+   "cases": [
+    {
+     "input": {
+      "days": [
+       {
+        "date": "d1",
+        "visitors": [
+         "ana",
+         "bo"
+        ]
+       },
+       {
+        "date": "d2",
+        "visitors": [
+         "cy",
+         "dee",
+         "eli"
+        ]
+       },
+       {
+        "date": "d3",
+        "visitors": [
+         "fay"
+        ]
+       }
+      ]
+     },
+     "output": "days=3 visitors=6 busiest=d2"
+    },
+    {
+     "input": {
+      "days": []
+     },
+     "output": "days=0 visitors=0 busiest=none"
+    },
+    {
+     "input": {
+      "days": [
+       {
+        "date": "b",
+        "visitors": [
+         "x",
+         "y"
+        ]
+       },
+       {
+        "date": "a",
+        "visitors": [
+         "z",
+         "w"
+        ]
+       }
+      ]
+     },
+     "output": "days=2 visitors=4 busiest=a"
+    }
+   ]
+  },
+  {
+   "name": "retention_percent",
+   "category": "graph_osp",
+   "subcategory": "visitor_retention",
+   "difficulty": "advanced",
+   "py": "def retention_percent(spec: dict) -> int:\n    \"\"\"Percent of first-day signers who return on any later day.\"\"\"\n    days = spec[\"days\"]\n    if len(days) < 2 or not days[0][\"visitors\"]:\n        return 0\n    first = set(days[0][\"visitors\"])\n    later = set()\n    for day in days[1:]:\n        later |= set(day[\"visitors\"])\n    return round(100 * len(first & later) / len(first))",
+   "jac": "node Hub {}\nnode Day { has date: str, idx: int; }\nnode Visitor { has name: str; }\n\nwalker RetentionScan {\n    has first: list = [], later: list = [], result: int = 0;\n    can start with Hub entry { visit [-->][?:Day]; }\n    can descend with Day entry { visit [-->][?:Visitor]; }\n    can bucket with Visitor entry {\n        owners = [<--][?:Day];\n        if owners[0].idx == 0 {\n            if here.name not in self.first { self.first.append(here.name); }\n        } else {\n            if here.name not in self.later { self.later.append(here.name); }\n        }\n    }\n    can compute with exit {\n        if self.first {\n            returned = 0;\n            for nm in self.first { if nm in self.later { returned += 1; } }\n            self.result = round(100 * returned / len(self.first));\n        }\n    }\n}\n\ndef retention_percent(spec: dict) -> int {\n    days_spec: list = list(spec[\"days\"]);\n    if len(days_spec) < 2 { return 0; }\n    hub = Hub();\n    idx = 0;\n    for d in days_spec {\n        day = Day(date=str(d[\"date\"]), idx=idx);\n        hub ++> day;\n        for nm in d[\"visitors\"] { day ++> Visitor(name=str(nm)); }\n        idx += 1;\n    }\n    return (hub spawn RetentionScan()).result;\n}\n\nwith entry { print(retention_percent({\"days\": [{\"date\": \"d1\", \"visitors\": [\"ana\", \"bo\", \"cy\"]}, {\"date\": \"d2\", \"visitors\": [\"bo\"]}, {\"date\": \"d3\", \"visitors\": [\"cy\", \"dee\"]}]})); }",
+   "expected_output": "67",
+   "cases": [
+    {
+     "input": {
+      "days": [
+       {
+        "date": "d1",
+        "visitors": [
+         "ana",
+         "bo",
+         "cy"
+        ]
+       },
+       {
+        "date": "d2",
+        "visitors": [
+         "bo"
+        ]
+       },
+       {
+        "date": "d3",
+        "visitors": [
+         "cy",
+         "dee"
+        ]
+       }
+      ]
+     },
+     "output": "67"
+    },
+    {
+     "input": {
+      "days": [
+       {
+        "date": "d1",
+        "visitors": [
+         "ana",
+         "bo"
+        ]
+       },
+       {
+        "date": "d2",
+        "visitors": [
+         "ana",
+         "bo"
+        ]
+       }
+      ]
+     },
+     "output": "100"
+    },
+    {
+     "input": {
+      "days": [
+       {
+        "date": "d1",
+        "visitors": [
+         "solo"
+        ]
+       }
+      ]
+     },
+     "output": "0"
+    }
+   ]
+  },
+  {
+   "name": "metric_spikes",
+   "category": "graph_osp",
+   "subcategory": "metric_series",
+   "difficulty": "advanced",
+   "py": "def metric_spikes(spec: dict) -> dict:\n    \"\"\"Per metric (name-sorted): readings strictly above that metric's mean.\"\"\"\n    out = {}\n    for m in sorted(spec[\"metrics\"], key=lambda x: x[\"name\"]):\n        vals = m[\"values\"]\n        spikes = 0\n        if vals:\n            mean = sum(vals) / len(vals)\n            for v in vals:\n                if v > mean:\n                    spikes += 1\n        out[m[\"name\"]] = spikes\n    return out",
+   "jac": "node Board {}\nnode Metric { has name: str; }\nnode Reading { has metric: str, value: int; }\n\nwalker SpikeScan {\n    has names: list = [], readings: list = [], result: dict = {};\n    can start with Board entry { visit [-->][?:Metric]; }\n    can note with Metric entry {\n        self.names.append(here.name);\n        visit [-->][?:Reading];\n    }\n    can collect with Reading entry { self.readings.append((here.metric, here.value)); }\n    can compute with exit {\n        self.names.sort();\n        for nm in self.names {\n            vals: list = [];\n            for (m, v) in self.readings { if m == nm { vals.append(v); } }\n            spikes = 0;\n            if vals {\n                mean = sum(vals) / len(vals);\n                for v in vals { if v > mean { spikes += 1; } }\n            }\n            self.result[nm] = spikes;\n        }\n    }\n}\n\ndef metric_spikes(spec: dict) -> dict {\n    board = Board();\n    for m in spec[\"metrics\"] {\n        met = Metric(name=str(m[\"name\"]));\n        board ++> met;\n        for v in m[\"values\"] { met ++> Reading(metric=str(m[\"name\"]), value=int(v)); }\n    }\n    return (board spawn SpikeScan()).result;\n}\n\nwith entry { print(metric_spikes({\"metrics\": [{\"name\": \"cpu\", \"values\": [10, 90, 20]}, {\"name\": \"mem\", \"values\": [50, 50]}]})); }",
+   "expected_output": "{'cpu': 1, 'mem': 0}",
+   "cases": [
+    {
+     "input": {
+      "metrics": [
+       {
+        "name": "cpu",
+        "values": [
+         10,
+         90,
+         20
+        ]
+       },
+       {
+        "name": "mem",
+        "values": [
+         50,
+         50
+        ]
+       }
+      ]
+     },
+     "output": "{'cpu': 1, 'mem': 0}"
+    },
+    {
+     "input": {
+      "metrics": [
+       {
+        "name": "lag",
+        "values": [
+         1,
+         2,
+         3,
+         10
+        ]
+       }
+      ]
+     },
+     "output": "{'lag': 1}"
+    },
+    {
+     "input": {
+      "metrics": [
+       {
+        "name": "a",
+        "values": []
+       },
+       {
+        "name": "b",
+        "values": [
+         2,
+         4,
+         6,
+         8
+        ]
+       }
+      ]
+     },
+     "output": "{'a': 0, 'b': 2}"
+    }
+   ]
+  }
+ ]
+}

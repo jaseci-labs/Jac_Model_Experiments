@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "591037f05c63",
+    "verdict": "keep",
+    "reason": "Genuine intro to WebSocket support in Jac Scale, brief but real content."
+  },
+  {
+    "chunk_id": "7e18a904abf0",
+    "verdict": "keep",
+    "reason": "Substantive overview of WebSocket vs REST semantics in Jac Scale."
+  },
+  {
+    "chunk_id": "a393bde4408f",
+    "verdict": "keep",
+    "reason": "Feature list with real technical detail (endpoints, JWT auth, HMR)."
+  },
+  {
+    "chunk_id": "1bebc593c46e",
+    "verdict": "keep",
+    "reason": "Documents the @restspec WEBSOCKET decorator pattern on async walkers."
+  },
+  {
+    "chunk_id": "0b3b02109324",
+    "verdict": "keep",
+    "reason": "Canonical Jac code example of a public WebSocket walker."
+  },
+  {
+    "chunk_id": "3776a7bfff31",
+    "verdict": "keep",
+    "reason": "Short but carries the ws:// endpoint URL convention for the preceding example."
+  },
+  {
+    "chunk_id": "1c2cc6ee5dbc",
+    "verdict": "keep",
+    "reason": "Documents the pub vs authenticated walker distinction."
+  },
+  {
+    "chunk_id": "9ab0dc8cc690",
+    "verdict": "keep",
+    "reason": "Introduces broadcast=True semantics, non-redundant."
+  },
+  {
+    "chunk_id": "6f4313629f3b",
+    "verdict": "keep",
+    "reason": "Canonical Jac code example of a broadcasting walker."
+  },
+  {
+    "chunk_id": "a55490f6a201",
+    "verdict": "keep",
+    "reason": "States broadcast delivery semantics; lead-in but informative."
+  },
+  {
+    "chunk_id": "0da2a5a323e9",
+    "verdict": "keep",
+    "reason": "Use-case list completing the broadcast section."
+  },
+  {
+    "chunk_id": "63d656f5194b",
+    "verdict": "keep",
+    "reason": "Documents private broadcasting walker auth behavior."
+  },
+  {
+    "chunk_id": "bf477a5193b8",
+    "verdict": "keep",
+    "reason": "Dense rules summary for WebSocket walkers (async requirement, pub, broadcast, URL scheme)."
+  },
+  {
+    "chunk_id": "a837e5a94b52",
+    "verdict": "keep",
+    "reason": "Core intro to sv-to-sv microservice interop and compile-time HTTP stubs."
+  },
+  {
+    "chunk_id": "89e5a9a71c5b",
+    "verdict": "keep",
+    "reason": "Frames the two sv import flavors, needed context for the following list."
+  },
+  {
+    "chunk_id": "3afa5a9f6fe7",
+    "verdict": "keep",
+    "reason": "Defines cl-to-sv vs sv-to-sv distinction, genuine content."
+  },
+  {
+    "chunk_id": "fc96bc9825d9",
+    "verdict": "keep",
+    "reason": "Concrete explanation of sv import RPC behavior with example module names."
+  },
+  {
+    "chunk_id": "5a4fdf1a20d0",
+    "verdict": "keep",
+    "reason": "Documents function vs walker endpoint paths and rehydration semantics."
+  },
+  {
+    "chunk_id": "583ba480c0d4",
+    "verdict": "keep",
+    "reason": "Cross-reference paragraph but establishes the section's scope; marginal keep."
+  },
+  {
+    "chunk_id": "cdbcee8a2775",
+    "verdict": "keep",
+    "reason": "Heading plus lead-in for the requirements list; keeps the list coherent."
+  },
+  {
+    "chunk_id": "5edfa088766b",
+    "verdict": "keep",
+    "reason": "Substantive precondition rules for sv import (def:pub, jac.toml, directory layout)."
+  },
+  {
+    "chunk_id": "b34fcbcc163c",
+    "verdict": "keep",
+    "reason": "Explains the wire contract and compiler-emitted wrappers for boundary types."
+  },
+  {
+    "chunk_id": "8942a662de8f",
+    "verdict": "drop",
+    "reason": "Two-word connective fragment ('What works:') with no standalone content."
+  },
+  {
+    "chunk_id": "38b1863135e3",
+    "verdict": "keep",
+    "reason": "Detailed list of supported boundary types including walker:pub round-trips."
+  },
+  {
+    "chunk_id": "ae2f6753050a",
+    "verdict": "drop",
+    "reason": "Two-word connective fragment ('What doesn't:') with no standalone content."
+  },
+  {
+    "chunk_id": "b174e46b0a33",
+    "verdict": "keep",
+    "reason": "Documents non-wire-friendly types and the jid re-resolution idiom."
+  },
+  {
+    "chunk_id": "c4d3975aee50",
+    "verdict": "keep",
+    "reason": "Documents RuntimeError failure behavior for RPC calls."
+  },
+  {
+    "chunk_id": "786c22258bcb",
+    "verdict": "keep",
+    "reason": "Exact error-message formats, useful grounding for debugging text."
+  },
+  {
+    "chunk_id": "9a32ace11f5c",
+    "verdict": "keep",
+    "reason": "Introduces walker import stub generation, core to the section."
+  },
+  {
+    "chunk_id": "9e4da58b5dff",
+    "verdict": "keep",
+    "reason": "Flagged near-dup, but this is the canonical reference-doc code example for walker imports; partners are elsewhere and likely tutorial copies."
+  },
+  {
+    "chunk_id": "8be23260dc7e",
+    "verdict": "keep",
+    "reason": "One-line lead-in naming the evaluated call; anchors the numbered sequence that follows."
+  },
+  {
+    "chunk_id": "9063a24b7f68",
+    "verdict": "keep",
+    "reason": "Step-by-step wire mechanics of remote walker spawn, high-value unique content."
+  },
+  {
+    "chunk_id": "127c3f6da498",
+    "verdict": "keep",
+    "reason": "Documents rehydrated walker instance semantics (isinstance, reports unwrapping)."
+  },
+  {
+    "chunk_id": "c3116e3036c5",
+    "verdict": "drop",
+    "reason": "Three-word connective fragment ('A few notes:') with no content."
+  },
+  {
+    "chunk_id": "1eff16cf4c3e",
+    "verdict": "keep",
+    "reason": "Important spawn-vs-construction semantic distinction for remote walkers."
+  },
+  {
+    "chunk_id": "4f92204f4fce",
+    "verdict": "keep",
+    "reason": "Documents the cl-to-sv walker-import limitation and its workaround."
+  },
+  {
+    "chunk_id": "7fe912425dee",
+    "verdict": "keep",
+    "reason": "Documents automatic transitive service startup behavior."
+  },
+  {
+    "chunk_id": "7d37038f92c5",
+    "verdict": "keep",
+    "reason": "Flagged as fully contained in an out-of-batch chunk, but this is the reference-doc copy in its native section; keeping the canonical copy per pair rule."
+  },
+  {
+    "chunk_id": "2112ad77195b",
+    "verdict": "keep",
+    "reason": "Distinguishes jac start vs jac run discovery behavior, unique content."
+  },
+  {
+    "chunk_id": "fb4ef993fef2",
+    "verdict": "keep",
+    "reason": "Lead-in establishing the discovery resolution order; needed for the list."
+  },
+  {
+    "chunk_id": "69ee06f92ef5",
+    "verdict": "keep",
+    "reason": "The four-step service discovery chain, core reference content."
+  },
+  {
+    "chunk_id": "71d8456b7ebc",
+    "verdict": "keep",
+    "reason": "Documents 127.0.0.1 binding constraint and multi-host env-var pattern."
+  },
+  {
+    "chunk_id": "0b62b79e2753",
+    "verdict": "keep",
+    "reason": "Documents the 18000-18999 sibling port range and collision-avoidance advice."
+  },
+  {
+    "chunk_id": "6646ce919abf",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose."
+  },
+  {
+    "chunk_id": "565c7ede5b64",
+    "verdict": "keep",
+    "reason": "Kubernetes deployment pattern lead-in with real guidance."
+  },
+  {
+    "chunk_id": "141864ae83bd",
+    "verdict": "keep",
+    "reason": "Flagged near-dup with an out-of-batch chunk, but this YAML example anchors the reference doc's k8s pattern; keeping the copy shown here."
+  },
+  {
+    "chunk_id": "1084fcfe69af",
+    "verdict": "keep",
+    "reason": "States the JAC_SV_<MODULE>_URL naming convention explicitly."
+  },
+  {
+    "chunk_id": "4ac6fd5ff12f",
+    "verdict": "keep",
+    "reason": "Local-dev pattern lead-in with concrete guidance."
+  },
+  {
+    "chunk_id": "25390fd1c8a8",
+    "verdict": "keep",
+    "reason": "Concrete shell example wiring env vars for multi-service local dev."
+  },
+  {
+    "chunk_id": "0002856f3499",
+    "verdict": "keep",
+    "reason": "Single-command vs multi-host deployment tradeoff; overlaps 71d8456b7ebc slightly but adds the alternative-workflow framing."
+  }
+]

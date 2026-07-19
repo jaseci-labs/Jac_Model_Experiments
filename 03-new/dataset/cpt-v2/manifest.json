@@ -1,0 +1,37 @@
+{
+  "seq_len": 4096,
+  "split": "85/15",
+  "seed": 3,
+  "tokenizer": "models/qwen-q4",
+  "eos_token": "<|im_end|>",
+  "fim": "skipped: Qwen3-Coder-30B-A3B-Instruct tokenizer has no FIM special tokens; downstream hole-fill is chat-format, not FIM",
+  "repos": {},
+  "sources": {
+    "blogs": {
+      "rows": 832,
+      "tokens": 66011,
+      "windows": 17
+    },
+    "docs": {
+      "rows": 6409,
+      "tokens": 2061194,
+      "windows": 553
+    },
+    "osp_paper": {
+      "rows": 368,
+      "tokens": 44624,
+      "windows": 12
+    },
+    "rehearsal": {
+      "rows": 118,
+      "tokens": 234847,
+      "windows": 64
+    }
+  },
+  "repack_only": true,
+  "curation": "03-new/dataset/cpt-v2/curation.json",
+  "packed": {
+    "train": 544,
+    "val": 102
+  }
+}

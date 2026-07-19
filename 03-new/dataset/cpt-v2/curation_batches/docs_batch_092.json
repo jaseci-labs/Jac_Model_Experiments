@@ -1,0 +1,252 @@
+[
+  {
+    "chunk_id": "5844f54d5fee",
+    "verdict": "keep",
+    "reason": "Genuine reference table documenting StreamEvent event types and payload fields."
+  },
+  {
+    "chunk_id": "8606527d8701",
+    "verdict": "drop",
+    "reason": "Bare heading-label fragment with no content of its own; the actual import snippets are separate chunks."
+  },
+  {
+    "chunk_id": "ab927c29ae45",
+    "verdict": "keep",
+    "reason": "Jac import syntax for StreamEvent is real, learnable language usage."
+  },
+  {
+    "chunk_id": "7789d2a9dd1d",
+    "verdict": "keep",
+    "reason": "Python-side StreamEvent import documents the dual-language byLLM API surface."
+  },
+  {
+    "chunk_id": "a1d4e267eaa5",
+    "verdict": "keep",
+    "reason": "Substantive prose explaining the usage event contract in streams."
+  },
+  {
+    "chunk_id": "af709aa34dda",
+    "verdict": "keep",
+    "reason": "Working Jac example of consuming usage events with real field names."
+  },
+  {
+    "chunk_id": "67894f0c1c3d",
+    "verdict": "keep",
+    "reason": "Explains cache-token counters and when they appear; genuine docs prose."
+  },
+  {
+    "chunk_id": "7293b85a9cab",
+    "verdict": "keep",
+    "reason": "Non-trivial Jac example computing cache hit rate across providers."
+  },
+  {
+    "chunk_id": "c09415f86b0f",
+    "verdict": "keep",
+    "reason": "Meaningful prose on caching economics tied to the config section."
+  },
+  {
+    "chunk_id": "a00d7ad16cbb",
+    "verdict": "keep",
+    "reason": "Small but real constraint: streaming only supports str return type."
+  },
+  {
+    "chunk_id": "ce5fd4c79ae2",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, pure markup boilerplate."
+  },
+  {
+    "chunk_id": "e0611057657a",
+    "verdict": "keep",
+    "reason": "Introduces Image/Video multimodal types with substantive framing."
+  },
+  {
+    "chunk_id": "e407959cba44",
+    "verdict": "keep",
+    "reason": "Heading plus instructional sentence introducing the Image type usage."
+  },
+  {
+    "chunk_id": "90e2ae2a4d54",
+    "verdict": "keep",
+    "reason": "Reference-doc copy is the canonical version of this flagged duplicate; keep here, drop the tutorial-side twin."
+  },
+  {
+    "chunk_id": "566332d48747",
+    "verdict": "keep",
+    "reason": "Lead-in sentence for the format table; keeps the table interpretable."
+  },
+  {
+    "chunk_id": "d9e49fa8430d",
+    "verdict": "keep",
+    "reason": "Canonical reference table of Image constructor formats; the duplicate copy elsewhere is the drop candidate."
+  },
+  {
+    "chunk_id": "5d8ca745a293",
+    "verdict": "keep",
+    "reason": "Working Jac example of in-memory Image construction from bytes/PIL/BytesIO."
+  },
+  {
+    "chunk_id": "7e05a6ed57ce",
+    "verdict": "keep",
+    "reason": "Substantive sentence stating image inputs compose with all return types."
+  },
+  {
+    "chunk_id": "8b16259cb3c9",
+    "verdict": "keep",
+    "reason": "Complete receipt-extraction example; more complete than its 0.695-containment twin, so this is the copy to keep."
+  },
+  {
+    "chunk_id": "9ec42c22db5c",
+    "verdict": "keep",
+    "reason": "Introduces Video type and its frame-extraction model."
+  },
+  {
+    "chunk_id": "c3153c5cdbab",
+    "verdict": "keep",
+    "reason": "Canonical reference copy of the Video usage example; drop the flagged twin outside this batch instead."
+  },
+  {
+    "chunk_id": "9de6898e195f",
+    "verdict": "keep",
+    "reason": "Real install requirement (jac install 'byllm[video]'), not boilerplate."
+  },
+  {
+    "chunk_id": "e9c4e568e2a7",
+    "verdict": "keep",
+    "reason": "Parameter table documenting Video path/fps semantics."
+  },
+  {
+    "chunk_id": "265681397ae4",
+    "verdict": "keep",
+    "reason": "Single-sentence fps tradeoff note; keeping the reference-side copy of this exact-duplicate pair."
+  },
+  {
+    "chunk_id": "4bc3d7808968",
+    "verdict": "keep",
+    "reason": "Structured-output-from-video example; keep the reference copy of the 0.8-containment pair."
+  },
+  {
+    "chunk_id": "18da7808fe4c",
+    "verdict": "keep",
+    "reason": "Heading plus sentence establishing that multimodal inputs work with tool calling."
+  },
+  {
+    "chunk_id": "09347d34c13f",
+    "verdict": "keep",
+    "reason": "0.513 containment suggests only partial overlap with its flagged pair, and the tools-plus-image example is distinct content."
+  },
+  {
+    "chunk_id": "b95d0420855c",
+    "verdict": "keep",
+    "reason": "Lead-in noting multimodal works in both Python integration modes."
+  },
+  {
+    "chunk_id": "d65a8ffaef46",
+    "verdict": "keep",
+    "reason": "Python @by decorator multimodal example, distinct from the Jac examples."
+  },
+  {
+    "chunk_id": "039d70148a95",
+    "verdict": "drop",
+    "reason": "Nav-only cross-reference sentence pointing to a tutorial page; no standalone content."
+  },
+  {
+    "chunk_id": "f25b3d6c4fb7",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, pure markup boilerplate."
+  },
+  {
+    "chunk_id": "6e9908610b3f",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose or code."
+  },
+  {
+    "chunk_id": "d696c173252b",
+    "verdict": "keep",
+    "reason": "Names the incl_info API and its purpose; anchors the following example."
+  },
+  {
+    "chunk_id": "29cd5dcc6238",
+    "verdict": "keep",
+    "reason": "Working incl_info example showing context injection into an LLM method."
+  },
+  {
+    "chunk_id": "d53d21c71bfa",
+    "verdict": "keep",
+    "reason": "States the important semantic that methods auto-include object attributes."
+  },
+  {
+    "chunk_id": "d23a47f89763",
+    "verdict": "keep",
+    "reason": "Concrete example of object-attribute context flowing into by llm() methods."
+  },
+  {
+    "chunk_id": "f059b724ad46",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, pure markup boilerplate."
+  },
+  {
+    "chunk_id": "4d33d86a9a97",
+    "verdict": "keep",
+    "reason": "Introduces the Python @by integration mode."
+  },
+  {
+    "chunk_id": "938f1378bfdb",
+    "verdict": "keep",
+    "reason": "Full Python integration example covering str, Enum, and dataclass return types."
+  },
+  {
+    "chunk_id": "5439e29e1a63",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, pure markup boilerplate."
+  },
+  {
+    "chunk_id": "1de23808d708",
+    "verdict": "drop",
+    "reason": "Heading-only fragment; the individual best-practice chunks carry the content."
+  },
+  {
+    "chunk_id": "6deff1d97e3d",
+    "verdict": "keep",
+    "reason": "Good/better contrast teaching sem-string usage for function clarity."
+  },
+  {
+    "chunk_id": "64dba1619e6e",
+    "verdict": "keep",
+    "reason": "Good/avoid contrast on descriptive parameter naming for LLM functions."
+  },
+  {
+    "chunk_id": "988d62609a93",
+    "verdict": "keep",
+    "reason": "Demonstrates sem annotations on object fields, a Jac-specific construct."
+  },
+  {
+    "chunk_id": "be67956648ec",
+    "verdict": "keep",
+    "reason": "Lead-in explaining why sem descriptions matter for tool selection."
+  },
+  {
+    "chunk_id": "44c5156d0168",
+    "verdict": "keep",
+    "reason": "Concrete example of sem annotations on a tool function and its parameters."
+  },
+  {
+    "chunk_id": "fc1605a2fd3f",
+    "verdict": "keep",
+    "reason": "Actionable guidance on tool-count limits; short but substantive."
+  },
+  {
+    "chunk_id": "f00c0bd3f0e4",
+    "verdict": "drop",
+    "reason": "Bare horizontal-rule separator, pure markup boilerplate."
+  },
+  {
+    "chunk_id": "f478bd569604",
+    "verdict": "keep",
+    "reason": "Explains the ByLLMError base-class catch pattern; real error-handling prose."
+  },
+  {
+    "chunk_id": "2d67c48168fb",
+    "verdict": "keep",
+    "reason": "Complete exception hierarchy with per-class failure meanings."
+  }
+]

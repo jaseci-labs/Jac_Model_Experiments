@@ -1,0 +1,255 @@
+[
+  {
+    "chunk_id": "1f098fd2e030",
+    "verdict": "keep",
+    "reason": "Genuine scoping-semantics prose (fresh-binding rule for loop/except/with targets) unique to Jac's foundation docs."
+  },
+  {
+    "chunk_id": "d1ee505fb5a3",
+    "verdict": "keep",
+    "reason": "Substantive Jac-vs-Python difference (glob rebinding, no UnboundLocalError) with real explanatory content."
+  },
+  {
+    "chunk_id": "3b3a6446f69f",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no prose or code; nav boilerplate."
+  },
+  {
+    "chunk_id": "6d8a864b45fd",
+    "verdict": "keep",
+    "reason": "Concrete code example demonstrating Jac's block-scope leakage behavior."
+  },
+  {
+    "chunk_id": "38165a30f9c8",
+    "verdict": "keep",
+    "reason": "Section lead-in with actual semantic content (defines falsy evaluation in conditions) that contextualizes the following table."
+  },
+  {
+    "chunk_id": "59afa3ee31db",
+    "verdict": "keep",
+    "reason": "Complete falsy-values reference table; genuine documentation content."
+  },
+  {
+    "chunk_id": "e9fda320b7ef",
+    "verdict": "keep",
+    "reason": "Short but content-bearing sentence completing the truthiness rule; not boilerplate."
+  },
+  {
+    "chunk_id": "1f5d0cf82368",
+    "verdict": "drop",
+    "reason": "Bare '**Examples:**' label with zero content; pure structural boilerplate."
+  },
+  {
+    "chunk_id": "2d787e9b8080",
+    "verdict": "keep",
+    "reason": "Worked truthiness examples in Jac syntax, including the default-value-with-or idiom."
+  },
+  {
+    "chunk_id": "15774dbd654a",
+    "verdict": "drop",
+    "reason": "Horizontal-rule separator only; no content."
+  },
+  {
+    "chunk_id": "6543b566c2d8",
+    "verdict": "keep",
+    "reason": "Operator-section overview naming Jac-specific operator families (graph, null-safe, pipe, by); useful orienting prose."
+  },
+  {
+    "chunk_id": "69f51221c621",
+    "verdict": "keep",
+    "reason": "Standard arithmetic operator table; mildly Python-generic but part of coherent language reference."
+  },
+  {
+    "chunk_id": "5f14ef71b822",
+    "verdict": "keep",
+    "reason": "Flagged duplicate counterpart (1f308fd2fd8f) is not in this batch and the only similarly-prefixed chunk here (1f098fd2e030) covers unrelated scoping content, so no verified redundancy; standard comparison table kept."
+  },
+  {
+    "chunk_id": "871ce94aa8a5",
+    "verdict": "keep",
+    "reason": "Logical operator example in Jac syntax (semicolons, braces) reinforcing surface form."
+  },
+  {
+    "chunk_id": "1e8c4ee45b0a",
+    "verdict": "keep",
+    "reason": "Important Jac-specific fact: no && or || symbol operators, word forms only."
+  },
+  {
+    "chunk_id": "11ed2ccaf640",
+    "verdict": "keep",
+    "reason": "Bitwise operator reference table; legitimate language documentation."
+  },
+  {
+    "chunk_id": "e679ed103077",
+    "verdict": "drop",
+    "reason": "Bare '**Examples:**' label identical to 1f5d0cf82368; structural boilerplate."
+  },
+  {
+    "chunk_id": "7b2283b8731f",
+    "verdict": "keep",
+    "reason": "Substantive bitwise-operation examples in Jac syntax with explanatory comments."
+  },
+  {
+    "chunk_id": "f9c20f654bd1",
+    "verdict": "drop",
+    "reason": "Heading-only fragment ('Common bit manipulation patterns:'); no content."
+  },
+  {
+    "chunk_id": "20fa5864246c",
+    "verdict": "keep",
+    "reason": "Real code content: typed Jac function definitions for bit-manipulation idioms."
+  },
+  {
+    "chunk_id": "6ee4c247883d",
+    "verdict": "drop",
+    "reason": "Two stacked headings with no prose or code between them; nav-only fragment."
+  },
+  {
+    "chunk_id": "04fc6a476dd8",
+    "verdict": "keep",
+    "reason": "Assignment example including chained assignment in Jac syntax."
+  },
+  {
+    "chunk_id": "e70321884e08",
+    "verdict": "drop",
+    "reason": "Heading-only fragment; the walrus operator is fully covered by the adjacent kept chunks."
+  },
+  {
+    "chunk_id": "ab965e856fb4",
+    "verdict": "keep",
+    "reason": "Content sentence defining walrus-operator semantics; pairs with the example chunk."
+  },
+  {
+    "chunk_id": "ded8d126e250",
+    "verdict": "keep",
+    "reason": "Worked walrus-operator examples in conditionals, comprehensions, and f-strings."
+  },
+  {
+    "chunk_id": "3fd6d3f5e4b6",
+    "verdict": "drop",
+    "reason": "Heading-only fragment with no content."
+  },
+  {
+    "chunk_id": "bcf07ae3a181",
+    "verdict": "keep",
+    "reason": "Brief but content-bearing sentence stating in-place-modification semantics for augmented assignment."
+  },
+  {
+    "chunk_id": "64e0512aa1dd",
+    "verdict": "keep",
+    "reason": "Complete augmented-assignment operator table; genuine reference content."
+  },
+  {
+    "chunk_id": "68e0984c21e8",
+    "verdict": "keep",
+    "reason": "Augmented-assignment examples covering numeric and bitwise flag-manipulation idioms in Jac."
+  },
+  {
+    "chunk_id": "de8a90d339e6",
+    "verdict": "keep",
+    "reason": "Section intro with real semantic content: the ? operator returns None instead of raising."
+  },
+  {
+    "chunk_id": "8f50fa63f622",
+    "verdict": "drop",
+    "reason": "Heading-only label; the ?. operator is fully documented in the adjacent code and summary-table chunks."
+  },
+  {
+    "chunk_id": "c9324ab3b51e",
+    "verdict": "keep",
+    "reason": "Core null-safe access example with chaining semantics in Jac obj syntax."
+  },
+  {
+    "chunk_id": "e52e8fc53943",
+    "verdict": "drop",
+    "reason": "Heading-only label; ?[] semantics are covered in c25c7200e794 and 73e1eb6ff24f."
+  },
+  {
+    "chunk_id": "c25c7200e794",
+    "verdict": "keep",
+    "reason": "Substantive prose defining ?[] behavior across IndexError/KeyError/TypeError cases."
+  },
+  {
+    "chunk_id": "73e1eb6ff24f",
+    "verdict": "keep",
+    "reason": "Worked ?[] examples including out-of-bounds and missing-key cases."
+  },
+  {
+    "chunk_id": "8b88d6c7af75",
+    "verdict": "drop",
+    "reason": "Heading-only fragment ('Safe method calls:'); no content."
+  },
+  {
+    "chunk_id": "76d5df30049f",
+    "verdict": "keep",
+    "reason": "Null-safe method-call and chained-call example with Jac obj definitions."
+  },
+  {
+    "chunk_id": "1ed8e7194d12",
+    "verdict": "drop",
+    "reason": "Heading-only fragment; no content."
+  },
+  {
+    "chunk_id": "6be639e26b1e",
+    "verdict": "keep",
+    "reason": "Practical idiom: null-safe access combined with or-fallback and conditional use."
+  },
+  {
+    "chunk_id": "f21aadb7252c",
+    "verdict": "drop",
+    "reason": "Heading-only fragment ('In filter comprehensions:'); no content."
+  },
+  {
+    "chunk_id": "f5cef39faaf8",
+    "verdict": "keep",
+    "reason": "Jac-specific filter-comprehension syntax (items[?value > 0]); distinct from null-safe access and worth retaining."
+  },
+  {
+    "chunk_id": "e22f6e13a7dc",
+    "verdict": "drop",
+    "reason": "Heading-only fragment ('Behavior summary:'); no content."
+  },
+  {
+    "chunk_id": "512ace68e44d",
+    "verdict": "keep",
+    "reason": "Compact behavior-summary table for all null-safe forms; high-density reference content."
+  },
+  {
+    "chunk_id": "af85e776b87e",
+    "verdict": "upweight",
+    "reason": "Core OSP conceptual prose: graph connections as first-class typed entities and the role of ++>/--> in building versus traversing graphs.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "860a3eedfbb1",
+    "verdict": "drop",
+    "reason": "Heading-only fragment ('Connection Operators:'); no content."
+  },
+  {
+    "chunk_id": "51e669e149e7",
+    "verdict": "upweight",
+    "reason": "Canonical node/edge connection example covering untyped (++>, <++, <++>) and typed (+>: Edge :+>) connection syntax, the heart of OSP graph construction.",
+    "weight": 3.0
+  },
+  {
+    "chunk_id": "6c1eca986f6c",
+    "verdict": "drop",
+    "reason": "Heading-only fragment ('Edge Reference Operators:'); no content."
+  },
+  {
+    "chunk_id": "490623bf29cf",
+    "verdict": "upweight",
+    "reason": "Core walker semantics: 'can visit with Item entry' ability plus edge-reference expressions ([-->], [<--], typed and attribute-filtered traversal), central OSP traversal mechanics.",
+    "weight": 3.5
+  },
+  {
+    "chunk_id": "fc47e12d588c",
+    "verdict": "keep",
+    "reason": "Substantive intro to Jac's three pipe variants including their role in walker traversal ordering."
+  },
+  {
+    "chunk_id": "cb7a629b88a1",
+    "verdict": "drop",
+    "reason": "Heading-only fragment; the pipe variants and symbols are named in the kept intro chunk fc47e12d588c."
+  }
+]

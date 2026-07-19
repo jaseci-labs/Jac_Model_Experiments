@@ -1,0 +1,20 @@
+[
+  {
+    "chunk_id": "67ed1e09b9d5",
+    "verdict": "keep",
+    "reason": "Genuine prose on composing OSP agentic patterns, non-redundant blog content.",
+    "weight": null
+  },
+  {
+    "chunk_id": "02e7610c4584",
+    "verdict": "keep",
+    "reason": "Substantive conceptual framing of OSP for agent architecture, but blog commentary rather than core node/edge/walker mechanics, so no upweight.",
+    "weight": null
+  },
+  {
+    "chunk_id": "eeae83f50164",
+    "verdict": "drop",
+    "reason": "Nav-only redirect stub with a meta refresh tag and no documentation prose.",
+    "weight": null
+  }
+]

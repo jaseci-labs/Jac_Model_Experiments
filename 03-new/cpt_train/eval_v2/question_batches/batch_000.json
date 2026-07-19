@@ -1,0 +1,257 @@
+[
+  {
+    "id": "b000-q-litellm-providers",
+    "question": "Jac's LLM integration is described as supporting any LiteLLM-compatible model. What does that imply about switching between cloud providers, and what option do you have if you want to run a model locally instead of calling a paid cloud API?",
+    "source_chunk_id": "b5b562152d63"
+  },
+  {
+    "id": "b000-q-osp-why-agents",
+    "question": "Why are walkers considered a natural representation of AI agents in Object-Spatial Programming?",
+    "source_chunk_id": "29d454d3fcd3"
+  },
+  {
+    "id": "b000-q-osp-separation",
+    "question": "In Object-Spatial Programming, what is the separation of concerns between nodes/edges on one side and walkers on the other, and what benefit does that separation bring?",
+    "source_chunk_id": "29d454d3fcd3"
+  },
+  {
+    "id": "b000-q-client-has-state",
+    "question": "In a Jac client-side component, what does declaring a `has` field correspond to in the compiled React output, and what happens when you reassign that field?",
+    "source_chunk_id": "b2fab688d8c2"
+  },
+  {
+    "id": "b000-q-classifiers-array",
+    "question": "When writing package classifiers in jac.toml for publishing, why must the value be a TOML array rather than a plain string, and what goes wrong if you get it wrong?",
+    "source_chunk_id": "d3438b6d5b7f"
+  },
+  {
+    "id": "b000-q-cl-compile-split",
+    "question": "In a fullstack Jac program, which parts of the code end up running in the browser and which on the server, and what in the source determines that split?",
+    "source_chunk_id": "0d80fa3e1c82"
+  },
+  {
+    "id": "b000-q-client-rpc",
+    "question": "When client-side Jac code awaits a call to a function defined on the server, what is actually happening under the hood?",
+    "source_chunk_id": "0d80fa3e1c82"
+  },
+  {
+    "id": "b000-q-report-order",
+    "question": "When a walker makes several report calls during a run, how should the caller read the results back safely, and why is hard-coding report indices without documentation considered fragile?",
+    "source_chunk_id": "997099069ba8"
+  },
+  {
+    "id": "b000-q-scale-k8s-steps",
+    "question": "When you deploy a Jac application to Kubernetes using the built-in scaling support, what infrastructure gets provisioned for you automatically and how does outside traffic reach the application?",
+    "source_chunk_id": "f7cb5213f250"
+  },
+  {
+    "id": "b000-q-ability-dispatch",
+    "question": "How does a walker decide which of its abilities to execute when it arrives at a node during traversal?",
+    "source_chunk_id": "f073f2065da5"
+  },
+  {
+    "id": "b000-q-boundary-types",
+    "question": "When values cross between Jac's client and server codespaces, what guarantee applies to primitive types like int or list[str], and what condition must non-primitive types satisfy to cross the boundary?",
+    "source_chunk_id": "81279b583438"
+  },
+  {
+    "id": "b000-q-generic-entry",
+    "question": "What is the difference between a walker ability declared with a bare `with entry` and one declared `with <NodeType> entry` — where does each one fire during a walker's run?",
+    "source_chunk_id": "832da809a9ba"
+  },
+  {
+    "id": "b000-q-here-visitor",
+    "question": "Inside a node ability in Jac, what does `visitor` refer to, and how does that differ from what `here` means inside a walker ability?",
+    "source_chunk_id": "cdf276f166b0"
+  },
+  {
+    "id": "b000-q-typed-edges",
+    "question": "What's the difference between connecting two nodes with the plain `++>` operator and using a typed edge connection form, and when do you actually need typed edges?",
+    "source_chunk_id": "796f4f090eec"
+  },
+  {
+    "id": "b000-q-edge-filters",
+    "question": "How can a Jac edge-reference expression narrow a traversal by node type, by node attributes, and by edge attributes? Describe the general idea of each kind of filter.",
+    "source_chunk_id": "796f4f090eec"
+  },
+  {
+    "id": "b000-q-visit-edge-type",
+    "question": "Why would a walker restrict a visit statement to a particular edge type instead of just visiting all outgoing connections?",
+    "source_chunk_id": "72504446408c"
+  },
+  {
+    "id": "b000-q-typed-reports-client",
+    "question": "When a server-side walker reports typed objects rather than plain dicts, what does the calling client gain when it receives the results?",
+    "source_chunk_id": "43a546caf068"
+  },
+  {
+    "id": "b000-q-decl-impl-folders",
+    "question": "How does separating declarations from implementations change the way a large Jac package's folder structure communicates its architecture, compared to keeping everything in flat single files?",
+    "source_chunk_id": "481522d13e74"
+  },
+  {
+    "id": "b000-q-disengage",
+    "question": "What does `disengage` do inside a walker ability, and how does it differ from simply letting the ability finish without calling visit?",
+    "source_chunk_id": "f6d6e2cde7d1"
+  },
+  {
+    "id": "b000-q-walker-priv",
+    "question": "What does declaring a walker with `walker:priv` give you in a multi-user Jac application?",
+    "source_chunk_id": "f6d6e2cde7d1"
+  },
+  {
+    "id": "b000-q-traversal-order",
+    "question": "When every ability in a walker calls `visit [-->]`, what overall traversal order over the graph results, and why does the visit mechanism produce that order?",
+    "source_chunk_id": "23cc28f6ec0e"
+  },
+  {
+    "id": "b000-q-scale-builtin",
+    "question": "Is production serving and Kubernetes deployment for Jac a separate package you have to install? Explain how the scaling capabilities and their heavier optional dependencies get into a project.",
+    "source_chunk_id": "cde752f04635"
+  },
+  {
+    "id": "b000-q-def-vs-walker",
+    "question": "When exposing server logic in Jac, when is a `def:pub` function the right tool and when should you reach for a walker instead?",
+    "source_chunk_id": "a5aec4c0b7af"
+  },
+  {
+    "id": "b000-q-as-cast",
+    "question": "What problem does the `as` cast operator solve in Jac's type system, and when would you use it on the result of a generic function call?",
+    "source_chunk_id": "09a04cb8c168"
+  },
+  {
+    "id": "b000-q-stack-replacement",
+    "question": "How does a single Jac program replace the separate pieces of a traditional web stack — the database schema, the HTTP API layer, and React state/effect boilerplate? Name which Jac constructs take over each role.",
+    "source_chunk_id": "f943785bfa8b"
+  },
+  {
+    "id": "b000-q-node-vs-obj",
+    "question": "A node declaration looks almost identical to an obj declaration in Jac. What does the runtime treat differently about a node?",
+    "source_chunk_id": "39f1528b7ca3"
+  },
+  {
+    "id": "b000-q-llm-default-config",
+    "question": "If a `by llm()` call in Jac doesn't specify a model explicitly, where does the model configuration come from?",
+    "source_chunk_id": "cb96a00b0242"
+  },
+  {
+    "id": "b000-q-exit-timing",
+    "question": "During a walker traversal, when do a node's exit abilities actually run relative to the visiting of that node's descendants, and in what order do the queued exit abilities execute?",
+    "source_chunk_id": "2f1f3385697b"
+  },
+  {
+    "id": "b000-q-walker-path",
+    "question": "What information does a walker's `path` attribute carry, and when is it populated?",
+    "source_chunk_id": "2f1f3385697b"
+  },
+  {
+    "id": "b000-q-bidirectional-poly",
+    "question": "Object-Spatial Programming is described as having 'bidirectional polymorphism' — both sides define the interaction. What does that mean for how node types and walker types each contribute to what happens during a visit?",
+    "source_chunk_id": "85359ce5e873"
+  },
+  {
+    "id": "b000-q-mtllm-unified",
+    "question": "How do you select an LLM provider in current mtllm/byllm code, and how does that differ from the older approach of separate per-provider classes like Gemini or OpenAI?",
+    "source_chunk_id": "5405c2f0d48c"
+  },
+  {
+    "id": "b000-q-test-exceptions",
+    "question": "In a Jac test block, how do you verify that a function raises an expected exception, and why does the standard pattern place an `assert False` immediately after the call under test?",
+    "source_chunk_id": "afd9ebeb0793"
+  },
+  {
+    "id": "b000-q-untyped-imports",
+    "question": "How does Jac's type checker treat imports from an installed third-party package that ships no type information (no py.typed marker and no stub files), and why does it not apply the strict Unknown discipline there?",
+    "source_chunk_id": "500b03c6881a"
+  },
+  {
+    "id": "b000-q-native-cstring",
+    "question": "When declaring a C function that takes a C string through Jac's native FFI, what type do you write in the Jac declaration, and why don't you spell out the low-level pointer type yourself?",
+    "source_chunk_id": "4bea1b5cfb7e"
+  },
+  {
+    "id": "b000-q-node-attach",
+    "question": "After instantiating a node archetype in Jac, what step makes it actually part of a graph rather than a free-floating object?",
+    "source_chunk_id": "ad3c6282f093"
+  },
+  {
+    "id": "b000-q-spawn-pipe",
+    "question": "Some older Jac material shows piping into spawn (forms like `spawn :>` or `spawn |>`) to pick a traversal order. What happens if you try that today, and what is the recommended way to spawn a walker?",
+    "source_chunk_id": "b55ca2b8f104"
+  },
+  {
+    "id": "b000-q-obj-node-split",
+    "question": "In an AI-powered Jac app, why is it good practice to define one `obj` schema for the LLM's structured output and a separate `node` type for persistence, instead of using a single type for both roles?",
+    "source_chunk_id": "2d601c90ddc7"
+  },
+  {
+    "id": "b000-q-osp-inversion",
+    "question": "Traditional OOP is said to 'bring data to computation.' How does Object-Spatial Programming flip that relationship?",
+    "source_chunk_id": "c79f4ce86224"
+  },
+  {
+    "id": "b000-q-edge-objects",
+    "question": "In Jac edge-reference expressions, what's the difference between retrieving the connected nodes and retrieving the edge objects themselves, and when would you want the edge objects?",
+    "source_chunk_id": "75e2b7ba6b87"
+  },
+  {
+    "id": "b000-q-cleanup-entry",
+    "question": "If a walker has cleanup logic that must run even when the walker might disengage partway through a traversal, why is putting that logic in an exit ability unreliable, and what is the recommended alternative?",
+    "source_chunk_id": "bad0daf895de"
+  },
+  {
+    "id": "b000-q-spawn-no-visit",
+    "question": "What happens when you spawn a walker at root but none of its abilities ever call visit? Which of its abilities will fire?",
+    "source_chunk_id": "4ee7fc01ee1a"
+  },
+  {
+    "id": "b000-q-desktop-status",
+    "question": "What does building a Jac app for the desktop client target currently produce, and which parts of the desktop pathway are still work in progress?",
+    "source_chunk_id": "664969ca38cb"
+  },
+  {
+    "id": "b000-q-accumulator",
+    "question": "What is the accumulator pattern in Jac walker design, and what problem does it solve when collecting data across a graph traversal?",
+    "source_chunk_id": "a0f7678bea13"
+  },
+  {
+    "id": "b000-q-scale-secrets",
+    "question": "When a Jac app is deployed with the scale option, how do environment-variable references in the configuration become available inside the Kubernetes pods, and what happens to that secret material when the deployment is destroyed?",
+    "source_chunk_id": "1e808f87e8b3"
+  },
+  {
+    "id": "b000-q-anthropic-caching",
+    "question": "What does byllm do automatically to reduce input-token costs when calling Claude models, and which parts of a request does it apply to?",
+    "source_chunk_id": "3eacd96d78fb"
+  },
+  {
+    "id": "b000-q-mobile-platform",
+    "question": "When initializing mobile support for a Jac app, what tooling does the scaffold use under the hood, and how is the default target platform chosen if you don't specify one?",
+    "source_chunk_id": "462534aa245e"
+  },
+  {
+    "id": "b000-q-jwt-secret",
+    "question": "Why must the JWT signing secret be explicitly configured before taking a Jac scale deployment to production, rather than relying on the default?",
+    "source_chunk_id": "a1ea66d9e393"
+  },
+  {
+    "id": "b000-q-root-persistence",
+    "question": "What determines whether a node in a Jac program survives a process restart, and how much database setup does the developer have to do to get that persistence?",
+    "source_chunk_id": "561d95b5f6c5"
+  },
+  {
+    "id": "b000-q-report-stdout",
+    "question": "Besides appending a value to the walker's reports collection, what visible side effect does the `report` statement have, and why is that worth knowing when reading a walker's program output?",
+    "source_chunk_id": "d8754904849f"
+  },
+  {
+    "id": "b000-q-forgot-password-200",
+    "question": "Why does the forgot-password flow in Jac's built-in auth endpoints return HTTP 200 even when the requested account doesn't exist?",
+    "source_chunk_id": "25cf20118586"
+  },
+  {
+    "id": "b000-q-visit-queue",
+    "question": "When `visit` is invoked in the middle of a walker ability, does the walker move to the target nodes immediately? Explain the actual sequencing between the rest of the ability body and the traversal to the visited nodes.",
+    "source_chunk_id": "c7211d3ec5f5"
+  }
+]

@@ -1,0 +1,21 @@
+{
+  "batch_id": "b08",
+  "accepted": [
+    "chain_value_range",
+    "scaled_chain_total",
+    "median_chain_value",
+    "count_max_occurrences",
+    "positive_fraction",
+    "route_summary",
+    "gates_passed",
+    "above_average_count",
+    "shared_reach_sum",
+    "reach_from_max_child",
+    "chain_report",
+    "leaf_share_percent",
+    "far_probe_pair",
+    "avg_after_boost"
+  ],
+  "rejected": [],
+  "accept_rate": 1.0
+}
