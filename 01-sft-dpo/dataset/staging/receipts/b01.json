@@ -1,0 +1,21 @@
+{
+  "batch_id": "b01",
+  "accepted": [
+    "can_reach",
+    "gather_reachable",
+    "count_unreachable",
+    "first_dead_end",
+    "bfs_visit_order",
+    "hops_between",
+    "component_size",
+    "same_component",
+    "sum_unlocked",
+    "deepest_hop",
+    "count_within_hops",
+    "count_islands",
+    "biggest_island",
+    "count_ancestors"
+  ],
+  "rejected": [],
+  "accept_rate": 1.0
+}

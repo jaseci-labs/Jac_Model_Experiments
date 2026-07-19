@@ -41,6 +41,11 @@ glob HOLDOUT_PATHS: list = [
 ];
 glob RECEIPT_DIR: str = "01-sft-dpo/dataset/staging/receipts";
 glob DEDUP_THRESHOLD: float = 0.6;
+# graph_osp bodies legitimately share walker/builder scaffolding: the existing 31
+# graph seeds have median pairwise ROUGE-L 0.832 (77% of pairs >= 0.6), so the
+# function-tier 0.6 rule would reject the whole tier. 0.95 catches only
+# near-verbatim copies while letting idiom repetition through by design.
+glob GRAPH_DEDUP_THRESHOLD: float = 0.95;
 
 
 def holdout_shingles() -> dict {
@@ -111,11 +116,12 @@ def check_example(ex: dict, existing: list[str], batch_kept: list[str]) -> tuple
     }
 
     jac_full: str = jac_with_demo(body, name, first["input"]);
+    thresh: float = GRAPH_DEDUP_THRESHOLD if str(ex.get("category", "")) == "graph_osp" else DEDUP_THRESHOLD;
     for kc in existing {
-        if rouge_l(jac_full, kc) >= DEDUP_THRESHOLD { return (False, "dup vs existing sft.jsonl", ""); }
+        if rouge_l(jac_full, kc) >= thresh { return (False, "dup vs existing sft.jsonl", ""); }
     }
     for kc in batch_kept {
-        if rouge_l(jac_full, kc) >= DEDUP_THRESHOLD { return (False, "dup within batch", ""); }
+        if rouge_l(jac_full, kc) >= thresh { return (False, "dup within batch", ""); }
     }
     return (True, "ok", jac_full);
 }
