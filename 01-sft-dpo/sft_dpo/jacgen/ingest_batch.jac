@@ -35,7 +35,7 @@ import from pathlib { Path }
 import from typing { Any }
 
 glob SFT_PATH: str = "01-sft-dpo/dataset/conversion/sft.jsonl";
-glob HOLDOUT_PATHS: list = [
+glob HOLDOUT_PATHS: list[str] = [
     "01-sft-dpo/dataset/eval_holdout/conversion.jsonl",
     "01-sft-dpo/dataset/eval_holdout/graph_conversion.jsonl"
 ];

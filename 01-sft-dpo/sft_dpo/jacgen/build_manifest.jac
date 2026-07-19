@@ -14,7 +14,7 @@ import from pathlib { Path }
 glob IDIOMATIC: str = "01-sft-dpo/dataset/conversion/sft.jsonl";
 glob TRANSPILE: str = "01-sft-dpo/dataset/conversion/sft_auto.jsonl";
 glob OUT: str = "01-sft-dpo/dataset/conversion/sft_train.jsonl";
-glob RATIO: int = 3;  # transpile examples per idiomatic example
+glob RATIO: int = 2;  # transpile examples per idiomatic example (idiomatic core tripled to 420, was 3 at 147)
 
 
 def read_lines(path: str) -> list[str] {
