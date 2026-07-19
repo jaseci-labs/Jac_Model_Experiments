@@ -59,9 +59,9 @@ def main():
 
     ap = argparse.ArgumentParser()
     ap.add_argument("--questions", default="03-new/cpt_train/eval_v2/questions.json")
-    ap.add_argument("--answers", default="03-new/results/cpt-v2/track_a_answers.json",
+    ap.add_argument("--answers", default="03-new/results/cpt-v2/json/track_a_answers.json",
                     help="incremental store of all generated + oracle answers (Track B reuses it)")
-    ap.add_argument("--out", default="03-new/results/cpt-v2/track_a.json")
+    ap.add_argument("--out", default="03-new/results/cpt-v2/json/track_a.json")
     args = ap.parse_args()
 
     questions = json.loads(Path(args.questions).read_text())

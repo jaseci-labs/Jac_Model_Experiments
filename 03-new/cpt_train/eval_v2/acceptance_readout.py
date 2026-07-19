@@ -36,17 +36,17 @@ def main():
     import json
     from pathlib import Path
 
-    track_a_raw = json.loads(Path("03-new/results/cpt-v2/track_a.json").read_text())
+    track_a_raw = json.loads(Path("03-new/results/cpt-v2/json/track_a.json").read_text())
     n = len(track_a_raw)
     track_a = {
         "base_mean": sum(r["base"] for r in track_a_raw.values()) / n,
         "cpt_v1_mean": sum(r["cpt_v1"] for r in track_a_raw.values()) / n,
         "cpt_v2_mean": sum(r["cpt_v2"] for r in track_a_raw.values()) / n,
     }
-    track_b = json.loads(Path("03-new/results/cpt-v2/track_b.json").read_text())
+    track_b = json.loads(Path("03-new/results/cpt-v2/json/track_b.json").read_text())
     verdict = decide_acceptance(track_a, track_b)
     print(json.dumps(verdict, indent=2))
-    Path("03-new/results/cpt-v2/acceptance.json").write_text(json.dumps(verdict, indent=2))
+    Path("03-new/results/cpt-v2/json/acceptance.json").write_text(json.dumps(verdict, indent=2))
 
 
 if __name__ == "__main__":

@@ -23,7 +23,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 ADAPTER_DIR = ROOT / "03-new" / "adapters" / "cpt-v2"
 RESULTS_DIR = ROOT / "03-new" / "results" / "cpt-v2"
-STATE_FILE = RESULTS_DIR / "training_state.json"
+JSON_DIR = RESULTS_DIR / "json"
+STATE_FILE = JSON_DIR / "training_state.json"
 REVIEWS_FILE = RESULTS_DIR / "leg_reviews.md"
 MANIFEST = ROOT / "03-new" / "dataset" / "cpt-v2" / "manifest.json"
 CONFIG_DIR = ROOT / "03-new" / "cpt_train"
@@ -58,7 +59,7 @@ def load_state() -> dict:
 
 
 def save_state(state: dict):
-    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+    STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
     STATE_FILE.write_text(json.dumps(state, indent=2))
 
 
