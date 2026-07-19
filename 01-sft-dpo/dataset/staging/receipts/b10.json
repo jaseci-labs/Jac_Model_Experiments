@@ -1,0 +1,21 @@
+{
+  "batch_id": "b10",
+  "accepted": [
+    "subtree_node_count",
+    "branch_total",
+    "tree_height",
+    "leaf_tally",
+    "best_root_leaf_sum",
+    "deepest_leaf_name",
+    "child_branch_sums",
+    "arms_balanced",
+    "positive_branch_sum",
+    "level_signed_sum",
+    "leaf_label_merge",
+    "unique_dep_cost",
+    "eval_op_tree",
+    "heavy_subtree_count"
+  ],
+  "rejected": [],
+  "accept_rate": 1.0
+}

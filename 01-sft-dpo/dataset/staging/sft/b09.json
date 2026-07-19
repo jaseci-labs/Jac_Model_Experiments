@@ -1,0 +1,805 @@
+{
+ "batch_id": "b09",
+ "generator": "fable-agent-v1",
+ "examples": [
+  {
+   "name": "flagged_census",
+   "category": "graph_osp",
+   "subcategory": "mark_then_count",
+   "difficulty": "simple",
+   "py": "def flagged_census(spec: dict) -> int:\n    \"\"\"Count chain values strictly above the limit.\"\"\"\n    count = 0\n    for n in spec[\"nums\"]:\n        if n > spec[\"limit\"]:\n            count += 1\n    return count",
+   "jac": "node Crate { has weight: int; has flagged: bool = False; }\n\nwalker Marker {\n    has limit: int;\n    can mark with Crate entry {\n        if here.weight > self.limit { here.flagged = True; }\n        visit [-->];\n    }\n}\n\nwalker Census {\n    has count: int = 0;\n    can tally with Crate entry {\n        if here.flagged { self.count += 1; }\n        visit [-->];\n    }\n}\n\ndef flagged_census(spec: dict) -> int {\n    nums: list = list(spec[\"nums\"]);\n    if not nums { return 0; }\n    crates: list = [Crate(weight=int(v)) for v in nums];\n    for (a, b) in zip(crates, crates[1:]) { a ++> b; }\n    marker = crates[0] spawn Marker(limit=int(spec[\"limit\"]));\n    return (crates[0] spawn Census()).count;\n}\n\nwith entry { print(flagged_census({\"nums\": [4, 9, 1, 7], \"limit\": 5})); }",
+   "expected_output": "2",
+   "cases": [
+    {
+     "input": {
+      "nums": [
+       4,
+       9,
+       1,
+       7
+      ],
+      "limit": 5
+     },
+     "output": "2"
+    },
+    {
+     "input": {
+      "nums": [
+       1,
+       2,
+       3
+      ],
+      "limit": 0
+     },
+     "output": "3"
+    },
+    {
+     "input": {
+      "nums": [
+       5,
+       5
+      ],
+      "limit": 5
+     },
+     "output": "0"
+    }
+   ]
+  },
+  {
+   "name": "min_max_product",
+   "category": "graph_osp",
+   "subcategory": "dual_seeker_merge",
+   "difficulty": "simple",
+   "py": "def min_max_product(spec: dict) -> int:\n    \"\"\"Product of the smallest and largest chain values.\"\"\"\n    nums = spec[\"nums\"]\n    if not nums:\n        return 0\n    lo = nums[0]\n    hi = nums[0]\n    for n in nums:\n        if n < lo:\n            lo = n\n        if n > hi:\n            hi = n\n    return lo * hi",
+   "jac": "node Bead { has val: int; }\n\nwalker LowSeek {\n    has lo: int;\n    can seek with Bead entry {\n        if here.val < self.lo { self.lo = here.val; }\n        visit [-->];\n    }\n}\n\nwalker HighSeek {\n    has hi: int;\n    can seek with Bead entry {\n        if here.val > self.hi { self.hi = here.val; }\n        visit [-->];\n    }\n}\n\ndef min_max_product(spec: dict) -> int {\n    nums: list = list(spec[\"nums\"]);\n    if not nums { return 0; }\n    beads: list = [Bead(val=int(v)) for v in nums];\n    for (a, b) in zip(beads, beads[1:]) { a ++> b; }\n    low = beads[0] spawn LowSeek(lo=int(nums[0]));\n    high = beads[0] spawn HighSeek(hi=int(nums[0]));\n    return low.lo * high.hi;\n}\n\nwith entry { print(min_max_product({\"nums\": [3, 8, 2]})); }",
+   "expected_output": "16",
+   "cases": [
+    {
+     "input": {
+      "nums": [
+       3,
+       8,
+       2
+      ]
+     },
+     "output": "16"
+    },
+    {
+     "input": {
+      "nums": [
+       5
+      ]
+     },
+     "output": "25"
+    },
+    {
+     "input": {
+      "nums": [
+       -4,
+       6
+      ]
+     },
+     "output": "-24"
+    }
+   ]
+  },
+  {
+   "name": "tail_after_first_negative",
+   "category": "graph_osp",
+   "subcategory": "probe_handoff",
+   "difficulty": "simple",
+   "py": "def tail_after_first_negative(spec: dict) -> int:\n    \"\"\"Count chain nodes from the first negative value to the end.\"\"\"\n    nums = spec[\"nums\"]\n    for i in range(len(nums)):\n        if nums[i] < 0:\n            return len(nums) - i\n    return 0",
+   "jac": "node Cell { has idx: int; has val: int; }\n\nwalker NegProbe {\n    has found: int = -1;\n    can seek with Cell entry {\n        if self.found == -1 {\n            if here.val < 0 { self.found = here.idx; }\n            else { visit [-->]; }\n        }\n    }\n}\n\nwalker TailTally {\n    has count: int = 0;\n    can tally with Cell entry {\n        self.count += 1;\n        visit [-->];\n    }\n}\n\ndef tail_after_first_negative(spec: dict) -> int {\n    nums: list = list(spec[\"nums\"]);\n    if not nums { return 0; }\n    cells: list = [];\n    for i in range(len(nums)) { cells.append(Cell(idx=i, val=int(nums[i]))); }\n    for (a, b) in zip(cells, cells[1:]) { a ++> b; }\n    probe = cells[0] spawn NegProbe();\n    if probe.found == -1 { return 0; }\n    return (cells[probe.found] spawn TailTally()).count;\n}\n\nwith entry { print(tail_after_first_negative({\"nums\": [3, -1, 4, 5]})); }",
+   "expected_output": "3",
+   "cases": [
+    {
+     "input": {
+      "nums": [
+       3,
+       -1,
+       4,
+       5
+      ]
+     },
+     "output": "3"
+    },
+    {
+     "input": {
+      "nums": [
+       -2
+      ]
+     },
+     "output": "1"
+    },
+    {
+     "input": {
+      "nums": [
+       1,
+       2,
+       3
+      ]
+     },
+     "output": "0"
+    }
+   ]
+  },
+  {
+   "name": "indexed_labels",
+   "category": "graph_osp",
+   "subcategory": "stamp_then_read",
+   "difficulty": "simple",
+   "py": "def indexed_labels(spec: dict) -> str:\n    \"\"\"Join each chain label with its position index.\"\"\"\n    names = spec[\"names\"]\n    if not names:\n        return \"\"\n    parts = []\n    for i in range(len(names)):\n        parts.append(names[i] + str(i))\n    return \",\".join(parts)",
+   "jac": "node Tag { has label: str; has idx: int = -1; }\n\nwalker Stamper {\n    has pos: int = 0;\n    can stamp with Tag entry {\n        here.idx = self.pos;\n        self.pos += 1;\n        visit [-->];\n    }\n}\n\nwalker Joiner {\n    has parts: list = [];\n    has line: str = \"\";\n    can read with Tag entry {\n        self.parts.append(here.label + str(here.idx));\n        visit [-->];\n    }\n    can settle with exit {\n        self.line = \",\".join(self.parts);\n    }\n}\n\ndef indexed_labels(spec: dict) -> str {\n    names: list = list(spec[\"names\"]);\n    if not names { return \"\"; }\n    tags: list = [Tag(label=str(nm)) for nm in names];\n    for (a, b) in zip(tags, tags[1:]) { a ++> b; }\n    stamper = tags[0] spawn Stamper();\n    return (tags[0] spawn Joiner()).line;\n}\n\nwith entry { print(indexed_labels({\"names\": [\"a\", \"b\", \"c\"]})); }",
+   "expected_output": "a0,b1,c2",
+   "cases": [
+    {
+     "input": {
+      "names": [
+       "a",
+       "b",
+       "c"
+      ]
+     },
+     "output": "a0,b1,c2"
+    },
+    {
+     "input": {
+      "names": [
+       "solo"
+      ]
+     },
+     "output": "solo0"
+    },
+    {
+     "input": {
+      "names": [
+       "x",
+       "y"
+      ]
+     },
+     "output": "x0,y1"
+    }
+   ]
+  },
+  {
+   "name": "open_gate_run",
+   "category": "graph_osp",
+   "subcategory": "mark_then_run",
+   "difficulty": "composed",
+   "py": "def open_gate_run(spec: dict) -> int:\n    \"\"\"Count consecutive doors from the start whose charge meets the key.\"\"\"\n    passed = 0\n    for c in spec[\"charges\"]:\n        if c < spec[\"key\"]:\n            break\n        passed += 1\n    return passed",
+   "jac": "node Door { has charge: int; has open: bool = False; }\n\nwalker Inspector {\n    has key: int;\n    can inspect with Door entry {\n        if here.charge >= self.key { here.open = True; }\n        visit [-->];\n    }\n}\n\nwalker Runner {\n    has passed: int = 0;\n    can run with Door entry {\n        if here.open {\n            self.passed += 1;\n            visit [-->];\n        }\n    }\n}\n\ndef open_gate_run(spec: dict) -> int {\n    charges: list = list(spec[\"charges\"]);\n    if not charges { return 0; }\n    doors: list = [Door(charge=int(v)) for v in charges];\n    for (a, b) in zip(doors, doors[1:]) { a ++> b; }\n    inspector = doors[0] spawn Inspector(key=int(spec[\"key\"]));\n    return (doors[0] spawn Runner()).passed;\n}\n\nwith entry { print(open_gate_run({\"charges\": [5, 3, 6], \"key\": 4})); }",
+   "expected_output": "1",
+   "cases": [
+    {
+     "input": {
+      "charges": [
+       5,
+       3,
+       6
+      ],
+      "key": 4
+     },
+     "output": "1"
+    },
+    {
+     "input": {
+      "charges": [
+       5,
+       3,
+       6
+      ],
+      "key": 3
+     },
+     "output": "3"
+    },
+    {
+     "input": {
+      "charges": [
+       2
+      ],
+      "key": 4
+     },
+     "output": "0"
+    }
+   ]
+  },
+  {
+   "name": "best_meeting_point",
+   "category": "graph_osp",
+   "subcategory": "parallel_depth_merge",
+   "difficulty": "composed",
+   "py": "def best_meeting_point(spec: dict) -> str:\n    \"\"\"Name and combined hop cost of the cheapest node both starts can reach.\"\"\"\n    adj = spec[\"adj\"]\n    da = {spec[\"a\"]: 0}\n    queue = [spec[\"a\"]]\n    while queue:\n        n = queue.pop(0)\n        for m in adj[n]:\n            if m not in da:\n                da[m] = da[n] + 1\n                queue.append(m)\n    db = {spec[\"b\"]: 0}\n    queue = [spec[\"b\"]]\n    while queue:\n        n = queue.pop(0)\n        for m in adj[n]:\n            if m not in db:\n                db[m] = db[n] + 1\n                queue.append(m)\n    best = \"\"\n    cost = -1\n    for n in sorted(adj):\n        if n in da and n in db:\n            c = da[n] + db[n]\n            if cost == -1 or c < cost:\n                best = n\n                cost = c\n    if cost == -1:\n        return \"none\"\n    return best + \":\" + str(cost)",
+   "jac": "node Junction { has name: str; has da: int = -1; has db: int = -1; has seen_a: bool = False; has seen_b: bool = False; }\n\nwalker StampA {\n    can roam with Junction entry {\n        if not here.seen_a {\n            here.seen_a = True;\n            for nxt in [-->] {\n                if nxt.da == -1 { nxt.da = here.da + 1; }\n            }\n            visit [-->];\n        }\n    }\n}\n\nwalker StampB {\n    can roam with Junction entry {\n        if not here.seen_b {\n            here.seen_b = True;\n            for nxt in [-->] {\n                if nxt.db == -1 { nxt.db = here.db + 1; }\n            }\n            visit [-->];\n        }\n    }\n}\n\ndef best_meeting_point(spec: dict) -> str {\n    adj: dict = dict(spec[\"adj\"]);\n    grid: dict = {};\n    for nm in adj.keys() { grid[nm] = Junction(name=str(nm)); }\n    for (a, bs) in adj.items() { for b in bs { grid[a] ++> grid[b]; } }\n    left = grid[str(spec[\"a\"])];\n    right = grid[str(spec[\"b\"])];\n    left.da = 0;\n    right.db = 0;\n    wa = left spawn StampA();\n    wb = right spawn StampB();\n    best: str = \"\";\n    cost: int = -1;\n    for nm in sorted(grid.keys()) {\n        j = grid[nm];\n        if j.da != -1 and j.db != -1 {\n            c: int = j.da + j.db;\n            if cost == -1 or c < cost { best = nm; cost = c; }\n        }\n    }\n    if cost == -1 { return \"none\"; }\n    return best + \":\" + str(cost);\n}\n\nwith entry { print(best_meeting_point({\"adj\": {\"a\": [\"c\"], \"b\": [\"c\"], \"c\": [\"d\"], \"d\": []}, \"a\": \"a\", \"b\": \"b\"})); }",
+   "expected_output": "c:2",
+   "cases": [
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "c"
+       ],
+       "b": [
+        "c"
+       ],
+       "c": [
+        "d"
+       ],
+       "d": []
+      },
+      "a": "a",
+      "b": "b"
+     },
+     "output": "c:2"
+    },
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "x"
+       ],
+       "b": [
+        "y"
+       ],
+       "x": [],
+       "y": []
+      },
+      "a": "a",
+      "b": "b"
+     },
+     "output": "none"
+    },
+    {
+     "input": {
+      "adj": {
+       "s": [
+        "m",
+        "n"
+       ],
+       "t": [
+        "n"
+       ],
+       "m": [
+        "z"
+       ],
+       "n": [
+        "z"
+       ],
+       "z": []
+      },
+      "a": "s",
+      "b": "t"
+     },
+     "output": "n:2"
+    }
+   ]
+  },
+  {
+   "name": "portal_fanout_total",
+   "category": "graph_osp",
+   "subcategory": "target_list_handoff",
+   "difficulty": "composed",
+   "py": "def portal_fanout_total(spec: dict) -> int:\n    \"\"\"Total fan-out across portal nodes reachable from start.\"\"\"\n    adj = spec[\"adj\"]; flags = spec[\"flags\"]\n    seen = []\n    queue = [spec[\"start\"]]\n    while queue:\n        n = queue.pop(0)\n        if n in seen:\n            continue\n        seen.append(n)\n        queue.extend(adj[n])\n    total = 0\n    for n in sorted(seen):\n        if flags[n]:\n            total += len(adj[n])\n    return total",
+   "jac": "node Hub { has name: str; has portal: bool; has scouted: bool = False; }\n\nwalker Scout {\n    has found: list = [];\n    can look with Hub entry {\n        if not here.scouted {\n            here.scouted = True;\n            if here.portal { self.found.append(here.name); }\n            visit [-->];\n        }\n    }\n}\n\nwalker FanCount {\n    has stage: int = 0;\n    has fan: int = 0;\n    can look with Hub entry {\n        if self.stage == 0 {\n            self.stage = 1;\n            visit [-->];\n        } else {\n            self.fan += 1;\n        }\n    }\n}\n\ndef portal_fanout_total(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]); flags: dict = dict(spec[\"flags\"]);\n    hubs: dict = {};\n    for nm in adj.keys() { hubs[nm] = Hub(name=str(nm), portal=bool(flags[nm])); }\n    for (a, bs) in adj.items() { for b in bs { hubs[a] ++> hubs[b]; } }\n    scout = hubs[str(spec[\"start\"])] spawn Scout();\n    total: int = 0;\n    for nm in sorted(scout.found) { total += (hubs[nm] spawn FanCount()).fan; }\n    return total;\n}\n\nwith entry { print(portal_fanout_total({\"adj\": {\"s\": [\"p\", \"q\"], \"p\": [\"x\", \"y\"], \"q\": [], \"x\": [], \"y\": []}, \"flags\": {\"s\": False, \"p\": True, \"q\": True, \"x\": False, \"y\": False}, \"start\": \"s\"})); }",
+   "expected_output": "2",
+   "cases": [
+    {
+     "input": {
+      "adj": {
+       "s": [
+        "p",
+        "q"
+       ],
+       "p": [
+        "x",
+        "y"
+       ],
+       "q": [],
+       "x": [],
+       "y": []
+      },
+      "flags": {
+       "s": false,
+       "p": true,
+       "q": true,
+       "x": false,
+       "y": false
+      },
+      "start": "s"
+     },
+     "output": "2"
+    },
+    {
+     "input": {
+      "adj": {
+       "s": [
+        "p"
+       ],
+       "p": []
+      },
+      "flags": {
+       "s": false,
+       "p": false
+      },
+      "start": "s"
+     },
+     "output": "0"
+    },
+    {
+     "input": {
+      "adj": {
+       "s": [
+        "a"
+       ],
+       "a": [
+        "b"
+       ],
+       "b": [
+        "c"
+       ],
+       "c": []
+      },
+      "flags": {
+       "s": true,
+       "a": true,
+       "b": true,
+       "c": false
+      },
+      "start": "s"
+     },
+     "output": "3"
+    }
+   ]
+  },
+  {
+   "name": "even_odd_depth_gap",
+   "category": "graph_osp",
+   "subcategory": "depth_stamp_scan",
+   "difficulty": "composed",
+   "py": "def even_odd_depth_gap(spec: dict) -> int:\n    \"\"\"Even-depth value total minus odd-depth value total.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]\n    depth = {spec[\"start\"]: 0}\n    queue = [spec[\"start\"]]\n    while queue:\n        n = queue.pop(0)\n        for m in adj[n]:\n            if m not in depth:\n                depth[m] = depth[n] + 1\n                queue.append(m)\n    gap = 0\n    for n in depth:\n        if depth[n] % 2 == 0:\n            gap += vals[n]\n        else:\n            gap -= vals[n]\n    return gap",
+   "jac": "node Ring { has val: int; has depth: int = -1; has stamped: bool = False; has scanned: bool = False; }\n\nwalker DepthStamp {\n    can roam with Ring entry {\n        if not here.stamped {\n            here.stamped = True;\n            for nxt in [-->] {\n                if nxt.depth == -1 { nxt.depth = here.depth + 1; }\n            }\n            visit [-->];\n        }\n    }\n}\n\nwalker ParityGap {\n    has gap: int = 0;\n    can scan with Ring entry {\n        if not here.scanned {\n            here.scanned = True;\n            if here.depth % 2 == 0 { self.gap += here.val; }\n            else { self.gap -= here.val; }\n            visit [-->];\n        }\n    }\n}\n\ndef even_odd_depth_gap(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]); vals: dict = dict(spec[\"vals\"]);\n    rings: dict = {};\n    for nm in adj.keys() { rings[nm] = Ring(val=int(vals[nm])); }\n    for (a, bs) in adj.items() { for b in bs { rings[a] ++> rings[b]; } }\n    base = rings[str(spec[\"start\"])];\n    base.depth = 0;\n    stamper = base spawn DepthStamp();\n    return (base spawn ParityGap()).gap;\n}\n\nwith entry { print(even_odd_depth_gap({\"adj\": {\"a\": [\"b\", \"c\"], \"b\": [\"d\"], \"c\": [], \"d\": []}, \"vals\": {\"a\": 10, \"b\": 3, \"c\": 4, \"d\": 6}, \"start\": \"a\"})); }",
+   "expected_output": "9",
+   "cases": [
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b",
+        "c"
+       ],
+       "b": [
+        "d"
+       ],
+       "c": [],
+       "d": []
+      },
+      "vals": {
+       "a": 10,
+       "b": 3,
+       "c": 4,
+       "d": 6
+      },
+      "start": "a"
+     },
+     "output": "9"
+    },
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b"
+       ],
+       "b": [
+        "c"
+       ],
+       "c": []
+      },
+      "vals": {
+       "a": 1,
+       "b": 2,
+       "c": 3
+      },
+      "start": "a"
+     },
+     "output": "2"
+    },
+    {
+     "input": {
+      "adj": {
+       "a": []
+      },
+      "vals": {
+       "a": 5
+      },
+      "start": "a"
+     },
+     "output": "5"
+    }
+   ]
+  },
+  {
+   "name": "leaves_to_half",
+   "category": "graph_osp",
+   "subcategory": "gauge_gather_combine",
+   "difficulty": "composed",
+   "py": "def leaves_to_half(spec: dict) -> int:\n    \"\"\"Fewest largest leaves needed to hold half the reachable sap.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]\n    seen = []\n    queue = [spec[\"start\"]]\n    while queue:\n        n = queue.pop(0)\n        if n in seen:\n            continue\n        seen.append(n)\n        queue.extend(adj[n])\n    total = 0\n    leaves = []\n    for n in seen:\n        total += vals[n]\n        if not adj[n]:\n            leaves.append(vals[n])\n    leaves.sort(reverse=True)\n    got = 0\n    used = 0\n    for v in leaves:\n        if got * 2 >= total:\n            break\n        got += v\n        used += 1\n    if got * 2 >= total:\n        return used\n    return -1",
+   "jac": "node Bough { has sap: int; has summed: bool = False; has gathered: bool = False; }\n\nwalker TotalScan {\n    has total: int = 0;\n    can add with Bough entry {\n        if not here.summed {\n            here.summed = True;\n            self.total += here.sap;\n            visit [-->];\n        }\n    }\n}\n\nwalker LeafGather {\n    has leaves: list = [];\n    can pick with Bough entry {\n        if not here.gathered {\n            here.gathered = True;\n            if len([-->]) == 0 { self.leaves.append(here.sap); }\n            visit [-->];\n        }\n    }\n}\n\ndef leaves_to_half(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]); vals: dict = dict(spec[\"vals\"]);\n    wood: dict = {};\n    for nm in adj.keys() { wood[nm] = Bough(sap=int(vals[nm])); }\n    for (a, bs) in adj.items() { for b in bs { wood[a] ++> wood[b]; } }\n    base = wood[str(spec[\"start\"])];\n    scan = base spawn TotalScan();\n    gather = base spawn LeafGather();\n    picks: list = list(gather.leaves);\n    picks.sort();\n    picks.reverse();\n    got: int = 0;\n    used: int = 0;\n    for v in picks {\n        if got * 2 >= scan.total { break; }\n        got += v;\n        used += 1;\n    }\n    if got * 2 >= scan.total { return used; }\n    return -1;\n}\n\nwith entry { print(leaves_to_half({\"adj\": {\"a\": [\"b\", \"c\"], \"b\": [], \"c\": []}, \"vals\": {\"a\": 2, \"b\": 5, \"c\": 3}, \"start\": \"a\"})); }",
+   "expected_output": "1",
+   "cases": [
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b",
+        "c"
+       ],
+       "b": [],
+       "c": []
+      },
+      "vals": {
+       "a": 2,
+       "b": 5,
+       "c": 3
+      },
+      "start": "a"
+     },
+     "output": "1"
+    },
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b",
+        "c"
+       ],
+       "b": [],
+       "c": []
+      },
+      "vals": {
+       "a": 10,
+       "b": 1,
+       "c": 1
+      },
+      "start": "a"
+     },
+     "output": "-1"
+    },
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b",
+        "c",
+        "d"
+       ],
+       "b": [],
+       "c": [],
+       "d": []
+      },
+      "vals": {
+       "a": 0,
+       "b": 4,
+       "c": 3,
+       "d": 3
+      },
+      "start": "a"
+     },
+     "output": "2"
+    }
+   ]
+  },
+  {
+   "name": "overlap_report",
+   "category": "graph_osp",
+   "subcategory": "parallel_walker_compare",
+   "difficulty": "composed",
+   "py": "def overlap_report(spec: dict) -> str:\n    \"\"\"Report how many nodes both starts reach versus exactly one.\"\"\"\n    adj = spec[\"adj\"]\n    ra = []\n    queue = [spec[\"a\"]]\n    while queue:\n        n = queue.pop(0)\n        if n in ra:\n            continue\n        ra.append(n)\n        queue.extend(adj[n])\n    rb = []\n    queue = [spec[\"b\"]]\n    while queue:\n        n = queue.pop(0)\n        if n in rb:\n            continue\n        rb.append(n)\n        queue.extend(adj[n])\n    both = 0\n    lone = 0\n    for n in adj:\n        ina = n in ra\n        inb = n in rb\n        if ina and inb:\n            both += 1\n        elif ina or inb:\n            lone += 1\n    return \"both=\" + str(both) + \";only=\" + str(lone)",
+   "jac": "node Site { has hit_a: bool = False; has hit_b: bool = False; }\n\nwalker MarkA {\n    can mark with Site entry {\n        if not here.hit_a {\n            here.hit_a = True;\n            visit [-->];\n        }\n    }\n}\n\nwalker MarkB {\n    can mark with Site entry {\n        if not here.hit_b {\n            here.hit_b = True;\n            visit [-->];\n        }\n    }\n}\n\ndef overlap_report(spec: dict) -> str {\n    adj: dict = dict(spec[\"adj\"]);\n    sites: dict = {};\n    for nm in adj.keys() { sites[nm] = Site(); }\n    for (a, bs) in adj.items() { for b in bs { sites[a] ++> sites[b]; } }\n    wa = sites[str(spec[\"a\"])] spawn MarkA();\n    wb = sites[str(spec[\"b\"])] spawn MarkB();\n    both: int = 0;\n    lone: int = 0;\n    for nm in sites.keys() {\n        s = sites[nm];\n        if s.hit_a and s.hit_b { both += 1; }\n        elif s.hit_a or s.hit_b { lone += 1; }\n    }\n    return \"both=\" + str(both) + \";only=\" + str(lone);\n}\n\nwith entry { print(overlap_report({\"adj\": {\"a\": [\"c\"], \"b\": [\"c\"], \"c\": [\"d\"], \"d\": []}, \"a\": \"a\", \"b\": \"b\"})); }",
+   "expected_output": "both=2;only=2",
+   "cases": [
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "c"
+       ],
+       "b": [
+        "c"
+       ],
+       "c": [
+        "d"
+       ],
+       "d": []
+      },
+      "a": "a",
+      "b": "b"
+     },
+     "output": "both=2;only=2"
+    },
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "x"
+       ],
+       "b": [],
+       "x": []
+      },
+      "a": "a",
+      "b": "b"
+     },
+     "output": "both=0;only=3"
+    },
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b"
+       ],
+       "b": [
+        "c"
+       ],
+       "c": []
+      },
+      "a": "a",
+      "b": "b"
+     },
+     "output": "both=2;only=1"
+    }
+   ]
+  },
+  {
+   "name": "sale_purchases",
+   "category": "graph_osp",
+   "subcategory": "mutate_then_run",
+   "difficulty": "composed",
+   "py": "def sale_purchases(spec: dict) -> int:\n    \"\"\"Items bought in order within budget after the sale discount.\"\"\"\n    wallet = spec[\"budget\"]\n    bought = 0\n    for p in spec[\"prices\"]:\n        cost = p\n        if p > spec[\"cap\"]:\n            cost = p - spec[\"off\"]\n        if wallet < cost:\n            break\n        wallet -= cost\n        bought += 1\n    return bought",
+   "jac": "walker Shopper { has wallet: int; has bought: int = 0; }\n\nnode Item {\n    has price: int;\n    can sell with Shopper entry {\n        if visitor.wallet >= self.price {\n            visitor.wallet -= self.price;\n            visitor.bought += 1;\n            visit [-->];\n        }\n    }\n}\n\nwalker Sale {\n    has cap: int;\n    has off: int;\n    can tag with Item entry {\n        if here.price > self.cap { here.price -= self.off; }\n        visit [-->];\n    }\n}\n\ndef sale_purchases(spec: dict) -> int {\n    prices: list = list(spec[\"prices\"]);\n    if not prices { return 0; }\n    items: list = [Item(price=int(v)) for v in prices];\n    for (a, b) in zip(items, items[1:]) { a ++> b; }\n    sale = items[0] spawn Sale(cap=int(spec[\"cap\"]), off=int(spec[\"off\"]));\n    return (items[0] spawn Shopper(wallet=int(spec[\"budget\"]))).bought;\n}\n\nwith entry { print(sale_purchases({\"prices\": [6, 4, 8], \"cap\": 5, \"off\": 3, \"budget\": 10})); }",
+   "expected_output": "2",
+   "cases": [
+    {
+     "input": {
+      "prices": [
+       6,
+       4,
+       8
+      ],
+      "cap": 5,
+      "off": 3,
+      "budget": 10
+     },
+     "output": "2"
+    },
+    {
+     "input": {
+      "prices": [
+       6,
+       4,
+       8
+      ],
+      "cap": 5,
+      "off": 3,
+      "budget": 12
+     },
+     "output": "3"
+    },
+    {
+     "input": {
+      "prices": [
+       6,
+       4,
+       8
+      ],
+      "cap": 5,
+      "off": 3,
+      "budget": 2
+     },
+     "output": "0"
+    }
+   ]
+  },
+  {
+   "name": "peak_radius_count",
+   "category": "graph_osp",
+   "subcategory": "three_walker_relay",
+   "difficulty": "advanced",
+   "py": "def peak_radius_count(spec: dict) -> int:\n    \"\"\"Count nodes within the radius of the highest-valued reachable node.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]\n    seen = []\n    queue = [spec[\"start\"]]\n    while queue:\n        n = queue.pop(0)\n        if n in seen:\n            continue\n        seen.append(n)\n        queue.extend(adj[n])\n    peak = seen[0]\n    for n in seen:\n        if vals[n] > vals[peak] or (vals[n] == vals[peak] and n < peak):\n            peak = n\n    depth = {peak: 0}\n    queue = [peak]\n    while queue:\n        n = queue.pop(0)\n        for m in adj[n]:\n            if m not in depth:\n                depth[m] = depth[n] + 1\n                queue.append(m)\n    count = 0\n    for n in depth:\n        if depth[n] <= spec[\"radius\"]:\n            count += 1\n    return count",
+   "jac": "node Spire { has name: str; has val: int; has depth: int = -1; has seen: bool = False; has stamped: bool = False; has scanned: bool = False; }\n\nwalker PeakSeek {\n    has best_name: str = \"\";\n    has best_val: int = 0;\n    can seek with Spire entry {\n        if not here.seen {\n            here.seen = True;\n            if self.best_name == \"\" or here.val > self.best_val or (here.val == self.best_val and here.name < self.best_name) {\n                self.best_name = here.name;\n                self.best_val = here.val;\n            }\n            visit [-->];\n        }\n    }\n}\n\nwalker DepthStamp {\n    can roam with Spire entry {\n        if not here.stamped {\n            here.stamped = True;\n            for nxt in [-->] {\n                if nxt.depth == -1 { nxt.depth = here.depth + 1; }\n            }\n            visit [-->];\n        }\n    }\n}\n\nwalker RadiusTally {\n    has radius: int;\n    has count: int = 0;\n    can scan with Spire entry {\n        if not here.scanned {\n            here.scanned = True;\n            if here.depth <= self.radius { self.count += 1; }\n            visit [-->];\n        }\n    }\n}\n\ndef peak_radius_count(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]); vals: dict = dict(spec[\"vals\"]);\n    spires: dict = {};\n    for nm in adj.keys() { spires[nm] = Spire(name=str(nm), val=int(vals[nm])); }\n    for (a, bs) in adj.items() { for b in bs { spires[a] ++> spires[b]; } }\n    seeker = spires[str(spec[\"start\"])] spawn PeakSeek();\n    peak = spires[seeker.best_name];\n    peak.depth = 0;\n    stamper = peak spawn DepthStamp();\n    return (peak spawn RadiusTally(radius=int(spec[\"radius\"]))).count;\n}\n\nwith entry { print(peak_radius_count({\"adj\": {\"s\": [\"a\", \"b\"], \"a\": [\"c\"], \"b\": [], \"c\": []}, \"vals\": {\"s\": 1, \"a\": 9, \"b\": 2, \"c\": 5}, \"start\": \"s\", \"radius\": 1})); }",
+   "expected_output": "2",
+   "cases": [
+    {
+     "input": {
+      "adj": {
+       "s": [
+        "a",
+        "b"
+       ],
+       "a": [
+        "c"
+       ],
+       "b": [],
+       "c": []
+      },
+      "vals": {
+       "s": 1,
+       "a": 9,
+       "b": 2,
+       "c": 5
+      },
+      "start": "s",
+      "radius": 1
+     },
+     "output": "2"
+    },
+    {
+     "input": {
+      "adj": {
+       "s": [
+        "a",
+        "b"
+       ],
+       "a": [
+        "c"
+       ],
+       "b": [],
+       "c": []
+      },
+      "vals": {
+       "s": 1,
+       "a": 9,
+       "b": 2,
+       "c": 5
+      },
+      "start": "s",
+      "radius": 0
+     },
+     "output": "1"
+    },
+    {
+     "input": {
+      "adj": {
+       "s": [
+        "m",
+        "n"
+       ],
+       "m": [
+        "p"
+       ],
+       "n": [],
+       "p": [
+        "q"
+       ],
+       "q": []
+      },
+      "vals": {
+       "s": 0,
+       "m": 9,
+       "n": 1,
+       "p": 5,
+       "q": 5
+      },
+      "start": "s",
+      "radius": 2
+     },
+     "output": "3"
+    }
+   ]
+  },
+  {
+   "name": "flagged_reach_total",
+   "category": "graph_osp",
+   "subcategory": "target_list_handoff",
+   "difficulty": "advanced",
+   "py": "def flagged_reach_total(spec: dict) -> int:\n    \"\"\"Total reach counts of every flagged node discovered from start.\"\"\"\n    adj = spec[\"adj\"]; flags = spec[\"flags\"]\n    found = []\n    queue = [spec[\"start\"]]\n    while queue:\n        n = queue.pop(0)\n        if n in found:\n            continue\n        found.append(n)\n        queue.extend(adj[n])\n    targets = []\n    for n in found:\n        if flags[n]:\n            targets.append(n)\n    targets.sort()\n    total = 0\n    for s in targets:\n        seen = []\n        queue = [s]\n        while queue:\n            n = queue.pop(0)\n            if n in seen:\n                continue\n            seen.append(n)\n            queue.extend(adj[n])\n        total += len(seen)\n    return total",
+   "jac": "node Beacon { has name: str; has lit: bool; has scouted: bool = False; has stamp: int = -1; }\n\nwalker Scout {\n    has targets: list = [];\n    can look with Beacon entry {\n        if not here.scouted {\n            here.scouted = True;\n            if here.lit { self.targets.append(here.name); }\n            visit [-->];\n        }\n    }\n}\n\nwalker ReachCount {\n    has run: int;\n    has count: int = 0;\n    can roam with Beacon entry {\n        if here.stamp != self.run {\n            here.stamp = self.run;\n            self.count += 1;\n            visit [-->];\n        }\n    }\n}\n\ndef flagged_reach_total(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]); flags: dict = dict(spec[\"flags\"]);\n    beacons: dict = {};\n    for nm in adj.keys() { beacons[nm] = Beacon(name=str(nm), lit=bool(flags[nm])); }\n    for (a, bs) in adj.items() { for b in bs { beacons[a] ++> beacons[b]; } }\n    scout = beacons[str(spec[\"start\"])] spawn Scout();\n    targets: list = list(scout.targets);\n    targets.sort();\n    total: int = 0;\n    run: int = 0;\n    for t in targets {\n        total += (beacons[t] spawn ReachCount(run=run)).count;\n        run += 1;\n    }\n    return total;\n}\n\nwith entry { print(flagged_reach_total({\"adj\": {\"s\": [\"a\", \"b\"], \"a\": [\"c\"], \"b\": [], \"c\": []}, \"flags\": {\"s\": False, \"a\": True, \"b\": True, \"c\": False}, \"start\": \"s\"})); }",
+   "expected_output": "3",
+   "cases": [
+    {
+     "input": {
+      "adj": {
+       "s": [
+        "a",
+        "b"
+       ],
+       "a": [
+        "c"
+       ],
+       "b": [],
+       "c": []
+      },
+      "flags": {
+       "s": false,
+       "a": true,
+       "b": true,
+       "c": false
+      },
+      "start": "s"
+     },
+     "output": "3"
+    },
+    {
+     "input": {
+      "adj": {
+       "s": [
+        "a"
+       ],
+       "a": []
+      },
+      "flags": {
+       "s": false,
+       "a": false
+      },
+      "start": "s"
+     },
+     "output": "0"
+    },
+    {
+     "input": {
+      "adj": {
+       "s": [
+        "a"
+       ],
+       "a": [
+        "b"
+       ],
+       "b": []
+      },
+      "flags": {
+       "s": true,
+       "a": true,
+       "b": true
+      },
+      "start": "s"
+     },
+     "output": "6"
+    }
+   ]
+  },
+  {
+   "name": "top_k_harvest",
+   "category": "graph_osp",
+   "subcategory": "interleaved_rounds",
+   "difficulty": "advanced",
+   "py": "def top_k_harvest(spec: dict) -> int:\n    \"\"\"Sum of the k largest chain values, claimed one round at a time.\"\"\"\n    nums = spec[\"nums\"]\n    total = 0\n    rounds = 0\n    taken = [False] * len(nums)\n    while rounds < spec[\"k\"]:\n        best = -1\n        for i in range(len(nums)):\n            if not taken[i] and (best == -1 or nums[i] > nums[best]):\n                best = i\n        if best == -1:\n            break\n        taken[best] = True\n        total += nums[best]\n        rounds += 1\n    return total",
+   "jac": "node Plot { has idx: int; has crop: int; has taken: bool = False; }\n\nwalker BestSeek {\n    has best_idx: int = -1;\n    has best_val: int = 0;\n    can scan with Plot entry {\n        if not here.taken {\n            if self.best_idx == -1 or here.crop > self.best_val {\n                self.best_idx = here.idx;\n                self.best_val = here.crop;\n            }\n        }\n        visit [-->];\n    }\n}\n\nwalker Claim {\n    has idx: int;\n    has grabbed: int = 0;\n    can grab with Plot entry {\n        if here.idx == self.idx {\n            here.taken = True;\n            self.grabbed = here.crop;\n        } else {\n            visit [-->];\n        }\n    }\n}\n\ndef top_k_harvest(spec: dict) -> int {\n    nums: list = list(spec[\"nums\"]);\n    if not nums { return 0; }\n    plots: list = [];\n    for i in range(len(nums)) { plots.append(Plot(idx=i, crop=int(nums[i]))); }\n    for (a, b) in zip(plots, plots[1:]) { a ++> b; }\n    total: int = 0;\n    rounds: int = 0;\n    while rounds < int(spec[\"k\"]) {\n        seek = plots[0] spawn BestSeek();\n        if seek.best_idx == -1 { break; }\n        claim = plots[0] spawn Claim(idx=seek.best_idx);\n        total += claim.grabbed;\n        rounds += 1;\n    }\n    return total;\n}\n\nwith entry { print(top_k_harvest({\"nums\": [4, 9, 2, 7], \"k\": 2})); }",
+   "expected_output": "16",
+   "cases": [
+    {
+     "input": {
+      "nums": [
+       4,
+       9,
+       2,
+       7
+      ],
+      "k": 2
+     },
+     "output": "16"
+    },
+    {
+     "input": {
+      "nums": [
+       4,
+       9,
+       2,
+       7
+      ],
+      "k": 10
+     },
+     "output": "22"
+    },
+    {
+     "input": {
+      "nums": [
+       5,
+       5,
+       1
+      ],
+      "k": 2
+     },
+     "output": "10"
+    }
+   ]
+  }
+ ]
+}

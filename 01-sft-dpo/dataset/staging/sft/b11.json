@@ -1,0 +1,673 @@
+{
+ "batch_id": "b11",
+ "generator": "fable-agent-v1",
+ "examples": [
+  {
+   "name": "unique_root_tags",
+   "category": "graph_osp",
+   "subcategory": "root_registry",
+   "difficulty": "simple",
+   "py": "def unique_root_tags(spec: dict) -> int:\n    \"\"\"Count distinct tags registered under the root registry.\"\"\"\n    seen = []\n    for t in spec[\"tags\"]:\n        if t not in seen:\n            seen.append(t)\n    return len(seen)",
+   "jac": "node Tag { has name: str; }\n\nwalker TagCount {\n    has count: int = 0;\n    can tally with Root entry {\n        self.count = len([-->][?:Tag]);\n    }\n}\n\ndef unique_root_tags(spec: dict) -> int {\n    for old in [root -->] { root del --> old; }\n    for t in list(spec[\"tags\"]) {\n        if str(t) not in [n.name for n in [root -->][?:Tag]] {\n            root ++> Tag(name=str(t));\n        }\n    }\n    return (root spawn TagCount()).count;\n}\n\nwith entry { print(unique_root_tags({'tags': ['red', 'blue', 'red']})); }",
+   "expected_output": "2",
+   "cases": [
+    {
+     "input": {
+      "tags": [
+       "red",
+       "blue",
+       "red"
+      ]
+     },
+     "output": "2"
+    },
+    {
+     "input": {
+      "tags": [
+       "a",
+       "b",
+       "c",
+       "a",
+       "b"
+      ]
+     },
+     "output": "3"
+    },
+    {
+     "input": {
+      "tags": []
+     },
+     "output": "0"
+    }
+   ]
+  },
+  {
+   "name": "category_names",
+   "category": "graph_osp",
+   "subcategory": "category_fanout",
+   "difficulty": "simple",
+   "py": "def category_names(spec: dict) -> list:\n    \"\"\"Sorted names of the categories fanned out under root.\"\"\"\n    names = list(spec[\"categories\"].keys())\n    names.sort()\n    return names",
+   "jac": "node Category { has name: str; }\n\nwalker NameScan {\n    has names: list = [];\n    can fan with Root entry { visit [-->][?:Category]; }\n    can grab with Category entry { self.names.append(here.name); }\n    can order with exit { self.names.sort(); }\n}\n\ndef category_names(spec: dict) -> list {\n    for old in [root -->] { root del --> old; }\n    for cat in list(spec[\"categories\"].keys()) { root ++> Category(name=str(cat)); }\n    return (root spawn NameScan()).names;\n}\n\nwith entry { print(category_names({'categories': {'veg': ['kale'], 'fruit': ['apple', 'pear']}})); }",
+   "expected_output": "['fruit', 'veg']",
+   "cases": [
+    {
+     "input": {
+      "categories": {
+       "veg": [
+        "kale"
+       ],
+       "fruit": [
+        "apple",
+        "pear"
+       ]
+      }
+     },
+     "output": "['fruit', 'veg']"
+    },
+    {
+     "input": {
+      "categories": {
+       "tools": []
+      }
+     },
+     "output": "['tools']"
+    },
+    {
+     "input": {
+      "categories": {}
+     },
+     "output": "[]"
+    }
+   ]
+  },
+  {
+   "name": "total_shelf_items",
+   "category": "graph_osp",
+   "subcategory": "category_fanout",
+   "difficulty": "simple",
+   "py": "def total_shelf_items(spec: dict) -> int:\n    \"\"\"Count every item hanging off root's category fan-out.\"\"\"\n    total = 0\n    for items in spec[\"categories\"].values():\n        total += len(items)\n    return total",
+   "jac": "node Category { has name: str; }\nnode Item {}\n\nwalker ShelfCount {\n    has total: int = 0;\n    can fan with Root entry { visit [-->][?:Category]; }\n    can descend with Category entry { visit [-->][?:Item]; }\n    can tally with Item entry { self.total += 1; }\n}\n\ndef total_shelf_items(spec: dict) -> int {\n    for old in [root -->] { root del --> old; }\n    for (cat, items) in spec[\"categories\"].items() {\n        shelf = Category(name=str(cat));\n        root ++> shelf;\n        for it in list(items) { shelf ++> Item(); }\n    }\n    return (root spawn ShelfCount()).total;\n}\n\nwith entry { print(total_shelf_items({'categories': {'fruit': ['apple', 'pear'], 'veg': ['kale']}})); }",
+   "expected_output": "3",
+   "cases": [
+    {
+     "input": {
+      "categories": {
+       "fruit": [
+        "apple",
+        "pear"
+       ],
+       "veg": [
+        "kale"
+       ]
+      }
+     },
+     "output": "3"
+    },
+    {
+     "input": {
+      "categories": {
+       "empty": []
+      }
+     },
+     "output": "0"
+    },
+    {
+     "input": {
+      "categories": {
+       "a": [
+        "x",
+        "y"
+       ],
+       "b": [
+        "z"
+       ],
+       "c": [
+        "w",
+        "v"
+       ]
+      }
+     },
+     "output": "5"
+    }
+   ]
+  },
+  {
+   "name": "any_overdue",
+   "category": "graph_osp",
+   "subcategory": "root_anchored",
+   "difficulty": "simple",
+   "py": "def any_overdue(spec: dict) -> bool:\n    \"\"\"Is any task hanging off root older than the limit?\"\"\"\n    for t in spec[\"tasks\"]:\n        if t[\"days\"] > spec[\"limit\"]:\n            return True\n    return False",
+   "jac": "node Task { has name: str; has days: int; }\n\nwalker OverdueProbe {\n    has limit: int;\n    has found: bool = False;\n    can scan with Root entry { visit [-->][?:Task]; }\n    can check with Task entry {\n        if here.days > self.limit { self.found = True; }\n    }\n}\n\ndef any_overdue(spec: dict) -> bool {\n    for old in [root -->] { root del --> old; }\n    for t in list(spec[\"tasks\"]) {\n        root ++> Task(name=str(t[\"name\"]), days=int(t[\"days\"]));\n    }\n    return (root spawn OverdueProbe(limit=int(spec[\"limit\"]))).found;\n}\n\nwith entry { print(any_overdue({'tasks': [{'name': 'pay rent', 'days': 12}, {'name': 'email', 'days': 2}], 'limit': 7})); }",
+   "expected_output": "True",
+   "cases": [
+    {
+     "input": {
+      "tasks": [
+       {
+        "name": "pay rent",
+        "days": 12
+       },
+       {
+        "name": "email",
+        "days": 2
+       }
+      ],
+      "limit": 7
+     },
+     "output": "True"
+    },
+    {
+     "input": {
+      "tasks": [
+       {
+        "name": "email",
+        "days": 2
+       }
+      ],
+      "limit": 7
+     },
+     "output": "False"
+    },
+    {
+     "input": {
+      "tasks": [],
+      "limit": 0
+     },
+     "output": "False"
+    }
+   ]
+  },
+  {
+   "name": "busiest_category",
+   "category": "graph_osp",
+   "subcategory": "category_fanout",
+   "difficulty": "composed",
+   "py": "def busiest_category(spec: dict) -> str:\n    \"\"\"Name of root's category with the most items (ties alphabetical).\"\"\"\n    cats = spec[\"categories\"]\n    if not cats:\n        return \"\"\n    best = \"\"\n    best_n = -1\n    for name in sorted(cats.keys()):\n        n = len(cats[name])\n        if n > best_n:\n            best = name\n            best_n = n\n    return best",
+   "jac": "node Category { has name: str; }\nnode Item {}\n\nwalker BusyScan {\n    has pairs: list = [];\n    has best: str = \"\";\n    can fan with Root entry { visit [-->][?:Category]; }\n    can size with Category entry {\n        self.pairs.append((here.name, len([-->][?:Item])));\n    }\n    can pick with exit {\n        if self.pairs {\n            self.pairs.sort();\n            best_n = -1;\n            for (nm, n) in self.pairs {\n                if n > best_n { self.best = nm; best_n = n; }\n            }\n        }\n    }\n}\n\ndef busiest_category(spec: dict) -> str {\n    cats: dict = dict(spec[\"categories\"]);\n    if not cats { return \"\"; }\n    for old in [root -->] { root del --> old; }\n    for (cat, items) in cats.items() {\n        shelf = Category(name=str(cat));\n        root ++> shelf;\n        for it in list(items) { shelf ++> Item(); }\n    }\n    return (root spawn BusyScan()).best;\n}\n\nwith entry { print(busiest_category({'categories': {'fruit': ['apple', 'pear'], 'veg': ['kale']}})); }",
+   "expected_output": "fruit",
+   "cases": [
+    {
+     "input": {
+      "categories": {
+       "fruit": [
+        "apple",
+        "pear"
+       ],
+       "veg": [
+        "kale"
+       ]
+      }
+     },
+     "output": "fruit"
+    },
+    {
+     "input": {
+      "categories": {
+       "b": [
+        "x"
+       ],
+       "a": [
+        "y"
+       ]
+      }
+     },
+     "output": "a"
+    },
+    {
+     "input": {
+      "categories": {}
+     },
+     "output": ""
+    }
+   ]
+  },
+  {
+   "name": "category_sizes",
+   "category": "graph_osp",
+   "subcategory": "child_summary",
+   "difficulty": "composed",
+   "py": "def category_sizes(spec: dict) -> dict:\n    \"\"\"Item count per category under root, keys sorted.\"\"\"\n    out = {}\n    for name in sorted(spec[\"categories\"].keys()):\n        out[name] = len(spec[\"categories\"][name])\n    return out",
+   "jac": "node Category { has name: str; }\nnode Item {}\n\nwalker SizeCensus {\n    has pairs: list = [];\n    has sizes: dict = {};\n    can fan with Root entry { visit [-->][?:Category]; }\n    can size with Category entry {\n        self.pairs.append((here.name, len([-->][?:Item])));\n    }\n    can settle with exit {\n        self.pairs.sort();\n        for (nm, n) in self.pairs { self.sizes[nm] = n; }\n    }\n}\n\ndef category_sizes(spec: dict) -> dict {\n    for old in [root -->] { root del --> old; }\n    for (cat, items) in spec[\"categories\"].items() {\n        shelf = Category(name=str(cat));\n        root ++> shelf;\n        for it in list(items) { shelf ++> Item(); }\n    }\n    return (root spawn SizeCensus()).sizes;\n}\n\nwith entry { print(category_sizes({'categories': {'veg': ['kale'], 'fruit': ['apple', 'pear']}})); }",
+   "expected_output": "{'fruit': 2, 'veg': 1}",
+   "cases": [
+    {
+     "input": {
+      "categories": {
+       "veg": [
+        "kale"
+       ],
+       "fruit": [
+        "apple",
+        "pear"
+       ]
+      }
+     },
+     "output": "{'fruit': 2, 'veg': 1}"
+    },
+    {
+     "input": {
+      "categories": {
+       "solo": []
+      }
+     },
+     "output": "{'solo': 0}"
+    },
+    {
+     "input": {
+      "categories": {}
+     },
+     "output": "{}"
+    }
+   ]
+  },
+  {
+   "name": "reachable_from_root",
+   "category": "graph_osp",
+   "subcategory": "root_reachable",
+   "difficulty": "composed",
+   "py": "def reachable_from_root(spec: dict) -> bool:\n    \"\"\"Can the target site be reached from root through the gateways?\"\"\"\n    seen = []\n    stack = list(spec[\"gateways\"])\n    while stack:\n        n = stack.pop()\n        if n in seen:\n            continue\n        seen.append(n)\n        stack.extend(spec[\"links\"].get(n, []))\n    return spec[\"target\"] in seen",
+   "jac": "node Site { has name: str; has seen: bool = False; }\n\nwalker ReachProbe {\n    has target: str;\n    has found: bool = False;\n    can launch with Root entry { visit [-->][?:Site]; }\n    can sweep with Site entry {\n        if not here.seen {\n            here.seen = True;\n            if here.name == self.target { self.found = True; }\n            visit [-->][?:Site];\n        }\n    }\n}\n\ndef reachable_from_root(spec: dict) -> bool {\n    for old in [root -->] { root del --> old; }\n    sites: dict = {};\n    names: list = list(spec[\"gateways\"]) + list(spec[\"links\"].keys());\n    for ts in spec[\"links\"].values() { names += list(ts); }\n    for nm in names {\n        if nm not in sites { sites[nm] = Site(name=str(nm)); }\n    }\n    for g in list(spec[\"gateways\"]) { root ++> sites[g]; }\n    for (s, ts) in spec[\"links\"].items() {\n        for t in list(ts) { sites[s] ++> sites[t]; }\n    }\n    return (root spawn ReachProbe(target=str(spec[\"target\"]))).found;\n}\n\nwith entry { print(reachable_from_root({'gateways': ['a'], 'links': {'a': ['b'], 'b': ['c'], 'c': ['a']}, 'target': 'c'})); }",
+   "expected_output": "True",
+   "cases": [
+    {
+     "input": {
+      "gateways": [
+       "a"
+      ],
+      "links": {
+       "a": [
+        "b"
+       ],
+       "b": [
+        "c"
+       ],
+       "c": [
+        "a"
+       ]
+      },
+      "target": "c"
+     },
+     "output": "True"
+    },
+    {
+     "input": {
+      "gateways": [
+       "a"
+      ],
+      "links": {
+       "a": [
+        "b"
+       ],
+       "x": [
+        "y"
+       ]
+      },
+      "target": "y"
+     },
+     "output": "False"
+    },
+    {
+     "input": {
+      "gateways": [],
+      "links": {
+       "a": [
+        "b"
+       ]
+      },
+      "target": "a"
+     },
+     "output": "False"
+    }
+   ]
+  },
+  {
+   "name": "hops_from_root",
+   "category": "graph_osp",
+   "subcategory": "root_distance",
+   "difficulty": "composed",
+   "py": "def hops_from_root(spec: dict) -> int:\n    \"\"\"Fewest hops from root to the named station (-1 if unreachable).\"\"\"\n    frontier = [(g, 1) for g in spec[\"gateways\"]]\n    seen = []\n    while frontier:\n        (name, d) = frontier.pop(0)\n        if name == spec[\"target\"]:\n            return d\n        if name in seen:\n            continue\n        seen.append(name)\n        for nxt in spec[\"links\"].get(name, []):\n            frontier.append((nxt, d + 1))\n    return -1",
+   "jac": "node Station { has name: str; has depth: int = -1; }\n\nwalker HopMeter {\n    has target: str;\n    has best: int = -1;\n    can launch with Root entry {\n        for g in [-->][?:Station] { if g.depth == -1 { g.depth = 1; } }\n        visit [-->][?:Station];\n    }\n    can hop with Station entry {\n        if here.name == self.target and (self.best == -1 or here.depth < self.best) {\n            self.best = here.depth;\n        }\n        for nxt in [-->][?:Station] {\n            if nxt.depth == -1 { nxt.depth = here.depth + 1; visit nxt; }\n        }\n    }\n}\n\ndef hops_from_root(spec: dict) -> int {\n    for old in [root -->] { root del --> old; }\n    stations: dict = {};\n    names: list = list(spec[\"gateways\"]) + list(spec[\"links\"].keys());\n    for ts in spec[\"links\"].values() { names += list(ts); }\n    for nm in names {\n        if nm not in stations { stations[nm] = Station(name=str(nm)); }\n    }\n    for g in list(spec[\"gateways\"]) { root ++> stations[g]; }\n    for (s, ts) in spec[\"links\"].items() {\n        for t in list(ts) { stations[s] ++> stations[t]; }\n    }\n    return (root spawn HopMeter(target=str(spec[\"target\"]))).best;\n}\n\nwith entry { print(hops_from_root({'gateways': ['a', 'b'], 'links': {'a': ['c'], 'c': ['d'], 'b': ['d']}, 'target': 'd'})); }",
+   "expected_output": "2",
+   "cases": [
+    {
+     "input": {
+      "gateways": [
+       "a",
+       "b"
+      ],
+      "links": {
+       "a": [
+        "c"
+       ],
+       "c": [
+        "d"
+       ],
+       "b": [
+        "d"
+       ]
+      },
+      "target": "d"
+     },
+     "output": "2"
+    },
+    {
+     "input": {
+      "gateways": [
+       "a"
+      ],
+      "links": {
+       "a": [
+        "b"
+       ],
+       "b": [
+        "c"
+       ]
+      },
+      "target": "c"
+     },
+     "output": "3"
+    },
+    {
+     "input": {
+      "gateways": [
+       "a"
+      ],
+      "links": {
+       "a": [
+        "b"
+       ]
+      },
+      "target": "z"
+     },
+     "output": "-1"
+    }
+   ]
+  },
+  {
+   "name": "settings_registry",
+   "category": "graph_osp",
+   "subcategory": "root_registry",
+   "difficulty": "composed",
+   "py": "def settings_registry(spec: dict) -> str:\n    \"\"\"Render root's settings registry after applying known overrides.\"\"\"\n    reg = {}\n    for (k, v) in spec[\"defaults\"].items():\n        reg[k] = str(v)\n    for (k, v) in spec[\"overrides\"].items():\n        if k in reg:\n            reg[k] = str(v)\n    entries = []\n    for k in sorted(reg.keys()):\n        entries.append(k + \"=\" + reg[k])\n    return \";\".join(entries)",
+   "jac": "node Setting { has key: str; has val: str; }\n\nwalker RegistryDump {\n    has entries: list = [];\n    has text: str = \"\";\n    can read with Root entry {\n        for s in [-->][?:Setting] { self.entries.append(s.key + \"=\" + s.val); }\n    }\n    can render with exit {\n        self.entries.sort();\n        self.text = \";\".join(self.entries);\n    }\n}\n\ndef settings_registry(spec: dict) -> str {\n    for old in [root -->] { root del --> old; }\n    for (k, v) in spec[\"defaults\"].items() {\n        root ++> Setting(key=str(k), val=str(v));\n    }\n    for (k, v) in spec[\"overrides\"].items() {\n        for s in [root -->][?:Setting] {\n            if s.key == str(k) { s.val = str(v); }\n        }\n    }\n    return (root spawn RegistryDump()).text;\n}\n\nwith entry { print(settings_registry({'defaults': {'theme': 'light', 'font': 12}, 'overrides': {'theme': 'dark', 'ghost': 1}})); }",
+   "expected_output": "font=12;theme=dark",
+   "cases": [
+    {
+     "input": {
+      "defaults": {
+       "theme": "light",
+       "font": 12
+      },
+      "overrides": {
+       "theme": "dark",
+       "ghost": 1
+      }
+     },
+     "output": "font=12;theme=dark"
+    },
+    {
+     "input": {
+      "defaults": {
+       "volume": 5
+      },
+      "overrides": {}
+     },
+     "output": "volume=5"
+    },
+    {
+     "input": {
+      "defaults": {},
+      "overrides": {
+       "theme": "dark"
+      }
+     },
+     "output": ""
+    }
+   ]
+  },
+  {
+   "name": "richest_category",
+   "category": "graph_osp",
+   "subcategory": "category_fanout",
+   "difficulty": "composed",
+   "py": "def richest_category(spec: dict) -> str:\n    \"\"\"Category under root with the highest sales total, as name=total.\"\"\"\n    cats = spec[\"categories\"]\n    if not cats:\n        return \"none\"\n    best = \"\"\n    best_total = -1\n    for name in sorted(cats.keys()):\n        total = 0\n        for amt in cats[name]:\n            total += amt\n        if total > best_total:\n            best = name\n            best_total = total\n    return best + \"=\" + str(best_total)",
+   "jac": "node Category { has name: str; }\nnode Sale { has amount: int; }\n\nwalker RevenueScan {\n    has pairs: list = [];\n    has label: str = \"none\";\n    can fan with Root entry { visit [-->][?:Category]; }\n    can total with Category entry {\n        subtotal = 0;\n        for s in [-->][?:Sale] { subtotal += s.amount; }\n        self.pairs.append((here.name, subtotal));\n    }\n    can crown with exit {\n        if self.pairs {\n            self.pairs.sort();\n            best = \"\"; best_total = -1;\n            for (nm, tot) in self.pairs {\n                if tot > best_total { best = nm; best_total = tot; }\n            }\n            self.label = best + \"=\" + str(best_total);\n        }\n    }\n}\n\ndef richest_category(spec: dict) -> str {\n    cats: dict = dict(spec[\"categories\"]);\n    if not cats { return \"none\"; }\n    for old in [root -->] { root del --> old; }\n    for (cat, amounts) in cats.items() {\n        booth = Category(name=str(cat));\n        root ++> booth;\n        for amt in list(amounts) { booth ++> Sale(amount=int(amt)); }\n    }\n    return (root spawn RevenueScan()).label;\n}\n\nwith entry { print(richest_category({'categories': {'toys': [5, 3], 'books': [10]}})); }",
+   "expected_output": "books=10",
+   "cases": [
+    {
+     "input": {
+      "categories": {
+       "toys": [
+        5,
+        3
+       ],
+       "books": [
+        10
+       ]
+      }
+     },
+     "output": "books=10"
+    },
+    {
+     "input": {
+      "categories": {
+       "b": [
+        4
+       ],
+       "a": [
+        4
+       ]
+      }
+     },
+     "output": "a=4"
+    },
+    {
+     "input": {
+      "categories": {}
+     },
+     "output": "none"
+    }
+   ]
+  },
+  {
+   "name": "idle_machine",
+   "category": "graph_osp",
+   "subcategory": "root_anchored",
+   "difficulty": "composed",
+   "py": "def idle_machine(spec: dict) -> str:\n    \"\"\"Least-loaded machine directly under root (ties alphabetical).\"\"\"\n    pairs = []\n    for m in spec[\"machines\"]:\n        pairs.append((m[\"load\"], m[\"name\"]))\n    if not pairs:\n        return \"\"\n    pairs.sort()\n    return pairs[0][1]",
+   "jac": "node Machine { has name: str; has load: int; }\n\nwalker IdleScan {\n    has pairs: list = [];\n    has pick: str = \"\";\n    can scan with Root entry { visit [-->][?:Machine]; }\n    can weigh with Machine entry { self.pairs.append((here.load, here.name)); }\n    can choose with exit {\n        if self.pairs {\n            self.pairs.sort();\n            self.pick = self.pairs[0][1];\n        }\n    }\n}\n\ndef idle_machine(spec: dict) -> str {\n    for old in [root -->] { root del --> old; }\n    for m in list(spec[\"machines\"]) {\n        root ++> Machine(name=str(m[\"name\"]), load=int(m[\"load\"]));\n    }\n    return (root spawn IdleScan()).pick;\n}\n\nwith entry { print(idle_machine({'machines': [{'name': 'web1', 'load': 30}, {'name': 'web2', 'load': 10}]})); }",
+   "expected_output": "web2",
+   "cases": [
+    {
+     "input": {
+      "machines": [
+       {
+        "name": "web1",
+        "load": 30
+       },
+       {
+        "name": "web2",
+        "load": 10
+       }
+      ]
+     },
+     "output": "web2"
+    },
+    {
+     "input": {
+      "machines": [
+       {
+        "name": "b",
+        "load": 5
+       },
+       {
+        "name": "a",
+        "load": 5
+       }
+      ]
+     },
+     "output": "a"
+    },
+    {
+     "input": {
+      "machines": []
+     },
+     "output": ""
+    }
+   ]
+  },
+  {
+   "name": "registry_depth",
+   "category": "graph_osp",
+   "subcategory": "root_distance",
+   "difficulty": "advanced",
+   "py": "def registry_depth(spec: dict) -> int:\n    \"\"\"Depth of the deepest entry in root's fan-out tree (tops sit at 1).\"\"\"\n    deepest = 0\n    frontier = [(t, 1) for t in spec[\"tops\"]]\n    while frontier:\n        (name, d) = frontier.pop(0)\n        if d > deepest:\n            deepest = d\n        for c in spec[\"tree\"].get(name, []):\n            frontier.append((c, d + 1))\n    return deepest",
+   "jac": "node Unit { has name: str; has depth: int = 0; }\n\nwalker DepthGauge {\n    has deepest: int = 0;\n    can launch with Root entry {\n        for t in [-->][?:Unit] { if t.depth == 0 { t.depth = 1; } }\n        visit [-->][?:Unit];\n    }\n    can plumb with Unit entry {\n        if here.depth > self.deepest { self.deepest = here.depth; }\n        for c in [-->][?:Unit] {\n            if c.depth == 0 { c.depth = here.depth + 1; visit c; }\n        }\n    }\n}\n\ndef registry_depth(spec: dict) -> int {\n    for old in [root -->] { root del --> old; }\n    units: dict = {};\n    names: list = list(spec[\"tops\"]) + list(spec[\"tree\"].keys());\n    for cs in spec[\"tree\"].values() { names += list(cs); }\n    for nm in names {\n        if nm not in units { units[nm] = Unit(name=str(nm)); }\n    }\n    for t in list(spec[\"tops\"]) { root ++> units[t]; }\n    for (p, cs) in spec[\"tree\"].items() {\n        for c in list(cs) { units[p] ++> units[c]; }\n    }\n    return (root spawn DepthGauge()).deepest;\n}\n\nwith entry { print(registry_depth({'tops': ['a', 'b'], 'tree': {'a': ['c'], 'c': ['d']}})); }",
+   "expected_output": "3",
+   "cases": [
+    {
+     "input": {
+      "tops": [
+       "a",
+       "b"
+      ],
+      "tree": {
+       "a": [
+        "c"
+       ],
+       "c": [
+        "d"
+       ]
+      }
+     },
+     "output": "3"
+    },
+    {
+     "input": {
+      "tops": [
+       "x"
+      ],
+      "tree": {}
+     },
+     "output": "1"
+    },
+    {
+     "input": {
+      "tops": [],
+      "tree": {
+       "a": [
+        "b"
+       ]
+      }
+     },
+     "output": "0"
+    }
+   ]
+  },
+  {
+   "name": "nearest_beacon",
+   "category": "graph_osp",
+   "subcategory": "root_distance",
+   "difficulty": "advanced",
+   "py": "def nearest_beacon(spec: dict) -> str:\n    \"\"\"Closest lit beacon to root as name@depth (ties alphabetical).\"\"\"\n    frontier = [(g, 1) for g in spec[\"gateways\"]]\n    seen = []\n    hits = []\n    while frontier:\n        (name, d) = frontier.pop(0)\n        if name in seen:\n            continue\n        seen.append(name)\n        if name in spec[\"lit\"]:\n            hits.append((d, name))\n        for nxt in spec[\"links\"].get(name, []):\n            frontier.append((nxt, d + 1))\n    if not hits:\n        return \"dark\"\n    hits.sort()\n    return hits[0][1] + \"@\" + str(hits[0][0])",
+   "jac": "node Beacon { has name: str; has lit: bool; has depth: int = -1; }\n\nwalker BeaconSeek {\n    has hits: list = [];\n    has label: str = \"dark\";\n    can launch with Root entry {\n        for g in [-->][?:Beacon] { if g.depth == -1 { g.depth = 1; } }\n        visit [-->][?:Beacon];\n    }\n    can seek with Beacon entry {\n        if here.lit { self.hits.append((here.depth, here.name)); }\n        for nxt in [-->][?:Beacon] {\n            if nxt.depth == -1 { nxt.depth = here.depth + 1; visit nxt; }\n        }\n    }\n    can settle with exit {\n        if self.hits {\n            self.hits.sort();\n            self.label = self.hits[0][1] + \"@\" + str(self.hits[0][0]);\n        }\n    }\n}\n\ndef nearest_beacon(spec: dict) -> str {\n    for old in [root -->] { root del --> old; }\n    beacons: dict = {};\n    names: list = list(spec[\"gateways\"]) + list(spec[\"links\"].keys());\n    for ts in spec[\"links\"].values() { names += list(ts); }\n    for nm in names {\n        if nm not in beacons {\n            beacons[nm] = Beacon(name=str(nm), lit=(nm in spec[\"lit\"]));\n        }\n    }\n    for g in list(spec[\"gateways\"]) { root ++> beacons[g]; }\n    for (s, ts) in spec[\"links\"].items() {\n        for t in list(ts) { beacons[s] ++> beacons[t]; }\n    }\n    return (root spawn BeaconSeek()).label;\n}\n\nwith entry { print(nearest_beacon({'gateways': ['a', 'b'], 'links': {'a': ['c'], 'b': ['d']}, 'lit': ['c', 'd']})); }",
+   "expected_output": "c@2",
+   "cases": [
+    {
+     "input": {
+      "gateways": [
+       "a",
+       "b"
+      ],
+      "links": {
+       "a": [
+        "c"
+       ],
+       "b": [
+        "d"
+       ]
+      },
+      "lit": [
+       "c",
+       "d"
+      ]
+     },
+     "output": "c@2"
+    },
+    {
+     "input": {
+      "gateways": [
+       "a"
+      ],
+      "links": {
+       "a": [
+        "b",
+        "c"
+       ]
+      },
+      "lit": [
+       "a"
+      ]
+     },
+     "output": "a@1"
+    },
+    {
+     "input": {
+      "gateways": [
+       "a"
+      ],
+      "links": {
+       "a": [
+        "b"
+       ]
+      },
+      "lit": []
+     },
+     "output": "dark"
+    }
+   ]
+  },
+  {
+   "name": "fanout_report",
+   "category": "graph_osp",
+   "subcategory": "child_summary",
+   "difficulty": "advanced",
+   "py": "def fanout_report(spec: dict) -> str:\n    \"\"\"Sorted per-category counts plus a grand total for root's fan-out.\"\"\"\n    cats = spec[\"categories\"]\n    if not cats:\n        return \"empty\"\n    parts = []\n    total = 0\n    for name in sorted(cats.keys()):\n        n = len(cats[name])\n        total += n\n        parts.append(name + \":\" + str(n))\n    return \",\".join(parts) + \"|total=\" + str(total)",
+   "jac": "node Category { has name: str; }\nnode Item {}\n\nwalker FanoutAudit {\n    has pairs: list = [];\n    has report: str = \"empty\";\n    can fan with Root entry { visit [-->][?:Category]; }\n    can size with Category entry {\n        self.pairs.append((here.name, len([-->][?:Item])));\n    }\n    can compose with exit {\n        if self.pairs {\n            self.pairs.sort();\n            parts = [];\n            total = 0;\n            for (nm, n) in self.pairs {\n                total += n;\n                parts.append(nm + \":\" + str(n));\n            }\n            self.report = \",\".join(parts) + \"|total=\" + str(total);\n        }\n    }\n}\n\ndef fanout_report(spec: dict) -> str {\n    for old in [root -->] { root del --> old; }\n    for (cat, items) in spec[\"categories\"].items() {\n        shelf = Category(name=str(cat));\n        root ++> shelf;\n        for it in list(items) { shelf ++> Item(); }\n    }\n    return (root spawn FanoutAudit()).report;\n}\n\nwith entry { print(fanout_report({'categories': {'veg': ['kale'], 'fruit': ['apple', 'pear']}})); }",
+   "expected_output": "fruit:2,veg:1|total=3",
+   "cases": [
+    {
+     "input": {
+      "categories": {
+       "veg": [
+        "kale"
+       ],
+       "fruit": [
+        "apple",
+        "pear"
+       ]
+      }
+     },
+     "output": "fruit:2,veg:1|total=3"
+    },
+    {
+     "input": {
+      "categories": {
+       "a": [],
+       "b": [
+        "x"
+       ]
+      }
+     },
+     "output": "a:0,b:1|total=1"
+    },
+    {
+     "input": {
+      "categories": {}
+     },
+     "output": "empty"
+    }
+   ]
+  }
+ ]
+}

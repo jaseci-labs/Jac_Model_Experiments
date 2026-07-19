@@ -1,0 +1,21 @@
+{
+  "batch_id": "b11",
+  "accepted": [
+    "unique_root_tags",
+    "category_names",
+    "total_shelf_items",
+    "any_overdue",
+    "busiest_category",
+    "category_sizes",
+    "reachable_from_root",
+    "hops_from_root",
+    "settings_registry",
+    "richest_category",
+    "idle_machine",
+    "registry_depth",
+    "nearest_beacon",
+    "fanout_report"
+  ],
+  "rejected": [],
+  "accept_rate": 1.0
+}
