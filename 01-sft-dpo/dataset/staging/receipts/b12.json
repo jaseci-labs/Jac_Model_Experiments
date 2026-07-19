@@ -1,0 +1,21 @@
+{
+  "batch_id": "b12",
+  "accepted": [
+    "follower_count",
+    "post_like_total",
+    "mutual_follow",
+    "channel_member_count",
+    "mutual_follow_pairs",
+    "feed_size",
+    "top_liked_post",
+    "top_influencer",
+    "engagement_report",
+    "follower_reach",
+    "repost_chain",
+    "fof_suggestions",
+    "feed_ranking",
+    "channel_pulse"
+  ],
+  "rejected": [],
+  "accept_rate": 1.0
+}

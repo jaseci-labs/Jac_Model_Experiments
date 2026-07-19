@@ -1,0 +1,28 @@
+{
+  "batch_id": "b14",
+  "accepted": [
+    "tab_name",
+    "signature_phrase",
+    "normalize_tags",
+    "search_filter",
+    "lang_label",
+    "truncate_note",
+    "capture_summary",
+    "should_skip",
+    "shade_rgb",
+    "parse_bench_json",
+    "lcg_stream",
+    "fmt_bench_row"
+  ],
+  "rejected": [
+    {
+      "name": "display_username",
+      "reason": "dup vs existing sft.jsonl"
+    },
+    {
+      "name": "output_tail",
+      "reason": "dup vs existing sft.jsonl"
+    }
+  ],
+  "accept_rate": 0.8571428571428571
+}

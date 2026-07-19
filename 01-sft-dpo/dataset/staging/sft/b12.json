@@ -1,0 +1,1325 @@
+{
+ "batch_id": "b12",
+ "generator": "fable-agent-v1",
+ "examples": [
+  {
+   "name": "follower_count",
+   "category": "graph_osp",
+   "subcategory": "follow_graph",
+   "difficulty": "simple",
+   "py": "def follower_count(spec: dict) -> int:\n    \"\"\"Count how many users follow the target user.\"\"\"\n    users = set(spec[\"users\"])\n    if spec[\"who\"] not in users:\n        return 0\n    return sum(1 for f in spec[\"follows\"] if f[0] in users and f[1] == spec[\"who\"])",
+   "jac": "node User { has name: str; }\nedge Follow {}\n\nwalker FanCount {\n    has moved: bool = False;\n    has count: int = 0;\n    can roam with User entry {\n        if not self.moved { self.moved = True; visit [<-:Follow:<-][?:User]; }\n        else { self.count += 1; }\n    }\n}\n\ndef follower_count(spec: dict) -> int {\n    unodes: dict = {};\n    for nm in list(spec[\"users\"]) { unodes[nm] = User(name=str(nm)); }\n    for f in list(spec[\"follows\"]) {\n        if f[0] in unodes and f[1] in unodes { unodes[f[0]] +>:Follow:+> unodes[f[1]]; }\n    }\n    who: str = str(spec[\"who\"]);\n    if who not in unodes { return 0; }\n    return (unodes[who] spawn FanCount()).count;\n}\n\nwith entry { print(follower_count({'users': ['ava', 'ben', 'cleo'], 'follows': [['ben', 'ava'], ['cleo', 'ava'], ['ava', 'ben']], 'who': 'ava'})); }",
+   "expected_output": "2",
+   "cases": [
+    {
+     "input": {
+      "users": [
+       "ava",
+       "ben",
+       "cleo"
+      ],
+      "follows": [
+       [
+        "ben",
+        "ava"
+       ],
+       [
+        "cleo",
+        "ava"
+       ],
+       [
+        "ava",
+        "ben"
+       ]
+      ],
+      "who": "ava"
+     },
+     "output": "2"
+    },
+    {
+     "input": {
+      "users": [
+       "ava",
+       "ben"
+      ],
+      "follows": [
+       [
+        "ava",
+        "ben"
+       ]
+      ],
+      "who": "ava"
+     },
+     "output": "0"
+    },
+    {
+     "input": {
+      "users": [
+       "ava",
+       "ben",
+       "cleo",
+       "dan"
+      ],
+      "follows": [
+       [
+        "ben",
+        "ava"
+       ],
+       [
+        "cleo",
+        "ava"
+       ],
+       [
+        "dan",
+        "ava"
+       ]
+      ],
+      "who": "ava"
+     },
+     "output": "3"
+    }
+   ]
+  },
+  {
+   "name": "post_like_total",
+   "category": "graph_osp",
+   "subcategory": "like_edges",
+   "difficulty": "simple",
+   "py": "def post_like_total(spec: dict) -> int:\n    \"\"\"Total likes received across the target user's posts.\"\"\"\n    users = set(spec[\"users\"])\n    mine = {p[\"id\"] for p in spec[\"posts\"] if p[\"author\"] == spec[\"who\"] and p[\"author\"] in users}\n    return sum(1 for l in spec[\"likes\"] if l[0] in users and l[1] in mine)",
+   "jac": "node User { has name: str; }\nnode Post { has id: str; }\nedge Wrote {}\nedge Like {}\n\nwalker LikeTally {\n    has total: int = 0;\n    can seek with User entry { visit [->:Wrote:->][?:Post]; }\n    can tally with Post entry { self.total += len([<-:Like:<-][?:User]); }\n}\n\ndef post_like_total(spec: dict) -> int {\n    unodes: dict = {};\n    for nm in list(spec[\"users\"]) { unodes[nm] = User(name=str(nm)); }\n    pnodes: dict = {};\n    for p in list(spec[\"posts\"]) {\n        if p[\"author\"] in unodes {\n            pn = Post(id=str(p[\"id\"]));\n            pnodes[p[\"id\"]] = pn;\n            unodes[p[\"author\"]] +>:Wrote:+> pn;\n        }\n    }\n    for l in list(spec[\"likes\"]) {\n        if l[0] in unodes and l[1] in pnodes { unodes[l[0]] +>:Like:+> pnodes[l[1]]; }\n    }\n    who: str = str(spec[\"who\"]);\n    if who not in unodes { return 0; }\n    return (unodes[who] spawn LikeTally()).total;\n}\n\nwith entry { print(post_like_total({'users': ['ava', 'ben', 'cleo'], 'posts': [{'id': 'p1', 'author': 'ava'}, {'id': 'p2', 'author': 'ava'}, {'id': 'p3', 'author': 'ben'}], 'likes': [['ben', 'p1'], ['cleo', 'p1'], ['cleo', 'p2'], ['ava', 'p3']], 'who': 'ava'})); }",
+   "expected_output": "3",
+   "cases": [
+    {
+     "input": {
+      "users": [
+       "ava",
+       "ben",
+       "cleo"
+      ],
+      "posts": [
+       {
+        "id": "p1",
+        "author": "ava"
+       },
+       {
+        "id": "p2",
+        "author": "ava"
+       },
+       {
+        "id": "p3",
+        "author": "ben"
+       }
+      ],
+      "likes": [
+       [
+        "ben",
+        "p1"
+       ],
+       [
+        "cleo",
+        "p1"
+       ],
+       [
+        "cleo",
+        "p2"
+       ],
+       [
+        "ava",
+        "p3"
+       ]
+      ],
+      "who": "ava"
+     },
+     "output": "3"
+    },
+    {
+     "input": {
+      "users": [
+       "ava",
+       "ben",
+       "cleo"
+      ],
+      "posts": [
+       {
+        "id": "p1",
+        "author": "ava"
+       },
+       {
+        "id": "p3",
+        "author": "ben"
+       }
+      ],
+      "likes": [
+       [
+        "ben",
+        "p1"
+       ],
+       [
+        "ava",
+        "p3"
+       ],
+       [
+        "cleo",
+        "p3"
+       ]
+      ],
+      "who": "ben"
+     },
+     "output": "2"
+    },
+    {
+     "input": {
+      "users": [
+       "ava",
+       "cleo"
+      ],
+      "posts": [
+       {
+        "id": "p9",
+        "author": "cleo"
+       }
+      ],
+      "likes": [],
+      "who": "cleo"
+     },
+     "output": "0"
+    }
+   ]
+  },
+  {
+   "name": "mutual_follow",
+   "category": "graph_osp",
+   "subcategory": "mutual_follow",
+   "difficulty": "simple",
+   "py": "def mutual_follow(spec: dict) -> bool:\n    \"\"\"True when the two named users follow each other.\"\"\"\n    users = set(spec[\"users\"])\n    a, b = spec[\"pair\"]\n    if a not in users or b not in users:\n        return False\n    fset = {(f[0], f[1]) for f in spec[\"follows\"]}\n    return (a, b) in fset and (b, a) in fset",
+   "jac": "node User { has name: str; }\nedge Follow {}\n\nwalker MutualCheck {\n    has other: str;\n    has ab: bool = False;\n    has ba: bool = False;\n    can scan with User entry {\n        for f in [->:Follow:->][?:User] { if f.name == self.other { self.ab = True; } }\n        for f in [<-:Follow:<-][?:User] { if f.name == self.other { self.ba = True; } }\n    }\n}\n\ndef mutual_follow(spec: dict) -> bool {\n    unodes: dict = {};\n    for nm in list(spec[\"users\"]) { unodes[nm] = User(name=str(nm)); }\n    for f in list(spec[\"follows\"]) {\n        if f[0] in unodes and f[1] in unodes { unodes[f[0]] +>:Follow:+> unodes[f[1]]; }\n    }\n    a: str = str(spec[\"pair\"][0]);\n    b: str = str(spec[\"pair\"][1]);\n    if a not in unodes or b not in unodes { return False; }\n    w = unodes[a] spawn MutualCheck(other=b);\n    return w.ab and w.ba;\n}\n\nwith entry { print(mutual_follow({'users': ['ava', 'ben', 'cleo'], 'follows': [['ava', 'ben'], ['ben', 'ava'], ['cleo', 'ava']], 'pair': ['ava', 'ben']})); }",
+   "expected_output": "True",
+   "cases": [
+    {
+     "input": {
+      "users": [
+       "ava",
+       "ben",
+       "cleo"
+      ],
+      "follows": [
+       [
+        "ava",
+        "ben"
+       ],
+       [
+        "ben",
+        "ava"
+       ],
+       [
+        "cleo",
+        "ava"
+       ]
+      ],
+      "pair": [
+       "ava",
+       "ben"
+      ]
+     },
+     "output": "True"
+    },
+    {
+     "input": {
+      "users": [
+       "ava",
+       "ben",
+       "cleo"
+      ],
+      "follows": [
+       [
+        "ava",
+        "ben"
+       ],
+       [
+        "cleo",
+        "ava"
+       ]
+      ],
+      "pair": [
+       "ava",
+       "ben"
+      ]
+     },
+     "output": "False"
+    },
+    {
+     "input": {
+      "users": [
+       "ren",
+       "kai"
+      ],
+      "follows": [
+       [
+        "ren",
+        "kai"
+       ],
+       [
+        "kai",
+        "ren"
+       ]
+      ],
+      "pair": [
+       "kai",
+       "ren"
+      ]
+     },
+     "output": "True"
+    }
+   ]
+  },
+  {
+   "name": "channel_member_count",
+   "category": "graph_osp",
+   "subcategory": "channel_membership",
+   "difficulty": "simple",
+   "py": "def channel_member_count(spec: dict) -> int:\n    \"\"\"Count members of the named channel, or -1 if the channel does not exist.\"\"\"\n    users = set(spec[\"users\"])\n    if spec[\"channel\"] not in spec[\"channels\"]:\n        return -1\n    return sum(1 for m in spec[\"members\"] if m[0] in users and m[1] == spec[\"channel\"])",
+   "jac": "node User { has name: str; }\nnode Channel { has name: str; }\nedge Member {}\n\nwalker MemberCount {\n    has count: int = 0;\n    can scan with Channel entry { self.count = len([<-:Member:<-][?:User]); }\n}\n\ndef channel_member_count(spec: dict) -> int {\n    unodes: dict = {};\n    for nm in list(spec[\"users\"]) { unodes[nm] = User(name=str(nm)); }\n    cnodes: dict = {};\n    for cn in list(spec[\"channels\"]) { cnodes[cn] = Channel(name=str(cn)); }\n    for m in list(spec[\"members\"]) {\n        if m[0] in unodes and m[1] in cnodes { unodes[m[0]] +>:Member:+> cnodes[m[1]]; }\n    }\n    target: str = str(spec[\"channel\"]);\n    if target not in cnodes { return -1; }\n    return (cnodes[target] spawn MemberCount()).count;\n}\n\nwith entry { print(channel_member_count({'users': ['ava', 'ben', 'cleo'], 'channels': ['general', 'dev'], 'members': [['ava', 'general'], ['ben', 'general'], ['cleo', 'dev']], 'channel': 'general'})); }",
+   "expected_output": "2",
+   "cases": [
+    {
+     "input": {
+      "users": [
+       "ava",
+       "ben",
+       "cleo"
+      ],
+      "channels": [
+       "general",
+       "dev"
+      ],
+      "members": [
+       [
+        "ava",
+        "general"
+       ],
+       [
+        "ben",
+        "general"
+       ],
+       [
+        "cleo",
+        "dev"
+       ]
+      ],
+      "channel": "general"
+     },
+     "output": "2"
+    },
+    {
+     "input": {
+      "users": [
+       "ava",
+       "ben"
+      ],
+      "channels": [
+       "general"
+      ],
+      "members": [
+       [
+        "ava",
+        "general"
+       ]
+      ],
+      "channel": "random"
+     },
+     "output": "-1"
+    },
+    {
+     "input": {
+      "users": [
+       "ava",
+       "ben",
+       "cleo"
+      ],
+      "channels": [
+       "dev"
+      ],
+      "members": [
+       [
+        "ava",
+        "dev"
+       ],
+       [
+        "ben",
+        "dev"
+       ],
+       [
+        "cleo",
+        "dev"
+       ]
+      ],
+      "channel": "dev"
+     },
+     "output": "3"
+    }
+   ]
+  },
+  {
+   "name": "mutual_follow_pairs",
+   "category": "graph_osp",
+   "subcategory": "mutual_follow",
+   "difficulty": "composed",
+   "py": "def mutual_follow_pairs(spec: dict) -> list:\n    \"\"\"List every mutual-follow pair as 'a|b' with a < b, sorted.\"\"\"\n    users = set(spec[\"users\"])\n    fset = {(f[0], f[1]) for f in spec[\"follows\"] if f[0] in users and f[1] in users}\n    return sorted(a + \"|\" + b for a, b in fset if a < b and (b, a) in fset)",
+   "jac": "node User { has name: str; }\nedge Follow {}\n\nwalker BackScan {\n    has base: str;\n    has moved: bool = False;\n    has hits: list = [];\n    can seek with User entry {\n        if not self.moved { self.moved = True; visit [->:Follow:->][?:User]; }\n        elif here.name > self.base {\n            for f in [->:Follow:->][?:User] {\n                if f.name == self.base { self.hits.append(self.base + \"|\" + here.name); }\n            }\n        }\n    }\n}\n\ndef mutual_follow_pairs(spec: dict) -> list {\n    unodes: dict = {};\n    for nm in list(spec[\"users\"]) { unodes[nm] = User(name=str(nm)); }\n    for f in list(spec[\"follows\"]) {\n        if f[0] in unodes and f[1] in unodes { unodes[f[0]] +>:Follow:+> unodes[f[1]]; }\n    }\n    out: list = [];\n    for u in sorted(unodes.keys()) {\n        w = unodes[u] spawn BackScan(base=u);\n        out.extend(w.hits);\n    }\n    return sorted(out);\n}\n\nwith entry { print(mutual_follow_pairs({'users': ['ava', 'ben', 'cleo'], 'follows': [['ava', 'ben'], ['ben', 'ava'], ['ben', 'cleo'], ['cleo', 'ben'], ['cleo', 'ava']]})); }",
+   "expected_output": "['ava|ben', 'ben|cleo']",
+   "cases": [
+    {
+     "input": {
+      "users": [
+       "ava",
+       "ben",
+       "cleo"
+      ],
+      "follows": [
+       [
+        "ava",
+        "ben"
+       ],
+       [
+        "ben",
+        "ava"
+       ],
+       [
+        "ben",
+        "cleo"
+       ],
+       [
+        "cleo",
+        "ben"
+       ],
+       [
+        "cleo",
+        "ava"
+       ]
+      ]
+     },
+     "output": "['ava|ben', 'ben|cleo']"
+    },
+    {
+     "input": {
+      "users": [
+       "ava",
+       "ben",
+       "cleo"
+      ],
+      "follows": [
+       [
+        "ava",
+        "ben"
+       ],
+       [
+        "cleo",
+        "ava"
+       ]
+      ]
+     },
+     "output": "[]"
+    },
+    {
+     "input": {
+      "users": [
+       "kai",
+       "ren"
+      ],
+      "follows": [
+       [
+        "kai",
+        "ren"
+       ],
+       [
+        "ren",
+        "kai"
+       ]
+      ]
+     },
+     "output": "['kai|ren']"
+    }
+   ]
+  },
+  {
+   "name": "feed_size",
+   "category": "graph_osp",
+   "subcategory": "social_feed",
+   "difficulty": "composed",
+   "py": "def feed_size(spec: dict) -> int:\n    \"\"\"Count posts in the user's feed: their own plus posts by users they follow.\"\"\"\n    users = set(spec[\"users\"])\n    who = spec[\"who\"]\n    if who not in users:\n        return 0\n    authors = {who} | {f[1] for f in spec[\"follows\"] if f[0] == who and f[1] in users}\n    return sum(1 for p in spec[\"posts\"] if p[\"author\"] in authors)",
+   "jac": "node User { has name: str; }\nnode Post {}\nedge Follow {}\n\nwalker FeedCount {\n    has base: str;\n    has count: int = 0;\n    can seek with User entry {\n        if here.name == self.base {\n            visit [-->][?:Post];\n            visit [->:Follow:->][?:User];\n        } else { visit [-->][?:Post]; }\n    }\n    can tally with Post entry { self.count += 1; }\n}\n\ndef feed_size(spec: dict) -> int {\n    unodes: dict = {};\n    for nm in list(spec[\"users\"]) { unodes[nm] = User(name=str(nm)); }\n    for f in list(spec[\"follows\"]) {\n        if f[0] in unodes and f[1] in unodes { unodes[f[0]] +>:Follow:+> unodes[f[1]]; }\n    }\n    for p in list(spec[\"posts\"]) {\n        if p[\"author\"] in unodes { unodes[p[\"author\"]] ++> Post(); }\n    }\n    who: str = str(spec[\"who\"]);\n    if who not in unodes { return 0; }\n    return (unodes[who] spawn FeedCount(base=who)).count;\n}\n\nwith entry { print(feed_size({'users': ['ava', 'ben', 'cleo'], 'follows': [['ava', 'ben']], 'posts': [{'author': 'ava'}, {'author': 'ben'}, {'author': 'ben'}, {'author': 'cleo'}], 'who': 'ava'})); }",
+   "expected_output": "3",
+   "cases": [
+    {
+     "input": {
+      "users": [
+       "ava",
+       "ben",
+       "cleo"
+      ],
+      "follows": [
+       [
+        "ava",
+        "ben"
+       ]
+      ],
+      "posts": [
+       {
+        "author": "ava"
+       },
+       {
+        "author": "ben"
+       },
+       {
+        "author": "ben"
+       },
+       {
+        "author": "cleo"
+       }
+      ],
+      "who": "ava"
+     },
+     "output": "3"
+    },
+    {
+     "input": {
+      "users": [
+       "ava",
+       "ben",
+       "cleo"
+      ],
+      "follows": [
+       [
+        "cleo",
+        "ava"
+       ],
+       [
+        "cleo",
+        "ben"
+       ]
+      ],
+      "posts": [
+       {
+        "author": "ava"
+       },
+       {
+        "author": "ben"
+       },
+       {
+        "author": "ben"
+       },
+       {
+        "author": "cleo"
+       }
+      ],
+      "who": "cleo"
+     },
+     "output": "4"
+    },
+    {
+     "input": {
+      "users": [
+       "ava",
+       "ben"
+      ],
+      "follows": [],
+      "posts": [
+       {
+        "author": "ben"
+       }
+      ],
+      "who": "ava"
+     },
+     "output": "0"
+    }
+   ]
+  },
+  {
+   "name": "top_liked_post",
+   "category": "graph_osp",
+   "subcategory": "like_ranking",
+   "difficulty": "composed",
+   "py": "def top_liked_post(spec: dict) -> str:\n    \"\"\"Post id with the most likes; ties broken by the smaller post id.\"\"\"\n    users = set(spec[\"users\"])\n    posts = [p for p in spec[\"posts\"] if p[\"author\"] in users]\n    if not posts:\n        return \"\"\n    counts = {p[\"id\"]: 0 for p in posts}\n    for l in spec[\"likes\"]:\n        if l[0] in users and l[1] in counts:\n            counts[l[1]] += 1\n    return min(counts, key=lambda k: (-counts[k], k))",
+   "jac": "node Hub {}\nnode User { has name: str; }\nnode Post { has id: str; }\nedge Wrote {}\nedge Like {}\n\nwalker BestPost {\n    has best_id: str = \"\";\n    has best_likes: int = -1;\n    can fan with Hub entry { visit [-->][?:User]; }\n    can seek with User entry { visit [->:Wrote:->][?:Post]; }\n    can judge with Post entry {\n        likes: int = len([<-:Like:<-][?:User]);\n        if likes > self.best_likes or (likes == self.best_likes and here.id < self.best_id) {\n            self.best_likes = likes;\n            self.best_id = here.id;\n        }\n    }\n}\n\ndef top_liked_post(spec: dict) -> str {\n    hub = Hub();\n    unodes: dict = {};\n    for nm in list(spec[\"users\"]) {\n        unodes[nm] = User(name=str(nm));\n        hub ++> unodes[nm];\n    }\n    pnodes: dict = {};\n    for p in list(spec[\"posts\"]) {\n        if p[\"author\"] in unodes {\n            pn = Post(id=str(p[\"id\"]));\n            pnodes[p[\"id\"]] = pn;\n            unodes[p[\"author\"]] +>:Wrote:+> pn;\n        }\n    }\n    if not pnodes { return \"\"; }\n    for l in list(spec[\"likes\"]) {\n        if l[0] in unodes and l[1] in pnodes { unodes[l[0]] +>:Like:+> pnodes[l[1]]; }\n    }\n    return (hub spawn BestPost()).best_id;\n}\n\nwith entry { print(top_liked_post({'users': ['ava', 'ben', 'cleo'], 'posts': [{'id': 'p1', 'author': 'ava'}, {'id': 'p2', 'author': 'ben'}, {'id': 'p3', 'author': 'cleo'}], 'likes': [['ben', 'p2'], ['ava', 'p2'], ['cleo', 'p1']]})); }",
+   "expected_output": "p2",
+   "cases": [
+    {
+     "input": {
+      "users": [
+       "ava",
+       "ben",
+       "cleo"
+      ],
+      "posts": [
+       {
+        "id": "p1",
+        "author": "ava"
+       },
+       {
+        "id": "p2",
+        "author": "ben"
+       },
+       {
+        "id": "p3",
+        "author": "cleo"
+       }
+      ],
+      "likes": [
+       [
+        "ben",
+        "p2"
+       ],
+       [
+        "ava",
+        "p2"
+       ],
+       [
+        "cleo",
+        "p1"
+       ]
+      ]
+     },
+     "output": "p2"
+    },
+    {
+     "input": {
+      "users": [
+       "ava",
+       "ben"
+      ],
+      "posts": [
+       {
+        "id": "p1",
+        "author": "ava"
+       },
+       {
+        "id": "p2",
+        "author": "ben"
+       }
+      ],
+      "likes": [
+       [
+        "ben",
+        "p1"
+       ],
+       [
+        "ava",
+        "p2"
+       ]
+      ]
+     },
+     "output": "p1"
+    },
+    {
+     "input": {
+      "users": [
+       "ava",
+       "ben",
+       "cleo"
+      ],
+      "posts": [
+       {
+        "id": "p7",
+        "author": "ava"
+       },
+       {
+        "id": "p8",
+        "author": "ben"
+       }
+      ],
+      "likes": [
+       [
+        "cleo",
+        "p8"
+       ],
+       [
+        "ava",
+        "p8"
+       ],
+       [
+        "ben",
+        "p8"
+       ]
+      ]
+     },
+     "output": "p8"
+    }
+   ]
+  },
+  {
+   "name": "top_influencer",
+   "category": "graph_osp",
+   "subcategory": "follow_graph",
+   "difficulty": "composed",
+   "py": "def top_influencer(spec: dict) -> str:\n    \"\"\"User with the most followers; ties broken by the smaller name.\"\"\"\n    users = sorted(set(spec[\"users\"]))\n    if not users:\n        return \"\"\n    counts = {u: 0 for u in users}\n    for f in spec[\"follows\"]:\n        if f[0] in counts and f[1] in counts:\n            counts[f[1]] += 1\n    return min(counts, key=lambda u: (-counts[u], u))",
+   "jac": "node Hub {}\nnode User { has name: str; }\nedge Follow {}\n\nwalker Influencer {\n    has best_name: str = \"\";\n    has best_fans: int = -1;\n    can fan with Hub entry { visit [-->][?:User]; }\n    can judge with User entry {\n        fans: int = len([<-:Follow:<-][?:User]);\n        if fans > self.best_fans or (fans == self.best_fans and here.name < self.best_name) {\n            self.best_fans = fans;\n            self.best_name = here.name;\n        }\n    }\n}\n\ndef top_influencer(spec: dict) -> str {\n    names: list = sorted(set(list(spec[\"users\"])));\n    if not names { return \"\"; }\n    hub = Hub();\n    unodes: dict = {};\n    for nm in names {\n        unodes[nm] = User(name=str(nm));\n        hub ++> unodes[nm];\n    }\n    for f in list(spec[\"follows\"]) {\n        if f[0] in unodes and f[1] in unodes { unodes[f[0]] +>:Follow:+> unodes[f[1]]; }\n    }\n    return (hub spawn Influencer()).best_name;\n}\n\nwith entry { print(top_influencer({'users': ['ava', 'ben', 'cleo', 'dan'], 'follows': [['ava', 'cleo'], ['ben', 'cleo'], ['dan', 'cleo'], ['cleo', 'ava']]})); }",
+   "expected_output": "cleo",
+   "cases": [
+    {
+     "input": {
+      "users": [
+       "ava",
+       "ben",
+       "cleo",
+       "dan"
+      ],
+      "follows": [
+       [
+        "ava",
+        "cleo"
+       ],
+       [
+        "ben",
+        "cleo"
+       ],
+       [
+        "dan",
+        "cleo"
+       ],
+       [
+        "cleo",
+        "ava"
+       ]
+      ]
+     },
+     "output": "cleo"
+    },
+    {
+     "input": {
+      "users": [
+       "ava",
+       "ben",
+       "cleo"
+      ],
+      "follows": [
+       [
+        "cleo",
+        "ava"
+       ],
+       [
+        "ben",
+        "ava"
+       ],
+       [
+        "ava",
+        "ben"
+       ],
+       [
+        "cleo",
+        "ben"
+       ]
+      ]
+     },
+     "output": "ava"
+    },
+    {
+     "input": {
+      "users": [
+       "kai",
+       "ren",
+       "zoe"
+      ],
+      "follows": [
+       [
+        "kai",
+        "zoe"
+       ],
+       [
+        "ren",
+        "zoe"
+       ]
+      ]
+     },
+     "output": "zoe"
+    }
+   ]
+  },
+  {
+   "name": "engagement_report",
+   "category": "graph_osp",
+   "subcategory": "like_ranking",
+   "difficulty": "composed",
+   "py": "def engagement_report(spec: dict) -> str:\n    \"\"\"Rank users by total likes received on their posts: 'name=likes' comma-joined, likes desc then name.\"\"\"\n    users = sorted(set(spec[\"users\"]))\n    per_post = {}\n    for l in spec[\"likes\"]:\n        if l[0] in users:\n            per_post[l[1]] = per_post.get(l[1], 0) + 1\n    totals = {u: 0 for u in users}\n    for p in spec[\"posts\"]:\n        if p[\"author\"] in totals:\n            totals[p[\"author\"]] += per_post.get(p[\"id\"], 0)\n    ranked = sorted(users, key=lambda u: (-totals[u], u))\n    return \",\".join(u + \"=\" + str(totals[u]) for u in ranked)",
+   "jac": "node User { has name: str; }\nnode Post { has id: str; }\nedge Wrote {}\nedge Like {}\n\nwalker LikeSum {\n    has total: int = 0;\n    can seek with User entry { visit [->:Wrote:->][?:Post]; }\n    can tally with Post entry { self.total += len([<-:Like:<-][?:User]); }\n}\n\ndef engagement_report(spec: dict) -> str {\n    names: list = sorted(set(list(spec[\"users\"])));\n    unodes: dict = {};\n    for nm in names { unodes[nm] = User(name=str(nm)); }\n    pnodes: dict = {};\n    for p in list(spec[\"posts\"]) {\n        if p[\"author\"] in unodes {\n            pn = Post(id=str(p[\"id\"]));\n            pnodes[p[\"id\"]] = pn;\n            unodes[p[\"author\"]] +>:Wrote:+> pn;\n        }\n    }\n    for l in list(spec[\"likes\"]) {\n        if l[0] in unodes and l[1] in pnodes { unodes[l[0]] +>:Like:+> pnodes[l[1]]; }\n    }\n    pairs: list = [];\n    for u in names {\n        w = unodes[u] spawn LikeSum();\n        pairs.append((-w.total, u));\n    }\n    pairs.sort();\n    return \",\".join([p[1] + \"=\" + str(-p[0]) for p in pairs]);\n}\n\nwith entry { print(engagement_report({'users': ['ava', 'ben', 'cleo'], 'posts': [{'id': 'p1', 'author': 'ava'}, {'id': 'p2', 'author': 'ben'}, {'id': 'p3', 'author': 'ava'}], 'likes': [['ben', 'p1'], ['cleo', 'p1'], ['cleo', 'p3'], ['ava', 'p2']]})); }",
+   "expected_output": "ava=3,ben=1,cleo=0",
+   "cases": [
+    {
+     "input": {
+      "users": [
+       "ava",
+       "ben",
+       "cleo"
+      ],
+      "posts": [
+       {
+        "id": "p1",
+        "author": "ava"
+       },
+       {
+        "id": "p2",
+        "author": "ben"
+       },
+       {
+        "id": "p3",
+        "author": "ava"
+       }
+      ],
+      "likes": [
+       [
+        "ben",
+        "p1"
+       ],
+       [
+        "cleo",
+        "p1"
+       ],
+       [
+        "cleo",
+        "p3"
+       ],
+       [
+        "ava",
+        "p2"
+       ]
+      ]
+     },
+     "output": "ava=3,ben=1,cleo=0"
+    },
+    {
+     "input": {
+      "users": [
+       "kai",
+       "ren"
+      ],
+      "posts": [
+       {
+        "id": "a1",
+        "author": "ren"
+       }
+      ],
+      "likes": [
+       [
+        "kai",
+        "a1"
+       ]
+      ]
+     },
+     "output": "ren=1,kai=0"
+    },
+    {
+     "input": {
+      "users": [
+       "ava",
+       "ben"
+      ],
+      "posts": [
+       {
+        "id": "p1",
+        "author": "ava"
+       },
+       {
+        "id": "p2",
+        "author": "ben"
+       }
+      ],
+      "likes": []
+     },
+     "output": "ava=0,ben=0"
+    }
+   ]
+  },
+  {
+   "name": "follower_reach",
+   "category": "graph_osp",
+   "subcategory": "reach_two_hops",
+   "difficulty": "composed",
+   "py": "def follower_reach(spec: dict) -> list:\n    \"\"\"Users reachable within two Follow hops of the target, sorted, excluding the target.\"\"\"\n    users = set(spec[\"users\"])\n    who = spec[\"who\"]\n    if who not in users:\n        return []\n    adj = {}\n    for f in spec[\"follows\"]:\n        if f[0] in users and f[1] in users:\n            adj.setdefault(f[0], set()).add(f[1])\n    one = adj.get(who, set())\n    reach = set(one)\n    for u in one:\n        reach |= adj.get(u, set())\n    reach.discard(who)\n    return sorted(reach)",
+   "jac": "node User {\n    has name: str;\n    has dist: int = 99;\n    has expanded: bool = False;\n}\nedge Follow {}\n\nwalker ReachScan {\n    can roam with User entry {\n        if not here.expanded and here.dist < 2 {\n            here.expanded = True;\n            for nxt in [->:Follow:->][?:User] {\n                if here.dist + 1 < nxt.dist { nxt.dist = here.dist + 1; }\n            }\n            visit [->:Follow:->][?:User];\n        }\n    }\n}\n\ndef follower_reach(spec: dict) -> list {\n    unodes: dict = {};\n    for nm in list(spec[\"users\"]) { unodes[nm] = User(name=str(nm)); }\n    for f in list(spec[\"follows\"]) {\n        if f[0] in unodes and f[1] in unodes { unodes[f[0]] +>:Follow:+> unodes[f[1]]; }\n    }\n    who: str = str(spec[\"who\"]);\n    if who not in unodes { return []; }\n    unodes[who].dist = 0;\n    unodes[who] spawn ReachScan();\n    return [u for u in sorted(unodes.keys()) if unodes[u].dist >= 1 and unodes[u].dist <= 2];\n}\n\nwith entry { print(follower_reach({'users': ['ava', 'ben', 'cleo', 'dan', 'eve'], 'follows': [['ava', 'ben'], ['ben', 'cleo'], ['cleo', 'dan'], ['ben', 'eve']], 'who': 'ava'})); }",
+   "expected_output": "['ben', 'cleo', 'eve']",
+   "cases": [
+    {
+     "input": {
+      "users": [
+       "ava",
+       "ben",
+       "cleo",
+       "dan",
+       "eve"
+      ],
+      "follows": [
+       [
+        "ava",
+        "ben"
+       ],
+       [
+        "ben",
+        "cleo"
+       ],
+       [
+        "cleo",
+        "dan"
+       ],
+       [
+        "ben",
+        "eve"
+       ]
+      ],
+      "who": "ava"
+     },
+     "output": "['ben', 'cleo', 'eve']"
+    },
+    {
+     "input": {
+      "users": [
+       "ava",
+       "ben",
+       "cleo"
+      ],
+      "follows": [
+       [
+        "ava",
+        "ben"
+       ],
+       [
+        "ben",
+        "ava"
+       ],
+       [
+        "ben",
+        "cleo"
+       ]
+      ],
+      "who": "ava"
+     },
+     "output": "['ben', 'cleo']"
+    },
+    {
+     "input": {
+      "users": [
+       "kai",
+       "ren",
+       "zoe"
+      ],
+      "follows": [
+       [
+        "ren",
+        "zoe"
+       ]
+      ],
+      "who": "kai"
+     },
+     "output": "[]"
+    }
+   ]
+  },
+  {
+   "name": "repost_chain",
+   "category": "graph_osp",
+   "subcategory": "repost_chain",
+   "difficulty": "composed",
+   "py": "def repost_chain(spec: dict) -> str:\n    \"\"\"Follow the repost chain from the start post, '>'-joined; the smallest id wins when several repost it.\"\"\"\n    posts = set(spec[\"posts\"])\n    if spec[\"start\"] not in posts:\n        return \"\"\n    children = {}\n    for r in spec[\"reposts\"]:\n        if r[0] in posts and r[1] in posts:\n            children.setdefault(r[1], []).append(r[0])\n    chain = [spec[\"start\"]]\n    seen = {spec[\"start\"]}\n    cur = spec[\"start\"]\n    while True:\n        nxt = sorted(c for c in children.get(cur, []) if c not in seen)\n        if not nxt:\n            break\n        cur = nxt[0]\n        chain.append(cur)\n        seen.add(cur)\n    return \">\".join(chain)",
+   "jac": "node Post { has id: str; }\nedge Repost {}\n\nwalker ChainWalk {\n    has path: list = [];\n    has seen: dict = {};\n    can step with Post entry {\n        if here.id not in self.seen {\n            self.seen[here.id] = True;\n            self.path.append(here.id);\n            best_id: str = \"\";\n            for k in [->:Repost:->][?:Post] {\n                if k.id not in self.seen and (best_id == \"\" or k.id < best_id) { best_id = k.id; }\n            }\n            if best_id != \"\" {\n                for k in [->:Repost:->][?:Post] {\n                    if k.id == best_id { visit [k]; }\n                }\n            }\n        }\n    }\n}\n\ndef repost_chain(spec: dict) -> str {\n    pnodes: dict = {};\n    for pid in list(spec[\"posts\"]) { pnodes[pid] = Post(id=str(pid)); }\n    for r in list(spec[\"reposts\"]) {\n        if r[0] in pnodes and r[1] in pnodes { pnodes[r[1]] +>:Repost:+> pnodes[r[0]]; }\n    }\n    start: str = str(spec[\"start\"]);\n    if start not in pnodes { return \"\"; }\n    w = pnodes[start] spawn ChainWalk();\n    return \">\".join(w.path);\n}\n\nwith entry { print(repost_chain({'posts': ['p1', 'p2', 'p3', 'p4'], 'reposts': [['p2', 'p1'], ['p3', 'p2'], ['p4', 'p3']], 'start': 'p1'})); }",
+   "expected_output": "p1>p2>p3>p4",
+   "cases": [
+    {
+     "input": {
+      "posts": [
+       "p1",
+       "p2",
+       "p3",
+       "p4"
+      ],
+      "reposts": [
+       [
+        "p2",
+        "p1"
+       ],
+       [
+        "p3",
+        "p2"
+       ],
+       [
+        "p4",
+        "p3"
+       ]
+      ],
+      "start": "p1"
+     },
+     "output": "p1>p2>p3>p4"
+    },
+    {
+     "input": {
+      "posts": [
+       "p1",
+       "p2",
+       "p3"
+      ],
+      "reposts": [
+       [
+        "p3",
+        "p1"
+       ],
+       [
+        "p2",
+        "p1"
+       ]
+      ],
+      "start": "p1"
+     },
+     "output": "p1>p2"
+    },
+    {
+     "input": {
+      "posts": [
+       "a1",
+       "a2"
+      ],
+      "reposts": [],
+      "start": "a2"
+     },
+     "output": "a2"
+    }
+   ]
+  },
+  {
+   "name": "fof_suggestions",
+   "category": "graph_osp",
+   "subcategory": "friend_suggestion",
+   "difficulty": "advanced",
+   "py": "def fof_suggestions(spec: dict) -> list:\n    \"\"\"Suggest accounts to follow: followed by someone you follow, not you, not already followed; sorted.\"\"\"\n    users = set(spec[\"users\"])\n    who = spec[\"who\"]\n    if who not in users:\n        return []\n    adj = {}\n    for f in spec[\"follows\"]:\n        if f[0] in users and f[1] in users:\n            adj.setdefault(f[0], set()).add(f[1])\n    direct = adj.get(who, set())\n    sugg = set()\n    for u in direct:\n        sugg |= adj.get(u, set())\n    sugg.discard(who)\n    sugg -= direct\n    return sorted(sugg)",
+   "jac": "node User { has name: str; }\nedge Follow {}\n\nwalker Suggest {\n    has base: str;\n    has direct: list = [];\n    has cands: list = [];\n    can seek with User entry {\n        if here.name == self.base {\n            for f in [->:Follow:->][?:User] { self.direct.append(f.name); }\n            visit [->:Follow:->][?:User];\n        } else {\n            for f in [->:Follow:->][?:User] { self.cands.append(f.name); }\n        }\n    }\n}\n\ndef fof_suggestions(spec: dict) -> list {\n    unodes: dict = {};\n    for nm in list(spec[\"users\"]) { unodes[nm] = User(name=str(nm)); }\n    for f in list(spec[\"follows\"]) {\n        if f[0] in unodes and f[1] in unodes { unodes[f[0]] +>:Follow:+> unodes[f[1]]; }\n    }\n    who: str = str(spec[\"who\"]);\n    if who not in unodes { return []; }\n    w = unodes[who] spawn Suggest(base=who);\n    uniq: dict = {};\n    for c in w.cands { uniq[c] = True; }\n    return [c for c in sorted(uniq.keys()) if c != who and c not in w.direct];\n}\n\nwith entry { print(fof_suggestions({'users': ['ava', 'ben', 'cleo', 'dan', 'eve'], 'follows': [['ava', 'ben'], ['ava', 'cleo'], ['ben', 'dan'], ['cleo', 'dan'], ['cleo', 'eve'], ['dan', 'ava']], 'who': 'ava'})); }",
+   "expected_output": "['dan', 'eve']",
+   "cases": [
+    {
+     "input": {
+      "users": [
+       "ava",
+       "ben",
+       "cleo",
+       "dan",
+       "eve"
+      ],
+      "follows": [
+       [
+        "ava",
+        "ben"
+       ],
+       [
+        "ava",
+        "cleo"
+       ],
+       [
+        "ben",
+        "dan"
+       ],
+       [
+        "cleo",
+        "dan"
+       ],
+       [
+        "cleo",
+        "eve"
+       ],
+       [
+        "dan",
+        "ava"
+       ]
+      ],
+      "who": "ava"
+     },
+     "output": "['dan', 'eve']"
+    },
+    {
+     "input": {
+      "users": [
+       "ava",
+       "ben",
+       "cleo"
+      ],
+      "follows": [
+       [
+        "ava",
+        "ben"
+       ],
+       [
+        "ben",
+        "cleo"
+       ],
+       [
+        "ben",
+        "ava"
+       ]
+      ],
+      "who": "ava"
+     },
+     "output": "['cleo']"
+    },
+    {
+     "input": {
+      "users": [
+       "kai",
+       "ren",
+       "zoe"
+      ],
+      "follows": [
+       [
+        "kai",
+        "ren"
+       ],
+       [
+        "ren",
+        "kai"
+       ],
+       [
+        "zoe",
+        "ren"
+       ]
+      ],
+      "who": "kai"
+     },
+     "output": "[]"
+    }
+   ]
+  },
+  {
+   "name": "feed_ranking",
+   "category": "graph_osp",
+   "subcategory": "social_feed",
+   "difficulty": "advanced",
+   "py": "def feed_ranking(spec: dict) -> str:\n    \"\"\"Rank the user's feed (own posts plus followees' posts) by like count desc, then post id; comma-joined ids.\"\"\"\n    users = set(spec[\"users\"])\n    who = spec[\"who\"]\n    if who not in users:\n        return \"\"\n    authors = {who} | {f[1] for f in spec[\"follows\"] if f[0] == who and f[1] in users}\n    feed = [p[\"id\"] for p in spec[\"posts\"] if p[\"author\"] in authors]\n    counts = {pid: 0 for pid in feed}\n    for l in spec[\"likes\"]:\n        if l[0] in users and l[1] in counts:\n            counts[l[1]] += 1\n    ranked = sorted(feed, key=lambda pid: (-counts[pid], pid))\n    return \",\".join(ranked)",
+   "jac": "node User { has name: str; }\nnode Post { has id: str; }\nedge Follow {}\nedge Wrote {}\nedge Like {}\n\nwalker FeedRank {\n    has base: str;\n    has pairs: list = [];\n    can seek with User entry {\n        if here.name == self.base {\n            visit [->:Wrote:->][?:Post];\n            visit [->:Follow:->][?:User];\n        } else { visit [->:Wrote:->][?:Post]; }\n    }\n    can weigh with Post entry {\n        self.pairs.append((-len([<-:Like:<-][?:User]), here.id));\n    }\n}\n\ndef feed_ranking(spec: dict) -> str {\n    unodes: dict = {};\n    for nm in list(spec[\"users\"]) { unodes[nm] = User(name=str(nm)); }\n    for f in list(spec[\"follows\"]) {\n        if f[0] in unodes and f[1] in unodes { unodes[f[0]] +>:Follow:+> unodes[f[1]]; }\n    }\n    pnodes: dict = {};\n    for p in list(spec[\"posts\"]) {\n        if p[\"author\"] in unodes {\n            pn = Post(id=str(p[\"id\"]));\n            pnodes[p[\"id\"]] = pn;\n            unodes[p[\"author\"]] +>:Wrote:+> pn;\n        }\n    }\n    for l in list(spec[\"likes\"]) {\n        if l[0] in unodes and l[1] in pnodes { unodes[l[0]] +>:Like:+> pnodes[l[1]]; }\n    }\n    who: str = str(spec[\"who\"]);\n    if who not in unodes { return \"\"; }\n    w = unodes[who] spawn FeedRank(base=who);\n    w.pairs.sort();\n    return \",\".join([p[1] for p in w.pairs]);\n}\n\nwith entry { print(feed_ranking({'users': ['ava', 'ben', 'cleo'], 'follows': [['ava', 'ben']], 'posts': [{'id': 'p1', 'author': 'ava'}, {'id': 'p2', 'author': 'ben'}, {'id': 'p3', 'author': 'ben'}, {'id': 'p4', 'author': 'cleo'}], 'likes': [['cleo', 'p2'], ['ava', 'p2'], ['ben', 'p1'], ['cleo', 'p4']], 'who': 'ava'})); }",
+   "expected_output": "p2,p1,p3",
+   "cases": [
+    {
+     "input": {
+      "users": [
+       "ava",
+       "ben",
+       "cleo"
+      ],
+      "follows": [
+       [
+        "ava",
+        "ben"
+       ]
+      ],
+      "posts": [
+       {
+        "id": "p1",
+        "author": "ava"
+       },
+       {
+        "id": "p2",
+        "author": "ben"
+       },
+       {
+        "id": "p3",
+        "author": "ben"
+       },
+       {
+        "id": "p4",
+        "author": "cleo"
+       }
+      ],
+      "likes": [
+       [
+        "cleo",
+        "p2"
+       ],
+       [
+        "ava",
+        "p2"
+       ],
+       [
+        "ben",
+        "p1"
+       ],
+       [
+        "cleo",
+        "p4"
+       ]
+      ],
+      "who": "ava"
+     },
+     "output": "p2,p1,p3"
+    },
+    {
+     "input": {
+      "users": [
+       "ava",
+       "ben"
+      ],
+      "follows": [],
+      "posts": [
+       {
+        "id": "p1",
+        "author": "ava"
+       },
+       {
+        "id": "p2",
+        "author": "ava"
+       }
+      ],
+      "likes": [
+       [
+        "ben",
+        "p2"
+       ]
+      ],
+      "who": "ava"
+     },
+     "output": "p2,p1"
+    },
+    {
+     "input": {
+      "users": [
+       "kai",
+       "ren",
+       "zoe"
+      ],
+      "follows": [
+       [
+        "zoe",
+        "kai"
+       ],
+       [
+        "zoe",
+        "ren"
+       ]
+      ],
+      "posts": [
+       {
+        "id": "m1",
+        "author": "kai"
+       },
+       {
+        "id": "m2",
+        "author": "ren"
+       },
+       {
+        "id": "m3",
+        "author": "zoe"
+       }
+      ],
+      "likes": [
+       [
+        "kai",
+        "m2"
+       ],
+       [
+        "ren",
+        "m2"
+       ],
+       [
+        "zoe",
+        "m1"
+       ]
+      ],
+      "who": "zoe"
+     },
+     "output": "m2,m1,m3"
+    }
+   ]
+  },
+  {
+   "name": "channel_pulse",
+   "category": "graph_osp",
+   "subcategory": "channel_membership",
+   "difficulty": "advanced",
+   "py": "def channel_pulse(spec: dict) -> str:\n    \"\"\"Report each channel as 'name=members/posts', sorted by channel name, comma-joined.\"\"\"\n    users = set(spec[\"users\"])\n    parts = []\n    for c in sorted(set(spec[\"channels\"])):\n        m = sum(1 for e in spec[\"members\"] if e[0] in users and e[1] == c)\n        p = sum(1 for post in spec[\"posts\"] if post[\"channel\"] == c)\n        parts.append(c + \"=\" + str(m) + \"/\" + str(p))\n    return \",\".join(parts)",
+   "jac": "node User { has name: str; }\nnode Channel { has name: str; }\nnode Post {}\nedge Member {}\nedge ChannelPost {}\n\nwalker PulseScan {\n    has members: int = 0;\n    has posts: int = 0;\n    can scan with Channel entry {\n        self.members = len([<-:Member:<-][?:User]);\n        visit [->:ChannelPost:->][?:Post];\n    }\n    can tally with Post entry { self.posts += 1; }\n}\n\ndef channel_pulse(spec: dict) -> str {\n    unodes: dict = {};\n    for nm in list(spec[\"users\"]) { unodes[nm] = User(name=str(nm)); }\n    cnodes: dict = {};\n    for cn in sorted(set(list(spec[\"channels\"]))) { cnodes[cn] = Channel(name=str(cn)); }\n    for m in list(spec[\"members\"]) {\n        if m[0] in unodes and m[1] in cnodes { unodes[m[0]] +>:Member:+> cnodes[m[1]]; }\n    }\n    for p in list(spec[\"posts\"]) {\n        if p[\"channel\"] in cnodes { cnodes[p[\"channel\"]] +>:ChannelPost:+> Post(); }\n    }\n    parts: list = [];\n    for cn in sorted(cnodes.keys()) {\n        w = cnodes[cn] spawn PulseScan();\n        parts.append(cn + \"=\" + str(w.members) + \"/\" + str(w.posts));\n    }\n    return \",\".join(parts);\n}\n\nwith entry { print(channel_pulse({'users': ['ava', 'ben', 'cleo'], 'channels': ['general', 'dev'], 'members': [['ava', 'general'], ['ben', 'general'], ['cleo', 'dev']], 'posts': [{'id': 'p1', 'channel': 'general'}, {'id': 'p2', 'channel': 'dev'}, {'id': 'p3', 'channel': 'dev'}]})); }",
+   "expected_output": "dev=1/2,general=2/1",
+   "cases": [
+    {
+     "input": {
+      "users": [
+       "ava",
+       "ben",
+       "cleo"
+      ],
+      "channels": [
+       "general",
+       "dev"
+      ],
+      "members": [
+       [
+        "ava",
+        "general"
+       ],
+       [
+        "ben",
+        "general"
+       ],
+       [
+        "cleo",
+        "dev"
+       ]
+      ],
+      "posts": [
+       {
+        "id": "p1",
+        "channel": "general"
+       },
+       {
+        "id": "p2",
+        "channel": "dev"
+       },
+       {
+        "id": "p3",
+        "channel": "dev"
+       }
+      ]
+     },
+     "output": "dev=1/2,general=2/1"
+    },
+    {
+     "input": {
+      "users": [
+       "kai",
+       "ren"
+      ],
+      "channels": [
+       "music"
+      ],
+      "members": [
+       [
+        "kai",
+        "music"
+       ],
+       [
+        "ren",
+        "music"
+       ]
+      ],
+      "posts": [
+       {
+        "id": "m1",
+        "channel": "music"
+       }
+      ]
+     },
+     "output": "music=2/1"
+    },
+    {
+     "input": {
+      "users": [
+       "ava"
+      ],
+      "channels": [
+       "dev",
+       "art"
+      ],
+      "members": [
+       [
+        "ava",
+        "art"
+       ]
+      ],
+      "posts": []
+     },
+     "output": "art=1/0,dev=0/0"
+    }
+   ]
+  }
+ ]
+}
