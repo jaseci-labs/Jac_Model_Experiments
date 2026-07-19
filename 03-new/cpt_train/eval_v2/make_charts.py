@@ -63,8 +63,11 @@ def load():
     curation = json.loads((DATASET_V2 / "curation.json").read_text())
     manifest_v1 = json.loads((DATASET_V1 / "manifest.json").read_text())["sources"]
     manifest_v2 = json.loads((DATASET_V2 / "manifest.json").read_text())["sources"]
+    lora_svd_path = JSON_DIR / "lora_svd.json"
+    lora_svd = json.loads(lora_svd_path.read_text()) if lora_svd_path.exists() else None
     return dict(legs=legs, track_a=track_a, track_b_raw=track_b_raw, track_b_agg=track_b_agg,
-                acceptance=acceptance, curation=curation, manifest_v1=manifest_v1, manifest_v2=manifest_v2)
+                acceptance=acceptance, curation=curation, manifest_v1=manifest_v1, manifest_v2=manifest_v2,
+                lora_svd=lora_svd)
 
 
 def save(fig, name):
@@ -572,6 +575,107 @@ def chart_cptv2_vs_jacgpt_head_to_head(d):
     save(fig, "22_cptv2_vs_jacgpt_head_to_head")
 
 
+# ============================================================
+# 23-26: LoRA adapter SVD -- under-training vs. capacity saturation
+# ============================================================
+
+def _lora_stable_rank(r):
+    return r["stable_rank"] if not r["is_moe"] else r["stable_rank_mean"]
+
+
+def _lora_nuclear_norm(r):
+    return r["nuclear_norm"] if not r["is_moe"] else r["nuclear_norm_mean"]
+
+
+def chart_lora_stable_rank_trend(d):
+    sv = d["lora_svd"]
+    legs = sv["leg_steps"]
+    by_leg = {leg: [] for leg in legs}
+    for r in sv["records"]:
+        by_leg[r["leg_step"]].append(_lora_stable_rank(r))
+    means = [np.mean(by_leg[leg]) for leg in legs]
+    rank = sv["rank"]
+    fig, ax = plt.subplots(figsize=(9, 5.5))
+    ax.axhline(rank, color=BAD, linestyle="--", linewidth=1.2)
+    ax.text(legs[0], rank + 0.25, f"full rank budget ({rank})", color=BAD, fontsize=9)
+    ax.plot(legs, means, "-o", color=V2, linewidth=2.25, markersize=5)
+    ax.annotate(f"{means[0]:.2f}", (legs[0], means[0]), textcoords="offset points", xytext=(0, 10), ha="center", fontweight="bold")
+    ax.annotate(f"{means[-1]:.2f}", (legs[-1], means[-1]), textcoords="offset points", xytext=(0, -18), ha="center", fontweight="bold")
+    ax.set_ylim(0, rank + 1.5)
+    ax.set_xlabel("leg step (global)")
+    ax.set_ylabel(f"mean stable rank (of {rank})")
+    ax.set_title("LoRA effective rank utilization across training")
+    save(fig, "23_lora_stable_rank_trend")
+
+
+def chart_lora_magnitude_trend(d):
+    sv = d["lora_svd"]
+    legs = sv["leg_steps"]
+    by_leg = {leg: [] for leg in legs}
+    for r in sv["records"]:
+        by_leg[r["leg_step"]].append(_lora_nuclear_norm(r))
+    means = [np.mean(by_leg[leg]) for leg in legs]
+    fig, ax = plt.subplots(figsize=(9, 5.5))
+    ax.plot(legs, means, "-o", color=V2, linewidth=2.25, markersize=5)
+    ax.fill_between(legs, means, color=V2, alpha=0.1)
+    deltas = [means[i] - means[i - 1] for i in range(1, len(means))]
+    ax.annotate(f"leg1→2: +{deltas[0]:.3f}", (legs[1], means[1]), textcoords="offset points", xytext=(-10, -22), fontsize=9, ha="left")
+    ax.annotate(f"leg11→12: +{deltas[-1]:.3f}", (legs[-1], means[-1]), textcoords="offset points", xytext=(-90, 10), fontsize=9, ha="left")
+    ax.set_xlabel("leg step (global)")
+    ax.set_ylabel("mean nuclear norm of ΔW (update magnitude)")
+    ax.set_title("LoRA update magnitude growth -- diminishing returns by leg 12")
+    save(fig, "24_lora_magnitude_trend")
+
+
+def chart_lora_singular_value_decay(d):
+    sv = d["lora_svd"]
+    legs = sv["leg_steps"]
+    pick_legs = [legs[0], legs[len(legs) // 2], legs[-1]]
+    labels = {legs[0]: "leg 1", legs[len(legs) // 2]: f"leg {len(legs)//2 + 1}", legs[-1]: f"leg {len(legs)}"}
+    colors = {legs[0]: BASE, legs[len(legs) // 2]: V1, legs[-1]: V2}
+    fig, ax = plt.subplots(figsize=(9, 5.5))
+    rank = sv["rank"]
+    x = np.arange(1, rank + 1)
+    for leg in pick_legs:
+        spectra = []
+        for r in sv["records"]:
+            if r["leg_step"] != leg:
+                continue
+            s = r["singular_values"] if not r["is_moe"] else r["singular_values_mean"]
+            spectra.append(s)
+        mean_spectrum = np.mean(np.array(spectra), axis=0)
+        norm_spectrum = mean_spectrum / mean_spectrum[0]
+        ax.plot(x, norm_spectrum, "-o", color=colors[leg], label=labels[leg], linewidth=2, markersize=4)
+    ax.set_xlabel("singular value index (1 = largest)")
+    ax.set_ylabel("singular value / largest singular value")
+    ax.set_title("Mean normalized singular-value spectrum, rank-16 budget")
+    ax.legend(loc="upper right", frameon=False)
+    save(fig, "25_lora_singular_value_decay")
+
+
+def chart_lora_stable_rank_by_projection(d):
+    sv = d["lora_svd"]
+    final_leg = sv["leg_steps"][-1]
+    by_proj = {}
+    for r in sv["records"]:
+        if r["leg_step"] != final_leg:
+            continue
+        by_proj.setdefault(r["proj"], []).append(_lora_stable_rank(r))
+    order = sorted(by_proj, key=lambda p: np.mean(by_proj[p]))
+    means = [np.mean(by_proj[p]) for p in order]
+    rank = sv["rank"]
+    fig, ax = plt.subplots(figsize=(9, 5.5))
+    colors = [V2 if "switch_mlp" in p else (V1 if "self_attn" in p else BASE) for p in order]
+    ax.barh(order, means, color=colors)
+    for i, v in enumerate(means):
+        ax.text(v + 0.15, i, f"{v:.2f}", va="center", fontsize=9)
+    ax.axvline(rank, color=BAD, linestyle="--", linewidth=1)
+    ax.set_xlim(0, rank + 2)
+    ax.set_xlabel(f"mean stable rank at final leg (of {rank})")
+    ax.set_title("Effective rank utilization by projection type, leg 12")
+    save(fig, "26_lora_stable_rank_by_projection")
+
+
 def main():
     d = load()
     print("Generating CPT-v2 matplotlib chart set...")
@@ -597,6 +701,13 @@ def main():
     chart_summary_dashboard(d)
     chart_gap_to_jacgpt(d)
     chart_cptv2_vs_jacgpt_head_to_head(d)
+    if d["lora_svd"]:
+        chart_lora_stable_rank_trend(d)
+        chart_lora_magnitude_trend(d)
+        chart_lora_singular_value_decay(d)
+        chart_lora_stable_rank_by_projection(d)
+    else:
+        print("  (skipping LoRA SVD charts -- run lora_svd_analysis.py first)")
     pngs = sorted(CHARTS_DIR.glob("*.png"))
     print(f"\n{len(pngs)} charts written to {CHARTS_DIR.relative_to(ROOT)}/")
 

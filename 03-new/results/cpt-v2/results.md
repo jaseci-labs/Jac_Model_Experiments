@@ -1,6 +1,6 @@
 # CPT-v2 analysis
 
-Companion to [`03-new/docs/cpt-2/results.md`](../../docs/cpt-2/results.md) (the Task 19 acceptance narrative). This document is the analysis: what CPT-v2 was built to find out, what the data actually shows, why it shows that, and what to do next. All 22 charts in this folder are cited inline as evidence; regenerate them anytime from the source-of-truth JSON in `json/` via `.venv/bin/python3 03-new/cpt_train/eval_v2/make_charts.py`. An interactive version of the same data also exists as a published dashboard artifact (`images/cptv2_dashboard_dark.png` / `images/cptv2_dashboard_light.png` are static captures of it).
+Companion to [`03-new/docs/cpt-2/results.md`](../../docs/cpt-2/results.md) (the Task 19 acceptance narrative). This document is the analysis: what CPT-v2 was built to find out, what the data actually shows, why it shows that, and what to do next. All 26 charts in this folder are cited inline as evidence; regenerate them anytime from the source-of-truth JSON in `json/` via `.venv/bin/python3 03-new/cpt_train/eval_v2/make_charts.py` (charts 23-26, the LoRA singular-value set, need `lora_svd_analysis.py` run first — see section 5). An interactive version of the same data also exists as a published dashboard artifact (`images/cptv2_dashboard_dark.png` / `images/cptv2_dashboard_light.png` are static captures of it).
 
 ## Executive summary
 
@@ -53,21 +53,35 @@ This is the actual failure mode, not "the model didn't learn enough Jac." **Next
 
 ---
 
-## 5. Was the run wasted?
+## 5. Finding: not capacity-limited either
+
+Section 4's conclusion — the objective, not the corpus or eval, is the bottleneck — has an obvious counter-question: how do we know the LoRA adapter (rank 16, last 16 layers) had enough *capacity* to represent what CPT-v2 needed to learn? If the rank budget was maxed out, "under-trained/capacity-starved" would be a live rival explanation to "wrong objective." This is checkable directly from the saved adapter weights, no retraining needed: `03-new/cpt_train/eval_v2/lora_svd_analysis.py` computes the singular-value spectrum of every targeted projection's update (ΔW = LoRA_A @ LoRA_B) at all 12 leg checkpoints (1,536 spectra: 16 layers × 8 projection types × 12 legs, MoE projections averaged over their 128 experts per layer).
+
+`images/23_lora_stable_rank_trend.png` tracks **stable rank** (a continuous effective-rank measure, `(Σs)²/Σs²`, ranging 1 to the rank budget of 16) across training. It starts at 7.71 (leg 1) and falls monotonically to 6.05 (leg 12) — roughly 38% of the rank-16 budget, and *shrinking* over time, not growing toward it. That's the opposite of what capacity saturation would look like (which would show stable rank pinned near 16, flat or rising). `images/25_lora_singular_value_decay.png` shows the same thing spectrally: the normalized singular-value curve at leg 1, leg 7, and leg 12 all drop off sharply after the first 1-2 components and only get more concentrated (not flatter) by leg 12 — plenty of unused rank headroom at every stage of training, not less as training went on.
+
+`images/24_lora_magnitude_trend.png` checks the companion "under-trained" question from a different angle — not the *shape* of the update but its *size*. Mean update magnitude (nuclear norm of ΔW) grows with strongly diminishing returns: +0.107 from leg 1→2, only +0.004 from leg 11→12. The update has essentially stopped growing by the ceiling, matching the LR-floor/loss-floor convergence already seen in section training curves. Nothing here looks like a run that needed more steps.
+
+`images/26_lora_stable_rank_by_projection.png` breaks the leg-12 snapshot down by projection type — real heterogeneity (`mlp.switch_mlp.down_proj` at 10.6/16 vs. `self_attn.o_proj` at 3.4/16), so if anything, the highest-utilization projection (`down_proj`, the layer that combines expert outputs back to hidden dim) would be the one place worth a higher-rank check first — but even that tops out at 66% of budget, not the near-total saturation that would make "raise the rank" a compelling next move on its own.
+
+**Net: rank=16 was not the bottleneck.** Both the shape (spectrum) and size (magnitude) of the LoRA update converge smoothly to a stable, low-rank solution well inside its budget — consistent with genuine convergence under the current objective, not a run that stopped short of its capacity ceiling. This closes off "just use a bigger LoRA rank" as a quick fix and reinforces section 4's read: the ceiling is what next-token CPT can teach, not how much of it fit in the adapter.
+
+---
+
+## 6. Was the run wasted?
 
 Two different questions, two different answers.
 
 **As a deliverable: yes.** 12 legs (~16.4h wall-clock, `images/07_leg_duration.png`), a curation pass, and new eval infrastructure produced a checkpoint that clears 0 of 3 acceptance gates (`images/19_acceptance_gauges.png`) and isn't usable as a foundation for Phase 4. Nothing downstream builds on this checkpoint as-is.
 
-**As information: no.** CPT-v2 killed two live, previously-unresolved hypotheses in one well-controlled run — corpus dilution and instrument mismatch — and did it cleanly enough (zero CF regression throughout, `images/09_cf_check_strip.png`; well-behaved loss curves with no pathological leg, `images/04_loss_curves.png`/`images/05_val_loss_delta.png`/`images/08_train_vs_val_scatter.png`) that the null can't be waved away as a broken run. That's a real, load-bearing result for deciding what *not* to spend the next attempt on.
+**As information: no.** CPT-v2 killed two live, previously-unresolved hypotheses in one well-controlled run — corpus dilution and instrument mismatch — plus a third (rank-capacity starvation) via post-hoc SVD analysis, and did it cleanly enough (zero CF regression throughout, `images/09_cf_check_strip.png`; well-behaved loss curves with no pathological leg, `images/04_loss_curves.png`/`images/05_val_loss_delta.png`/`images/08_train_vs_val_scatter.png`) that none of these nulls can be waved away as a broken run. That's a real, load-bearing result for deciding what *not* to spend the next attempt on.
 
 ---
 
-## 6. What to try next
+## 7. What to try next
 
-Given two independent CPT nulls that survived a corpus-mix change and an eval-instrument change, the honest read is that **continual pretraining via next-token prediction on doc prose is not the right lever** for teaching enforced syntactic/semantic correctness — the failure mode in section 4 is structural to the objective, not a tuning problem.
+Given two independent CPT nulls that survived a corpus-mix change and an eval-instrument change, plus a third ruling out LoRA rank capacity, the honest read is that **continual pretraining via next-token prediction on doc prose is not the right lever** for teaching enforced syntactic/semantic correctness — the failure mode in section 4 is structural to the objective, not a tuning or capacity problem.
 
-**Recommended: skip a third CPT attempt, move to Phase 4 (SFT/DPO) directly on base.** `workflow.md`'s existing plan already calls for DPO pairs contrasting semantically-correct vs. subtly-wrong-but-compiling OSP idiom — that objective directly penalizes the "confident, fluent, wrong" failure mode this analysis found, in a way next-token CPT structurally cannot. That plan was gated behind "CPT checkpoint accepted"; two nulls is enough to drop that gate and test SFT/DPO as its own falsifiable experiment rather than waiting on a third CPT success.
+**Recommended: skip a third CPT attempt, move to Phase 4 (SFT/DPO) directly on base.** `workflow.md`'s existing plan already calls for DPO pairs contrasting semantically-correct vs. subtly-wrong-but-compiling OSP idiom — that objective directly penalizes the "confident, fluent, wrong" failure mode this analysis found, in a way next-token CPT structurally cannot. That plan was gated behind "CPT checkpoint accepted"; two nulls (plus the capacity check) is enough to drop that gate and test SFT/DPO as its own falsifiable experiment rather than waiting on a third CPT success.
 
 **If CPT is worth one more shot first**, the one real variable neither v1 nor v2 varied is corpus *shape*: both trained on doc *prose* (markdown describing Jac, code examples embedded but not dominant). Neither tried CPT on a corpus dominated by actual compilable Jac snippets rather than prose about Jac — closer in shape to what actually needs to be learned. That's a genuine, still-untested single-variable CPT hypothesis if you want to exhaust the lever before moving on. Not recommended as the first move given the section 4 finding, but noted as the one open door.
 
@@ -99,7 +113,11 @@ Given two independent CPT nulls that survived a corpus-mix change and an eval-in
 | 20 | `images/20_summary_dashboard.png` | one-page capstone summary |
 | 21 | `images/21_gap_to_jacgpt.png` | mean distance from jac-gpt, by model |
 | 22 | `images/22_cptv2_vs_jacgpt_head_to_head.png` | both tracks, cpt-v2 vs jac-gpt only |
+| 23 | `images/23_lora_stable_rank_trend.png` | LoRA mean stable rank vs leg (16-rank budget) |
+| 24 | `images/24_lora_magnitude_trend.png` | LoRA update magnitude (nuclear norm) vs leg |
+| 25 | `images/25_lora_singular_value_decay.png` | normalized singular-value spectrum, leg 1 vs 7 vs 12 |
+| 26 | `images/26_lora_stable_rank_by_projection.png` | effective rank utilization by projection type, leg 12 |
 
 ---
 
-**Bottom line:** the mechanism worked (clean training, zero regression, real infrastructure); the hypothesis didn't survive (corpus mix and eval instrument both ruled out; the actual failure mode is a model that fabricates plausible wrong syntax rather than admitting uncertainty, which next-token CPT can't fix). Per the same discipline as CPT-v1's null: stated plainly, not rounded up.
+**Bottom line:** the mechanism worked (clean training, zero regression, real infrastructure); the hypothesis didn't survive (corpus mix, eval instrument, and LoRA rank capacity all ruled out; the actual failure mode is a model that fabricates plausible wrong syntax rather than admitting uncertainty, which next-token CPT can't fix regardless of how much of its rank budget is available). Per the same discipline as CPT-v1's null: stated plainly, not rounded up.
