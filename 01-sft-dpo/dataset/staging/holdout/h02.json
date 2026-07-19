@@ -1,0 +1,756 @@
+{
+  "batch_id": "h02",
+  "tasks": [
+    {
+      "name": "greedy_color_count",
+      "py": "def greedy_color_count(spec: dict) -> int:\n    \"\"\"Greedy-color nodes in alphabetical order (smallest free color); return number of distinct colors used.\"\"\"\n    edges = spec[\"edges\"]\n    nbrs = {}\n    for e in edges:\n        u, v = e[0], e[1]\n        nbrs.setdefault(u, set()).add(v)\n        nbrs.setdefault(v, set()).add(u)\n    color = {}\n    for n in sorted(nbrs):\n        taken = set()\n        for m in nbrs[n]:\n            if m in color:\n                taken.add(color[m])\n        pick = 0\n        while pick in taken:\n            pick += 1\n        color[n] = pick\n    return len(set(color.values())) if color else 0",
+      "jac_reference": "node CCell { has name: str; has color: int = -1; }\nedge CAdj {}\n\nwalker WPaint {\n    has palette: int = 0;\n    can paint with CCell entry {\n        if here.name == \"__hub__\" {\n            cells = [here -->];\n            by_name = {};\n            for c in cells { by_name[c.name] = c; }\n            used_all = set();\n            for nm in sorted(by_name.keys()) {\n                cur = by_name[nm];\n                taken = set();\n                for nb in [cur ->:CAdj:->] {\n                    if nb.color >= 0 { taken.add(nb.color); }\n                }\n                pick = 0;\n                while pick in taken { pick += 1; }\n                cur.color = pick;\n                used_all.add(pick);\n            }\n            self.palette = len(used_all);\n        }\n    }\n}\n\ndef greedy_color_count(spec: dict) -> int {\n    edges: list = spec[\"edges\"];\n    cells: dict = {};\n    hub = CCell(name=\"__hub__\");\n    for e in edges {\n        for nm in e {\n            if nm not in cells {\n                cells[nm] = CCell(name=nm);\n                hub ++> cells[nm];\n            }\n        }\n    }\n    for e in edges {\n        cells[e[0]] +>:CAdj:+> cells[e[1]];\n        cells[e[1]] +>:CAdj:+> cells[e[0]];\n    }\n    w = hub spawn WPaint();\n    return w.palette;\n}",
+      "cases": [
+        {
+          "input": {
+            "edges": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "b",
+                "c"
+              ],
+              [
+                "a",
+                "c"
+              ]
+            ]
+          },
+          "output": "3"
+        },
+        {
+          "input": {
+            "edges": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "b",
+                "c"
+              ]
+            ]
+          },
+          "output": "2"
+        },
+        {
+          "input": {
+            "edges": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "a",
+                "c"
+              ],
+              [
+                "a",
+                "d"
+              ],
+              [
+                "b",
+                "c"
+              ],
+              [
+                "b",
+                "d"
+              ],
+              [
+                "c",
+                "d"
+              ]
+            ]
+          },
+          "output": "4"
+        }
+      ]
+    },
+    {
+      "name": "component_size_histogram",
+      "py": "def component_size_histogram(spec: dict) -> list:\n    \"\"\"Return the sizes of all connected components, sorted descending.\"\"\"\n    names = spec[\"nodes\"]\n    edges = spec[\"edges\"]\n    nbrs = {n: [] for n in names}\n    for e in edges:\n        nbrs[e[0]].append(e[1])\n        nbrs[e[1]].append(e[0])\n    seen = set()\n    sizes = []\n    for n in sorted(names):\n        if n in seen:\n            continue\n        stack = [n]\n        seen.add(n)\n        cnt = 0\n        while stack:\n            cur = stack.pop()\n            cnt += 1\n            for m in nbrs[cur]:\n                if m not in seen:\n                    seen.add(m)\n                    stack.append(m)\n        sizes.append(cnt)\n    sizes.sort(reverse=True)\n    return sizes",
+      "jac_reference": "node INode { has name: str; has seen: bool = False; }\nedge IL {}\n\nwalker WFlood {\n    has size: int = 0;\n    can flood with INode entry {\n        if not here.seen {\n            here.seen = True;\n            self.size += 1;\n            visit [->:IL:->];\n        }\n    }\n}\n\ndef component_size_histogram(spec: dict) -> list {\n    names: list = spec[\"nodes\"];\n    edges: list = spec[\"edges\"];\n    hub = INode(name=\"__hub__\", seen=True);\n    reg: dict = {};\n    for nm in names {\n        reg[nm] = INode(name=nm);\n        hub ++> reg[nm];\n    }\n    for e in edges {\n        reg[e[0]] +>:IL:+> reg[e[1]];\n        reg[e[1]] +>:IL:+> reg[e[0]];\n    }\n    sizes = [];\n    for nm in sorted(names) {\n        if not reg[nm].seen {\n            w = reg[nm] spawn WFlood();\n            sizes.append(w.size);\n        }\n    }\n    sizes.sort(reverse=True);\n    return sizes;\n}",
+      "cases": [
+        {
+          "input": {
+            "nodes": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e",
+              "f"
+            ],
+            "edges": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "b",
+                "c"
+              ],
+              [
+                "d",
+                "e"
+              ]
+            ]
+          },
+          "output": "[3, 2, 1]"
+        },
+        {
+          "input": {
+            "nodes": [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "edges": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "b",
+                "c"
+              ],
+              [
+                "c",
+                "d"
+              ]
+            ]
+          },
+          "output": "[4]"
+        },
+        {
+          "input": {
+            "nodes": [
+              "x",
+              "y",
+              "z"
+            ],
+            "edges": []
+          },
+          "output": "[1, 1, 1]"
+        }
+      ]
+    },
+    {
+      "name": "shortest_path_count",
+      "py": "def shortest_path_count(spec: dict) -> int:\n    \"\"\"Count the distinct shortest (fewest-hop) directed paths from src to dst (0 if unreachable).\"\"\"\n    edges = spec[\"edges\"]\n    src, dst = spec[\"src\"], spec[\"dst\"]\n    adj = {}\n    for e in edges:\n        adj.setdefault(e[0], []).append(e[1])\n        adj.setdefault(e[1], [])\n    dist = {src: 0}\n    ways = {src: 1}\n    queue = [src]\n    while queue:\n        cur = queue.pop(0)\n        for m in adj.get(cur, []):\n            if m not in dist:\n                dist[m] = dist[cur] + 1\n                ways[m] = ways[cur]\n                queue.append(m)\n            elif dist[m] == dist[cur] + 1:\n                ways[m] += ways[cur]\n    return ways.get(dst, 0)",
+      "jac_reference": "node PNode { has name: str; has dist: int = -1; has ways: int = 0; has done: bool = False; }\nedge PL {}\n\nwalker WCount {\n    can relax with PNode entry {\n        if not here.done {\n            here.done = True;\n            for c in [here ->:PL:->] {\n                if c.dist == -1 {\n                    c.dist = here.dist + 1;\n                    c.ways = here.ways;\n                    visit c;\n                } elif c.dist == here.dist + 1 {\n                    c.ways += here.ways;\n                }\n            }\n        }\n    }\n}\n\ndef shortest_path_count(spec: dict) -> int {\n    edges: list = spec[\"edges\"];\n    hub = PNode(name=\"__hub__\", done=True);\n    reg: dict = {};\n    for e in edges {\n        for nm in e {\n            if nm not in reg {\n                reg[nm] = PNode(name=nm);\n                hub ++> reg[nm];\n            }\n        }\n    }\n    for e in edges {\n        reg[e[0]] +>:PL:+> reg[e[1]];\n    }\n    start = reg[spec[\"src\"]];\n    start.dist = 0;\n    start.ways = 1;\n    start spawn WCount();\n    return reg[spec[\"dst\"]].ways;\n}",
+      "cases": [
+        {
+          "input": {
+            "edges": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "a",
+                "c"
+              ],
+              [
+                "b",
+                "d"
+              ],
+              [
+                "c",
+                "d"
+              ]
+            ],
+            "src": "a",
+            "dst": "d"
+          },
+          "output": "2"
+        },
+        {
+          "input": {
+            "edges": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "b",
+                "c"
+              ]
+            ],
+            "src": "a",
+            "dst": "c"
+          },
+          "output": "1"
+        },
+        {
+          "input": {
+            "edges": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "a",
+                "c"
+              ],
+              [
+                "b",
+                "d"
+              ],
+              [
+                "c",
+                "d"
+              ],
+              [
+                "d",
+                "e"
+              ],
+              [
+                "d",
+                "f"
+              ],
+              [
+                "e",
+                "g"
+              ],
+              [
+                "f",
+                "g"
+              ]
+            ],
+            "src": "a",
+            "dst": "g"
+          },
+          "output": "4"
+        },
+        {
+          "input": {
+            "edges": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "c",
+                "a"
+              ]
+            ],
+            "src": "a",
+            "dst": "c"
+          },
+          "output": "0"
+        }
+      ]
+    },
+    {
+      "name": "tree_mis",
+      "py": "def tree_mis(spec: dict) -> int:\n    \"\"\"Size of the maximum independent set of a rooted tree (no chosen node is parent of another chosen node).\"\"\"\n    children = spec[\"children\"]\n    top = spec[\"top\"]\n    def dp(n):\n        incl, excl = 1, 0\n        for c in children.get(n, []):\n            ci, ce = dp(c)\n            incl += ce\n            excl += max(ci, ce)\n        return incl, excl\n    a, b = dp(top)\n    return max(a, b)",
+      "jac_reference": "node TNode { has name: str; }\nedge TL {}\n\ndef mis_pair(n: TNode) -> list {\n    incl = 1;\n    excl = 0;\n    for c in [n ->:TL:->] {\n        sub = mis_pair(c);\n        incl += sub[1];\n        excl += max(sub[0], sub[1]);\n    }\n    return [incl, excl];\n}\n\nwalker WMis {\n    has best: int = 0;\n    can compute with TNode entry {\n        pair = mis_pair(here);\n        self.best = max(pair[0], pair[1]);\n    }\n}\n\ndef tree_mis(spec: dict) -> int {\n    children: dict = spec[\"children\"];\n    top: str = spec[\"top\"];\n    reg: dict = {};\n    hub = TNode(name=\"__hub__\");\n    all_names = [top];\n    for (p, kids) in children.items() {\n        if p not in all_names { all_names.append(p); }\n        for k in kids { if k not in all_names { all_names.append(k); } }\n    }\n    for nm in all_names { reg[nm] = TNode(name=nm); }\n    hub ++> reg[top];\n    for (p, kids) in children.items() {\n        for k in kids { reg[p] +>:TL:+> reg[k]; }\n    }\n    w = reg[top] spawn WMis();\n    return w.best;\n}",
+      "cases": [
+        {
+          "input": {
+            "children": {
+              "a": [
+                "b"
+              ],
+              "b": [
+                "c"
+              ]
+            },
+            "top": "a"
+          },
+          "output": "2"
+        },
+        {
+          "input": {
+            "children": {
+              "r": [
+                "x",
+                "y",
+                "z"
+              ]
+            },
+            "top": "r"
+          },
+          "output": "3"
+        },
+        {
+          "input": {
+            "children": {
+              "r": [
+                "b",
+                "c"
+              ],
+              "b": [
+                "d",
+                "e"
+              ],
+              "c": [
+                "f"
+              ]
+            },
+            "top": "r"
+          },
+          "output": "4"
+        }
+      ]
+    },
+    {
+      "name": "tree_centroid",
+      "py": "def tree_centroid(spec: dict) -> str:\n    \"\"\"Name of the tree centroid: node whose removal minimizes the largest remaining component (ties -> alphabetically first).\"\"\"\n    edges = spec[\"edges\"]\n    nbrs = {}\n    for e in edges:\n        nbrs.setdefault(e[0], []).append(e[1])\n        nbrs.setdefault(e[1], []).append(e[0])\n    def comp_size(start, banned):\n        seen = {start, banned}\n        stack = [start]\n        cnt = 1\n        while stack:\n            cur = stack.pop()\n            for m in nbrs[cur]:\n                if m not in seen:\n                    seen.add(m)\n                    cnt += 1\n                    stack.append(m)\n        return cnt\n    best_name = \"\"\n    best_score = -1\n    for x in sorted(nbrs):\n        score = 0\n        for y in nbrs[x]:\n            s = comp_size(y, x)\n            if s > score:\n                score = s\n        if best_score == -1 or score < best_score:\n            best_score = score\n            best_name = x\n    return best_name",
+      "jac_reference": "node YNode { has name: str; }\nedge YL {}\n\nwalker WGatherY {\n    has members: list = [];\n    can grab with YNode entry {\n        if here.name == \"__hub__\" {\n            visit [-->];\n        } else {\n            self.members.append(here);\n        }\n    }\n}\n\ndef y_comp_size(start: YNode, banned_name: str) -> int {\n    seen = set();\n    seen.add(start.name);\n    seen.add(banned_name);\n    frontier = [start];\n    cnt = 1;\n    while len(frontier) > 0 {\n        cur = frontier.pop();\n        for nb in [cur ->:YL:->] {\n            if nb.name not in seen {\n                seen.add(nb.name);\n                cnt += 1;\n                frontier.append(nb);\n            }\n        }\n    }\n    return cnt;\n}\n\ndef tree_centroid(spec: dict) -> str {\n    edges: list = spec[\"edges\"];\n    hub = YNode(name=\"__hub__\");\n    reg: dict = {};\n    for e in edges {\n        for nm in e {\n            if nm not in reg {\n                reg[nm] = YNode(name=nm);\n                hub ++> reg[nm];\n            }\n        }\n    }\n    for e in edges {\n        reg[e[0]] +>:YL:+> reg[e[1]];\n        reg[e[1]] +>:YL:+> reg[e[0]];\n    }\n    w = hub spawn WGatherY();\n    ranked = [];\n    for x in w.members {\n        score = 0;\n        for y in [x ->:YL:->] {\n            s = y_comp_size(y, x.name);\n            if s > score { score = s; }\n        }\n        ranked.append([score, x.name]);\n    }\n    ranked.sort();\n    return ranked[0][1];\n}",
+      "cases": [
+        {
+          "input": {
+            "edges": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "b",
+                "c"
+              ],
+              [
+                "c",
+                "d"
+              ],
+              [
+                "d",
+                "e"
+              ]
+            ]
+          },
+          "output": "c"
+        },
+        {
+          "input": {
+            "edges": [
+              [
+                "m",
+                "a"
+              ],
+              [
+                "m",
+                "b"
+              ],
+              [
+                "m",
+                "c"
+              ]
+            ]
+          },
+          "output": "m"
+        },
+        {
+          "input": {
+            "edges": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "b",
+                "c"
+              ],
+              [
+                "c",
+                "d"
+              ]
+            ]
+          },
+          "output": "b"
+        }
+      ]
+    },
+    {
+      "name": "bridge_count",
+      "py": "def bridge_count(spec: dict) -> int:\n    \"\"\"Count bridges: undirected edges whose removal disconnects their two endpoints.\"\"\"\n    edges = spec[\"edges\"]\n    nbrs = {}\n    for e in edges:\n        nbrs.setdefault(e[0], []).append(e[1])\n        nbrs.setdefault(e[1], []).append(e[0])\n    def connected_without(u, v):\n        seen = {u}\n        stack = [u]\n        while stack:\n            cur = stack.pop()\n            for m in nbrs[cur]:\n                if (cur == u and m == v) or (cur == v and m == u):\n                    continue\n                if m not in seen:\n                    seen.add(m)\n                    stack.append(m)\n        return v in seen\n    acc = 0\n    for e in edges:\n        if not connected_without(e[0], e[1]):\n            acc += 1\n    return acc",
+      "jac_reference": "node BNode { has name: str; }\nedge BL {}\n\ndef b_connected_without(reg: dict, u: str, v: str) -> bool {\n    seen = set();\n    seen.add(u);\n    frontier = [reg[u]];\n    while len(frontier) > 0 {\n        cur = frontier.pop();\n        for nb in [cur ->:BL:->] {\n            blocked = (cur.name == u and nb.name == v) or (cur.name == v and nb.name == u);\n            if not blocked and nb.name not in seen {\n                seen.add(nb.name);\n                frontier.append(nb);\n            }\n        }\n    }\n    return v in seen;\n}\n\nwalker WBridges {\n    has pairs: list = [];\n    has reg: dict = {};\n    has total: int = 0;\n    can scan with BNode entry {\n        if here.name == \"__hub__\" {\n            for pr in self.pairs {\n                if not b_connected_without(self.reg, pr[0], pr[1]) {\n                    self.total += 1;\n                }\n            }\n        }\n    }\n}\n\ndef bridge_count(spec: dict) -> int {\n    edges: list = spec[\"edges\"];\n    hub = BNode(name=\"__hub__\");\n    reg: dict = {};\n    for e in edges {\n        for nm in e {\n            if nm not in reg {\n                reg[nm] = BNode(name=nm);\n                hub ++> reg[nm];\n            }\n        }\n    }\n    for e in edges {\n        reg[e[0]] +>:BL:+> reg[e[1]];\n        reg[e[1]] +>:BL:+> reg[e[0]];\n    }\n    w = hub spawn WBridges(pairs=edges, reg=reg);\n    return w.total;\n}",
+      "cases": [
+        {
+          "input": {
+            "edges": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "b",
+                "c"
+              ],
+              [
+                "c",
+                "a"
+              ],
+              [
+                "c",
+                "d"
+              ]
+            ]
+          },
+          "output": "1"
+        },
+        {
+          "input": {
+            "edges": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "b",
+                "c"
+              ],
+              [
+                "c",
+                "d"
+              ]
+            ]
+          },
+          "output": "3"
+        },
+        {
+          "input": {
+            "edges": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "b",
+                "c"
+              ],
+              [
+                "c",
+                "d"
+              ],
+              [
+                "d",
+                "a"
+              ]
+            ]
+          },
+          "output": "0"
+        }
+      ]
+    },
+    {
+      "name": "indegree_ranking",
+      "py": "def indegree_ranking(spec: dict) -> list:\n    \"\"\"Node names ranked by in-degree descending, ties broken alphabetically.\"\"\"\n    edges = spec[\"edges\"]\n    indeg = {}\n    for e in edges:\n        indeg.setdefault(e[0], 0)\n        indeg[e[1]] = indeg.get(e[1], 0) + 1\n    pairs = [[-d, n] for n, d in indeg.items()]\n    pairs.sort()\n    return [p[1] for p in pairs]",
+      "jac_reference": "node RNode { has name: str; }\nedge RL {}\n\nwalker WRank {\n    has order: list = [];\n    can rank with RNode entry {\n        if here.name == \"__hub__\" {\n            pairs = [];\n            for n in [here -->] {\n                pairs.append([0 - len([n <-:RL:<-]), n.name]);\n            }\n            pairs.sort();\n            for p in pairs { self.order.append(p[1]); }\n        }\n    }\n}\n\ndef indegree_ranking(spec: dict) -> list {\n    edges: list = spec[\"edges\"];\n    hub = RNode(name=\"__hub__\");\n    reg: dict = {};\n    for e in edges {\n        for nm in e {\n            if nm not in reg {\n                reg[nm] = RNode(name=nm);\n                hub ++> reg[nm];\n            }\n        }\n    }\n    for e in edges {\n        reg[e[0]] +>:RL:+> reg[e[1]];\n    }\n    w = hub spawn WRank();\n    return w.order;\n}",
+      "cases": [
+        {
+          "input": {
+            "edges": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "c",
+                "b"
+              ],
+              [
+                "b",
+                "d"
+              ],
+              [
+                "a",
+                "d"
+              ],
+              [
+                "a",
+                "c"
+              ]
+            ]
+          },
+          "output": "['b', 'd', 'c', 'a']"
+        },
+        {
+          "input": {
+            "edges": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "b",
+                "c"
+              ],
+              [
+                "c",
+                "a"
+              ]
+            ]
+          },
+          "output": "['a', 'b', 'c']"
+        },
+        {
+          "input": {
+            "edges": [
+              [
+                "x",
+                "z"
+              ],
+              [
+                "y",
+                "z"
+              ],
+              [
+                "z",
+                "w"
+              ]
+            ]
+          },
+          "output": "['z', 'w', 'x', 'y']"
+        }
+      ]
+    },
+    {
+      "name": "lca_name",
+      "py": "def lca_name(spec: dict) -> str:\n    \"\"\"Name of the lowest common ancestor of nodes p and q in a rooted tree (a node counts as its own ancestor).\"\"\"\n    children = spec[\"children\"]\n    p, q = spec[\"p\"], spec[\"q\"]\n    parent = {}\n    for f, kids in children.items():\n        for k in kids:\n            parent[k] = f\n    chain_p = [p]\n    while chain_p[-1] in parent:\n        chain_p.append(parent[chain_p[-1]])\n    anc = set(chain_p)\n    cur = q\n    while cur not in anc:\n        cur = parent[cur]\n    return cur",
+      "jac_reference": "node ANode { has name: str; }\nedge AL {}\n\nwalker WUp {\n    has chain: list = [];\n    can climb with ANode entry {\n        self.chain.append(here.name);\n        visit [<-:AL:<-];\n    }\n}\n\ndef lca_name(spec: dict) -> str {\n    children: dict = spec[\"children\"];\n    top: str = spec[\"top\"];\n    reg: dict = {};\n    hub = ANode(name=\"__hub__\");\n    all_names = [top];\n    for (f, kids) in children.items() {\n        if f not in all_names { all_names.append(f); }\n        for k in kids { if k not in all_names { all_names.append(k); } }\n    }\n    for nm in all_names { reg[nm] = ANode(name=nm); }\n    hub ++> reg[top];\n    for (f, kids) in children.items() {\n        for k in kids { reg[f] +>:AL:+> reg[k]; }\n    }\n    wp = reg[spec[\"p\"]] spawn WUp();\n    wq = reg[spec[\"q\"]] spawn WUp();\n    anc = set(wp.chain);\n    for nm in wq.chain {\n        if nm in anc { return nm; }\n    }\n    return top;\n}",
+      "cases": [
+        {
+          "input": {
+            "children": {
+              "r": [
+                "a",
+                "b"
+              ],
+              "a": [
+                "c",
+                "d"
+              ],
+              "b": [
+                "e"
+              ]
+            },
+            "top": "r",
+            "p": "c",
+            "q": "d"
+          },
+          "output": "a"
+        },
+        {
+          "input": {
+            "children": {
+              "r": [
+                "a",
+                "b"
+              ],
+              "a": [
+                "c",
+                "d"
+              ],
+              "b": [
+                "e"
+              ]
+            },
+            "top": "r",
+            "p": "c",
+            "q": "e"
+          },
+          "output": "r"
+        },
+        {
+          "input": {
+            "children": {
+              "r": [
+                "s"
+              ],
+              "s": [
+                "t"
+              ],
+              "t": [
+                "u"
+              ]
+            },
+            "top": "r",
+            "p": "u",
+            "q": "t"
+          },
+          "output": "t"
+        }
+      ]
+    },
+    {
+      "name": "degree_profile_match",
+      "py": "def degree_profile_match(spec: dict) -> bool:\n    \"\"\"True if the two undirected graphs have identical sorted neighbor-degree profiles (structural-equivalence lite).\"\"\"\n    def profile(edges):\n        nbrs = {}\n        for e in edges:\n            nbrs.setdefault(e[0], []).append(e[1])\n            nbrs.setdefault(e[1], []).append(e[0])\n        prof = []\n        for n, ms in nbrs.items():\n            prof.append([len(ms), sorted(len(nbrs[m]) for m in ms)])\n        prof.sort()\n        return prof\n    return profile(spec[\"g1\"]) == profile(spec[\"g2\"])",
+      "jac_reference": "node QNode { has name: str; }\nedge QL {}\n\nwalker WGatherQ {\n    has members: list = [];\n    can grab with QNode entry {\n        if here.name == \"__hub__\" {\n            visit [-->];\n        } else {\n            self.members.append(here);\n        }\n    }\n}\n\ndef q_profile(edges: list) -> list {\n    hub = QNode(name=\"__hub__\");\n    reg: dict = {};\n    for e in edges {\n        for nm in e {\n            if nm not in reg {\n                reg[nm] = QNode(name=nm);\n                hub ++> reg[nm];\n            }\n        }\n    }\n    for e in edges {\n        reg[e[0]] +>:QL:+> reg[e[1]];\n        reg[e[1]] +>:QL:+> reg[e[0]];\n    }\n    w = hub spawn WGatherQ();\n    prof = [];\n    for n in w.members {\n        degs = [];\n        for m in [n ->:QL:->] {\n            degs.append(len([m ->:QL:->]));\n        }\n        degs.sort();\n        prof.append([len(degs), degs]);\n    }\n    prof.sort();\n    return prof;\n}\n\ndef degree_profile_match(spec: dict) -> bool {\n    return q_profile(spec[\"g1\"]) == q_profile(spec[\"g2\"]);\n}",
+      "cases": [
+        {
+          "input": {
+            "g1": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "b",
+                "c"
+              ],
+              [
+                "c",
+                "a"
+              ]
+            ],
+            "g2": [
+              [
+                "x",
+                "y"
+              ],
+              [
+                "y",
+                "z"
+              ]
+            ]
+          },
+          "output": "False"
+        },
+        {
+          "input": {
+            "g1": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "b",
+                "c"
+              ]
+            ],
+            "g2": [
+              [
+                "u",
+                "v"
+              ],
+              [
+                "v",
+                "w"
+              ]
+            ]
+          },
+          "output": "True"
+        },
+        {
+          "input": {
+            "g1": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "a",
+                "c"
+              ],
+              [
+                "a",
+                "d"
+              ]
+            ],
+            "g2": [
+              [
+                "x",
+                "y"
+              ],
+              [
+                "y",
+                "z"
+              ],
+              [
+                "z",
+                "w"
+              ]
+            ]
+          },
+          "output": "False"
+        }
+      ]
+    },
+    {
+      "name": "eulerian_path_feasible",
+      "py": "def eulerian_path_feasible(spec: dict) -> bool:\n    \"\"\"True if the undirected graph admits an Eulerian path: connected and 0 or 2 odd-degree nodes.\"\"\"\n    edges = spec[\"edges\"]\n    nbrs = {}\n    for e in edges:\n        nbrs.setdefault(e[0], []).append(e[1])\n        nbrs.setdefault(e[1], []).append(e[0])\n    names = sorted(nbrs)\n    seen = {names[0]}\n    stack = [names[0]]\n    while stack:\n        cur = stack.pop()\n        for m in nbrs[cur]:\n            if m not in seen:\n                seen.add(m)\n                stack.append(m)\n    if len(seen) != len(names):\n        return False\n    odd = 0\n    for n in names:\n        if len(nbrs[n]) % 2 == 1:\n            odd += 1\n    return odd == 0 or odd == 2",
+      "jac_reference": "node ENode { has name: str; has seen: bool = False; }\nedge EL {}\n\nwalker WSpreadE {\n    has size: int = 0;\n    can flood with ENode entry {\n        if not here.seen {\n            here.seen = True;\n            self.size += 1;\n            visit [->:EL:->];\n        }\n    }\n}\n\ndef eulerian_path_feasible(spec: dict) -> bool {\n    edges: list = spec[\"edges\"];\n    hub = ENode(name=\"__hub__\", seen=True);\n    reg: dict = {};\n    for e in edges {\n        for nm in e {\n            if nm not in reg {\n                reg[nm] = ENode(name=nm);\n                hub ++> reg[nm];\n            }\n        }\n    }\n    for e in edges {\n        reg[e[0]] +>:EL:+> reg[e[1]];\n        reg[e[1]] +>:EL:+> reg[e[0]];\n    }\n    names = sorted(reg.keys());\n    w = reg[names[0]] spawn WSpreadE();\n    if w.size != len(names) { return False; }\n    odd = 0;\n    for nm in names {\n        if len([reg[nm] ->:EL:->]) % 2 == 1 { odd += 1; }\n    }\n    return odd == 0 or odd == 2;\n}",
+      "cases": [
+        {
+          "input": {
+            "edges": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "b",
+                "c"
+              ]
+            ]
+          },
+          "output": "True"
+        },
+        {
+          "input": {
+            "edges": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "a",
+                "c"
+              ],
+              [
+                "a",
+                "d"
+              ]
+            ]
+          },
+          "output": "False"
+        },
+        {
+          "input": {
+            "edges": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "b",
+                "c"
+              ],
+              [
+                "c",
+                "a"
+              ]
+            ]
+          },
+          "output": "True"
+        },
+        {
+          "input": {
+            "edges": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "c",
+                "d"
+              ]
+            ]
+          },
+          "output": "False"
+        }
+      ]
+    }
+  ]
+}

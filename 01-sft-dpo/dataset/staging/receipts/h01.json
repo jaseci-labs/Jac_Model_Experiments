@@ -1,0 +1,17 @@
+{
+  "batch_id": "h01",
+  "accepted": [
+    "graph_diameter",
+    "count_cut_vertices",
+    "weighted_median_stop",
+    "cycle_length",
+    "count_st_paths",
+    "is_bipartite",
+    "critical_path_cost",
+    "kth_nearest",
+    "euler_trail_check",
+    "longest_increasing_path"
+  ],
+  "rejected": [],
+  "accept_rate": 1.0
+}
