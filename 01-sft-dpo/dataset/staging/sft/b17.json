@@ -1,0 +1,801 @@
+{
+ "batch_id": "b17",
+ "generator": "fable-agent-v1",
+ "examples": [
+  {
+   "name": "spawn_points",
+   "category": "graph_osp",
+   "subcategory": "shooter_spawn",
+   "difficulty": "simple",
+   "py": "def spawn_points(spec: dict) -> list:\n    rng = int(spec[\"seed\"])\n    vals = []\n    for lo, hi in spec[\"zones\"]:\n        rng = (rng * 1103515245 + 12345) % 2147483648\n        r = rng / 2147483648.0\n        vals.append(round(float(lo) + r * (float(hi) - float(lo)), 6))\n    return vals",
+   "jac": "node Spawner {}\nnode Zone { has lo: float; has hi: float; }\n\nwalker Respawn {\n    has rng: int;\n    has vals: list = [];\n    can start with Spawner entry { visit [-->]; }\n    can draw with Zone entry {\n        self.rng = (self.rng * 1103515245 + 12345) % 2147483648;\n        r = self.rng / 2147483648.0;\n        self.vals.append(round(here.lo + r * (here.hi - here.lo), 6));\n        visit [-->];\n    }\n}\n\ndef spawn_points(spec: dict) -> list {\n    spawner = Spawner();\n    prev = spawner;\n    for z in spec[\"zones\"] {\n        nxt = Zone(lo=float(z[0]), hi=float(z[1]));\n        prev ++> nxt;\n        prev = nxt;\n    }\n    return (spawner spawn Respawn(rng=int(spec[\"seed\"]))).vals;\n}\n\nwith entry { print(spawn_points({'seed': 7, 'zones': [[-14.0, 14.0], [1.0, 5.0], [-16.0, 2.0]]})); }",
+   "expected_output": "[2.71757, 2.197059, -10.029856]",
+   "cases": [
+    {
+     "input": {
+      "seed": 7,
+      "zones": [
+       [
+        -14.0,
+        14.0
+       ],
+       [
+        1.0,
+        5.0
+       ],
+       [
+        -16.0,
+        2.0
+       ]
+      ]
+     },
+     "output": "[2.71757, 2.197059, -10.029856]"
+    },
+    {
+     "input": {
+      "seed": 1,
+      "zones": [
+       [
+        0.0,
+        1.0
+       ]
+      ]
+     },
+     "output": "[0.51387]"
+    },
+    {
+     "input": {
+      "seed": 42,
+      "zones": [
+       [
+        1.0,
+        5.0
+       ],
+       [
+        0.0,
+        6.28
+       ]
+      ]
+     },
+     "output": "[3.32923, 3.264462]"
+    }
+   ]
+  },
+  {
+   "name": "key_lookup",
+   "category": "graph_osp",
+   "subcategory": "input_bindings",
+   "difficulty": "simple",
+   "py": "def key_lookup(spec: dict) -> int:\n    for code, key in spec[\"bindings\"]:\n        if code == spec[\"code\"]:\n            return int(key)\n    return 0",
+   "jac": "node Pad {}\nnode Binding { has code: str; has key: int; }\n\nwalker Lookup {\n    has code: str;\n    has result: int = 0, found: bool = False;\n    can start with Pad entry { visit [-->]; }\n    can check with Binding entry {\n        if not self.found and here.code == self.code {\n            self.result = here.key;\n            self.found = True;\n        }\n    }\n}\n\ndef key_lookup(spec: dict) -> int {\n    pad = Pad();\n    for b in spec[\"bindings\"] { pad ++> Binding(code=str(b[0]), key=int(b[1])); }\n    return (pad spawn Lookup(code=str(spec[\"code\"]))).result;\n}\n\nwith entry { print(key_lookup({'bindings': [['KeyW', 87], ['KeyA', 65], ['Space', 32], ['ArrowUp', 265]], 'code': 'Space'})); }",
+   "expected_output": "32",
+   "cases": [
+    {
+     "input": {
+      "bindings": [
+       [
+        "KeyW",
+        87
+       ],
+       [
+        "KeyA",
+        65
+       ],
+       [
+        "Space",
+        32
+       ],
+       [
+        "ArrowUp",
+        265
+       ]
+      ],
+      "code": "Space"
+     },
+     "output": "32"
+    },
+    {
+     "input": {
+      "bindings": [
+       [
+        "KeyW",
+        87
+       ],
+       [
+        "KeyA",
+        65
+       ]
+      ],
+      "code": "Escape"
+     },
+     "output": "0"
+    },
+    {
+     "input": {
+      "bindings": [
+       [
+        "KeyW",
+        87
+       ],
+       [
+        "Tab",
+        258
+       ]
+      ],
+      "code": "KeyW"
+     },
+     "output": "87"
+    }
+   ]
+  },
+  {
+   "name": "pipeline_exit",
+   "category": "graph_osp",
+   "subcategory": "build_pipeline",
+   "difficulty": "simple",
+   "py": "def pipeline_exit(spec: dict) -> int:\n    oks = len([s for s in spec[\"statuses\"] if s == \"ok\"])\n    return 0 if oks > 0 else 1",
+   "jac": "node Runner {}\nnode Step { has status: str; }\n\nwalker ExitCode {\n    has oks: int = 0, code: int = 1;\n    can start with Runner entry { visit [-->]; }\n    can tally with Step entry {\n        if here.status == \"ok\" { self.oks += 1; }\n    }\n    can decide with exit {\n        if self.oks > 0 { self.code = 0; }\n    }\n}\n\ndef pipeline_exit(spec: dict) -> int {\n    runner = Runner();\n    for s in spec[\"statuses\"] { runner ++> Step(status=str(s)); }\n    return (runner spawn ExitCode()).code;\n}\n\nwith entry { print(pipeline_exit({'statuses': ['fail', 'ok', 'skip']})); }",
+   "expected_output": "0",
+   "cases": [
+    {
+     "input": {
+      "statuses": [
+       "fail",
+       "ok",
+       "skip"
+      ]
+     },
+     "output": "0"
+    },
+    {
+     "input": {
+      "statuses": [
+       "fail",
+       "skip",
+       "error"
+      ]
+     },
+     "output": "1"
+    }
+   ]
+  },
+  {
+   "name": "biggest_source",
+   "category": "graph_osp",
+   "subcategory": "file_tree",
+   "difficulty": "simple",
+   "py": "def biggest_source(spec: dict) -> str:\n    binary = [\"png\", \"jpg\", \"gif\", \"ico\", \"wasm\", \"pyc\"]\n    best_path = \"\"\n    best_size = -1\n    for f in spec[\"files\"]:\n        base = f[\"path\"].split(\"/\")[-1]\n        ext = base.split(\".\")[-1].lower() if \".\" in base else \"\"\n        if ext in binary:\n            continue\n        if f[\"size\"] > best_size or (f[\"size\"] == best_size and f[\"path\"] < best_path):\n            best_size = f[\"size\"]\n            best_path = f[\"path\"]\n    return best_path",
+   "jac": "node Repo {}\nnode SrcFile { has path: str; has size: int; }\n\nwalker FindBiggest {\n    has best_path: str = \"\", best_size: int = -1;\n    can start with Repo entry { visit [-->]; }\n    can weigh with SrcFile entry {\n        base = here.path.split(\"/\")[-1];\n        ext = base.split(\".\")[-1].lower() if \".\" in base else \"\";\n        if ext not in [\"png\", \"jpg\", \"gif\", \"ico\", \"wasm\", \"pyc\"] {\n            if here.size > self.best_size or (here.size == self.best_size and here.path < self.best_path) {\n                self.best_size = here.size;\n                self.best_path = here.path;\n            }\n        }\n    }\n}\n\ndef biggest_source(spec: dict) -> str {\n    repo = Repo();\n    for f in spec[\"files\"] { repo ++> SrcFile(path=str(f[\"path\"]), size=int(f[\"size\"])); }\n    return (repo spawn FindBiggest()).best_path;\n}\n\nwith entry { print(biggest_source({'files': [{'path': 'src/main.jac', 'size': 1200}, {'path': 'assets/logo.png', 'size': 5000}, {'path': 'readme.md', 'size': 800}]})); }",
+   "expected_output": "src/main.jac",
+   "cases": [
+    {
+     "input": {
+      "files": [
+       {
+        "path": "src/main.jac",
+        "size": 1200
+       },
+       {
+        "path": "assets/logo.png",
+        "size": 5000
+       },
+       {
+        "path": "readme.md",
+        "size": 800
+       }
+      ]
+     },
+     "output": "src/main.jac"
+    },
+    {
+     "input": {
+      "files": [
+       {
+        "path": "b.py",
+        "size": 10
+       },
+       {
+        "path": "a.py",
+        "size": 10
+       }
+      ]
+     },
+     "output": "a.py"
+    },
+    {
+     "input": {
+      "files": [
+       {
+        "path": "x.png",
+        "size": 9
+       },
+       {
+        "path": "y.ico",
+        "size": 4
+       }
+      ]
+     },
+     "output": ""
+    }
+   ]
+  },
+  {
+   "name": "shade_corridor",
+   "category": "graph_osp",
+   "subcategory": "shooter_render",
+   "difficulty": "composed",
+   "py": "def shade_corridor(spec: dict) -> int:\n    value = int(spec[\"channel\"])\n    for pct in spec[\"pcts\"]:\n        v = value * int(pct) // 100\n        value = v if v < 255 else 255\n    return value",
+   "jac": "node Lamp {}\nnode Room { has pct: int; }\n\nwalker Shade {\n    has value: int;\n    can start with Lamp entry { visit [-->]; }\n    can dim with Room entry {\n        v = self.value * here.pct // 100;\n        self.value = v if v < 255 else 255;\n        visit [-->];\n    }\n}\n\ndef shade_corridor(spec: dict) -> int {\n    lamp = Lamp();\n    prev = lamp;\n    for p in spec[\"pcts\"] { nxt = Room(pct=int(p)); prev ++> nxt; prev = nxt; }\n    return (lamp spawn Shade(value=int(spec[\"channel\"]))).value;\n}\n\nwith entry { print(shade_corridor({'channel': 235, 'pcts': [85, 70]})); }",
+   "expected_output": "139",
+   "cases": [
+    {
+     "input": {
+      "channel": 235,
+      "pcts": [
+       85,
+       70
+      ]
+     },
+     "output": "139"
+    },
+    {
+     "input": {
+      "channel": 80,
+      "pcts": [
+       120,
+       120
+      ]
+     },
+     "output": "115"
+    },
+    {
+     "input": {
+      "channel": 200,
+      "pcts": [
+       200
+      ]
+     },
+     "output": "255"
+    },
+    {
+     "input": {
+      "channel": 150,
+      "pcts": []
+     },
+     "output": "150"
+    }
+   ]
+  },
+  {
+   "name": "step_marks",
+   "category": "graph_osp",
+   "subcategory": "build_pipeline",
+   "difficulty": "composed",
+   "py": "def step_marks(spec: dict) -> list:\n    lines = []\n    for s in spec[\"steps\"]:\n        if s[\"status\"] == \"ok\":\n            mark = \"ok  \"\n        elif s[\"status\"] == \"skip\":\n            mark = \"skip\"\n        else:\n            mark = \"FAIL\"\n        lines.append(\"  [\" + mark + \"] \" + s[\"name\"] + \": \" + s[\"detail\"])\n    return lines",
+   "jac": "node Pipeline {}\nnode BuildStep { has name: str; has status: str; has detail: str; }\n\nwalker MarkLines {\n    has lines: list = [];\n    can start with Pipeline entry { visit [-->]; }\n    can mark with BuildStep entry {\n        if here.status == \"ok\" { m = \"ok  \"; }\n        elif here.status == \"skip\" { m = \"skip\"; }\n        else { m = \"FAIL\"; }\n        self.lines.append(\"  [\" + m + \"] \" + here.name + \": \" + here.detail);\n        visit [-->];\n    }\n}\n\ndef step_marks(spec: dict) -> list {\n    pipe = Pipeline();\n    prev = pipe;\n    for s in spec[\"steps\"] {\n        nxt = BuildStep(name=str(s[\"name\"]), status=str(s[\"status\"]), detail=str(s[\"detail\"]));\n        prev ++> nxt;\n        prev = nxt;\n    }\n    return (pipe spawn MarkLines()).lines;\n}\n\nwith entry { print(step_marks({'steps': [{'name': 'benchmark', 'status': 'ok', 'detail': '120ms'}, {'name': 'shot.png', 'status': 'skip', 'detail': 'no display'}, {'name': 'deploy', 'status': 'fail', 'detail': 'crashed'}]})); }",
+   "expected_output": "['  [ok  ] benchmark: 120ms', '  [skip] shot.png: no display', '  [FAIL] deploy: crashed']",
+   "cases": [
+    {
+     "input": {
+      "steps": [
+       {
+        "name": "benchmark",
+        "status": "ok",
+        "detail": "120ms"
+       },
+       {
+        "name": "shot.png",
+        "status": "skip",
+        "detail": "no display"
+       },
+       {
+        "name": "deploy",
+        "status": "fail",
+        "detail": "crashed"
+       }
+      ]
+     },
+     "output": "['  [ok  ] benchmark: 120ms', '  [skip] shot.png: no display', '  [FAIL] deploy: crashed']"
+    },
+    {
+     "input": {
+      "steps": [
+       {
+        "name": "lint",
+        "status": "error",
+        "detail": "bad token"
+       }
+      ]
+     },
+     "output": "['  [FAIL] lint: bad token']"
+    },
+    {
+     "input": {
+      "steps": []
+     },
+     "output": "[]"
+    }
+   ]
+  },
+  {
+   "name": "bench_payload",
+   "category": "graph_osp",
+   "subcategory": "build_pipeline",
+   "difficulty": "composed",
+   "py": "def bench_payload(spec: dict) -> str:\n    for line in spec[\"lines\"]:\n        s = line.strip()\n        if s.startswith(\"BENCH_JSON \"):\n            return s[11:]\n    return \"none\"",
+   "jac": "node Log {}\nnode LogLine { has text: str; }\n\nwalker FindBench {\n    has payload: str = \"none\";\n    can start with Log entry { visit [-->]; }\n    can scan with LogLine entry {\n        s = here.text.strip();\n        if s.startswith(\"BENCH_JSON \") {\n            self.payload = s[11:];\n            disengage;\n        }\n        visit [-->];\n    }\n}\n\ndef bench_payload(spec: dict) -> str {\n    log = Log();\n    prev = log;\n    for line in spec[\"lines\"] { nxt = LogLine(text=str(line)); prev ++> nxt; prev = nxt; }\n    return (log spawn FindBench()).payload;\n}\n\nwith entry { print(bench_payload({'lines': ['starting run', '  BENCH_JSON {\"jac\": 120}', 'done']})); }",
+   "expected_output": "{\"jac\": 120}",
+   "cases": [
+    {
+     "input": {
+      "lines": [
+       "starting run",
+       "  BENCH_JSON {\"jac\": 120}",
+       "done"
+      ]
+     },
+     "output": "{\"jac\": 120}"
+    },
+    {
+     "input": {
+      "lines": [
+       "no marker here",
+       "still nothing"
+      ]
+     },
+     "output": "none"
+    },
+    {
+     "input": {
+      "lines": [
+       "BENCH_JSON [1, 2]",
+       "BENCH_JSON later"
+      ]
+     },
+     "output": "[1, 2]"
+    }
+   ]
+  },
+  {
+   "name": "count_kept_files",
+   "category": "graph_osp",
+   "subcategory": "file_tree",
+   "difficulty": "composed",
+   "py": "def count_kept_files(spec: dict) -> int:\n    binary = [\"png\", \"jpg\", \"gif\", \"ico\", \"wasm\", \"pyc\"]\n    kept = 0\n    for path in spec[\"paths\"]:\n        segs = path.split(\"/\")\n        base = segs[-1]\n        ext = base.split(\".\")[-1].lower() if \".\" in base else \"\"\n        if \"__pycache__\" in segs[:-1]:\n            continue\n        if base.startswith(\".\") or ext in binary:\n            continue\n        kept += 1\n    return kept",
+   "jac": "node Tree {}\nnode Folder { has name: str; }\nnode Leaf { has name: str; }\n\nwalker KeepCount {\n    has kept: int = 0;\n    can start with Tree entry { visit [-->]; }\n    can dive with Folder entry {\n        if here.name != \"__pycache__\" { visit [-->]; }\n    }\n    can check with Leaf entry {\n        ext = here.name.split(\".\")[-1].lower() if \".\" in here.name else \"\";\n        if not here.name.startswith(\".\") and ext not in [\"png\", \"jpg\", \"gif\", \"ico\", \"wasm\", \"pyc\"] {\n            self.kept += 1;\n        }\n    }\n}\n\ndef count_kept_files(spec: dict) -> int {\n    tree = Tree();\n    folders: dict = {};\n    for path in spec[\"paths\"] {\n        segs: list = path.split(\"/\");\n        parent = tree;\n        prefix = \"\";\n        for d in segs[:-1] {\n            prefix = prefix + \"/\" + d;\n            if prefix not in folders {\n                nd = Folder(name=d);\n                parent ++> nd;\n                folders[prefix] = nd;\n            }\n            parent = folders[prefix];\n        }\n        parent ++> Leaf(name=segs[-1]);\n    }\n    return (tree spawn KeepCount()).kept;\n}\n\nwith entry { print(count_kept_files({'paths': ['src/main.jac', 'a/__pycache__/x.pyc', 'dir/.hidden', 'logo.PNG', 'readme.md']})); }",
+   "expected_output": "2",
+   "cases": [
+    {
+     "input": {
+      "paths": [
+       "src/main.jac",
+       "a/__pycache__/x.pyc",
+       "dir/.hidden",
+       "logo.PNG",
+       "readme.md"
+      ]
+     },
+     "output": "2"
+    },
+    {
+     "input": {
+      "paths": [
+       "a/b/c.py",
+       ".env",
+       "x/__pycache__/deep/z.txt",
+       "img.gif"
+      ]
+     },
+     "output": "1"
+    },
+    {
+     "input": {
+      "paths": [
+       "one.txt",
+       "two.txt",
+       "sub/three.jac"
+      ]
+     },
+     "output": "3"
+    }
+   ]
+  },
+  {
+   "name": "lang_census",
+   "category": "graph_osp",
+   "subcategory": "file_tree",
+   "difficulty": "composed",
+   "py": "def lang_census(spec: dict) -> dict:\n    labels = {\"py\": \"Python\", \"md\": \"Markdown\", \"toml\": \"TOML\", \"css\": \"CSS\", \"js\": \"JavaScript\"}\n    tally = {}\n    for path in spec[\"paths\"]:\n        base = path.split(\"/\")[-1]\n        if path.endswith(\".jac\"):\n            lab = \"Jac\"\n        elif \".\" in base:\n            ext = base.split(\".\")[-1].lower()\n            lab = labels.get(ext, ext.upper())\n        else:\n            lab = \"Text\"\n        tally[lab] = tally.get(lab, 0) + 1\n    return {k: tally[k] for k in sorted(tally)}",
+   "jac": "node Repo {}\nnode SrcFile { has path: str; }\n\nwalker Census {\n    has tally: dict = {}, result: dict = {};\n    can start with Repo entry { visit [-->]; }\n    can label with SrcFile entry {\n        labels: dict = {\"py\": \"Python\", \"md\": \"Markdown\", \"toml\": \"TOML\", \"css\": \"CSS\", \"js\": \"JavaScript\"};\n        base = here.path.split(\"/\")[-1];\n        if here.path.endswith(\".jac\") { lab = \"Jac\"; }\n        elif \".\" in base {\n            ext = base.split(\".\")[-1].lower();\n            lab = labels.get(ext, ext.upper());\n        }\n        else { lab = \"Text\"; }\n        self.tally[lab] = self.tally.get(lab, 0) + 1;\n    }\n    can arrange with exit {\n        for k in sorted(self.tally.keys()) { self.result[k] = self.tally[k]; }\n    }\n}\n\ndef lang_census(spec: dict) -> dict {\n    repo = Repo();\n    for p in spec[\"paths\"] { repo ++> SrcFile(path=str(p)); }\n    return (repo spawn Census()).result;\n}\n\nwith entry { print(lang_census({'paths': ['main.jac', 'app.py', 'docs/readme.md', 'web/style.css', 'util.py']})); }",
+   "expected_output": "{'CSS': 1, 'Jac': 1, 'Markdown': 1, 'Python': 2}",
+   "cases": [
+    {
+     "input": {
+      "paths": [
+       "main.jac",
+       "app.py",
+       "docs/readme.md",
+       "web/style.css",
+       "util.py"
+      ]
+     },
+     "output": "{'CSS': 1, 'Jac': 1, 'Markdown': 1, 'Python': 2}"
+    },
+    {
+     "input": {
+      "paths": [
+       "README",
+       "data.xyz"
+      ]
+     },
+     "output": "{'Text': 1, 'XYZ': 1}"
+    },
+    {
+     "input": {
+      "paths": [
+       "a.jac",
+       "b.jac",
+       "conf.toml"
+      ]
+     },
+     "output": "{'Jac': 2, 'TOML': 1}"
+    }
+   ]
+  },
+  {
+   "name": "dir_usage",
+   "category": "graph_osp",
+   "subcategory": "file_tree",
+   "difficulty": "composed",
+   "py": "def dir_usage(spec: dict) -> dict:\n    tally = {}\n    for f in spec[\"files\"]:\n        top = f[\"path\"].split(\"/\")[0] if \"/\" in f[\"path\"] else \"(root)\"\n        tally[top] = tally.get(top, 0) + int(f[\"size\"])\n    return {k: tally[k] for k in sorted(tally)}",
+   "jac": "node Drive {}\nnode Folder { has name: str; }\nnode StoredFile { has size: int; }\n\nwalker Usage {\n    has tally: dict = {}, result: dict = {};\n    can start with Drive entry { visit [-->]; }\n    can measure with Folder entry {\n        total = 0;\n        for f in [-->] { total += f.size; }\n        self.tally[here.name] = self.tally.get(here.name, 0) + total;\n    }\n    can arrange with exit {\n        for k in sorted(self.tally.keys()) { self.result[k] = self.tally[k]; }\n    }\n}\n\ndef dir_usage(spec: dict) -> dict {\n    drive = Drive();\n    folders: dict = {};\n    for f in spec[\"files\"] {\n        top = f[\"path\"].split(\"/\")[0] if \"/\" in f[\"path\"] else \"(root)\";\n        if top not in folders {\n            fd = Folder(name=top);\n            drive ++> fd;\n            folders[top] = fd;\n        }\n        folders[top] ++> StoredFile(size=int(f[\"size\"]));\n    }\n    return (drive spawn Usage()).result;\n}\n\nwith entry { print(dir_usage({'files': [{'path': 'src/main.jac', 'size': 100}, {'path': 'src/util.jac', 'size': 50}, {'path': 'docs/a.md', 'size': 30}, {'path': 'README', 'size': 10}]})); }",
+   "expected_output": "{'(root)': 10, 'docs': 30, 'src': 150}",
+   "cases": [
+    {
+     "input": {
+      "files": [
+       {
+        "path": "src/main.jac",
+        "size": 100
+       },
+       {
+        "path": "src/util.jac",
+        "size": 50
+       },
+       {
+        "path": "docs/a.md",
+        "size": 30
+       },
+       {
+        "path": "README",
+        "size": 10
+       }
+      ]
+     },
+     "output": "{'(root)': 10, 'docs': 30, 'src': 150}"
+    },
+    {
+     "input": {
+      "files": [
+       {
+        "path": "a/x.py",
+        "size": 5
+       }
+      ]
+     },
+     "output": "{'a': 5}"
+    },
+    {
+     "input": {
+      "files": []
+     },
+     "output": "{}"
+    }
+   ]
+  },
+  {
+   "name": "capped_docs",
+   "category": "graph_osp",
+   "subcategory": "content_store",
+   "difficulty": "composed",
+   "py": "def capped_docs(spec: dict) -> list:\n    truncated = 0\n    total = 0\n    for d in spec[\"docs\"]:\n        t = d[\"text\"]\n        if len(t) > int(spec[\"cap\"]):\n            t = t[:int(spec[\"cap\"])]\n            truncated += 1\n        total += len(t)\n    return [truncated, total]",
+   "jac": "node Store {}\nnode Doc { has name: str; has text: str; }\n\nwalker CapScan {\n    has cap: int;\n    has truncated: int = 0, total: int = 0;\n    can start with Store entry { visit [-->]; }\n    can measure with Doc entry {\n        t = here.text;\n        if len(t) > self.cap {\n            t = t[:self.cap];\n            self.truncated += 1;\n        }\n        self.total += len(t);\n    }\n}\n\ndef capped_docs(spec: dict) -> list {\n    store = Store();\n    for d in spec[\"docs\"] { store ++> Doc(name=str(d[\"name\"]), text=str(d[\"text\"])); }\n    w = store spawn CapScan(cap=int(spec[\"cap\"]));\n    return [w.truncated, w.total];\n}\n\nwith entry { print(capped_docs({'docs': [{'name': 'a', 'text': 'hello world'}, {'name': 'b', 'text': 'hi'}], 'cap': 5})); }",
+   "expected_output": "[1, 7]",
+   "cases": [
+    {
+     "input": {
+      "docs": [
+       {
+        "name": "a",
+        "text": "hello world"
+       },
+       {
+        "name": "b",
+        "text": "hi"
+       }
+      ],
+      "cap": 5
+     },
+     "output": "[1, 7]"
+    },
+    {
+     "input": {
+      "docs": [
+       {
+        "name": "x",
+        "text": "abc"
+       }
+      ],
+      "cap": 10
+     },
+     "output": "[0, 3]"
+    },
+    {
+     "input": {
+      "docs": [],
+      "cap": 4
+     },
+     "output": "[0, 0]"
+    }
+   ]
+  },
+  {
+   "name": "score_tally",
+   "category": "graph_osp",
+   "subcategory": "shooter_game",
+   "difficulty": "advanced",
+   "py": "def score_tally(spec: dict) -> int:\n    targets = [{\"x\": float(t[0]), \"y\": float(t[1]), \"z\": float(t[2]), \"alive\": True} for t in spec[\"targets\"]]\n    step = float(spec[\"step\"])\n    r2 = float(spec[\"r2\"])\n    score = 0\n    for b in spec[\"bullets\"]:\n        if float(b[\"life\"]) <= 0.0:\n            continue\n        px = float(b[\"pos\"][0]) + float(b[\"vel\"][0]) * step\n        py = float(b[\"pos\"][1]) + float(b[\"vel\"][1]) * step\n        pz = float(b[\"pos\"][2]) + float(b[\"vel\"][2]) * step\n        hit = False\n        for t in targets:\n            if t[\"alive\"] and not hit:\n                dx = px - t[\"x\"]\n                dy = py - t[\"y\"]\n                dz = pz - t[\"z\"]\n                if dx * dx + dy * dy + dz * dz < r2:\n                    t[\"alive\"] = False\n                    score += 1\n                    hit = True\n    return score",
+   "jac": "node Arena {}\nnode Target { has x: float; has y: float; has z: float; has alive: bool = True; }\nnode Bullet {\n    has px: float; has py: float; has pz: float;\n    has vx: float; has vy: float; has vz: float;\n    has life: float;\n}\n\nwalker ResolveHits {\n    has step: float, r2: float;\n    has targets: list = [], score: int = 0;\n    can start with Arena entry { visit [-->][?:Bullet]; }\n    can fly with Bullet entry {\n        if here.life > 0.0 {\n            here.px += here.vx * self.step;\n            here.py += here.vy * self.step;\n            here.pz += here.vz * self.step;\n            here.life -= self.step;\n            hit = False;\n            for t in self.targets {\n                if t.alive and not hit {\n                    dx = here.px - t.x;\n                    dy = here.py - t.y;\n                    dz = here.pz - t.z;\n                    if dx * dx + dy * dy + dz * dz < self.r2 {\n                        t.alive = False;\n                        here.life = 0.0;\n                        self.score += 1;\n                        hit = True;\n                    }\n                }\n            }\n        }\n    }\n}\n\ndef score_tally(spec: dict) -> int {\n    arena = Arena();\n    tnodes: list = [];\n    for t in spec[\"targets\"] {\n        tn = Target(x=float(t[0]), y=float(t[1]), z=float(t[2]));\n        arena ++> tn;\n        tnodes.append(tn);\n    }\n    for b in spec[\"bullets\"] {\n        arena ++> Bullet(px=float(b[\"pos\"][0]), py=float(b[\"pos\"][1]), pz=float(b[\"pos\"][2]),\n                         vx=float(b[\"vel\"][0]), vy=float(b[\"vel\"][1]), vz=float(b[\"vel\"][2]),\n                         life=float(b[\"life\"]));\n    }\n    w = arena spawn ResolveHits(step=float(spec[\"step\"]), r2=float(spec[\"r2\"]), targets=tnodes);\n    return w.score;\n}\n\nwith entry { print(score_tally({'bullets': [{'pos': [0.0, 0.0, 0.0], 'vel': [2.0, 0.0, 0.0], 'life': 1.0}, {'pos': [5.0, 0.0, 0.0], 'vel': [0.0, 0.0, 0.0], 'life': 0.0}, {'pos': [0.0, 0.0, 4.0], 'vel': [0.0, 0.0, -2.0], 'life': 1.0}], 'targets': [[1.0, 0.0, 0.0], [0.0, 0.0, 3.0]], 'step': 0.5, 'r2': 1.4})); }",
+   "expected_output": "2",
+   "cases": [
+    {
+     "input": {
+      "bullets": [
+       {
+        "pos": [
+         0.0,
+         0.0,
+         0.0
+        ],
+        "vel": [
+         2.0,
+         0.0,
+         0.0
+        ],
+        "life": 1.0
+       },
+       {
+        "pos": [
+         5.0,
+         0.0,
+         0.0
+        ],
+        "vel": [
+         0.0,
+         0.0,
+         0.0
+        ],
+        "life": 0.0
+       },
+       {
+        "pos": [
+         0.0,
+         0.0,
+         4.0
+        ],
+        "vel": [
+         0.0,
+         0.0,
+         -2.0
+        ],
+        "life": 1.0
+       }
+      ],
+      "targets": [
+       [
+        1.0,
+        0.0,
+        0.0
+       ],
+       [
+        0.0,
+        0.0,
+        3.0
+       ]
+      ],
+      "step": 0.5,
+      "r2": 1.4
+     },
+     "output": "2"
+    },
+    {
+     "input": {
+      "bullets": [
+       {
+        "pos": [
+         0.0,
+         0.0,
+         0.0
+        ],
+        "vel": [
+         2.0,
+         0.0,
+         0.0
+        ],
+        "life": 1.0
+       }
+      ],
+      "targets": [
+       [
+        10.0,
+        10.0,
+        10.0
+       ]
+      ],
+      "step": 0.5,
+      "r2": 1.4
+     },
+     "output": "0"
+    },
+    {
+     "input": {
+      "bullets": [
+       {
+        "pos": [
+         0.0,
+         0.0,
+         0.0
+        ],
+        "vel": [
+         1.0,
+         0.0,
+         0.0
+        ],
+        "life": 2.0
+       },
+       {
+        "pos": [
+         2.0,
+         0.0,
+         0.0
+        ],
+        "vel": [
+         -1.0,
+         0.0,
+         0.0
+        ],
+        "life": 2.0
+       }
+      ],
+      "targets": [
+       [
+        1.0,
+        0.0,
+        0.0
+       ]
+      ],
+      "step": 1.0,
+      "r2": 1.4
+     },
+     "output": "1"
+    }
+   ]
+  },
+  {
+   "name": "transform_point",
+   "category": "graph_osp",
+   "subcategory": "graphics_pipeline",
+   "difficulty": "advanced",
+   "py": "def transform_point(spec: dict) -> list:\n    x = float(spec[\"point\"][0])\n    y = float(spec[\"point\"][1])\n    z = float(spec[\"point\"][2])\n    for op in spec[\"ops\"]:\n        vx = float(op[\"v\"][0])\n        vy = float(op[\"v\"][1])\n        vz = float(op[\"v\"][2])\n        if op[\"kind\"] == \"translate\":\n            x += vx\n            y += vy\n            z += vz\n        else:\n            x *= vx\n            y *= vy\n            z *= vz\n    return [round(x, 6), round(y, 6), round(z, 6)]",
+   "jac": "node Camera {}\nnode Xform { has kind: str; has vx: float; has vy: float; has vz: float; }\n\nwalker ApplyChain {\n    has x: float, y: float, z: float;\n    can start with Camera entry { visit [-->]; }\n    can step with Xform entry {\n        if here.kind == \"translate\" {\n            self.x += here.vx;\n            self.y += here.vy;\n            self.z += here.vz;\n        } else {\n            self.x *= here.vx;\n            self.y *= here.vy;\n            self.z *= here.vz;\n        }\n        visit [-->];\n    }\n}\n\ndef transform_point(spec: dict) -> list {\n    cam = Camera();\n    prev = cam;\n    for op in spec[\"ops\"] {\n        nxt = Xform(kind=str(op[\"kind\"]), vx=float(op[\"v\"][0]), vy=float(op[\"v\"][1]), vz=float(op[\"v\"][2]));\n        prev ++> nxt;\n        prev = nxt;\n    }\n    w = cam spawn ApplyChain(x=float(spec[\"point\"][0]), y=float(spec[\"point\"][1]), z=float(spec[\"point\"][2]));\n    return [round(w.x, 6), round(w.y, 6), round(w.z, 6)];\n}\n\nwith entry { print(transform_point({'point': [1.0, 2.0, 3.0], 'ops': [{'kind': 'translate', 'v': [1.0, 1.0, 0.5]}, {'kind': 'scale', 'v': [2.0, 1.0, 2.0]}]})); }",
+   "expected_output": "[4.0, 3.0, 7.0]",
+   "cases": [
+    {
+     "input": {
+      "point": [
+       1.0,
+       2.0,
+       3.0
+      ],
+      "ops": [
+       {
+        "kind": "translate",
+        "v": [
+         1.0,
+         1.0,
+         0.5
+        ]
+       },
+       {
+        "kind": "scale",
+        "v": [
+         2.0,
+         1.0,
+         2.0
+        ]
+       }
+      ]
+     },
+     "output": "[4.0, 3.0, 7.0]"
+    },
+    {
+     "input": {
+      "point": [
+       2.0,
+       4.0,
+       6.0
+      ],
+      "ops": [
+       {
+        "kind": "scale",
+        "v": [
+         0.5,
+         0.5,
+         0.5
+        ]
+       }
+      ]
+     },
+     "output": "[1.0, 2.0, 3.0]"
+    },
+    {
+     "input": {
+      "point": [
+       1.5,
+       0.0,
+       -2.0
+      ],
+      "ops": []
+     },
+     "output": "[1.5, 0.0, -2.0]"
+    }
+   ]
+  },
+  {
+   "name": "matrix_stack",
+   "category": "graph_osp",
+   "subcategory": "graphics_pipeline",
+   "difficulty": "advanced",
+   "py": "def matrix_stack(spec: dict) -> list:\n    regs = [0, 0]\n    mode = 0\n    for op in spec[\"ops\"]:\n        if op == \"proj\":\n            mode = 0\n        elif op == \"mv\":\n            mode = 1\n        else:\n            n = int(op.split(\":\")[1])\n            if op.startswith(\"set:\"):\n                regs[mode] = n\n            elif op.startswith(\"add:\"):\n                regs[mode] += n\n            else:\n                regs[mode] *= n\n    return regs",
+   "jac": "node Shim {}\nnode Register { has name: str; has value: int = 0; }\nnode Op { has text: str; }\n\nwalker DriveShim {\n    has regs: list;\n    has mode: int = 0;\n    can start with Shim entry { visit [-->][?:Op]; }\n    can exec with Op entry {\n        t = here.text;\n        if t == \"proj\" { self.mode = 0; }\n        elif t == \"mv\" { self.mode = 1; }\n        else {\n            n = int(t.split(\":\")[1]);\n            reg = self.regs[self.mode];\n            if t.startswith(\"set:\") { reg.value = n; }\n            elif t.startswith(\"add:\") { reg.value += n; }\n            else { reg.value *= n; }\n        }\n        visit [-->][?:Op];\n    }\n}\n\ndef matrix_stack(spec: dict) -> list {\n    shim = Shim();\n    proj = Register(name=\"proj\");\n    mv = Register(name=\"mv\");\n    shim ++> proj;\n    shim ++> mv;\n    prev = shim;\n    for op in spec[\"ops\"] { nxt = Op(text=str(op)); prev ++> nxt; prev = nxt; }\n    shim spawn DriveShim(regs=[proj, mv]);\n    return [proj.value, mv.value];\n}\n\nwith entry { print(matrix_stack({'ops': ['set:3', 'mul:4', 'mv', 'set:2', 'add:5']})); }",
+   "expected_output": "[12, 7]",
+   "cases": [
+    {
+     "input": {
+      "ops": [
+       "set:3",
+       "mul:4",
+       "mv",
+       "set:2",
+       "add:5"
+      ]
+     },
+     "output": "[12, 7]"
+    },
+    {
+     "input": {
+      "ops": [
+       "mv",
+       "add:9"
+      ]
+     },
+     "output": "[0, 9]"
+    },
+    {
+     "input": {
+      "ops": [
+       "mv",
+       "set:2",
+       "proj",
+       "set:8",
+       "mul:2",
+       "mv",
+       "add:3"
+      ]
+     },
+     "output": "[16, 5]"
+    }
+   ]
+  }
+ ]
+}
