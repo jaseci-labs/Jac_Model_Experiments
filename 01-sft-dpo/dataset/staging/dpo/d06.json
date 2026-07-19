@@ -1,0 +1,186 @@
+{
+ "batch_id": "d06",
+ "generator": "fable-agent-v1",
+ "pairs": [
+  {
+   "py": "def range_reachable(spec: dict) -> int:\n    \"\"\"Return max minus min over reachable node values.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]; start = spec[\"start\"]\n    seen = set(); stack = [start]; lo = None; hi = None\n    while stack:\n        n = stack.pop()\n        if n in seen: continue\n        seen.add(n); v = vals[n]\n        if lo is None or v < lo: lo = v\n        if hi is None or v > hi: hi = v\n        stack.extend(adj.get(n, []))\n    return hi - lo",
+   "chosen_jac": "node GN_range_reachable { has name: str; has val: int; has seen: bool = False; }\n\nwalker W_range_reachable {\n    has lo: int = 2147483647;\n    has hi: int = -2147483648;\n    can step with GN_range_reachable entry {\n        if not here.seen { here.seen = True; if here.val < self.lo { self.lo = here.val; } if here.val > self.hi { self.hi = here.val; } visit [-->]; }\n    }\n}\n\ndef range_reachable(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]); start: str = str(spec[\"start\"]);\n    vals: dict = dict(spec[\"vals\"]);\n    nodes: dict = {};\n    for nm in adj.keys() { nodes[nm] = GN_range_reachable(name=str(nm), seen=False, val=int(vals[nm])); }\n    for (s, ts) in adj.items() { for t in list(ts) { if t not in nodes { nodes[t] = GN_range_reachable(name=str(t), seen=False, val=int(vals[t])); } } }\n    for (s, ts) in adj.items() { for t in list(ts) { nodes[s] ++> nodes[t]; } }\n    w = nodes[start] spawn W_range_reachable();\n    return w.hi - w.lo;\n}",
+   "rejected_jac": "def range_reachable(spec: dict) -> int {\n    adj: dict = spec[\"adj\"];\n    vals: dict = spec[\"vals\"];\n    start: str = spec[\"start\"];\n    seen: list = [];\n    stack: list = [start];\n    lo: int = 0;\n    hi: int = 0;\n    first: bool = True;\n    while len(stack) > 0 {\n        n = stack.pop();\n        if n in seen { continue; }\n        seen.append(n);\n        v = vals[n];\n        if first { lo = v; hi = v; first = False; }\n        if v < lo { lo = v; }\n        if v > hi { hi = v; }\n        stack.extend(adj.get(n, []));\n    }\n    return hi - lo;\n}",
+   "rejected_style": "python_shaped_authored",
+   "recipe": "R3b",
+   "difficulty": "composed",
+   "source": "range_reachable"
+  },
+  {
+   "py": "def sum_positive(spec: dict) -> int:\n    \"\"\"Sum the positive values among reachable nodes.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]; start = spec[\"start\"]\n    seen = set(); stack = [start]; acc = 0\n    while stack:\n        n = stack.pop()\n        if n in seen: continue\n        seen.add(n); v = vals[n]\n        acc += v if v > 0 else 0\n        stack.extend(adj.get(n, []))\n    return acc",
+   "chosen_jac": "node GN_sum_positive { has name: str; has val: int; has seen: bool = False; }\n\nwalker W_sum_positive {\n    has total: int = 0;\n    can step with GN_sum_positive entry {\n        if not here.seen { here.seen = True; self.total += (here.val if here.val > 0 else 0); visit [-->]; }\n    }\n}\n\ndef sum_positive(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]); start: str = str(spec[\"start\"]);\n    vals: dict = dict(spec[\"vals\"]);\n    nodes: dict = {};\n    for nm in adj.keys() { nodes[nm] = GN_sum_positive(name=str(nm), seen=False, val=int(vals[nm])); }\n    for (s, ts) in adj.items() { for t in list(ts) { if t not in nodes { nodes[t] = GN_sum_positive(name=str(t), seen=False, val=int(vals[t])); } } }\n    for (s, ts) in adj.items() { for t in list(ts) { nodes[s] ++> nodes[t]; } }\n    w = nodes[start] spawn W_sum_positive();\n    return w.total;\n}",
+   "rejected_jac": "def sum_positive(spec: dict) -> int {\n    adj: dict = spec[\"adj\"];\n    vals: dict = spec[\"vals\"];\n    start: str = spec[\"start\"];\n    seen: list = [];\n    stack: list = [start];\n    acc: int = 0;\n    while len(stack) > 0 {\n        n = stack.pop();\n        if n in seen { continue; }\n        seen.append(n);\n        v = vals[n];\n        acc += v if v > 0 else 0;\n        stack.extend(adj.get(n, []));\n    }\n    return acc;\n}",
+   "rejected_style": "python_shaped_authored",
+   "recipe": "R3b",
+   "difficulty": "composed",
+   "source": "sum_positive"
+  },
+  {
+   "py": "def count_chain(spec: dict) -> int:\n    \"\"\"Count the elements in the chain.\"\"\"\n    items = spec[\"items\"]\n    return len(items)",
+   "chosen_jac": "node Cell { has val: int; has seen: bool = False; }\n\nwalker CntC {\n    has count: int = 0;\n    can step with Cell entry {\n        if not here.seen { here.seen = True; self.count += 1; visit [-->]; }\n    }\n}\n\ndef count_chain(spec: dict) -> int {\n    items: list = list(spec[\"items\"]);\n    if len(items) == 0 { return 0; }\n    cells: list = [];\n    for v in items { cells.append(Cell(val=int(v))); }\n    i: int = 0;\n    while i < len(cells) - 1 { cells[i] ++> cells[i + 1]; i += 1; }\n    w = cells[0] spawn CntC();\n    return w.count;\n}",
+   "rejected_jac": "def count_chain(spec: dict) -> int {\n    items: list = spec[\"items\"];\n    count: int = 0;\n    for it in items { count += 1; }\n    return count;\n}",
+   "rejected_style": "python_shaped_authored",
+   "recipe": "R3b",
+   "difficulty": "composed",
+   "source": "count_chain"
+  },
+  {
+   "py": "def count_within_hops(spec: dict) -> int:\n    \"\"\"Count nodes lying within limit hops of start.\"\"\"\n    adj = spec[\"adj\"]; limit = spec[\"limit\"]\n    dist = {spec[\"start\"]: 0}; queue = [spec[\"start\"]]; total = 0\n    while queue:\n        n = queue.pop(0)\n        total += 1\n        if dist[n] < limit:\n            for t in adj.get(n, []):\n                if t not in dist:\n                    dist[t] = dist[n] + 1\n                    queue.append(t)\n    return total",
+   "chosen_jac": "node Zone { has name: str; has ring: int = -1; has scanned: bool = False; }\n\nwalker Radar {\n    has reach: int;\n    has blips: int = 0;\n    can ping with Zone entry {\n        if here.scanned { return; }\n        here.scanned = True;\n        self.blips += 1;\n        if here.ring < self.reach {\n            for nxt in [-->] {\n                if nxt.ring == -1 { nxt.ring = here.ring + 1; }\n            }\n            visit [-->];\n        }\n    }\n}\n\ndef count_within_hops(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]);\n    reg: dict = {};\n    for (src, outs) in adj.items() {\n        if src not in reg { reg[src] = Zone(name=str(src)); }\n        for dst in outs { if dst not in reg { reg[dst] = Zone(name=str(dst)); } }\n    }\n    for (src, outs) in adj.items() { for dst in outs { reg[src] ++> reg[dst]; } }\n    reg[spec[\"start\"]].ring = 0;\n    w = reg[spec[\"start\"]] spawn Radar(reach=int(spec[\"limit\"]));\n    return w.blips;\n}",
+   "rejected_jac": "def count_within_hops(spec: dict) -> int {\n    adj: dict = spec[\"adj\"];\n    limit: int = spec[\"limit\"];\n    dist: dict = {spec[\"start\"]: 0};\n    queue: list = [spec[\"start\"]];\n    total: int = 0;\n    while len(queue) > 0 {\n        n = queue.pop(0);\n        total += 1;\n        if dist[n] < limit {\n            for t in adj.get(n, []) {\n                if t not in dist {\n                    dist[t] = dist[n] + 1;\n                    queue.append(t);\n                }\n            }\n        }\n    }\n    return total;\n}",
+   "rejected_style": "python_shaped_authored",
+   "recipe": "R3b",
+   "difficulty": "composed",
+   "source": "count_within_hops"
+  },
+  {
+   "py": "def count_even_leaves(spec: dict) -> int:\n    \"\"\"Count reachable nodes that are leaves (no children) with an even value.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]; start = spec[\"start\"]\n    seen = set(); stack = [start]; hits = 0\n    while stack:\n        n = stack.pop()\n        if n in seen: continue\n        seen.add(n); kids = adj.get(n, [])\n        if len(kids) == 0 and vals[n] % 2 == 0: hits += 1\n        stack.extend(kids)\n    return hits",
+   "chosen_jac": "node Twig { has name: str; has size: int; has passed: bool = False; }\n\nwalker LeafScan {\n    has hits: int = 0;\n    can inspect with Twig entry {\n        if not here.passed {\n            here.passed = True;\n            if len([-->]) == 0 and here.size % 2 == 0 { self.hits += 1; }\n            visit [-->];\n        }\n    }\n}\n\ndef count_even_leaves(spec: dict) -> int {\n    adj: dict = spec[\"adj\"]; vals: dict = spec[\"vals\"];\n    built: dict = {};\n    for (u, vs) in adj.items() {\n        if u not in built { built[u] = Twig(name=u, size=vals[u]); }\n        for v in vs { if v not in built { built[v] = Twig(name=v, size=vals[v]); } }\n    }\n    for (u, vs) in adj.items() { for v in vs { built[u] ++> built[v]; } }\n    wk = built[spec[\"start\"]] spawn LeafScan();\n    return wk.hits;\n}",
+   "rejected_jac": "def count_even_leaves(spec: dict) -> int {\n    adj: dict = spec[\"adj\"];\n    vals: dict = spec[\"vals\"];\n    start: str = spec[\"start\"];\n    seen: list = [];\n    stack: list = [start];\n    hits: int = 0;\n    while len(stack) > 0 {\n        n = stack.pop();\n        if n in seen { continue; }\n        seen.append(n);\n        kids: list = adj.get(n, []);\n        if len(kids) == 0 and vals[n] % 2 == 0 { hits += 1; }\n        stack.extend(kids);\n    }\n    return hits;\n}",
+   "rejected_style": "python_shaped_authored",
+   "recipe": "R3b",
+   "difficulty": "composed",
+   "source": "count_even_leaves"
+  },
+  {
+   "py": "def frontier_size(spec: dict) -> int:\n    \"\"\"Count nodes sitting exactly 'depth' hops from start.\"\"\"\n    adj = spec[\"adj\"]; start = spec[\"start\"]; d = spec[\"depth\"]\n    depth = {start: 0}; queue = [start]; i = 0; count = 0\n    while i < len(queue):\n        n = queue[i]; i += 1\n        if depth[n] == d:\n            count += 1\n        elif depth[n] < d:\n            for t in adj.get(n, []):\n                if t not in depth:\n                    depth[t] = depth[n] + 1\n                    queue.append(t)\n    return count",
+   "chosen_jac": "node Zone { has zid: str; has ring: int = -1; }\n\nwalker RingCounter {\n    has d: int;\n    has size: int = 0;\n    can expand with Zone entry {\n        if here.ring == self.d {\n            self.size += 1;\n        } elif here.ring < self.d {\n            for nb in [-->] {\n                if nb.ring == -1 { nb.ring = here.ring + 1; visit nb; }\n            }\n        }\n    }\n}\n\ndef frontier_size(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]);\n    zones: dict = {};\n    for s in adj.keys() {\n        if s not in zones { zones[s] = Zone(zid=str(s)); }\n        for t in adj[s] {\n            if t not in zones { zones[t] = Zone(zid=str(t)); }\n        }\n    }\n    for s in adj.keys() { for t in adj[s] { zones[s] ++> zones[t]; } }\n    zones[spec[\"start\"]].ring = 0;\n    w = zones[spec[\"start\"]] spawn RingCounter(d=int(spec[\"depth\"]));\n    return w.size;\n}",
+   "rejected_jac": "def frontier_size(spec: dict) -> int {\n    adj: dict = spec[\"adj\"];\n    start: str = spec[\"start\"];\n    d: int = spec[\"depth\"];\n    depth: dict = {start: 0};\n    queue: list = [start];\n    i: int = 0;\n    count: int = 0;\n    while i < len(queue) {\n        n = queue[i];\n        i += 1;\n        if depth[n] == d {\n            count += 1;\n        } elif depth[n] < d {\n            for t in adj.get(n, []) {\n                if t not in depth {\n                    depth[t] = depth[n] + 1;\n                    queue.append(t);\n                }\n            }\n        }\n    }\n    return count;\n}",
+   "rejected_style": "python_shaped_authored",
+   "recipe": "R3b",
+   "difficulty": "composed",
+   "source": "frontier_size"
+  },
+  {
+   "py": "def trace_route(spec: dict) -> str:\n    \"\"\"Follow single-successor links from start, joining stop names with slashes.\"\"\"\n    nxt = spec[\"next\"]\n    cur = spec[\"start\"]\n    parts = []\n    while cur:\n        parts.append(cur)\n        cur = nxt.get(cur, \"\")\n    return \"/\".join(parts)",
+   "chosen_jac": "node Stop { has name: str; }\n\nwalker Tracer {\n    has path: list = [];\n    can log with Stop entry { self.path.append(here.name); visit [-->]; }\n}\n\ndef trace_route(spec: dict) -> str {\n    nxt: dict = dict(spec[\"next\"]);\n    cur: str = str(spec[\"start\"]);\n    first = Stop(name=cur);\n    tip = first;\n    while nxt.get(cur, \"\") != \"\" {\n        cur = str(nxt[cur]);\n        hop = Stop(name=cur);\n        tip ++> hop;\n        tip = hop;\n    }\n    return \"/\".join((first spawn Tracer()).path);\n}",
+   "rejected_jac": "def trace_route(spec: dict) -> str {\n    nxt: dict = spec[\"next\"];\n    cur: str = spec[\"start\"];\n    parts: list = [];\n    while cur != \"\" {\n        parts.append(cur);\n        cur = nxt.get(cur, \"\");\n    }\n    return \"/\".join(parts);\n}",
+   "rejected_style": "python_shaped_authored",
+   "recipe": "R3b",
+   "difficulty": "composed",
+   "source": "trace_route"
+  },
+  {
+   "py": "def out_degree_by_mode(spec: dict) -> list:\n    \"\"\"Return [road_out, rail_out] counts for the start node.\"\"\"\n    roads_out = 0\n    for pair in spec[\"roads\"]:\n        if pair[0] == spec[\"start\"]:\n            roads_out += 1\n    rails_out = 0\n    for pair in spec[\"rails\"]:\n        if pair[0] == spec[\"start\"]:\n            rails_out += 1\n    return [roads_out, rails_out]",
+   "chosen_jac": "edge Road {}\nedge Rail {}\nnode Hub { has name: str; }\n\ndef out_degree_by_mode(spec: dict) -> list {\n    reg: dict = {};\n    reg[spec[\"start\"]] = Hub(name=spec[\"start\"]);\n    for pr in spec[\"roads\"] { for nm in pr { if nm not in reg { reg[nm] = Hub(name=nm); } } }\n    for pr in spec[\"rails\"] { for nm in pr { if nm not in reg { reg[nm] = Hub(name=nm); } } }\n    for pr in spec[\"roads\"] { reg[pr[0]] +>:Road:+> reg[pr[1]]; }\n    for pr in spec[\"rails\"] { reg[pr[0]] +>:Rail:+> reg[pr[1]]; }\n    base = reg[spec[\"start\"]];\n    return [len([edge base ->:Road:->]), len([edge base ->:Rail:->])];\n}",
+   "rejected_jac": "def out_degree_by_mode(spec: dict) -> list {\n    roads_out: int = 0;\n    for pair in spec[\"roads\"] {\n        if pair[0] == spec[\"start\"] { roads_out += 1; }\n    }\n    rails_out: int = 0;\n    for pair in spec[\"rails\"] {\n        if pair[0] == spec[\"start\"] { rails_out += 1; }\n    }\n    return [roads_out, rails_out];\n}",
+   "rejected_style": "python_shaped_authored",
+   "recipe": "R3b",
+   "difficulty": "composed",
+   "source": "out_degree_by_mode"
+  },
+  {
+   "py": "def chain_toll_total(spec: dict) -> int:\n    \"\"\"Total toll paid crossing every road along the chain of stops.\"\"\"\n    total = 0\n    for t in spec[\"tolls\"]:\n        total += t\n    return total",
+   "chosen_jac": "node Stop {}\nedge Road { has toll: int; }\n\nwalker TollTally {\n    has total: int = 0;\n    can pay with Road entry { self.total += here.toll; }\n    can advance with Stop entry { visit [edge -->]; }\n}\n\ndef chain_toll_total(spec: dict) -> int {\n    tolls: list = list(spec[\"tolls\"]);\n    stops: list = [Stop() for _ in range(len(tolls) + 1)];\n    for (i, t) in enumerate(tolls) {\n        stops[i] +>:Road(toll=int(t)):+> stops[i + 1];\n    }\n    return (stops[0] spawn TollTally()).total;\n}",
+   "rejected_jac": "def chain_toll_total(spec: dict) -> int {\n    total: int = 0;\n    for t in spec[\"tolls\"] { total += t; }\n    return total;\n}",
+   "rejected_style": "python_shaped_authored",
+   "recipe": "R3b",
+   "difficulty": "composed",
+   "source": "chain_toll_total"
+  },
+  {
+   "py": "def busiest_kind(spec: dict) -> str:\n    \"\"\"Kind of road with the largest total distance among reachable roads (ties alphabetical).\"\"\"\n    adj = {}\n    for s, t, k, w in spec[\"edges\"]:\n        adj.setdefault(s, []).append((t, k, w))\n    seen = set()\n    stack = [spec[\"start\"]]\n    totals = {}\n    while stack:\n        n = stack.pop()\n        if n in seen:\n            continue\n        seen.add(n)\n        for t, k, w in adj.get(n, []):\n            totals[k] = totals.get(k, 0) + w\n            stack.append(t)\n    best = \"\"\n    for k in sorted(totals):\n        if best == \"\" or totals[k] > totals[best]:\n            best = k\n    return best",
+   "chosen_jac": "node Junction { has name: str; has seen: bool = False; }\nedge Road { has kind: str; has dist: int; }\n\nwalker KindLedger {\n    has totals: dict = {};\n    can tally with Junction entry {\n        if not here.seen {\n            here.seen = True;\n            for e in [edge here -->] {\n                self.totals[e.kind] = self.totals.get(e.kind, 0) + e.dist;\n            }\n            visit [-->];\n        }\n    }\n}\n\ndef busiest_kind(spec: dict) -> str {\n    nodes: dict = {};\n    for tr in spec[\"edges\"] {\n        for nm in [tr[0], tr[1]] {\n            if nm not in nodes { nodes[nm] = Junction(name=str(nm)); }\n        }\n    }\n    for tr in spec[\"edges\"] {\n        nodes[tr[0]] +>:Road(kind=str(tr[2]), dist=int(tr[3])):+> nodes[tr[1]];\n    }\n    totals: dict = (nodes[spec[\"start\"]] spawn KindLedger()).totals;\n    best: str = \"\";\n    for k in sorted(totals.keys()) {\n        if best == \"\" or totals[k] > totals[best] { best = k; }\n    }\n    return best;\n}",
+   "rejected_jac": "def busiest_kind(spec: dict) -> str {\n    adj: dict = {};\n    for tr in spec[\"edges\"] {\n        s = tr[0];\n        if s not in adj { adj[s] = []; }\n        adj[s].append([tr[1], tr[2], tr[3]]);\n    }\n    seen: list = [];\n    stack: list = [spec[\"start\"]];\n    totals: dict = {};\n    while len(stack) > 0 {\n        n = stack.pop();\n        if n in seen { continue; }\n        seen.append(n);\n        for out in adj.get(n, []) {\n            k = out[1];\n            totals[k] = totals.get(k, 0) + out[2];\n            stack.append(out[0]);\n        }\n    }\n    best: str = \"\";\n    for k in sorted(totals) {\n        if best == \"\" or totals[k] > totals[best] { best = k; }\n    }\n    return best;\n}",
+   "rejected_style": "python_shaped_authored",
+   "recipe": "R3b",
+   "difficulty": "composed",
+   "source": "busiest_kind"
+  },
+  {
+   "py": "def fan_post_count(spec: dict) -> int:\n    \"\"\"Count posts written by the users that the given user follows.\"\"\"\n    fol = set(spec[\"follows\"].get(spec[\"who\"], []))\n    return sum(1 for p in spec[\"posts\"] if p[\"author\"] in fol)",
+   "chosen_jac": "node User { has name: str; }\nnode Post {}\nedge Follows {}\n\nwalker FanCount {\n    has moved: bool = False;\n    has count: int = 0;\n    can seek with User entry {\n        if not self.moved {\n            self.moved = True;\n            visit [->:Follows:->][?:User];\n        } else {\n            visit [-->][?:Post];\n        }\n    }\n    can tally with Post entry { self.count += 1; }\n}\n\ndef fan_post_count(spec: dict) -> int {\n    who: str = str(spec[\"who\"]);\n    unodes: dict = {};\n    for nm in list(spec[\"users\"]) { unodes[nm] = User(name=str(nm)); }\n    for (src, tgts) in dict(spec[\"follows\"]).items() {\n        for t in list(tgts) {\n            if src in unodes and t in unodes { unodes[src] +>:Follows:+> unodes[t]; }\n        }\n    }\n    for p in list(spec[\"posts\"]) {\n        if p[\"author\"] in unodes { unodes[p[\"author\"]] ++> Post(); }\n    }\n    if who not in unodes { return 0; }\n    return (unodes[who] spawn FanCount()).count;\n}",
+   "rejected_jac": "def fan_post_count(spec: dict) -> int {\n    fol: list = spec[\"follows\"].get(spec[\"who\"], []);\n    count: int = 0;\n    for p in spec[\"posts\"] {\n        if p[\"author\"] in fol { count += 1; }\n    }\n    return count;\n}",
+   "rejected_style": "python_shaped_authored",
+   "recipe": "R3b",
+   "difficulty": "composed",
+   "source": "fan_post_count"
+  },
+  {
+   "py": "def shared_reach_sum(spec: dict) -> int:\n    \"\"\"Sum values of nodes reachable from both entry points.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]\n    first = []\n    queue = [spec[\"a\"]]\n    while queue:\n        n = queue.pop(0)\n        if n in first:\n            continue\n        first.append(n)\n        queue.extend(adj[n])\n    total = 0\n    second = []\n    queue = [spec[\"b\"]]\n    while queue:\n        n = queue.pop(0)\n        if n in second:\n            continue\n        second.append(n)\n        queue.extend(adj[n])\n        if n in first:\n            total += vals[n]\n    return total",
+   "chosen_jac": "node Depot { has stock: int; has hit: bool = False; has counted: bool = False; }\n\nwalker MarkReach {\n    can mark with Depot entry {\n        if not here.hit {\n            here.hit = True;\n            visit [-->];\n        }\n    }\n}\n\nwalker SharedSum {\n    has total: int = 0;\n    can gather with Depot entry {\n        if not here.counted {\n            here.counted = True;\n            if here.hit { self.total += here.stock; }\n            visit [-->];\n        }\n    }\n}\n\ndef shared_reach_sum(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]); vals: dict = dict(spec[\"vals\"]);\n    depots: dict = {};\n    for nm in vals.keys() { depots[nm] = Depot(stock=int(vals[nm])); }\n    for (a, bs) in adj.items() { for b in bs { depots[a] ++> depots[b]; } }\n    marker = depots[str(spec[\"a\"])] spawn MarkReach();\n    return (depots[str(spec[\"b\"])] spawn SharedSum()).total;\n}",
+   "rejected_jac": "def shared_reach_sum(spec: dict) -> int {\n    adj: dict = spec[\"adj\"];\n    vals: dict = spec[\"vals\"];\n    first: list = [];\n    queue: list = [spec[\"a\"]];\n    while len(queue) > 0 {\n        n = queue.pop(0);\n        if n in first { continue; }\n        first.append(n);\n        queue.extend(adj[n]);\n    }\n    total: int = 0;\n    second: list = [];\n    queue = [spec[\"b\"]];\n    while len(queue) > 0 {\n        n = queue.pop(0);\n        if n in second { continue; }\n        second.append(n);\n        queue.extend(adj[n]);\n        if n in first { total += vals[n]; }\n    }\n    return total;\n}",
+   "rejected_style": "python_shaped_authored",
+   "recipe": "R3b",
+   "difficulty": "composed",
+   "source": "shared_reach_sum"
+  },
+  {
+   "py": "def child_branch_sums(spec: dict) -> dict:\n    \"\"\"Map each direct child of base to the value sum of its subtree.\"\"\"\n    kids = spec[\"kids\"]\n    vals = spec[\"vals\"]\n    out = {}\n    for ch in sorted(kids.get(spec[\"base\"], [])):\n        total = 0\n        stack = [ch]\n        while stack:\n            cur = stack.pop()\n            total += vals[cur]\n            stack.extend(kids.get(cur, []))\n        out[ch] = total\n    return out",
+   "chosen_jac": "node Arm { has name: str; has val: int; }\n\nwalker ArmSum {\n    has total: int = 0;\n    can add with Arm entry {\n        self.total = here.val;\n        for c in [-->] { self.total += (c spawn ArmSum()).total; }\n    }\n}\n\ndef child_branch_sums(spec: dict) -> dict {\n    kids: dict = dict(spec[\"kids\"]); vals: dict = dict(spec[\"vals\"]);\n    nodes: dict = {};\n    for nm in vals.keys() { nodes[nm] = Arm(name=str(nm), val=int(vals[nm])); }\n    for (p, cs) in kids.items() { for c in cs { nodes[p] ++> nodes[c]; } }\n    out: dict = {};\n    for ch in sorted(kids.get(spec[\"base\"], [])) {\n        out[ch] = (nodes[ch] spawn ArmSum()).total;\n    }\n    return out;\n}",
+   "rejected_jac": "def child_branch_sums(spec: dict) -> dict {\n    kids: dict = spec[\"kids\"];\n    vals: dict = spec[\"vals\"];\n    out: dict = {};\n    for ch in sorted(kids.get(spec[\"base\"], [])) {\n        total: int = 0;\n        stack: list = [ch];\n        while len(stack) > 0 {\n            cur = stack.pop();\n            total += vals[cur];\n            stack.extend(kids.get(cur, []));\n        }\n        out[ch] = total;\n    }\n    return out;\n}",
+   "rejected_style": "python_shaped_authored",
+   "recipe": "R3b",
+   "difficulty": "composed",
+   "source": "child_branch_sums"
+  },
+  {
+   "py": "def open_gate_run(spec: dict) -> int:\n    \"\"\"Count consecutive doors from the start whose charge meets the key.\"\"\"\n    passed = 0\n    for c in spec[\"charges\"]:\n        if c < spec[\"key\"]:\n            break\n        passed += 1\n    return passed",
+   "chosen_jac": "node Door { has charge: int; has open: bool = False; }\n\nwalker Inspector {\n    has key: int;\n    can inspect with Door entry {\n        if here.charge >= self.key { here.open = True; }\n        visit [-->];\n    }\n}\n\nwalker Runner {\n    has passed: int = 0;\n    can run with Door entry {\n        if here.open {\n            self.passed += 1;\n            visit [-->];\n        }\n    }\n}\n\ndef open_gate_run(spec: dict) -> int {\n    charges: list = list(spec[\"charges\"]);\n    if not charges { return 0; }\n    doors: list = [Door(charge=int(v)) for v in charges];\n    for (a, b) in zip(doors, doors[1:]) { a ++> b; }\n    inspector = doors[0] spawn Inspector(key=int(spec[\"key\"]));\n    return (doors[0] spawn Runner()).passed;\n}",
+   "rejected_jac": "def open_gate_run(spec: dict) -> int {\n    passed: int = 0;\n    for c in spec[\"charges\"] {\n        if c < spec[\"key\"] { break; }\n        passed += 1;\n    }\n    return passed;\n}",
+   "rejected_style": "python_shaped_authored",
+   "recipe": "R3b",
+   "difficulty": "composed",
+   "source": "open_gate_run"
+  },
+  {
+   "py": "def total_shelf_items(spec: dict) -> int:\n    \"\"\"Count every item hanging off root's category fan-out.\"\"\"\n    total = 0\n    for items in spec[\"categories\"].values():\n        total += len(items)\n    return total",
+   "chosen_jac": "node Category { has name: str; }\nnode Item {}\n\nwalker ShelfCount {\n    has total: int = 0;\n    can fan with Root entry { visit [-->][?:Category]; }\n    can descend with Category entry { visit [-->][?:Item]; }\n    can tally with Item entry { self.total += 1; }\n}\n\ndef total_shelf_items(spec: dict) -> int {\n    for old in [root -->] { root del --> old; }\n    for (cat, items) in spec[\"categories\"].items() {\n        shelf = Category(name=str(cat));\n        root ++> shelf;\n        for it in list(items) { shelf ++> Item(); }\n    }\n    return (root spawn ShelfCount()).total;\n}",
+   "rejected_jac": "def total_shelf_items(spec: dict) -> int {\n    total: int = 0;\n    for items in spec[\"categories\"].values() { total += len(items); }\n    return total;\n}",
+   "rejected_style": "python_shaped_authored",
+   "recipe": "R3b",
+   "difficulty": "composed",
+   "source": "total_shelf_items"
+  },
+  {
+   "py": "def follower_count(spec: dict) -> int:\n    \"\"\"Count how many users follow the target user.\"\"\"\n    users = set(spec[\"users\"])\n    if spec[\"who\"] not in users:\n        return 0\n    return sum(1 for f in spec[\"follows\"] if f[0] in users and f[1] == spec[\"who\"])",
+   "chosen_jac": "node User { has name: str; }\nedge Follow {}\n\nwalker FanCount {\n    has moved: bool = False;\n    has count: int = 0;\n    can roam with User entry {\n        if not self.moved { self.moved = True; visit [<-:Follow:<-][?:User]; }\n        else { self.count += 1; }\n    }\n}\n\ndef follower_count(spec: dict) -> int {\n    unodes: dict = {};\n    for nm in list(spec[\"users\"]) { unodes[nm] = User(name=str(nm)); }\n    for f in list(spec[\"follows\"]) {\n        if f[0] in unodes and f[1] in unodes { unodes[f[0]] +>:Follow:+> unodes[f[1]]; }\n    }\n    who: str = str(spec[\"who\"]);\n    if who not in unodes { return 0; }\n    return (unodes[who] spawn FanCount()).count;\n}",
+   "rejected_jac": "def follower_count(spec: dict) -> int {\n    users: list = list(spec[\"users\"]);\n    if spec[\"who\"] not in users { return 0; }\n    count: int = 0;\n    for f in spec[\"follows\"] {\n        if f[0] in users and f[1] == spec[\"who\"] { count += 1; }\n    }\n    return count;\n}",
+   "rejected_style": "python_shaped_authored",
+   "recipe": "R3b",
+   "difficulty": "composed",
+   "source": "follower_count"
+  },
+  {
+   "py": "def feed_ranking(spec: dict) -> str:\n    \"\"\"Rank the user's feed (own posts plus followees' posts) by like count desc, then post id; comma-joined ids.\"\"\"\n    users = set(spec[\"users\"])\n    who = spec[\"who\"]\n    if who not in users:\n        return \"\"\n    authors = {who} | {f[1] for f in spec[\"follows\"] if f[0] == who and f[1] in users}\n    feed = [p[\"id\"] for p in spec[\"posts\"] if p[\"author\"] in authors]\n    counts = {pid: 0 for pid in feed}\n    for l in spec[\"likes\"]:\n        if l[0] in users and l[1] in counts:\n            counts[l[1]] += 1\n    ranked = sorted(feed, key=lambda pid: (-counts[pid], pid))\n    return \",\".join(ranked)",
+   "chosen_jac": "node User { has name: str; }\nnode Post { has id: str; }\nedge Follow {}\nedge Wrote {}\nedge Like {}\n\nwalker FeedRank {\n    has base: str;\n    has pairs: list = [];\n    can seek with User entry {\n        if here.name == self.base {\n            visit [->:Wrote:->][?:Post];\n            visit [->:Follow:->][?:User];\n        } else { visit [->:Wrote:->][?:Post]; }\n    }\n    can weigh with Post entry {\n        self.pairs.append((-len([<-:Like:<-][?:User]), here.id));\n    }\n}\n\ndef feed_ranking(spec: dict) -> str {\n    unodes: dict = {};\n    for nm in list(spec[\"users\"]) { unodes[nm] = User(name=str(nm)); }\n    for f in list(spec[\"follows\"]) {\n        if f[0] in unodes and f[1] in unodes { unodes[f[0]] +>:Follow:+> unodes[f[1]]; }\n    }\n    pnodes: dict = {};\n    for p in list(spec[\"posts\"]) {\n        if p[\"author\"] in unodes {\n            pn = Post(id=str(p[\"id\"]));\n            pnodes[p[\"id\"]] = pn;\n            unodes[p[\"author\"]] +>:Wrote:+> pn;\n        }\n    }\n    for l in list(spec[\"likes\"]) {\n        if l[0] in unodes and l[1] in pnodes { unodes[l[0]] +>:Like:+> pnodes[l[1]]; }\n    }\n    who: str = str(spec[\"who\"]);\n    if who not in unodes { return \"\"; }\n    w = unodes[who] spawn FeedRank(base=who);\n    w.pairs.sort();\n    return \",\".join([p[1] for p in w.pairs]);\n}",
+   "rejected_jac": "def feed_ranking(spec: dict) -> str {\n    users: list = list(spec[\"users\"]);\n    who: str = spec[\"who\"];\n    if who not in users { return \"\"; }\n    authors: list = [who];\n    for f in spec[\"follows\"] {\n        if f[0] == who and f[1] in users and f[1] not in authors { authors.append(f[1]); }\n    }\n    feed: list = [];\n    for p in spec[\"posts\"] {\n        if p[\"author\"] in authors { feed.append(p[\"id\"]); }\n    }\n    counts: dict = {};\n    for pid in feed { counts[pid] = 0; }\n    for l in spec[\"likes\"] {\n        if l[0] in users and l[1] in counts { counts[l[1]] += 1; }\n    }\n    pairs: list = [];\n    for pid in feed { pairs.append((-counts[pid], pid)); }\n    pairs.sort();\n    out: list = [];\n    for pr in pairs { out.append(pr[1]); }\n    return \",\".join(out);\n}",
+   "rejected_style": "python_shaped_authored",
+   "recipe": "R3b",
+   "difficulty": "composed",
+   "source": "feed_ranking"
+  },
+  {
+   "py": "def peak_hour(spec: dict) -> str:\n    \"\"\"Busiest event hour as 'hour:count' (ties -> earliest hour).\"\"\"\n    tally = {}\n    for e in spec[\"events\"]:\n        tally[e[\"hour\"]] = tally.get(e[\"hour\"], 0) + 1\n    if not tally:\n        return \"none\"\n    best_h = -1\n    best_n = -1\n    for h in sorted(tally):\n        if tally[h] > best_n:\n            best_h = h\n            best_n = tally[h]\n    return str(best_h) + \":\" + str(best_n)",
+   "chosen_jac": "node Feed {}\nnode Event { has hour: int; }\n\nwalker PeakScan {\n    has tally: dict = {}, result: str = \"none\";\n    can start with Feed entry { visit [-->][?:Event]; }\n    can count with Event entry {\n        self.tally[here.hour] = self.tally.get(here.hour, 0) + 1;\n    }\n    can pick with exit {\n        if self.tally {\n            best_h = -1;\n            best_n = -1;\n            for h in sorted(self.tally) {\n                if self.tally[h] > best_n { best_h = h; best_n = self.tally[h]; }\n            }\n            self.result = str(best_h) + \":\" + str(best_n);\n        }\n    }\n}\n\ndef peak_hour(spec: dict) -> str {\n    feed = Feed();\n    for e in spec[\"events\"] { feed ++> Event(hour=int(e[\"hour\"])); }\n    return (feed spawn PeakScan()).result;\n}",
+   "rejected_jac": "def peak_hour(spec: dict) -> str {\n    tally: dict = {};\n    for e in spec[\"events\"] {\n        tally[e[\"hour\"]] = tally.get(e[\"hour\"], 0) + 1;\n    }\n    if len(tally) == 0 { return \"none\"; }\n    best_h: int = -1;\n    best_n: int = -1;\n    for h in sorted(tally) {\n        if tally[h] > best_n {\n            best_h = h;\n            best_n = tally[h];\n        }\n    }\n    return str(best_h) + \":\" + str(best_n);\n}",
+   "rejected_style": "python_shaped_authored",
+   "recipe": "R3b",
+   "difficulty": "composed",
+   "source": "peak_hour"
+  },
+  {
+   "py": "def bullet_sweep(spec: dict) -> int:\n    \"\"\"Advance every bullet one tick; count those still inside the arena.\"\"\"\n    live = 0\n    for b in spec[\"bullets\"]:\n        nx = b[\"x\"] + b[\"v\"]\n        if 0 <= nx < spec[\"arena\"]:\n            live += 1\n    return live",
+   "chosen_jac": "node Arena { has bound: int; }\nnode Bullet { has x: int, v: int; }\n\nwalker Sweep {\n    has bound: int = 0, live: int = 0;\n    can start with Arena entry {\n        self.bound = here.bound;\n        visit [-->][?:Bullet];\n    }\n    can advance with Bullet entry {\n        here.x += here.v;\n        if here.x >= 0 and here.x < self.bound { self.live += 1; }\n    }\n}\n\ndef bullet_sweep(spec: dict) -> int {\n    arena = Arena(bound=int(spec[\"arena\"]));\n    for b in spec[\"bullets\"] {\n        arena ++> Bullet(x=int(b[\"x\"]), v=int(b[\"v\"]));\n    }\n    return (arena spawn Sweep()).live;\n}",
+   "rejected_jac": "def bullet_sweep(spec: dict) -> int {\n    live: int = 0;\n    for b in spec[\"bullets\"] {\n        nx = b[\"x\"] + b[\"v\"];\n        if nx >= 0 and nx < spec[\"arena\"] { live += 1; }\n    }\n    return live;\n}",
+   "rejected_style": "python_shaped_authored",
+   "recipe": "R3b",
+   "difficulty": "composed",
+   "source": "bullet_sweep"
+  },
+  {
+   "py": "def bench_payload(spec: dict) -> str:\n    for line in spec[\"lines\"]:\n        s = line.strip()\n        if s.startswith(\"BENCH_JSON \"):\n            return s[11:]\n    return \"none\"",
+   "chosen_jac": "node Log {}\nnode LogLine { has text: str; }\n\nwalker FindBench {\n    has payload: str = \"none\";\n    can start with Log entry { visit [-->]; }\n    can scan with LogLine entry {\n        s = here.text.strip();\n        if s.startswith(\"BENCH_JSON \") {\n            self.payload = s[11:];\n            disengage;\n        }\n        visit [-->];\n    }\n}\n\ndef bench_payload(spec: dict) -> str {\n    log = Log();\n    prev = log;\n    for line in spec[\"lines\"] { nxt = LogLine(text=str(line)); prev ++> nxt; prev = nxt; }\n    return (log spawn FindBench()).payload;\n}",
+   "rejected_jac": "def bench_payload(spec: dict) -> str {\n    for line in spec[\"lines\"] {\n        s = line.strip();\n        if s.startswith(\"BENCH_JSON \") { return s[11:]; }\n    }\n    return \"none\";\n}",
+   "rejected_style": "python_shaped_authored",
+   "recipe": "R3b",
+   "difficulty": "composed",
+   "source": "bench_payload"
+  }
+ ]
+}
