@@ -1,0 +1,21 @@
+{
+  "batch_id": "b05",
+  "accepted": [
+    "count_road_reachable",
+    "rail_reachable_names",
+    "out_degree_by_mode",
+    "sum_follow_values",
+    "wider_network",
+    "shared_reach_count",
+    "mode_cost_split",
+    "mentor_chain_depth",
+    "unblocked_follower_count",
+    "strong_or_rail_reach",
+    "transfer_count",
+    "mixed_only_count",
+    "interchange_names",
+    "faster_mode_hops"
+  ],
+  "rejected": [],
+  "accept_rate": 1.0
+}

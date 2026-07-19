@@ -1,0 +1,1 @@
+{"eid": "a33d5c5d5a47", "run_id": "3bbf4c46", "pid": 94902, "stamp": "Sun Jul 19 04:40:48 2026", "status": "done", "started": "2026-07-19 04:40:48", "cmd": "/Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.venv/bin/jac run 01-sft-dpo/sft_dpo/jacgen/eval_probe.jac"}

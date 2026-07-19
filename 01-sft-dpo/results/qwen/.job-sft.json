@@ -1,0 +1,1 @@
+{"name": "qwen", "mode": "sft", "run_id": "58ebbbb1", "pid": 93927, "stamp": "Sun Jul 19 04:40:12 2026", "status": "done", "started": "2026-07-19 04:40:12", "cmd": "./01-sft-dpo/sft_dpo/run_probe.sh Qwen/Qwen3-Coder-30B-A3B qwen"}

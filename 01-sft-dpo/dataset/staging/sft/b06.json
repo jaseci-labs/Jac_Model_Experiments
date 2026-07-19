@@ -1,0 +1,911 @@
+{
+ "batch_id": "b06",
+ "generator": "fable-agent-v1",
+ "examples": [
+  {
+   "name": "chain_toll_total",
+   "category": "graph_osp",
+   "subcategory": "edge_weight_sum",
+   "difficulty": "simple",
+   "py": "def chain_toll_total(spec: dict) -> int:\n    \"\"\"Total toll paid crossing every road along the chain of stops.\"\"\"\n    total = 0\n    for t in spec[\"tolls\"]:\n        total += t\n    return total",
+   "jac": "node Stop {}\nedge Road { has toll: int; }\n\nwalker TollTally {\n    has total: int = 0;\n    can pay with Road entry { self.total += here.toll; }\n    can advance with Stop entry { visit [edge -->]; }\n}\n\ndef chain_toll_total(spec: dict) -> int {\n    tolls: list = list(spec[\"tolls\"]);\n    stops: list = [Stop() for _ in range(len(tolls) + 1)];\n    for (i, t) in enumerate(tolls) {\n        stops[i] +>:Road(toll=int(t)):+> stops[i + 1];\n    }\n    return (stops[0] spawn TollTally()).total;\n}\n\nwith entry { print(chain_toll_total({\"tolls\": [2, 3, 4]})); }",
+   "expected_output": "9",
+   "cases": [
+    {
+     "input": {
+      "tolls": [
+       2,
+       3,
+       4
+      ]
+     },
+     "output": "9"
+    },
+    {
+     "input": {
+      "tolls": [
+       7
+      ]
+     },
+     "output": "7"
+    },
+    {
+     "input": {
+      "tolls": [
+       1,
+       1,
+       1,
+       1
+      ]
+     },
+     "output": "4"
+    }
+   ]
+  },
+  {
+   "name": "longest_leg",
+   "category": "graph_osp",
+   "subcategory": "edge_max",
+   "difficulty": "simple",
+   "py": "def longest_leg(spec: dict) -> int:\n    \"\"\"Length of the longest single road along the trail.\"\"\"\n    best = -1\n    for d in spec[\"dists\"]:\n        if d > best:\n            best = d\n    return best",
+   "jac": "node Camp {}\nedge Trail { has dist: int; }\n\nwalker LegScan {\n    has best: int = -1;\n    can measure with Trail entry {\n        if here.dist > self.best { self.best = here.dist; }\n    }\n    can advance with Camp entry { visit [edge -->]; }\n}\n\ndef longest_leg(spec: dict) -> int {\n    dists: list = list(spec[\"dists\"]);\n    camps: list = [Camp() for _ in range(len(dists) + 1)];\n    for (i, d) in enumerate(dists) {\n        camps[i] +>:Trail(dist=int(d)):+> camps[i + 1];\n    }\n    return (camps[0] spawn LegScan()).best;\n}\n\nwith entry { print(longest_leg({\"dists\": [4, 9, 2]})); }",
+   "expected_output": "9",
+   "cases": [
+    {
+     "input": {
+      "dists": [
+       4,
+       9,
+       2
+      ]
+     },
+     "output": "9"
+    },
+    {
+     "input": {
+      "dists": [
+       5
+      ]
+     },
+     "output": "5"
+    },
+    {
+     "input": {
+      "dists": [
+       3,
+       3,
+       8,
+       1
+      ]
+     },
+     "output": "8"
+    }
+   ]
+  },
+  {
+   "name": "cheapest_spoke",
+   "category": "graph_osp",
+   "subcategory": "edge_min",
+   "difficulty": "simple",
+   "py": "def cheapest_spoke(spec: dict) -> int:\n    \"\"\"Cheapest fare among the direct routes leaving the hub.\"\"\"\n    best = -1\n    for f in spec[\"fares\"]:\n        if best == -1 or f < best:\n            best = f\n    return best",
+   "jac": "node Hub {}\nnode City {}\nedge Route { has fare: int; }\n\nwalker FareScan {\n    has best: int = -1;\n    can scan with Hub entry {\n        for e in [edge here -->] {\n            if self.best == -1 or e.fare < self.best { self.best = e.fare; }\n        }\n    }\n}\n\ndef cheapest_spoke(spec: dict) -> int {\n    hub = Hub();\n    for f in spec[\"fares\"] { hub +>:Route(fare=int(f)):+> City(); }\n    return (hub spawn FareScan()).best;\n}\n\nwith entry { print(cheapest_spoke({\"fares\": [7, 3, 9]})); }",
+   "expected_output": "3",
+   "cases": [
+    {
+     "input": {
+      "fares": [
+       7,
+       3,
+       9
+      ]
+     },
+     "output": "3"
+    },
+    {
+     "input": {
+      "fares": [
+       10
+      ]
+     },
+     "output": "10"
+    },
+    {
+     "input": {
+      "fares": [
+       4,
+       8,
+       2,
+       6
+      ]
+     },
+     "output": "2"
+    }
+   ]
+  },
+  {
+   "name": "count_heavy_roads",
+   "category": "graph_osp",
+   "subcategory": "edge_threshold_count",
+   "difficulty": "simple",
+   "py": "def count_heavy_roads(spec: dict) -> int:\n    \"\"\"Count roads along the chain at least as long as the limit.\"\"\"\n    n = 0\n    for d in spec[\"dists\"]:\n        if d >= spec[\"limit\"]:\n            n += 1\n    return n",
+   "jac": "node Post {}\nedge Road { has dist: int; }\n\nwalker HeavyCount {\n    has limit: int;\n    has n: int = 0;\n    can check with Road entry {\n        if here.dist >= self.limit { self.n += 1; }\n    }\n    can advance with Post entry { visit [edge -->]; }\n}\n\ndef count_heavy_roads(spec: dict) -> int {\n    dists: list = list(spec[\"dists\"]);\n    posts: list = [Post() for _ in range(len(dists) + 1)];\n    for (i, d) in enumerate(dists) {\n        posts[i] +>:Road(dist=int(d)):+> posts[i + 1];\n    }\n    return (posts[0] spawn HeavyCount(limit=int(spec[\"limit\"]))).n;\n}\n\nwith entry { print(count_heavy_roads({\"dists\": [3, 7, 5], \"limit\": 5})); }",
+   "expected_output": "2",
+   "cases": [
+    {
+     "input": {
+      "dists": [
+       3,
+       7,
+       5
+      ],
+      "limit": 5
+     },
+     "output": "2"
+    },
+    {
+     "input": {
+      "dists": [
+       1,
+       2
+      ],
+      "limit": 5
+     },
+     "output": "0"
+    },
+    {
+     "input": {
+      "dists": [
+       9,
+       9,
+       9
+      ],
+      "limit": 4
+     },
+     "output": "3"
+    }
+   ]
+  },
+  {
+   "name": "reachable_toll_sum",
+   "category": "graph_osp",
+   "subcategory": "edge_weight_sum_graph",
+   "difficulty": "composed",
+   "py": "def reachable_toll_sum(spec: dict) -> int:\n    \"\"\"Sum the toll on every road leaving any junction reachable from start.\"\"\"\n    adj = {}\n    for s, t, w in spec[\"edges\"]:\n        adj.setdefault(s, []).append((t, w))\n    seen = set()\n    stack = [spec[\"start\"]]\n    total = 0\n    while stack:\n        n = stack.pop()\n        if n in seen:\n            continue\n        seen.add(n)\n        for t, w in adj.get(n, []):\n            total += w\n            stack.append(t)\n    return total",
+   "jac": "node Junction { has name: str; has seen: bool = False; }\nedge Road { has toll: int; }\n\nwalker TollAudit {\n    has total: int = 0;\n    can audit with Junction entry {\n        if not here.seen {\n            here.seen = True;\n            for e in [edge here -->] { self.total += e.toll; }\n            visit [-->];\n        }\n    }\n}\n\ndef reachable_toll_sum(spec: dict) -> int {\n    nodes: dict = {};\n    for tr in spec[\"edges\"] {\n        for nm in [tr[0], tr[1]] {\n            if nm not in nodes { nodes[nm] = Junction(name=str(nm)); }\n        }\n    }\n    for tr in spec[\"edges\"] { nodes[tr[0]] +>:Road(toll=int(tr[2])):+> nodes[tr[1]]; }\n    return (nodes[spec[\"start\"]] spawn TollAudit()).total;\n}\n\nwith entry { print(reachable_toll_sum({\"edges\": [[\"a\", \"b\", 2], [\"a\", \"c\", 3], [\"b\", \"d\", 4], [\"c\", \"d\", 5]], \"start\": \"a\"})); }",
+   "expected_output": "14",
+   "cases": [
+    {
+     "input": {
+      "edges": [
+       [
+        "a",
+        "b",
+        2
+       ],
+       [
+        "a",
+        "c",
+        3
+       ],
+       [
+        "b",
+        "d",
+        4
+       ],
+       [
+        "c",
+        "d",
+        5
+       ]
+      ],
+      "start": "a"
+     },
+     "output": "14"
+    },
+    {
+     "input": {
+      "edges": [
+       [
+        "a",
+        "b",
+        2
+       ],
+       [
+        "a",
+        "c",
+        3
+       ],
+       [
+        "b",
+        "d",
+        4
+       ],
+       [
+        "c",
+        "d",
+        5
+       ]
+      ],
+      "start": "b"
+     },
+     "output": "4"
+    },
+    {
+     "input": {
+      "edges": [
+       [
+        "x",
+        "y",
+        7
+       ],
+       [
+        "z",
+        "x",
+        1
+       ]
+      ],
+      "start": "x"
+     },
+     "output": "7"
+    }
+   ]
+  },
+  {
+   "name": "route_labels",
+   "category": "graph_osp",
+   "subcategory": "edge_label_join",
+   "difficulty": "composed",
+   "py": "def route_labels(spec: dict) -> str:\n    \"\"\"Join the label of each leg along the route with dashes, in order.\"\"\"\n    parts = []\n    for lb in spec[\"labels\"]:\n        parts.append(lb)\n    return \"-\".join(parts)",
+   "jac": "node Waypoint {}\nedge Leg { has label: str; }\n\nwalker LabelTrail {\n    has parts: list = [];\n    can note with Leg entry { self.parts.append(here.label); }\n    can advance with Waypoint entry { visit [edge -->]; }\n}\n\ndef route_labels(spec: dict) -> str {\n    labels: list = list(spec[\"labels\"]);\n    pts: list = [Waypoint() for _ in range(len(labels) + 1)];\n    for (i, lb) in enumerate(labels) {\n        pts[i] +>:Leg(label=str(lb)):+> pts[i + 1];\n    }\n    return \"-\".join((pts[0] spawn LabelTrail()).parts);\n}\n\nwith entry { print(route_labels({\"labels\": [\"M1\", \"A5\"]})); }",
+   "expected_output": "M1-A5",
+   "cases": [
+    {
+     "input": {
+      "labels": [
+       "M1",
+       "A5"
+      ]
+     },
+     "output": "M1-A5"
+    },
+    {
+     "input": {
+      "labels": [
+       "Z9"
+      ]
+     },
+     "output": "Z9"
+    },
+    {
+     "input": {
+      "labels": [
+       "a",
+       "b",
+       "c"
+      ]
+     },
+     "output": "a-b-c"
+    }
+   ]
+  },
+  {
+   "name": "sorted_road_lengths",
+   "category": "graph_osp",
+   "subcategory": "edge_collect_sorted",
+   "difficulty": "composed",
+   "py": "def sorted_road_lengths(spec: dict) -> list:\n    \"\"\"Collect the length of every road leaving a reachable junction, sorted.\"\"\"\n    adj = {}\n    for s, t, w in spec[\"edges\"]:\n        adj.setdefault(s, []).append((t, w))\n    seen = set()\n    stack = [spec[\"start\"]]\n    found = []\n    while stack:\n        n = stack.pop()\n        if n in seen:\n            continue\n        seen.add(n)\n        for t, w in adj.get(n, []):\n            found.append(w)\n            stack.append(t)\n    return sorted(found)",
+   "jac": "node Junction { has name: str; has seen: bool = False; }\nedge Road { has dist: int; }\n\nwalker LengthGather {\n    has found: list = [];\n    can gather with Junction entry {\n        if not here.seen {\n            here.seen = True;\n            for e in [edge here -->] { self.found.append(e.dist); }\n            visit [-->];\n        }\n    }\n}\n\ndef sorted_road_lengths(spec: dict) -> list {\n    nodes: dict = {};\n    for tr in spec[\"edges\"] {\n        for nm in [tr[0], tr[1]] {\n            if nm not in nodes { nodes[nm] = Junction(name=str(nm)); }\n        }\n    }\n    for tr in spec[\"edges\"] { nodes[tr[0]] +>:Road(dist=int(tr[2])):+> nodes[tr[1]]; }\n    return sorted((nodes[spec[\"start\"]] spawn LengthGather()).found);\n}\n\nwith entry { print(sorted_road_lengths({\"edges\": [[\"a\", \"b\", 5], [\"a\", \"c\", 2], [\"c\", \"d\", 9]], \"start\": \"a\"})); }",
+   "expected_output": "[2, 5, 9]",
+   "cases": [
+    {
+     "input": {
+      "edges": [
+       [
+        "a",
+        "b",
+        5
+       ],
+       [
+        "a",
+        "c",
+        2
+       ],
+       [
+        "c",
+        "d",
+        9
+       ]
+      ],
+      "start": "a"
+     },
+     "output": "[2, 5, 9]"
+    },
+    {
+     "input": {
+      "edges": [
+       [
+        "a",
+        "b",
+        5
+       ],
+       [
+        "a",
+        "c",
+        2
+       ],
+       [
+        "c",
+        "d",
+        9
+       ]
+      ],
+      "start": "c"
+     },
+     "output": "[9]"
+    },
+    {
+     "input": {
+      "edges": [
+       [
+        "m",
+        "n",
+        4
+       ],
+       [
+        "n",
+        "m",
+        6
+       ]
+      ],
+      "start": "m"
+     },
+     "output": "[4, 6]"
+    }
+   ]
+  },
+  {
+   "name": "heaviest_road_name",
+   "category": "graph_osp",
+   "subcategory": "edge_argmax",
+   "difficulty": "composed",
+   "py": "def heaviest_road_name(spec: dict) -> str:\n    \"\"\"Name of the longest road leaving any junction reachable from start.\"\"\"\n    adj = {}\n    for s, t, nm, w in spec[\"edges\"]:\n        adj.setdefault(s, []).append((t, nm, w))\n    seen = set()\n    stack = [spec[\"start\"]]\n    best_w = -1\n    best_name = \"\"\n    while stack:\n        n = stack.pop()\n        if n in seen:\n            continue\n        seen.add(n)\n        for t, nm, w in adj.get(n, []):\n            if w > best_w:\n                best_w = w\n                best_name = nm\n            stack.append(t)\n    return best_name",
+   "jac": "node Junction { has name: str; has seen: bool = False; }\nedge Road { has label: str; has dist: int; }\n\nwalker RoadScout {\n    has best_w: int = -1;\n    has best_name: str = \"\";\n    can scout with Junction entry {\n        if not here.seen {\n            here.seen = True;\n            for e in [edge here -->] {\n                if e.dist > self.best_w {\n                    self.best_w = e.dist;\n                    self.best_name = e.label;\n                }\n            }\n            visit [-->];\n        }\n    }\n}\n\ndef heaviest_road_name(spec: dict) -> str {\n    nodes: dict = {};\n    for tr in spec[\"edges\"] {\n        for nm in [tr[0], tr[1]] {\n            if nm not in nodes { nodes[nm] = Junction(name=str(nm)); }\n        }\n    }\n    for tr in spec[\"edges\"] {\n        nodes[tr[0]] +>:Road(label=str(tr[2]), dist=int(tr[3])):+> nodes[tr[1]];\n    }\n    w = nodes[spec[\"start\"]] spawn RoadScout();\n    return w.best_name;\n}\n\nwith entry { print(heaviest_road_name({\"edges\": [[\"a\", \"b\", \"R1\", 5], [\"a\", \"c\", \"R2\", 8], [\"b\", \"d\", \"R3\", 2]], \"start\": \"a\"})); }",
+   "expected_output": "R2",
+   "cases": [
+    {
+     "input": {
+      "edges": [
+       [
+        "a",
+        "b",
+        "R1",
+        5
+       ],
+       [
+        "a",
+        "c",
+        "R2",
+        8
+       ],
+       [
+        "b",
+        "d",
+        "R3",
+        2
+       ]
+      ],
+      "start": "a"
+     },
+     "output": "R2"
+    },
+    {
+     "input": {
+      "edges": [
+       [
+        "a",
+        "b",
+        "R1",
+        5
+       ],
+       [
+        "a",
+        "c",
+        "R2",
+        8
+       ],
+       [
+        "b",
+        "d",
+        "R3",
+        2
+       ]
+      ],
+      "start": "b"
+     },
+     "output": "R3"
+    },
+    {
+     "input": {
+      "edges": [
+       [
+        "p",
+        "q",
+        "Ring",
+        4
+       ],
+       [
+        "q",
+        "p",
+        "Spur",
+        9
+       ]
+      ],
+      "start": "p"
+     },
+     "output": "Spur"
+    }
+   ]
+  },
+  {
+   "name": "discounted_total",
+   "category": "graph_osp",
+   "subcategory": "edge_field_pair",
+   "difficulty": "composed",
+   "py": "def discounted_total(spec: dict) -> int:\n    \"\"\"Total fare along the chain, half price (rounded down) on promo rides.\"\"\"\n    total = 0\n    for fare, promo in zip(spec[\"fares\"], spec[\"promos\"]):\n        if promo:\n            total += fare // 2\n        else:\n            total += fare\n    return total",
+   "jac": "node Station {}\nedge Ride { has fare: int; has promo: bool; }\n\nwalker FareMeter {\n    has total: int = 0;\n    can charge with Ride entry {\n        if here.promo { self.total += here.fare // 2; }\n        else { self.total += here.fare; }\n    }\n    can advance with Station entry { visit [edge -->]; }\n}\n\ndef discounted_total(spec: dict) -> int {\n    fares: list = list(spec[\"fares\"]);\n    stations: list = [Station() for _ in range(len(fares) + 1)];\n    for (i, f) in enumerate(fares) {\n        stations[i] +>:Ride(fare=int(f), promo=bool(spec[\"promos\"][i])):+> stations[i + 1];\n    }\n    return (stations[0] spawn FareMeter()).total;\n}\n\nwith entry { print(discounted_total({\"fares\": [10, 7], \"promos\": [True, False]})); }",
+   "expected_output": "12",
+   "cases": [
+    {
+     "input": {
+      "fares": [
+       10,
+       7
+      ],
+      "promos": [
+       true,
+       false
+      ]
+     },
+     "output": "12"
+    },
+    {
+     "input": {
+      "fares": [
+       9
+      ],
+      "promos": [
+       true
+      ]
+     },
+     "output": "4"
+    },
+    {
+     "input": {
+      "fares": [
+       4,
+       4,
+       4
+      ],
+      "promos": [
+       false,
+       false,
+       true
+      ]
+     },
+     "output": "10"
+    }
+   ]
+  },
+  {
+   "name": "light_load_reach",
+   "category": "graph_osp",
+   "subcategory": "edge_filter_reach",
+   "difficulty": "composed",
+   "py": "def light_load_reach(spec: dict) -> int:\n    \"\"\"Count depots reachable from start using only lanes within the load cap.\"\"\"\n    adj = {}\n    for s, t, w in spec[\"edges\"]:\n        adj.setdefault(s, []).append((t, w))\n    seen = set()\n    stack = [spec[\"start\"]]\n    while stack:\n        n = stack.pop()\n        if n in seen:\n            continue\n        seen.add(n)\n        for t, w in adj.get(n, []):\n            if w <= spec[\"cap\"]:\n                stack.append(t)\n    return len(seen)",
+   "jac": "node Depot { has name: str; has seen: bool = False; }\nedge Lane { has load: int; }\n\nwalker Hauler {\n    has cap: int;\n    has count: int = 0;\n    can roll with Depot entry {\n        if not here.seen {\n            here.seen = True;\n            self.count += 1;\n            visit [->:Lane:load <= self.cap:->];\n        }\n    }\n}\n\ndef light_load_reach(spec: dict) -> int {\n    nodes: dict = {};\n    for tr in spec[\"edges\"] {\n        for nm in [tr[0], tr[1]] {\n            if nm not in nodes { nodes[nm] = Depot(name=str(nm)); }\n        }\n    }\n    for tr in spec[\"edges\"] { nodes[tr[0]] +>:Lane(load=int(tr[2])):+> nodes[tr[1]]; }\n    return (nodes[spec[\"start\"]] spawn Hauler(cap=int(spec[\"cap\"]))).count;\n}\n\nwith entry { print(light_load_reach({\"edges\": [[\"a\", \"b\", 3], [\"a\", \"c\", 9], [\"b\", \"d\", 2]], \"start\": \"a\", \"cap\": 5})); }",
+   "expected_output": "3",
+   "cases": [
+    {
+     "input": {
+      "edges": [
+       [
+        "a",
+        "b",
+        3
+       ],
+       [
+        "a",
+        "c",
+        9
+       ],
+       [
+        "b",
+        "d",
+        2
+       ]
+      ],
+      "start": "a",
+      "cap": 5
+     },
+     "output": "3"
+    },
+    {
+     "input": {
+      "edges": [
+       [
+        "a",
+        "b",
+        3
+       ],
+       [
+        "a",
+        "c",
+        9
+       ],
+       [
+        "b",
+        "d",
+        2
+       ]
+      ],
+      "start": "a",
+      "cap": 10
+     },
+     "output": "4"
+    },
+    {
+     "input": {
+      "edges": [
+       [
+        "u",
+        "v",
+        4
+       ],
+       [
+        "v",
+        "w",
+        6
+       ],
+       [
+        "w",
+        "x",
+        1
+       ]
+      ],
+      "start": "u",
+      "cap": 5
+     },
+     "output": "2"
+    }
+   ]
+  },
+  {
+   "name": "road_kinds",
+   "category": "graph_osp",
+   "subcategory": "edge_label_unique",
+   "difficulty": "composed",
+   "py": "def road_kinds(spec: dict) -> list:\n    \"\"\"Sorted distinct kinds of road leaving any junction reachable from start.\"\"\"\n    adj = {}\n    for s, t, k in spec[\"edges\"]:\n        adj.setdefault(s, []).append((t, k))\n    seen = set()\n    stack = [spec[\"start\"]]\n    kinds = set()\n    while stack:\n        n = stack.pop()\n        if n in seen:\n            continue\n        seen.add(n)\n        for t, k in adj.get(n, []):\n            kinds.add(k)\n            stack.append(t)\n    return sorted(kinds)",
+   "jac": "node Junction { has name: str; has seen: bool = False; }\nedge Road { has kind: str; }\n\nwalker KindCollect {\n    has kinds: list = [];\n    can collect with Junction entry {\n        if not here.seen {\n            here.seen = True;\n            for e in [edge here -->] {\n                if e.kind not in self.kinds { self.kinds.append(e.kind); }\n            }\n            visit [-->];\n        }\n    }\n}\n\ndef road_kinds(spec: dict) -> list {\n    nodes: dict = {};\n    for tr in spec[\"edges\"] {\n        for nm in [tr[0], tr[1]] {\n            if nm not in nodes { nodes[nm] = Junction(name=str(nm)); }\n        }\n    }\n    for tr in spec[\"edges\"] { nodes[tr[0]] +>:Road(kind=str(tr[2])):+> nodes[tr[1]]; }\n    return sorted((nodes[spec[\"start\"]] spawn KindCollect()).kinds);\n}\n\nwith entry { print(road_kinds({\"edges\": [[\"a\", \"b\", \"paved\"], [\"a\", \"c\", \"dirt\"], [\"b\", \"d\", \"paved\"]], \"start\": \"a\"})); }",
+   "expected_output": "['dirt', 'paved']",
+   "cases": [
+    {
+     "input": {
+      "edges": [
+       [
+        "a",
+        "b",
+        "paved"
+       ],
+       [
+        "a",
+        "c",
+        "dirt"
+       ],
+       [
+        "b",
+        "d",
+        "paved"
+       ]
+      ],
+      "start": "a"
+     },
+     "output": "['dirt', 'paved']"
+    },
+    {
+     "input": {
+      "edges": [
+       [
+        "a",
+        "b",
+        "paved"
+       ],
+       [
+        "a",
+        "c",
+        "dirt"
+       ],
+       [
+        "b",
+        "d",
+        "paved"
+       ]
+      ],
+      "start": "b"
+     },
+     "output": "['paved']"
+    },
+    {
+     "input": {
+      "edges": [
+       [
+        "r",
+        "s",
+        "rail"
+       ],
+       [
+        "s",
+        "t",
+        "ferry"
+       ],
+       [
+        "t",
+        "u",
+        "rail"
+       ],
+       [
+        "u",
+        "v",
+        "toll"
+       ]
+      ],
+      "start": "r"
+     },
+     "output": "['ferry', 'rail', 'toll']"
+    }
+   ]
+  },
+  {
+   "name": "trail_dist_to",
+   "category": "graph_osp",
+   "subcategory": "edge_path_sum",
+   "difficulty": "advanced",
+   "py": "def trail_dist_to(spec: dict) -> int:\n    \"\"\"Total road distance from start to target in a tree of trails (-1 if absent).\"\"\"\n    adj = {}\n    for s, t, w in spec[\"edges\"]:\n        adj.setdefault(s, []).append((t, w))\n    stack = [(spec[\"start\"], 0)]\n    while stack:\n        n, d = stack.pop()\n        if n == spec[\"target\"]:\n            return d\n        for t, w in adj.get(n, []):\n            stack.append((t, d + w))\n    return -1",
+   "jac": "node Town { has name: str; has d: int = 0; }\nedge Road { has dist: int; }\n\nwalker PathMeter {\n    has target: str;\n    has result: int = -1;\n    can walk with Town entry {\n        if here.name == self.target {\n            self.result = here.d;\n            disengage;\n        }\n        for (nb, e) in zip([-->], [edge -->]) { nb.d = here.d + e.dist; }\n        visit [-->];\n    }\n}\n\ndef trail_dist_to(spec: dict) -> int {\n    nodes: dict = {};\n    for tr in spec[\"edges\"] {\n        for nm in [tr[0], tr[1]] {\n            if nm not in nodes { nodes[nm] = Town(name=str(nm)); }\n        }\n    }\n    for tr in spec[\"edges\"] { nodes[tr[0]] +>:Road(dist=int(tr[2])):+> nodes[tr[1]]; }\n    w = nodes[spec[\"start\"]] spawn PathMeter(target=str(spec[\"target\"]));\n    return w.result;\n}\n\nwith entry { print(trail_dist_to({\"edges\": [[\"a\", \"b\", 3], [\"a\", \"c\", 7], [\"b\", \"d\", 2]], \"start\": \"a\", \"target\": \"d\"})); }",
+   "expected_output": "5",
+   "cases": [
+    {
+     "input": {
+      "edges": [
+       [
+        "a",
+        "b",
+        3
+       ],
+       [
+        "a",
+        "c",
+        7
+       ],
+       [
+        "b",
+        "d",
+        2
+       ]
+      ],
+      "start": "a",
+      "target": "d"
+     },
+     "output": "5"
+    },
+    {
+     "input": {
+      "edges": [
+       [
+        "a",
+        "b",
+        3
+       ],
+       [
+        "a",
+        "c",
+        7
+       ],
+       [
+        "b",
+        "d",
+        2
+       ]
+      ],
+      "start": "a",
+      "target": "c"
+     },
+     "output": "7"
+    },
+    {
+     "input": {
+      "edges": [
+       [
+        "a",
+        "b",
+        3
+       ],
+       [
+        "a",
+        "c",
+        7
+       ],
+       [
+        "b",
+        "d",
+        2
+       ]
+      ],
+      "start": "a",
+      "target": "z"
+     },
+     "output": "-1"
+    }
+   ]
+  },
+  {
+   "name": "busiest_kind",
+   "category": "graph_osp",
+   "subcategory": "edge_label_weight",
+   "difficulty": "advanced",
+   "py": "def busiest_kind(spec: dict) -> str:\n    \"\"\"Kind of road with the largest total distance among reachable roads (ties alphabetical).\"\"\"\n    adj = {}\n    for s, t, k, w in spec[\"edges\"]:\n        adj.setdefault(s, []).append((t, k, w))\n    seen = set()\n    stack = [spec[\"start\"]]\n    totals = {}\n    while stack:\n        n = stack.pop()\n        if n in seen:\n            continue\n        seen.add(n)\n        for t, k, w in adj.get(n, []):\n            totals[k] = totals.get(k, 0) + w\n            stack.append(t)\n    best = \"\"\n    for k in sorted(totals):\n        if best == \"\" or totals[k] > totals[best]:\n            best = k\n    return best",
+   "jac": "node Junction { has name: str; has seen: bool = False; }\nedge Road { has kind: str; has dist: int; }\n\nwalker KindLedger {\n    has totals: dict = {};\n    can tally with Junction entry {\n        if not here.seen {\n            here.seen = True;\n            for e in [edge here -->] {\n                self.totals[e.kind] = self.totals.get(e.kind, 0) + e.dist;\n            }\n            visit [-->];\n        }\n    }\n}\n\ndef busiest_kind(spec: dict) -> str {\n    nodes: dict = {};\n    for tr in spec[\"edges\"] {\n        for nm in [tr[0], tr[1]] {\n            if nm not in nodes { nodes[nm] = Junction(name=str(nm)); }\n        }\n    }\n    for tr in spec[\"edges\"] {\n        nodes[tr[0]] +>:Road(kind=str(tr[2]), dist=int(tr[3])):+> nodes[tr[1]];\n    }\n    totals: dict = (nodes[spec[\"start\"]] spawn KindLedger()).totals;\n    best: str = \"\";\n    for k in sorted(totals.keys()) {\n        if best == \"\" or totals[k] > totals[best] { best = k; }\n    }\n    return best;\n}\n\nwith entry { print(busiest_kind({\"edges\": [[\"a\", \"b\", \"rail\", 4], [\"a\", \"c\", \"road\", 7], [\"b\", \"d\", \"rail\", 5]], \"start\": \"a\"})); }",
+   "expected_output": "rail",
+   "cases": [
+    {
+     "input": {
+      "edges": [
+       [
+        "a",
+        "b",
+        "rail",
+        4
+       ],
+       [
+        "a",
+        "c",
+        "road",
+        7
+       ],
+       [
+        "b",
+        "d",
+        "rail",
+        5
+       ]
+      ],
+      "start": "a"
+     },
+     "output": "rail"
+    },
+    {
+     "input": {
+      "edges": [
+       [
+        "a",
+        "b",
+        "toll",
+        6
+       ],
+       [
+        "b",
+        "c",
+        "road",
+        6
+       ]
+      ],
+      "start": "a"
+     },
+     "output": "road"
+    },
+    {
+     "input": {
+      "edges": [
+       [
+        "m",
+        "n",
+        "ferry",
+        3
+       ],
+       [
+        "n",
+        "p",
+        "dirt",
+        8
+       ]
+      ],
+      "start": "m"
+     },
+     "output": "dirt"
+    }
+   ]
+  },
+  {
+   "name": "within_fuel_count",
+   "category": "graph_osp",
+   "subcategory": "edge_budget_reach",
+   "difficulty": "advanced",
+   "py": "def within_fuel_count(spec: dict) -> int:\n    \"\"\"Count camps in the trail tree whose total distance from start fits the fuel.\"\"\"\n    adj = {}\n    for s, t, w in spec[\"edges\"]:\n        adj.setdefault(s, []).append((t, w))\n    stack = [(spec[\"start\"], 0)]\n    count = 0\n    while stack:\n        n, d = stack.pop()\n        if d <= spec[\"fuel\"]:\n            count += 1\n        for t, w in adj.get(n, []):\n            stack.append((t, d + w))\n    return count",
+   "jac": "node Camp { has name: str; has d: int = 0; }\nedge Trail { has dist: int; }\n\nwalker RangeCount {\n    has fuel: int;\n    has count: int = 0;\n    can survey with Camp entry {\n        if here.d <= self.fuel { self.count += 1; }\n        for (nb, e) in zip([-->], [edge -->]) { nb.d = here.d + e.dist; }\n        visit [-->];\n    }\n}\n\ndef within_fuel_count(spec: dict) -> int {\n    nodes: dict = {};\n    for tr in spec[\"edges\"] {\n        for nm in [tr[0], tr[1]] {\n            if nm not in nodes { nodes[nm] = Camp(name=str(nm)); }\n        }\n    }\n    for tr in spec[\"edges\"] { nodes[tr[0]] +>:Trail(dist=int(tr[2])):+> nodes[tr[1]]; }\n    return (nodes[spec[\"start\"]] spawn RangeCount(fuel=int(spec[\"fuel\"]))).count;\n}\n\nwith entry { print(within_fuel_count({\"edges\": [[\"a\", \"b\", 4], [\"a\", \"c\", 1], [\"c\", \"d\", 2]], \"start\": \"a\", \"fuel\": 3})); }",
+   "expected_output": "3",
+   "cases": [
+    {
+     "input": {
+      "edges": [
+       [
+        "a",
+        "b",
+        4
+       ],
+       [
+        "a",
+        "c",
+        1
+       ],
+       [
+        "c",
+        "d",
+        2
+       ]
+      ],
+      "start": "a",
+      "fuel": 3
+     },
+     "output": "3"
+    },
+    {
+     "input": {
+      "edges": [
+       [
+        "a",
+        "b",
+        4
+       ],
+       [
+        "a",
+        "c",
+        1
+       ],
+       [
+        "c",
+        "d",
+        2
+       ]
+      ],
+      "start": "a",
+      "fuel": 0
+     },
+     "output": "1"
+    },
+    {
+     "input": {
+      "edges": [
+       [
+        "a",
+        "b",
+        4
+       ],
+       [
+        "a",
+        "c",
+        1
+       ],
+       [
+        "c",
+        "d",
+        2
+       ]
+      ],
+      "start": "a",
+      "fuel": 10
+     },
+     "output": "4"
+    }
+   ]
+  }
+ ]
+}

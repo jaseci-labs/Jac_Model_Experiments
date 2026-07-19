@@ -1,0 +1,21 @@
+{
+  "batch_id": "b06",
+  "accepted": [
+    "chain_toll_total",
+    "longest_leg",
+    "cheapest_spoke",
+    "count_heavy_roads",
+    "reachable_toll_sum",
+    "route_labels",
+    "sorted_road_lengths",
+    "heaviest_road_name",
+    "discounted_total",
+    "light_load_reach",
+    "road_kinds",
+    "trail_dist_to",
+    "busiest_kind",
+    "within_fuel_count"
+  ],
+  "rejected": [],
+  "accept_rate": 1.0
+}

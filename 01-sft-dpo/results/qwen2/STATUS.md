@@ -8,3 +8,4 @@ Append-only progress log. Read this first after any context loss.
 - Phase 1 done: ingest_batch.jac / dpo_authored.jac / ingest_holdout.jac written, parse-checked, smoke-tested (accept, reject-dup, reject-invented-output, receipt-refuse all verified). Staging dirs created.
 - 2026-07-19 ~04:45 — Phase A COMPLETE: qwen-q8 (30G) rebuilt, qwen-jac-fused-q8 + qwen-jac-dpo-fused-q8 re-fused from surviving adapters, both smoke-verified (valid Jac output, 67-69 tok/s, peak 32.5GB). qwen2-q4/q8 APFS clones seeded. OG MODEL RECOVERED.
 - Phase 2 in flight: wave 1 (b01-b04 walker themes) Fable subagents authoring.
+- Wave 1 (b01-b04) DONE: 56/56 accepted, sft.jsonl 203. Dedup gate fixed category-aware (graph 0.95). Wave 2 (b05-b08: typed edges, edge attrs, hetero nodes, ability composition) launched.
