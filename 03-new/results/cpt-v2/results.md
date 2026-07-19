@@ -1,117 +1,105 @@
-# CPT-v2 results — chart readout
+# CPT-v2 analysis
 
-Companion to [`03-new/docs/cpt-2/results.md`](../../docs/cpt-2/results.md) (the authoritative Task 19 narrative and verdict). This file walks through the 20 static matplotlib charts in this folder one at a time with the analysis each one supports. All charts are generated from the source-of-truth JSON in `json/` by `03-new/cpt_train/eval_v2/make_charts.py` — regenerate anytime with:
+Companion to [`03-new/docs/cpt-2/results.md`](../../docs/cpt-2/results.md) (the Task 19 acceptance narrative). This document is the analysis: what CPT-v2 was built to find out, what the data actually shows, why it shows that, and what to do next. All 22 charts in this folder are cited inline as evidence; regenerate them anytime from the source-of-truth JSON in `json/` via `.venv/bin/python3 03-new/cpt_train/eval_v2/make_charts.py`. An interactive version of the same data also exists as a published dashboard artifact (`cptv2_dashboard_dark.png` / `cptv2_dashboard_light.png` are static captures of it).
 
-```
-.venv/bin/python3 03-new/cpt_train/eval_v2/make_charts.py
-```
+## Executive summary
 
-An interactive version of the same data (11 linked charts, dark/light themes) also exists as a published artifact; static screenshots of it are `cptv2_dashboard_dark.png` / `cptv2_dashboard_light.png` in this folder.
+CPT-v2 was a second, independent attempt to make continual pretraining move Jac's semantic ceiling, after CPT-v1 nulled (base and CPT-v1 gave byte-identical answers on a 20-question MCQ). CPT-v2 changed two things at once: the corpus (docs-dominant, Fable-curated, code dropped, rehearsal cut to CF-insurance-only) and the eval (dual-track against a RAG-grounded jac-gpt oracle instead of MCQ). Both changes were real and well-executed — the training mechanism worked cleanly (12 legs, zero CF regression, real loss improvement) — and the result is still a null: **cpt-v2 is statistically indistinguishable from cpt-v1** (Track A, t=0.22) and **loses to jac-gpt on 91 of 100 blind-judged questions** (Track B). Verdict: **REJECTED**, design.md §6.4's bar cleared on 0 of 3 gates.
 
-**Verdict up front: REJECTED.** design.md §6.4's bar needs Track A to beat both base and cpt-v1 by ≥0.03 cosine, and Track B win-or-tie ≥0.50. Neither cleared — see `19_acceptance_gauges.png` and `20_summary_dashboard.png` for the one-glance version, or read on for the full breakdown.
+The value of this run isn't the checkpoint — it's what a *second* null, with two major variables changed, rules out. See "What this actually tells us" below.
 
 ---
 
-## Corpus
+## 1. What CPT-v2 was testing
 
-### `01_corpus_composition.png` — token composition, v1 → v2
+CPT-v1's null left two live, non-exclusive hypotheses for why nothing moved:
 
-Grouped bars, real numbers pulled from both datasets' `manifest.json` (not the rounded projections in design.md's prose table). Docs dominate both corpora (1.96M → 2.06M tokens) and moved least; code was dropped entirely (0.99M → 0); rehearsal shrunk hard (0.75M → 0.23M, from ~20% of v1's total down to CF-insurance-only). Net corpus size: 3.80M tokens (v1) → 2.41M tokens (v2), a real reduction driven almost entirely by dropping code.
+1. **Corpus dilution** — CPT-v1 mixed docs (1.96M tok) with a 17-repo code corpus (992K tok) and heavy rehearsal (750K tok, ~20% of total); the semantic signal from docs may have been drowned out.
+2. **Instrument mismatch** — a 20-question MCQ (constrained choice) may simply be too blunt to detect real learning that open-ended generation, graded against a grounded reference, would show.
 
-### `02_corpus_share_pie.png` — CPT-v2 share by source
-
-Same v2 numbers as a share-of-total view: docs alone is 85.6% of the corpus. This is the "docs-dominant" design decision made visible — there's very little room in this corpus for anything except doc-derived semantics to move the model.
-
-### `03_curation_verdicts.png` — Fable curation pass
-
-10,157 chunks reviewed pre-pack: 70.3% kept as-is, 4.6% upweighted, 25.1% dropped (noise, boilerplate, near-duplicate, off-topic). A quarter of the raw corpus never made it into training at all — the curation pass was a real filter, not a rubber stamp.
+CPT-v2 was designed to kill or confirm both at once: drop code entirely, cut rehearsal to ~10%-of-total CF-insurance, add a Fable curation pass to remove noise (`03_curation_verdicts.png`), and replace MCQ with two open-ended tracks scored against a real RAG-grounded reference system (jac-gpt) instead of a fixed answer key.
 
 ---
 
-## Training (12-leg epoch loop)
+## 2. Finding: corpus dilution wasn't it
 
-### `04_loss_curves.png` — train & val loss per leg
+`01_corpus_composition.png` and `02_corpus_share_pie.png` show the corpus change is real, not cosmetic — code (992K tok in v1) dropped to zero, rehearsal cut from 750K to 234K tok, docs now 85.6% of a smaller, more concentrated 2.41M-token corpus (down from 3.80M). The curation pass (`03_curation_verdicts.png`) removed a further 25.1% of raw chunks as noise/near-duplicate/off-topic before packing even started. If corpus dilution were the real bottleneck, this is close to the cleanest test of that hypothesis this project can run without a from-scratch data pipeline.
 
-The core training result. Train loss falls monotonically and steeply (−82%, 1.756→0.319). Val loss falls too but with two upticks (legs 9 and 11) against the still-falling train curve — the classic shape that raises "is this starting to overfit" — except leg 12 recovers to *tie* leg 10's best val loss (0.783 vs 0.784) while posting the run's best train loss and a clean CF-check. Read together, that's oscillation around a floor, not a genuine turn toward overfitting past leg 10. Floor/target/ceiling of the stop-loss schedule are marked; training halted at the ceiling exactly as designed, not early and not extended.
-
-### `05_val_loss_delta.png` — leg-over-leg val loss change
-
-The same story from a different angle: bars below zero (green) are legs where val loss improved over the previous leg, above zero (red) are upticks. Legs 2, 4, 5, 6, 8, 10, 12 improve; legs 3, 7, 9, 11 regress slightly. No trend of accelerating regression toward the end — leg 12's delta is negative (an improvement), which is the strongest single piece of evidence that leg 9/11's upticks weren't the start of an overfitting slide.
-
-### `06_lr_schedule.png` — learning rate decay
-
-One coherent cosine schedule across all 12 legs, not 12 independent decay-and-restart cycles — this was a deliberate fix from CPT-v1, which hit a hard 3-epoch ceiling by resetting LR every epoch. Note the true peak is leg 2 (9.90e-6), not leg 1 (8.33e-6) — this is a short warmup before the cosine decay proper begins, worth knowing if eyeballing "leg 1 = peak" by habit.
-
-### `07_leg_duration.png` — per-leg wall-clock time
-
-12 legs, ~82 minutes each on average, ~16.4 hours of wall-clock training total on the M5 Pro. Duration is flat across legs (79–85 min, no leg is a runaway outlier) — the per-leg cost was predictable, which matters for anyone budgeting a similar run.
-
-### `08_train_vs_val_scatter.png` — train loss vs. val loss, colored by leg
-
-Plots each leg as a point in (train loss, val loss) space, colored by leg number (dark = early, bright = late). Early legs cluster top-right (both losses high); late legs cluster bottom-left (both losses low) — a clean, well-behaved training trajectory with no leg jumping off the diagonal band, which is another angle confirming nothing pathological happened at any single leg.
-
-### `09_cf_check_strip.png` — CF-check per leg
-
-16/16 on the general-Python coding regression benchmark, every single leg, no exceptions. This is the guardrail that would have stopped the run early if CPT-v2 was degrading general coding ability while it learned Jac-specific content — it never fired. All 12 `cf_check_*.json` snapshots (full generated code, not just pass/fail) were inspected by hand; all clean and idiomatic.
+It didn't move the needle. `10_track_a_means.png`: cpt-v2 mean cosine-to-jac-gpt is 0.8133 vs cpt-v1's 0.8126 — a delta of +0.0007, t=0.22 (`11_track_a_delta_hist_vs_v1.png` is centered almost exactly on zero, 47 win / 53 loss, indistinguishable from a coin flip: `15_track_a_scatter_v1_vs_v2.png`, `13_track_a_win_loss.png`). `14_track_a_boxplot.png` shows the three models' score distributions nearly fully overlapping. **A docs-dominant, curated corpus produces the same result as CPT-v1's diluted one.** Corpus dilution is not the explanation for the semantic ceiling.
 
 ---
 
-## Track A — cosine similarity to jac-gpt oracle (n=100)
+## 3. Finding: instrument mismatch wasn't it either
 
-### `10_track_a_means.png` — mean cosine-to-oracle, with required margin
+CPT-v2's eval is a strictly harder test than CPT-v1's MCQ: Track A grades 100 open-ended generations by embedding similarity to a real RAG-grounded system's answer; Track B has a blind judge (source-blind A/B order, no knowledge of which system produced which answer) read each pair against the actual ground-truth doc passage and decide which is *factually correct*, not just similar in style. If CPT-v1's MCQ was too blunt to see real learning, this setup should have found it.
 
-base 0.8051, cpt-v1 0.8126, cpt-v2 0.8133. The dashed red lines mark what cpt-v2 needed to clear (mean + 0.03) to pass this track — it isn't close. cpt-v2 beats base by 0.0081 and cpt-v1 by essentially nothing (0.0007).
+It didn't. `16_track_b_outcome_bar.png` / `17_track_b_pie.png`: jac-gpt wins 91 of 100 blind judgments, cpt-v2 wins 7, ties 2 — win-or-tie rate 0.09 against a 0.50 bar. This is not a marginal miss the way Track A's numbers are; it's a rout, and it comes from an eval specifically built to be more sensitive than CPT-v1's. **A richer, open-ended, reference-grounded eval still finds nothing to reward.** Instrument mismatch is not the explanation either.
 
-### `11_track_a_delta_hist_vs_v1.png` / `12_track_a_delta_hist_vs_base.png` — per-question delta histograms
-
-The vs-cpt-v1 histogram (chart 11) is the more damning of the two: it's centered almost exactly on zero and roughly symmetric — visually, this is what a coin flip looks like, and the paired t-test agrees (t=0.22). The vs-base histogram (chart 12) skews very slightly positive — a real but small effect (t=2.07) — consistent with CPT moving the model's style/vocabulary toward Jac-ish text without CPT-v2 being any better at it than CPT-v1 was a training run ago.
-
-### `13_track_a_win_loss.png` — win/loss counts
-
-cpt-v2 beats base on 55/100 questions (barely over half) and beats cpt-v1 on only 47/100 (under half). The 50/50 reference line makes both bars easy to read against chance.
-
-### `14_track_a_boxplot.png` — score distribution by model
-
-All three models' interquartile ranges nearly overlap completely; medians differ by hundredths of a cosine point. If this were the only evidence, "no meaningful difference between the three models" would be the honest one-line summary — which is exactly what the paired stats confirm numerically.
-
-### `15_track_a_scatter_v1_vs_v2.png` — per-question cpt-v1 vs cpt-v2
-
-Every point is one question, x = cpt-v1's score, y = cpt-v2's score, diagonal = no difference. Points scatter evenly on both sides of the diagonal with no visible skew — the clearest single visual for "these two models are indistinguishable on this metric."
+Two independent, well-executed nulls — different corpus, different eval — now sit at the same ceiling.
 
 ---
 
-## Track B — blind pairwise judge vs. oracle (n=100)
+## 4. Finding: what the model actually does wrong
 
-### `16_track_b_outcome_bar.png` / `17_track_b_pie.png` — outcome breakdown
+Track A and Track B don't just disagree in magnitude (a small real edge vs. a rout) — `18_honest_gap_scatter.png` shows why, and it's the most mechanistically informative chart in the set. `b003-q-any-inference` scored 0.9355 cosine — 2nd-highest of all 100 questions, near-maximal stylistic similarity to jac-gpt's answer — and still lost the blind judgment outright: cpt-v2 hedged ("may infer or leave as unknown") instead of confirming the passage's actual rule. High cosine did not mean correct.
 
-Oracle won 91, cpt-v2 won 7, tied 2. Win-or-tie rate 9% against a required 50%. Where Track A said "too close to call," Track B says "not competitive" — and Track B is the one that actually reads for factual correctness against the source passage rather than embedding-space proximity.
+Reading all 100 Track B justifications during judging surfaced a consistent pattern in cpt-v2's losing answers, not random noise: it **invents plausible, fluent, wrong-domain syntax** rather than saying it doesn't know. Examples pulled directly from the blind judgments:
 
-### `18_honest_gap_scatter.png` — where the two tracks disagree
+- Asked about Jac's typed-edge syntax, cpt-v2 answered entirely in Neo4j/Cypher query syntax.
+- Asked about Jac's file-based routing, cpt-v2 answered "I believe you're referring to... this is standard Next.js routing" — misidentified the language/framework entirely.
+- Asked how the Jac toolchain is distributed, cpt-v2 described GitHub-release binaries, Docker containers, and `pip install -e .` — fabricated a plausible-sounding but entirely wrong distribution story where the real answer (a single self-contained `jac` binary, no pip) was directly in the training corpus's own breaking-changes docs.
 
-The chart that explains why Track A and Track B tell such different-looking stories. Each point is one question's cpt-v2 cosine score, placed on the lane the blind judge actually decided. The ringed outlier, `b003-q-any-inference`, scored 0.9355 — 2nd-highest of all 100 questions — and still lost the blind judgment outright: cpt-v2 hedged ("may infer or leave as unknown") where the oracle correctly confirmed the passage's actual rule (untyped values are typed `any`). High stylistic similarity to the oracle's answer did not mean the answer was right. This is design.md §6.2's "cosine can reward verbose-but-wrong answers" warning, caught in the data rather than just asserted.
-
----
-
-## Direct comparison to jac-gpt
-
-### `21_gap_to_jacgpt.png` — mean distance from jac-gpt's answer, by model
-
-Same Track A numbers, reframed as a gap instead of a similarity: 1 − cosine, lower = closer to jac-gpt. base 0.1949, cpt-v1 0.1874, cpt-v2 0.1867. cpt-v2 closes some of the gap to jac-gpt relative to base, but the cpt-v1 → cpt-v2 improvement is 0.0007 — a rounding error, not a second round of real progress.
-
-### `22_cptv2_vs_jacgpt_head_to_head.png` — both tracks, cpt-v2 vs jac-gpt only
-
-The two tracks side by side with everything else stripped out. Left: cpt-v2's mean cosine (0.8133) against jac-gpt's self-similarity ceiling (1.0, dashed) — a real, sizeable remaining gap. Right: the actual blind-judged outcome, cpt-v2 win-or-tie (9) vs jac-gpt wins (91), against the 50/50 line. This is the single clearest "did CPT-v2 catch up to jac-gpt" chart in the set, and the answer is no.
+This is the actual failure mode, not "the model didn't learn enough Jac." **Next-token prediction on doc prose teaches style and vocabulary association — it has no training signal that penalizes fluent, confident, wrong output**, because nothing in a next-token CPT objective distinguishes "plausible continuation" from "correct continuation." A model can absorb the *shape* of Jac documentation (which is why cosine similarity rose at all, marginally, vs. base) without absorbing enforced correctness. That gap is invisible to a similarity metric and glaring to a judge reading for truth — which is exactly the divergence in section 3.
 
 ---
 
-## Verdict
+## 5. Was the run wasted?
 
-### `19_acceptance_gauges.png` — the three gates, side by side
+Two different questions, two different answers.
 
-Each panel is drawn to its own scale so the shortfall is legible rather than squashed by Track B's much larger required margin. All three read FAIL. The black vertical line is the threshold; the filled bar is where cpt-v2 actually landed.
+**As a deliverable: yes.** 12 legs (~16.4h wall-clock, `07_leg_duration.png`), a curation pass, and new eval infrastructure produced a checkpoint that clears 0 of 3 acceptance gates (`19_acceptance_gauges.png`) and isn't usable as a foundation for Phase 4. Nothing downstream builds on this checkpoint as-is.
 
-### `20_summary_dashboard.png` — one-page capstone
+**As information: no.** CPT-v2 killed two live, previously-unresolved hypotheses in one well-controlled run — corpus dilution and instrument mismatch — and did it cleanly enough (zero CF regression throughout, `09_cf_check_strip.png`; well-behaved loss curves with no pathological leg, `04_loss_curves.png`/`05_val_loss_delta.png`/`08_train_vs_val_scatter.png`) that the null can't be waved away as a broken run. That's a real, load-bearing result for deciding what *not* to spend the next attempt on.
 
-Six panels combining loss curves, Track A means, Track B outcome, corpus composition, all three acceptance gates, and the verdict stamp — everything above compressed onto one image for a single glance.
+---
 
-**Bottom line:** the corpus rebuild, curation pass, and 12-leg epoch-loop training all executed cleanly and as designed (zero CF regression, real val-loss improvement, one coherent LR schedule). None of that changed the outcome — CPT-v2 does not clear design.md §6.4's acceptance bar. Per the same discipline as CPT-v1's original null, that's the honest read, not rounded up.
+## 6. What to try next
+
+Given two independent CPT nulls that survived a corpus-mix change and an eval-instrument change, the honest read is that **continual pretraining via next-token prediction on doc prose is not the right lever** for teaching enforced syntactic/semantic correctness — the failure mode in section 4 is structural to the objective, not a tuning problem.
+
+**Recommended: skip a third CPT attempt, move to Phase 4 (SFT/DPO) directly on base.** `workflow.md`'s existing plan already calls for DPO pairs contrasting semantically-correct vs. subtly-wrong-but-compiling OSP idiom — that objective directly penalizes the "confident, fluent, wrong" failure mode this analysis found, in a way next-token CPT structurally cannot. That plan was gated behind "CPT checkpoint accepted"; two nulls is enough to drop that gate and test SFT/DPO as its own falsifiable experiment rather than waiting on a third CPT success.
+
+**If CPT is worth one more shot first**, the one real variable neither v1 nor v2 varied is corpus *shape*: both trained on doc *prose* (markdown describing Jac, code examples embedded but not dominant). Neither tried CPT on a corpus dominated by actual compilable Jac snippets rather than prose about Jac — closer in shape to what actually needs to be learned. That's a genuine, still-untested single-variable CPT hypothesis if you want to exhaust the lever before moving on. Not recommended as the first move given the section 4 finding, but noted as the one open door.
+
+---
+
+## Chart index
+
+| # | file | what it shows |
+|---|---|---|
+| 1 | `01_corpus_composition.png` | token composition, v1 vs v2, by source |
+| 2 | `02_corpus_share_pie.png` | v2 corpus share by source |
+| 3 | `03_curation_verdicts.png` | Fable curation pass keep/upweight/drop |
+| 4 | `04_loss_curves.png` | train & val loss per leg, floor/target/ceiling |
+| 5 | `05_val_loss_delta.png` | leg-over-leg val loss change |
+| 6 | `06_lr_schedule.png` | LR decay across all 12 legs |
+| 7 | `07_leg_duration.png` | wall-clock time per leg |
+| 8 | `08_train_vs_val_scatter.png` | train vs val loss, colored by leg |
+| 9 | `09_cf_check_strip.png` | CF-check pass/fail per leg |
+| 10 | `10_track_a_means.png` | mean cosine-to-jac-gpt per model, vs required margin |
+| 11 | `11_track_a_delta_hist_vs_v1.png` | per-question delta, cpt-v2 − cpt-v1 |
+| 12 | `12_track_a_delta_hist_vs_base.png` | per-question delta, cpt-v2 − base |
+| 13 | `13_track_a_win_loss.png` | win/loss counts vs each baseline |
+| 14 | `14_track_a_boxplot.png` | score distribution by model |
+| 15 | `15_track_a_scatter_v1_vs_v2.png` | per-question cpt-v1 vs cpt-v2 |
+| 16 | `16_track_b_outcome_bar.png` | Track B outcome, stacked bar |
+| 17 | `17_track_b_pie.png` | Track B outcome, pie |
+| 18 | `18_honest_gap_scatter.png` | cosine score vs blind-judge outcome |
+| 19 | `19_acceptance_gauges.png` | all 3 acceptance gates vs threshold |
+| 20 | `20_summary_dashboard.png` | one-page capstone summary |
+| 21 | `21_gap_to_jacgpt.png` | mean distance from jac-gpt, by model |
+| 22 | `22_cptv2_vs_jacgpt_head_to_head.png` | both tracks, cpt-v2 vs jac-gpt only |
+
+---
+
+**Bottom line:** the mechanism worked (clean training, zero regression, real infrastructure); the hypothesis didn't survive (corpus mix and eval instrument both ruled out; the actual failure mode is a model that fabricates plausible wrong syntax rather than admitting uncertainty, which next-token CPT can't fix). Per the same discipline as CPT-v1's null: stated plainly, not rounded up.
