@@ -418,5 +418,145 @@
     "judge_winner": "A",
     "winner": "oracle",
     "justification": "A uses correct Jac declaration/impl syntax (`def greet() -> str;` with a bodyless signature, `impl Person {...}`) matching the passage's spec-vs-body framing, while B uses non-Jac syntax (`class`, `attr`, `func`) and cuts off incomplete."
+  },
+  {
+    "id": "b002-q-type-filter",
+    "order": "oracle_first",
+    "judge_winner": "A",
+    "winner": "oracle",
+    "justification": "A uses the exact Jac typed-filter-comprehension syntax `[root-->][?:Task]` and shows attribute filtering matching the passage, while B invents SQL/Cypher-style FROM/WHERE/MATCH syntax that isn't Jac."
+  },
+  {
+    "id": "b003-q-node-vs-walker-abilities",
+    "order": "oracle_first",
+    "judge_winner": "A",
+    "winner": "oracle",
+    "justification": "A grounds the distinction in real Jac semantics (`self`/`here` on walker abilities vs `self`/`visitor` on node abilities) with concrete code, while B gives an abstract 'ownership semantics' framing with no Jac-specific grounding."
+  },
+  {
+    "id": "b000-q-node-vs-obj",
+    "order": "oracle_first",
+    "judge_winner": "A",
+    "winner": "oracle",
+    "justification": "A correctly identifies persistence-via-root-connectivity and graph query syntax as the runtime distinction, while B invents an unrelated parent-child tree/garbage-collection model not reflected in real Jac node semantics."
+  },
+  {
+    "id": "b003-q-fullstack-rpc",
+    "order": "cpt_v2_first",
+    "judge_winner": "B",
+    "winner": "oracle",
+    "justification": "A explicitly claims the question is about 'Jamstack (not Jac)' and answers with TypeScript/tRPC, while B correctly describes Jac's compiler-generated RPC and cross-boundary type sharing matching the passage."
+  },
+  {
+    "id": "b003-q-named-args-defaults",
+    "order": "oracle_first",
+    "judge_winner": "B",
+    "winner": "cpt_v2",
+    "justification": "The passage's `greet(excited=True, name=\"Eve\")` example shows named args can reorder freely, which B affirms, while A fabricates an unsupported restriction (invented '@jac/desktop plugin' rule) claiming you cannot skip an earlier defaulted parameter."
+  },
+  {
+    "id": "b002-q-union-entry",
+    "order": "oracle_first",
+    "judge_winner": "A",
+    "winner": "oracle",
+    "justification": "A correctly demonstrates the `Type1 | Type2` union-entry syntax for firing one ability across multiple types, while B fabricates an entirely unrelated game-ability JSON schema with no connection to Jac."
+  },
+  {
+    "id": "b001-q-persistence-model",
+    "order": "cpt_v2_first",
+    "judge_winner": "B",
+    "winner": "oracle",
+    "justification": "B states cleanly and correctly that connectivity to root is the single determining property, matching the passage, while A muddles the answer by also crediting 'memory addresses/object identity' as part of the mechanism, which isn't in the passage."
+  },
+  {
+    "id": "b000-q-desktop-status",
+    "order": "oracle_first",
+    "judge_winner": "A",
+    "winner": "oracle",
+    "justification": "A accurately reports the current desktop build output and the specific in-progress items (sv codespace wiring, HMR, per-OS packaging) matching the passage, while B declines to answer at all."
+  },
+  {
+    "id": "b001-q-unrooted-nodes",
+    "order": "oracle_first",
+    "judge_winner": "A",
+    "winner": "oracle",
+    "justification": "A correctly states unrooted nodes behave like regular in-memory objects that are garbage collected after execution, matching the passage, while B fabricates an unrelated TensorFlow/PyTorch computational-graph framing."
+  },
+  {
+    "id": "b000-q-mobile-platform",
+    "order": "cpt_v2_first",
+    "judge_winner": "B",
+    "winner": "oracle",
+    "justification": "B correctly identifies Capacitor as the tooling and the ios-on-macOS/android-elsewhere fallback logic matching the passage, while A incorrectly claims Cordova is used and gets the default-platform logic wrong."
+  },
+  {
+    "id": "b003-q-library-mode-spawn",
+    "order": "cpt_v2_first",
+    "judge_winner": "B",
+    "winner": "oracle",
+    "justification": "B correctly uses the real Jac library-mode API (`from jaclang.lib import Walker, spawn, root`; `spawn(FriendFinder(), root())`), while A invents a fictional `jac.compile`/`program.get_walker` API not matching the actual library mode."
+  },
+  {
+    "id": "b001-q-nacompile-output",
+    "order": "oracle_first",
+    "judge_winner": "A",
+    "winner": "oracle",
+    "justification": "The passage says no external compiler or linker is needed; A correctly describes the self-contained internal pipeline, while B directly contradicts the passage by claiming GCC/Clang and ld/lld are required."
+  },
+  {
+    "id": "b000-q-node-attach",
+    "order": "cpt_v2_first",
+    "judge_winner": "B",
+    "winner": "oracle",
+    "justification": "B correctly uses the `++>` connect operator to attach a node to root as shown in the passage, while A invents a fictional `graph {}` block and `->` syntax not used in real Jac."
+  },
+  {
+    "id": "b001-q-visit-queued",
+    "order": "cpt_v2_first",
+    "judge_winner": "B",
+    "winner": "oracle",
+    "justification": "Both get the core queuing concept right, but B stays in correct Jac syntax and semantics throughout while A illustrates with non-Jac JavaScript-style pseudocode (`console.log`, `ability myAbility()`)."
+  },
+  {
+    "id": "b002-q-visit-queue",
+    "order": "oracle_first",
+    "judge_winner": "A",
+    "winner": "oracle",
+    "justification": "The passage explicitly says visit 'doesn't immediately move,' which A correctly states with accurate Jac syntax, while B directly contradicts the passage by claiming visit moves the walker immediately and uses non-Jac Python-style syntax."
+  },
+  {
+    "id": "b003-q-report-typed-object",
+    "order": "cpt_v2_first",
+    "judge_winner": "B",
+    "winner": "oracle",
+    "justification": "B answers in real Jac syntax matching the passage's Bad/Good example (`report new_task` vs manual dict), while A gives a generic Python explanation with no Jac grounding and cuts off incomplete."
+  },
+  {
+    "id": "b001-q-cycle-guard",
+    "order": "oracle_first",
+    "judge_winner": "A",
+    "winner": "oracle",
+    "justification": "A demonstrates the visited-set cycle guard in correct Jac syntax closely matching the passage's technique, while B illustrates only with a generic Python recursive function and no Jac code."
+  },
+  {
+    "id": "b000-q-ability-dispatch",
+    "order": "cpt_v2_first",
+    "judge_winner": "B",
+    "winner": "oracle",
+    "justification": "B correctly explains entry/exit ability dispatch tied to node-type matching with accurate Jac semantics and example, while A describes a fabricated generic AI-agent decision framework unrelated to Jac."
+  },
+  {
+    "id": "b001-q-edges-first-class",
+    "order": "oracle_first",
+    "judge_winner": "A",
+    "winner": "oracle",
+    "justification": "A correctly uses real Jac syntax (`++>`, typed node/edge declarations) to explain first-class graph connections matching the passage, while B uses incorrect syntax (`node a = node(1)`, `a -> b`, fabricated `.out_edges()`) not reflecting actual Jac."
+  },
+  {
+    "id": "b001-q-reports-access",
+    "order": "cpt_v2_first",
+    "judge_winner": "B",
+    "winner": "oracle",
+    "justification": "B correctly identifies the `.reports` array on the spawn result matching the passage's `result.reports` pattern exactly, while A gives a generic, non-Jac Python walker implementation with no `.reports` concept and cuts off incomplete."
   }
 ]
