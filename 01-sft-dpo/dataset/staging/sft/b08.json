@@ -1,0 +1,780 @@
+{
+ "batch_id": "b08",
+ "generator": "fable-agent-v1",
+ "examples": [
+  {
+   "name": "chain_value_range",
+   "category": "graph_osp",
+   "subcategory": "with_exit_transform",
+   "difficulty": "simple",
+   "py": "def chain_value_range(spec: dict) -> int:\n    \"\"\"Spread between the largest and smallest chain value.\"\"\"\n    nums = spec[\"nums\"]\n    if not nums:\n        return 0\n    vals = []\n    for n in nums:\n        vals.append(n)\n    vals.sort()\n    return vals[-1] - vals[0]",
+   "jac": "node Rung { has amt: int; }\n\nwalker SpanScan {\n    has vals: list = [];\n    has spread: int = 0;\n    can collect with Rung entry {\n        self.vals.append(here.amt);\n        visit [-->];\n    }\n    can settle with exit {\n        self.vals.sort();\n        self.spread = self.vals[-1] - self.vals[0];\n    }\n}\n\ndef chain_value_range(spec: dict) -> int {\n    nums: list = list(spec[\"nums\"]);\n    if not nums { return 0; }\n    rungs: list = [Rung(amt=int(v)) for v in nums];\n    for (a, b) in zip(rungs, rungs[1:]) { a ++> b; }\n    return (rungs[0] spawn SpanScan()).spread;\n}\n\nwith entry { print(chain_value_range({\"nums\": [4, 9, 2, 7]})); }",
+   "expected_output": "7",
+   "cases": [
+    {
+     "input": {
+      "nums": [
+       4,
+       9,
+       2,
+       7
+      ]
+     },
+     "output": "7"
+    },
+    {
+     "input": {
+      "nums": [
+       5
+      ]
+     },
+     "output": "0"
+    },
+    {
+     "input": {
+      "nums": [
+       -3,
+       10
+      ]
+     },
+     "output": "13"
+    }
+   ]
+  },
+  {
+   "name": "scaled_chain_total",
+   "category": "graph_osp",
+   "subcategory": "node_ability_visitor",
+   "difficulty": "simple",
+   "py": "def scaled_chain_total(spec: dict) -> int:\n    \"\"\"Total of the chain values, each scaled by the shared factor.\"\"\"\n    total = 0\n    for n in spec[\"nums\"]:\n        total += n * spec[\"factor\"]\n    return total",
+   "jac": "walker Cart { has factor: int; has total: int = 0; }\n\nnode Stall {\n    has price: int;\n    can offer with Cart entry {\n        visitor.total += self.price * visitor.factor;\n        visit [-->];\n    }\n}\n\ndef scaled_chain_total(spec: dict) -> int {\n    stalls: list = [Stall(price=int(v)) for v in spec[\"nums\"]];\n    if not stalls { return 0; }\n    for (a, b) in zip(stalls, stalls[1:]) { a ++> b; }\n    return (stalls[0] spawn Cart(factor=int(spec[\"factor\"]))).total;\n}\n\nwith entry { print(scaled_chain_total({\"nums\": [2, 3, 4], \"factor\": 3})); }",
+   "expected_output": "27",
+   "cases": [
+    {
+     "input": {
+      "nums": [
+       2,
+       3,
+       4
+      ],
+      "factor": 3
+     },
+     "output": "27"
+    },
+    {
+     "input": {
+      "nums": [
+       5
+      ],
+      "factor": 2
+     },
+     "output": "10"
+    },
+    {
+     "input": {
+      "nums": [
+       1,
+       1,
+       1
+      ],
+      "factor": 0
+     },
+     "output": "0"
+    }
+   ]
+  },
+  {
+   "name": "median_chain_value",
+   "category": "graph_osp",
+   "subcategory": "with_exit_transform",
+   "difficulty": "simple",
+   "py": "def median_chain_value(spec: dict) -> float:\n    \"\"\"Median of the chain values, rounded to 2 places.\"\"\"\n    nums = spec[\"nums\"]\n    if not nums:\n        return 0.0\n    vals = sorted(nums)\n    k = len(vals)\n    mid = k // 2\n    if k % 2 == 1:\n        return round(float(vals[mid]), 2)\n    return round((vals[mid - 1] + vals[mid]) / 2, 2)",
+   "jac": "node Pod { has load: int; }\n\nwalker MedianScan {\n    has vals: list = [];\n    has med: float = 0.0;\n    can gather with Pod entry {\n        self.vals.append(here.load);\n        visit [-->];\n    }\n    can settle with exit {\n        self.vals.sort();\n        k: int = len(self.vals);\n        mid: int = k // 2;\n        if k % 2 == 1 { self.med = round(float(self.vals[mid]), 2); }\n        else { self.med = round((self.vals[mid - 1] + self.vals[mid]) / 2, 2); }\n    }\n}\n\ndef median_chain_value(spec: dict) -> float {\n    nums: list = list(spec[\"nums\"]);\n    if not nums { return 0.0; }\n    pods: list = [Pod(load=int(v)) for v in nums];\n    for (a, b) in zip(pods, pods[1:]) { a ++> b; }\n    return (pods[0] spawn MedianScan()).med;\n}\n\nwith entry { print(median_chain_value({\"nums\": [7, 1, 5]})); }",
+   "expected_output": "5.0",
+   "cases": [
+    {
+     "input": {
+      "nums": [
+       7,
+       1,
+       5
+      ]
+     },
+     "output": "5.0"
+    },
+    {
+     "input": {
+      "nums": [
+       4,
+       1,
+       9,
+       2
+      ]
+     },
+     "output": "3.0"
+    },
+    {
+     "input": {
+      "nums": [
+       10
+      ]
+     },
+     "output": "10.0"
+    }
+   ]
+  },
+  {
+   "name": "count_max_occurrences",
+   "category": "graph_osp",
+   "subcategory": "walker_handoff",
+   "difficulty": "simple",
+   "py": "def count_max_occurrences(spec: dict) -> int:\n    \"\"\"How many chain values equal the chain maximum.\"\"\"\n    nums = spec[\"nums\"]\n    if not nums:\n        return 0\n    peak = nums[0]\n    for n in nums:\n        if n > peak:\n            peak = n\n    hits = 0\n    for n in nums:\n        if n == peak:\n            hits += 1\n    return hits",
+   "jac": "node Post { has score: int; }\n\nwalker PeakSeek {\n    has best: int;\n    can scan with Post entry {\n        if here.score > self.best { self.best = here.score; }\n        visit [-->];\n    }\n}\n\nwalker PeakCount {\n    has target: int;\n    has hits: int = 0;\n    can tally with Post entry {\n        if here.score == self.target { self.hits += 1; }\n        visit [-->];\n    }\n}\n\ndef count_max_occurrences(spec: dict) -> int {\n    nums: list = list(spec[\"nums\"]);\n    if not nums { return 0; }\n    posts: list = [Post(score=int(v)) for v in nums];\n    for (a, b) in zip(posts, posts[1:]) { a ++> b; }\n    seeker = posts[0] spawn PeakSeek(best=int(nums[0]));\n    return (posts[0] spawn PeakCount(target=seeker.best)).hits;\n}\n\nwith entry { print(count_max_occurrences({\"nums\": [3, 7, 7, 2]})); }",
+   "expected_output": "2",
+   "cases": [
+    {
+     "input": {
+      "nums": [
+       3,
+       7,
+       7,
+       2
+      ]
+     },
+     "output": "2"
+    },
+    {
+     "input": {
+      "nums": [
+       5,
+       5,
+       5
+      ]
+     },
+     "output": "3"
+    },
+    {
+     "input": {
+      "nums": [
+       9,
+       1
+      ]
+     },
+     "output": "1"
+    }
+   ]
+  },
+  {
+   "name": "positive_fraction",
+   "category": "graph_osp",
+   "subcategory": "with_exit_transform",
+   "difficulty": "composed",
+   "py": "def positive_fraction(spec: dict) -> float:\n    \"\"\"Fraction of reachable nodes holding a positive value, rounded to 2 places.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]; start = spec[\"start\"]\n    seen = []\n    queue = [start]\n    while queue:\n        n = queue.pop(0)\n        if n in seen:\n            continue\n        seen.append(n)\n        queue.extend(adj[n])\n    pos = 0\n    for n in seen:\n        if vals[n] > 0:\n            pos += 1\n    return round(pos / len(seen), 2)",
+   "jac": "node Cell { has charge: int; has swept: bool = False; }\n\nwalker ChargeScan {\n    has pos: int = 0;\n    has total: int = 0;\n    has frac: float = 0.0;\n    can sweep with Cell entry {\n        if not here.swept {\n            here.swept = True;\n            self.total += 1;\n            if here.charge > 0 { self.pos += 1; }\n            visit [-->];\n        }\n    }\n    can settle with exit {\n        self.frac = round(self.pos / self.total, 2);\n    }\n}\n\ndef positive_fraction(spec: dict) -> float {\n    adj: dict = dict(spec[\"adj\"]); vals: dict = dict(spec[\"vals\"]);\n    cells: dict = {};\n    for nm in vals.keys() { cells[nm] = Cell(charge=int(vals[nm])); }\n    for (a, bs) in adj.items() { for b in bs { cells[a] ++> cells[b]; } }\n    return (cells[str(spec[\"start\"])] spawn ChargeScan()).frac;\n}\n\nwith entry { print(positive_fraction({\"adj\": {\"a\": [\"b\", \"c\"], \"b\": [], \"c\": []}, \"vals\": {\"a\": 2, \"b\": -1, \"c\": 5}, \"start\": \"a\"})); }",
+   "expected_output": "0.67",
+   "cases": [
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b",
+        "c"
+       ],
+       "b": [],
+       "c": []
+      },
+      "vals": {
+       "a": 2,
+       "b": -1,
+       "c": 5
+      },
+      "start": "a"
+     },
+     "output": "0.67"
+    },
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b"
+       ],
+       "b": []
+      },
+      "vals": {
+       "a": -2,
+       "b": 7
+      },
+      "start": "a"
+     },
+     "output": "0.5"
+    },
+    {
+     "input": {
+      "adj": {
+       "a": []
+      },
+      "vals": {
+       "a": 3
+      },
+      "start": "a"
+     },
+     "output": "1.0"
+    }
+   ]
+  },
+  {
+   "name": "route_summary",
+   "category": "graph_osp",
+   "subcategory": "with_exit_format",
+   "difficulty": "composed",
+   "py": "def route_summary(spec: dict) -> str:\n    \"\"\"Summarize the route as a stops/distance string.\"\"\"\n    kms = spec[\"kms\"]\n    if not kms:\n        return \"stops=0;km=0\"\n    total = 0\n    for k in kms:\n        total += k\n    return \"stops=\" + str(len(kms)) + \";km=\" + str(total)",
+   "jac": "node Stop { has km: int; }\n\nwalker RouteScan {\n    has stops: int = 0;\n    has dist: int = 0;\n    has line: str = \"\";\n    can ride with Stop entry {\n        self.stops += 1;\n        self.dist += here.km;\n        visit [-->];\n    }\n    can settle with exit {\n        self.line = \"stops=\" + str(self.stops) + \";km=\" + str(self.dist);\n    }\n}\n\ndef route_summary(spec: dict) -> str {\n    kms: list = list(spec[\"kms\"]);\n    if not kms { return \"stops=0;km=0\"; }\n    stops: list = [Stop(km=int(v)) for v in kms];\n    for (a, b) in zip(stops, stops[1:]) { a ++> b; }\n    return (stops[0] spawn RouteScan()).line;\n}\n\nwith entry { print(route_summary({\"kms\": [12, 30]})); }",
+   "expected_output": "stops=2;km=42",
+   "cases": [
+    {
+     "input": {
+      "kms": [
+       12,
+       30
+      ]
+     },
+     "output": "stops=2;km=42"
+    },
+    {
+     "input": {
+      "kms": [
+       5
+      ]
+     },
+     "output": "stops=1;km=5"
+    },
+    {
+     "input": {
+      "kms": [
+       3,
+       3,
+       3,
+       3
+      ]
+     },
+     "output": "stops=4;km=12"
+    }
+   ]
+  },
+  {
+   "name": "gates_passed",
+   "category": "graph_osp",
+   "subcategory": "node_ability_visitor",
+   "difficulty": "composed",
+   "py": "def gates_passed(spec: dict) -> int:\n    \"\"\"Count toll gates passable in order with the starting budget.\"\"\"\n    wallet = spec[\"budget\"]\n    passed = 0\n    for fee in spec[\"fees\"]:\n        if wallet < fee:\n            break\n        wallet -= fee\n        passed += 1\n    return passed",
+   "jac": "walker Rider { has wallet: int; has passed: int = 0; }\n\nnode Gate {\n    has fee: int;\n    can charge with Rider entry {\n        if visitor.wallet >= self.fee {\n            visitor.wallet -= self.fee;\n            visitor.passed += 1;\n            visit [-->];\n        }\n    }\n}\n\ndef gates_passed(spec: dict) -> int {\n    fees: list = list(spec[\"fees\"]);\n    if not fees { return 0; }\n    gates: list = [Gate(fee=int(v)) for v in fees];\n    for (a, b) in zip(gates, gates[1:]) { a ++> b; }\n    return (gates[0] spawn Rider(wallet=int(spec[\"budget\"]))).passed;\n}\n\nwith entry { print(gates_passed({\"fees\": [3, 4, 5], \"budget\": 8})); }",
+   "expected_output": "2",
+   "cases": [
+    {
+     "input": {
+      "fees": [
+       3,
+       4,
+       5
+      ],
+      "budget": 8
+     },
+     "output": "2"
+    },
+    {
+     "input": {
+      "fees": [
+       3,
+       4,
+       5
+      ],
+      "budget": 12
+     },
+     "output": "3"
+    },
+    {
+     "input": {
+      "fees": [
+       3,
+       4,
+       5
+      ],
+      "budget": 2
+     },
+     "output": "0"
+    }
+   ]
+  },
+  {
+   "name": "above_average_count",
+   "category": "graph_osp",
+   "subcategory": "two_phase_walk",
+   "difficulty": "composed",
+   "py": "def above_average_count(spec: dict) -> int:\n    \"\"\"Count reachable nodes strictly above the reachable average.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]; start = spec[\"start\"]\n    seen = []\n    queue = [start]\n    while queue:\n        n = queue.pop(0)\n        if n in seen:\n            continue\n        seen.append(n)\n        queue.extend(adj[n])\n    total = 0\n    for n in seen:\n        total += vals[n]\n    avg = total / len(seen)\n    count = 0\n    for n in seen:\n        if vals[n] > avg:\n            count += 1\n    return count",
+   "jac": "node Farm { has crop: int; has tallied: bool = False; has judged: bool = False; }\n\nwalker CropSum {\n    has total: int = 0;\n    has count: int = 0;\n    can tally with Farm entry {\n        if not here.tallied {\n            here.tallied = True;\n            self.total += here.crop;\n            self.count += 1;\n            visit [-->];\n        }\n    }\n}\n\nwalker OverBar {\n    has bar: float;\n    has hits: int = 0;\n    can judge with Farm entry {\n        if not here.judged {\n            here.judged = True;\n            if here.crop > self.bar { self.hits += 1; }\n            visit [-->];\n        }\n    }\n}\n\ndef above_average_count(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]); vals: dict = dict(spec[\"vals\"]);\n    farms: dict = {};\n    for nm in vals.keys() { farms[nm] = Farm(crop=int(vals[nm])); }\n    for (a, bs) in adj.items() { for b in bs { farms[a] ++> farms[b]; } }\n    origin = farms[str(spec[\"start\"])];\n    first = origin spawn CropSum();\n    bar: float = first.total / first.count;\n    return (origin spawn OverBar(bar=bar)).hits;\n}\n\nwith entry { print(above_average_count({\"adj\": {\"a\": [\"b\", \"c\"], \"b\": [], \"c\": []}, \"vals\": {\"a\": 1, \"b\": 5, \"c\": 3}, \"start\": \"a\"})); }",
+   "expected_output": "1",
+   "cases": [
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b",
+        "c"
+       ],
+       "b": [],
+       "c": []
+      },
+      "vals": {
+       "a": 1,
+       "b": 5,
+       "c": 3
+      },
+      "start": "a"
+     },
+     "output": "1"
+    },
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b"
+       ],
+       "b": [
+        "c"
+       ],
+       "c": [
+        "d"
+       ],
+       "d": []
+      },
+      "vals": {
+       "a": 5,
+       "b": 6,
+       "c": 1,
+       "d": 0
+      },
+      "start": "a"
+     },
+     "output": "2"
+    },
+    {
+     "input": {
+      "adj": {
+       "a": []
+      },
+      "vals": {
+       "a": 7
+      },
+      "start": "a"
+     },
+     "output": "0"
+    }
+   ]
+  },
+  {
+   "name": "shared_reach_sum",
+   "category": "graph_osp",
+   "subcategory": "two_phase_walk",
+   "difficulty": "composed",
+   "py": "def shared_reach_sum(spec: dict) -> int:\n    \"\"\"Sum values of nodes reachable from both entry points.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]\n    first = []\n    queue = [spec[\"a\"]]\n    while queue:\n        n = queue.pop(0)\n        if n in first:\n            continue\n        first.append(n)\n        queue.extend(adj[n])\n    total = 0\n    second = []\n    queue = [spec[\"b\"]]\n    while queue:\n        n = queue.pop(0)\n        if n in second:\n            continue\n        second.append(n)\n        queue.extend(adj[n])\n        if n in first:\n            total += vals[n]\n    return total",
+   "jac": "node Depot { has stock: int; has hit: bool = False; has counted: bool = False; }\n\nwalker MarkReach {\n    can mark with Depot entry {\n        if not here.hit {\n            here.hit = True;\n            visit [-->];\n        }\n    }\n}\n\nwalker SharedSum {\n    has total: int = 0;\n    can gather with Depot entry {\n        if not here.counted {\n            here.counted = True;\n            if here.hit { self.total += here.stock; }\n            visit [-->];\n        }\n    }\n}\n\ndef shared_reach_sum(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]); vals: dict = dict(spec[\"vals\"]);\n    depots: dict = {};\n    for nm in vals.keys() { depots[nm] = Depot(stock=int(vals[nm])); }\n    for (a, bs) in adj.items() { for b in bs { depots[a] ++> depots[b]; } }\n    marker = depots[str(spec[\"a\"])] spawn MarkReach();\n    return (depots[str(spec[\"b\"])] spawn SharedSum()).total;\n}\n\nwith entry { print(shared_reach_sum({\"adj\": {\"a\": [\"c\", \"d\"], \"b\": [\"d\", \"e\"], \"c\": [], \"d\": [\"f\"], \"e\": [], \"f\": []}, \"vals\": {\"a\": 1, \"b\": 1, \"c\": 1, \"d\": 2, \"e\": 3, \"f\": 4}, \"a\": \"a\", \"b\": \"b\"})); }",
+   "expected_output": "6",
+   "cases": [
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "c",
+        "d"
+       ],
+       "b": [
+        "d",
+        "e"
+       ],
+       "c": [],
+       "d": [
+        "f"
+       ],
+       "e": [],
+       "f": []
+      },
+      "vals": {
+       "a": 1,
+       "b": 1,
+       "c": 1,
+       "d": 2,
+       "e": 3,
+       "f": 4
+      },
+      "a": "a",
+      "b": "b"
+     },
+     "output": "6"
+    },
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "m"
+       ],
+       "b": [
+        "n"
+       ],
+       "m": [],
+       "n": []
+      },
+      "vals": {
+       "a": 1,
+       "b": 1,
+       "m": 5,
+       "n": 7
+      },
+      "a": "a",
+      "b": "b"
+     },
+     "output": "0"
+    },
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "x"
+       ],
+       "b": [
+        "x"
+       ],
+       "x": [
+        "y"
+       ],
+       "y": []
+      },
+      "vals": {
+       "a": 9,
+       "b": 8,
+       "x": 2,
+       "y": 3
+      },
+      "a": "a",
+      "b": "b"
+     },
+     "output": "5"
+    }
+   ]
+  },
+  {
+   "name": "reach_from_max_child",
+   "category": "graph_osp",
+   "subcategory": "walker_handoff",
+   "difficulty": "composed",
+   "py": "def reach_from_max_child(spec: dict) -> int:\n    \"\"\"Count nodes reachable from the highest-valued direct child of start.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]\n    kids = adj[spec[\"start\"]]\n    if not kids:\n        return 0\n    best = kids[0]\n    for k in kids:\n        if vals[k] > vals[best] or (vals[k] == vals[best] and k < best):\n            best = k\n    seen = []\n    queue = [best]\n    while queue:\n        n = queue.pop(0)\n        if n in seen:\n            continue\n        seen.append(n)\n        queue.extend(adj[n])\n    return len(seen)",
+   "jac": "node Town { has name: str; has worth: int; has toured: bool = False; }\n\nwalker PickChild {\n    has stage: int = 0;\n    has best_name: str = \"\";\n    has best_val: int = 0;\n    can pick with Town entry {\n        if self.stage == 0 {\n            self.stage = 1;\n            visit [-->];\n        } elif self.best_name == \"\" or here.worth > self.best_val or (here.worth == self.best_val and here.name < self.best_name) {\n            self.best_name = here.name;\n            self.best_val = here.worth;\n        }\n    }\n}\n\nwalker TownCount {\n    has count: int = 0;\n    can tour with Town entry {\n        if not here.toured {\n            here.toured = True;\n            self.count += 1;\n            visit [-->];\n        }\n    }\n}\n\ndef reach_from_max_child(spec: dict) -> int {\n    adj: dict = dict(spec[\"adj\"]); vals: dict = dict(spec[\"vals\"]);\n    towns: dict = {};\n    for nm in vals.keys() { towns[nm] = Town(name=str(nm), worth=int(vals[nm])); }\n    for (a, bs) in adj.items() { for b in bs { towns[a] ++> towns[b]; } }\n    picker = towns[str(spec[\"start\"])] spawn PickChild();\n    if picker.best_name == \"\" { return 0; }\n    return (towns[picker.best_name] spawn TownCount()).count;\n}\n\nwith entry { print(reach_from_max_child({\"adj\": {\"h\": [\"a\", \"b\"], \"a\": [\"x\"], \"b\": [\"y\", \"z\"], \"x\": [], \"y\": [], \"z\": []}, \"vals\": {\"h\": 0, \"a\": 3, \"b\": 7, \"x\": 1, \"y\": 1, \"z\": 1}, \"start\": \"h\"})); }",
+   "expected_output": "3",
+   "cases": [
+    {
+     "input": {
+      "adj": {
+       "h": [
+        "a",
+        "b"
+       ],
+       "a": [
+        "x"
+       ],
+       "b": [
+        "y",
+        "z"
+       ],
+       "x": [],
+       "y": [],
+       "z": []
+      },
+      "vals": {
+       "h": 0,
+       "a": 3,
+       "b": 7,
+       "x": 1,
+       "y": 1,
+       "z": 1
+      },
+      "start": "h"
+     },
+     "output": "3"
+    },
+    {
+     "input": {
+      "adj": {
+       "h": [
+        "p",
+        "q"
+       ],
+       "p": [
+        "u"
+       ],
+       "q": [],
+       "u": []
+      },
+      "vals": {
+       "h": 0,
+       "p": 4,
+       "q": 4,
+       "u": 0
+      },
+      "start": "h"
+     },
+     "output": "2"
+    },
+    {
+     "input": {
+      "adj": {
+       "h": []
+      },
+      "vals": {
+       "h": 5
+      },
+      "start": "h"
+     },
+     "output": "0"
+    }
+   ]
+  },
+  {
+   "name": "chain_report",
+   "category": "graph_osp",
+   "subcategory": "ability_composition",
+   "difficulty": "composed",
+   "py": "def chain_report(spec: dict) -> str:\n    \"\"\"Render chain items and their total in one report line.\"\"\"\n    names = spec[\"names\"]; nums = spec[\"nums\"]\n    if not names:\n        return \"|sum=0\"\n    parts = []\n    total = 0\n    for i in range(len(names)):\n        parts.append(names[i] + \":\" + str(nums[i]))\n        total += nums[i]\n    return \",\".join(parts) + \"|sum=\" + str(total)",
+   "jac": "walker Reporter {\n    has parts: list = [];\n    has total: int = 0;\n    has line: str = \"\";\n    can settle with exit {\n        self.line = \",\".join(self.parts) + \"|sum=\" + str(self.total);\n    }\n}\n\nnode Item {\n    has label: str;\n    has amt: int;\n    can log with Reporter entry {\n        visitor.parts.append(self.label + \":\" + str(self.amt));\n        visitor.total += self.amt;\n        visit [-->];\n    }\n}\n\ndef chain_report(spec: dict) -> str {\n    names: list = list(spec[\"names\"]); nums: list = list(spec[\"nums\"]);\n    if not names { return \"|sum=0\"; }\n    items: list = [];\n    for (nm, v) in zip(names, nums) { items.append(Item(label=str(nm), amt=int(v))); }\n    for (a, b) in zip(items, items[1:]) { a ++> b; }\n    return (items[0] spawn Reporter()).line;\n}\n\nwith entry { print(chain_report({\"names\": [\"a\", \"b\"], \"nums\": [2, 5]})); }",
+   "expected_output": "a:2,b:5|sum=7",
+   "cases": [
+    {
+     "input": {
+      "names": [
+       "a",
+       "b"
+      ],
+      "nums": [
+       2,
+       5
+      ]
+     },
+     "output": "a:2,b:5|sum=7"
+    },
+    {
+     "input": {
+      "names": [
+       "solo"
+      ],
+      "nums": [
+       4
+      ]
+     },
+     "output": "solo:4|sum=4"
+    },
+    {
+     "input": {
+      "names": [
+       "x",
+       "y",
+       "z"
+      ],
+      "nums": [
+       1,
+       2,
+       3
+      ]
+     },
+     "output": "x:1,y:2,z:3|sum=6"
+    }
+   ]
+  },
+  {
+   "name": "leaf_share_percent",
+   "category": "graph_osp",
+   "subcategory": "with_exit_format",
+   "difficulty": "advanced",
+   "py": "def leaf_share_percent(spec: dict) -> str:\n    \"\"\"Percent of total reachable value held at leaf nodes.\"\"\"\n    adj = spec[\"adj\"]; vals = spec[\"vals\"]; start = spec[\"start\"]\n    seen = []\n    queue = [start]\n    while queue:\n        n = queue.pop(0)\n        if n in seen:\n            continue\n        seen.append(n)\n        queue.extend(adj[n])\n    total = 0\n    leaf = 0\n    for n in seen:\n        total += vals[n]\n        if not adj[n]:\n            leaf += vals[n]\n    return str(round(100.0 * leaf / total, 1)) + \"%\"",
+   "jac": "node Branch { has sap: int; has drained: bool = False; }\n\nwalker SapAudit {\n    has total: int = 0;\n    has leaf: int = 0;\n    has text: str = \"\";\n    can drain with Branch entry {\n        if not here.drained {\n            here.drained = True;\n            self.total += here.sap;\n            if len([-->]) == 0 { self.leaf += here.sap; }\n            visit [-->];\n        }\n    }\n    can settle with exit {\n        self.text = str(round(100.0 * self.leaf / self.total, 1)) + \"%\";\n    }\n}\n\ndef leaf_share_percent(spec: dict) -> str {\n    adj: dict = dict(spec[\"adj\"]); vals: dict = dict(spec[\"vals\"]);\n    grove: dict = {};\n    for nm in vals.keys() { grove[nm] = Branch(sap=int(vals[nm])); }\n    for (a, bs) in adj.items() { for b in bs { grove[a] ++> grove[b]; } }\n    return (grove[str(spec[\"start\"])] spawn SapAudit()).text;\n}\n\nwith entry { print(leaf_share_percent({\"adj\": {\"a\": [\"b\", \"c\"], \"b\": [], \"c\": [\"d\"], \"d\": []}, \"vals\": {\"a\": 2, \"b\": 3, \"c\": 1, \"d\": 4}, \"start\": \"a\"})); }",
+   "expected_output": "70.0%",
+   "cases": [
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b",
+        "c"
+       ],
+       "b": [],
+       "c": [
+        "d"
+       ],
+       "d": []
+      },
+      "vals": {
+       "a": 2,
+       "b": 3,
+       "c": 1,
+       "d": 4
+      },
+      "start": "a"
+     },
+     "output": "70.0%"
+    },
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b"
+       ],
+       "b": []
+      },
+      "vals": {
+       "a": 5,
+       "b": 3
+      },
+      "start": "a"
+     },
+     "output": "37.5%"
+    },
+    {
+     "input": {
+      "adj": {
+       "z": []
+      },
+      "vals": {
+       "z": 6
+      },
+      "start": "z"
+     },
+     "output": "100.0%"
+    }
+   ]
+  },
+  {
+   "name": "far_probe_pair",
+   "category": "graph_osp",
+   "subcategory": "walker_handoff",
+   "difficulty": "advanced",
+   "py": "def far_probe_pair(spec: dict) -> list:\n    \"\"\"Find the farthest node from start, then count what it can reach.\"\"\"\n    adj = spec[\"adj\"]; start = spec[\"start\"]\n    depth = {start: 0}\n    queue = [start]\n    while queue:\n        n = queue.pop(0)\n        for m in adj[n]:\n            if m not in depth:\n                depth[m] = depth[n] + 1\n                queue.append(m)\n    far = start\n    for n in depth:\n        if depth[n] > depth[far] or (depth[n] == depth[far] and n < far):\n            far = n\n    seen = []\n    queue = [far]\n    while queue:\n        n = queue.pop(0)\n        if n in seen:\n            continue\n        seen.append(n)\n        queue.extend(adj[n])\n    return [far, len(seen)]",
+   "jac": "node Relay { has name: str; has depth: int = -1; has stamped: bool = False; has probed: bool = False; }\n\nwalker FarSeek {\n    has far_name: str = \"\";\n    has far_depth: int = -1;\n    can roam with Relay entry {\n        if not here.stamped {\n            here.stamped = True;\n            for nxt in [-->] {\n                if nxt.depth == -1 { nxt.depth = here.depth + 1; }\n            }\n            if here.depth > self.far_depth or (here.depth == self.far_depth and here.name < self.far_name) {\n                self.far_name = here.name;\n                self.far_depth = here.depth;\n            }\n            visit [-->];\n        }\n    }\n}\n\nwalker SpanCount {\n    has count: int = 0;\n    can probe with Relay entry {\n        if not here.probed {\n            here.probed = True;\n            self.count += 1;\n            visit [-->];\n        }\n    }\n}\n\ndef far_probe_pair(spec: dict) -> list {\n    adj: dict = dict(spec[\"adj\"]);\n    relays: dict = {};\n    for nm in adj.keys() { relays[nm] = Relay(name=str(nm)); }\n    for (a, bs) in adj.items() { for b in bs { relays[a] ++> relays[b]; } }\n    base = relays[str(spec[\"start\"])];\n    base.depth = 0;\n    seeker = base spawn FarSeek();\n    probe = relays[seeker.far_name] spawn SpanCount();\n    return [seeker.far_name, probe.count];\n}\n\nwith entry { print(far_probe_pair({\"adj\": {\"s\": [\"a\", \"b\"], \"a\": [\"c\"], \"b\": [], \"c\": []}, \"start\": \"s\"})); }",
+   "expected_output": "['c', 1]",
+   "cases": [
+    {
+     "input": {
+      "adj": {
+       "s": [
+        "a",
+        "b"
+       ],
+       "a": [
+        "c"
+       ],
+       "b": [],
+       "c": []
+      },
+      "start": "s"
+     },
+     "output": "['c', 1]"
+    },
+    {
+     "input": {
+      "adj": {
+       "s": [
+        "a"
+       ],
+       "a": [
+        "b"
+       ],
+       "b": [
+        "s"
+       ]
+      },
+      "start": "s"
+     },
+     "output": "['b', 3]"
+    },
+    {
+     "input": {
+      "adj": {
+       "s": [
+        "m",
+        "k"
+       ],
+       "m": [],
+       "k": []
+      },
+      "start": "s"
+     },
+     "output": "['k', 1]"
+    }
+   ]
+  },
+  {
+   "name": "avg_after_boost",
+   "category": "graph_osp",
+   "subcategory": "two_phase_mutation",
+   "difficulty": "advanced",
+   "py": "def avg_after_boost(spec: dict) -> float:\n    \"\"\"Average reachable value after boosting nodes at or above the cut.\"\"\"\n    adj = spec[\"adj\"]; vals = dict(spec[\"vals\"])\n    start = spec[\"start\"]; cut = spec[\"cut\"]; bonus = spec[\"bonus\"]\n    seen = []\n    queue = [start]\n    while queue:\n        n = queue.pop(0)\n        if n in seen:\n            continue\n        seen.append(n)\n        queue.extend(adj[n])\n    for n in seen:\n        if vals[n] >= cut:\n            vals[n] += bonus\n    total = 0\n    for n in seen:\n        total += vals[n]\n    return round(total / len(seen), 2)",
+   "jac": "walker Booster { has cut: int; has bonus: int; }\n\nnode Worker {\n    has pay: int;\n    has bumped: bool = False;\n    has polled: bool = False;\n    can bump with Booster entry {\n        if not self.bumped {\n            self.bumped = True;\n            if self.pay >= visitor.cut { self.pay += visitor.bonus; }\n            visit [-->];\n        }\n    }\n}\n\nwalker Payroll {\n    has total: int = 0;\n    has count: int = 0;\n    has avg: float = 0.0;\n    can poll with Worker entry {\n        if not here.polled {\n            here.polled = True;\n            self.total += here.pay;\n            self.count += 1;\n            visit [-->];\n        }\n    }\n    can settle with exit {\n        self.avg = round(self.total / self.count, 2);\n    }\n}\n\ndef avg_after_boost(spec: dict) -> float {\n    adj: dict = dict(spec[\"adj\"]); vals: dict = dict(spec[\"vals\"]);\n    crew: dict = {};\n    for nm in vals.keys() { crew[nm] = Worker(pay=int(vals[nm])); }\n    for (a, bs) in adj.items() { for b in bs { crew[a] ++> crew[b]; } }\n    base = crew[str(spec[\"start\"])];\n    booster = base spawn Booster(cut=int(spec[\"cut\"]), bonus=int(spec[\"bonus\"]));\n    return (base spawn Payroll()).avg;\n}\n\nwith entry { print(avg_after_boost({\"adj\": {\"a\": [\"b\", \"c\"], \"b\": [], \"c\": []}, \"vals\": {\"a\": 4, \"b\": 10, \"c\": 2}, \"start\": \"a\", \"cut\": 5, \"bonus\": 3})); }",
+   "expected_output": "6.33",
+   "cases": [
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b",
+        "c"
+       ],
+       "b": [],
+       "c": []
+      },
+      "vals": {
+       "a": 4,
+       "b": 10,
+       "c": 2
+      },
+      "start": "a",
+      "cut": 5,
+      "bonus": 3
+     },
+     "output": "6.33"
+    },
+    {
+     "input": {
+      "adj": {
+       "x": [
+        "y"
+       ],
+       "y": []
+      },
+      "vals": {
+       "x": 1,
+       "y": 2
+      },
+      "start": "x",
+      "cut": 1,
+      "bonus": 10
+     },
+     "output": "11.5"
+    },
+    {
+     "input": {
+      "adj": {
+       "a": [
+        "b"
+       ],
+       "b": []
+      },
+      "vals": {
+       "a": 1,
+       "b": 1
+      },
+      "start": "a",
+      "cut": 5,
+      "bonus": 9
+     },
+     "output": "1.0"
+    }
+   ]
+  }
+ ]
+}

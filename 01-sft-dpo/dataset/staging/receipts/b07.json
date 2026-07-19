@@ -1,0 +1,21 @@
+{
+  "batch_id": "b07",
+  "accepted": [
+    "count_user_posts",
+    "sum_item_stock",
+    "has_powered_device",
+    "count_hot_sensors",
+    "posts_per_user",
+    "loyal_users",
+    "top_city_revenue",
+    "low_stock_warehouses",
+    "avg_category_price",
+    "author_of_top_post",
+    "fan_post_count",
+    "richest_department",
+    "fully_stocked_cities",
+    "suspended_users"
+  ],
+  "rejected": [],
+  "accept_rate": 1.0
+}
