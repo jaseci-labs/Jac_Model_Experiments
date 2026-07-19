@@ -1,0 +1,587 @@
+{
+  "batch_id": "b19",
+  "generator": "fable-agent-v1",
+  "examples": [
+    {
+      "name": "sign_counts",
+      "category": "function",
+      "subcategory": "typed_collections",
+      "difficulty": "simple",
+      "py": "def sign_counts(nums: list[int]) -> dict[str, int]:\n    \"\"\"Count negatives, zeros, and positives.\"\"\"\n    return {\"neg\": len([n for n in nums if n < 0]),\n            \"zero\": len([n for n in nums if n == 0]),\n            \"pos\": len([n for n in nums if n > 0])}",
+      "jac": "def sign_counts(nums: list[int]) -> dict[str, int] {\n    return {\n        \"neg\": len([n for n in nums if n < 0]),\n        \"zero\": len([n for n in nums if n == 0]),\n        \"pos\": len([n for n in nums if n > 0])\n    };\n}\n\nwith entry { print(sign_counts([-2, 0, 3, 5])); }",
+      "expected_output": "{'neg': 1, 'zero': 1, 'pos': 2}",
+      "cases": [
+        {
+          "input": [
+            -2,
+            0,
+            3,
+            5
+          ],
+          "output": "{'neg': 1, 'zero': 1, 'pos': 2}"
+        },
+        {
+          "input": [
+            0,
+            0,
+            -1
+          ],
+          "output": "{'neg': 1, 'zero': 2, 'pos': 0}"
+        },
+        {
+          "input": [
+            4,
+            4
+          ],
+          "output": "{'neg': 0, 'zero': 0, 'pos': 2}"
+        }
+      ]
+    },
+    {
+      "name": "even_odd_split",
+      "category": "function",
+      "subcategory": "typed_collections",
+      "difficulty": "simple",
+      "py": "def even_odd_split(nums: list[int]) -> tuple[list[int], list[int]]:\n    \"\"\"Split nums into (evens, odds), order preserved.\"\"\"\n    return ([n for n in nums if n % 2 == 0], [n for n in nums if n % 2 == 1])",
+      "jac": "def even_odd_split(nums: list[int]) -> tuple[list[int], list[int]] {\n    return ([n for n in nums if n % 2 == 0], [n for n in nums if n % 2 == 1]);\n}\n\nwith entry { print(even_odd_split([1, 2, 3, 4])); }",
+      "expected_output": "([2, 4], [1, 3])",
+      "cases": [
+        {
+          "input": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "output": "([2, 4], [1, 3])"
+        },
+        {
+          "input": [
+            7,
+            9
+          ],
+          "output": "([], [7, 9])"
+        },
+        {
+          "input": [
+            8
+          ],
+          "output": "([8], [])"
+        }
+      ]
+    },
+    {
+      "name": "clamp_scores",
+      "category": "function",
+      "subcategory": "comprehension_pipeline",
+      "difficulty": "simple",
+      "py": "def clamp_scores(nums: list[int]) -> list[int]:\n    \"\"\"Clamp each score into the 0..100 range.\"\"\"\n    return [0 if n < 0 else (100 if n > 100 else n) for n in nums]",
+      "jac": "def clamp_scores(nums: list[int]) -> list[int] {\n    return [0 if n < 0 else (100 if n > 100 else n) for n in nums];\n}\n\nwith entry { print(clamp_scores([-5, 42, 130])); }",
+      "expected_output": "[0, 42, 100]",
+      "cases": [
+        {
+          "input": [
+            -5,
+            42,
+            130
+          ],
+          "output": "[0, 42, 100]"
+        },
+        {
+          "input": [
+            99,
+            101
+          ],
+          "output": "[99, 100]"
+        },
+        {
+          "input": [
+            0
+          ],
+          "output": "[0]"
+        }
+      ]
+    },
+    {
+      "name": "pairwise_diffs",
+      "category": "function",
+      "subcategory": "comprehension_pipeline",
+      "difficulty": "simple",
+      "py": "def pairwise_diffs(nums: list[int]) -> list[int]:\n    \"\"\"Difference between each adjacent pair.\"\"\"\n    return [b - a for a, b in zip(nums, nums[1:])]",
+      "jac": "def pairwise_diffs(nums: list[int]) -> list[int] {\n    return [b - a for (a, b) in zip(nums, nums[1:])];\n}\n\nwith entry { print(pairwise_diffs([1, 4, 9, 16])); }",
+      "expected_output": "[3, 5, 7]",
+      "cases": [
+        {
+          "input": [
+            1,
+            4,
+            9,
+            16
+          ],
+          "output": "[3, 5, 7]"
+        },
+        {
+          "input": [
+            5,
+            5
+          ],
+          "output": "[0]"
+        },
+        {
+          "input": [
+            10,
+            3,
+            3
+          ],
+          "output": "[-7, 0]"
+        }
+      ]
+    },
+    {
+      "name": "grade_report",
+      "category": "function",
+      "subcategory": "match_dispatch",
+      "difficulty": "composed",
+      "py": "def grade_report(scores: dict[str, int]) -> dict[str, str]:\n    \"\"\"Map each student to a letter grade.\"\"\"\n    out = {}\n    for name, s in scores.items():\n        match s // 10:\n            case 10 | 9:\n                out[name] = \"A\"\n            case 8:\n                out[name] = \"B\"\n            case 7:\n                out[name] = \"C\"\n            case 6:\n                out[name] = \"D\"\n            case _:\n                out[name] = \"F\"\n    return out",
+      "jac": "def grade_report(scores: dict[str, int]) -> dict[str, str] {\n    out: dict[str, str] = {};\n    for (name, s) in scores.items() {\n        match s // 10 {\n            case 10 | 9: out[name] = \"A\";\n            case 8: out[name] = \"B\";\n            case 7: out[name] = \"C\";\n            case 6: out[name] = \"D\";\n            case _: out[name] = \"F\";\n        }\n    }\n    return out;\n}\n\nwith entry { print(grade_report({'ana': 91, 'bo': 78, 'cy': 55})); }",
+      "expected_output": "{'ana': 'A', 'bo': 'C', 'cy': 'F'}",
+      "cases": [
+        {
+          "input": {
+            "ana": 91,
+            "bo": 78,
+            "cy": 55
+          },
+          "output": "{'ana': 'A', 'bo': 'C', 'cy': 'F'}"
+        },
+        {
+          "input": {
+            "di": 100,
+            "el": 64
+          },
+          "output": "{'di': 'A', 'el': 'D'}"
+        },
+        {
+          "input": {
+            "fu": 83
+          },
+          "output": "{'fu': 'B'}"
+        }
+      ]
+    },
+    {
+      "name": "transpose_grid",
+      "category": "function",
+      "subcategory": "comprehension_pipeline",
+      "difficulty": "composed",
+      "py": "def transpose_grid(m: list[list[int]]) -> list[list[int]]:\n    \"\"\"Transpose a rectangular grid of ints.\"\"\"\n    return [[row[i] for row in m] for i in range(len(m[0]))]",
+      "jac": "def transpose_grid(m: list[list[int]]) -> list[list[int]] {\n    return [[row[i] for row in m] for i in range(len(m[0]))];\n}\n\nwith entry { print(transpose_grid([[1, 2, 3], [4, 5, 6]])); }",
+      "expected_output": "[[1, 4], [2, 5], [3, 6]]",
+      "cases": [
+        {
+          "input": [
+            [
+              1,
+              2,
+              3
+            ],
+            [
+              4,
+              5,
+              6
+            ]
+          ],
+          "output": "[[1, 4], [2, 5], [3, 6]]"
+        },
+        {
+          "input": [
+            [
+              7
+            ]
+          ],
+          "output": "[[7]]"
+        },
+        {
+          "input": [
+            [
+              1,
+              2
+            ],
+            [
+              3,
+              4
+            ],
+            [
+              5,
+              6
+            ]
+          ],
+          "output": "[[1, 3, 5], [2, 4, 6]]"
+        }
+      ]
+    },
+    {
+      "name": "invert_tags",
+      "category": "function",
+      "subcategory": "typed_collections",
+      "difficulty": "composed",
+      "py": "def invert_tags(docs: dict[str, list[str]]) -> dict[str, list[str]]:\n    \"\"\"Invert doc->tags into tag->sorted docs.\"\"\"\n    tags = sorted({t for ts in docs.values() for t in ts})\n    return {t: sorted(d for d, ts in docs.items() if t in ts) for t in tags}",
+      "jac": "def invert_tags(docs: dict[str, list[str]]) -> dict[str, list[str]] {\n    tags: list[str] = sorted({t for ts in docs.values() for t in ts});\n    return {t: sorted([d for (d, ts) in docs.items() if t in ts]) for t in tags};\n}\n\nwith entry { print(invert_tags({'a.txt': ['ml', 'jac'], 'b.txt': ['jac']})); }",
+      "expected_output": "{'jac': ['a.txt', 'b.txt'], 'ml': ['a.txt']}",
+      "cases": [
+        {
+          "input": {
+            "a.txt": [
+              "ml",
+              "jac"
+            ],
+            "b.txt": [
+              "jac"
+            ]
+          },
+          "output": "{'jac': ['a.txt', 'b.txt'], 'ml': ['a.txt']}"
+        },
+        {
+          "input": {
+            "x": [
+              "z"
+            ]
+          },
+          "output": "{'z': ['x']}"
+        },
+        {
+          "input": {
+            "one": [
+              "a"
+            ],
+            "two": [
+              "a",
+              "b"
+            ],
+            "three": [
+              "b"
+            ]
+          },
+          "output": "{'a': ['one', 'two'], 'b': ['three', 'two']}"
+        }
+      ]
+    },
+    {
+      "name": "group_by_initial",
+      "category": "function",
+      "subcategory": "typed_collections",
+      "difficulty": "composed",
+      "py": "def group_by_initial(words: list[str]) -> dict[str, list[str]]:\n    \"\"\"Group words under their first letter, letters sorted.\"\"\"\n    return {c: [w for w in words if w[0] == c]\n            for c in sorted({w[0] for w in words})}",
+      "jac": "def group_by_initial(words: list[str]) -> dict[str, list[str]] {\n    return {\n        c: [w for w in words if w[0] == c]\n        for c in sorted({w[0] for w in words})\n    };\n}\n\nwith entry { print(group_by_initial(['ant', 'bee', 'ape'])); }",
+      "expected_output": "{'a': ['ant', 'ape'], 'b': ['bee']}",
+      "cases": [
+        {
+          "input": [
+            "ant",
+            "bee",
+            "ape"
+          ],
+          "output": "{'a': ['ant', 'ape'], 'b': ['bee']}"
+        },
+        {
+          "input": [
+            "kit"
+          ],
+          "output": "{'k': ['kit']}"
+        },
+        {
+          "input": [
+            "oak",
+            "elm",
+            "oat",
+            "elk"
+          ],
+          "output": "{'e': ['elm', 'elk'], 'o': ['oak', 'oat']}"
+        }
+      ]
+    },
+    {
+      "name": "run_lengths",
+      "category": "function",
+      "subcategory": "typed_collections",
+      "difficulty": "composed",
+      "py": "def run_lengths(nums: list[int]) -> list[tuple[int, int]]:\n    \"\"\"Run-length encode nums as (value, count) pairs.\"\"\"\n    out = []\n    for n in nums:\n        if out and out[-1][0] == n:\n            out[-1] = (n, out[-1][1] + 1)\n        else:\n            out.append((n, 1))\n    return out",
+      "jac": "def run_lengths(nums: list[int]) -> list[tuple[int, int]] {\n    out: list[tuple[int, int]] = [];\n    for n in nums {\n        if out and out[-1][0] == n {\n            out[-1] = (n, out[-1][1] + 1);\n        } else {\n            out.append((n, 1));\n        }\n    }\n    return out;\n}\n\nwith entry { print(run_lengths([1, 1, 2, 3, 3, 3])); }",
+      "expected_output": "[(1, 2), (2, 1), (3, 3)]",
+      "cases": [
+        {
+          "input": [
+            1,
+            1,
+            2,
+            3,
+            3,
+            3
+          ],
+          "output": "[(1, 2), (2, 1), (3, 3)]"
+        },
+        {
+          "input": [
+            4
+          ],
+          "output": "[(4, 1)]"
+        },
+        {
+          "input": [
+            5,
+            5,
+            5,
+            5
+          ],
+          "output": "[(5, 4)]"
+        }
+      ]
+    },
+    {
+      "name": "leaderboard",
+      "category": "function",
+      "subcategory": "comprehension_pipeline",
+      "difficulty": "composed",
+      "py": "def leaderboard(rows: list[dict]) -> list[str]:\n    \"\"\"Format rows as ranked 'i. name (score)' lines, best first.\"\"\"\n    ranked = sorted(rows, key=lambda r: -r[\"score\"])\n    return [f\"{i}. {r['name']} ({r['score']})\" for i, r in enumerate(ranked, 1)]",
+      "jac": "def leaderboard(rows: list[dict]) -> list[str] {\n    ranked: list[dict] = sorted(rows, key=lambda r: dict : -r[\"score\"]);\n    return [f\"{i}. {r['name']} ({r['score']})\" for (i, r) in enumerate(ranked, 1)];\n}\n\nwith entry { print(leaderboard([{'name': 'ana', 'score': 12}, {'name': 'bo', 'score': 30}])); }",
+      "expected_output": "['1. bo (30)', '2. ana (12)']",
+      "cases": [
+        {
+          "input": [
+            {
+              "name": "ana",
+              "score": 12
+            },
+            {
+              "name": "bo",
+              "score": 30
+            }
+          ],
+          "output": "['1. bo (30)', '2. ana (12)']"
+        },
+        {
+          "input": [
+            {
+              "name": "cy",
+              "score": 7
+            }
+          ],
+          "output": "['1. cy (7)']"
+        },
+        {
+          "input": [
+            {
+              "name": "di",
+              "score": 5
+            },
+            {
+              "name": "el",
+              "score": 9
+            },
+            {
+              "name": "fu",
+              "score": 1
+            }
+          ],
+          "output": "['1. el (9)', '2. di (5)', '3. fu (1)']"
+        }
+      ]
+    },
+    {
+      "name": "moving_avg",
+      "category": "function",
+      "subcategory": "comprehension_pipeline",
+      "difficulty": "composed",
+      "py": "def moving_avg(nums: list[float]) -> list[float]:\n    \"\"\"3-wide moving average, rounded to 2 places.\"\"\"\n    return [round(sum(nums[i:i + 3]) / 3, 2) for i in range(len(nums) - 2)]",
+      "jac": "def moving_avg(nums: list[float]) -> list[float] {\n    return [round(sum(nums[i:i + 3]) / 3, 2) for i in range(len(nums) - 2)];\n}\n\nwith entry { print(moving_avg([1.0, 2.0, 3.0, 4.0])); }",
+      "expected_output": "[2.0, 3.0]",
+      "cases": [
+        {
+          "input": [
+            1.0,
+            2.0,
+            3.0,
+            4.0
+          ],
+          "output": "[2.0, 3.0]"
+        },
+        {
+          "input": [
+            10.0,
+            20.0,
+            60.0
+          ],
+          "output": "[30.0]"
+        },
+        {
+          "input": [
+            0.5,
+            0.5,
+            2.0,
+            0.5
+          ],
+          "output": "[1.0, 1.0]"
+        }
+      ]
+    },
+    {
+      "name": "pivot_counts",
+      "category": "function",
+      "subcategory": "comprehension_pipeline",
+      "difficulty": "advanced",
+      "py": "def pivot_counts(recs: list[dict]) -> dict[str, dict[str, int]]:\n    \"\"\"Pivot records into city -> {category -> count}, keys sorted.\"\"\"\n    cities = sorted({r[\"city\"] for r in recs})\n    cats = sorted({r[\"cat\"] for r in recs})\n    return {c: {k: sum(1 for r in recs if r[\"city\"] == c and r[\"cat\"] == k)\n                for k in cats}\n            for c in cities}",
+      "jac": "def pivot_counts(recs: list[dict]) -> dict[str, dict[str, int]] {\n    cities: list[str] = sorted({r[\"city\"] for r in recs});\n    cats: list[str] = sorted({r[\"cat\"] for r in recs});\n    return {\n        c: {k: len([1 for r in recs if r[\"city\"] == c and r[\"cat\"] == k]) for k in cats}\n        for c in cities\n    };\n}\n\nwith entry { print(pivot_counts([{'city': 'nyc', 'cat': 'a'}, {'city': 'nyc', 'cat': 'b'}, {'city': 'la', 'cat': 'a'}])); }",
+      "expected_output": "{'la': {'a': 1, 'b': 0}, 'nyc': {'a': 1, 'b': 1}}",
+      "cases": [
+        {
+          "input": [
+            {
+              "city": "nyc",
+              "cat": "a"
+            },
+            {
+              "city": "nyc",
+              "cat": "b"
+            },
+            {
+              "city": "la",
+              "cat": "a"
+            }
+          ],
+          "output": "{'la': {'a': 1, 'b': 0}, 'nyc': {'a': 1, 'b': 1}}"
+        },
+        {
+          "input": [
+            {
+              "city": "sf",
+              "cat": "x"
+            }
+          ],
+          "output": "{'sf': {'x': 1}}"
+        },
+        {
+          "input": [
+            {
+              "city": "la",
+              "cat": "b"
+            },
+            {
+              "city": "la",
+              "cat": "b"
+            }
+          ],
+          "output": "{'la': {'b': 2}}"
+        }
+      ]
+    },
+    {
+      "name": "shape_areas",
+      "category": "function",
+      "subcategory": "match_dispatch",
+      "difficulty": "advanced",
+      "py": "def shape_areas(shapes: list[list]) -> list[float]:\n    \"\"\"Area of each ['sq', s] / ['rect', w, h] / ['tri', b, h] shape; 0.0 if unknown.\"\"\"\n    out = []\n    for s in shapes:\n        match s:\n            case [\"sq\", x]:\n                out.append(float(x * x))\n            case [\"rect\", w, h]:\n                out.append(float(w * h))\n            case [\"tri\", b, h]:\n                out.append(b * h / 2)\n            case _:\n                out.append(0.0)\n    return out",
+      "jac": "def shape_areas(shapes: list[list]) -> list[float] {\n    out: list[float] = [];\n    for s in shapes {\n        match s {\n            case [\"sq\", x]: out.append(float(x * x));\n            case [\"rect\", w, h]: out.append(float(w * h));\n            case [\"tri\", b, h]: out.append(b * h / 2);\n            case _: out.append(0.0);\n        }\n    }\n    return out;\n}\n\nwith entry { print(shape_areas([['sq', 3], ['rect', 2, 4], ['tri', 3, 4]])); }",
+      "expected_output": "[9.0, 8.0, 6.0]",
+      "cases": [
+        {
+          "input": [
+            [
+              "sq",
+              3
+            ],
+            [
+              "rect",
+              2,
+              4
+            ],
+            [
+              "tri",
+              3,
+              4
+            ]
+          ],
+          "output": "[9.0, 8.0, 6.0]"
+        },
+        {
+          "input": [
+            [
+              "hex",
+              1
+            ]
+          ],
+          "output": "[0.0]"
+        },
+        {
+          "input": [
+            [
+              "rect",
+              5,
+              5
+            ],
+            [
+              "sq",
+              2
+            ]
+          ],
+          "output": "[25.0, 4.0]"
+        }
+      ]
+    },
+    {
+      "name": "restock_report",
+      "category": "function",
+      "subcategory": "typed_collections",
+      "difficulty": "advanced",
+      "py": "def restock_report(items: list[dict]) -> tuple[dict[str, int], list[str]]:\n    \"\"\"Return (totals per category, sorted names with qty below 5).\"\"\"\n    totals = {}\n    for it in items:\n        totals[it[\"cat\"]] = totals.get(it[\"cat\"], 0) + it[\"qty\"]\n    low = sorted(it[\"name\"] for it in items if it[\"qty\"] < 5)\n    return (totals, low)",
+      "jac": "def restock_report(items: list[dict]) -> tuple[dict[str, int], list[str]] {\n    totals: dict[str, int] = {};\n    for it in items {\n        totals[it[\"cat\"]] = totals.get(it[\"cat\"], 0) + it[\"qty\"];\n    }\n    low: list[str] = sorted([it[\"name\"] for it in items if it[\"qty\"] < 5]);\n    return (totals, low);\n}\n\nwith entry { print(restock_report([{'name': 'bolt', 'cat': 'hw', 'qty': 12}, {'name': 'nut', 'cat': 'hw', 'qty': 3}, {'name': 'tape', 'cat': 'adh', 'qty': 4}])); }",
+      "expected_output": "({'hw': 15, 'adh': 4}, ['nut', 'tape'])",
+      "cases": [
+        {
+          "input": [
+            {
+              "name": "bolt",
+              "cat": "hw",
+              "qty": 12
+            },
+            {
+              "name": "nut",
+              "cat": "hw",
+              "qty": 3
+            },
+            {
+              "name": "tape",
+              "cat": "adh",
+              "qty": 4
+            }
+          ],
+          "output": "({'hw': 15, 'adh': 4}, ['nut', 'tape'])"
+        },
+        {
+          "input": [
+            {
+              "name": "pen",
+              "cat": "sta",
+              "qty": 9
+            }
+          ],
+          "output": "({'sta': 9}, [])"
+        },
+        {
+          "input": [
+            {
+              "name": "clip",
+              "cat": "sta",
+              "qty": 1
+            },
+            {
+              "name": "pin",
+              "cat": "sta",
+              "qty": 2
+            }
+          ],
+          "output": "({'sta': 3}, ['clip', 'pin'])"
+        }
+      ]
+    }
+  ]
+}

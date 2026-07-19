@@ -1,0 +1,473 @@
+{
+  "batch_id": "b20",
+  "generator": "fable-agent-v1",
+  "examples": [
+    {
+      "name": "safe_ratio",
+      "category": "function",
+      "subcategory": "error_handling",
+      "difficulty": "simple",
+      "py": "def safe_ratio(spec: str) -> str:\n    try:\n        parts = spec.split(\"/\")\n        a = int(parts[0])\n        b = int(parts[1])\n        return str(a / b)\n    except ZeroDivisionError:\n        return \"undefined\"\n    except (ValueError, IndexError):\n        return \"bad input\"",
+      "jac": "def safe_ratio(spec: str) -> str {\n    try {\n        parts = spec.split(\"/\");\n        a = int(parts[0]);\n        b = int(parts[1]);\n        return str(a / b);\n    } except ZeroDivisionError {\n        return \"undefined\";\n    } except (ValueError, IndexError) {\n        return \"bad input\";\n    }\n}\n\nwith entry { print(safe_ratio('8/2')); }",
+      "expected_output": "4.0",
+      "cases": [
+        {
+          "input": "8/2",
+          "output": "4.0"
+        },
+        {
+          "input": "5/0",
+          "output": "undefined"
+        },
+        {
+          "input": "x/2",
+          "output": "bad input"
+        }
+      ]
+    },
+    {
+      "name": "parse_port",
+      "category": "function",
+      "subcategory": "error_handling",
+      "difficulty": "simple",
+      "py": "def parse_port(raw: str) -> str:\n    try:\n        port = int(raw)\n        if port < 1 or port > 65535:\n            raise ValueError(f\"port out of range: {port}\")\n        return f\"ok:{port}\"\n    except ValueError as e:\n        return f\"invalid ({e})\"",
+      "jac": "def parse_port(raw: str) -> str {\n    try {\n        port = int(raw);\n        if port < 1 or port > 65535 {\n            raise ValueError(f\"port out of range: {port}\");\n        }\n        return f\"ok:{port}\";\n    } except ValueError as e {\n        return f\"invalid ({e})\";\n    }\n}\n\nwith entry { print(parse_port('8080')); }",
+      "expected_output": "ok:8080",
+      "cases": [
+        {
+          "input": "8080",
+          "output": "ok:8080"
+        },
+        {
+          "input": "99999",
+          "output": "invalid (port out of range: 99999)"
+        },
+        {
+          "input": "http",
+          "output": "invalid (invalid literal for int() with base 10: 'http')"
+        }
+      ]
+    },
+    {
+      "name": "nest_depth",
+      "category": "function",
+      "subcategory": "recursive_def",
+      "difficulty": "simple",
+      "py": "def nest_depth(tree: dict) -> int:\n    deepest = 0\n    for value in tree.values():\n        if isinstance(value, dict):\n            child = nest_depth(value)\n            if child > deepest:\n                deepest = child\n    return deepest + 1",
+      "jac": "def nest_depth(tree: dict) -> int {\n    deepest = 0;\n    for value in tree.values() {\n        if isinstance(value, dict) {\n            child = nest_depth(value);\n            if child > deepest {\n                deepest = child;\n            }\n        }\n    }\n    return deepest + 1;\n}\n\nwith entry { print(nest_depth({'a': 1, 'b': 2})); }",
+      "expected_output": "1",
+      "cases": [
+        {
+          "input": {
+            "a": 1,
+            "b": 2
+          },
+          "output": "1"
+        },
+        {
+          "input": {
+            "a": {
+              "b": {
+                "c": 1
+              }
+            },
+            "d": 2
+          },
+          "output": "3"
+        }
+      ]
+    },
+    {
+      "name": "deep_max",
+      "category": "function",
+      "subcategory": "recursive_def",
+      "difficulty": "simple",
+      "py": "def deep_max(items: list) -> int:\n    best = -1\n    for item in items:\n        candidate = deep_max(item) if isinstance(item, list) else item\n        if candidate > best:\n            best = candidate\n    return best",
+      "jac": "def deep_max(items: list) -> int {\n    best = -1;\n    for item in items {\n        candidate = deep_max(item) if isinstance(item, list) else item;\n        if candidate > best {\n            best = candidate;\n        }\n    }\n    return best;\n}\n\nwith entry { print(deep_max([3, [7, [2]], 5])); }",
+      "expected_output": "7",
+      "cases": [
+        {
+          "input": [
+            3,
+            [
+              7,
+              [
+                2
+              ]
+            ],
+            5
+          ],
+          "output": "7"
+        },
+        {
+          "input": [
+            1,
+            2
+          ],
+          "output": "2"
+        },
+        {
+          "input": [
+            [],
+            [
+              0
+            ]
+          ],
+          "output": "0"
+        }
+      ]
+    },
+    {
+      "name": "count_leaves",
+      "category": "function",
+      "subcategory": "recursive_def",
+      "difficulty": "composed",
+      "py": "def _count(value: object) -> int:\n    if isinstance(value, dict):\n        return sum([_count(v) for v in value.values()])\n    if isinstance(value, list):\n        return sum([_count(v) for v in value])\n    return 1\n\ndef count_leaves(data: dict) -> int:\n    return _count(data)",
+      "jac": "def _count(value: any) -> int {\n    if isinstance(value, dict) {\n        return sum([_count(v) for v in value.values()]);\n    }\n    if isinstance(value, list) {\n        return sum([_count(v) for v in value]);\n    }\n    return 1;\n}\n\ndef count_leaves(data: dict) -> int {\n    return _count(data);\n}\n\nwith entry { print(count_leaves({'a': [1, 2], 'b': {'c': 3}})); }",
+      "expected_output": "3",
+      "cases": [
+        {
+          "input": {
+            "a": [
+              1,
+              2
+            ],
+            "b": {
+              "c": 3
+            }
+          },
+          "output": "3"
+        },
+        {
+          "input": {
+            "a": {
+              "b": [
+                1,
+                [
+                  2,
+                  3
+                ],
+                4
+              ],
+              "c": "s"
+            }
+          },
+          "output": "5"
+        },
+        {
+          "input": {
+            "x": 1
+          },
+          "output": "1"
+        }
+      ]
+    },
+    {
+      "name": "flatten_all",
+      "category": "function",
+      "subcategory": "recursive_def",
+      "difficulty": "composed",
+      "py": "def flatten_all(nested: list) -> list:\n    flat = []\n    for item in nested:\n        if isinstance(item, list):\n            flat.extend(flatten_all(item))\n        else:\n            flat.append(item)\n    return flat",
+      "jac": "def flatten_all(nested: list) -> list {\n    flat = [];\n    for item in nested {\n        if isinstance(item, list) {\n            flat.extend(flatten_all(item));\n        } else {\n            flat.append(item);\n        }\n    }\n    return flat;\n}\n\nwith entry { print(flatten_all([1, [2, [3, 4]], 5])); }",
+      "expected_output": "[1, 2, 3, 4, 5]",
+      "cases": [
+        {
+          "input": [
+            1,
+            [
+              2,
+              [
+                3,
+                4
+              ]
+            ],
+            5
+          ],
+          "output": "[1, 2, 3, 4, 5]"
+        },
+        {
+          "input": [
+            [
+              [
+                "a"
+              ]
+            ],
+            "b"
+          ],
+          "output": "['a', 'b']"
+        }
+      ]
+    },
+    {
+      "name": "dig",
+      "category": "function",
+      "subcategory": "error_handling",
+      "difficulty": "composed",
+      "py": "def dig(query: dict) -> str:\n    spot = query[\"data\"]\n    try:\n        for key in query[\"path\"].split(\".\"):\n            spot = spot[key]\n        return f\"found: {spot}\"\n    except KeyError as e:\n        return f\"missing key: {e}\"\n    except TypeError:\n        return \"path too deep\"",
+      "jac": "def dig(query: dict) -> str {\n    spot = query[\"data\"];\n    try {\n        for key in query[\"path\"].split(\".\") {\n            spot = spot[key];\n        }\n        return f\"found: {spot}\";\n    } except KeyError as e {\n        return f\"missing key: {e}\";\n    } except TypeError {\n        return \"path too deep\";\n    }\n}\n\nwith entry { print(dig({'data': {'a': {'b': 5}}, 'path': 'a.b'})); }",
+      "expected_output": "found: 5",
+      "cases": [
+        {
+          "input": {
+            "data": {
+              "a": {
+                "b": 5
+              }
+            },
+            "path": "a.b"
+          },
+          "output": "found: 5"
+        },
+        {
+          "input": {
+            "data": {
+              "a": {
+                "b": 5
+              }
+            },
+            "path": "a.c"
+          },
+          "output": "missing key: 'c'"
+        },
+        {
+          "input": {
+            "data": {
+              "a": 1
+            },
+            "path": "a.b"
+          },
+          "output": "path too deep"
+        }
+      ]
+    },
+    {
+      "name": "mean_report",
+      "category": "function",
+      "subcategory": "helper_pipeline",
+      "difficulty": "composed",
+      "py": "def _validated(values: list) -> list:\n    if len(values) == 0:\n        raise ValueError(\"no samples\")\n    for v in values:\n        if not isinstance(v, (int, float)):\n            raise ValueError(f\"bad sample: {v}\")\n    return values\n\ndef _mean(values: list) -> float:\n    return sum(values) / len(values)\n\ndef mean_report(values: list) -> str:\n    try:\n        clean = _validated(values)\n        return f\"mean={_mean(clean):.2f} n={len(clean)}\"\n    except ValueError as e:\n        return f\"rejected: {e}\"",
+      "jac": "def _validated(values: list) -> list {\n    if len(values) == 0 {\n        raise ValueError(\"no samples\");\n    }\n    for v in values {\n        if not isinstance(v, (int, float)) {\n            raise ValueError(f\"bad sample: {v}\");\n        }\n    }\n    return values;\n}\n\ndef _mean(values: list) -> float {\n    return sum(values) / len(values);\n}\n\ndef mean_report(values: list) -> str {\n    try {\n        clean = _validated(values);\n        return f\"mean={_mean(clean):.2f} n={len(clean)}\";\n    } except ValueError as e {\n        return f\"rejected: {e}\";\n    }\n}\n\nwith entry { print(mean_report([4, 8, 6])); }",
+      "expected_output": "mean=6.00 n=3",
+      "cases": [
+        {
+          "input": [
+            4,
+            8,
+            6
+          ],
+          "output": "mean=6.00 n=3"
+        },
+        {
+          "input": [],
+          "output": "rejected: no samples"
+        },
+        {
+          "input": [
+            3,
+            "x"
+          ],
+          "output": "rejected: bad sample: x"
+        }
+      ]
+    },
+    {
+      "name": "receipt_total",
+      "category": "function",
+      "subcategory": "helper_pipeline",
+      "difficulty": "composed",
+      "py": "def _subtotal(prices: list) -> float:\n    total = 0.0\n    for p in prices:\n        total += p\n    return total\n\ndef _with_tax(amount: float, rate: float) -> float:\n    return amount * (1.0 + rate)\n\ndef receipt_total(order: dict) -> str:\n    opts = {\"tax_rate\": 0.1, \"coupon\": 0.0}\n    opts.update(order)\n    net = _subtotal(opts[\"prices\"]) - opts[\"coupon\"]\n    return f\"due: {_with_tax(net, opts['tax_rate']):.2f}\"",
+      "jac": "def _subtotal(prices: list) -> float {\n    total = 0.0;\n    for p in prices {\n        total += p;\n    }\n    return total;\n}\n\ndef _with_tax(amount: float, rate: float) -> float {\n    return amount * (1.0 + rate);\n}\n\ndef receipt_total(order: dict) -> str {\n    opts = {\"tax_rate\": 0.1, \"coupon\": 0.0};\n    opts.update(order);\n    net = _subtotal(opts[\"prices\"]) - opts[\"coupon\"];\n    return f\"due: {_with_tax(net, opts['tax_rate']):.2f}\";\n}\n\nwith entry { print(receipt_total({'prices': [10.0, 5.0]})); }",
+      "expected_output": "due: 16.50",
+      "cases": [
+        {
+          "input": {
+            "prices": [
+              10.0,
+              5.0
+            ]
+          },
+          "output": "due: 16.50"
+        },
+        {
+          "input": {
+            "prices": [
+              10.0,
+              5.0
+            ],
+            "tax_rate": 0.0,
+            "coupon": 3.0
+          },
+          "output": "due: 12.00"
+        }
+      ]
+    },
+    {
+      "name": "clean_tags",
+      "category": "function",
+      "subcategory": "helper_pipeline",
+      "difficulty": "composed",
+      "py": "def _normalize(tag: str) -> str:\n    return tag.strip().lower()\n\ndef _dedupe(tags: list) -> list:\n    seen = []\n    for t in tags:\n        if t not in seen:\n            seen.append(t)\n    return seen\n\ndef clean_tags(raw: list) -> str:\n    cleaned = [_normalize(t) for t in raw]\n    kept = [t for t in cleaned if t != \"\"]\n    return \",\".join(_dedupe(kept))",
+      "jac": "def _normalize(tag: str) -> str {\n    return tag.strip().lower();\n}\n\ndef _dedupe(tags: list) -> list {\n    seen = [];\n    for t in tags {\n        if t not in seen {\n            seen.append(t);\n        }\n    }\n    return seen;\n}\n\ndef clean_tags(raw: list) -> str {\n    cleaned = [_normalize(t) for t in raw];\n    kept = [t for t in cleaned if t != \"\"];\n    return \",\".join(_dedupe(kept));\n}\n\nwith entry { print(clean_tags([' Py', 'py', '', 'ML '])); }",
+      "expected_output": "py,ml",
+      "cases": [
+        {
+          "input": [
+            " Py",
+            "py",
+            "",
+            "ML "
+          ],
+          "output": "py,ml"
+        },
+        {
+          "input": [
+            "A",
+            "b",
+            "A"
+          ],
+          "output": "a,b"
+        }
+      ]
+    },
+    {
+      "name": "parse_pairs",
+      "category": "function",
+      "subcategory": "error_handling",
+      "difficulty": "composed",
+      "py": "def _pair(chunk: str) -> tuple:\n    parts = chunk.split(\"=\")\n    if len(parts) != 2 or parts[0] == \"\":\n        raise ValueError(chunk)\n    return (parts[0], parts[1])\n\ndef parse_pairs(line: str) -> str:\n    good = {}\n    bad = 0\n    for chunk in line.split(\";\"):\n        try:\n            kv = _pair(chunk)\n            good[kv[0]] = kv[1]\n        except ValueError:\n            bad += 1\n    return f\"{good} bad={bad}\"",
+      "jac": "def _pair(chunk: str) -> tuple {\n    parts = chunk.split(\"=\");\n    if len(parts) != 2 or parts[0] == \"\" {\n        raise ValueError(chunk);\n    }\n    return (parts[0], parts[1]);\n}\n\ndef parse_pairs(line: str) -> str {\n    good = {};\n    bad = 0;\n    for chunk in line.split(\";\") {\n        try {\n            kv = _pair(chunk);\n            good[kv[0]] = kv[1];\n        } except ValueError {\n            bad += 1;\n        }\n    }\n    return f\"{good} bad={bad}\";\n}\n\nwith entry { print(parse_pairs('a=1;b=2')); }",
+      "expected_output": "{'a': '1', 'b': '2'} bad=0",
+      "cases": [
+        {
+          "input": "a=1;b=2",
+          "output": "{'a': '1', 'b': '2'} bad=0"
+        },
+        {
+          "input": "a=1;oops;=x",
+          "output": "{'a': '1'} bad=2"
+        }
+      ]
+    },
+    {
+      "name": "eval_tree",
+      "category": "function",
+      "subcategory": "recursive_def",
+      "difficulty": "advanced",
+      "py": "def _eval(t: object) -> int:\n    if isinstance(t, int):\n        return t\n    left = _eval(t[\"left\"])\n    right = _eval(t[\"right\"])\n    op = t[\"op\"]\n    if op == \"+\":\n        return left + right\n    if op == \"-\":\n        return left - right\n    if op == \"*\":\n        return left * right\n    if op == \"/\":\n        return left // right\n    raise ValueError(f\"unknown op: {op}\")\n\ndef eval_tree(expr: dict) -> str:\n    try:\n        return f\"= {_eval(expr)}\"\n    except ZeroDivisionError:\n        return \"division by zero\"\n    except ValueError as e:\n        return str(e)",
+      "jac": "def _eval(t: any) -> int {\n    if isinstance(t, int) {\n        return t;\n    }\n    left = _eval(t[\"left\"]);\n    right = _eval(t[\"right\"]);\n    match t[\"op\"] {\n        case \"+\":\n            return left + right;\n        case \"-\":\n            return left - right;\n        case \"*\":\n            return left * right;\n        case \"/\":\n            return left // right;\n        case _:\n            raise ValueError(f\"unknown op: {t['op']}\");\n    }\n}\n\ndef eval_tree(expr: dict) -> str {\n    try {\n        return f\"= {_eval(expr)}\";\n    } except ZeroDivisionError {\n        return \"division by zero\";\n    } except ValueError as e {\n        return str(e);\n    }\n}\n\nwith entry { print(eval_tree({'op': '+', 'left': {'op': '*', 'left': 3, 'right': 4}, 'right': 5})); }",
+      "expected_output": "= 17",
+      "cases": [
+        {
+          "input": {
+            "op": "+",
+            "left": {
+              "op": "*",
+              "left": 3,
+              "right": 4
+            },
+            "right": 5
+          },
+          "output": "= 17"
+        },
+        {
+          "input": {
+            "op": "/",
+            "left": 8,
+            "right": 0
+          },
+          "output": "division by zero"
+        },
+        {
+          "input": {
+            "op": "%",
+            "left": 1,
+            "right": 2
+          },
+          "output": "unknown op: %"
+        }
+      ]
+    },
+    {
+      "name": "deep_merge",
+      "category": "function",
+      "subcategory": "recursive_def",
+      "difficulty": "advanced",
+      "py": "def _merge(base: dict, patch: dict) -> dict:\n    merged = dict(base)\n    for key, value in patch.items():\n        if key in merged and isinstance(merged[key], dict) and isinstance(value, dict):\n            merged[key] = _merge(merged[key], value)\n        else:\n            merged[key] = value\n    return merged\n\ndef deep_merge(spec: dict) -> dict:\n    return _merge(spec[\"base\"], spec[\"patch\"])",
+      "jac": "def _merge(base: dict, patch: dict) -> dict {\n    merged = dict(base);\n    for (key, value) in patch.items() {\n        if key in merged and isinstance(merged[key], dict) and isinstance(value, dict) {\n            merged[key] = _merge(merged[key], value);\n        } else {\n            merged[key] = value;\n        }\n    }\n    return merged;\n}\n\ndef deep_merge(spec: dict) -> dict {\n    return _merge(spec[\"base\"], spec[\"patch\"]);\n}\n\nwith entry { print(deep_merge({'base': {'a': 1, 'n': {'x': 1, 'y': 2}}, 'patch': {'n': {'y': 9}, 'b': 3}})); }",
+      "expected_output": "{'a': 1, 'n': {'x': 1, 'y': 9}, 'b': 3}",
+      "cases": [
+        {
+          "input": {
+            "base": {
+              "a": 1,
+              "n": {
+                "x": 1,
+                "y": 2
+              }
+            },
+            "patch": {
+              "n": {
+                "y": 9
+              },
+              "b": 3
+            }
+          },
+          "output": "{'a': 1, 'n': {'x': 1, 'y': 9}, 'b': 3}"
+        },
+        {
+          "input": {
+            "base": {
+              "a": 1
+            },
+            "patch": {
+              "a": {
+                "z": 1
+              }
+            }
+          },
+          "output": "{'a': {'z': 1}}"
+        }
+      ]
+    },
+    {
+      "name": "audit_records",
+      "category": "function",
+      "subcategory": "helper_pipeline",
+      "difficulty": "advanced",
+      "py": "def _amount(record: dict) -> int:\n    amount = record[\"amount\"]\n    if not isinstance(amount, int):\n        raise ValueError(f\"non-integer amount: {amount}\")\n    if amount < 0:\n        raise ValueError(f\"negative amount: {amount}\")\n    return amount\n\ndef _summary(total: int, ok: int, bad: list) -> str:\n    if len(bad) == 0:\n        return f\"total={total} ok={ok}\"\n    return f\"total={total} ok={ok} bad={','.join(bad)}\"\n\ndef audit_records(records: list) -> str:\n    total = 0\n    ok = 0\n    bad = []\n    for record in records:\n        try:\n            total += _amount(record)\n            ok += 1\n        except KeyError:\n            bad.append(record.get(\"id\", \"?\") + \":missing\")\n        except ValueError:\n            bad.append(record.get(\"id\", \"?\") + \":invalid\")\n    return _summary(total, ok, bad)",
+      "jac": "def _amount(record: dict) -> int {\n    amount = record[\"amount\"];\n    if not isinstance(amount, int) {\n        raise ValueError(f\"non-integer amount: {amount}\");\n    }\n    if amount < 0 {\n        raise ValueError(f\"negative amount: {amount}\");\n    }\n    return amount;\n}\n\ndef _summary(total: int, ok: int, bad: list) -> str {\n    if len(bad) == 0 {\n        return f\"total={total} ok={ok}\";\n    }\n    return f\"total={total} ok={ok} bad={','.join(bad)}\";\n}\n\ndef audit_records(records: list) -> str {\n    total = 0;\n    ok = 0;\n    bad = [];\n    for record in records {\n        try {\n            total += _amount(record);\n            ok += 1;\n        } except KeyError {\n            bad.append(record.get(\"id\", \"?\") + \":missing\");\n        } except ValueError {\n            bad.append(record.get(\"id\", \"?\") + \":invalid\");\n        }\n    }\n    return _summary(total, ok, bad);\n}\n\nwith entry { print(audit_records([{'id': 'a', 'amount': 10}, {'id': 'b', 'amount': 5}])); }",
+      "expected_output": "total=15 ok=2",
+      "cases": [
+        {
+          "input": [
+            {
+              "id": "a",
+              "amount": 10
+            },
+            {
+              "id": "b",
+              "amount": 5
+            }
+          ],
+          "output": "total=15 ok=2"
+        },
+        {
+          "input": [
+            {
+              "id": "a",
+              "amount": 10
+            },
+            {
+              "id": "b"
+            },
+            {
+              "id": "c",
+              "amount": -2
+            }
+          ],
+          "output": "total=10 ok=1 bad=b:missing,c:invalid"
+        }
+      ]
+    }
+  ]
+}

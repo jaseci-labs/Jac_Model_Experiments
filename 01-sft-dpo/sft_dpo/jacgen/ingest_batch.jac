@@ -63,13 +63,11 @@ def holdout_shingles() -> dict {
 }
 
 
-def func_name(py: str) -> str {
-    return py.split("def ", 1)[1].split("(", 1)[0].strip();
-}
-
-
-def run_python(py: str, inp: Any, timeout: int = 10) -> tuple[int, str] {
-    src: str = py + "\n\nprint(" + func_name(py) + "(" + repr(inp) + "))\n";
+def run_python(py: str, name: str, inp: Any, timeout: int = 10) -> tuple[int, str] {
+    # name comes from ex["name"], not parsed from py: multi-def batches (private
+    # helpers alongside the public fn) made naive first-"def " extraction grab
+    # the wrong function (surfaced as false rc=1/invented-output rejects on b20).
+    src: str = py + "\n\nprint(" + name + "(" + repr(inp) + "))\n";
     with tempfile.TemporaryDirectory() as d {
         f = Path(str(d)) / "check.py";
         f.write_text(src);
@@ -110,7 +108,7 @@ def check_example(ex: dict, existing: list[str], batch_kept: list[str]) -> tuple
         (jrc, jout, jerr) = run_jac(jac_with_demo(body, name, cd["input"]));
         if jrc != 0 { return (False, "jac fail rc=" + str(jrc) + " case=" + repr(cd["input"])[:60] + " err=" + jerr.strip()[:150], ""); }
         if jout.strip() != want { return (False, "jac out " + repr(jout.strip())[:80] + " != " + repr(want)[:80], ""); }
-        (prc, pout) = run_python(py, cd["input"]);
+        (prc, pout) = run_python(py, name, cd["input"]);
         if prc != 0 { return (False, "python fail rc=" + str(prc), ""); }
         if pout != want { return (False, "python out " + repr(pout)[:80] + " != " + repr(want)[:80] + " (invented output?)", ""); }
     }

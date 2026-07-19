@@ -1,0 +1,25 @@
+{
+  "batch_id": "b20",
+  "accepted": [
+    "safe_ratio",
+    "parse_port",
+    "nest_depth",
+    "count_leaves",
+    "flatten_all",
+    "dig",
+    "mean_report",
+    "receipt_total",
+    "clean_tags",
+    "parse_pairs",
+    "eval_tree",
+    "deep_merge",
+    "audit_records"
+  ],
+  "rejected": [
+    {
+      "name": "deep_max",
+      "reason": "dup vs existing sft.jsonl"
+    }
+  ],
+  "accept_rate": 0.9285714285714286
+}

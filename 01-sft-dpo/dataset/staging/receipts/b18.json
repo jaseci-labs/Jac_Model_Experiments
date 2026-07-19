@@ -1,0 +1,21 @@
+{
+  "batch_id": "b18",
+  "accepted": [
+    "circle_metrics",
+    "badge_label",
+    "stack_depth",
+    "invoice_total",
+    "parse_semver",
+    "cart_total",
+    "validate_signup",
+    "token_bucket",
+    "grade_report",
+    "apply_settings",
+    "bounding_box",
+    "running_stats",
+    "process_ledger",
+    "poly_at"
+  ],
+  "rejected": [],
+  "accept_rate": 1.0
+}
