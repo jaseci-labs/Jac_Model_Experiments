@@ -4,7 +4,8 @@
 # 01-sft-dpo/results/<N>/{base,finetuned}.txt, metrics.jsonl. Adds: function SFT idiom baseline,
 # graph holdout (base/SFT/idiom), DPO (function behavior+idiom built in), graph DPO.
 set -uo pipefail
-cd /Volumes/ExtremePro/JaseciLabs/jac_ml_studio
+cd /Volumes/ExtremePro/JaseciLabs/jac_model_studio
+[ -d ".venv/bin" ] && export PATH="$PWD/.venv/bin:$PATH"
 N="$1"
 GH=01-sft-dpo/dataset/eval_holdout/graph_conversion.jsonl
 Q8="models/${N}-q8"
