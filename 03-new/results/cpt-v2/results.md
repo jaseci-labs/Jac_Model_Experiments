@@ -92,6 +92,18 @@ The chart that explains why Track A and Track B tell such different-looking stor
 
 ---
 
+## Direct comparison to jac-gpt
+
+### `21_gap_to_jacgpt.png` — mean distance from jac-gpt's answer, by model
+
+Same Track A numbers, reframed as a gap instead of a similarity: 1 − cosine, lower = closer to jac-gpt. base 0.1949, cpt-v1 0.1874, cpt-v2 0.1867. cpt-v2 closes some of the gap to jac-gpt relative to base, but the cpt-v1 → cpt-v2 improvement is 0.0007 — a rounding error, not a second round of real progress.
+
+### `22_cptv2_vs_jacgpt_head_to_head.png` — both tracks, cpt-v2 vs jac-gpt only
+
+The two tracks side by side with everything else stripped out. Left: cpt-v2's mean cosine (0.8133) against jac-gpt's self-similarity ceiling (1.0, dashed) — a real, sizeable remaining gap. Right: the actual blind-judged outcome, cpt-v2 win-or-tie (9) vs jac-gpt wins (91), against the 50/50 line. This is the single clearest "did CPT-v2 catch up to jac-gpt" chart in the set, and the answer is no.
+
+---
+
 ## Verdict
 
 ### `19_acceptance_gauges.png` — the three gates, side by side

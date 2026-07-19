@@ -282,7 +282,7 @@ def chart_track_a_means(d):
     ax.hlines(req_v1, 0.65, 1.35, color=BAD, linestyle="--")
     ax.text(1.35, req_v1, f" need≥{req_v1:.4f}", color=BAD, va="center", fontsize=9)
     ax.set_ylim(min(vals) - 0.01, max(req_base, req_v1) + 0.015)
-    ax.set_ylabel("mean cosine-to-oracle")
+    ax.set_ylabel("mean cosine-to-jac-gpt")
     ax.set_title("Track A: mean cosine similarity vs. required +0.03 margin")
     save(fig, "10_track_a_means")
 
@@ -343,8 +343,8 @@ def chart_track_a_boxplot(d):
     for patch, color in zip(bp["boxes"], [BASE, V1, V2]):
         patch.set_facecolor(color)
         patch.set_alpha(0.75)
-    ax.set_ylabel("cosine-to-oracle score")
-    ax.set_title("Distribution of cosine-to-oracle scores, all 100 questions")
+    ax.set_ylabel("cosine-to-jac-gpt score")
+    ax.set_title("Distribution of cosine-to-jac-gpt scores, all 100 questions")
     save(fig, "14_track_a_boxplot")
 
 
@@ -360,8 +360,8 @@ def chart_track_a_scatter_v1_v2(d):
     ax.scatter(v1[~above], v2[~above], color=BASE, alpha=0.75, s=32, label=f"cpt-v1 wins ({(~above).sum()})")
     ax.set_xlim(lo, hi)
     ax.set_ylim(lo, hi)
-    ax.set_xlabel("cpt-v1 cosine-to-oracle")
-    ax.set_ylabel("cpt-v2 cosine-to-oracle")
+    ax.set_xlabel("cpt-v1 cosine-to-jac-gpt")
+    ax.set_ylabel("cpt-v2 cosine-to-jac-gpt")
     ax.set_title("Per-question cosine score: cpt-v1 vs cpt-v2 (points scatter evenly → coin flip)")
     ax.legend(loc="upper left", frameon=False)
     ax.set_aspect("equal")
@@ -375,7 +375,7 @@ def chart_track_a_scatter_v1_v2(d):
 def chart_track_b_outcome_bar(d):
     agg = d["track_b_agg"]
     total = agg["total"]
-    segs = [("oracle wins", agg["oracle_wins"], ORACLE), ("cpt-v2 wins", agg["cpt_v2_wins"], V2), ("ties", agg["ties"], TIE)]
+    segs = [("jac-gpt wins", agg["oracle_wins"], ORACLE), ("cpt-v2 wins", agg["cpt_v2_wins"], V2), ("ties", agg["ties"], TIE)]
     fig, ax = plt.subplots(figsize=(10, 2.4))
     left = 0
     for label, val, color in segs:
@@ -398,7 +398,7 @@ def chart_track_b_outcome_bar(d):
 def chart_track_b_pie(d):
     agg = d["track_b_agg"]
     vals = [agg["oracle_wins"], agg["cpt_v2_wins"], agg["ties"]]
-    labels = ["oracle wins", "cpt-v2 wins", "ties"]
+    labels = ["jac-gpt wins", "cpt-v2 wins", "ties"]
     colors = [ORACLE, V2, TIE]
     fig, ax = plt.subplots(figsize=(6.5, 6.5))
     wedges, _, autotexts = ax.pie(
@@ -418,7 +418,7 @@ def chart_honest_gap_scatter(d):
     ta_by_id = {row_id: row for row_id, row in d["track_a"].items()}
     lanes = {"oracle": 2, "tie": 1, "cpt_v2": 0}
     lane_colors = {"oracle": ORACLE, "tie": TIE, "cpt_v2": V2}
-    lane_labels = {"oracle": "oracle won (blind)", "tie": "tie", "cpt_v2": "cpt-v2 won (blind)"}
+    lane_labels = {"oracle": "jac-gpt won (blind)", "tie": "tie", "cpt_v2": "cpt-v2 won (blind)"}
     rng = np.random.default_rng(7)
     fig, ax = plt.subplots(figsize=(11, 5))
     outlier_id = "b003-q-any-inference"
@@ -437,7 +437,7 @@ def chart_honest_gap_scatter(d):
             ax.annotate("b003-q-any-inference: 0.9355 cosine\n(2nd-highest of all 100) — lost blind",
                         (cosine, lane + jitter), textcoords="offset points", xytext=(-160, 18), fontsize=9, fontweight="bold")
     ax.set_yticks(list(lanes.values()), [lane_labels[k] for k in lanes])
-    ax.set_xlabel("cpt-v2 cosine-to-oracle score")
+    ax.set_xlabel("cpt-v2 cosine-to-jac-gpt score")
     ax.set_title("Honest gap: cosine score vs. what the blind judge actually decided (n=100)")
     save(fig, "18_honest_gap_scatter")
 
@@ -493,7 +493,7 @@ def chart_summary_dashboard(d):
     vals = [agg["oracle_wins"], agg["cpt_v2_wins"], agg["ties"]]
     ax3.pie(vals, colors=[ORACLE, V2, TIE], startangle=90,
             wedgeprops=dict(edgecolor=PAPER, linewidth=1))
-    ax3.set_title(f"Track B: oracle {agg['oracle_wins']} / cpt-v2 {agg['cpt_v2_wins']} / tie {agg['ties']}", fontsize=11)
+    ax3.set_title(f"Track B vs jac-gpt: won {agg['oracle_wins']} / cpt-v2 {agg['cpt_v2_wins']} / tie {agg['ties']}", fontsize=11)
 
     ax4 = fig.add_subplot(gs[1, 0])
     sources = ["docs", "osp_paper", "blogs", "rehearsal", "code"]
@@ -523,6 +523,55 @@ def chart_summary_dashboard(d):
     save(fig, "20_summary_dashboard")
 
 
+# ============================================================
+# 21-22: direct cpt-v2 vs jac-gpt comparison
+# ============================================================
+
+def chart_gap_to_jacgpt(d):
+    base, v1, v2 = track_a_means(d["track_a"])
+    labels = ["base", "cpt-v1", "cpt-v2"]
+    gaps = [1 - base, 1 - v1, 1 - v2]
+    colors = [BASE, V1, V2]
+    fig, ax = plt.subplots(figsize=(7.5, 6))
+    bars = ax.bar(labels, gaps, color=colors, width=0.55)
+    for b, g in zip(bars, gaps):
+        ax.text(b.get_x() + b.get_width() / 2, g + 0.0015, f"{g:.4f}", ha="center", fontweight="bold")
+    ax.set_ylabel("mean cosine distance from jac-gpt's answer (lower = closer)")
+    ax.set_title("Gap to jac-gpt, by model")
+    save(fig, "21_gap_to_jacgpt")
+
+
+def chart_cptv2_vs_jacgpt_head_to_head(d):
+    base, v1, v2 = track_a_means(d["track_a"])
+    agg = d["track_b_agg"]
+    fig, axes = plt.subplots(1, 2, figsize=(13, 5.5))
+
+    ax = axes[0]
+    ax.bar(["cpt-v2"], [v2], color=V2, width=0.4)
+    ax.axhline(1.0, color=ORACLE, linestyle="--", linewidth=1.6, label="jac-gpt (self-similarity = 1.0)")
+    ax.text(0, v2 + 0.01, f"{v2:.4f}", ha="center", fontweight="bold")
+    ax.set_ylim(0, 1.08)
+    ax.set_ylabel("mean cosine-to-jac-gpt")
+    ax.set_title("Track A: cpt-v2 vs jac-gpt")
+    ax.legend(loc="lower center", frameon=False)
+
+    ax2 = axes[1]
+    win_or_tie = agg["cpt_v2_wins"] + agg["ties"]
+    lose = agg["oracle_wins"]
+    ax2.bar(["cpt-v2\nwin-or-tie"], [win_or_tie], color=V2, width=0.4)
+    ax2.bar(["jac-gpt\nwins"], [lose], color=ORACLE, width=0.4)
+    for i, v in enumerate([win_or_tie, lose]):
+        ax2.text(i, v + 1.5, str(v), ha="center", fontweight="bold")
+    ax2.axhline(50, color=BAD, linestyle="--", linewidth=1.4, label="50/50 line")
+    ax2.set_ylim(0, 100)
+    ax2.set_ylabel("of 100 blind judgments")
+    ax2.set_title("Track B: cpt-v2 vs jac-gpt")
+    ax2.legend(loc="upper center", frameon=False)
+
+    fig.suptitle("cpt-v2 vs jac-gpt, both tracks side by side", fontsize=15, fontweight="bold")
+    save(fig, "22_cptv2_vs_jacgpt_head_to_head")
+
+
 def main():
     d = load()
     print("Generating CPT-v2 matplotlib chart set...")
@@ -546,6 +595,8 @@ def main():
     chart_honest_gap_scatter(d)
     chart_acceptance_gauges(d)
     chart_summary_dashboard(d)
+    chart_gap_to_jacgpt(d)
+    chart_cptv2_vs_jacgpt_head_to_head(d)
     pngs = sorted(CHARTS_DIR.glob("*.png"))
     print(f"\n{len(pngs)} charts written to {CHARTS_DIR.relative_to(ROOT)}/")
 
