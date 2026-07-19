@@ -142,6 +142,8 @@ Semantic MCQ picks the CPT checkpoint to carry forward (cheapest signal, no comp
 
 **DONE (2026-07-14) — NULL RESULT.** 20-question hand-authored MCQ bank (`03-new/cpt_train/mcq_check/`), greedy decode. `qwen-q4` 18/20 vs `qwen-cpt-v1` 18/20 — **identical answers on all 20 questions**, including the same 2 mistakes. CPT-v1 is **NOT accepted** — Phase 4 should not build on it as-is. Full writeup + interpretation: [analysis.md](analysis.md).
 
+**CPT-v2 retest, DONE (2026-07-18) — REJECTED, confirms the null with a harder eval.** Redesigned per [../cpt-2/design.md](../cpt-2/design.md): docs-dominant curated corpus (2.41M tok, code dropped, rehearsal ~10%), 12-leg epoch-loop CPT with per-leg CF-check (16/16 every leg, zero regression, val loss −43%), evaluated against a RAG-grounded jac-gpt oracle instead of MCQ — dual-track (cosine-similarity + blind pairwise judge). Track A: cpt_v2 vs cpt_v1 delta +0.0007 (t=0.22, noise); vs base +0.0081 (real but 4x under the 0.03 acceptance margin). Track B (source-blind Sonnet judge, n=100): oracle wins 91 / cpt_v2 wins 7 / ties 2 — win-or-tie rate 0.09 vs the required 0.50. **CPT-v2 checkpoint NOT accepted either** — same semantic ceiling as CPT-v1, this time against a harder, source-grounded reference rather than a fixed MCQ bank. Full writeup: [../cpt-2/results.md](../cpt-2/results.md).
+
 ## Phase 4 — SFT/DPO (redesigned data)
 
 *Spec not yet written — this phase is a placeholder until the SFT/DPO redesign follow-up (`design.md` sequencing item 2) lands.* Planned shape: reuse the `01-sft-dpo` LoRA recipe/hyperparameters unchanged; redesign DPO pair composition to contrast semantically-correct vs. subtly-wrong OSP idiom (both compile) instead of syntax-fix pairs. Runs on top of the accepted CPT checkpoint.
@@ -173,6 +175,7 @@ Build the 4-point delta table (base / +CPT / +CPT+SFT-DPO / +CPT+SFT-DPO+GRPO) a
 - [x] Phase 1 CPT dataset built, manifest emitted, decontam clean
 - [x] Phase 2 CPT training run complete (2586/2586 iters, train loss -18.5%, val loss -24.4% — see `cpt-v1-training-results.md`). **CF regression check PASS** (16/16 both models, zero delta — `analysis.md`).
 - [x] Checkpoint 1 MCQ + trust check recorded — NULL result, checkpoint NOT accepted (see `analysis.md`)
+- [x] Checkpoint 1 retested as CPT-v2 (redesigned corpus/training/dual-track eval) — REJECTED, confirms the null (see `../cpt-2/results.md`)
 - [ ] SFT/DPO redesign spec written (gates Phase 4)
 - [ ] Phase 4 SFT/DPO run, Checkpoint 2 full eval recorded
 - [ ] RL/GRPO redesign spec written (gates Phase 6)

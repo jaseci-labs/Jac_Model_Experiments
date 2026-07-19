@@ -1,0 +1,7 @@
+{
+  "accepted": false,
+  "margin_vs_base": 0.0081,
+  "margin_vs_v1": 0.0007,
+  "win_or_tie_rate": 0.09,
+  "reason": "track_a margin too small (vs base +0.008, vs cpt-v1 +0.001, need >= 0.03); track_b win-or-tie rate 0.09 below 0.5"
+}
