@@ -1,0 +1,686 @@
+windows/epoch=544, resuming at done_steps=0 -> leg 1
+=== leg 1/12: /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/.venv/bin/python3 /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/run_cpt_leg.py --config /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/config_v2_leg1.yaml --adapter-path /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2 --iters 544 --done-steps 0 ===
+ens/sec 511.161, Trained Tokens 1308500, Peak mem 29.291 GB
+Iter 340: Train loss 1.628, Learning Rate 5.199e-06, It/sec 0.127, Tokens/sec 505.968, Trained Tokens 1348360, Peak mem 29.291 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 350: Val loss 1.494, Val took 37.696s
+Iter 350: Train loss 1.640, Learning Rate 5.353e-06, It/sec 0.147, Tokens/sec 506.230, Trained Tokens 1382909, Peak mem 29.291 GB
+Iter 360: Train loss 1.849, Learning Rate 5.506e-06, It/sec 0.136, Tokens/sec 507.701, Trained Tokens 1420310, Peak mem 29.291 GB
+Iter 370: Train loss 1.417, Learning Rate 5.660e-06, It/sec 0.126, Tokens/sec 508.018, Trained Tokens 1460670, Peak mem 29.291 GB
+Iter 380: Train loss 1.585, Learning Rate 5.813e-06, It/sec 0.146, Tokens/sec 518.285, Trained Tokens 1496211, Peak mem 29.291 GB
+Iter 390: Train loss 1.295, Learning Rate 5.966e-06, It/sec 0.127, Tokens/sec 507.909, Trained Tokens 1536125, Peak mem 29.291 GB
+Iter 400: Val loss 1.486, Val took 38.627s
+Iter 400: Train loss 1.495, Learning Rate 6.120e-06, It/sec 0.125, Tokens/sec 506.613, Trained Tokens 1576799, Peak mem 29.291 GB
+Iter 410: Train loss 1.530, Learning Rate 6.273e-06, It/sec 0.126, Tokens/sec 510.382, Trained Tokens 1617162, Peak mem 29.291 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 420: Train loss 1.348, Learning Rate 6.426e-06, It/sec 0.128, Tokens/sec 509.490, Trained Tokens 1656864, Peak mem 29.291 GB
+Iter 430: Train loss 1.571, Learning Rate 6.580e-06, It/sec 0.134, Tokens/sec 511.614, Trained Tokens 1695054, Peak mem 29.291 GB
+Iter 440: Train loss 1.537, Learning Rate 6.733e-06, It/sec 0.128, Tokens/sec 513.104, Trained Tokens 1735082, Peak mem 29.291 GB
+Iter 450: Val loss 1.351, Val took 38.927s
+Iter 450: Train loss 1.372, Learning Rate 6.887e-06, It/sec 0.125, Tokens/sec 507.442, Trained Tokens 1775566, Peak mem 29.291 GB
+Iter 460: Train loss 2.173, Learning Rate 7.040e-06, It/sec 0.124, Tokens/sec 502.762, Trained Tokens 1816107, Peak mem 29.291 GB
+Iter 470: Train loss 1.685, Learning Rate 7.193e-06, It/sec 0.124, Tokens/sec 503.231, Trained Tokens 1856846, Peak mem 29.291 GB
+Iter 480: Train loss 1.128, Learning Rate 7.347e-06, It/sec 0.126, Tokens/sec 507.682, Trained Tokens 1897245, Peak mem 29.291 GB
+Iter 490: Train loss 1.414, Learning Rate 7.500e-06, It/sec 0.126, Tokens/sec 508.131, Trained Tokens 1937494, Peak mem 29.291 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 500: Val loss 1.379, Val took 39.224s
+Iter 500: Train loss 1.746, Learning Rate 7.653e-06, It/sec 0.125, Tokens/sec 505.995, Trained Tokens 1977919, Peak mem 29.291 GB
+Iter 510: Train loss 1.704, Learning Rate 7.807e-06, It/sec 0.138, Tokens/sec 508.891, Trained Tokens 2014743, Peak mem 29.291 GB
+Iter 520: Train loss 1.964, Learning Rate 7.960e-06, It/sec 0.140, Tokens/sec 507.634, Trained Tokens 2050905, Peak mem 29.291 GB
+Iter 530: Train loss 1.808, Learning Rate 8.113e-06, It/sec 0.123, Tokens/sec 503.138, Trained Tokens 2091689, Peak mem 29.291 GB
+Iter 540: Train loss 1.809, Learning Rate 8.267e-06, It/sec 0.128, Tokens/sec 509.564, Trained Tokens 2131596, Peak mem 29.291 GB
+Iter 544: Val loss 1.371, Val took 37.337s
+Iter 544: Train loss 1.756, Learning Rate 8.328e-06, It/sec 0.309, Tokens/sec 503.474, Trained Tokens 2147895, Peak mem 29.291 GB
+Saved final weights to /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2/adapters.safetensors.
+Leg complete: global step 544, wrote 0000544_adapters.safetensors + 0000544_optimizer.safetensors
+
+=== CF-check: /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/.venv/bin/python3 /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/cf_check/run_leg_cf_check.py /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2 ===
+
+======================================================================
+LOADING cpt-v2-leg (models/qwen-q4) + adapter /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2
+======================================================================
+  [is_prime] 4/4 PASS
+  [reverse_string] 3/3 PASS
+  [fibonacci] 3/3 PASS
+  [factorial] 3/3 PASS
+  [is_palindrome] 3/3 PASS
+  [bubble_sort] 3/3 PASS
+  [count_vowels] 3/3 PASS
+  [max_of_list] 3/3 PASS
+  [flatten] 2/2 PASS
+  [remove_duplicates] 2/2 PASS
+  [gcd] 3/3 PASS
+  [binary_search] 3/3 PASS
+  [is_anagram] 2/2 PASS
+  [sum_digits] 3/3 PASS
+  [merge_dicts] 1/1 PASS
+  [caesar_cipher] 3/3 PASS
+CF-check: 16/16
+
+=== leg 2/12: /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/.venv/bin/python3 /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/run_cpt_leg.py --config /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/config_v2_leg2.yaml --adapter-path /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2 --iters 544 --done-steps 544 --resume-adapter-file /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2/0000544_adapters.safetensors --resume-optimizer-file /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2/0000544_optimizer.safetensors ===
+ARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 924: Train loss 1.809, Learning Rate 9.962e-06, It/sec 0.113, Tokens/sec 462.556, Trained Tokens 1493495, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 934: Train loss 1.371, Learning Rate 9.959e-06, It/sec 0.116, Tokens/sec 468.213, Trained Tokens 1533910, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 944: Val loss 1.253, Val took 40.046s
+Iter 944: Train loss 1.941, Learning Rate 9.956e-06, It/sec 0.114, Tokens/sec 464.489, Trained Tokens 1574717, Peak mem 28.716 GB
+Iter 954: Train loss 1.377, Learning Rate 9.953e-06, It/sec 0.114, Tokens/sec 462.601, Trained Tokens 1615249, Peak mem 28.716 GB
+Iter 964: Train loss 1.754, Learning Rate 9.950e-06, It/sec 0.114, Tokens/sec 465.266, Trained Tokens 1656022, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 974: Train loss 1.381, Learning Rate 9.947e-06, It/sec 0.114, Tokens/sec 465.810, Trained Tokens 1696783, Peak mem 28.716 GB
+Iter 984: Train loss 1.034, Learning Rate 9.943e-06, It/sec 0.127, Tokens/sec 472.659, Trained Tokens 1734026, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 994: Val loss 1.222, Val took 40.715s
+Iter 994: Train loss 1.765, Learning Rate 9.940e-06, It/sec 0.113, Tokens/sec 461.159, Trained Tokens 1774862, Peak mem 28.716 GB
+Iter 1004: Train loss 1.213, Learning Rate 9.936e-06, It/sec 0.119, Tokens/sec 466.118, Trained Tokens 1814145, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 1014: Train loss 1.840, Learning Rate 9.933e-06, It/sec 0.113, Tokens/sec 462.663, Trained Tokens 1854972, Peak mem 28.716 GB
+Iter 1024: Train loss 1.495, Learning Rate 9.929e-06, It/sec 0.115, Tokens/sec 465.733, Trained Tokens 1895396, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 1034: Train loss 1.280, Learning Rate 9.925e-06, It/sec 0.125, Tokens/sec 462.879, Trained Tokens 1932325, Peak mem 28.716 GB
+Iter 1044: Val loss 1.390, Val took 40.570s
+Iter 1044: Train loss 1.243, Learning Rate 9.921e-06, It/sec 0.118, Tokens/sec 467.528, Trained Tokens 1972089, Peak mem 28.716 GB
+Iter 1054: Train loss 1.190, Learning Rate 9.917e-06, It/sec 0.115, Tokens/sec 465.795, Trained Tokens 2012541, Peak mem 28.716 GB
+Iter 1064: Train loss 1.471, Learning Rate 9.913e-06, It/sec 0.115, Tokens/sec 466.062, Trained Tokens 2053221, Peak mem 28.716 GB
+Iter 1074: Train loss 1.533, Learning Rate 9.908e-06, It/sec 0.115, Tokens/sec 466.258, Trained Tokens 2093917, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 1084: Train loss 1.304, Learning Rate 9.904e-06, It/sec 0.122, Tokens/sec 462.359, Trained Tokens 2131926, Peak mem 28.716 GB
+Iter 1088: Val loss 1.158, Val took 40.322s
+Iter 1088: Train loss 1.251, Learning Rate 9.902e-06, It/sec 0.293, Tokens/sec 468.568, Trained Tokens 2147895, Peak mem 28.716 GB
+Saved final weights to /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2/adapters.safetensors.
+Leg complete: global step 1088, wrote 0001088_adapters.safetensors + 0001088_optimizer.safetensors
+
+=== CF-check: /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/.venv/bin/python3 /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/cf_check/run_leg_cf_check.py /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2 ===
+
+======================================================================
+LOADING cpt-v2-leg (models/qwen-q4) + adapter /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2
+======================================================================
+  [is_prime] 4/4 PASS
+  [reverse_string] 3/3 PASS
+  [fibonacci] 3/3 PASS
+  [factorial] 3/3 PASS
+  [is_palindrome] 3/3 PASS
+  [bubble_sort] 3/3 PASS
+  [count_vowels] 3/3 PASS
+  [max_of_list] 3/3 PASS
+  [flatten] 2/2 PASS
+  [remove_duplicates] 2/2 PASS
+  [gcd] 3/3 PASS
+  [binary_search] 3/3 PASS
+  [is_anagram] 2/2 PASS
+  [sum_digits] 3/3 PASS
+  [merge_dicts] 1/1 PASS
+  [caesar_cipher] 3/3 PASS
+CF-check: 16/16
+
+=== leg 3/12: /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/.venv/bin/python3 /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/run_cpt_leg.py --config /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/config_v2_leg3.yaml --adapter-path /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2 --iters 544 --done-steps 1088 --resume-adapter-file /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2/0001088_adapters.safetensors --resume-optimizer-file /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2/0001088_optimizer.safetensors ===
+rain loss 1.335, Learning Rate 9.642e-06, It/sec 0.115, Tokens/sec 465.516, Trained Tokens 1574075, Peak mem 28.716 GB
+Iter 1498: Train loss 1.265, Learning Rate 9.634e-06, It/sec 0.123, Tokens/sec 470.102, Trained Tokens 1612360, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 1508: Train loss 1.260, Learning Rate 9.625e-06, It/sec 0.116, Tokens/sec 468.485, Trained Tokens 1652743, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 1518: Train loss 1.054, Learning Rate 9.617e-06, It/sec 0.115, Tokens/sec 467.143, Trained Tokens 1693222, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 1528: Train loss 1.150, Learning Rate 9.608e-06, It/sec 0.116, Tokens/sec 469.585, Trained Tokens 1733597, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 1538: Val loss 1.332, Val took 41.582s
+Iter 1538: Train loss 1.122, Learning Rate 9.599e-06, It/sec 0.118, Tokens/sec 469.332, Trained Tokens 1773325, Peak mem 28.716 GB
+Iter 1548: Train loss 0.876, Learning Rate 9.590e-06, It/sec 0.119, Tokens/sec 471.609, Trained Tokens 1812895, Peak mem 28.716 GB
+Iter 1558: Train loss 1.213, Learning Rate 9.581e-06, It/sec 0.115, Tokens/sec 466.746, Trained Tokens 1853407, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 1568: Train loss 1.413, Learning Rate 9.572e-06, It/sec 0.114, Tokens/sec 464.227, Trained Tokens 1894212, Peak mem 28.716 GB
+Iter 1578: Train loss 1.204, Learning Rate 9.562e-06, It/sec 0.115, Tokens/sec 465.446, Trained Tokens 1934782, Peak mem 28.716 GB
+Iter 1588: Val loss 1.296, Val took 40.477s
+Iter 1588: Train loss 1.060, Learning Rate 9.553e-06, It/sec 0.115, Tokens/sec 467.006, Trained Tokens 1975326, Peak mem 28.716 GB
+Iter 1598: Train loss 1.015, Learning Rate 9.544e-06, It/sec 0.127, Tokens/sec 468.594, Trained Tokens 2012089, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 1608: Train loss 1.164, Learning Rate 9.534e-06, It/sec 0.119, Tokens/sec 472.898, Trained Tokens 2051919, Peak mem 28.716 GB
+Iter 1618: Train loss 0.968, Learning Rate 9.524e-06, It/sec 0.117, Tokens/sec 466.610, Trained Tokens 2091793, Peak mem 28.716 GB
+Iter 1628: Train loss 1.191, Learning Rate 9.515e-06, It/sec 0.116, Tokens/sec 465.052, Trained Tokens 2131863, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 1632: Val loss 1.218, Val took 41.490s
+Iter 1632: Train loss 1.365, Learning Rate 9.511e-06, It/sec 0.293, Tokens/sec 470.385, Trained Tokens 2147895, Peak mem 28.716 GB
+Saved final weights to /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2/adapters.safetensors.
+Leg complete: global step 1632, wrote 0001632_adapters.safetensors + 0001632_optimizer.safetensors
+
+=== CF-check: /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/.venv/bin/python3 /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/cf_check/run_leg_cf_check.py /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2 ===
+
+======================================================================
+LOADING cpt-v2-leg (models/qwen-q4) + adapter /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2
+======================================================================
+  [is_prime] 4/4 PASS
+  [reverse_string] 3/3 PASS
+  [fibonacci] 3/3 PASS
+  [factorial] 3/3 PASS
+  [is_palindrome] 3/3 PASS
+  [bubble_sort] 3/3 PASS
+  [count_vowels] 3/3 PASS
+  [max_of_list] 3/3 PASS
+  [flatten] 2/2 PASS
+  [remove_duplicates] 2/2 PASS
+  [gcd] 3/3 PASS
+  [binary_search] 3/3 PASS
+  [is_anagram] 2/2 PASS
+  [sum_digits] 3/3 PASS
+  [merge_dicts] 1/1 PASS
+  [caesar_cipher] 3/3 PASS
+CF-check: 16/16
+
+=== leg 4/12: /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/.venv/bin/python3 /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/run_cpt_leg.py --config /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/config_v2_leg4.yaml --adapter-path /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2 --iters 544 --done-steps 1632 --resume-adapter-file /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2/0001632_adapters.safetensors --resume-optimizer-file /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2/0001632_optimizer.safetensors ===
+430, Peak mem 28.716 GB
+Iter 2002: Train loss 1.106, Learning Rate 9.086e-06, It/sec 0.116, Tokens/sec 470.049, Trained Tokens 1469810, Peak mem 28.716 GB
+Iter 2012: Train loss 1.178, Learning Rate 9.073e-06, It/sec 0.123, Tokens/sec 473.728, Trained Tokens 1508306, Peak mem 28.716 GB
+Iter 2022: Train loss 1.019, Learning Rate 9.060e-06, It/sec 0.117, Tokens/sec 469.468, Trained Tokens 1548267, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 2032: Val loss 1.168, Val took 40.061s
+Iter 2032: Train loss 0.797, Learning Rate 9.046e-06, It/sec 0.120, Tokens/sec 471.967, Trained Tokens 1587683, Peak mem 28.716 GB
+Iter 2042: Train loss 0.921, Learning Rate 9.033e-06, It/sec 0.116, Tokens/sec 471.046, Trained Tokens 1628324, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 2052: Train loss 0.895, Learning Rate 9.019e-06, It/sec 0.127, Tokens/sec 467.685, Trained Tokens 1665152, Peak mem 28.716 GB
+Iter 2062: Train loss 1.029, Learning Rate 9.006e-06, It/sec 0.116, Tokens/sec 467.755, Trained Tokens 1705477, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 2072: Train loss 1.100, Learning Rate 8.992e-06, It/sec 0.116, Tokens/sec 466.795, Trained Tokens 1745690, Peak mem 28.716 GB
+Iter 2082: Val loss 1.134, Val took 39.946s
+Iter 2082: Train loss 1.153, Learning Rate 8.979e-06, It/sec 0.117, Tokens/sec 468.870, Trained Tokens 1785791, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 2092: Train loss 0.987, Learning Rate 8.965e-06, It/sec 0.121, Tokens/sec 462.160, Trained Tokens 1824029, Peak mem 28.716 GB
+Iter 2102: Train loss 1.118, Learning Rate 8.951e-06, It/sec 0.121, Tokens/sec 466.710, Trained Tokens 1862507, Peak mem 28.716 GB
+Iter 2112: Train loss 0.886, Learning Rate 8.937e-06, It/sec 0.127, Tokens/sec 464.331, Trained Tokens 1898993, Peak mem 28.716 GB
+Iter 2122: Train loss 0.887, Learning Rate 8.923e-06, It/sec 0.115, Tokens/sec 464.183, Trained Tokens 1939301, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 2132: Val loss 1.135, Val took 41.650s
+Iter 2132: Train loss 1.115, Learning Rate 8.909e-06, It/sec 0.126, Tokens/sec 472.621, Trained Tokens 1976719, Peak mem 28.716 GB
+Iter 2142: Train loss 0.926, Learning Rate 8.895e-06, It/sec 0.126, Tokens/sec 466.760, Trained Tokens 2013733, Peak mem 28.716 GB
+Iter 2152: Train loss 0.996, Learning Rate 8.880e-06, It/sec 0.127, Tokens/sec 473.719, Trained Tokens 2051100, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 2162: Train loss 0.861, Learning Rate 8.866e-06, It/sec 0.117, Tokens/sec 469.625, Trained Tokens 2091106, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 2172: Train loss 0.968, Learning Rate 8.852e-06, It/sec 0.116, Tokens/sec 470.333, Trained Tokens 2131595, Peak mem 28.716 GB
+Iter 2176: Val loss 1.107, Val took 40.908s
+Iter 2176: Train loss 0.898, Learning Rate 8.846e-06, It/sec 0.285, Tokens/sec 464.289, Trained Tokens 2147895, Peak mem 28.716 GB
+Saved final weights to /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2/adapters.safetensors.
+Leg complete: global step 2176, wrote 0002176_adapters.safetensors + 0002176_optimizer.safetensors
+
+=== CF-check: /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/.venv/bin/python3 /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/cf_check/run_leg_cf_check.py /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2 ===
+
+======================================================================
+LOADING cpt-v2-leg (models/qwen-q4) + adapter /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2
+======================================================================
+  [is_prime] 4/4 PASS
+  [reverse_string] 3/3 PASS
+  [fibonacci] 3/3 PASS
+  [factorial] 3/3 PASS
+  [is_palindrome] 3/3 PASS
+  [bubble_sort] 3/3 PASS
+  [count_vowels] 3/3 PASS
+  [max_of_list] 3/3 PASS
+  [flatten] 2/2 PASS
+  [remove_duplicates] 2/2 PASS
+  [gcd] 3/3 PASS
+  [binary_search] 3/3 PASS
+  [is_anagram] 2/2 PASS
+  [sum_digits] 3/3 PASS
+  [merge_dicts] 1/1 PASS
+  [caesar_cipher] 3/3 PASS
+CF-check: 16/16
+
+=== leg 5/12: /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/.venv/bin/python3 /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/run_cpt_leg.py --config /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/config_v2_leg5.yaml --adapter-path /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2 --iters 544 --done-steps 2176 --resume-adapter-file /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2/0002176_adapters.safetensors --resume-optimizer-file /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2/0002176_optimizer.safetensors ===
+Learning Rate 8.226e-06, It/sec 0.130, Tokens/sec 473.752, Trained Tokens 1538398, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 2576: Val loss 1.261, Val took 40.318s
+Iter 2576: Train loss 0.872, Learning Rate 8.208e-06, It/sec 0.115, Tokens/sec 468.024, Trained Tokens 1579069, Peak mem 28.716 GB
+Iter 2586: Train loss 0.973, Learning Rate 8.191e-06, It/sec 0.124, Tokens/sec 469.843, Trained Tokens 1617029, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 2596: Train loss 0.660, Learning Rate 8.174e-06, It/sec 0.126, Tokens/sec 469.531, Trained Tokens 1654147, Peak mem 28.716 GB
+Iter 2606: Train loss 0.876, Learning Rate 8.156e-06, It/sec 0.116, Tokens/sec 468.034, Trained Tokens 1694598, Peak mem 28.716 GB
+Iter 2616: Train loss 0.781, Learning Rate 8.139e-06, It/sec 0.118, Tokens/sec 473.054, Trained Tokens 1734664, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 2626: Val loss 1.022, Val took 41.195s
+Iter 2626: Train loss 0.867, Learning Rate 8.121e-06, It/sec 0.115, Tokens/sec 464.006, Trained Tokens 1775102, Peak mem 28.716 GB
+Iter 2636: Train loss 0.757, Learning Rate 8.104e-06, It/sec 0.115, Tokens/sec 466.076, Trained Tokens 1815612, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 2646: Train loss 0.897, Learning Rate 8.086e-06, It/sec 0.127, Tokens/sec 465.058, Trained Tokens 1852252, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 2656: Train loss 1.051, Learning Rate 8.068e-06, It/sec 0.114, Tokens/sec 465.239, Trained Tokens 1892983, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 2666: Train loss 0.622, Learning Rate 8.050e-06, It/sec 0.131, Tokens/sec 471.100, Trained Tokens 1928967, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 2676: Val loss 1.020, Val took 40.698s
+Iter 2676: Train loss 1.159, Learning Rate 8.032e-06, It/sec 0.115, Tokens/sec 466.084, Trained Tokens 1969609, Peak mem 28.716 GB
+Iter 2686: Train loss 0.899, Learning Rate 8.014e-06, It/sec 0.117, Tokens/sec 468.449, Trained Tokens 2009818, Peak mem 28.716 GB
+Iter 2696: Train loss 0.896, Learning Rate 7.996e-06, It/sec 0.114, Tokens/sec 465.504, Trained Tokens 2050565, Peak mem 28.716 GB
+Iter 2706: Train loss 1.021, Learning Rate 7.978e-06, It/sec 0.117, Tokens/sec 470.399, Trained Tokens 2090731, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 2716: Train loss 1.163, Learning Rate 7.960e-06, It/sec 0.114, Tokens/sec 463.902, Trained Tokens 2131569, Peak mem 28.716 GB
+Iter 2720: Val loss 1.076, Val took 40.316s
+Iter 2720: Train loss 1.000, Learning Rate 7.953e-06, It/sec 0.285, Tokens/sec 465.541, Trained Tokens 2147895, Peak mem 28.716 GB
+Saved final weights to /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2/adapters.safetensors.
+Leg complete: global step 2720, wrote 0002720_adapters.safetensors + 0002720_optimizer.safetensors
+
+=== CF-check: /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/.venv/bin/python3 /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/cf_check/run_leg_cf_check.py /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2 ===
+
+======================================================================
+LOADING cpt-v2-leg (models/qwen-q4) + adapter /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2
+======================================================================
+  [is_prime] 4/4 PASS
+  [reverse_string] 3/3 PASS
+  [fibonacci] 3/3 PASS
+  [factorial] 3/3 PASS
+  [is_palindrome] 3/3 PASS
+  [bubble_sort] 3/3 PASS
+  [count_vowels] 3/3 PASS
+  [max_of_list] 3/3 PASS
+  [flatten] 2/2 PASS
+  [remove_duplicates] 2/2 PASS
+  [gcd] 3/3 PASS
+  [binary_search] 3/3 PASS
+  [is_anagram] 2/2 PASS
+  [sum_digits] 3/3 PASS
+  [merge_dicts] 1/1 PASS
+  [caesar_cipher] 3/3 PASS
+CF-check: 16/16
+
+=== leg 6/12: /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/.venv/bin/python3 /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/run_cpt_leg.py --config /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/config_v2_leg6.yaml --adapter-path /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2 --iters 544 --done-steps 2720 --resume-adapter-file /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2/0002720_adapters.safetensors --resume-optimizer-file /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2/0002720_optimizer.safetensors ===
+han 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 3130: Train loss 0.918, Learning Rate 7.166e-06, It/sec 0.125, Tokens/sec 504.634, Trained Tokens 1610889, Peak mem 28.716 GB
+Iter 3140: Train loss 0.866, Learning Rate 7.146e-06, It/sec 0.127, Tokens/sec 511.092, Trained Tokens 1651234, Peak mem 28.716 GB
+Iter 3150: Train loss 0.618, Learning Rate 7.126e-06, It/sec 0.126, Tokens/sec 510.369, Trained Tokens 1691606, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 3160: Train loss 0.682, Learning Rate 7.105e-06, It/sec 0.126, Tokens/sec 507.565, Trained Tokens 1732040, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 3170: Val loss 1.053, Val took 38.320s
+Iter 3170: Train loss 0.776, Learning Rate 7.085e-06, It/sec 0.130, Tokens/sec 513.995, Trained Tokens 1771729, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 3180: Train loss 0.855, Learning Rate 7.065e-06, It/sec 0.126, Tokens/sec 509.020, Trained Tokens 1812097, Peak mem 28.716 GB
+Iter 3190: Train loss 0.674, Learning Rate 7.045e-06, It/sec 0.139, Tokens/sec 517.991, Trained Tokens 1849355, Peak mem 28.716 GB
+Iter 3200: Train loss 0.958, Learning Rate 7.024e-06, It/sec 0.124, Tokens/sec 504.144, Trained Tokens 1890112, Peak mem 28.716 GB
+Iter 3210: Train loss 0.588, Learning Rate 7.004e-06, It/sec 0.126, Tokens/sec 509.483, Trained Tokens 1930557, Peak mem 28.716 GB
+Iter 3220: Val loss 0.894, Val took 37.773s
+Iter 3220: Train loss 0.816, Learning Rate 6.983e-06, It/sec 0.126, Tokens/sec 508.997, Trained Tokens 1970807, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 3230: Train loss 0.514, Learning Rate 6.963e-06, It/sec 0.128, Tokens/sec 510.300, Trained Tokens 2010601, Peak mem 28.716 GB
+Iter 3240: Train loss 0.685, Learning Rate 6.942e-06, It/sec 0.130, Tokens/sec 517.322, Trained Tokens 2050512, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 3250: Train loss 0.651, Learning Rate 6.922e-06, It/sec 0.125, Tokens/sec 507.705, Trained Tokens 2091268, Peak mem 28.716 GB
+Iter 3260: Train loss 0.916, Learning Rate 6.901e-06, It/sec 0.126, Tokens/sec 510.123, Trained Tokens 2131609, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 3264: Val loss 0.974, Val took 37.777s
+Iter 3264: Train loss 1.065, Learning Rate 6.893e-06, It/sec 0.312, Tokens/sec 508.616, Trained Tokens 2147895, Peak mem 28.716 GB
+Saved final weights to /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2/adapters.safetensors.
+Leg complete: global step 3264, wrote 0003264_adapters.safetensors + 0003264_optimizer.safetensors
+
+=== CF-check: /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/.venv/bin/python3 /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/cf_check/run_leg_cf_check.py /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2 ===
+
+======================================================================
+LOADING cpt-v2-leg (models/qwen-q4) + adapter /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2
+======================================================================
+  [is_prime] 4/4 PASS
+  [reverse_string] 3/3 PASS
+  [fibonacci] 3/3 PASS
+  [factorial] 3/3 PASS
+  [is_palindrome] 3/3 PASS
+  [bubble_sort] 3/3 PASS
+  [count_vowels] 3/3 PASS
+  [max_of_list] 3/3 PASS
+  [flatten] 2/2 PASS
+  [remove_duplicates] 2/2 PASS
+  [gcd] 3/3 PASS
+  [binary_search] 3/3 PASS
+  [is_anagram] 2/2 PASS
+  [sum_digits] 3/3 PASS
+  [merge_dicts] 1/1 PASS
+  [caesar_cipher] 3/3 PASS
+CF-check: 16/16
+
+=== leg 7/12: /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/.venv/bin/python3 /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/run_cpt_leg.py --config /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/config_v2_leg7.yaml --adapter-path /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2 --iters 544 --done-steps 3264 --resume-adapter-file /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2/0003264_adapters.safetensors --resume-optimizer-file /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2/0003264_optimizer.safetensors ===
+Rate 6.027e-06, It/sec 0.136, Tokens/sec 507.477, Trained Tokens 1609199, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 3684: Train loss 0.614, Learning Rate 6.006e-06, It/sec 0.126, Tokens/sec 510.423, Trained Tokens 1649726, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 3694: Train loss 0.738, Learning Rate 5.984e-06, It/sec 0.126, Tokens/sec 509.211, Trained Tokens 1690227, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 3704: Train loss 0.665, Learning Rate 5.963e-06, It/sec 0.126, Tokens/sec 508.306, Trained Tokens 1730426, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 3714: Val loss 0.914, Val took 39.540s
+Iter 3714: Train loss 0.746, Learning Rate 5.941e-06, It/sec 0.127, Tokens/sec 513.828, Trained Tokens 1770839, Peak mem 28.716 GB
+Iter 3724: Train loss 0.647, Learning Rate 5.920e-06, It/sec 0.127, Tokens/sec 512.182, Trained Tokens 1811093, Peak mem 28.716 GB
+Iter 3734: Train loss 0.667, Learning Rate 5.898e-06, It/sec 0.127, Tokens/sec 512.073, Trained Tokens 1851290, Peak mem 28.716 GB
+Iter 3744: Train loss 0.642, Learning Rate 5.876e-06, It/sec 0.125, Tokens/sec 507.372, Trained Tokens 1892040, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 3754: Train loss 0.790, Learning Rate 5.855e-06, It/sec 0.127, Tokens/sec 514.532, Trained Tokens 1932426, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 3764: Val loss 0.956, Val took 36.175s
+Iter 3764: Train loss 0.803, Learning Rate 5.833e-06, It/sec 0.126, Tokens/sec 509.346, Trained Tokens 1972874, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 3774: Train loss 0.681, Learning Rate 5.812e-06, It/sec 0.125, Tokens/sec 507.012, Trained Tokens 2013582, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 3784: Train loss 0.852, Learning Rate 5.790e-06, It/sec 0.129, Tokens/sec 513.305, Trained Tokens 2053521, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 3794: Train loss 0.735, Learning Rate 5.768e-06, It/sec 0.125, Tokens/sec 509.355, Trained Tokens 2094244, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 3804: Train loss 0.653, Learning Rate 5.747e-06, It/sec 0.137, Tokens/sec 513.451, Trained Tokens 2131642, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 3808: Val loss 0.976, Val took 38.610s
+Iter 3808: Train loss 0.886, Learning Rate 5.738e-06, It/sec 0.314, Tokens/sec 509.953, Trained Tokens 2147895, Peak mem 28.716 GB
+Saved final weights to /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2/adapters.safetensors.
+Leg complete: global step 3808, wrote 0003808_adapters.safetensors + 0003808_optimizer.safetensors
+
+=== CF-check: /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/.venv/bin/python3 /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/cf_check/run_leg_cf_check.py /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2 ===
+
+======================================================================
+LOADING cpt-v2-leg (models/qwen-q4) + adapter /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2
+======================================================================
+  [is_prime] 4/4 PASS
+  [reverse_string] 3/3 PASS
+  [fibonacci] 3/3 PASS
+  [factorial] 3/3 PASS
+  [is_palindrome] 3/3 PASS
+  [bubble_sort] 3/3 PASS
+  [count_vowels] 3/3 PASS
+  [max_of_list] 3/3 PASS
+  [flatten] 2/2 PASS
+  [remove_duplicates] 2/2 PASS
+  [gcd] 3/3 PASS
+  [binary_search] 3/3 PASS
+  [is_anagram] 2/2 PASS
+  [sum_digits] 3/3 PASS
+  [merge_dicts] 1/1 PASS
+  [caesar_cipher] 3/3 PASS
+CF-check: 16/16
+
+=== leg 8/12: /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/.venv/bin/python3 /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/run_cpt_leg.py --config /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/config_v2_leg8.yaml --adapter-path /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2 --iters 544 --done-steps 3808 --resume-adapter-file /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2/0003808_adapters.safetensors --resume-optimizer-file /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2/0003808_optimizer.safetensors ===
+ARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 4188: Train loss 0.540, Learning Rate 4.917e-06, It/sec 0.138, Tokens/sec 513.818, Trained Tokens 1499422, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 4198: Train loss 0.666, Learning Rate 4.895e-06, It/sec 0.125, Tokens/sec 509.580, Trained Tokens 1540139, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 4208: Val loss 0.885, Val took 38.537s
+Iter 4208: Train loss 0.460, Learning Rate 4.874e-06, It/sec 0.143, Tokens/sec 512.639, Trained Tokens 1575962, Peak mem 28.716 GB
+Iter 4218: Train loss 0.661, Learning Rate 4.853e-06, It/sec 0.120, Tokens/sec 483.518, Trained Tokens 1616090, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 4228: Train loss 0.546, Learning Rate 4.831e-06, It/sec 0.116, Tokens/sec 467.922, Trained Tokens 1656290, Peak mem 28.716 GB
+Iter 4238: Train loss 0.507, Learning Rate 4.810e-06, It/sec 0.114, Tokens/sec 463.860, Trained Tokens 1697031, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 4248: Train loss 0.545, Learning Rate 4.788e-06, It/sec 0.114, Tokens/sec 462.224, Trained Tokens 1737743, Peak mem 28.716 GB
+Iter 4258: Val loss 0.900, Val took 40.286s
+Iter 4258: Train loss 0.568, Learning Rate 4.767e-06, It/sec 0.122, Tokens/sec 468.301, Trained Tokens 1776255, Peak mem 28.716 GB
+Iter 4268: Train loss 0.466, Learning Rate 4.746e-06, It/sec 0.133, Tokens/sec 472.314, Trained Tokens 1811873, Peak mem 28.716 GB
+Iter 4278: Train loss 0.540, Learning Rate 4.724e-06, It/sec 0.116, Tokens/sec 466.286, Trained Tokens 1851968, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 4288: Train loss 0.553, Learning Rate 4.703e-06, It/sec 0.120, Tokens/sec 466.176, Trained Tokens 1890819, Peak mem 28.716 GB
+Iter 4298: Train loss 0.509, Learning Rate 4.682e-06, It/sec 0.119, Tokens/sec 471.031, Trained Tokens 1930551, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 4308: Val loss 0.868, Val took 41.497s
+Iter 4308: Train loss 0.667, Learning Rate 4.660e-06, It/sec 0.118, Tokens/sec 470.669, Trained Tokens 1970324, Peak mem 28.716 GB
+Iter 4318: Train loss 0.449, Learning Rate 4.639e-06, It/sec 0.115, Tokens/sec 464.895, Trained Tokens 2010770, Peak mem 28.716 GB
+Iter 4328: Train loss 0.754, Learning Rate 4.618e-06, It/sec 0.117, Tokens/sec 465.369, Trained Tokens 2050707, Peak mem 28.716 GB
+Iter 4338: Train loss 0.377, Learning Rate 4.597e-06, It/sec 0.116, Tokens/sec 466.590, Trained Tokens 2090917, Peak mem 28.716 GB
+Iter 4348: Train loss 0.707, Learning Rate 4.575e-06, It/sec 0.115, Tokens/sec 466.739, Trained Tokens 2131591, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 4352: Val loss 0.823, Val took 40.499s
+Iter 4352: Train loss 0.613, Learning Rate 4.567e-06, It/sec 0.287, Tokens/sec 467.743, Trained Tokens 2147895, Peak mem 28.716 GB
+Saved final weights to /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2/adapters.safetensors.
+Leg complete: global step 4352, wrote 0004352_adapters.safetensors + 0004352_optimizer.safetensors
+
+=== CF-check: /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/.venv/bin/python3 /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/cf_check/run_leg_cf_check.py /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2 ===
+
+======================================================================
+LOADING cpt-v2-leg (models/qwen-q4) + adapter /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2
+======================================================================
+  [is_prime] 4/4 PASS
+  [reverse_string] 3/3 PASS
+  [fibonacci] 3/3 PASS
+  [factorial] 3/3 PASS
+  [is_palindrome] 3/3 PASS
+  [bubble_sort] 3/3 PASS
+  [count_vowels] 3/3 PASS
+  [max_of_list] 3/3 PASS
+  [flatten] 2/2 PASS
+  [remove_duplicates] 2/2 PASS
+  [gcd] 3/3 PASS
+  [binary_search] 3/3 PASS
+  [is_anagram] 2/2 PASS
+  [sum_digits] 3/3 PASS
+  [merge_dicts] 1/1 PASS
+  [caesar_cipher] 3/3 PASS
+CF-check: 16/16
+
+=== leg 9/12: /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/.venv/bin/python3 /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/run_cpt_leg.py --config /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/config_v2_leg9.yaml --adapter-path /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2 --iters 544 --done-steps 4352 --resume-adapter-file /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2/0004352_adapters.safetensors --resume-optimizer-file /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2/0004352_optimizer.safetensors ===
+The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 4752: Val loss 0.911, Val took 37.425s
+Iter 4752: Train loss 0.347, Learning Rate 3.742e-06, It/sec 0.125, Tokens/sec 507.319, Trained Tokens 1580653, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 4762: Train loss 0.540, Learning Rate 3.722e-06, It/sec 0.125, Tokens/sec 508.488, Trained Tokens 1621247, Peak mem 28.716 GB
+Iter 4772: Train loss 0.613, Learning Rate 3.702e-06, It/sec 0.134, Tokens/sec 512.572, Trained Tokens 1659379, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 4782: Train loss 0.879, Learning Rate 3.682e-06, It/sec 0.127, Tokens/sec 510.838, Trained Tokens 1699615, Peak mem 28.716 GB
+Iter 4792: Train loss 0.633, Learning Rate 3.663e-06, It/sec 0.138, Tokens/sec 520.995, Trained Tokens 1737286, Peak mem 28.716 GB
+Iter 4802: Val loss 0.799, Val took 37.438s
+Iter 4802: Train loss 0.626, Learning Rate 3.643e-06, It/sec 0.133, Tokens/sec 519.830, Trained Tokens 1776260, Peak mem 28.716 GB
+Iter 4812: Train loss 0.531, Learning Rate 3.623e-06, It/sec 0.126, Tokens/sec 510.473, Trained Tokens 1816745, Peak mem 28.716 GB
+Iter 4822: Train loss 0.468, Learning Rate 3.603e-06, It/sec 0.124, Tokens/sec 505.822, Trained Tokens 1857505, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 4832: Train loss 0.536, Learning Rate 3.584e-06, It/sec 0.127, Tokens/sec 508.616, Trained Tokens 1897644, Peak mem 28.716 GB
+Iter 4842: Train loss 0.459, Learning Rate 3.564e-06, It/sec 0.133, Tokens/sec 506.327, Trained Tokens 1935817, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 4852: Val loss 0.904, Val took 40.163s
+Iter 4852: Train loss 0.464, Learning Rate 3.545e-06, It/sec 0.100, Tokens/sec 410.122, Trained Tokens 1976634, Peak mem 28.716 GB
+Iter 4862: Train loss 0.526, Learning Rate 3.525e-06, It/sec 0.124, Tokens/sec 504.913, Trained Tokens 2017442, Peak mem 28.716 GB
+Iter 4872: Train loss 0.449, Learning Rate 3.506e-06, It/sec 0.124, Tokens/sec 503.995, Trained Tokens 2058118, Peak mem 28.716 GB
+Iter 4882: Train loss 0.466, Learning Rate 3.486e-06, It/sec 0.122, Tokens/sec 490.675, Trained Tokens 2098268, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 4892: Train loss 0.340, Learning Rate 3.467e-06, It/sec 0.151, Tokens/sec 503.710, Trained Tokens 2131656, Peak mem 28.716 GB
+Iter 4896: Val loss 0.893, Val took 38.885s
+Iter 4896: Train loss 0.497, Learning Rate 3.459e-06, It/sec 0.311, Tokens/sec 504.429, Trained Tokens 2147895, Peak mem 28.716 GB
+Saved final weights to /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2/adapters.safetensors.
+Leg complete: global step 4896, wrote 0004896_adapters.safetensors + 0004896_optimizer.safetensors
+
+=== CF-check: /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/.venv/bin/python3 /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/cf_check/run_leg_cf_check.py /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2 ===
+
+======================================================================
+LOADING cpt-v2-leg (models/qwen-q4) + adapter /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2
+======================================================================
+  [is_prime] 4/4 PASS
+  [reverse_string] 3/3 PASS
+  [fibonacci] 3/3 PASS
+  [factorial] 3/3 PASS
+  [is_palindrome] 3/3 PASS
+  [bubble_sort] 3/3 PASS
+  [count_vowels] 3/3 PASS
+  [max_of_list] 3/3 PASS
+  [flatten] 2/2 PASS
+  [remove_duplicates] 2/2 PASS
+  [gcd] 3/3 PASS
+  [binary_search] 3/3 PASS
+  [is_anagram] 2/2 PASS
+  [sum_digits] 3/3 PASS
+  [merge_dicts] 1/1 PASS
+  [caesar_cipher] 3/3 PASS
+CF-check: 16/16
+
+=== leg 10/12: /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/.venv/bin/python3 /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/run_cpt_leg.py --config /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/config_v2_leg10.yaml --adapter-path /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2 --iters 544 --done-steps 4896 --resume-adapter-file /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2/0004896_adapters.safetensors --resume-optimizer-file /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2/0004896_optimizer.safetensors ===
+rain loss 0.370, Learning Rate 2.730e-06, It/sec 0.125, Tokens/sec 510.015, Trained Tokens 1580280, Peak mem 28.716 GB
+Iter 5306: Train loss 0.515, Learning Rate 2.713e-06, It/sec 0.126, Tokens/sec 511.125, Trained Tokens 1620967, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 5316: Train loss 0.355, Learning Rate 2.696e-06, It/sec 0.126, Tokens/sec 508.285, Trained Tokens 1661384, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 5326: Train loss 0.451, Learning Rate 2.679e-06, It/sec 0.126, Tokens/sec 510.479, Trained Tokens 1701884, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 5336: Train loss 0.483, Learning Rate 2.662e-06, It/sec 0.124, Tokens/sec 506.493, Trained Tokens 1742679, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 5346: Val loss 0.845, Val took 37.257s
+Iter 5346: Train loss 0.491, Learning Rate 2.645e-06, It/sec 0.134, Tokens/sec 513.699, Trained Tokens 1780906, Peak mem 28.716 GB
+Iter 5356: Train loss 0.421, Learning Rate 2.629e-06, It/sec 0.152, Tokens/sec 509.584, Trained Tokens 1814464, Peak mem 28.716 GB
+Iter 5366: Train loss 0.669, Learning Rate 2.612e-06, It/sec 0.125, Tokens/sec 507.903, Trained Tokens 1854992, Peak mem 28.716 GB
+Iter 5376: Train loss 0.476, Learning Rate 2.595e-06, It/sec 0.126, Tokens/sec 510.542, Trained Tokens 1895668, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 5386: Train loss 0.554, Learning Rate 2.579e-06, It/sec 0.126, Tokens/sec 509.387, Trained Tokens 1936084, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 5396: Val loss 0.821, Val took 37.342s
+Iter 5396: Train loss 0.393, Learning Rate 2.562e-06, It/sec 0.136, Tokens/sec 513.047, Trained Tokens 1973858, Peak mem 28.716 GB
+Iter 5406: Train loss 0.442, Learning Rate 2.546e-06, It/sec 0.130, Tokens/sec 514.875, Trained Tokens 2013406, Peak mem 28.716 GB
+Iter 5416: Train loss 0.557, Learning Rate 2.530e-06, It/sec 0.134, Tokens/sec 510.804, Trained Tokens 2051650, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 5426: Train loss 0.442, Learning Rate 2.513e-06, It/sec 0.130, Tokens/sec 512.942, Trained Tokens 2091137, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 5436: Train loss 0.591, Learning Rate 2.497e-06, It/sec 0.126, Tokens/sec 509.028, Trained Tokens 2131596, Peak mem 28.716 GB
+Iter 5440: Val loss 0.784, Val took 38.449s
+Iter 5440: Train loss 0.451, Learning Rate 2.491e-06, It/sec 0.311, Tokens/sec 506.920, Trained Tokens 2147895, Peak mem 28.716 GB
+Saved final weights to /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2/adapters.safetensors.
+Leg complete: global step 5440, wrote 0005440_adapters.safetensors + 0005440_optimizer.safetensors
+
+=== CF-check: /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/.venv/bin/python3 /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/cf_check/run_leg_cf_check.py /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2 ===
+
+======================================================================
+LOADING cpt-v2-leg (models/qwen-q4) + adapter /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2
+======================================================================
+  [is_prime] 4/4 PASS
+  [reverse_string] 3/3 PASS
+  [fibonacci] 3/3 PASS
+  [factorial] 3/3 PASS
+  [is_palindrome] 3/3 PASS
+  [bubble_sort] 3/3 PASS
+  [count_vowels] 3/3 PASS
+  [max_of_list] 3/3 PASS
+  [flatten] 2/2 PASS
+  [remove_duplicates] 2/2 PASS
+  [gcd] 3/3 PASS
+  [binary_search] 3/3 PASS
+  [is_anagram] 2/2 PASS
+  [sum_digits] 3/3 PASS
+  [merge_dicts] 1/1 PASS
+  [caesar_cipher] 3/3 PASS
+CF-check: 16/16
+
+=== leg 11/12: /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/.venv/bin/python3 /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/run_cpt_leg.py --config /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/config_v2_leg11.yaml --adapter-path /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2 --iters 544 --done-steps 5440 --resume-adapter-file /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2/0005440_adapters.safetensors --resume-optimizer-file /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2/0005440_optimizer.safetensors ===
+246, Peak mem 28.716 GB
+Iter 5810: Train loss 0.647, Learning Rate 1.946e-06, It/sec 0.128, Tokens/sec 507.298, Trained Tokens 1456997, Peak mem 28.716 GB
+Iter 5820: Train loss 0.395, Learning Rate 1.933e-06, It/sec 0.123, Tokens/sec 501.689, Trained Tokens 1497814, Peak mem 28.716 GB
+Iter 5830: Train loss 0.416, Learning Rate 1.919e-06, It/sec 0.126, Tokens/sec 500.623, Trained Tokens 1537546, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 5840: Val loss 0.792, Val took 37.813s
+Iter 5840: Train loss 0.418, Learning Rate 1.906e-06, It/sec 0.127, Tokens/sec 504.416, Trained Tokens 1577181, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 5850: Train loss 0.438, Learning Rate 1.893e-06, It/sec 0.124, Tokens/sec 503.219, Trained Tokens 1617680, Peak mem 28.716 GB
+Iter 5860: Train loss 0.554, Learning Rate 1.880e-06, It/sec 0.124, Tokens/sec 503.706, Trained Tokens 1658172, Peak mem 28.716 GB
+Iter 5870: Train loss 0.558, Learning Rate 1.868e-06, It/sec 0.139, Tokens/sec 513.016, Trained Tokens 1695152, Peak mem 28.716 GB
+Iter 5880: Train loss 0.348, Learning Rate 1.855e-06, It/sec 0.132, Tokens/sec 505.380, Trained Tokens 1733560, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 5890: Val loss 0.843, Val took 40.265s
+Iter 5890: Train loss 0.438, Learning Rate 1.842e-06, It/sec 0.133, Tokens/sec 500.885, Trained Tokens 1771228, Peak mem 28.716 GB
+Iter 5900: Train loss 0.354, Learning Rate 1.830e-06, It/sec 0.132, Tokens/sec 503.119, Trained Tokens 1809244, Peak mem 28.716 GB
+Iter 5910: Train loss 0.595, Learning Rate 1.817e-06, It/sec 0.124, Tokens/sec 496.182, Trained Tokens 1849265, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 5920: Train loss 0.565, Learning Rate 1.805e-06, It/sec 0.122, Tokens/sec 496.566, Trained Tokens 1889812, Peak mem 28.716 GB
+Iter 5930: Train loss 0.399, Learning Rate 1.792e-06, It/sec 0.124, Tokens/sec 503.582, Trained Tokens 1930262, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 5940: Val loss 0.800, Val took 40.375s
+Iter 5940: Train loss 0.432, Learning Rate 1.780e-06, It/sec 0.124, Tokens/sec 506.132, Trained Tokens 1970951, Peak mem 28.716 GB
+Iter 5950: Train loss 0.312, Learning Rate 1.768e-06, It/sec 0.123, Tokens/sec 501.366, Trained Tokens 2011713, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 5960: Train loss 0.410, Learning Rate 1.756e-06, It/sec 0.125, Tokens/sec 507.334, Trained Tokens 2052161, Peak mem 28.716 GB
+Iter 5970: Train loss 0.468, Learning Rate 1.744e-06, It/sec 0.127, Tokens/sec 513.757, Trained Tokens 2092548, Peak mem 28.716 GB
+Iter 5980: Train loss 0.536, Learning Rate 1.732e-06, It/sec 0.131, Tokens/sec 512.672, Trained Tokens 2131621, Peak mem 28.716 GB
+Iter 5984: Val loss 0.942, Val took 38.711s
+Iter 5984: Train loss 0.392, Learning Rate 1.727e-06, It/sec 0.313, Tokens/sec 509.033, Trained Tokens 2147895, Peak mem 28.716 GB
+Saved final weights to /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2/adapters.safetensors.
+Leg complete: global step 5984, wrote 0005984_adapters.safetensors + 0005984_optimizer.safetensors
+
+=== CF-check: /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/.venv/bin/python3 /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/cf_check/run_leg_cf_check.py /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2 ===
+
+======================================================================
+LOADING cpt-v2-leg (models/qwen-q4) + adapter /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2
+======================================================================
+  [is_prime] 4/4 PASS
+  [reverse_string] 3/3 PASS
+  [fibonacci] 3/3 PASS
+  [factorial] 3/3 PASS
+  [is_palindrome] 3/3 PASS
+  [bubble_sort] 3/3 PASS
+  [count_vowels] 3/3 PASS
+  [max_of_list] 3/3 PASS
+  [flatten] 2/2 PASS
+  [remove_duplicates] 2/2 PASS
+  [gcd] 3/3 PASS
+  [binary_search] 3/3 PASS
+  [is_anagram] 2/2 PASS
+  [sum_digits] 3/3 PASS
+  [merge_dicts] 1/1 PASS
+  [caesar_cipher] 3/3 PASS
+CF-check: 16/16
+
+=== leg 12/12: /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/.venv/bin/python3 /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/run_cpt_leg.py --config /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/config_v2_leg12.yaml --adapter-path /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2 --iters 544 --done-steps 5984 --resume-adapter-file /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2/0005984_adapters.safetensors --resume-optimizer-file /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2/0005984_optimizer.safetensors ===
+rain loss 0.394, Learning Rate 1.328e-06, It/sec 0.130, Tokens/sec 494.507, Trained Tokens 1585426, Peak mem 28.716 GB
+Iter 6394: Train loss 0.250, Learning Rate 1.320e-06, It/sec 0.111, Tokens/sec 403.955, Trained Tokens 1621682, Peak mem 28.716 GB
+Iter 6404: Train loss 0.452, Learning Rate 1.312e-06, It/sec 0.124, Tokens/sec 386.108, Trained Tokens 1652743, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 6414: Train loss 0.330, Learning Rate 1.304e-06, It/sec 0.110, Tokens/sec 441.448, Trained Tokens 1692931, Peak mem 28.716 GB
+Iter 6424: Train loss 0.416, Learning Rate 1.296e-06, It/sec 0.123, Tokens/sec 497.811, Trained Tokens 1733293, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 6434: Val loss 0.843, Val took 42.540s
+Iter 6434: Train loss 0.332, Learning Rate 1.288e-06, It/sec 0.097, Tokens/sec 380.912, Trained Tokens 1772378, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 6444: Train loss 0.347, Learning Rate 1.281e-06, It/sec 0.092, Tokens/sec 376.576, Trained Tokens 1813137, Peak mem 28.716 GB
+Iter 6454: Train loss 0.287, Learning Rate 1.273e-06, It/sec 0.093, Tokens/sec 368.450, Trained Tokens 1852591, Peak mem 28.716 GB
+Iter 6464: Train loss 0.505, Learning Rate 1.266e-06, It/sec 0.112, Tokens/sec 425.221, Trained Tokens 1890508, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 6474: Train loss 0.698, Learning Rate 1.259e-06, It/sec 0.125, Tokens/sec 496.410, Trained Tokens 1930197, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 6484: Val loss 0.723, Val took 39.577s
+Iter 6484: Train loss 0.341, Learning Rate 1.252e-06, It/sec 0.120, Tokens/sec 490.262, Trained Tokens 1970928, Peak mem 28.716 GB
+Iter 6494: Train loss 0.456, Learning Rate 1.244e-06, It/sec 0.123, Tokens/sec 486.592, Trained Tokens 2010424, Peak mem 28.716 GB
+Iter 6504: Train loss 0.382, Learning Rate 1.237e-06, It/sec 0.115, Tokens/sec 467.166, Trained Tokens 2051200, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 6514: Train loss 0.417, Learning Rate 1.231e-06, It/sec 0.118, Tokens/sec 478.479, Trained Tokens 2091624, Peak mem 28.716 GB
+Iter 6524: Train loss 0.460, Learning Rate 1.224e-06, It/sec 0.119, Tokens/sec 477.640, Trained Tokens 2131772, Peak mem 28.716 GB
+[WARNING] Some sequences are longer than 4096 tokens. The longest sentence 4097 will be truncated to 4096. Consider pre-splitting your data to save memory.
+Iter 6528: Val loss 0.783, Val took 45.053s
+Iter 6528: Train loss 0.319, Learning Rate 1.221e-06, It/sec 0.299, Tokens/sec 481.498, Trained Tokens 2147895, Peak mem 28.716 GB
+Saved final weights to /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2/adapters.safetensors.
+Leg complete: global step 6528, wrote 0006528_adapters.safetensors + 0006528_optimizer.safetensors
+
+=== CF-check: /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/.venv/bin/python3 /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/cpt_train/cf_check/run_leg_cf_check.py /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2 ===
+
+======================================================================
+LOADING cpt-v2-leg (models/qwen-q4) + adapter /Volumes/ExtremePro/JaseciLabs/jac_ml_studio/.claude/worktrees/cpt-v2-impl/03-new/adapters/cpt-v2
+======================================================================
+  [is_prime] 4/4 PASS
+  [reverse_string] 3/3 PASS
+  [fibonacci] 3/3 PASS
+  [factorial] 3/3 PASS
+  [is_palindrome] 3/3 PASS
+  [bubble_sort] 3/3 PASS
+  [count_vowels] 3/3 PASS
+  [max_of_list] 3/3 PASS
+  [flatten] 2/2 PASS
+  [remove_duplicates] 2/2 PASS
+  [gcd] 3/3 PASS
+  [binary_search] 3/3 PASS
+  [is_anagram] 2/2 PASS
+  [sum_digits] 3/3 PASS
+  [merge_dicts] 1/1 PASS
+  [caesar_cipher] 3/3 PASS
+CF-check: 16/16
+
+HALTED at leg 12: keeping this leg's checkpoint.
+=== epoch loop finished: status=halt_keep_this ===
