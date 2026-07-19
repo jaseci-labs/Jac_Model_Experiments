@@ -1,0 +1,21 @@
+{
+  "batch_id": "b02",
+  "accepted": [
+    "count_within_depth",
+    "can_reach",
+    "sum_first_k",
+    "first_leaf_name",
+    "hops_to_target",
+    "sum_within_depth",
+    "frontier_size",
+    "count_with_walls",
+    "names_within_depth",
+    "sum_until_negative",
+    "word_position",
+    "nearest_flagged",
+    "bounded_leaf_names",
+    "min_hops_to_threshold"
+  ],
+  "rejected": [],
+  "accept_rate": 1.0
+}
