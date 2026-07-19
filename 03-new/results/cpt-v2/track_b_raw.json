@@ -558,5 +558,145 @@
     "judge_winner": "B",
     "winner": "oracle",
     "justification": "B correctly identifies the `.reports` array on the spawn result matching the passage's `result.reports` pattern exactly, while A gives a generic, non-Jac Python walker implementation with no `.reports` concept and cuts off incomplete."
+  },
+  {
+    "id": "b000-q-scale-builtin",
+    "order": "oracle_first",
+    "judge_winner": "A",
+    "winner": "oracle",
+    "justification": "A correctly matches the passage that scale ships built into the jac binary with no separate package, and optional deps come in via `[scale.*]` config plus `jac install`, while B answers about an entirely unrelated project (Jina)."
+  },
+  {
+    "id": "b001-q-walker-field-state",
+    "order": "oracle_first",
+    "judge_winner": "A",
+    "winner": "oracle",
+    "justification": "A correctly explains that walker has-fields persist and accumulate across traversal (matching the rooms_visited accumulator example), while B misleadingly frames fields as staying at their 'original values' and 'unchanged', missing the accumulation behavior the passage's example demonstrates."
+  },
+  {
+    "id": "b003-q-llm-zero-config",
+    "order": "cpt_v2_first",
+    "judge_winner": "B",
+    "winner": "oracle",
+    "justification": "The passage states no imports are required for `llm`; B correctly states this and cites the `jac.toml` `[plugins.byllm.model]` config, while A directly contradicts the passage by claiming you still need to import the llm module."
+  },
+  {
+    "id": "b002-q-node-gatekeeper",
+    "order": "cpt_v2_first",
+    "judge_winner": "B",
+    "winner": "oracle",
+    "justification": "B closely mirrors the passage's Gateway example with correct Jac syntax (`visitor.clearance`, `disengage`), while A gives generic Python pseudocode with no Jac grounding and cuts off incomplete."
+  },
+  {
+    "id": "b002-q-missing-visit",
+    "order": "cpt_v2_first",
+    "judge_winner": "B",
+    "winner": "oracle",
+    "justification": "B directly and correctly states the walker stops at the current node without an explicit visit statement, matching the passage precisely, while A discusses Python's unrelated `ast.NodeVisitor` mechanism instead of Jac."
+  },
+  {
+    "id": "b002-q-self-vs-here",
+    "order": "cpt_v2_first",
+    "judge_winner": "B",
+    "winner": "oracle",
+    "justification": "B correctly matches the passage (self = the walker, here = the current node), while A inverts the definitions entirely and frames them in terms of an unrelated 'document' model."
+  },
+  {
+    "id": "b000-q-report-stdout",
+    "order": "cpt_v2_first",
+    "judge_winner": "A",
+    "winner": "cpt_v2",
+    "justification": "A explicitly and concretely states that report immediately prints to the console/terminal, matching the passage's stdout point, while B's explanation is vaguer and more circular about what the visible side effect actually is."
+  },
+  {
+    "id": "b002-q-single-file-fullstack",
+    "order": "cpt_v2_first",
+    "judge_winner": "B",
+    "winner": "oracle",
+    "justification": "B correctly describes the real `sv import` plus `root spawn WalkerName()` mechanism shown in the passage, while A invents fictional APIs like `get_all_walkers()` and direct `server_walker.say_hello()` calls not used in Jac."
+  },
+  {
+    "id": "b002-q-persistence-rule",
+    "order": "cpt_v2_first",
+    "judge_winner": "B",
+    "winner": "oracle",
+    "justification": "B precisely matches the passage's anchor/root-reachability/persistent-flag model and commit()/process-exit write timing, while A describes generic, fabricated ORM concepts like dirty tracking and an `instance.persist()` method not in the passage."
+  },
+  {
+    "id": "b003-q-template-pack",
+    "order": "oracle_first",
+    "judge_winner": "A",
+    "winner": "oracle",
+    "justification": "A's answer, while using a slightly wrong subcommand name, stays conceptually close to the passage's actual `.jacpack` bundling mechanism, whereas B fabricates an entirely unrelated npm-style package.json/jac.json bundle structure with no resemblance to the real CLI flags."
+  },
+  {
+    "id": "b002-q-root-exit-timing",
+    "order": "cpt_v2_first",
+    "judge_winner": "B",
+    "winner": "oracle",
+    "justification": "B precisely matches the passage using correct Jac terminology (post-order deferred exits, LIFO) with a grounded code example, while A gives generic listy filler and an unrelated Python pseudocode snippet."
+  },
+  {
+    "id": "b003-q-jid-identity",
+    "order": "oracle_first",
+    "judge_winner": "A",
+    "winner": "oracle",
+    "justification": "A correctly identifies the `jid()` function as the mechanism giving nodes stable cross-boundary identity, matching the passage's toggle_task/delete_task usage, while B fabricates a generic `node.id`/`NodeManager` server class with no mention of `jid()`."
+  },
+  {
+    "id": "b002-q-c-structs",
+    "order": "cpt_v2_first",
+    "judge_winner": "B",
+    "winner": "oracle",
+    "justification": "B correctly states C structs are declared as `obj` inside the import block matching the passage, with an accurate `na { import from ... { obj Point {...} } }` example, while A invents a `struct` keyword that isn't real Jac syntax."
+  },
+  {
+    "id": "b002-q-walker-accumulate",
+    "order": "cpt_v2_first",
+    "judge_winner": "B",
+    "winner": "oracle",
+    "justification": "B matches the passage's accumulator pattern precisely using real Jac syntax (has-field list, entry ability appends, Root exit reports), while A gives generic non-Jac Python tree-walker classes."
+  },
+  {
+    "id": "b001-q-connect-direction",
+    "order": "oracle_first",
+    "judge_winner": "A",
+    "winner": "oracle",
+    "justification": "A correctly uses the exact Jac operators (`++>`, `<++`, `<++>`) matching the passage's table, while B answers entirely in unrelated Cypher/Neo4j syntax and cuts off incomplete."
+  },
+  {
+    "id": "b001-q-impl-separation",
+    "order": "cpt_v2_first",
+    "judge_winner": "B",
+    "winner": "oracle",
+    "justification": "A explicitly states it has no information about Jac's impl system and falls back to generic OOP encapsulation talk, while B directly and accurately explains the `.jac`/`.impl.jac` separation matching the passage."
+  },
+  {
+    "id": "b003-q-sem-purpose",
+    "order": "cpt_v2_first",
+    "judge_winner": "B",
+    "winner": "oracle",
+    "justification": "B matches the passage's actual syntax (a separate `sem name = \"...\"` statement feeding the compiler-generated LLM prompt), while A invents an inline `sem:` annotation syntax that isn't real Jac and cuts off incomplete."
+  },
+  {
+    "id": "b000-q-bidirectional-poly",
+    "order": "cpt_v2_first",
+    "judge_winner": "B",
+    "winner": "oracle",
+    "justification": "B grounds the explanation in real Jac syntax (`visitor` in node abilities, `here` in walker abilities) with a complete worked example, while A uses a generic non-Jac visitor-pattern pseudocode and cuts off incomplete."
+  },
+  {
+    "id": "b000-q-classifiers-array",
+    "order": "cpt_v2_first",
+    "judge_winner": "B",
+    "winner": "oracle",
+    "justification": "B explicitly names the passage's specific failure mode (malformed wheel METADATA) and gives a complete jac.toml example, while A is more generic about 'parsing issues' and cuts off mid-list."
+  },
+  {
+    "id": "b003-q-node-vs-obj",
+    "order": "oracle_first",
+    "judge_winner": "A",
+    "winner": "oracle",
+    "justification": "A correctly frames the node's 'superpower' as edge-based graph connectivity matching the passage, while B fabricates an unrelated parent-child tree API (`add_child`, `bfs_traverse`) not reflective of Jac's actual edge/graph model."
   }
 ]
