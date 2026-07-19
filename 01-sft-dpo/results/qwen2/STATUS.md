@@ -10,3 +10,5 @@ Append-only progress log. Read this first after any context loss.
 - Phase 2 in flight: wave 1 (b01-b04 walker themes) Fable subagents authoring.
 - Wave 1 (b01-b04) DONE: 56/56 accepted, sft.jsonl 203. Dedup gate fixed category-aware (graph 0.95). Wave 2 (b05-b08: typed edges, edge attrs, hetero nodes, ability composition) launched.
 - b05+b06 ingested (28/28), sft.jsonl 231 (committed via external "changes pushed" commit). b07/b08 killed by session API limit (resets 7am Detroit) — respawn scheduled. Remaining: waves 2.5-5 (b07-b20), holdout, DPO gen, splits, training.
+- Waves 1-3 (b01-b11) complete: 154 new examples, sft.jsonl 301. Found+fixed real toolchain bug: writer.jac run_jac shared a basename-keyed .jac/data/snippet.db across ALL validation calls (jac persists root state to disk); root-anchored examples leaked state cross-call. Fixed via cwd=tempdir isolation (commit 297c7ba). b01-b10 unaffected (never touch root). b11 re-verified clean after fix (14/14).
+- Wave 4 (b12-15: littlex/guestbook-inspired graph_osp + lib_*.py function-tier mining) launched.
