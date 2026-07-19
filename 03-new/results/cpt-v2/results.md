@@ -1,6 +1,6 @@
 # CPT-v2 results — chart readout
 
-Companion to [`03-new/docs/cpt-2/results.md`](../../docs/cpt-2/results.md) (the authoritative Task 19 narrative and verdict). This file walks through the 20 static matplotlib charts in `charts/` one at a time with the analysis each one supports. All charts are generated from the source-of-truth JSON in `json/` by `03-new/cpt_train/eval_v2/make_charts.py` — regenerate anytime with:
+Companion to [`03-new/docs/cpt-2/results.md`](../../docs/cpt-2/results.md) (the authoritative Task 19 narrative and verdict). This file walks through the 20 static matplotlib charts in this folder one at a time with the analysis each one supports. All charts are generated from the source-of-truth JSON in `json/` by `03-new/cpt_train/eval_v2/make_charts.py` — regenerate anytime with:
 
 ```
 .venv/bin/python3 03-new/cpt_train/eval_v2/make_charts.py
@@ -8,7 +8,7 @@ Companion to [`03-new/docs/cpt-2/results.md`](../../docs/cpt-2/results.md) (the 
 
 An interactive version of the same data (11 linked charts, dark/light themes) also exists as a published artifact; static screenshots of it are `cptv2_dashboard_dark.png` / `cptv2_dashboard_light.png` in this folder.
 
-**Verdict up front: REJECTED.** design.md §6.4's bar needs Track A to beat both base and cpt-v1 by ≥0.03 cosine, and Track B win-or-tie ≥0.50. Neither cleared — see `charts/19_acceptance_gauges.png` and `charts/20_summary_dashboard.png` for the one-glance version, or read on for the full breakdown.
+**Verdict up front: REJECTED.** design.md §6.4's bar needs Track A to beat both base and cpt-v1 by ≥0.03 cosine, and Track B win-or-tie ≥0.50. Neither cleared — see `19_acceptance_gauges.png` and `20_summary_dashboard.png` for the one-glance version, or read on for the full breakdown.
 
 ---
 

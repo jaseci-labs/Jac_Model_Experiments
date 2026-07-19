@@ -1,7 +1,7 @@
 """Static matplotlib chart set for the CPT-v2 readout -- companion to the
 interactive HTML dashboard (built separately), reads the same source-of-
 -truth JSON so numbers can't drift between the two. Every chart is saved as
-its own PNG under 03-new/results/cpt-v2/charts/ so each one can be dropped
+its own PNG directly under 03-new/results/cpt-v2/ so each one can be dropped
 into a doc or slide independently."""
 import json
 from pathlib import Path
@@ -15,7 +15,7 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[3]
 RESULTS = ROOT / "03-new" / "results" / "cpt-v2"
 JSON_DIR = RESULTS / "json"
-CHARTS_DIR = RESULTS / "charts"
+CHARTS_DIR = RESULTS
 DATASET_V1 = ROOT / "03-new" / "dataset" / "cpt"
 DATASET_V2 = ROOT / "03-new" / "dataset" / "cpt-v2"
 
