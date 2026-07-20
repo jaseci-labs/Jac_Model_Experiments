@@ -8,7 +8,7 @@ Run with JAC_RUN_TAG=fresh set:
 
 import json;
 import from pathlib { Path }
-import from common { require_run_tag, data_root, out_path, example_key, existing_keys }
+import from common { require_run_tag, data_root, out_path, example_key, existing_keys, append_jsonl }
 
 with entry {
     tag = require_run_tag();
@@ -30,6 +30,22 @@ with entry {
     assert "key-two" in keys;
 
     assert existing_keys("/tmp/jacgen2_does_not_exist.jsonl") == {};
+
+    jsonl_path = "/tmp/jacgen2_test_append_jsonl.jsonl";
+    jsonl_file = Path(jsonl_path);
+    if jsonl_file.exists() {
+        jsonl_file.unlink();
+    }
+    append_jsonl(jsonl_path, {"n": 1, "label": "one"});
+    append_jsonl(jsonl_path, {"n": 2, "label": "two"});
+    with open(jsonl_path, 'r') as f {
+        appended_lines = f.readlines();
+    }
+    assert len(appended_lines) == 2;
+    rec_one = json.loads(appended_lines[0].strip());
+    rec_two = json.loads(appended_lines[1].strip());
+    assert rec_one == {"n": 1, "label": "one"};
+    assert rec_two == {"n": 2, "label": "two"};
 
     print("all common.jac checks passed");
 }

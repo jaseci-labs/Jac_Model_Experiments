@@ -8,35 +8,18 @@ follows check_llm.jac's proven `Model(model_name=...)` pattern (Task 1).
 
 import os;
 import time;
-import json;
-import from pathlib { Path }
 import from datetime { datetime }
 import from byllm.lib { Model }
-import from common { load_env, require_run_tag, data_root }
+import from common { load_env, require_run_tag, data_root, append_jsonl, load_model_name }
 
 # NOTE: jacgen/writer.append_jsonl (old pipeline) is functionally identical
-# to this, but a real cross-directory relative import (`..jacgen.writer`)
-# type-checks fine yet fails at runtime here ("attempted relative import
-# with no known parent package") -- jac run executes each entry script
-# without real Python package context, and path segments like
+# to common.append_jsonl, but a real cross-directory relative import
+# (`..jacgen.writer`) type-checks fine yet fails at runtime here ("attempted
+# relative import with no known parent package") -- jac run executes each
+# entry script without real Python package context, and path segments like
 # "01-sft-dpo" aren't valid Python identifiers anyway, so package-qualified
-# absolute imports aren't an option either. Inlined instead (5 lines,
-# stdlib-only, verbatim match of writer.append_jsonl).
-def append_jsonl(path: str, rec: dict) {
-    p = Path(path);
-    p.parent.mkdir(parents=True, exist_ok=True);
-    with open(path, "a") as f {
-        f.write(json.dumps(rec) + "\n");
-    }
-}
-
-def load_model_name(key: str) -> str {
-    models_path = Path(__file__).parent / "models.json";
-    with open(models_path, 'r') as f {
-        data = json.load(f);
-    }
-    return data[key]["model_name"];
-}
+# absolute imports aren't an option either. common.jac (same directory,
+# already imported above) is the shared copy instead.
 
 glob llm_opus: Model = Model(model_name=load_model_name("opus"));
 glob llm_fable: Model = Model(model_name=load_model_name("fable"));

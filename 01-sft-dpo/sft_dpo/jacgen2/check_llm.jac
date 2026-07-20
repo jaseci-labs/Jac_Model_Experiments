@@ -6,34 +6,8 @@ ANTHROPIC_API_KEY + live run -- see models.json note), loads .env if present
 (no python-dotenv dependency), then tries one ping call per model.
 """
 
-import os;
-import json;
-import from pathlib { Path }
 import from byllm.lib { Model }
-
-def load_model_name(key: str) -> str {
-    models_path = Path(__file__).parent / "models.json";
-    with open(models_path, 'r') as f {
-        data = json.load(f);
-    }
-    return data[key]["model_name"];
-}
-
-def load_env() {
-    env_path = Path(__file__).parent / ".env";
-    if env_path.exists() {
-        with open(env_path, 'r') as f {
-            lines = f.readlines();
-        }
-        for line in lines {
-            s = line.strip();
-            if s and not s.startswith('#') and '=' in s {
-                parts = s.split('=', 1);
-                os.environ.setdefault(parts[0].strip(), parts[1].strip());
-            }
-        }
-    }
-}
+import from common { load_env, load_model_name }
 
 glob llm_opus: Model = Model(model_name=load_model_name("opus"));
 glob llm_fable: Model = Model(model_name=load_model_name("fable"));

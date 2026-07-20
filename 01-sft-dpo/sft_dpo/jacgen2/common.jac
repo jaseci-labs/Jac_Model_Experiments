@@ -44,6 +44,22 @@ def load_env() {
     }
 }
 
+def append_jsonl(path: str, rec: dict) {
+    p = Path(path);
+    p.parent.mkdir(parents=True, exist_ok=True);
+    with open(path, "a") as f {
+        f.write(json.dumps(rec) + "\n");
+    }
+}
+
+def load_model_name(role: str) -> str {
+    models_path = Path(__file__).parent / "models.json";
+    with open(models_path, 'r') as f {
+        data = json.load(f);
+    }
+    return data[role]["model_name"];
+}
+
 def existing_keys(jsonl_path: str) -> dict {
     keys = {};
     path = Path(jsonl_path);
