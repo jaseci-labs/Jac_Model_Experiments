@@ -27,6 +27,7 @@ flowchart TD
         gentraj[gen_trajectory.jac]
         gendoc[gen_documentation.jac]
         genmig[gen_migration.jac]
+        gengraph[gen_graph_conversion.jac<br/>31 -> ~150-200, runs ONCE<br/>folds into shared conversion snapshot]
         gendpo[gen_dpo.jac]
         holdv2[holdout_v2.jac<br/>carve once, from fresh only]
         manifest[build_manifest_v2.jac<br/>excludes holdout ids, both tags]
@@ -48,6 +49,7 @@ flowchart TD
     llmopus --> gencg
     llmopus --> gentraj
     llmopus --> genmig
+    llmopus --> gengraph
     llmfable --> gendbg
     llmfable --> genexp
     llmfable --> gendoc
@@ -61,12 +63,15 @@ flowchart TD
     gendbg --> gatejac
     gentraj --> gatejac
     genmig --> gatejac
+    gengraph --> gatejac
     gendpo --> gatejac
     gatejac --> writer
     genexp -.prose_lexical: groundedness.-> dedup
     gendoc -.prose_lexical: symbol existence.-> dedup
 
     writer --> dedup --> decontam
+
+    gengraph -.folds into.-> convpipe
 
     gencg --> manifest
     gendbg --> manifest
@@ -107,7 +112,9 @@ jac run model-experiments/01-sft-dpo/sft_dpo/jacgen2/gen_migration.jac       # -
 jac run model-experiments/01-sft-dpo/sft_dpo/jacgen2/gen_dpo.jac             # -> .../dpo/          (reads buggy_variants.jsonl; see dpo-plan.md)
 
 # conversion category: SNAPSHOT, not live pointer (fresh build only):
-#   copy the conversion records to model-experiments/04-cpt-sft/dataset/shared/conversion_slice.jsonl,
+jac run model-experiments/01-sft-dpo/sft_dpo/jacgen2/gen_graph_conversion.jac  # FRESH BUILD ONLY — 31 -> ~150-200 graph examples, folds into the snapshot below (datagen/spec.md §4.1)
+#   copy the conversion records (existing pipeline output + gen_graph_conversion's growth)
+#   to model-experiments/04-cpt-sft/dataset/shared/conversion_slice.jsonl,
 #   record row-count + sha256 in the manifest. post_cptv2's build reads the snapshot
 #   and hard-fails on hash mismatch. (Upstream 01-sft-dpo/dataset/ is gitignored,
 #   single-copy, and its rebuild chain TRUNCATES — a live pointer would let the two
@@ -119,13 +126,18 @@ jac run model-experiments/01-sft-dpo/sft_dpo/jacgen2/dataset_stats_v2.jac    # c
 jac run model-experiments/01-sft-dpo/sft_dpo/jacgen2/decontam_v2.jac         # contamination audit vs old + new holdouts
 ```
 
-Note on `conversion`: reused unmodified from `jacgen/`, **not**
-independently regenerated per run-tag the way the other six categories are —
-`fresh` and `post_cptv2` releases share the same snapshotted conversion
-slice. Deliberate asymmetry: re-running the miner against a live HF dataset
-would introduce corpus-drift noise with no benefit, since conversion has no
-LLM-creative component to vary between runs (transpile + compiler gate,
-deterministic given the same source rows).
+Note on `conversion`: the function tier is reused unmodified from
+`jacgen/` and is **not** independently regenerated per run-tag the way the
+other categories are — `fresh` and `post_cptv2` releases share the same
+snapshotted conversion slice. Deliberate asymmetry: re-running the miner
+against a live HF dataset would introduce corpus-drift noise with no
+benefit, since that tier has no LLM-creative component to vary between
+runs (transpile + compiler gate, deterministic given the same source
+rows). The graph tier's growth (`gen_graph_conversion.jac`) **does** use
+an LLM (Opus) but deliberately runs only once, during the fresh build, and
+folds into the same shared snapshot — not run per-tag like `code_gen`/
+`debug`/etc — specifically to preserve this no-variance property
+(`datagen/spec.md` §4.1).
 
 ## 3. Per-example generation sequence (one `gen_code_gen.jac` call)
 
@@ -199,14 +211,17 @@ is more likely attributable to the base model, not the data.
 §4.1. Calls ≈ accepted examples × (1 + rejection rate) — figures below are
 accepted-example floors:
 
-- **Opus** (`code_gen` + `trajectory` + `migration`): ~4,500 `code_gen`
-  (1 call/example-variant, minus the `error_message_authoring` slice which
-  is Fable) + ~1,250 `trajectory` (**1 call/example** — one call writes the
-  whole 3-6-turn conversation, but each call is long; budget ~3-4x normal
-  output tokens/call) + ~500 `migration` (1 call/example, whole-file
-  outputs — budget ~2x tokens/call) → roughly **6,250 calls per run-tag,
-  ~12,500 total across both tags**. Opus still carries the token-heavy
-  load — fewer calls than Fable-adjacent arithmetic suggests, but the
+- **Opus** (`code_gen` + `trajectory` + `migration` + `gen_graph_conversion`,
+  one-time): ~4,500 `code_gen` (1 call/example-variant, minus the
+  `error_message_authoring` slice which is Fable) + ~1,250 `trajectory`
+  (**1 call/example** — one call writes the whole 3-6-turn conversation,
+  but each call is long; budget ~3-4x normal output tokens/call) + ~500
+  `migration` (1 call/example, whole-file outputs — budget ~2x
+  tokens/call) → roughly **6,250 calls per run-tag, ~12,500 total across
+  both tags**, **plus ~150-200 one-time calls** for
+  `gen_graph_conversion.jac` (fresh build only, not doubled — folds into
+  the shared snapshot per §2). Opus still carries the token-heavy load —
+  fewer calls than Fable-adjacent arithmetic suggests, but the
   trajectory/migration calls are the longest in the pipeline.
 - **Fable** (`debug` + `explanation` + `documentation` + `gen_dpo` + the
   ungated-prose task-type overrides): ~2,000 `debug` + ~1,250
@@ -218,7 +233,8 @@ accepted-example floors:
   debug counts) → roughly **5,400-5,800 calls per run-tag, ~11,000-11,500
   total across both tags**.
 
-Grand total ≈ **24,000-25,000 calls across both tags** before rejection
+Grand total ≈ **24,000-25,000 calls across both tags, plus one-time
+~150-200 for the graph-conversion growth (§2)** before rejection
 overhead. `conversion` contributes no LLM calls at all (snapshotted
 deterministic pipeline).
 

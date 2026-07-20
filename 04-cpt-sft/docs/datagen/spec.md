@@ -310,25 +310,61 @@ hard-coded.
 
 ## 4. `conversion` — Python → Jac (10%)
 
-**Reused as-is** from the existing `model-experiments/01-sft-dpo/sft_dpo/jacgen/` pipeline —
+**Mostly reused as-is** from the existing `model-experiments/01-sft-dpo/sft_dpo/jacgen/` pipeline —
 `mine.jac` (HF corpus mining), `scale_conversion.jac` (transpile + jac-run
 gate), `idiomatic_batch*.jac` (hand-authored idiomatic core), `graph_seeds.jac`
-(node/edge/walker conversion tier). No new generation code needed here; this
-phase's contribution is folding its existing output into the unified
-`sft_train.jsonl` via `build_manifest_v2.jac` with `task_type` back-filled as
-`python_to_jac_function` (the transpile-tier majority) or
-`python_to_jac_graph` (the graph tier).
+(node/edge/walker conversion tier). This phase's contribution is folding its
+existing output into the unified `sft_train.jsonl` via `build_manifest_v2.jac`
+with `task_type` back-filled as `python_to_jac_function` (the transpile-tier
+majority) or `python_to_jac_graph` (the graph tier) — **plus one new
+generator**, `gen_graph_conversion.jac` (added 2026-07-20), that grows the
+graph tier.
 
 The slice is **snapshotted, not referenced live** — see `workflow.md` §2's
 snapshot-and-hash rule (the upstream `01-sft-dpo/dataset/` files are
 gitignored, single-copy, and truncatable by their own rebuild chain; a live
 pointer would let the fresh/post builds silently read different data).
 
-If the existing ~1,640-example pool falls short of the 10% target
-(~1,250 at 12,500 total — currently already exceeds this, no action needed at
-current dataset size), re-run `scale_conversion.jac` with a higher `limit` to
-mine additional examples from the same Vezora corpus **before** the snapshot
-is taken.
+If the existing function-tier pool falls short of the 10% target (~1,250
+at 12,500 total — currently already exceeds this at ~1,500+147, no action
+needed at current dataset size), re-run `scale_conversion.jac` with a
+higher `limit` to mine additional examples from the same Vezora corpus
+**before** the snapshot is taken.
+
+### 4.1 `python_to_jac_graph` scale-up (added 2026-07-20)
+
+The graph tier is the thin, high-value slice: 31 hand-authored examples
+(`graph_data/train.json`) against ~1,500 function-tier examples, despite
+being where the real idiom-teaching headroom is — idiomatic-vs-transpile
+similarity ~0.26 for graph examples vs 0.97 for functions
+(`model-experiments/01-sft-dpo/sft_dpo/jacgen/README.md`). Growing it:
+
+- **Target**: ~150-200 total (up from 31) — a ~5-6x increase.
+- **Method**: `gen_graph_conversion.jac`, **Opus**-generated, forward
+  authorship rather than mining (no public corpus of graph-shaped Python
+  exists to mine the way Vezora covers plain functions). Opus authors a
+  graph/tree/relational-shaped Python program (a scenario prompt bank
+  seeded by the existing 31 examples' problem shapes — recursive
+  structures, adjacency lists, tree walks, dependency graphs — extended to
+  new shapes Opus proposes itself, reviewed against the bank for
+  duplication before generation), then produces the idiomatic
+  walker/node/edge Jac equivalent.
+- **Gate**: `behavioral` — both Python and Jac outputs must match across
+  the same distinct test-input set (`writer.jac`'s existing behavioral-gate
+  pattern, unchanged). No new gate class needed; this is squarely inside
+  what `run_jac` + pinned expected-output already verifies.
+- **Run-tag treatment — deliberately shared, not per-tag**: unlike every
+  other Opus/Fable generator in this catalog, `gen_graph_conversion.jac`
+  runs **once, during the `fresh` build**, and its output is folded into
+  the same snapshotted, hash-verified conversion slice both run-tags
+  consume (`../spec.md` §5). This preserves `conversion`'s existing
+  "no-variance-between-builds" property, which `../workflow.md` §5 relies
+  on for `idiom_eval`'s arm-neutrality claim — if the graph tier were
+  independently regenerated per run-tag like `code_gen`/`debug`, that claim
+  would break and `idiom_eval` would need re-justifying as a voting metric.
+- **Dedup**: new graph examples run through the same bucketed near-dup
+  check (§0.4) against the existing 31 before acceptance — growing the
+  tier should widen scenario coverage, not near-duplicate the existing set.
 
 ---
 

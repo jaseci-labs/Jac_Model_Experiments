@@ -60,6 +60,7 @@ base. This phase builds that SFT set and the comparison protocol.
 | Number of builds | Two, independent (`fresh`, `post_cptv2`) — not one dataset reused twice |
 | Relationship to CPT v2 training | Decoupled. This phase does not train or run CPT v2. `fresh` can and should proceed now; `post_cptv2` waits for CPT v2 to actually land. |
 | DPO dataset | Yes, separate plan — see `dpo-plan.md` |
+| `python_to_jac_graph` scale-up | Grow from 31 to ~150-200, Opus-generated (added 2026-07-20) — see `datagen/spec.md` §4. The only LLM-touching piece of an otherwise-deterministic `conversion` category. |
 
 ## 4. Architecture
 
@@ -77,6 +78,7 @@ model-experiments/01-sft-dpo/sft_dpo/jacgen2/
   gen_trajectory.jac
   gen_documentation.jac
   gen_migration.jac
+  gen_graph_conversion.jac # grows python_to_jac_graph 31 -> ~150-200, Opus; folds into conversion's snapshot before build_manifest_v2
   gen_dpo.jac             # see dpo-plan.md
   holdout_v2.jac          # carves per-category eval holdouts from the fresh build (fixed thereafter)
   build_manifest_v2.jac   # excludes holdout ids for BOTH run-tags
@@ -125,6 +127,7 @@ generation prone to subtle errors goes to Fable:
 | `gen_dpo.jac` | Fable | preference correctness has to be unambiguous per axis (`dpo-plan.md` §2), especially `auth_security` and `correctness` — a subtly-wrong "chosen" side poisons the pair |
 | `gen_documentation.jac` | Fable | prose output with no compiler gate — hallucinated parameter names or invented behavior is exactly the ungated failure mode; only the lexical symbol-existence check catches it |
 | `gen_migration.jac` | Opus | token-heavy whole-file rewrites, fully compiler-gated (migrated file must pass, original must fail/warn) — errors get caught mechanically, so the bulk model is safe |
+| `gen_graph_conversion.jac` | Opus | bulk growth of a thin tier (31→~150-200 examples), fully behaviorally-gated (Python + Jac output must match across test cases) — mechanically checkable, no judgment call needed per-example |
 
 Task-type-level overrides within a category: `code_gen`'s
 `error_message_authoring` and `debug`'s `code_critique` are ungated prose
