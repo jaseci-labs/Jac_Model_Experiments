@@ -9,9 +9,18 @@ Build a full 7-category SFT dataset (`code_gen`, `debug`, `explanation`,
 `conversion`, `trajectory`, `documentation`, `migration`) plus a companion
 DPO preference-pair dataset, **twice, independently**:
 
-- **`fresh`** — generated now, against the current pre-CPT-v2 project state.
-- **`post_cptv2`** — generated later, after CPT v2 training (`model-experiments/03-cpt-only/docs/cpt-2/design.md`)
-  actually runs.
+- **`fresh`** — generated now, against the pre-CPT-v2 project state.
+- **`post_cptv2`** — against the CPT-v2-trained checkpoint.
+
+> **Status update (2026-07-20):** CPT-v2 training (`model-experiments/03-cpt-only/docs/cpt-2/design.md`)
+> completed and was **rejected** on its own acceptance gates
+> (`docs/cpt-2/results.md`: 0/3 gates cleared; `docs/cpt-2/analysis.md`:
+> root-caused as a structural limit of next-token CPT on doc prose, not a
+> bad run — recommends skipping further CPT). `post_cptv2` is therefore
+> **no longer blocked on training landing** — the checkpoint exists
+> (`model-experiments/03-cpt-only/adapters/cpt-v2/`). Decision (this session): run the
+> three-arm test anyway, as an independent, differently-instrumented
+> confirmation of the rejection — see `workflow.md` §0.
 
 Both builds use the identical pipeline, task taxonomy, and prompts (see
 `datagen/spec.md`, `datagen/workflow.md`) but are **not** required to produce
@@ -58,7 +67,7 @@ base. This phase builds that SFT set and the comparison protocol.
 | Seed source for code | jac-mcp `list_examples`/`get_example` + Jac lang doc code-fences via `search_docs`/`get_resource`. Not this repo's own app code (avoids overfitting to studio-app style, keeps canonical language coverage). |
 | Generator model | Split by generator — Opus for token-heavy/bulk, Fable for precision/error-prone. See §4.1. Both via API, called from Jac using `by llm()` (jac-by-llm pattern) |
 | Number of builds | Two, independent (`fresh`, `post_cptv2`) — not one dataset reused twice |
-| Relationship to CPT v2 training | Decoupled. This phase does not train or run CPT v2. `fresh` can and should proceed now; `post_cptv2` waits for CPT v2 to actually land. |
+| Relationship to CPT v2 training | Decoupled — this phase never trained/ran CPT v2. CPT-v2 completed and was **rejected** (2026-07-20, `03-cpt-only/docs/cpt-2/results.md`); `post_cptv2` is unblocked immediately, not waiting on anything. Proceeding anyway as independent confirmation (`workflow.md` §0). |
 | DPO dataset | Yes, separate plan — see `dpo-plan.md` |
 | `python_to_jac_graph` scale-up | Grow from 31 to ~150-200, Opus-generated (added 2026-07-20) — see `datagen/spec.md` §4. The only LLM-touching piece of an otherwise-deterministic `conversion` category. |
 

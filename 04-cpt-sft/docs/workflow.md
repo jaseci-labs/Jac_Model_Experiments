@@ -17,6 +17,47 @@ v2 actually do anything."
 > dataset-noise component and a CPT component. Cost: one extra overnight
 > LoRA SFT run + one eval pass — cheap next to the generation budget.
 
+## 0. Status: CPT-v2 already completed and was rejected — running anyway
+
+As of 2026-07-20, CPT-v2 training finished (all 12 legs, clean run to the
+designed ceiling) and was **rejected** on its own terms:
+`model-experiments/03-cpt-only/docs/cpt-2/results.md` — 0 of 3 acceptance gates cleared
+(Track A margin vs base +0.008 of a required ≥0.03; vs CPT-v1 +0.0007,
+"statistically indistinguishable from noise"; Track B oracle beat CPT-v2 in
+91/100 blind pairwise judgments against a required ≥50% win-or-tie).
+`docs/cpt-2/analysis.md` root-causes this as a **structural limit of
+next-token CPT on doc prose** (the model fabricates plausible, fluent,
+wrong-domain syntax rather than admitting uncertainty), not a defect in
+this particular run — and recommends skipping further CPT attempts
+entirely in favor of SFT/DPO on the base model.
+
+This means `post_cptv2` is **no longer blocked on "CPT v2 landing"** — the
+checkpoint already exists at `model-experiments/03-cpt-only/adapters/cpt-v2/`. The three-arm
+protocol below runs anyway, deliberately, rather than being retired:
+
+- **Why bother, given CPT-v2 is already rejected**: this protocol's
+  instrument (full 7-category SFT-then-eval, §5) is genuinely different
+  from CPT-v2's own Track A (cosine-similarity margin) and Track B (blind
+  pairwise oracle judge). A second, differently-shaped measurement against
+  the same checkpoint is worth having before treating the question fully
+  closed — either it corroborates the rejection (expected, given
+  analysis.md's structural-limit argument applies regardless of
+  downstream SFT), or it doesn't, which would itself be a notable finding
+  worth investigating (e.g. "SFT papers over the fabrication problem" would
+  contradict the structural-limit theory).
+- **What this changes practically**: nothing in the pipeline mechanics.
+  Arms B and C can run on their normal schedule rather than waiting —
+  build `post_cptv2` whenever convenient, no dependency on `03-cpt-only`
+  finishing anything further.
+- **What this doesn't change**: the decision rule in §6 still requires a
+  majority of Panel-1 rows to show a significant `B−C` win before calling
+  CPT-v2 effective. Given the rejection above, the base-rate expectation
+  going in is that this protocol reproduces the null result — that
+  expectation is not a reason to skip the measurement, but it is context
+  for interpreting a result that comes back positive (extraordinary claim,
+  check the composition diff and the `C−A` noise term extra carefully
+  before trusting it).
+
 ## 1. Why this is the right instrument
 
 `model-experiments/03-cpt-only/docs/cpt-2/design.md` found CPT-v1 moved free-generation vocabulary
@@ -32,8 +73,8 @@ supposed to move: can the model *write* correct, idiomatic Jac.
 flowchart TD
     subgraph phase1["model-experiments/04-cpt-sft datagen (this phase, spec.md + datagen/)"]
         freshdata["fresh SFT+DPO dataset<br/>(build now)"]
-        cptv2train["CPT v2 training<br/>(model-experiments/03-cpt-only/, separate phase, not yet run)"]
-        postdata["post_cptv2 SFT+DPO dataset<br/>(build after CPT v2 lands)"]
+        cptv2train["CPT v2 training<br/>COMPLETED + REJECTED<br/>(model-experiments/03-cpt-only/, 2026-07-20)"]
+        postdata["post_cptv2 SFT+DPO dataset<br/>(unblocked, build whenever)"]
     end
 
     baseOld[pre-CPT-v2 base checkpoint]
@@ -66,10 +107,11 @@ flowchart TD
     diffreport[dataset_stats_v2.jac<br/>fresh vs post_cptv2 composition diff] --> compare
 ```
 
-Arm A has no dependency on CPT v2 landing — it runs as soon as the `fresh`
-dataset (`spec.md` §8 rollout) is built. Arms B and C are blocked on the
-`post_cptv2` dataset, which is blocked on CPT v2 training
-(`model-experiments/03-cpt-only/`'s responsibility, out of this phase's scope).
+Arm A has no dependency on CPT v2 and runs as soon as the `fresh` dataset
+(`spec.md` §8 rollout) is built. Arms B and C are blocked only on the
+`post_cptv2` dataset build — **not** on CPT v2 training, which already
+completed (§0). Build `post_cptv2` and run B/C on whatever schedule suits;
+there is no external dependency left.
 
 ## 3. The four measurement points
 
@@ -195,16 +237,22 @@ mirror-image single-metric false-positive here).
 
 ## 7. Sequencing against `model-experiments/03-cpt-only/`
 
-This phase does not block on or gate CPT v2 training. Recommended order:
+CPT v2 training already completed (§0) — there is no external dependency
+left to sequence against. Recommended order is now purely about this
+phase's own build order, not about waiting on another team's timeline:
 
 1. Pin generator snapshots (§4). Build `fresh` dataset (`spec.md` §8
    rollout steps 1-7). Carve holdouts (`holdout_v2.jac`), grow the graph
    holdout to ≥100.
 2. Run the incumbent eval column (no training — one eval pass).
-3. Run Arm A now (with seed repeats), independent of CPT v2's timeline.
-   This alone delivers value regardless of CPT v2's outcome — it's the
-   first time the full 7-category SFT plan will have actually been
-   executed, and incumbent-vs-A answers the dilution question immediately.
-4. When `model-experiments/03-cpt-only/` finishes CPT v2 training: verify snapshot pins still
-   hold (§4.3), build `post_cptv2` dataset (`spec.md` §8 steps 8-9), run
-   Arms C and B (with seed repeats), run §6.
+3. Run Arm A (with seed repeats). This alone delivers value independent of
+   anything else — it's the first time the full 7-category SFT plan will
+   have actually been executed, and incumbent-vs-A answers the dilution
+   question immediately.
+4. Verify snapshot pins still hold (§4.3) against the `fresh` build, build
+   `post_cptv2` dataset (`spec.md` §8 steps 8-9), run Arms C and B (with
+   seed repeats, against the already-completed `model-experiments/03-cpt-only/adapters/cpt-v2/`
+   checkpoint), run §6. Given CPT-v2's own rejection (§0), the base-rate
+   expectation is a null result on `B−C` — report it as such if that's
+   what comes back, and scrutinize a positive result harder than a null
+   one.
