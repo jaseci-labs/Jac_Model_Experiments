@@ -64,7 +64,8 @@ base. This phase builds that SFT set and the comparison protocol.
 | `explanation` scope | Docs-grounded quiz Q&A only (Jac lang docs → question/answer). Not open-ended code-explanation — deferred. |
 | `trajectory` scope | LLM-simulated multi-turn (single model plays both user and assistant across a coding task). Not live agent-session capture — deferred. |
 | Scale target | 10,000-15,000 examples per dataset build, split per `datagen/spec.md` §weights |
-| Seed source for code | jac-mcp `list_examples`/`get_example` + Jac lang doc code-fences via `search_docs`/`get_resource`. Not this repo's own app code (avoids overfitting to studio-app style, keeps canonical language coverage). |
+| Seed source for code | **Expanded 2026-07-20** (was jac-mcp only — measured supply ~300-600 forced a ~25-40x fan-out ratio, too thin). Now 5 tiers: (1) jac-mcp `list_examples`/`get_example`, (2) jac-mcp doc code-fences via `search_docs`/`get_resource`, (3) jaclang's own repo — compiler test fixtures + stdlib source, (4) multi-org public Jac GitHub scrape (same infra as CPT's corpus build) — **Fable-reviewed against a ponytail rubric before acceptance**, rejecting inefficient/reinvented-stdlib/overengineered code, (5) this repo's own app code (`jms/`, `model-experiments/*/sft_dpo/jacgen/*.jac`, studio `.sv.jac`/`.cl.jac`) — the original exclusion (overfitting to studio-app style) reversed now that tiers 3-4 dilute any single-project style dominance. See `datagen/spec.md` §8. |
+| Datagen build discipline | `/ponytail:ponytail` governs `jacgen2/` implementation itself (one-shot batch scripts, not a product surface — no speculative abstraction, shortest working diff, stdlib/native first) **and** the tier-4 Fable seed-quality gate (reject reinvented-stdlib, unneeded deps, dead flexibility, inefficient code) — see `datagen/spec.md` §8.4/§9. |
 | Generator model | Split by generator — Opus for token-heavy/bulk, Fable for precision/error-prone. See §4.1. Both via API, called from Jac using `by llm()` (jac-by-llm pattern) |
 | Number of builds | Two, independent (`fresh`, `post_cptv2`) — not one dataset reused twice |
 | Relationship to CPT v2 training | Decoupled — this phase never trained/ran CPT v2. CPT-v2 completed and was **rejected** (2026-07-20, `03-cpt-only/docs/cpt-2/results.md`); `post_cptv2` is unblocked immediately, not waiting on anything. Proceeding anyway as independent confirmation (`workflow.md` §0). |
@@ -78,7 +79,9 @@ pipeline (left untouched):
 
 ```
 model-experiments/01-sft-dpo/sft_dpo/jacgen2/
-  seed_pool.jac          # shared seed corpus builder; pins expected_output per seed; frozen+hashed after fresh build
+  seed_pool.jac          # shared seed corpus builder; 5 source tiers (datagen/spec.md §8); pins expected_output per seed; frozen+hashed after fresh build
+  seed_scrape.jac        # tier 4: clones the multi-org public Jac repo list (reuses CPT's build_cpt.py cloning/manifest-SHA infra), parse-gates with jac check -p
+  gen_seed_review.jac    # tier 4 quality gate: Fable review per scraped candidate against the ponytail rubric (datagen/spec.md §8.4) — reject before the candidate ever reaches seed_pool.jsonl
   llm.jac                # by-llm() wrappers, dual-model (Opus + Fable, §4.1) — pinned snapshot IDs, retry/backoff, per-call exception capture, spend cap
   gate.jac               # run_jac_project(files) multi-file gate extension + make_sft_example_v2 + category-aware extract_payload
   gen_code_gen.jac
@@ -107,6 +110,18 @@ extractor only understands ```` ```python ```` fences and would silently
 pass everything Jac or prose (a clean audit that checked nothing); v2
 supplies per-category extractors (jac fence / instruction text / doc chunk)
 into the same shingle + overlap machinery.
+
+**Development discipline (added 2026-07-20):** `/ponytail:ponytail`
+governs the implementation of every `jacgen2/` module. These are one-shot
+batch scripts, not a product surface — no speculative abstraction, no
+config for a value that never changes, shortest working diff, stdlib/
+native Jac features before hand-rolled helpers. This is a build-time
+instruction for whoever implements the pipeline, distinct from — and not
+to be confused with — the *content* the pipeline generates: `dpo-plan.md`
+§3 already explicitly declined to bake a concise-vs-verbose *preference
+axis* into the training data itself, since that's a workflow opinion, not
+a Jac-language fact. Ponytail governs how `jacgen2` is written; it does
+not reopen that DPO-axis decision.
 
 All new tooling is Jac, matching the existing `jacgen/` convention (see
 `model-experiments/01-sft-dpo/sft_dpo/jacgen/README.md`). LLM-backed generation uses Jac's
@@ -137,6 +152,7 @@ generation prone to subtle errors goes to Fable:
 | `gen_documentation.jac` | Fable | prose output with no compiler gate — hallucinated parameter names or invented behavior is exactly the ungated failure mode; only the lexical symbol-existence check catches it |
 | `gen_migration.jac` | Opus | token-heavy whole-file rewrites, fully compiler-gated (migrated file must pass, original must fail/warn) — errors get caught mechanically, so the bulk model is safe |
 | `gen_graph_conversion.jac` | Opus | bulk growth of a thin tier (31→~150-200 examples), fully behaviorally-gated (Python + Jac output must match across test cases) — mechanically checkable, no judgment call needed per-example |
+| `gen_seed_review.jac` | Fable | tier-4 seed quality gate — judging whether scraped code is efficient/idiomatic/not-reinvented-stdlib is exactly the precision/error-prone-consequence work Fable is assigned to (a bad call here poisons every downstream example the seed fans out into) |
 
 Task-type-level overrides within a category: `code_gen`'s
 `error_message_authoring` and `debug`'s `code_critique` are ungated prose
@@ -260,7 +276,7 @@ was actually verified:
 ### Dedup + decontamination
 
 All categories run through the **scaled** dedup policy (`datagen/spec.md`
-§0.4: exact-hash first, bucketed near-dup, instruction+code jointly,
+§0.2: exact-hash first, bucketed near-dup, instruction+code jointly,
 same-seed exemption — not `dedup.jac`'s raw O(n²) pairwise pass, which has
 never run above n≈147) and through `decontam_v2.jac`'s per-category
 extractors feeding the 14-token-shingle ≥0.5 overlap machinery, against

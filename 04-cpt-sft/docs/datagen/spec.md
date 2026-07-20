@@ -19,20 +19,37 @@ wiring that is Jac's actual differentiator over plain Python.
 > types, five bug types, and folded ~20 named language features into
 > existing rows' seed scopes. A feasibility audit added §0 (seed supply and
 > fan-out — read it first, it constrains everything below).
+>
+> Revision note (2026-07-20, seed pool expansion): the jac-mcp-only supply
+> (~300-600 seeds) forced a ~25-40x fan-out ratio — thin enough that a
+> follow-up decision expanded seed sourcing to 5 tiers (§8). This lowers
+> the required fan-out ratio; §0.1 below reflects the expanded estimate,
+> but the fan-out *mechanism* itself (§0.2) stays in place regardless
+> of supply — it's cheap insurance, not purely a shortage-driven hack.
 
 ## 0. Seed supply and fan-out (read first)
 
-Measured supply (verified against the live jac-mcp server and the bundled
-doc corpus): `list_examples` returns **9 app-scale examples** (untagged;
-several not fetchable standalone — the seed builder must tolerate
-`get_example` failures), and the doc bundle holds ~800-950 ` ```jac `
-fences of which a large fraction are non-runnable fragments or incremental
-tutorial states that near-duplicate each other. Realistic distinct,
-`jac run`-passing seeds: **~300-600**.
+### 0.1 Measured / estimated supply, 5 tiers (§8 has full detail per tier)
 
-Non-conversion demand is ~11,250 SFT examples + ~2,500 DPO pairs, so the
-pipeline needs **~25-40 examples per seed**. That fan-out is a designed
-mechanism, not an accident:
+| Tier | Source | Estimated usable seeds |
+|---|---|---|
+| 1 | jac-mcp `list_examples`/`get_example` | ~9 apps, low count but high quality |
+| 2 | jac-mcp doc code-fences | ~300-600 (measured, most already counted here) |
+| 3 | jaclang repo's own test fixtures + stdlib source (new) | unmeasured, pending pilot — likely low hundreds given a compiler test suite's typical size |
+| 4 | Multi-org public Jac GitHub scrape, Fable-reviewed (new) | unmeasured, pending pilot — CPT's own 17-org code corpus pull landed ~992K tokens before its own (different) filters; expect this tier to dwarf tiers 1-3 once scraped, net of the tier-4 rejection rate |
+| 5 | This repo's own app code — `jms/`, `model-experiments/*/sft_dpo/jacgen/*.jac`, studio `.sv.jac`/`.cl.jac` (new, reverses a prior exclusion) | low hundreds, real production-shaped Jac |
+
+Net effect: total supply should land well above the old ~300-600 ceiling,
+plausibly into four figures once tiers 3-5 are actually pulled and
+counted — but **do not assume** the number until the pilot measures it
+per tier. Tier 4 in particular has an unknown rejection rate (§8.4) that
+only a real run will reveal.
+
+### 0.2 Fan-out mechanism (unchanged in kind, lower ratio needed now)
+
+Whatever the real supply turns out to be, the fan-out mechanism stays —
+even a four-figure seed pool benefits from more than 1 example per seed,
+and the machinery costs nothing extra to keep:
 
 1. **Example key is `(seed_id, task_type, variant_idx)`** — everywhere:
    output filenames, resumability skip-checks, dedup bookkeeping. (A key of
@@ -56,7 +73,9 @@ mechanism, not an accident:
 
 If, after the pilot, measured usable-seed count × achievable fan-out cannot
 reach the target, the honest move is cutting the target and saying so in
-the release notes — not padding with near-duplicates.
+the release notes — not padding with near-duplicates. With 5 tiers this is
+a much less likely outcome than it was at jac-mcp-only supply, but the
+rule doesn't change: measure before committing to scale.
 
 ## Category weights (target: 12,500 examples, range 10,000-15,000)
 
@@ -98,7 +117,7 @@ task description that snippet solves, and pair them. This avoids the failure
 mode of forward-generation (LLM invents both problem and solution and can
 drift into non-idiomatic Python-shaped Jac) — the *code* is always a real,
 canonical, jac-mcp-sourced or doc-sourced artifact (or a re-gated mutation
-of one, §0.3); only the instruction is synthesized.
+of one, §0.2); only the instruction is synthesized.
 
 | `task_type` | What it teaches | Seed source |
 |---|---|---|
@@ -363,7 +382,7 @@ similarity ~0.26 for graph examples vs 0.97 for functions
   independently regenerated per run-tag like `code_gen`/`debug`, that claim
   would break and `idiom_eval` would need re-justifying as a voting metric.
 - **Dedup**: new graph examples run through the same bucketed near-dup
-  check (§0.4) against the existing 31 before acceptance — growing the
+  check (§0.2) against the existing 31 before acceptance — growing the
   tier should widen scenario coverage, not near-duplicate the existing set.
 
 ---
@@ -464,39 +483,130 @@ mechanically checkable, low judgment risk.
 
 Single shared builder (`seed_pool.jac`, see `workflow.md` for its place in
 the module graph) feeding `code_gen`, `debug`, `explanation`, `trajectory`,
-`documentation`, and `migration`:
+`documentation`, and `migration`. Five source tiers (expanded 2026-07-20
+from a jac-mcp-only pool — `../spec.md` §3 "Seed source for code"):
 
-1. Enumerate every `jac-mcp` example via `list_examples` (9 app-scale
-   examples, untagged), fetch each with `get_example`, **tolerating
-   per-example fetch failures** (the knowledge map itself only guarantees a
-   subset). Decompose fetched apps into archetype/walker/endpoint-level
-   seeds; drop shadcn `ui/*.cl.jac` boilerplate.
-2. Enumerate doc pages via `search_docs`/`get_resource` — every
-   `jac://guide/*` skill page (including `jac-has-fields` and
-   `jac-core-cheatsheet`, previously missed) **and every `jac://docs/*`
-   reference** (`cheatsheet`, `foundation`, `osp`, `byllm`, `jac-client`,
-   `jac-scale`, `testing`, `cli`, `diagnostics`, `python-integration`,
-   tutorials) — extract fenced code blocks.
-3. **Run every code seed once and pin its stdout as `expected_output`** in
+### 8.1 Tier 1 — jac-mcp examples
+
+Enumerate every `jac-mcp` example via `list_examples` (9 app-scale
+examples, untagged), fetch each with `get_example`, **tolerating
+per-example fetch failures** (the knowledge map itself only guarantees a
+subset). Decompose fetched apps into archetype/walker/endpoint-level
+seeds; drop shadcn `ui/*.cl.jac` boilerplate.
+
+### 8.2 Tier 2 — jac-mcp docs
+
+Enumerate doc pages via `search_docs`/`get_resource` — every
+`jac://guide/*` skill page (including `jac-has-fields` and
+`jac-core-cheatsheet`, previously missed) **and every `jac://docs/*`
+reference** (`cheatsheet`, `foundation`, `osp`, `byllm`, `jac-client`,
+`jac-scale`, `testing`, `cli`, `diagnostics`, `python-integration`,
+tutorials) — extract fenced code blocks.
+
+### 8.3 Tier 3 — jaclang's own repo (added 2026-07-20)
+
+Clone the `jaclang` compiler repo itself (separately from jac-mcp's
+bundled docs) and mine its test fixtures and stdlib source directly — the
+same canonical-language category as tiers 1-2, just untapped because
+jac-mcp only bundles docs, not the language repo's own tests. Filter to
+files that parse standalone (`jac check -p`) and, where they carry an
+assertable behavior, run (`jac run`) to pin `expected_output` same as
+tier 2. No Fable review needed here — compiler test fixtures are
+by-definition canonical, that's their job.
+
+### 8.4 Tier 4 — multi-org public Jac GitHub scrape, Fable-reviewed (added 2026-07-20)
+
+Reuses the cloning/manifest-SHA infrastructure `03-cpt-only/cpt_build/build_cpt.py`
+already built for CPT's own corpus pull (`seed_scrape.jac`, new module,
+`../spec.md` §4) — clone candidate public repos containing `.jac` files to
+scratchpad, record SHAs in a manifest, same convention. Two gates, in order:
+
+1. **Parse gate**: `jac check -p` (parse-only, not the full type-checker —
+   matches the precedent CPT's own corpus build already used for its code
+   corpus, and avoids the project's standing "never gate on `jac check`"
+   rule, which is specifically about *rejecting generated output*, not
+   about *filtering scraped input* before it's ever a candidate).
+2. **Ponytail-rubric Fable review gate** (`gen_seed_review.jac`, new
+   module) — this is the step the user specifically asked for: "make sure
+   no bad or inefficient code is being used." Fable reviews each
+   parse-gate-surviving candidate against the `/ponytail:ponytail` rubric
+   and rejects anything that:
+   - reinvents something the Jac stdlib or a native language feature
+     already covers,
+   - carries unneeded abstraction for a single use site (interface with
+     one implementation, config for a value that never changes),
+   - is obviously inefficient (O(n²) where O(n) is trivial, redundant
+     re-computation, dead code paths),
+   - is Python-shaped Jac rather than idiomatic OSP where the problem is
+     graph-shaped (the same idiom bar `dpo-plan.md` §2.1 already holds
+     conversion examples to).
+
+   Accepted candidates get a `seed_source: "github_scrape"` tag and a
+   `review_note` field recording Fable's verdict, for audit. This gate is
+   the reason tier 4 is Fable-assigned, not Opus (`../spec.md` §4.1) —
+   judging code quality is exactly the precision/consequence-sensitive
+   work Fable is assigned across this catalog; a bad call here poisons
+   every downstream example the seed fans out into.
+
+   Rejection rate is unmeasured until the pilot runs — budget for it
+   (`datagen/workflow.md` §5 cost accounting).
+
+Exclude repos already consumed by CPT's own corpus in ways that would
+make this tier redundant with tier 3 or introduce a different kind of
+contamination — check CPT's corpus manifest (`03-cpt-only/dataset/cpt-v2/manifest.json`)
+for the org list already covered there and avoid the exact same corpus
+tier's *code* slice, which CPT-v2 deliberately dropped (`docs/cpt-2/design.md` §1
+"drop code entirely") — that's a CPT-corpus-composition decision, not a
+statement about this tier's validity, but re-scraping the identical set
+CPT already excluded is a reasonable place to widen the org list rather
+than duplicate CPT's discovery work outright. Same decontamination
+requirement as every other tier: `decontam_v2.jac`'s shingle overlap check
+against eval holdouts, applied at seed-acceptance time, not just at
+example-acceptance time.
+
+### 8.5 Tier 5 — this repo's own app code (added 2026-07-20, reverses a prior exclusion)
+
+Mine `jms/`, `model-experiments/*/sft_dpo/jacgen/*.jac`, and studio
+`.sv.jac`/`.cl.jac` files directly. The original exclusion
+(`../spec.md` §3, "avoids overfitting to studio-app style") is reversed
+now that tiers 3-4 add enough independent-style volume to dilute any
+single-project style dominance — this tier alone would have posed the
+overfitting risk the original decision was guarding against; alongside
+four other tiers it's additive real-world signal instead. No Fable
+review needed — this is the project's own reviewed, working code.
+
+### 8.6 Shared post-processing (all tiers)
+
+1. **Run every code seed once and pin its stdout as `expected_output`** in
    `seed_pool.jsonl`. This is what the behavioral gate compares against
-   (nothing else populates expected output for doc-fence seeds), and it
-   freezes behavior identically for both run-tags. Seeds that don't run
-   standalone are kept but flagged `gate_class: compile_only` (client
-   components, endpoint snippets, `by llm()` demos — the gate matrix in
-   `../spec.md` §7 governs what they can seed).
-4. Assemble the deprecated-pattern inventory (§7's caveat) as a tagged
+   (nothing else populates expected output for doc-fence or scraped
+   seeds), and it freezes behavior identically for both run-tags. Seeds
+   that don't run standalone are kept but flagged `gate_class: compile_only`
+   (client components, endpoint snippets, `by llm()` demos — the gate
+   matrix in `../spec.md` §7 governs what they can seed).
+2. Assemble the deprecated-pattern inventory (§7's caveat) as a tagged
    sub-pool for `syntax_migration` and `migration`.
-5. Author the app-idea prompt bank for `schema_design` (§1.1) — short
+3. Author the app-idea prompt bank for `schema_design` (§1.1) — short
    plain-language app descriptions, hand-curated once, stored alongside the
    pool (these are prompts, not code seeds, but versioned identically so
    both run-tags draw from the same bank).
-6. Dedup seeds against each other (exact-match + bucketed near-dup, §0.4)
+4. Dedup seeds against each other (exact-match + bucketed near-dup, §0.2)
    before they ever reach a generator — no point spending LLM calls (Opus
-   or Fable, see `../spec.md` §4.1) on the same snippet twice.
+   or Fable, see `../spec.md` §4.1) on the same snippet twice. Cross-tier
+   dedup matters here specifically — tier 5 (this repo) and tier 1
+   (jac-mcp examples) could plausibly overlap if any jac-mcp example was
+   itself drawn from this project's history; the same bucketed check
+   catches it regardless of tier.
+5. Every seed carries a `seed_tier` field (1-5) in metadata, alongside the
+   existing `seed_id`/origin tag — `dataset_stats_v2.jac` reports
+   composition by tier as well as by category/task_type, so the eventual
+   dataset's tier mix is visible, not just its category mix.
 
 Output: `seed_pool.jsonl`, not run-tag-scoped (see `../spec.md` §5 — kept
 identical across `fresh` and `post_cptv2` builds so only LLM-authored content
 varies between the two datasets). **Frozen after the `fresh` build**: its
-sources ship inside the jaclang package and drift with any `jac` upgrade,
-so the file is hash-recorded at freeze time and the `post_cptv2` build
-verifies the hash instead of regenerating (`workflow.md` §2).
+sources ship inside the jaclang package (tiers 1-2) or are cloned from
+external repos that can be updated or go private (tiers 3-4) — either
+way, they can drift — so the file is hash-recorded at freeze time and the
+`post_cptv2` build verifies the hash instead of regenerating
+(`workflow.md` §2).

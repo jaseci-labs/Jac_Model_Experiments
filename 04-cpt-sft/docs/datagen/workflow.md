@@ -15,8 +15,15 @@ flowchart TD
         convpipe[existing conversion pipeline<br/>mine / scale_conversion / idiomatic_batch* / graph_seeds]
     end
 
+    subgraph seedtiers["seed sourcing (5 tiers, datagen/spec.md §8)"]
+        scrape[seed_scrape.jac<br/>tier 4: clone multi-org public Jac repos<br/>reuses CPT's clone/manifest-SHA infra]
+        seedreview[gen_seed_review.jac<br/>tier 4 gate: Fable + ponytail rubric<br/>reject inefficient/reinvented/Python-shaped]
+        jaclangrepo[(jaclang repo<br/>tier 3: test fixtures + stdlib)]
+        selfcode[(this repo's own app code<br/>tier 5: jms/, jacgen/*.jac, .sv.jac/.cl.jac)]
+    end
+
     subgraph new["jacgen2/ (new)"]
-        seedpool[seed_pool.jac<br/>+ expected_output pinning<br/>+ deprecated inventory + idea bank]
+        seedpool[seed_pool.jac<br/>5-tier merge + expected_output pinning<br/>+ deprecated inventory + idea bank + seed_tier tagging]
         llmopus[llm.jac: opus wrapper<br/>bulk / token-heavy<br/>pinned snapshot, retry, budget cap]
         llmfable[llm.jac: fable wrapper<br/>precision / error-prone<br/>pinned snapshot, retry, budget cap]
         gatejac[gate.jac<br/>run_jac_project, make_sft_example_v2,<br/>extract_payload]
@@ -35,9 +42,16 @@ flowchart TD
         decontamv2[decontam_v2.jac<br/>per-category extractors]
     end
 
-    mcp[(jac-mcp<br/>list_examples / get_example /<br/>search_docs / get_resource)]
+    mcp[(jac-mcp<br/>list_examples / get_example /<br/>search_docs / get_resource<br/>tiers 1-2)]
 
     mcp --> seedpool
+    jaclangrepo --> seedpool
+    selfcode --> seedpool
+    scrape --> seedreview
+    llmfable --> seedreview
+    seedreview -.decontam check vs eval holdouts.-> decontam
+    seedreview -.accepted candidates only.-> seedpool
+
     seedpool --> gencg
     seedpool --> gendbg
     seedpool --> genexp
@@ -93,15 +107,18 @@ flowchart TD
 order" claim was wrong — two documented data flows depend on `gen_debug`'s
 `buggy_variants.jsonl`: `gen_dpo`'s correctness/auth/typing axes and
 `gen_trajectory`'s `debug_session` type). Required order:
-`seed_pool` → `gen_debug` → everything else in any order →
-`build_manifest_v2` last.
+`seed_scrape` → `gen_seed_review` → `seed_pool` → `gen_debug` →
+everything else in any order → `build_manifest_v2` last.
 
 ```bash
 export JAC_RUN_TAG=fresh   # or post_cptv2 — NO default; modules hard-fail if unset
 # run from repo root (jacgen convention: repo-root-relative paths)
 
-# fresh build only — pool is frozen+hashed afterwards; post_cptv2 verifies the hash instead
-jac run model-experiments/01-sft-dpo/sft_dpo/jacgen2/seed_pool.jac           # seed_pool.jsonl (shared, expected_output pinned per seed)
+# fresh build only — seed sourcing runs once, pool is frozen+hashed afterwards;
+# post_cptv2 verifies the hash instead of re-sourcing/re-reviewing anything.
+jac run model-experiments/01-sft-dpo/sft_dpo/jacgen2/seed_scrape.jac        # tier 4: clone + jac check -p parse-gate candidate repos
+jac run model-experiments/01-sft-dpo/sft_dpo/jacgen2/gen_seed_review.jac    # tier 4: Fable + ponytail rubric — reject bad/inefficient/reinvented/Python-shaped
+jac run model-experiments/01-sft-dpo/sft_dpo/jacgen2/seed_pool.jac          # merges tiers 1-5 -> seed_pool.jsonl (shared, expected_output pinned per seed, seed_tier tagged)
 
 jac run model-experiments/01-sft-dpo/sft_dpo/jacgen2/gen_debug.jac           # -> .../debug/ + raw_output/debug/buggy_variants.jsonl (FIRST — others consume it)
 jac run model-experiments/01-sft-dpo/sft_dpo/jacgen2/gen_code_gen.jac        # -> model-experiments/04-cpt-sft/dataset/$JAC_RUN_TAG/clean_dataset/code_gen/
@@ -237,6 +254,15 @@ Grand total ≈ **24,000-25,000 calls across both tags, plus one-time
 ~150-200 for the graph-conversion growth (§2)** before rejection
 overhead. `conversion` contributes no LLM calls at all (snapshotted
 deterministic pipeline).
+
+**Plus one-time tier-4 seed review** (`gen_seed_review.jac`, fresh build
+only, Fable): one call per scraped candidate surviving the `jac check -p`
+parse gate. Unmeasured until `seed_scrape.jac` actually runs and reports a
+candidate count — cannot be estimated in advance the way generation calls
+can, since it depends on how many `.jac` files the scraped repo list
+contains and what fraction parse cleanly. Budget this as an open line
+item, not a fixed number, until the pilot reports it (`datagen/spec.md`
+§0.1 flags the same uncertainty on the supply side).
 
 Recommended sequencing to control spend: run the pilot (step 3 of
 `../spec.md` §8 rollout, ~20-30 examples per category, both models) first,
