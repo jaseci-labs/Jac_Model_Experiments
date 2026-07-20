@@ -1,0 +1,15 @@
+{
+  "captured_at": "2026-06-10",
+  "platform": "Linux x86_64",
+  "note": "Measured by capture.jac via bench.jac",
+  "jac": {
+    "avg": 670.872378,
+    "max": 867.728623,
+    "frames": 5367
+  },
+  "zig": {
+    "avg": 662.70829,
+    "max": 835.031966,
+    "frames": 5302
+  }
+}
