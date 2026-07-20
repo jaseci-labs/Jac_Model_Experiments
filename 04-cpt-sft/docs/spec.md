@@ -68,28 +68,47 @@ pipeline (left untouched):
 
 ```
 model-experiments/01-sft-dpo/sft_dpo/jacgen2/
-  seed_pool.jac          # shared seed corpus builder (all code-bearing categories)
-  llm.jac                # shared by-llm() wrapper functions, dual-model (Opus + Fable, see §4.1)
+  seed_pool.jac          # shared seed corpus builder; pins expected_output per seed; frozen+hashed after fresh build
+  llm.jac                # by-llm() wrappers, dual-model (Opus + Fable, §4.1) — pinned snapshot IDs, retry/backoff, per-call exception capture, spend cap
+  gate.jac               # run_jac_project(files) multi-file gate extension + make_sft_example_v2 + category-aware extract_payload
   gen_code_gen.jac
-  gen_debug.jac
+  gen_debug.jac           # also emits raw_output/debug/buggy_variants.jsonl (interface for gen_dpo + gen_trajectory)
   gen_explanation.jac
   gen_trajectory.jac
   gen_documentation.jac
   gen_migration.jac
   gen_dpo.jac             # see dpo-plan.md
-  build_manifest_v2.jac
+  holdout_v2.jac          # carves per-category eval holdouts from the fresh build (fixed thereafter)
+  build_manifest_v2.jac   # excludes holdout ids for BOTH run-tags
   dataset_stats_v2.jac
-  decontam_v2.jac         # thin wrapper: reuses jacgen/decontam.jac against jacgen2 output paths
+  decontam_v2.jac         # per-category content extractors feeding jacgen/decontam.jac's shingle machinery
 ```
 
-`jacgen2` **imports** `jacgen/writer.jac` (the `jac run` compiler+behavioral
-gate, `make_sft_example`, `append_jsonl`), `jacgen/dedup.jac`, and
-`jacgen/decontam.jac` directly rather than forking them — one gate
-implementation, no drift between the conversion pipeline and this one.
+Reuse from `jacgen/` is deliberately narrow — audit-verified: only
+`writer.jac`'s `run_jac` + `append_jsonl` and `decontam.jac`'s generic
+shingle machinery survive contact with the new categories. `writer.jac`'s
+`make_sft_example` hardcodes the conversion prompt and old schema, and
+`extract_jac`/`dedup.jac` assume `messages[1]` is a single assistant turn
+with a jac fence — wrong for trajectories and prose categories. Hence
+`gate.jac`'s v2 builders rather than a broader import claim.
+`decontam_v2.jac` is **not** a path-only wrapper: `decontam.jac`'s
+extractor only understands ```` ```python ```` fences and would silently
+pass everything Jac or prose (a clean audit that checked nothing); v2
+supplies per-category extractors (jac fence / instruction text / doc chunk)
+into the same shingle + overlap machinery.
 
 All new tooling is Jac, matching the existing `jacgen/` convention (see
 `model-experiments/01-sft-dpo/sft_dpo/jacgen/README.md`). LLM-backed generation uses Jac's
 native `by llm()` function-body delegation, not hand-rolled HTTP calls.
+There is no in-repo precedent for `by llm()` at ~25-30k batch calls
+(existing jacgen used agentic sessions + a deterministic transpiler), so
+`llm.jac`'s contract is explicit: retry with exponential backoff per call,
+per-call exception capture routed to `rejected/` with reason (one 429 must
+not kill a batch), periodic output flush, a per-generator call-budget
+kill-switch, per-batch token-usage logging, and pinned snapshot IDs
+recorded into every example's `generator_model_id`. The Anthropic Message
+Batches API is the preferred transport for the Opus bulk tier (purpose-built
+for this shape, ~half the cost).
 
 ### 4.1 Model assignment per generator
 
@@ -99,8 +118,8 @@ generation prone to subtle errors goes to Fable:
 
 | Generator | Model | Why |
 |---|---|---|
-| `gen_code_gen.jac` | Opus | highest example volume (~5,000, 40% of dataset), one call per example, mostly mechanical reverse-instruction writing off a known-good seed |
-| `gen_trajectory.jac` | Opus | highest per-example token volume by design (up to 6 turns/calls per example, §5 of `datagen/spec.md`) |
+| `gen_code_gen.jac` | Opus | highest example volume (~4,500, 36% of dataset), one call per example-variant, mostly mechanical reverse-instruction writing off a known-good seed |
+| `gen_trajectory.jac` | Opus | highest per-example token volume — one call per example produces the whole 3-6-turn conversation (§5 of `datagen/spec.md`), so calls are few but each is long |
 | `gen_debug.jac` | Fable | precision-critical — injected bug must actually reproduce, symptom description must match the real failure, dual-gate (buggy fails, fixed passes) means a sloppy generation is wasted spend either way |
 | `gen_explanation.jac` | Fable | no compiler gate exists for this category (§7 below) — generation quality is the *only* defense against a hallucinated, ungrounded answer |
 | `gen_dpo.jac` | Fable | preference correctness has to be unambiguous per axis (`dpo-plan.md` §2), especially `auth_security` and `correctness` — a subtly-wrong "chosen" side poisons the pair |
@@ -118,8 +137,13 @@ level, not left to each generator script to remember.
 
 ## 5. Run-tag isolation
 
-Every invocation of every `jacgen2` module reads `RUN_TAG` from the
-environment (`fresh` | `post_cptv2`). All output paths are tag-scoped:
+Every invocation of every `jacgen2` module reads `JAC_RUN_TAG` from the
+environment (`fresh` | `post_cptv2`) — `JAC_` prefix matching the existing
+jacgen env-var convention, and **no default**: modules hard-fail at entry
+if it's unset or not one of the two values (a defaulted tag would silently
+write one build's data into the other's tree). Like the existing modules,
+jacgen2 uses repo-root-relative paths — run everything from the repo root.
+All output paths are tag-scoped:
 
 ```
 model-experiments/04-cpt-sft/dataset/<RUN_TAG>/raw_output/<category>/
@@ -139,7 +163,12 @@ policy — same reasoning: large generated artifacts, regenerable from the
 The non-LLM part of seeding (which jac-mcp examples and doc chunks get
 pulled) stays identical across both builds — see `workflow.md` §confound
 mitigation for why. Only the LLM-authored content (instructions, bugs, quiz
-answers, trajectories) is regenerated per run.
+answers, trajectories) is regenerated per run. The pool is **frozen after
+the `fresh` build** (its sources ship inside the jaclang package and drift
+with `jac` upgrades): sha256 recorded at freeze, verified — not
+regenerated — at `post_cptv2` build time. The conversion slice gets the
+same snapshot-and-hash treatment (`datagen/workflow.md` §2), since its
+upstream lives in gitignored, single-copy, truncatable files.
 
 ## 6. Metadata schema
 
@@ -153,9 +182,12 @@ field:
   "task_type": "string",
   "complexity": "simple | medium | hard",
   "compiler_pass": true,
-  "test_pass": true,
+  "test_pass": "true | false | null (null = gate class has no behavioral check, see §7)",
   "manually_reviewed": false,
   "generator": "opus-api | fable-api",
+  "generator_model_id": "exact dated snapshot ID — pinned, asserted equal across run-tags",
+  "gate_class": "behavioral | compile_only | compile_project | prose_lexical",
+  "variant_idx": "int — fan-out index within (seed_id, task_type), see datagen/spec.md §0",
   "generation_date": "timestamp",
   "source_prompt_version": "prompt-category-vN",
   "context_bundle_version": "jac-context-vN",
@@ -179,41 +211,62 @@ that are synthesized directly from a doc chunk without a code seed).
 
 ## 7. Validation & gating policy
 
-Non-negotiable, inherited from `jacgen/`'s existing rule: **never gate on
-`jac check`** — it over-rejects untyped-but-runnable Jac. Always gate on
-`jac run` (compiler pass + behavioral pass across distinct test cases).
+Non-negotiable, inherited from `jacgen/`'s existing rule: **never gate
+generated output on `jac check`** — it over-rejects untyped-but-runnable
+Jac. One narrow, audit-driven exception exists (migration input warning
+detection, below): `jac check`/`lint_jac` may be used to *detect
+deprecation warnings on an input*, never to reject generated code.
+
+### Gate classes
+
+Not every task type can be behaviorally gated — the audit confirmed
+`writer.jac`'s `run_jac` is single-file (one snippet in a bare tempdir, no
+`jac.toml`, no client build), and several failure modes (auth leaks,
+client re-render bugs) are unobservable in a single process. Every example
+carries its `gate_class` in metadata (§6) so downstream consumers know what
+was actually verified:
+
+| Gate class | What it verifies | Applies to |
+|---|---|---|
+| `behavioral` | `jac run` exit 0 **plus** output matches the seed's pinned `expected_output` (recorded at seed-pool build time — nothing else populates expected outputs for doc-fence seeds); "≥2 distinct inputs" applies only to seeds that are pure functions | single-file `code_gen`, `debug` (most bug types), `trajectory` final turn, `migration`, `conversion` |
+| `compile_project` | `run_jac_project(files)` (the `gate.jac` extension): multi-file program compiles+runs together in a scaffolded project dir | `hard`-tier multi-file examples, `cross_boundary_debug`, fullstack/client-touching seeds |
+| `compile_only` | compiles but no behavioral assertion (seed has no runnable entry, or failure mode unobservable in-process) | client-component snippets, `auth_leak` + `stale_client_state` debug rows (plus a Fable critique pass confirming the bug is real), `by llm()`-bearing seeds (never executed in the gate — live API calls inside a gate are nondeterministic spend) |
+| `prose_lexical` | mechanical lexical check, no compiler | `explanation` (groundedness: chunk-term overlap, threshold calibrated on pilot), `documentation` (backticked-symbol existence), `error_message_authoring`, `code_critique` |
+
+### Per-category summary
 
 | Category | Gate |
 |---|---|
-| `code_gen` | Generated Jac must `jac run` clean and produce output matching the instruction's implied spec across ≥2 distinct inputs where applicable. |
-| `debug` | The *buggy* variant must actually fail (`jac run` non-zero, or wrong output vs the seed's known-good output). The *fixed* variant (== original seed, or an LLM-repaired equivalent) must pass. Reject pairs where the "bug" doesn't reproduce. |
-| `explanation` | No compiler applicable. Gate is a lexical groundedness check: answer must reference terms/entities present in the source doc chunk (reject hallucinated answers that don't cite anything from the chunk). Sample manually reviewed. |
-| `conversion` | Unchanged — existing `jacgen/` gate (transpile + `jac run` behavioral check). |
-| `trajectory` | Final turn's code must `jac run` clean. Intermediate turns (the deliberately-broken ones) are not gated — they're supposed to show a plausible error. |
-| `documentation` | No compiler applicable. Lexical symbol-existence check: every symbol the doc references (functions, params, fields, routes) must exist in the seed code. Sample manually reviewed. |
-| `migration` | Migrated file must pass `jac run`; the deprecated original must fail or emit deprecation warnings. Pairs where the original passes silently are rejected (nothing was migrated). |
+| `code_gen` | `behavioral` (single-file) or `compile_project` (`hard` tier); design-and-prose types per their §1.1 rows. |
+| `debug` | Dual-gate: buggy variant must fail (`jac run` non-zero or output ≠ pinned `expected_output`), fixed variant must pass. Reject pairs where the bug doesn't reproduce. `auth_leak`/`stale_client_state` rows: `compile_only` + critique (failure unobservable in-process — flagged `test_pass: null`). |
+| `explanation` | `prose_lexical` groundedness. Sample manually reviewed. |
+| `conversion` | Unchanged — existing `jacgen/` gate (transpile + `jac run` behavioral check), consumed via snapshot. |
+| `trajectory` | Final turn `behavioral`/`compile_project`; intermediate turns deliberately ungated (they're supposed to show a plausible error). |
+| `documentation` | `prose_lexical` symbol-existence. Sample manually reviewed. |
+| `migration` | Migrated file passes `jac run`. Deprecated original must fail `jac run` **or** produce a deprecation warning under `jac check`/`lint_jac` (the narrow exception — `jac run` emits no deprecation warnings, verified against jaclang 0.16.1). Pairs where the original passes silently with no check-warning are rejected. |
 
-Task-type-level gate exceptions within a category (`error_message_authoring`,
-`code_critique`) are specified where the task types are defined —
-`datagen/spec.md` §1.1 and §2.1.
+### Dedup + decontamination
 
-All categories run through `jacgen/dedup.jac` (ROUGE-L near-duplicate guard)
-and `jacgen/decontam.jac` (14-token shingle overlap ≥0.5) against the
-existing eval holdouts (`model-experiments/01-sft-dpo/dataset/eval_holdout/`) before landing in
-`clean_dataset/`.
+All categories run through the **scaled** dedup policy (`datagen/spec.md`
+§0.4: exact-hash first, bucketed near-dup, instruction+code jointly,
+same-seed exemption — not `dedup.jac`'s raw O(n²) pairwise pass, which has
+never run above n≈147) and through `decontam_v2.jac`'s per-category
+extractors feeding the 14-token-shingle ≥0.5 overlap machinery, against
+the existing eval holdouts (`model-experiments/01-sft-dpo/dataset/eval_holdout/`) **plus the
+new `holdout_v2.jac` slices**, before landing in `clean_dataset/`.
 
 ## 8. Rollout plan
 
 1. Write `datagen/spec.md` task catalog (this phase, done alongside this spec).
-2. Build `seed_pool.jac`, `llm.jac`, and one generator (`gen_code_gen.jac`) end to end.
-3. Pilot: ~20-30 examples for `code_gen` only, manually inspect actual `jac run` output — not a claim, an actual run and read.
-4. Once pilot quality confirmed, build remaining generators (`gen_debug`, `gen_explanation`, `gen_trajectory`, `gen_documentation`, `gen_migration`) + `gen_dpo` (per `dpo-plan.md`).
+2. Pin Opus/Fable snapshot IDs in `llm.jac`. Build `seed_pool.jac` (with per-seed `expected_output` pinning and the deprecated-pattern inventory — the inventory's size decides `migration`'s real target, `datagen/spec.md` §7), `gate.jac`, and one generator (`gen_code_gen.jac`) end to end.
+3. Pilot: ~20-30 examples for `code_gen` only, manually inspect actual `jac run` output — not a claim, an actual run and read. Measure seed fan-out yield and per-example token cost; calibrate the `prose_lexical` thresholds here.
+4. Once pilot quality confirmed, build remaining generators (`gen_debug`, `gen_explanation`, `gen_trajectory`, `gen_documentation`, `gen_migration`) + `gen_dpo` (per `dpo-plan.md`). `gen_debug` before `gen_trajectory`/`gen_dpo` — both consume its `buggy_variants.jsonl`.
 5. Pilot each new generator the same way before scaling.
-6. Full `RUN_TAG=fresh` generation to 10,000-15,000 target, per `datagen/spec.md` weights.
-7. `dataset_stats_v2.jac` composition report + `decontam_v2.jac` audit on the `fresh` release.
-8. Park. `RUN_TAG=post_cptv2` waits for CPT v2 training to complete (outside this phase's scope).
-9. When CPT v2 lands: re-run steps 6-7 with `RUN_TAG=post_cptv2`.
-10. Proceed to `workflow.md`'s two-test SFT comparison.
+6. Full `JAC_RUN_TAG=fresh` generation to the 10,000-15,000 target — or the honest lower number the pilot's fan-out measurement supports (`datagen/spec.md` §0).
+7. Snapshot the conversion slice + freeze/hash `seed_pool.jsonl`. Carve holdouts (`holdout_v2.jac`). `dataset_stats_v2.jac` composition report + `decontam_v2.jac` audit on the `fresh` release.
+8. Park. `JAC_RUN_TAG=post_cptv2` waits for CPT v2 training to complete (outside this phase's scope).
+9. When CPT v2 lands: verify snapshot-ID pins and pool/slice hashes still hold, then re-run step 6 + the stats/decontam audit with `JAC_RUN_TAG=post_cptv2` (holdouts are NOT re-carved — the fresh-build slices score both datasets' training runs).
+10. Proceed to `workflow.md`'s SFT comparison.
 
 ## 9. Out of scope for this phase
 

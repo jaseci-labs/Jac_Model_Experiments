@@ -8,8 +8,12 @@ as the SFT dataset (two independent builds, `fresh` and `post_cptv2`).
 
 Existing precedent: `model-experiments/01-sft-dpo/sft_dpo/jacgen/dpo_conversion.jac` already
 builds one axis of this (idiomatic-chosen vs Python-shaped-rejected, for
-`conversion` only, 147 pairs). This plan generalizes that pattern across all
-5 SFT categories and adds four more preference axes beyond idiomatic-vs-not.
+`conversion` only, 147 pairs). This plan generalizes that pattern across the
+full 7-category SFT catalog and adds four more preference axes beyond
+idiomatic-vs-not. Three of the five axes (§2.3-2.5) are assembled from
+`gen_debug`'s persisted `raw_output/debug/buggy_variants.jsonl` rather than
+fresh generation — `gen_dpo` therefore runs **after** `gen_debug`
+(`datagen/workflow.md` §2 partial order).
 
 ## 1. Why more than one axis
 
@@ -60,8 +64,9 @@ correct tool. Sourced from `node_edge_definition`, `walker_traversal`,
 - **chosen**: code that passes the `jac run` behavioral gate across all test
   cases.
 - **rejected**: code that looks plausible, may even compile, but fails a
-  held-out test case — sourced directly from `debug` category's buggy
-  variants (`datagen/spec.md` §2) before they're paired with their fix. This
+  held-out test case — sourced directly from
+  `raw_output/debug/buggy_variants.jsonl` (`datagen/spec.md` §2's declared
+  interface: buggy code + bug_type + seed_id, persisted pre-pairing). This
   reuses `debug` generation output rather than requiring separate
   generation — the buggy variant already exists; pairing it against its own
   clean seed as `rejected`/`chosen` is close to free.
@@ -79,6 +84,11 @@ correct tool. Sourced from `node_edge_definition`, `walker_traversal`,
   non-leaky, and leaky-but-otherwise-correct code is exactly the case 2.3
   alone wouldn't catch (the leaky variant may pass every functional test
   case while still being wrong).
+- **Gate caveat**: the leak is not behaviorally observable in a
+  single-process `jac run` (`../spec.md` §7 gate classes) — both sides of
+  these pairs are gated `compile_only` + a Fable critique confirming the
+  rejected side actually leaks (missing `def:priv`, missing per-user
+  filter, or a plain auto-registered `def`). Flagged in pair metadata.
 
 ### 2.5 Typed vs loosely-typed (10%)
 
@@ -118,8 +128,9 @@ share). Split per §2's weights: idiomatic 40% (~1,000), graph-native 15%
 
 ## 5. Gating
 
-Every `chosen` example must independently pass the same `jac run` gate as
-its SFT counterpart (§7 of `../spec.md`). `rejected` examples do **not**
+Every `chosen` example must independently pass the same gate class as
+its SFT counterpart (§7 of `../spec.md` — `behavioral` where observable,
+`compile_only`+critique for the 2.4 auth axis). `rejected` examples do **not**
 need to fail compilation — most of these axes (2.1, 2.2, 2.4, 2.5) pair a
 compiling-but-wrong-in-a-specific-way rejected side against a correct chosen
 side; only 2.3 by definition pairs a behaviorally-failing rejected side.
