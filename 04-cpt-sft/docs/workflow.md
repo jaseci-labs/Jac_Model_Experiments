@@ -1,10 +1,21 @@
-# workflow.md — Two-Test CPT-Effect Protocol
+# workflow.md — Three-Arm CPT-Effect Protocol
 
 Root workflow. Companion to `spec.md` (umbrella design), `datagen/spec.md`
 + `datagen/workflow.md` (how the two datasets get built), `dpo-plan.md`
 (the DPO half of each dataset). This file covers what happens **after**
-both the `fresh` and `post_cptv2` datasets exist: two SFT training runs and
-the comparison that answers "did CPT v2 actually do anything."
+both the `fresh` and `post_cptv2` datasets exist: three SFT training arms,
+a no-training incumbent reference, and the comparison that answers "did CPT
+v2 actually do anything."
+
+> Revision note (2026-07-20 audit): originally a two-test protocol. An
+> experiment-design audit found that with two independently generated
+> datasets, the A-vs-B delta confounds CPT effect with dataset-generation
+> noise — the two variables change together. Rather than dropping the
+> second dataset (a deliberate design choice: each build is a full,
+> self-contained product of its era's pipeline), the protocol adds **Arm C**
+> (pre-CPT base × `post_cptv2` dataset), which decomposes the delta into a
+> dataset-noise component and a CPT component. Cost: one extra overnight
+> LoRA SFT run + one eval pass — cheap next to the generation budget.
 
 ## 1. Why this is the right instrument
 
@@ -13,8 +24,7 @@ but left MCQ concept-recognition completely unmoved (18/20 byte-identical
 before/after) — the diagnosis was partly an *instrument* problem: MCQ can't
 see a shift in generation capability. SFT-then-eval on a real coding task
 distribution is a better instrument for exactly the capability CPT is
-supposed to move: can the model *write* correct, idiomatic Jac. This
-workflow is that instrument, run twice.
+supposed to move: can the model *write* correct, idiomatic Jac.
 
 ## 2. Overall flow
 
@@ -26,131 +36,175 @@ flowchart TD
         postdata["post_cptv2 SFT+DPO dataset<br/>(build after CPT v2 lands)"]
     end
 
-    subgraph testA["Test A: SFT-over-fresh"]
-        baseA[current pre-CPT-v2 base model]
-        sftA[SFT-train on fresh dataset]
-        evalA[eval battery]
-        baseA --> sftA
-        freshdata --> sftA
-        sftA --> evalA
+    baseOld[pre-CPT-v2 base checkpoint]
+    baseNew[CPT-v2-trained checkpoint]
+    incumbent[incumbent: existing conversion-only<br/>SFT model from 01-sft-dpo<br/>no training needed]
+
+    subgraph armA["Arm A: pre-CPT base × fresh"]
+        sftA[SFT+DPO train] --> evalA[eval battery]
+    end
+    subgraph armC["Arm C: pre-CPT base × post_cptv2"]
+        sftC[SFT+DPO train] --> evalC[eval battery]
+    end
+    subgraph armB["Arm B: CPT-v2 base × post_cptv2"]
+        sftB[SFT+DPO train] --> evalB[eval battery]
     end
 
-    subgraph testB["Test B: SFT-over-post-CPTv2"]
-        baseB[CPT-v2-trained base model]
-        sftB[SFT-train on post_cptv2 dataset]
-        evalB[eval battery]
-        cptv2train --> baseB
-        baseB --> sftB
-        postdata --> sftB
-        sftB --> evalB
-    end
+    baseOld --> sftA
+    freshdata --> sftA
+    baseOld --> sftC
+    postdata --> sftC
+    cptv2train --> baseNew
+    baseNew --> sftB
+    postdata --> sftB
+    incumbent --> evalI[eval battery<br/>applicable rows only]
 
-    freshdata -.can start now, independent of CPT v2.-> testA
-    cptv2train --> postdata
-    postdata --> testB
-
-    evalA --> compare[comparison + decision]
+    evalA --> compare[decomposition + decision]
     evalB --> compare
+    evalC --> compare
+    evalI --> compare
     diffreport[dataset_stats_v2.jac<br/>fresh vs post_cptv2 composition diff] --> compare
 ```
 
-`Test A` has no dependency on CPT v2 landing — it can and should run as soon
-as the `fresh` dataset (§rollout in `spec.md`) is built. `Test B` is blocked
-on CPT v2 training completing, which is out of this phase's scope
-(`model-experiments/03-cpt-only/`'s responsibility).
+Arm A has no dependency on CPT v2 landing — it runs as soon as the `fresh`
+dataset (`spec.md` §8 rollout) is built. Arms B and C are blocked on the
+`post_cptv2` dataset, which is blocked on CPT v2 training
+(`model-experiments/03-cpt-only/`'s responsibility, out of this phase's scope).
 
-## 3. Test A — SFT over fresh (no CPT)
+## 3. The four measurement points
 
-**Purpose**: establish the baseline. What does full 5-category SFT (the
-thing that was never actually built past the conversion probe) get you on
-top of the *current*, non-CPT'd base model.
+| Arm | Base | Dataset | What it isolates |
+|---|---|---|---|
+| **Incumbent** | (already trained) `01-sft-dpo` conversion-only SFT checkpoint | 588-example manifest (historical) | reference floor — no training needed, just run the applicable eval rows. Without this, "B beat A" could hold while both lose to the cheap old model, and nobody would know |
+| **A** | pre-CPT-v2 | `fresh` | what full 7-category SFT delivers on the current base |
+| **C** | pre-CPT-v2 | `post_cptv2` | **C − A = dataset-generation noise** at fixed base — the confound, measured directly |
+| **B** | CPT-v2 | `post_cptv2` | **B − C = CPT-v2 effect** at fixed dataset — the treatment, cleanly attributed |
 
-1. Base model: current pre-CPT-v2 checkpoint (whatever `model-experiments/03-cpt-only/` currently
-   treats as its base — not the CPT-v1 checkpoint, the pre-CPT-v2 one, so
-   Test B's comparison isolates CPT-v2 specifically).
-2. Train: SFT on `model-experiments/04-cpt-sft/dataset/fresh/releases/sft_train.jsonl`, DPO
-   pass on `dpo_train.jsonl` (same `mlx-lm-lora` toolchain as `model-experiments/01-sft-dpo`'s
-   existing runs — reuse `build_splits.jac`/`build_dpo_splits.jac` patterns).
-3. Eval battery (§5).
-4. Record: full eval battery results, tagged `run=A_fresh`.
+All SFT arms use the identical training recipe and hyperparameters
+(`mlx-lm-lora` toolchain, `build_splits.jac`/`build_dpo_splits.jac`
+patterns from `01-sft-dpo`). Base model for A and C is the pre-CPT-v2
+checkpoint (not the CPT-v1 one), so B's comparison isolates CPT-v2
+specifically. Record results tagged `run=A_fresh`, `run=C_cross`,
+`run=B_post_cptv2`, `run=incumbent`.
 
-## 4. Test B — SFT over post-CPT-v2
+**Seed repeats:** each SFT arm is run 2-3 times varying only the training
+seed/data order. The spread across repeats is the empirical training-noise
+σ per eval row — the yardstick every delta gets measured against. Without
+it, single-run deltas are indistinguishable from LoRA training
+stochasticity. (2-3 overnight runs per arm on the M5 Pro; report the
+mean ± spread per row.)
 
-**Purpose**: same SFT recipe, same task distribution, applied to a base
-model that's gone through CPT v2. If CPT v2's hypothesis (corpus dilution +
-better instrument, per `model-experiments/03-cpt-only/docs/cpt-2/design.md` §1) is right, this run
-should show measurably better eval results than Test A, on the *same* eval
-battery.
+## 4. Generator-version pinning (required before any generation)
 
-1. Base model: CPT-v2-trained checkpoint.
-2. Train: SFT on `model-experiments/04-cpt-sft/dataset/post_cptv2/releases/sft_train.jsonl`,
-   DPO on its `dpo_train.jsonl`. Identical training recipe/hyperparameters
-   to Test A — the only intended variable is the base model checkpoint (the
-   dataset *content* is a secondary, acknowledged variable — see §6).
-3. Eval battery (§5), identical to Test A.
-4. Record: full eval battery results, tagged `run=B_post_cptv2`.
+The `fresh` and `post_cptv2` builds may be months apart. If the Opus/Fable
+API snapshots change in between, dataset quality drifts systematically —
+invisible to the composition diff and perfectly collinear with the CPT
+treatment. Therefore:
 
-## 5. Eval battery (identical for both tests)
+1. `llm.jac`'s wrappers pin **exact dated snapshot IDs**, not family
+   aliases. The IDs are recorded in `seed_pool.jsonl`'s header and in every
+   example's `generator_model_id` metadata field (`spec.md` §6).
+2. At `post_cptv2` build time, the pipeline asserts snapshot IDs match the
+   `fresh` build's and hard-fails on mismatch.
+3. If a pinned snapshot has been deprecated by then, that is a forced
+   protocol change: either fall back to training Arms B and C on the
+   `fresh` dataset (single-dataset design — attribution survives, the
+   second build is dropped) or accept and *report* the drift as a named
+   confound. Decide then; the rule is pre-registered now so it isn't
+   decided after seeing results.
+4. The same pinning applies to any LLM grader used at eval time (§5).
 
-Reuses existing instrumentation rather than inventing new eval:
+## 5. Eval battery (identical rows for every arm)
 
-| Eval | Source | What it measures |
+Reuses existing instrumentation rather than inventing new eval. Rows are
+split into two panels — only Panel 1 votes in the capability decision (§6);
+Panel 2 is reported but excluded from the vote because CPT-v2 trained
+directly on the text those rows are generated from (3x-upsampled docs per
+`03-cpt-only/docs/cpt-2/design.md` §2), making them measures of doc
+memorization, not downstream capability.
+
+**Panel 1 — capability (votes):**
+
+| Eval | Source | Notes |
 |---|---|---|
-| Function-holdout `jac run` pass rate | `model-experiments/01-sft-dpo/sft_dpo/jacgen/eval_probe.jac` (`mlx` mode) | basic run%/test-pass% on 150-example function holdout |
-| Graph-holdout `jac run` pass rate | `graph_holdout.jac`'s 13-example disjoint set | walker/node/edge-specific correctness |
-| Idiom-quality judge | `idiom_eval.jac`'s ROUGE-L(output, py2jac(python)) bucketing | idiomatic-divergent vs Python-shaped, per output |
-| `code_gen`/`debug`/`trajectory`/`migration` holdout pass rate | new holdout slices carved from `model-experiments/04-cpt-sft` generation (never seen during SFT training — same disjoint-offset pattern as `holdout.jac`) | the categories that never existed before this phase |
-| `documentation` holdout accuracy | held-out code→docs examples, graded by the same symbol-existence check + sample manual review | doc-articulation quality — whether the model can describe Jac code without inventing symbols |
-| `explanation` holdout accuracy | held-out docs-quiz Q&A, graded by groundedness + correctness | whether SFT + CPT improved doc-grounded reasoning, not just code output |
-| CPT-v2's own open-ended-vs-oracle eval | `model-experiments/03-cpt-only/docs/cpt-2/design.md`'s open-ended generation compared against a jac-gpt-oracle, per that doc's §1 instrument-mismatch hypothesis | cross-check against CPT-v2's own success criteria, run post-SFT instead of post-CPT-only |
+| Function-holdout `jac run` pass rate | `eval_probe.jac` (`mlx` mode), 150-example holdout | clean: Vezora-mined Python, disjoint from all Jac docs |
+| Graph-holdout `jac run` pass rate | `graph_holdout.jac` set, **grown from 13 to ≥100 items** before any arm runs (13 items resolve nothing below a ~30pp swing — one item = 7.7pp) | walker/node/edge correctness — the idiom-headroom tier |
+| Idiom-quality judge | `idiom_eval.jac` ROUGE-L(output, py2jac(python)) bucketing | arm-neutral because the conversion slice is snapshot-shared between builds (`datagen/workflow.md` §2) |
+| `code_gen`/`debug`/`trajectory`/`migration` holdout pass rate | `holdout_v2.jac` slices (see holdout rules below), **≥100 items per category** | jac-mcp-example-seeded items only in the voting slice; doc-fence-seeded items reported as a separate sub-slice (partial contamination — doc fences are inside the CPT corpus) |
+| `documentation` holdout accuracy | held-out code→docs examples, symbol-existence check + blind sample review | code seeds only; doc-fence-seeded items excluded from the vote same as above |
 
-Running CPT-v2's own eval instrument *after* SFT (not just right after CPT)
-is deliberate — it directly tests whether CPT's effect, if any, survives
-and compounds through a subsequent SFT pass, which is the actually-relevant
-question (nobody ships a CPT-only model).
+**Panel 2 — doc-knowledge absorption (reported, does not vote):**
 
-## 6. Comparison protocol + confound mitigation
+| Eval | Why it can't vote |
+|---|---|
+| `explanation` holdout accuracy | quiz Q&A generated *from* the same doc text CPT-v2 trained on, 3x upsampled — guaranteed to favor Arm B if CPT memorized anything; a legitimate measure of "docs got into the weights," not of capability |
+| CPT-v2's own open-ended-vs-oracle eval | its questions are deliberately grounded in the packed v2 corpus (design.md §6.1) — same contamination, imported |
 
-Primary comparison: `eval_battery(B_post_cptv2) − eval_battery(A_fresh)`,
-per metric in §5.
+Running CPT-v2's own instrument after SFT remains deliberate — it tests
+whether CPT's doc absorption survives an SFT pass — it just doesn't count
+as an independent capability vote.
 
-Acknowledged confound: `fresh` and `post_cptv2` are independently
-LLM-generated datasets (per `spec.md` §3, deliberately not the same content
-reused twice), so some of any observed delta could be generation-run noise
-rather than a real CPT effect. Two mitigations, both already built into
-`datagen/spec.md`/`datagen/workflow.md`:
+**Holdout rules** (enforced by `holdout_v2.jac`, in the `jacgen2` module
+list — `spec.md` §4):
 
-1. **Shared, non-run-tag-scoped `seed_pool.jsonl`** (`../spec.md` §5) — the
-   actual code seeds and doc chunks driving both builds are identical; only
-   the LLM-authored instructions/bugs/quiz-answers/trajectories vary between
-   builds. This bounds how much the two datasets can differ in *coverage*,
-   even though their *content* differs.
-2. **`dataset_stats_v2.jac` diff report** (`datagen/workflow.md` §4) —
-   before trusting any eval delta as a CPT signal, confirm the two datasets
-   are compositionally similar (task_type distribution, per-category counts,
-   rejection rates). If they diverge significantly, that divergence itself
-   is a confound to report alongside the eval delta, not a reason to discard
-   the comparison — just a reason to caveat it.
+- Carved **once, from the `fresh` build only**, fixed thereafter, and used
+  unchanged to score every arm — never re-carved per run-tag (per-tag
+  holdouts would score A and B on different tests, invalidating §6
+  outright). Carving from one tag slightly favors the arms trained on that
+  tag's sibling examples; carving from `fresh` puts that (small,
+  distribution-level) advantage on the *null* side — it biases against
+  finding a CPT effect, which is the conservative direction.
+- Holdout `id`s are excluded from `releases/sft_train.jsonl` by
+  `build_manifest_v2.jac` for **both** tags, and appended to
+  `decontam_v2.jac`'s reference list — "never seen during training" is
+  enforced, not assumed.
+- Every holdout item carries its `seed_id` provenance so the
+  doc-fence/jac-mcp-example split above is mechanical.
+- The two prose rows (`documentation`, `explanation`) are graded by a
+  pinned-snapshot LLM judge, blind: order-randomized, arm-anonymized
+  (design.md §6.3 already established this pattern for CPT-v2).
 
-Decision rule: treat CPT v2 as having a measurable effect only if
-`B_post_cptv2` outperforms `A_fresh` on a **majority of §5's eval rows**, by
-a margin exceeding whatever noise floor the dataset-composition diff report
-suggests (e.g. if code_gen pass-rate is the only metric that moved and the
-diff report shows code_gen was also the category with the largest
-composition drift between the two builds, that's inconclusive, not
-confirming). A single-metric win is not sufficient given the confound —
-this mirrors CPT-v1's own lesson (`model-experiments/03-cpt-only/docs/cpt-2/design.md`'s MCQ result
-was a single-metric false-negative; guard against the mirror-image
-single-metric false-positive here).
+## 6. Decision rule (pre-registered)
+
+Per Panel-1 row, compute the paired delta over identical holdout items
+(McNemar / paired bootstrap over items — every arm answers the same items,
+so pair them; pairing roughly halves the detectable-effect threshold vs
+comparing marginal rates). A row is a **win for CPT** if `B − C > 0` with
+the paired test clearing both (a) 95% significance and (b) the
+training-noise σ from §3's seed repeats.
+
+- **CPT-v2 has a real effect** ⇔ a majority of Panel-1 rows are
+  individually significant wins for `B − C`.
+- `C − A` per row is reported alongside as the measured dataset-noise
+  component. If `C − A` is comparable in magnitude to `B − C`, say so
+  loudly — that's the two-dataset confound made visible, and it caps how
+  much any B-vs-A headline number can be trusted.
+- The `dataset_stats_v2.jac` composition diff (`datagen/workflow.md` §4)
+  remains a sanity gate: large composition drift between builds is
+  reported as a named caveat on the C-arm interpretation.
+- The incumbent column answers a separate, mandatory question: does Arm A
+  beat the 588-example conversion-only incumbent on the three legacy rows
+  (function holdout, graph holdout, idiom_eval)? If not, the 7-category
+  dataset diluted conversion skill and the project's next move changes
+  regardless of what CPT did. New-category rows don't apply to the
+  incumbent; report them as N/A.
+
+A single-metric win is not sufficient — this mirrors CPT-v1's own lesson
+(the MCQ result was a single-metric false-negative; guard against the
+mirror-image single-metric false-positive here).
 
 ## 7. Sequencing against `model-experiments/03-cpt-only/`
 
-This phase does not block on or gate CPT v2 training. Recommended real-world
-order:
+This phase does not block on or gate CPT v2 training. Recommended order:
 
-1. Build `fresh` dataset now (`spec.md` rollout steps 1-7).
-2. Run Test A now, independent of CPT v2's timeline. This alone delivers
-   value regardless of CPT v2's outcome — it's the first time the full
-   5-category SFT plan will have actually been executed.
-3. When `model-experiments/03-cpt-only/` finishes CPT v2 training: build `post_cptv2` dataset
-   (`spec.md` rollout steps 8-9), run Test B, run the comparison in §6.
+1. Pin generator snapshots (§4). Build `fresh` dataset (`spec.md` §8
+   rollout steps 1-7). Carve holdouts (`holdout_v2.jac`), grow the graph
+   holdout to ≥100.
+2. Run the incumbent eval column (no training — one eval pass).
+3. Run Arm A now (with seed repeats), independent of CPT v2's timeline.
+   This alone delivers value regardless of CPT v2's outcome — it's the
+   first time the full 7-category SFT plan will have actually been
+   executed, and incumbent-vs-A answers the dilution question immediately.
+4. When `model-experiments/03-cpt-only/` finishes CPT v2 training: verify snapshot pins still
+   hold (§4.3), build `post_cptv2` dataset (`spec.md` §8 steps 8-9), run
+   Arms C and B (with seed repeats), run §6.

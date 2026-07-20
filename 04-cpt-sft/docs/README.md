@@ -17,7 +17,7 @@ independent of whatever CPT-v2's own eval says.
 | File | Contents |
 |---|---|
 | [`spec.md`](spec.md) | Umbrella design: what gets built, why, architecture, schema, validation, rollout. Start here. |
-| [`workflow.md`](workflow.md) | The two-test comparison protocol: SFT-over-fresh vs SFT-over-post-CPTv2. How we decide if CPT did anything. |
+| [`workflow.md`](workflow.md) | The three-arm comparison protocol (A: pre-CPT×fresh, C: pre-CPT×post_cptv2, B: CPT×post_cptv2, + incumbent reference). B−C isolates CPT, C−A measures dataset noise. |
 | [`dpo-plan.md`](dpo-plan.md) | DPO preference-pair dataset design: idiomatic-vs-non-idiomatic plus additional preference axes. |
 | [`datagen/spec.md`](datagen/spec.md) | Full SFT task taxonomy — every category, every task type, seed sourcing, generation prompts, gating. The "make the model actually write Jac" detail. |
 | [`datagen/workflow.md`](datagen/workflow.md) | Datagen pipeline mechanics: module graph, run order, mermaid diagrams, run-tag isolation, cost/scale accounting. |
