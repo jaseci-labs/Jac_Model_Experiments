@@ -144,6 +144,10 @@ same as SFT.
 }
 ```
 
+`generator` is `fable-api` for every axis — `gen_dpo.jac` runs entirely on
+Fable per `../spec.md` §4.1 (preference-pair correctness is precision-critical,
+not token-heavy, so it gets the smart model, not the bulk one).
+
 Compatible with `model-experiments/01-sft-dpo/sft_dpo/jacgen/build_dpo_splits.jac`'s
 `{prompt, chosen, rejected}` shape for `mlx-lm-lora` DPO training — that
 splitter can be reused directly against this dataset's release file, no

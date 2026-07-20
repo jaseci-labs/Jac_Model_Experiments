@@ -17,7 +17,8 @@ flowchart TD
 
     subgraph new["jacgen2/ (new)"]
         seedpool[seed_pool.jac]
-        llm[llm.jac<br/>by-llm wrappers, Fable-backed]
+        llmopus[llm.jac: opus wrapper<br/>bulk / token-heavy]
+        llmfable[llm.jac: fable wrapper<br/>precision / error-prone]
         gencg[gen_code_gen.jac]
         gendbg[gen_debug.jac]
         genexp[gen_explanation.jac]
@@ -37,11 +38,11 @@ flowchart TD
     seedpool --> gentraj
     seedpool --> gendpo
 
-    llm --> gencg
-    llm --> gendbg
-    llm --> genexp
-    llm --> gentraj
-    llm --> gendpo
+    llmopus --> gencg
+    llmopus --> gentraj
+    llmfable --> gendbg
+    llmfable --> genexp
+    llmfable --> gendpo
 
     gencg --> writer
     gendbg --> writer
@@ -105,7 +106,7 @@ rows).
 sequenceDiagram
     participant Seed as seed_pool.jsonl
     participant Gen as gen_code_gen.jac
-    participant LLM as llm.jac (Fable, by llm())
+    participant LLM as llm.jac (Opus, by llm())
     participant Gate as writer.jac (jac run)
     participant Dedup as dedup.jac / decontam.jac
     participant Out as clean_dataset/code_gen/
@@ -128,8 +129,10 @@ sequenceDiagram
     end
 ```
 
-`gen_debug.jac` follows the same shape but with two gate calls (buggy variant
-must fail, fixed variant must pass) instead of one. `gen_trajectory.jac`
+`gen_debug.jac`, `gen_explanation.jac`, and `gen_dpo.jac` follow the same
+shape but call the Fable wrapper instead of Opus (`../spec.md` §4.1).
+`gen_debug.jac` has two gate calls (buggy variant must fail, fixed variant
+must pass) instead of one. `gen_trajectory.jac` calls the Opus wrapper and
 gates only the final turn. `gen_explanation.jac` replaces the `jac run` gate
 with the lexical groundedness check described in `../spec.md` §7.
 
@@ -139,8 +142,8 @@ with the lexical groundedness check described in `../spec.md` §7.
 flowchart LR
     seedpool[seed_pool.jsonl<br/>shared, not tagged]
 
-    seedpool --> freshgen[RUN_TAG=fresh<br/>generators + Fable calls]
-    seedpool --> postgen[RUN_TAG=post_cptv2<br/>generators + Fable calls]
+    seedpool --> freshgen[RUN_TAG=fresh<br/>generators + Opus/Fable calls]
+    seedpool --> postgen[RUN_TAG=post_cptv2<br/>generators + Opus/Fable calls]
 
     freshgen --> freshout["model-experiments/04-cpt-sft/dataset/fresh/releases/<br/>sft_train.jsonl, dpo_train.jsonl"]
     postgen --> postout["model-experiments/04-cpt-sft/dataset/post_cptv2/releases/<br/>sft_train.jsonl, dpo_train.jsonl"]
@@ -161,18 +164,29 @@ is more likely attributable to the base model, not the data.
 
 ## 5. Cost / scale accounting
 
-10,000-15,000 examples × 2 independent run-tags = up to ~20,000-30,000 Fable
-generation calls total (roughly 1 call per example for `code_gen`/`debug`/
-`explanation`, up to ~6 calls per `trajectory` example for multi-turn
-unrolling — budget `trajectory` at ~4x its raw example count in call volume).
-`conversion` contributes no LLM calls (reused deterministic pipeline).
+10,000-15,000 examples × 2 independent run-tags, split by model per `../spec.md`
+§4.1:
+
+- **Opus** (`code_gen` + `trajectory`): ~5,000 `code_gen` (1 call/example)
+  + ~1,250 `trajectory` (up to 6 calls/example for multi-turn unrolling,
+  budget at ~4x raw example count in call volume) → roughly 10,000-11,000
+  calls per run-tag, ~20,000-22,000 total across both tags. This is the
+  bulk of total call volume, by design — Opus carries the token-heavy load.
+- **Fable** (`debug` + `explanation` + `gen_dpo`): ~2,000 `debug` + ~1,500
+  `explanation` + ~2,500 DPO pairs (1 call/example each) → roughly 6,000
+  calls per run-tag, ~12,000 total across both tags.
+
+`conversion` contributes no LLM calls at all (reused deterministic
+pipeline).
 
 Recommended sequencing to control spend: run the pilot (§5 of `../spec.md`
-rollout plan, ~20-30 examples per category) first, read `dataset_stats_v2.jac`'s
-token-usage-per-batch log (`model-experiments/04-cpt-sft/dataset/$RUN_TAG/logs/generation/`,
-following the existing `dataset/logs/generation/` convention from
-`jac-context-v1.md`) to get an actual per-example cost, then extrapolate
-before committing to the full 10,000-15,000 run for either tag.
+rollout plan, ~20-30 examples per category, both models) first, read
+`dataset_stats_v2.jac`'s token-usage-per-batch log
+(`model-experiments/04-cpt-sft/dataset/$RUN_TAG/logs/generation/`, following
+the existing `dataset/logs/generation/` convention from `jac-context-v1.md`,
+broken out per model) to get actual per-example cost for Opus and Fable
+separately, then extrapolate before committing to the full 10,000-15,000 run
+for either tag.
 
 ## 6. Idempotency / resumability
 
@@ -180,6 +194,6 @@ Every generator appends rather than overwrites (matching `writer.jac`'s
 `append_jsonl` convention), and every example carries a `seed_id`. A
 generator run can be safely re-invoked after a partial failure (network
 error, rate limit) — it should skip `seed_id`s already present in that
-run-tag's `clean_dataset/<category>/` output before making a fresh Fable
-call. This mirrors the existing `jacgen/verify_dataset.jac` non-destructive
+run-tag's `clean_dataset/<category>/` output before making a fresh Opus or
+Fable call. This mirrors the existing `jacgen/verify_dataset.jac` non-destructive
 re-validation pattern rather than introducing a new resumability mechanism.

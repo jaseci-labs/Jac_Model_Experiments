@@ -56,7 +56,7 @@ base. This phase builds that SFT set and the comparison protocol.
 | `trajectory` scope | LLM-simulated multi-turn (single model plays both user and assistant across a coding task). Not live agent-session capture — deferred. |
 | Scale target | 10,000-15,000 examples per dataset build, split per `datagen/spec.md` §weights |
 | Seed source for code | jac-mcp `list_examples`/`get_example` + Jac lang doc code-fences via `search_docs`/`get_resource`. Not this repo's own app code (avoids overfitting to studio-app style, keeps canonical language coverage). |
-| Generator model | Fable (`claude-fable-5`) via API, called from Jac using `by llm()` (jac-by-llm pattern) |
+| Generator model | Split by generator — Opus for token-heavy/bulk, Fable for precision/error-prone. See §4.1. Both via API, called from Jac using `by llm()` (jac-by-llm pattern) |
 | Number of builds | Two, independent (`fresh`, `post_cptv2`) — not one dataset reused twice |
 | Relationship to CPT v2 training | Decoupled. This phase does not train or run CPT v2. `fresh` can and should proceed now; `post_cptv2` waits for CPT v2 to actually land. |
 | DPO dataset | Yes, separate plan — see `dpo-plan.md` |
@@ -69,7 +69,7 @@ pipeline (left untouched):
 ```
 model-experiments/01-sft-dpo/sft_dpo/jacgen2/
   seed_pool.jac          # shared seed corpus builder (all code-bearing categories)
-  llm.jac                # shared by-llm() wrapper functions, Fable-backed
+  llm.jac                # shared by-llm() wrapper functions, dual-model (Opus + Fable, see §4.1)
   gen_code_gen.jac
   gen_debug.jac
   gen_explanation.jac
@@ -88,6 +88,24 @@ implementation, no drift between the conversion pipeline and this one.
 All new tooling is Jac, matching the existing `jacgen/` convention (see
 `model-experiments/01-sft-dpo/sft_dpo/jacgen/README.md`). LLM-backed generation uses Jac's
 native `by llm()` function-body delegation, not hand-rolled HTTP calls.
+
+### 4.1 Model assignment per generator
+
+Two models, split by nature of the work rather than one model for
+everything — token-heavy/bulk generation goes to Opus, precision-critical
+generation prone to subtle errors goes to Fable:
+
+| Generator | Model | Why |
+|---|---|---|
+| `gen_code_gen.jac` | Opus | highest example volume (~5,000, 40% of dataset), one call per example, mostly mechanical reverse-instruction writing off a known-good seed |
+| `gen_trajectory.jac` | Opus | highest per-example token volume by design (up to 6 turns/calls per example, §5 of `datagen/spec.md`) |
+| `gen_debug.jac` | Fable | precision-critical — injected bug must actually reproduce, symptom description must match the real failure, dual-gate (buggy fails, fixed passes) means a sloppy generation is wasted spend either way |
+| `gen_explanation.jac` | Fable | no compiler gate exists for this category (§7 below) — generation quality is the *only* defense against a hallucinated, ungrounded answer |
+| `gen_dpo.jac` | Fable | preference correctness has to be unambiguous per axis (`dpo-plan.md` §2), especially `auth_security` and `correctness` — a subtly-wrong "chosen" side poisons the pair |
+
+`llm.jac` exposes one `by llm()` wrapper per (task_type, model) pair rather
+than a single global model config, so this split is enforced at the wrapper
+level, not left to each generator script to remember.
 
 ## 5. Run-tag isolation
 
@@ -128,7 +146,7 @@ field:
   "compiler_pass": true,
   "test_pass": true,
   "manually_reviewed": false,
-  "generator": "fable-api",
+  "generator": "opus-api | fable-api",
   "generation_date": "timestamp",
   "source_prompt_version": "prompt-category-vN",
   "context_bundle_version": "jac-context-vN",

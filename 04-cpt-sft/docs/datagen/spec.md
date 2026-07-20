@@ -24,6 +24,12 @@ wiring that is Jac's actual differentiator over plain Python.
 | `trajectory` | 10% | ~1,250 |
 | buffer / hard-to-classify | 10% | ~1,250 |
 
+Generator model per category (full rationale in `../spec.md` §4.1):
+`code_gen` and `trajectory` → Opus (bulk/token-heavy). `debug`,
+`explanation`, and the DPO layer (`dpo-plan.md`) → Fable
+(precision-critical, error-prone). `conversion` uses no LLM — reused
+deterministic transpile pipeline.
+
 Buffer absorbs overflow from whichever category's seed pool turns out
 richer than expected — `build_manifest_v2.jac` reallocates it at build time
 rather than forcing an artificial per-category cap.
@@ -181,7 +187,7 @@ mine additional examples from the same Vezora corpus.
 
 ## 5. `trajectory` — LLM-simulated multi-turn sessions (10%)
 
-Single Fable call plays both sides of a coding conversation, 3-6 turns,
+Single Opus call plays both sides of a coding conversation, 3-6 turns,
 seeded by a `code_gen` task (reuses the same seed pool — a trajectory is a
 `code_gen` task's instruction, unrolled into a realistic back-and-forth
 instead of a single-shot answer).
@@ -219,8 +225,8 @@ the module graph) feeding `code_gen`, `debug`, `explanation`, and
    `doc:<page_id>#<chunk_idx>`), the domain/task_type it plausibly belongs
    to (inferred from which skill's docs it came from), and a stable `seed_id`.
 4. Dedup seeds against each other (exact-match + `dedup.jac` near-duplicate)
-   before they ever reach a generator — no point spending Fable calls on the
-   same snippet twice.
+   before they ever reach a generator — no point spending LLM calls (Opus or
+   Fable, see `../spec.md` §4.1) on the same snippet twice.
 
 Output: `seed_pool.jsonl`, not run-tag-scoped (see `../spec.md` §5 — kept
 identical across `fresh` and `post_cptv2` builds so only LLM-authored content
