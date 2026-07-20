@@ -178,7 +178,7 @@ def load_jsonl(path: str) -> list[dict] {
 }
 
 
-with entry {
+with entry:__main__ {
     print(
         "NOTE: decontam-against-eval-holdouts (spec.md 8.4) is deferred to "
         + "decontam_v2.jac (Task 16) -- eval_holdout/*.jsonl currently holds "

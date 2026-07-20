@@ -153,7 +153,7 @@ def scan_repo(repo: str, repo_dir: Path, sha: str, out_f: any) -> dict {
 }
 
 
-with entry {
+with entry:__main__ {
     Path(OUT_DIR).mkdir(parents=True, exist_ok=True);
     spec_path: Path = repos_spec_path();
     if not spec_path.exists() {

@@ -463,7 +463,7 @@ def gather_tier5() -> list[dict] {
 }
 
 
-with entry {
+with entry:__main__ {
     Path(OUT_DIR).mkdir(parents=True, exist_ok=True);
 
     tier1: list[dict] = gather_tier1();
