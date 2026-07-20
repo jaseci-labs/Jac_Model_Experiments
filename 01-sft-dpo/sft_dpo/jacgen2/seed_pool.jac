@@ -15,8 +15,18 @@ Source locations (see header comment in each gather_tier* function for the
     to have a local clone of that exact upstream repo as a sibling project
     (`/Volumes/ExtremePro/JaseciLabs/jaseci`, origin =
     github.com/jaseci-labs/jaseci) — same source jac-mcp's GitHub fallback
-    targets, just already on disk. Used directly instead of re-fetching
-    over the network.
+    targets, just already on disk. IMPORTANT: that sibling clone's checked
+    -out working tree is NOT read directly (it sits on a non-default
+    branch that has diverged from origin/main). Instead, `gather_tier1`
+    fetches `origin/main`, resolves its exact commit SHA, and reads
+    `jac/examples/**` out of a `git archive` of that pinned SHA — so tier
+    1's content is reproducible and traceable to a specific upstream
+    commit regardless of what the sibling repo's working tree happens to
+    have checked out. Every tier-1 seed's `origin` field embeds that SHA
+    (`example:jaseci@<sha8>:<relpath>`). If `origin/main` can't be
+    resolved (offline, etc.), it falls back to whatever commit/branch is
+    actually checked out, records that SHA+branch instead, and prints a
+    loud WARNING since that's not the canonical source.
   - Tier 2 (jac-mcp docs): jac_mcp DOES bundle docs on disk even in the
     PyPI install: `content/docs/*.md` (reference + tutorials) and
     `content/{pitfalls,patterns,understand}.md` (guide pages), found under
@@ -53,7 +63,8 @@ glob REPO_ROOT: str = "/Volumes/ExtremePro/JaseciLabs/jac_model_studio";
 glob JACLANG_PKG: str = REPO_ROOT + "/.venv/lib/python3.14/site-packages/jaclang";
 glob JACLANG_GUIDE_SKILLS: str = JACLANG_PKG + "/cli/skills";
 glob JAC_MCP_UV_CONTENT: str = "/Users/ayush/.local/share/uv/tools/jaclang/lib/python3.13/site-packages/jac_mcp/content";
-glob JASECI_EXAMPLES: str = "/Volumes/ExtremePro/JaseciLabs/jaseci/jac/examples";
+glob JASECI_REPO: str = "/Volumes/ExtremePro/JaseciLabs/jaseci";
+glob JASECI_EXAMPLES_SUBPATH: str = "jac/examples";
 glob OUT_DIR: str = REPO_ROOT + "/model-experiments/04-cpt-sft/dataset/shared";
 glob SEED_POOL_PATH: str = OUT_DIR + "/seed_pool.jsonl";
 glob DOC_CHUNKS_PATH: str = OUT_DIR + "/doc_chunks.jsonl";
@@ -156,35 +167,133 @@ def gate_candidate(code: str, already_parsed: bool = False) -> dict | None {
 }
 
 
-"""Tier 1 — jac-mcp example apps (sourced from the local jaseci-labs/jaseci
-clone, see module docstring). Whole-file seeds; skip /ui/ shadcn boilerplate."""
+"""Resolve which commit of the jaseci sibling repo tier 1 should read from,
+without ever mutating that repo's working tree (no checkout/reset/pull —
+fetch/rev-parse/branch/archive only, all read-only-ish).
+
+Preferred path: fetch `origin/main` and pin to its exact SHA — this is what
+a real jac-mcp GitHub fallback would target, regardless of what branch the
+sibling clone's working tree happens to have checked out.
+
+Fallback (only if the fetch or rev-parse fails, e.g. offline): read
+whatever commit is currently checked out, but record its SHA and branch
+name and print a loud WARNING, since that is NOT guaranteed to be the
+default branch and may have diverged from origin/main.
+
+Returns (sha, provenance_label, used_pinned_main)."""
+def resolve_tier1_ref() -> tuple[str, str, bool] {
+    fetch_proc = subprocess.run(
+        ["git", "-C", JASECI_REPO, "fetch", "origin", "main"],
+        capture_output=True, timeout=120
+    );
+    if fetch_proc.returncode == 0 {
+        rev_proc = subprocess.run(
+            ["git", "-C", JASECI_REPO, "rev-parse", "origin/main"],
+            capture_output=True, text=True, timeout=30
+        );
+        if rev_proc.returncode == 0 and rev_proc.stdout.strip() {
+            sha: str = rev_proc.stdout.strip();
+            print("tier 1: pinned jac-mcp examples to jaseci origin/main @ " + sha[:8]);
+            return (sha, "jaseci@" + sha[:8], True);
+        }
+    }
+
+    head_proc = subprocess.run(
+        ["git", "-C", JASECI_REPO, "rev-parse", "HEAD"],
+        capture_output=True, text=True, timeout=30
+    );
+    if head_proc.returncode != 0 or not head_proc.stdout.strip() {
+        raise RuntimeError(
+            "tier 1 hard-fail: could not fetch/resolve origin/main NOR determine HEAD "
+            + "commit of the jaseci sibling repo at " + JASECI_REPO
+            + " -- cannot establish a reproducible source ref for tier 1 (jac-mcp examples)."
+        );
+    }
+    branch_proc = subprocess.run(
+        ["git", "-C", JASECI_REPO, "branch", "--show-current"],
+        capture_output=True, text=True, timeout=30
+    );
+    sha: str = head_proc.stdout.strip();
+    branch: str = branch_proc.stdout.strip() if branch_proc.returncode == 0 else "UNKNOWN";
+    if branch not in ["main", "master"] {
+        print(
+            "WARNING: tier 1 could not fetch/resolve origin/main from the jaseci sibling "
+            + "repo at " + JASECI_REPO + " -- falling back to whatever is currently checked "
+            + "out there: branch '" + branch + "' @ " + sha[:8] + ". This is NOT the default "
+            + "branch a real jac-mcp fetch would target and may have diverged from "
+            + "origin/main. Recorded in every tier-1 seed's origin field for traceability."
+        );
+    }
+    return (sha, "jaseci@" + sha[:8] + "@" + branch, False);
+}
+
+
+"""Tier 1 — jac-mcp example apps (sourced from a pinned commit of the local
+jaseci-labs/jaseci sibling clone, see module docstring and
+`resolve_tier1_ref`). Whole-file seeds; skip /ui/ shadcn boilerplate."""
 def gather_tier1() -> list[dict] {
     candidates: list[dict] = [];
-    base: Path = Path(JASECI_EXAMPLES);
-    if not base.exists() {
-        return candidates;
+    repo_path: Path = Path(JASECI_REPO);
+    if not repo_path.exists() {
+        raise RuntimeError(
+            "tier 1 hard-fail: expected the jaseci sibling clone (jac-mcp example-apps "
+            + "source) at " + JASECI_REPO + " but this path does not exist. Escalate -- "
+            + "do not silently skip tier 1."
+        );
     }
-    for app_dir in sorted(base.iterdir()) {
-        if not app_dir.is_dir() or app_dir.name.startswith(".") {
-            continue;
+
+    (sha, label, pinned_main) = resolve_tier1_ref();
+
+    archive_proc = subprocess.run(
+        ["git", "-C", JASECI_REPO, "archive", sha, "--", JASECI_EXAMPLES_SUBPATH],
+        capture_output=True
+    );
+    if archive_proc.returncode != 0 {
+        raise RuntimeError(
+            "tier 1 hard-fail: `git archive " + sha + " -- " + JASECI_EXAMPLES_SUBPATH
+            + "` failed in " + JASECI_REPO + ": "
+            + archive_proc.stderr.decode("utf-8", errors="ignore")
+        );
+    }
+
+    with tempfile.TemporaryDirectory(prefix="jacgen2_tier1_") as tmp_dir {
+        tar_proc = subprocess.run(["tar", "-x", "-C", str(tmp_dir)], input=archive_proc.stdout);
+        if tar_proc.returncode != 0 {
+            raise RuntimeError(
+                "tier 1 hard-fail: failed to extract git archive of "
+                + JASECI_REPO + "@" + sha + " into scratch dir " + str(tmp_dir)
+            );
         }
-        for f in sorted(app_dir.rglob("*.jac")) {
-            rel: str = str(f.relative_to(base));
-            if "/ui/" in ("/" + rel) {
+        base: Path = Path(str(tmp_dir)) / JASECI_EXAMPLES_SUBPATH;
+        if not base.exists() {
+            raise RuntimeError(
+                "tier 1 hard-fail: expected " + JASECI_EXAMPLES_SUBPATH + "/ not found in "
+                + "the archive of " + JASECI_REPO + "@" + sha + " (extracted to "
+                + str(base) + "). Escalate -- do not silently skip tier 1."
+            );
+        }
+        for app_dir in sorted(base.iterdir()) {
+            if not app_dir.is_dir() or app_dir.name.startswith(".") {
                 continue;
             }
-            try {
-                code: str = f.read_text(encoding="utf-8", errors="ignore");
-            } except Exception {
-                continue;
+            for f in sorted(app_dir.rglob("*.jac")) {
+                rel: str = str(f.relative_to(base));
+                if "/ui/" in ("/" + rel) {
+                    continue;
+                }
+                try {
+                    code: str = f.read_text(encoding="utf-8", errors="ignore");
+                } except Exception {
+                    continue;
+                }
+                candidates.append({
+                    "origin": "example:" + label + ":" + rel,
+                    "code": code,
+                    "hint": rel,
+                    "doc_chunk": None,
+                    "already_parsed": False
+                });
             }
-            candidates.append({
-                "origin": "example:" + rel,
-                "code": code,
-                "hint": rel,
-                "doc_chunk": None,
-                "already_parsed": False
-            });
         }
     }
     return candidates;
@@ -197,23 +306,39 @@ def gather_tier2() -> tuple[list[dict], list[dict]] {
     chunk_records: list[dict] = [];
     doc_files: list[Path] = [];
 
-    uv_docs_dir: Path = Path(JAC_MCP_UV_CONTENT) / "docs";
-    if uv_docs_dir.exists() {
-        for f in sorted(uv_docs_dir.glob("*.md")) {
-            doc_files.append(f);
-        }
+    mcp_content_base: Path = Path(JAC_MCP_UV_CONTENT);
+    if not mcp_content_base.exists() {
+        raise RuntimeError(
+            "tier 2 hard-fail: expected jac-mcp content bundle at " + JAC_MCP_UV_CONTENT
+            + " but this path does not exist. Escalate -- do not silently skip tier 2."
+        );
+    }
+    skills_dir: Path = Path(JACLANG_GUIDE_SKILLS);
+    if not skills_dir.exists() {
+        raise RuntimeError(
+            "tier 2 hard-fail: expected jaclang guide-skills bundle at "
+            + JACLANG_GUIDE_SKILLS + " but this path does not exist. Escalate -- do not "
+            + "silently skip tier 2."
+        );
+    }
+    uv_docs_dir: Path = mcp_content_base / "docs";
+    if not uv_docs_dir.exists() {
+        raise RuntimeError(
+            "tier 2 hard-fail: expected jac-mcp docs dir at " + str(uv_docs_dir)
+            + " but this path does not exist. Escalate -- do not silently skip tier 2."
+        );
+    }
+    for f in sorted(uv_docs_dir.glob("*.md")) {
+        doc_files.append(f);
     }
     for name in ["pitfalls.md", "patterns.md", "understand.md"] {
-        f: Path = Path(JAC_MCP_UV_CONTENT) / name;
+        f: Path = mcp_content_base / name;
         if f.exists() {
             doc_files.append(f);
         }
     }
-    skills_dir: Path = Path(JACLANG_GUIDE_SKILLS);
-    if skills_dir.exists() {
-        for f in sorted(skills_dir.glob("*.md")) {
-            doc_files.append(f);
-        }
+    for f in sorted(skills_dir.glob("*.md")) {
+        doc_files.append(f);
     }
 
     for f in doc_files {
@@ -269,7 +394,10 @@ def gather_tier3() -> list[dict] {
     candidates: list[dict] = [];
     base: Path = Path(JACLANG_PKG);
     if not base.exists() {
-        return candidates;
+        raise RuntimeError(
+            "tier 3 hard-fail: expected jaclang package install at " + JACLANG_PKG
+            + " but this path does not exist. Escalate -- do not silently skip tier 3."
+        );
     }
     for f in sorted(base.rglob("*.jac")) {
         try {
