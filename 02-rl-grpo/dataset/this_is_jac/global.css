@@ -1,0 +1,246 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Plus+Jakarta+Sans:wght@0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap");
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.141 0.005 285.823);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.141 0.005 285.823);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.141 0.005 285.823);
+    --primary: oklch(0.646 0.222 41.116);
+    --primary-foreground: oklch(0.98 0.016 73.684);
+    --secondary: oklch(0.967 0.001 286.375);
+    --secondary-foreground: oklch(0.21 0.006 285.885);
+    --muted: oklch(0.967 0.001 286.375);
+    --muted-foreground: oklch(0.552 0.016 285.938);
+    --accent: oklch(0.967 0.001 286.375);
+    --accent-foreground: oklch(0.21 0.006 285.885);
+    --destructive: oklch(0.577 0.245 27.325);
+    --border: oklch(0.92 0.004 286.32);
+    --input: oklch(0.92 0.004 286.32);
+    --ring: oklch(0.705 0.213 47.604);
+    --jac: oklch(0.705 0.213 47.604);
+    --jac-2: oklch(0.78 0.16 75);
+    --like: oklch(0.65 0.24 357);
+    --reply: oklch(0.68 0.16 237);
+    --repost: oklch(0.72 0.18 152);
+    --chart-1: oklch(0.837 0.128 66.29);
+    --chart-2: oklch(0.705 0.213 47.604);
+    --chart-3: oklch(0.646 0.222 41.116);
+    --chart-4: oklch(0.553 0.195 38.402);
+    --chart-5: oklch(0.47 0.157 37.304);
+    --radius: 0.875rem;
+}
+
+.dark {
+    --background: oklch(0.06 0.004 286);
+    --foreground: oklch(0.95 0.002 286);
+    --card: oklch(0.115 0.005 286);
+    --card-foreground: oklch(0.95 0.002 286);
+    --popover: oklch(0.115 0.005 286);
+    --popover-foreground: oklch(0.95 0.002 286);
+    --primary: oklch(0.705 0.213 47.604);
+    --primary-foreground: oklch(0.145 0.02 50);
+    --secondary: oklch(0.2 0.005 286);
+    --secondary-foreground: oklch(0.95 0.002 286);
+    --muted: oklch(0.2 0.005 286);
+    --muted-foreground: oklch(0.66 0.012 286);
+    --accent: oklch(0.24 0.006 286);
+    --accent-foreground: oklch(0.985 0 0);
+    --destructive: oklch(0.65 0.2 25);
+    --border: oklch(1 0 0 / 9%);
+    --input: oklch(1 0 0 / 12%);
+    --ring: oklch(0.705 0.213 47.604);
+    --jac: oklch(0.705 0.213 47.604);
+    --jac-2: oklch(0.82 0.16 78);
+    --like: oklch(0.68 0.25 357);
+    --reply: oklch(0.7 0.16 237);
+    --repost: oklch(0.74 0.18 152);
+    --chart-1: oklch(0.837 0.128 66.29);
+    --chart-2: oklch(0.705 0.213 47.604);
+    --chart-3: oklch(0.646 0.222 41.116);
+    --chart-4: oklch(0.553 0.195 38.402);
+    --chart-5: oklch(0.47 0.157 37.304);
+    --radius: 0.875rem;
+}
+
+@theme inline {
+    --font-sans: 'Plus Jakarta Sans', sans-serif;
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    --color-jac: var(--jac);
+    --color-jac-2: var(--jac-2);
+    --color-like: var(--like);
+    --color-reply: var(--reply);
+    --color-repost: var(--repost);
+    --color-chart-5: var(--chart-5);
+    --color-chart-4: var(--chart-4);
+    --color-chart-3: var(--chart-3);
+    --color-chart-2: var(--chart-2);
+    --color-chart-1: var(--chart-1);
+    --color-ring: var(--ring);
+    --color-input: var(--input);
+    --color-border: var(--border);
+    --color-destructive: var(--destructive);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-accent: var(--accent);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-muted: var(--muted);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-secondary: var(--secondary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-primary: var(--primary);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-popover: var(--popover);
+    --color-card-foreground: var(--card-foreground);
+    --color-card: var(--card);
+    --color-foreground: var(--foreground);
+    --color-background: var(--background);
+    --radius-sm: calc(var(--radius) - 4px);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) + 4px);
+    --radius-2xl: calc(var(--radius) + 8px);
+    --radius-3xl: calc(var(--radius) + 12px);
+}
+
+@layer base {
+    * {
+        @apply border-border outline-ring/50;
+    }
+    html {
+        @apply font-sans;
+        scroll-behavior: smooth;
+        scroll-padding-top: 4.5rem;
+    }
+    body {
+        @apply font-sans bg-background text-foreground antialiased;
+    }
+}
+
+/* ── this-is-jac flourishes ─────────────────────────────────────────── */
+
+/* subtle dotted grid backdrop used behind hero / sections */
+.tij-grid {
+    background-image: radial-gradient(
+        var(--color-border) 1px,
+        transparent 1px
+    );
+    background-size: 26px 26px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+}
+
+/* warm radial glow */
+.tij-glow {
+    background: radial-gradient(
+        ellipse 60% 50% at 50% 0%,
+        color-mix(in oklch, var(--jac) 26%, transparent),
+        transparent 70%
+    );
+}
+
+.tij-gradient-text {
+    background-image: linear-gradient(110deg, var(--jac-2), var(--jac));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+@keyframes tij-fade-up {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes tij-pulse {
+    0%, 100% { opacity: 0.55; }
+    50% { opacity: 1; }
+}
+@keyframes tij-bounce-down {
+    0%, 100% { transform: translateY(0); opacity: 0.5; }
+    50% { transform: translateY(6px); opacity: 1; }
+}
+
+.tij-fade-up { animation: tij-fade-up 0.6s ease both; }
+.tij-pulse { animation: tij-pulse 1.6s ease-in-out infinite; }
+.tij-bounce { animation: tij-bounce-down 1.8s ease-in-out infinite; }
+
+/* flowing dashes along the interop funnel connectors */
+@keyframes tij-flow { to { stroke-dashoffset: -16; } }
+.tij-flow { stroke-dasharray: 5 7; animation: tij-flow 0.9s linear infinite; }
+
+/* thin custom scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: oklch(1 0 0 / 0.1); border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: oklch(1 0 0 / 0.18); }
+
+/* ── littleX (embedded app) flourishes ───────────────────────────────── */
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse-dot {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+.lx-fade-up { animation: fadeUp 0.3s ease both; }
+.lx-pulse { animation: pulse-dot 1.2s ease-in-out infinite; }
+
+.lx-char-ring { width: 22px; height: 22px; flex-shrink: 0; }
+.lx-char-ring-bg { fill: none; stroke: var(--border); stroke-width: 2.5; }
+.lx-char-ring-fill {
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    transform: rotate(-90deg);
+    transform-origin: 12px 12px;
+    transition: stroke-dashoffset 0.12s ease, stroke 0.2s ease;
+}
+
+/* ── Source-viewer syntax theme (Pygments token classes) ──────────────────
+   Server-side Pygments emits <span class="k">…</span> etc; these rules colour
+   them to match the site's CodeBlock palette: orange keywords, emerald
+   strings, muted comments, amber numbers, sky types. */
+.tij-code { color: oklch(0.95 0.002 286 / 0.88); }
+.tij-code .c, .tij-code .ch, .tij-code .cm, .tij-code .c1, .tij-code .cs,
+.tij-code .cp, .tij-code .cpf {
+    color: var(--muted-foreground);
+    font-style: italic;
+}
+.tij-code .k, .tij-code .kc, .tij-code .kd, .tij-code .kn, .tij-code .kp,
+.tij-code .kr, .tij-code .kt, .tij-code .ow {
+    color: var(--primary);
+}
+.tij-code .s, .tij-code .sa, .tij-code .sb, .tij-code .sc, .tij-code .dl,
+.tij-code .s2, .tij-code .s1, .tij-code .se, .tij-code .sh, .tij-code .sx,
+.tij-code .sr, .tij-code .ss, .tij-code .sb {
+    color: #34d399;
+}
+.tij-code .sd { color: #34d399; opacity: 0.72; font-style: italic; }
+.tij-code .si { color: #fcd34d; }
+.tij-code .m, .tij-code .mb, .tij-code .mf, .tij-code .mh, .tij-code .mi,
+.tij-code .mo, .tij-code .il {
+    color: #fcd34d;
+}
+.tij-code .nc, .tij-code .ne, .tij-code .nn, .tij-code .nt {
+    color: #7dd3fc;
+}
+.tij-code .nb, .tij-code .bp { color: #c4b5fd; }
+.tij-code .nd { color: #c4b5fd; font-style: italic; }
+.tij-code .nf, .tij-code .fm { color: #93c5fd; }
+.tij-code .na { color: #f0abfc; }
+.tij-code .nv, .tij-code .vc, .tij-code .vg, .tij-code .vi,
+.tij-code .nl, .tij-code .no { color: oklch(0.95 0.002 286 / 0.9); }
+.tij-code .o, .tij-code .p { color: oklch(0.95 0.002 286 / 0.72); }
+.tij-code .err { color: #f87171; }
+.tij-code .gd { color: #f87171; }
+.tij-code .gi { color: #34d399; }
+.tij-code .gh, .tij-code .gu { color: #7dd3fc; font-weight: 600; }
+.tij-code .gs { font-weight: 600; }
+.tij-code .ge { font-style: italic; }

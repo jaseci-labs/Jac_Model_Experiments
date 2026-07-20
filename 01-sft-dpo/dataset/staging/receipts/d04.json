@@ -1,0 +1,11 @@
+{
+  "batch_id": "d04",
+  "accepted": 19,
+  "rejected": [
+    {
+      "tag": "def count_below(spec: dict) -> int:",
+      "reason": "contaminated vs holdout"
+    }
+  ],
+  "accept_rate": 0.95
+}

@@ -1,0 +1,15 @@
+{
+  "batch_id": "d01",
+  "accepted": 19,
+  "rejected": [
+    {
+      "tag": "def count_zero(spec: dict) -> int:",
+      "reason": "contaminated vs holdout"
+    },
+    {
+      "tag": "def sum_edge_weights(spec: dict) -> int:",
+      "reason": "contaminated vs holdout"
+    }
+  ],
+  "accept_rate": 0.9047619047619048
+}

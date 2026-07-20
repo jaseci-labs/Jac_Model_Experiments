@@ -1,0 +1,10 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="64" height="64" rx="14" fill="#0c0e14"/>
+  <!-- object-spatial motif: a tiny graph of nodes + edges -->
+  <line x1="32" y1="20" x2="18" y2="42" stroke="#f97316" stroke-width="2.5" stroke-opacity="0.5"/>
+  <line x1="32" y1="20" x2="46" y2="42" stroke="#f97316" stroke-width="2.5" stroke-opacity="0.5"/>
+  <line x1="18" y1="42" x2="46" y2="42" stroke="#f97316" stroke-width="2.5" stroke-opacity="0.3"/>
+  <circle cx="32" cy="20" r="7" fill="#f97316"/>
+  <circle cx="18" cy="42" r="5.5" fill="#fbbf24"/>
+  <circle cx="46" cy="42" r="5.5" fill="#fbbf24"/>
+</svg>

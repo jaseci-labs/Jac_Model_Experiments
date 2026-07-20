@@ -1,0 +1,15 @@
+{
+  "batch_id": "d07",
+  "accepted": 18,
+  "rejected": [
+    {
+      "tag": "def count_leaves(spec: dict) -> int:",
+      "reason": "contaminated vs holdout"
+    },
+    {
+      "tag": "def sum_squares(spec: dict) -> int:",
+      "reason": "contaminated vs holdout"
+    }
+  ],
+  "accept_rate": 0.9
+}

@@ -5,25 +5,25 @@ __pycache__/
 .DS_Store
 
 models/
-01-sft-dpo/adapters/
-02-rl-grpo/adapters/
-03-new/adapters/
+model-experiments/01-sft-dpo/adapters/
+model-experiments/02-rl-grpo/adapters/
+model-experiments/03-new/adapters/
 .venv/
 
 # root results/ is studio scratch (builder job logs, eval runs) — not repo output
 results/_builder/
 results/_evals/
 
-# LaTeX build output (rebuild via 02-rl-grpo/presentation/build.sh)
-02-rl-grpo/presentation/main.pdf
-02-rl-grpo/presentation/main.aux
-02-rl-grpo/presentation/main.fdb_latexmk
-02-rl-grpo/presentation/main.fls
-02-rl-grpo/presentation/main.log
-02-rl-grpo/presentation/main.nav
-02-rl-grpo/presentation/main.out
-02-rl-grpo/presentation/main.snm
-02-rl-grpo/presentation/main.toc
+# LaTeX build output (rebuild via model-experiments/02-rl-grpo/presentation/build.sh)
+model-experiments/02-rl-grpo/presentation/main.pdf
+model-experiments/02-rl-grpo/presentation/main.aux
+model-experiments/02-rl-grpo/presentation/main.fdb_latexmk
+model-experiments/02-rl-grpo/presentation/main.fls
+model-experiments/02-rl-grpo/presentation/main.log
+model-experiments/02-rl-grpo/presentation/main.nav
+model-experiments/02-rl-grpo/presentation/main.out
+model-experiments/02-rl-grpo/presentation/main.snm
+model-experiments/02-rl-grpo/presentation/main.toc
 
 # vendored external clone (jac-gpt oracle for CPT-v2 endpoint discovery, Task 14)
-03-new/cpt_train/jac_gpt_oracle/
+model-experiments/03-new/cpt_train/jac_gpt_oracle/

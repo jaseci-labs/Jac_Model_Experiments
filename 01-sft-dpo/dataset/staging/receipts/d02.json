@@ -1,0 +1,19 @@
+{
+  "batch_id": "d02",
+  "accepted": 17,
+  "rejected": [
+    {
+      "tag": "def sum_reachable(spec: dict) -> int:",
+      "reason": "contaminated vs holdout"
+    },
+    {
+      "tag": "def count_div3(spec: dict) -> int:",
+      "reason": "contaminated vs holdout"
+    },
+    {
+      "tag": "def count_edges(spec: dict) -> int:",
+      "reason": "contaminated vs holdout"
+    }
+  ],
+  "accept_rate": 0.85
+}

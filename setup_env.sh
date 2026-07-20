@@ -9,14 +9,14 @@ python3 -m venv .venv
 
 echo "--- verify ---"
 .venv/bin/jac --version >/dev/null 2>&1 && echo "jac: ok" || echo "jac: MISSING"
-.venv/bin/jac check -p 01-sft-dpo/sft_dpo/jacgen/*.jac >/dev/null 2>&1 \
+.venv/bin/jac check -p model-experiments/01-sft-dpo/sft_dpo/jacgen/*.jac >/dev/null 2>&1 \
   && echo "syntax check: ok" || echo "syntax check: FAILED"
 echo
 echo "next:"
 echo "  source .venv/bin/activate     # puts jac + mlx_lm on PATH"
-echo "  ./01-sft-dpo/sft_dpo/check.sh                     # syntax sweep + behavioral note"
-echo "  ./01-sft-dpo/sft_dpo/run_probe.sh <hf-model> <name>"
+echo "  ./model-experiments/01-sft-dpo/sft_dpo/check.sh                     # syntax sweep + behavioral note"
+echo "  ./model-experiments/01-sft-dpo/sft_dpo/run_probe.sh <hf-model> <name>"
 echo
-echo "ML studio (chat + train + data + evals):"
-echo "  ./jac_ml_studio/start.sh                   # API :8400 + UI :3000"
-echo "  open http://localhost:3000"
+echo "JMS (chat + train + data + evals):"
+echo "  ./jms/start.sh                              # API :8001 + UI :8000"
+echo "  open http://localhost:8000"
