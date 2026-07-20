@@ -17,7 +17,7 @@ on what the last one learned:
 
 Shared across all attempts, at repo root: `models/` (base + merged checkpoints,
 gitignored), `docs/` (repo-wide strategy + the adapter-hyperparameter registry),
-`studio/` (the Jac ML Studio app, which reads results from every attempt),
+`studio-desktop/` (the Jac ML Studio app, which reads results from every attempt),
 `this_is_jac/` (the real Jac codebase RL mines tasks from), `papers/` (reference papers).
 
 ---
@@ -259,7 +259,7 @@ compute-smart execution order, gotchas) → **[`02-rl-grpo/rl/README.md`](02-rl-
 | `models/` *(gitignored)* | base + merged/fused checkpoints, shared across attempts — attempt 2 finetunes attempt 1's output |
 | `results/` | studio scratch space only (`_builder`, `_evals`) — per-attempt run outputs live inside `01-sft-dpo/results/` and `02-rl-grpo/results/` |
 | `docs/` | repo-wide: `training_configs/` (hyperparameter registry for every adapter, incl. deleted ones — see `docs/ARTIFACT_LOG.md`), `wholestack/` (end-to-end strategy spanning both attempts) |
-| `studio/` | **Jac ML Studio** — the app that visualizes/drives all of this (dataset browser, GENERATE panel, RL section, builder jobs) |
+| `studio-desktop/` | **Jac ML Studio** — the app that visualizes/drives all of this (dataset browser, GENERATE panel, RL section, builder jobs) |
 | `this_is_jac/` | the real open-source Jac codebase attempt 2 mines RL tasks from |
 | `context.md` | durable project framing (what Jac is, the goal, fixed constraints) |
 | `papers/` | reference papers (MultiPL-T, WizardCoder, Magicoder, SelfCodeAlign, DeepSeek-Coder, CodeDPO, Magpie) |
