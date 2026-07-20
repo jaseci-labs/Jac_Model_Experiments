@@ -1,0 +1,6 @@
+{
+  "opus": {"model_name": "claude-opus-4-8", "provider_prefix": "", "verified": false},
+  "fable": {"model_name": "claude-fable-5", "provider_prefix": "", "verified": false},
+  "pinned_at": null,
+  "note": "model_name values are unverified aliases from session context, not confirmed dated snapshots. Run check_llm.jac with a real ANTHROPIC_API_KEY to verify/correct before any generator relies on these."
+}

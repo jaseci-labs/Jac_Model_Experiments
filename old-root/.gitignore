@@ -27,3 +27,6 @@ model-experiments/02-rl-grpo/presentation/main.toc
 
 # vendored external clone (jac-gpt oracle for CPT-v2 endpoint discovery, Task 14)
 model-experiments/03-new/cpt_train/jac_gpt_oracle/
+
+# generated CPT+SFT dataset (jacgen2 pipeline output, not repo source)
+model-experiments/04-cpt-sft/dataset/
