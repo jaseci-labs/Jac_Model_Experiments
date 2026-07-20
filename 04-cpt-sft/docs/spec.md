@@ -5,9 +5,9 @@ Date: 2026-07-20.
 
 ## 1. Purpose
 
-Build a full 5-category SFT dataset (`code_gen`, `debug`, `explanation`,
-`conversion`, `trajectory`) plus a companion DPO preference-pair dataset,
-**twice, independently**:
+Build a full 7-category SFT dataset (`code_gen`, `debug`, `explanation`,
+`conversion`, `trajectory`, `documentation`, `migration`) plus a companion
+DPO preference-pair dataset, **twice, independently**:
 
 - **`fresh`** — generated now, against the current pre-CPT-v2 project state.
 - **`post_cptv2`** — generated later, after CPT v2 training (`model-experiments/03-cpt-only/docs/cpt-2/design.md`)
@@ -51,7 +51,7 @@ base. This phase builds that SFT set and the comparison protocol.
 
 | Decision | Choice |
 |---|---|
-| Categories in scope | All 5: `code_gen`, `debug`, `explanation`, `conversion`, `trajectory` |
+| Categories in scope | All 7: `code_gen`, `debug`, `explanation`, `conversion`, `trajectory`, plus `documentation` and `migration` (added 2026-07-20, see `datagen/spec.md` §6-§7) |
 | `explanation` scope | Docs-grounded quiz Q&A only (Jac lang docs → question/answer). Not open-ended code-explanation — deferred. |
 | `trajectory` scope | LLM-simulated multi-turn (single model plays both user and assistant across a coding task). Not live agent-session capture — deferred. |
 | Scale target | 10,000-15,000 examples per dataset build, split per `datagen/spec.md` §weights |
@@ -74,6 +74,8 @@ model-experiments/01-sft-dpo/sft_dpo/jacgen2/
   gen_debug.jac
   gen_explanation.jac
   gen_trajectory.jac
+  gen_documentation.jac
+  gen_migration.jac
   gen_dpo.jac             # see dpo-plan.md
   build_manifest_v2.jac
   dataset_stats_v2.jac
@@ -102,6 +104,13 @@ generation prone to subtle errors goes to Fable:
 | `gen_debug.jac` | Fable | precision-critical — injected bug must actually reproduce, symptom description must match the real failure, dual-gate (buggy fails, fixed passes) means a sloppy generation is wasted spend either way |
 | `gen_explanation.jac` | Fable | no compiler gate exists for this category (§7 below) — generation quality is the *only* defense against a hallucinated, ungrounded answer |
 | `gen_dpo.jac` | Fable | preference correctness has to be unambiguous per axis (`dpo-plan.md` §2), especially `auth_security` and `correctness` — a subtly-wrong "chosen" side poisons the pair |
+| `gen_documentation.jac` | Fable | prose output with no compiler gate — hallucinated parameter names or invented behavior is exactly the ungated failure mode; only the lexical symbol-existence check catches it |
+| `gen_migration.jac` | Opus | token-heavy whole-file rewrites, fully compiler-gated (migrated file must pass, original must fail/warn) — errors get caught mechanically, so the bulk model is safe |
+
+Task-type-level overrides within a category: `code_gen`'s
+`error_message_authoring` and `debug`'s `code_critique` are ungated prose
+outputs — both run on Fable even where the category default is Opus
+(`datagen/spec.md` §1.1, §2.1).
 
 `llm.jac` exposes one `by llm()` wrapper per (task_type, model) pair rather
 than a single global model config, so this split is enforced at the wrapper
@@ -140,7 +149,7 @@ field:
 ```json
 {
   "id": "string",
-  "category": "code_gen | debug | explanation | conversion | trajectory",
+  "category": "code_gen | debug | explanation | conversion | trajectory | documentation | migration",
   "task_type": "string",
   "complexity": "simple | medium | hard",
   "compiler_pass": true,
@@ -181,6 +190,12 @@ Non-negotiable, inherited from `jacgen/`'s existing rule: **never gate on
 | `explanation` | No compiler applicable. Gate is a lexical groundedness check: answer must reference terms/entities present in the source doc chunk (reject hallucinated answers that don't cite anything from the chunk). Sample manually reviewed. |
 | `conversion` | Unchanged — existing `jacgen/` gate (transpile + `jac run` behavioral check). |
 | `trajectory` | Final turn's code must `jac run` clean. Intermediate turns (the deliberately-broken ones) are not gated — they're supposed to show a plausible error. |
+| `documentation` | No compiler applicable. Lexical symbol-existence check: every symbol the doc references (functions, params, fields, routes) must exist in the seed code. Sample manually reviewed. |
+| `migration` | Migrated file must pass `jac run`; the deprecated original must fail or emit deprecation warnings. Pairs where the original passes silently are rejected (nothing was migrated). |
+
+Task-type-level gate exceptions within a category (`error_message_authoring`,
+`code_critique`) are specified where the task types are defined —
+`datagen/spec.md` §1.1 and §2.1.
 
 All categories run through `jacgen/dedup.jac` (ROUGE-L near-duplicate guard)
 and `jacgen/decontam.jac` (14-token shingle overlap ≥0.5) against the
@@ -192,7 +207,7 @@ existing eval holdouts (`model-experiments/01-sft-dpo/dataset/eval_holdout/`) be
 1. Write `datagen/spec.md` task catalog (this phase, done alongside this spec).
 2. Build `seed_pool.jac`, `llm.jac`, and one generator (`gen_code_gen.jac`) end to end.
 3. Pilot: ~20-30 examples for `code_gen` only, manually inspect actual `jac run` output — not a claim, an actual run and read.
-4. Once pilot quality confirmed, build remaining 3 generators (`gen_debug`, `gen_explanation`, `gen_trajectory`) + `gen_dpo` (per `dpo-plan.md`).
+4. Once pilot quality confirmed, build remaining generators (`gen_debug`, `gen_explanation`, `gen_trajectory`, `gen_documentation`, `gen_migration`) + `gen_dpo` (per `dpo-plan.md`).
 5. Pilot each new generator the same way before scaling.
 6. Full `RUN_TAG=fresh` generation to 10,000-15,000 target, per `datagen/spec.md` weights.
 7. `dataset_stats_v2.jac` composition report + `decontam_v2.jac` audit on the `fresh` release.

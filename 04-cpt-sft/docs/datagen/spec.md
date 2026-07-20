@@ -15,28 +15,35 @@ wiring that is Jac's actual differentiator over plain Python.
 
 ## Category weights (target: 12,500 examples, range 10,000-15,000)
 
+Seven categories (the original five plus `documentation` and `migration`,
+added 2026-07-20):
+
 | Category | Weight | Target @ 12,500 |
 |---|---|---|
-| `code_gen` | 40% | ~5,000 |
+| `code_gen` | 36% | ~4,500 |
 | `debug` | 16% | ~2,000 |
-| `explanation` | 12% | ~1,500 |
-| `conversion` | 12% | ~1,500 |
+| `explanation` | 10% | ~1,250 |
+| `conversion` | 10% | ~1,250 |
 | `trajectory` | 10% | ~1,250 |
-| buffer / hard-to-classify | 10% | ~1,250 |
-
-Generator model per category (full rationale in `../spec.md` §4.1):
-`code_gen` and `trajectory` → Opus (bulk/token-heavy). `debug`,
-`explanation`, and the DPO layer (`dpo-plan.md`) → Fable
-(precision-critical, error-prone). `conversion` uses no LLM — reused
-deterministic transpile pipeline.
+| `documentation` | 6% | ~750 |
+| `migration` | 4% | ~500 |
+| buffer / hard-to-classify | 8% | ~1,000 |
 
 Buffer absorbs overflow from whichever category's seed pool turns out
 richer than expected — `build_manifest_v2.jac` reallocates it at build time
 rather than forcing an artificial per-category cap.
 
+Generator model per category (full rationale in `../spec.md` §4.1):
+`code_gen`, `trajectory`, and `migration` → Opus (bulk/token-heavy or
+compiler-gated-mechanical). `debug`, `explanation`, `documentation`, and
+the DPO layer (`dpo-plan.md`) → Fable (precision-critical, error-prone, or
+ungated-prose output). `conversion` uses no LLM — reused deterministic
+transpile pipeline. Task-type-level overrides exist inside `code_gen` and
+`debug` for ungated-prose outputs (see §1.1 and §2).
+
 ---
 
-## 1. `code_gen` — NL instruction → Jac code (40%)
+## 1. `code_gen` — NL instruction → Jac code (36%)
 
 Reverse-instruction generation: take a seed (canonical Jac snippet from
 jac-mcp examples or a doc code-fence), have the LLM write the natural-language
@@ -70,12 +77,27 @@ synthesized.
 | `packaging_cli` | `jac.toml` metadata, console-script entry points, `jac bundle` | `jac-packaging` doc examples |
 | `shadcn_component_composition` | `jac add --shadcn`, import paths, composition, `jac retheme` | `jac-shadcn-components` doc examples |
 | `scaffold_bootstrap` | `jac create --use <template>`, fixing deprecated syntax the scaffold ships with | `jac-scaffold` doc examples |
+| `test_authoring` | given a working walker/function, write the assertion/test cases that would catch regressions in it | any code-bearing seed from the pool; gate = authored tests must pass against the seed and fail against a mutated variant |
+| `perf_optimization` | given a correct-but-wasteful walker/query (redundant traversal, missing early-exit, repeated filtering), rewrite it tighter with behavior held constant | walker/query seeds, deliberately de-optimized by the generator; gate = both versions produce identical output, optimized version passes `jac run` |
+| `byllm_schema_design` | design the structured-output schema itself for a `by llm()` call given a described extraction/classification need — deeper than `llm_delegated_function`, which only *uses* a given schema | `jac-by-llm` doc examples |
 
-Per-task-type target: roughly even split of the 40% budget across the 21
-types above, weighted 1.5x for `node_edge_definition`, `walker_traversal`,
-`graph_query_patterns`, `sv_endpoint_authoring`, `cl_component_authoring` —
-these five are Jac's actual differentiators and the ones a Python-trained
-base model is most likely to get wrong by defaulting to Python idiom.
+### 1.1 Design-and-prose task types (forward generation, not reverse-instruction)
+
+Three `code_gen` task types break the reverse-instruction pattern (§1 intro)
+because their *output* is not a seed-derived snippet:
+
+| `task_type` | What it teaches | Method + gate |
+|---|---|---|
+| `schema_design` | plain-language app idea → choose and define the node/edge/walker schema from scratch. Distinct from `node_edge_definition`, which teaches syntax *given* a known shape — this teaches choosing the shape | forward generation seeded by an app-idea prompt bank; output gated by `jac run` (schema must compile + a smoke walker must traverse it) |
+| `syntax_migration` | deprecated Jac syntax → current syntax, single-snippet scope (broader whole-file scope lives in the `migration` category, §7) | seeds = doc/scaffold examples of deprecated patterns; gate = migrated snippet passes `jac run`, deprecated original does not (or emits deprecation warnings) |
+| `error_message_authoring` | given a failure scenario (bad code + context), write the diagnostic message a good compiler/runtime would emit — teaches the model to *explain* failures precisely, the inverse of `pitfall_identification` (§3) which only recalls documented pitfalls | prose output, **no compiler gate** — runs on Fable (not `code_gen`'s default Opus, see `../spec.md` §4.1 override note); lexical check: message must reference the actual failing symbol/line |
+
+Per-task-type target: roughly even split of the 36% budget across the 25
+types above (22 in the main table + 3 design-and-prose), weighted 1.5x for
+`node_edge_definition`, `walker_traversal`, `graph_query_patterns`,
+`sv_endpoint_authoring`, `cl_component_authoring` — these five are Jac's
+actual differentiators and the ones a Python-trained base model is most
+likely to get wrong by defaulting to Python idiom.
 
 Complexity tiers per task_type: `simple` (one archetype/one function, single
 concept), `medium` (2-3 archetypes or a short walker chain), `hard`
@@ -88,7 +110,7 @@ distribution simple:medium:hard = 45:35:20 per task_type.
 ## 2. `debug` — broken code + symptom → fixed code (16%)
 
 Cross a **bug taxonomy** against a subset of the `code_gen` domain areas.
-Not all 21 domains get debug coverage — niche ones (`native_compile_subset`,
+Not all domains get debug coverage — niche ones (`native_compile_subset`,
 `packaging_cli`, `scaffold_bootstrap`) are excluded; bug injection there
 would teach edge cases nobody actually hits during normal Jac writing.
 
@@ -139,9 +161,22 @@ required restructuring beyond a single-line fix.
 should learn to flag and fix, sourced from the same domains
 `jac-sv-auth`/`jac-sv-multi-user` cover.
 
+### 2.1 Extended debug task types (added 2026-07-20)
+
+Two task types that don't fit the single-file inject-one-bug template:
+
+| `task_type` | Shape | Gate |
+|---|---|---|
+| `cross_boundary_debug` | a `.sv.jac` endpoint and its `.cl.jac` consumer disagree on a type/shape/route name — find and fix across **both** files. The single-file taxonomy above never produces this, but it's the most common real-world fullstack failure mode | both files must `jac run`/compile together after the fix; the broken pair must fail integration (type mismatch or runtime error at the call boundary) before it |
+| `code_critique` | given working-or-broken Jac code, list what's wrong (or confirm it's clean) **without fixing it** — teaches review judgment separate from repair. Distinct from every other debug task, which always pairs symptom→fix | prose output, **no compiler gate** — every flagged issue must reference a real line/symbol in the input; critiques of *known-buggy* seeds (reuse this section's injected-bug variants) must flag the injected bug to pass. Runs on Fable like the rest of `debug` |
+
+`cross_boundary_debug` seeds come from paired `.sv.jac`+`.cl.jac` doc
+examples (`jac-fullstack-patterns`, `jac-sv-endpoints` + `jac-cl-components`
+combined), with the LLM breaking exactly one side of the contract.
+
 ---
 
-## 3. `explanation` — docs-grounded quiz Q&A (12%)
+## 3. `explanation` — docs-grounded quiz Q&A (10%)
 
 Scope: **grounded in Jac language/framework documentation only** — not
 open-ended "explain this code" (that variant is explicitly deferred, see
@@ -167,7 +202,7 @@ question minimum per chunk, up to 3 for chunks covering multiple concepts.
 
 ---
 
-## 4. `conversion` — Python → Jac (12%)
+## 4. `conversion` — Python → Jac (10%)
 
 **Reused as-is** from the existing `model-experiments/01-sft-dpo/sft_dpo/jacgen/` pipeline —
 `mine.jac` (HF corpus mining), `scale_conversion.jac` (transpile + jac-run
@@ -178,8 +213,8 @@ phase's contribution is folding its existing output into the unified
 `python_to_jac_function` (the transpile-tier majority) or
 `python_to_jac_graph` (the graph tier).
 
-If the existing ~1,640-example pool falls short of the 12% target
-(~1,500 at 12,500 total — currently already exceeds this, no action needed at
+If the existing ~1,640-example pool falls short of the 10% target
+(~1,250 at 12,500 total — currently already exceeds this, no action needed at
 current dataset size), re-run `scale_conversion.jac` with a higher `limit` to
 mine additional examples from the same Vezora corpus.
 
@@ -211,11 +246,58 @@ list, compatible with the existing `mlx` split builder pattern in
 
 ---
 
-## 6. Seed pool construction
+## 6. `documentation` — code → docs (6%, added 2026-07-20)
+
+Inverse of `explanation`: given working Jac code, produce the documentation
+for it. Teaches the model to *articulate* what Jac code does — a capability
+that also feeds back into the project (generated doc entries can seed future
+`explanation` rounds after human review).
+
+| `task_type` | Shape |
+|---|---|
+| `docstring_authoring` | given a function/walker/node, write its docstring (purpose, params, return, side effects on the graph) |
+| `api_reference_entry` | given a `.sv.jac` endpoint (or small endpoint group), write the API-reference entry: route, auth requirement, request/response shape, error cases |
+| `module_overview` | given a small multi-archetype file, write the module-level overview: what it models, how the pieces relate, entry points |
+
+Generation: seeds from the same shared pool (code-bearing seeds only).
+Prose output, no compiler gate — runs on **Fable** (`../spec.md` §4.1):
+factual-precision-critical, and hallucinated parameter names or invented
+behavior in docs is exactly the ungated failure mode Fable is assigned to
+guard. Lexical gate: every symbol the doc references (function names,
+params, field names, routes) must exist in the seed code — checkable
+mechanically, same pattern as `explanation`'s groundedness check.
+
+---
+
+## 7. `migration` — deprecated → current Jac, file scope (4%, added 2026-07-20)
+
+Whole-file sibling of `code_gen`'s single-snippet `syntax_migration`
+(§1.1): given a small complete file (or minimal multi-file app) written
+against deprecated Jac syntax/patterns, produce the fully migrated current
+version. Teaches coordinated multi-edit migration — deprecations rarely
+appear one at a time in real files.
+
+| `task_type` | Shape |
+|---|---|
+| `file_syntax_migration` | one `.jac` file, 2-5 distinct deprecated patterns → current syntax throughout |
+| `scaffold_modernization` | output of `jac create --use <template>` (which ships deprecated syntax per `jac-scaffold`) → modernized equivalent, the post-scaffold checklist applied |
+
+Seeds: deprecated-pattern examples from `jac-scaffold` docs + doc changelogs
+listing deprecated forms; generator composes several into one coherent file,
+then produces the migration. Gate: migrated file passes `jac run`; the
+deprecated original either fails or emits deprecation warnings — pairs where
+both versions behave identically *and* the original produces no warning are
+rejected (nothing was actually migrated). Runs on **Opus** (`../spec.md`
+§4.1): token-heavy whole-file rewrites, mechanically checkable by the
+compiler gate, low judgment risk.
+
+---
+
+## 8. Seed pool construction
 
 Single shared builder (`seed_pool.jac`, see `workflow.md` for its place in
-the module graph) feeding `code_gen`, `debug`, `explanation`, and
-`trajectory`:
+the module graph) feeding `code_gen`, `debug`, `explanation`, `trajectory`,
+`documentation`, and `migration`:
 
 1. Enumerate every `jac-mcp` example via `list_examples`, fetch each with
    `get_example`.
@@ -224,7 +306,14 @@ the module graph) feeding `code_gen`, `debug`, `explanation`, and
 3. Tag every seed with its origin (`jac-mcp:<example_id>` or
    `doc:<page_id>#<chunk_idx>`), the domain/task_type it plausibly belongs
    to (inferred from which skill's docs it came from), and a stable `seed_id`.
-4. Dedup seeds against each other (exact-match + `dedup.jac` near-duplicate)
+4. Collect deprecated-pattern examples (from `jac-scaffold` docs + doc
+   changelogs listing deprecated forms) as a tagged sub-pool for
+   `syntax_migration` (§1.1) and the `migration` category (§7).
+5. Author the app-idea prompt bank for `schema_design` (§1.1) — short
+   plain-language app descriptions, hand-curated once, stored alongside the
+   pool (these are prompts, not code seeds, but versioned identically so
+   both run-tags draw from the same bank).
+6. Dedup seeds against each other (exact-match + `dedup.jac` near-duplicate)
    before they ever reach a generator — no point spending LLM calls (Opus or
    Fable, see `../spec.md` §4.1) on the same snippet twice.
 

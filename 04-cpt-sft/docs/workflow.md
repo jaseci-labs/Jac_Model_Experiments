@@ -99,7 +99,8 @@ Reuses existing instrumentation rather than inventing new eval:
 | Function-holdout `jac run` pass rate | `model-experiments/01-sft-dpo/sft_dpo/jacgen/eval_probe.jac` (`mlx` mode) | basic run%/test-pass% on 150-example function holdout |
 | Graph-holdout `jac run` pass rate | `graph_holdout.jac`'s 13-example disjoint set | walker/node/edge-specific correctness |
 | Idiom-quality judge | `idiom_eval.jac`'s ROUGE-L(output, py2jac(python)) bucketing | idiomatic-divergent vs Python-shaped, per output |
-| `code_gen`/`debug`/`trajectory` holdout pass rate | new holdout slices carved from `model-experiments/04-cpt-sft` generation (never seen during SFT training — same disjoint-offset pattern as `holdout.jac`) | the categories that never existed before this phase |
+| `code_gen`/`debug`/`trajectory`/`migration` holdout pass rate | new holdout slices carved from `model-experiments/04-cpt-sft` generation (never seen during SFT training — same disjoint-offset pattern as `holdout.jac`) | the categories that never existed before this phase |
+| `documentation` holdout accuracy | held-out code→docs examples, graded by the same symbol-existence check + sample manual review | doc-articulation quality — whether the model can describe Jac code without inventing symbols |
 | `explanation` holdout accuracy | held-out docs-quiz Q&A, graded by groundedness + correctness | whether SFT + CPT improved doc-grounded reasoning, not just code output |
 | CPT-v2's own open-ended-vs-oracle eval | `model-experiments/03-cpt-only/docs/cpt-2/design.md`'s open-ended generation compared against a jac-gpt-oracle, per that doc's §1 instrument-mismatch hypothesis | cross-check against CPT-v2's own success criteria, run post-SFT instead of post-CPT-only |
 

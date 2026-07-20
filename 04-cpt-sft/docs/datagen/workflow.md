@@ -23,6 +23,8 @@ flowchart TD
         gendbg[gen_debug.jac]
         genexp[gen_explanation.jac]
         gentraj[gen_trajectory.jac]
+        gendoc[gen_documentation.jac]
+        genmig[gen_migration.jac]
         gendpo[gen_dpo.jac]
         manifest[build_manifest_v2.jac]
         stats[dataset_stats_v2.jac]
@@ -36,19 +38,25 @@ flowchart TD
     seedpool --> gendbg
     seedpool --> genexp
     seedpool --> gentraj
+    seedpool --> gendoc
+    seedpool --> genmig
     seedpool --> gendpo
 
     llmopus --> gencg
     llmopus --> gentraj
+    llmopus --> genmig
     llmfable --> gendbg
     llmfable --> genexp
+    llmfable --> gendoc
     llmfable --> gendpo
 
     gencg --> writer
     gendbg --> writer
     gentraj --> writer
+    genmig --> writer
     gendpo --> writer
     genexp -.groundedness check only, no compiler.-> writer
+    gendoc -.symbol-existence check only, no compiler.-> writer
 
     writer --> dedup --> decontam
 
@@ -56,6 +64,8 @@ flowchart TD
     gendbg --> manifest
     genexp --> manifest
     gentraj --> manifest
+    gendoc --> manifest
+    genmig --> manifest
     convpipe --> manifest
     gendpo --> manifest
 
@@ -79,6 +89,8 @@ jac run model-experiments/01-sft-dpo/sft_dpo/jacgen2/gen_code_gen.jac        # -
 jac run model-experiments/01-sft-dpo/sft_dpo/jacgen2/gen_debug.jac           # -> .../debug/
 jac run model-experiments/01-sft-dpo/sft_dpo/jacgen2/gen_explanation.jac     # -> .../explanation/
 jac run model-experiments/01-sft-dpo/sft_dpo/jacgen2/gen_trajectory.jac      # -> .../trajectory/
+jac run model-experiments/01-sft-dpo/sft_dpo/jacgen2/gen_documentation.jac   # -> .../documentation/
+jac run model-experiments/01-sft-dpo/sft_dpo/jacgen2/gen_migration.jac       # -> .../migration/
 jac run model-experiments/01-sft-dpo/sft_dpo/jacgen2/gen_dpo.jac             # -> .../dpo/ (see dpo-plan.md)
 
 # conversion category: existing jacgen/ pipeline, unchanged, run separately
@@ -91,7 +103,7 @@ jac run model-experiments/01-sft-dpo/sft_dpo/jacgen2/decontam_v2.jac         # c
 ```
 
 Note on `conversion`: because it's reused unmodified from `jacgen/`, it is
-**not** independently regenerated per run-tag the way the other four
+**not** independently regenerated per run-tag the way the other six
 categories are. `fresh` and `post_cptv2` releases share the same conversion
 slice. This is a deliberate asymmetry — re-running the conversion miner
 against a live HF dataset a second time would introduce corpus-drift noise
@@ -167,14 +179,19 @@ is more likely attributable to the base model, not the data.
 10,000-15,000 examples × 2 independent run-tags, split by model per `../spec.md`
 §4.1:
 
-- **Opus** (`code_gen` + `trajectory`): ~5,000 `code_gen` (1 call/example)
-  + ~1,250 `trajectory` (up to 6 calls/example for multi-turn unrolling,
-  budget at ~4x raw example count in call volume) → roughly 10,000-11,000
-  calls per run-tag, ~20,000-22,000 total across both tags. This is the
-  bulk of total call volume, by design — Opus carries the token-heavy load.
-- **Fable** (`debug` + `explanation` + `gen_dpo`): ~2,000 `debug` + ~1,500
-  `explanation` + ~2,500 DPO pairs (1 call/example each) → roughly 6,000
-  calls per run-tag, ~12,000 total across both tags.
+- **Opus** (`code_gen` + `trajectory` + `migration`): ~4,500 `code_gen`
+  (1 call/example, minus the `error_message_authoring` slice which is
+  Fable) + ~1,250 `trajectory` (up to 6 calls/example for multi-turn
+  unrolling, budget at ~4x raw example count in call volume) + ~500
+  `migration` (1 call/example, but whole-file outputs — budget ~2x normal
+  tokens/call) → roughly 10,000-10,500 calls per run-tag, ~20,000-21,000
+  total across both tags. This is the bulk of total call volume, by
+  design — Opus carries the token-heavy load.
+- **Fable** (`debug` + `explanation` + `documentation` + `gen_dpo` + the
+  ungated-prose task-type overrides): ~2,000 `debug` + ~1,250
+  `explanation` + ~750 `documentation` + ~2,500 DPO pairs (1 call/example
+  each) + the `error_message_authoring`/`code_critique` slices → roughly
+  6,500-7,000 calls per run-tag, ~13,000-14,000 total across both tags.
 
 `conversion` contributes no LLM calls at all (reused deterministic
 pipeline).
