@@ -3,11 +3,11 @@
 __pycache__/
 *.pyc
 .DS_Store
+.playwright-mcp/
 
 models/
-model-experiments/01-sft-dpo/adapters/
-model-experiments/02-rl-grpo/adapters/
-model-experiments/03-new/adapters/
+# every attempt's adapter/optimizer checkpoints, whatever the attempt dir is named
+model-experiments/*/adapters/
 .venv/
 
 # root results/ is studio scratch (builder job logs, eval runs) — not repo output
