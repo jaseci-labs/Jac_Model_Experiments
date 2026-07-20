@@ -1,0 +1,22 @@
+{
+  "org": "jaseci-labs",
+  "repos": [
+    "jac",
+    "Agentic-AI",
+    "jac-shadcn",
+    "this_is_jac",
+    "jac-load-test",
+    "jac-mcp-playground",
+    "jasketch",
+    "jac-client-playground",
+    "Algo",
+    "llvm-slice",
+    "littleX",
+    "jaseci-blogs",
+    "jaseci-studio",
+    "agentic-ai-tutorial",
+    "the-jac-workshop",
+    "inr-codelabs",
+    "tree-sitter-jac"
+  ]
+}
