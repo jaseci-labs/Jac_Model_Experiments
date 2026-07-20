@@ -11,14 +11,16 @@ on what the last one learned:
 
 | Attempt | Method | Status | Headline result |
 |---|---|---|---|
-| **[`01-sft-dpo/`](01-sft-dpo/)** | Supervised finetuning + DPO | done | stock model **0%** runnable Jac → **94%** after one LoRA pass |
-| **[`02-rl-grpo/`](02-rl-grpo/)** | RL (GRPO) on top of attempt 1's model | done | best-of-k + compiler-as-verifier ships **~94%**; GRPO ≈ SFT, no extra lift |
-| **[`03-new/`](03-new/)** | TBD | just started | seeded with [`03-new/rui.md`](03-new/rui.md) |
+| **[`model-experiments/01-sft-dpo/`](model-experiments/01-sft-dpo/)** | Supervised finetuning + DPO | done | stock model **0%** runnable Jac → **94%** after one LoRA pass |
+| **[`model-experiments/02-rl-grpo/`](model-experiments/02-rl-grpo/)** | RL (GRPO) on top of attempt 1's model | done | best-of-k + compiler-as-verifier ships **~94%**; GRPO ≈ SFT, no extra lift |
+| **[`model-experiments/03-new/`](model-experiments/03-new/)** | TBD | just started | seeded with [`model-experiments/03-new/rui.md`](model-experiments/03-new/rui.md) |
 
 Shared across all attempts, at repo root: `models/` (base + merged checkpoints,
 gitignored), `docs/` (repo-wide strategy + the adapter-hyperparameter registry),
-`studio/` (the Jac Model Studio app, which reads results from every attempt),
-`this_is_jac/` (the real Jac codebase RL mines tasks from), `papers/` (reference papers).
+`jms/` (Jac Model Studio, JMS — the app that reads results from every attempt),
+`papers/` (reference papers). The attempts themselves live under
+`model-experiments/`; `model-experiments/02-rl-grpo/dataset/this_is_jac/` is the
+real Jac codebase RL mines tasks from.
 
 ---
 
@@ -65,7 +67,7 @@ Jac is often untyped-but-runnable, and `jac check` over-rejects it).
 
 ## Attempt 1 — SFT + DPO
 
-**[`01-sft-dpo/`](01-sft-dpo/)** — the first attempt: prove that supervised finetuning
+**[`model-experiments/01-sft-dpo/`](model-experiments/01-sft-dpo/)** — the first attempt: prove that supervised finetuning
 on synthetic, compiler-validated data can take a model from zero to mostly-correct
 Jac, then use DPO to push the *idiomatic* (not just correct) style on top.
 
@@ -84,7 +86,7 @@ transpile (`jac py2jac`) with a jac-run gate for volume (`sft_auto.jsonl`, 1500)
 / agentically-written idiomatic examples including graph-tier node/edge/walker tasks
 (`sft.jsonl`, 147) → DPO pairs of idiomatic (chosen) vs. transpiled Python-shaped
 (rejected) versions of the same function (`dpo.jsonl`, 147). Everything is written in
-Jac itself — see [`01-sft-dpo/sft_dpo/jacgen/`](01-sft-dpo/sft_dpo/jacgen/) (24
+Jac itself — see [`model-experiments/01-sft-dpo/sft_dpo/jacgen/`](model-experiments/01-sft-dpo/sft_dpo/jacgen/) (24
 modules: generate, validate, dedup, decontaminate, split, eval harness).
 
 ### Results
@@ -112,34 +114,34 @@ below). Measured on a decontaminated, disjoint holdout.
   the right base to invest in. **Verdict: kept Qwen3-Coder** — no candidate beat it on
   behavioral pass-% beyond run-to-run noise, and its DPO graph score (61%) was the best
   of any DPO-capable model. Full matrix →
-  [`01-sft-dpo/docs/initmodelchoice/2026-06-26-sft-dpo-bakeoff-results.md`](01-sft-dpo/docs/initmodelchoice/2026-06-26-sft-dpo-bakeoff-results.md).
+  [`model-experiments/01-sft-dpo/docs/initmodelchoice/2026-06-26-sft-dpo-bakeoff-results.md`](model-experiments/01-sft-dpo/docs/initmodelchoice/2026-06-26-sft-dpo-bakeoff-results.md).
 
 Full results, all 16 training graphs, side-by-side model comparison →
-**[`01-sft-dpo/resultspub/initmodelchoice/RESULTS.md`](01-sft-dpo/resultspub/initmodelchoice/RESULTS.md)**.
+**[`model-experiments/01-sft-dpo/resultspub/initmodelchoice/RESULTS.md`](model-experiments/01-sft-dpo/resultspub/initmodelchoice/RESULTS.md)**.
 
 ### Run it
 
 ```bash
 ./setup_env.sh && source .venv/bin/activate
-./01-sft-dpo/sft_dpo/check.sh                                                # type + behavioral gate, non-destructive
-./01-sft-dpo/sft_dpo/run_probe.sh Qwen/Qwen3-Coder-30B-A3B-Instruct qwen      # quantize → base eval → train → fuse → finetuned eval
-./01-sft-dpo/sft_dpo/run_dpo.sh qwen                                          # DPO stage on top of the SFT adapter
+./model-experiments/01-sft-dpo/sft_dpo/check.sh                                                # type + behavioral gate, non-destructive
+./model-experiments/01-sft-dpo/sft_dpo/run_probe.sh Qwen/Qwen3-Coder-30B-A3B-Instruct qwen      # quantize → base eval → train → fuse → finetuned eval
+./model-experiments/01-sft-dpo/sft_dpo/run_dpo.sh qwen                                          # DPO stage on top of the SFT adapter
 ```
 
 Full docs → operator runbook
-[`01-sft-dpo/sft_dpo/process.md`](01-sft-dpo/sft_dpo/process.md), architecture handoff
-[`01-sft-dpo/docs/sft_dpo/modeltesting/HANDOFF.md`](01-sft-dpo/docs/sft_dpo/modeltesting/HANDOFF.md),
-pipeline reference [`01-sft-dpo/sft_dpo/jacgen/README.md`](01-sft-dpo/sft_dpo/jacgen/README.md).
+[`model-experiments/01-sft-dpo/sft_dpo/process.md`](model-experiments/01-sft-dpo/sft_dpo/process.md), architecture handoff
+[`model-experiments/01-sft-dpo/docs/sft_dpo/modeltesting/HANDOFF.md`](model-experiments/01-sft-dpo/docs/sft_dpo/modeltesting/HANDOFF.md),
+pipeline reference [`model-experiments/01-sft-dpo/sft_dpo/jacgen/README.md`](model-experiments/01-sft-dpo/sft_dpo/jacgen/README.md).
 
 ---
 
 ## Attempt 2 — RL / GRPO
 
-**[`02-rl-grpo/`](02-rl-grpo/)** — starting from attempt 1's SFT+DPO'd model
+**[`model-experiments/02-rl-grpo/`](model-experiments/02-rl-grpo/)** — starting from attempt 1's SFT+DPO'd model
 (`jac-qwen3coder`), the second attempt asked whether **RL (GRPO)** could push
 correctness further, using the Jac compiler itself as a free, verifiable reward (no
 learned reward model). Full story with every number and every bug:
-**[`02-rl-grpo/RL_FINDINGS.md`](02-rl-grpo/RL_FINDINGS.md)**.
+**[`model-experiments/02-rl-grpo/RL_FINDINGS.md`](model-experiments/02-rl-grpo/RL_FINDINGS.md)**.
 
 ### The headline
 
@@ -221,31 +223,31 @@ model's Jac runs at all, it's almost always exactly right. That tight coupling i
 makes the compiler a perfect, zero-cost verifier: no learned reward model or ground
 truth needed at inference time, just sample-and-check.
 
-Shipped: **[`02-rl-grpo/rl/generate.py`](02-rl-grpo/rl/generate.py)** — the best-of-k
+Shipped: **[`model-experiments/02-rl-grpo/rl/generate.py`](model-experiments/02-rl-grpo/rl/generate.py)** — the best-of-k
 generator; the live Studio RL section (11%→94% journey, ladder, k-scaling, a GENERATE
 JAC panel), backed by
-[`02-rl-grpo/resultspub/rl/corrected_summary.json`](02-rl-grpo/resultspub/rl/corrected_summary.json).
-Graphs → [`02-rl-grpo/resultspub/rl/`](02-rl-grpo/resultspub/rl/).
+[`model-experiments/02-rl-grpo/resultspub/rl/corrected_summary.json`](model-experiments/02-rl-grpo/resultspub/rl/corrected_summary.json).
+Graphs → [`model-experiments/02-rl-grpo/resultspub/rl/`](model-experiments/02-rl-grpo/resultspub/rl/).
 
 ### Run it
 
 ```bash
-jac run 02-rl-grpo/rl/build_tasks.jac           # this_is_jac/ drivers -> tasks + templates
-jac run 02-rl-grpo/rl/build_rl_splits.jac       # fixed holdout + trainpool
-jac run 02-rl-grpo/rl/run_ladder.jac            # DRY: prints the plan, runs nothing heavy
-JAC_LADDER_GO=1 jac run 02-rl-grpo/rl/run_ladder.jac   # execute the ladder (hours per cell)
-jac run 02-rl-grpo/rl/show_ladder.jac           # pivot results into a curve table
+jac run model-experiments/02-rl-grpo/rl/build_tasks.jac           # this_is_jac/ drivers -> tasks + templates
+jac run model-experiments/02-rl-grpo/rl/build_rl_splits.jac       # fixed holdout + trainpool
+jac run model-experiments/02-rl-grpo/rl/run_ladder.jac            # DRY: prints the plan, runs nothing heavy
+JAC_LADDER_GO=1 jac run model-experiments/02-rl-grpo/rl/run_ladder.jac   # execute the ladder (hours per cell)
+jac run model-experiments/02-rl-grpo/rl/show_ladder.jac           # pivot results into a curve table
 ```
 
 Full pipeline reference (reward design, warm-start, the recommended
-compute-smart execution order, gotchas) → **[`02-rl-grpo/rl/README.md`](02-rl-grpo/rl/README.md)**.
+compute-smart execution order, gotchas) → **[`model-experiments/02-rl-grpo/rl/README.md`](model-experiments/02-rl-grpo/rl/README.md)**.
 
 ---
 
 ## Attempt 3 — next
 
-**[`03-new/`](03-new/)** — not started yet. Seeded with
-[`03-new/rui.md`](03-new/rui.md).
+**[`model-experiments/03-new/`](model-experiments/03-new/)** — not started yet. Seeded with
+[`model-experiments/03-new/rui.md`](model-experiments/03-new/rui.md).
 
 ---
 
@@ -253,14 +255,15 @@ compute-smart execution order, gotchas) → **[`02-rl-grpo/rl/README.md`](02-rl-
 
 | Path | What |
 |---|---|
-| `01-sft-dpo/` | attempt 1 — code, dataset, adapters, results, docs (see [above](#attempt-1--sft--dpo)) |
-| `02-rl-grpo/` | attempt 2 — code, dataset, adapters, results, docs, the RL slide deck (see [above](#attempt-2--rl--grpo)) |
-| `03-new/` | attempt 3 — just `rui.md` so far |
+| `model-experiments/` | parent dir for all three attempts (see rows below) |
+| `model-experiments/01-sft-dpo/` | attempt 1 — code, dataset, adapters, results, docs (see [above](#attempt-1--sft--dpo)) |
+| `model-experiments/02-rl-grpo/` | attempt 2 — code, dataset, adapters, results, docs, the RL slide deck (see [above](#attempt-2--rl--grpo)) |
+| `model-experiments/03-new/` | attempt 3 — just `rui.md` so far |
 | `models/` *(gitignored)* | base + merged/fused checkpoints, shared across attempts — attempt 2 finetunes attempt 1's output |
-| `results/` | studio scratch space only (`_builder`, `_evals`) — per-attempt run outputs live inside `01-sft-dpo/results/` and `02-rl-grpo/results/` |
+| `results/` | JMS scratch space only (`_builder`, `_evals`) — per-attempt run outputs live inside `model-experiments/01-sft-dpo/results/` and `model-experiments/02-rl-grpo/results/` |
 | `docs/` | repo-wide: `training_configs/` (hyperparameter registry for every adapter, incl. deleted ones — see `docs/ARTIFACT_LOG.md`), `wholestack/` (end-to-end strategy spanning both attempts) |
-| `studio/` | **Jac Model Studio** — the app that visualizes/drives all of this (dataset browser, GENERATE panel, RL section, builder jobs) |
-| `this_is_jac/` | the real open-source Jac codebase attempt 2 mines RL tasks from |
+| `jms/` | **Jac Model Studio (JMS)** — the app that visualizes/drives all of this (dataset browser, GENERATE panel, RL section, builder jobs) |
+| `model-experiments/02-rl-grpo/dataset/this_is_jac/` | the real open-source Jac codebase attempt 2 mines RL tasks from |
 | `context.md` | durable project framing (what Jac is, the goal, fixed constraints) |
 | `papers/` | reference papers (MultiPL-T, WizardCoder, Magicoder, SelfCodeAlign, DeepSeek-Coder, CodeDPO, Magpie) |
 | `setup_env.sh` | one-time venv + toolchain install (jaclang, mlx-lm, mlx-lm-lora, matplotlib) |
@@ -302,23 +305,23 @@ design in both attempts had to respect.
 **Attempt 1 — SFT + DPO**
 | Doc | What |
 |---|---|
-| [`01-sft-dpo/sft_dpo/process.md`](01-sft-dpo/sft_dpo/process.md) | operator runbook — setup → check → run, pause/resume, timings |
-| [`01-sft-dpo/docs/sft_dpo/modeltesting/HANDOFF.md`](01-sft-dpo/docs/sft_dpo/modeltesting/HANDOFF.md) | single source of truth — architecture, every module, every gotcha |
-| [`01-sft-dpo/docs/initmodelchoice/2026-06-26-sft-dpo-bakeoff-results.md`](01-sft-dpo/docs/initmodelchoice/2026-06-26-sft-dpo-bakeoff-results.md) | 6-model base bake-off, the keep-Qwen3-Coder verdict |
-| [`01-sft-dpo/docs/initmodelchoice/strat.md`](01-sft-dpo/docs/initmodelchoice/strat.md) | the 12 data-generation recipes (R1–R12) |
-| [`01-sft-dpo/resultspub/initmodelchoice/RESULTS.md`](01-sft-dpo/resultspub/initmodelchoice/RESULTS.md) | full measured results + all 16 training graphs |
-| [`01-sft-dpo/sft_dpo/jacgen/README.md`](01-sft-dpo/sft_dpo/jacgen/README.md) | module-by-module pipeline reference (24 modules) |
+| [`model-experiments/01-sft-dpo/sft_dpo/process.md`](model-experiments/01-sft-dpo/sft_dpo/process.md) | operator runbook — setup → check → run, pause/resume, timings |
+| [`model-experiments/01-sft-dpo/docs/sft_dpo/modeltesting/HANDOFF.md`](model-experiments/01-sft-dpo/docs/sft_dpo/modeltesting/HANDOFF.md) | single source of truth — architecture, every module, every gotcha |
+| [`model-experiments/01-sft-dpo/docs/initmodelchoice/2026-06-26-sft-dpo-bakeoff-results.md`](model-experiments/01-sft-dpo/docs/initmodelchoice/2026-06-26-sft-dpo-bakeoff-results.md) | 6-model base bake-off, the keep-Qwen3-Coder verdict |
+| [`model-experiments/01-sft-dpo/docs/initmodelchoice/strat.md`](model-experiments/01-sft-dpo/docs/initmodelchoice/strat.md) | the 12 data-generation recipes (R1–R12) |
+| [`model-experiments/01-sft-dpo/resultspub/initmodelchoice/RESULTS.md`](model-experiments/01-sft-dpo/resultspub/initmodelchoice/RESULTS.md) | full measured results + all 16 training graphs |
+| [`model-experiments/01-sft-dpo/sft_dpo/jacgen/README.md`](model-experiments/01-sft-dpo/sft_dpo/jacgen/README.md) | module-by-module pipeline reference (24 modules) |
 
 **Attempt 2 — RL / GRPO**
 | Doc | What |
 |---|---|
-| [`02-rl-grpo/RL_FINDINGS.md`](02-rl-grpo/RL_FINDINGS.md) | the full story — every era, every bug, every corrected number |
-| [`02-rl-grpo/rl/README.md`](02-rl-grpo/rl/README.md) | pipeline reference — reward design, warm-start, ladder execution, gotchas |
-| [`02-rl-grpo/docs/rl/00-overview.md`](02-rl-grpo/docs/rl/00-overview.md) / [`01-design.md`](02-rl-grpo/docs/rl/01-design.md) | design docs written before the ladder was built |
-| [`02-rl-grpo/docs/rl/RL_WEEKEND_RESULTS.md`](02-rl-grpo/docs/rl/RL_WEEKEND_RESULTS.md) | original Era-1 write-up, verbatim |
-| [`02-rl-grpo/docs/rl/references.md`](02-rl-grpo/docs/rl/references.md) | cited RL literature (Yue et al., ProRL, Spurious Rewards) |
-| [`02-rl-grpo/resultspub/rl/README.md`](02-rl-grpo/resultspub/rl/README.md) | index of the published (corrected) graphs |
-| [`02-rl-grpo/presentation/main.pdf`](02-rl-grpo/presentation/main.pdf) | slide deck ([source](02-rl-grpo/presentation/main.tex)) |
+| [`model-experiments/02-rl-grpo/RL_FINDINGS.md`](model-experiments/02-rl-grpo/RL_FINDINGS.md) | the full story — every era, every bug, every corrected number |
+| [`model-experiments/02-rl-grpo/rl/README.md`](model-experiments/02-rl-grpo/rl/README.md) | pipeline reference — reward design, warm-start, ladder execution, gotchas |
+| [`model-experiments/02-rl-grpo/docs/rl/00-overview.md`](model-experiments/02-rl-grpo/docs/rl/00-overview.md) / [`01-design.md`](model-experiments/02-rl-grpo/docs/rl/01-design.md) | design docs written before the ladder was built |
+| [`model-experiments/02-rl-grpo/docs/rl/RL_WEEKEND_RESULTS.md`](model-experiments/02-rl-grpo/docs/rl/RL_WEEKEND_RESULTS.md) | original Era-1 write-up, verbatim |
+| [`model-experiments/02-rl-grpo/docs/rl/references.md`](model-experiments/02-rl-grpo/docs/rl/references.md) | cited RL literature (Yue et al., ProRL, Spurious Rewards) |
+| [`model-experiments/02-rl-grpo/resultspub/rl/README.md`](model-experiments/02-rl-grpo/resultspub/rl/README.md) | index of the published (corrected) graphs |
+| [`model-experiments/02-rl-grpo/presentation/main.pdf`](model-experiments/02-rl-grpo/presentation/main.pdf) | slide deck ([source](model-experiments/02-rl-grpo/presentation/main.tex)) |
 
 ---
 
