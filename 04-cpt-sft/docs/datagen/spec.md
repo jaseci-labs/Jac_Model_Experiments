@@ -462,7 +462,8 @@ difference to buffer — do not pad with repetition.
 
 **Gate (corrected 2026-07-20 — verified compiler behavior):** `jac run`
 emits **no deprecation warnings, ever** — warnings like W0062 surface only
-under `jac check`. So the gate is two-part:
+under `jac check`. So the gate is three-part (the third part added
+2026-07-21 — see below):
 
 1. Migrated file must pass `jac run` (the normal generation gate —
    unchanged, and `jac check` is still never used to reject generated
@@ -474,8 +475,43 @@ under `jac check`. So the gate is two-part:
    Pairs where the original passes `jac run` silently *and* produces no
    check-warning are rejected (nothing was actually migrated).
 
+**Amendment (2026-07-21) — a second, necessary exception to "never gate on
+`jac check`":** part 1 alone (migrated code passes `jac run`) cannot
+detect a PARTIAL migration — a file combining several `check_warning`-type
+deprecated patterns (e.g. W0061 + W0062 together) where only some were
+fixed will still pass `jac run` cleanly, since `jac run` never surfaces
+deprecation warnings regardless of whether they're present. So there is a
+**gate part 3**: the migrated (output) code is re-checked under full
+`jac check`, and rejected if any of the original combo's specific
+deprecation-warning codes still appear. This is the second, narrowly-scoped
+place this project's "never gate output on `jac check`" rule is
+deliberately relaxed (`../spec.md` §7 documents both exceptions) — it
+never gates on general `jac check` pass/fail, only on the presence of the
+*specific* codes belonging to that example's own composed patterns.
+Implemented in `gen_migration.jac`'s `run_collect` as "gate part 2" (the
+input-detection check above is folded into prepare-time verification in
+the real implementation, not a separate collect-time step — see the file's
+own docstring for the exact mechanics).
+
 Runs on **Opus** (`../spec.md` §4.1): token-heavy whole-file rewrites,
 mechanically checkable, low judgment risk.
+
+**Real inventory + pilot result (2026-07-20/21):** the confirmable
+deprecated-pattern inventory landed at **4 entries**, each empirically
+verified against the real compiler: W0061 (paren filter), W0062
+(`root()`), W0063 (JSX spread), and the hard-fail v1 `import:py` prefix
+form. `include:jac` was investigated and deliberately excluded (a
+single-file `run_jac`-style gate structurally cannot demonstrate an
+`include` migration, which requires a real companion file). `jac js` (CLI
+alias) and the `jac-scaffold` guide were not investigated — noted as an
+open gap, not a blocker. With only 4 patterns, `itertools.combinations`
+over sizes 2-4 yields 11 valid distinct combos (6+4+1); a 10-item pilot
+(all 6 two-pattern + 4 of the three-pattern combos) ran end-to-end for
+real — Opus-generated, gated, **10/10 accepted, 0 rejected**. The ~500
+example target this category was originally scoped for is not reachable
+from a 4-pattern inventory; per this section's own contingency, the
+buffer category absorbs the shortfall rather than padding with
+repetition.
 
 ---
 
