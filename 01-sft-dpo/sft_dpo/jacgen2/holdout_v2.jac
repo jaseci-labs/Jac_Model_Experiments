@@ -32,6 +32,15 @@ no-op that reports the existing holdout instead of re-carving (holdouts
 are carved once and fixed thereafter -- re-running must never
 re-randomize or resize them).
 
+SHARED, NOT run-tag-scoped (fix, follow-up to Task 17): per `spec.md` §5
+and `workflow.md` §5 ("Holdout rules"), holdouts behave exactly like
+`seed_pool.jsonl` (`seed_pool.jac`) and the frozen pool hashes
+(`freeze_pool.jac`) -- carved ONCE from the `fresh` build, written to a
+SHARED location outside any `<RUN_TAG>/` tree, then read unchanged by
+every subsequent build (including `post_cptv2`). This module therefore
+HARD-FAILS if invoked with `JAC_RUN_TAG=post_cptv2` -- carving is a
+fresh-build-only operation, never a silent no-op under the wrong tag.
+
 Run (from repo root, jacgen convention):
     JAC_RUN_TAG=fresh /Volumes/ExtremePro/JaseciLabs/jac_model_studio/.venv/bin/jac \
         run model-experiments/01-sft-dpo/sft_dpo/jacgen2/holdout_v2.jac
@@ -45,6 +54,10 @@ glob HOLDOUT_CATEGORIES: list[str] = [
     "code_gen", "debug", "documentation", "explanation", "migration", "trajectory"
 ];
 glob HOLDOUT_FRACTION_PCT: int = 15;  # integer percent, avoids float rounding surprises
+
+# SHARED, non-tag-scoped -- matches seed_pool.jsonl/doc_chunks.jsonl/
+# pool_hashes.json's convention (Task 5/7), NOT common.data_root(tag).
+glob HOLDOUT_SHARED_DIR: str = "model-experiments/04-cpt-sft/dataset/shared/holdouts";
 
 def load_jsonl(path: str) -> list[dict] {
     p = Path(path);
@@ -76,8 +89,16 @@ def holdout_count(n: int) -> int {
 
 with entry:__main__ {
     tag: str = require_run_tag();
+    if tag != "fresh" {
+        raise RuntimeError(
+            "holdout_v2.jac must only be run with JAC_RUN_TAG=fresh; holdouts are "
+            + "carved once from the fresh build and shared across both tags (see "
+            + "spec.md §5 / workflow.md §5 'Holdout rules'). Got JAC_RUN_TAG="
+            + str(tag) + " -- refusing to run, even as a no-op."
+        );
+    }
     base: str = data_root(tag);
-    holdout_dir: str = base + "/holdouts";
+    holdout_dir: str = HOLDOUT_SHARED_DIR;
     manifest_path: str = holdout_dir + "/holdout_ids.json";
 
     print("=== holdout_v2: per-category eval holdout carving (Task 17) ===");

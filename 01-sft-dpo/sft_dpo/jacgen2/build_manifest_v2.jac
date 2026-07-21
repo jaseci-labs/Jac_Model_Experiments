@@ -54,6 +54,20 @@ glob SFT_CATEGORIES: list[str] = [
 glob LEGACY_CONVERSION_DIR: str = "model-experiments/01-sft-dpo/dataset/conversion";
 glob GRAPH_CONVERSION_PATH: str = "model-experiments/04-cpt-sft/dataset/shared/graph_conversion_growth.jsonl";
 
+# SHARED, non-tag-scoped -- must match holdout_v2.jac's HOLDOUT_SHARED_DIR
+# exactly (fix, follow-up to Task 17: holdouts are carved once from the
+# fresh build and shared across both tags, per spec.md §5 / workflow.md §5).
+glob HOLDOUT_MANIFEST_PATH: str = "model-experiments/04-cpt-sft/dataset/shared/holdouts/holdout_ids.json";
+
+# Legacy-conversion schema-backfill constants (Finding 2 fix): these
+# records predate the v2 pipeline entirely -- distinct, clearly-labeled
+# "legacy" placeholders, never confused with the new pipeline's
+# prompt-v2.0/jac-context-v2/claude-opus-4-*/claude-fable-5 constants
+# (see gate.jac's PROMPT_VER/CONTEXT_BUNDLE_VER/VALIDATOR_VER/DATASET_VER).
+glob LEGACY_GENERATOR_MODEL_ID: str = "legacy-conversion-pipeline";
+glob LEGACY_GENERATION_DATE: str = "unknown-pre-v2-pipeline";  # exact date not tracked; not a fabricated timestamp
+glob LEGACY_VERSION_TAG: str = "legacy-pre-v2";
+
 def load_jsonl(path: str) -> list[dict] {
     p = Path(path);
     if not p.exists() { return []; }
@@ -76,17 +90,22 @@ def write_jsonl(path: str, records: list) {
 }
 
 def load_holdout_exclusions(tag: str) -> dict {
-    manifest_path: str = data_root(tag) + "/holdouts/holdout_ids.json";
+    manifest_path: str = HOLDOUT_MANIFEST_PATH;
     p = Path(manifest_path);
     excl: dict = {};
     if not p.exists() {
-        print(
-            "WARNING: " + manifest_path + " not found -- holdout_v2.jac hasn't "
-            + "run yet. Proceeding with an EMPTY exclusion set (no records "
-            + "excluded). Re-run this script after holdout_v2.jac to get real "
-            + "holdout-safe training data."
+        raise RuntimeError(
+            "build_manifest_v2.jac hard-fail: shared holdout manifest not found at "
+            + manifest_path + ". This manifest is shared (non-tag-scoped) and is "
+            + "expected to always exist by the time this script runs, for BOTH "
+            + "fresh and post_cptv2 builds -- it must be carved once, under "
+            + "JAC_RUN_TAG=fresh, by holdout_v2.jac, before build_manifest_v2.jac "
+            + "ever runs (see spec.md §5 / workflow.md §5 'Holdout rules'). A "
+            + "missing manifest here is a real pipeline-ordering error, not "
+            + "something to paper over with zero exclusions -- run: "
+            + "JAC_RUN_TAG=fresh " + "/Volumes/ExtremePro/JaseciLabs/jac_model_studio/.venv/bin/jac "
+            + "run model-experiments/01-sft-dpo/sft_dpo/jacgen2/holdout_v2.jac first."
         );
-        return excl;
     }
     manifest: dict = dict(json.loads(p.read_text()));
     for cat in manifest {
@@ -96,11 +115,21 @@ def load_holdout_exclusions(tag: str) -> dict {
     return excl;
 }
 
-def normalize_legacy_conversion(rec: dict, task_type: str, id_prefix: str) -> dict {
+"""Backfill the full v2 schema (spec.md §6, 17 fields) onto a legacy
+(pre-v2-pipeline) conversion record. These records genuinely come from
+a different, already-existing generator (the old jacgen/ pipeline's
+`jac run` + exact-output-match gate -- confirmed real via
+compiler_pass=True/behavioral_pass=True on every sampled legacy
+record), so they get honestly-labeled LEGACY placeholders, distinct
+from the new pipeline's prompt-v2.0/jac-context-v2/claude-opus-4-*
+constants (gate.jac's make_example_v2) -- never pretending these are
+new-pipeline gaps."""
+def normalize_legacy_conversion(rec: dict, task_type: str, id_prefix: str, run_tag: str) -> dict {
     meta: dict = dict(rec.get("meta", {}));
     messages: list = list(rec.get("messages", []));
     basis: str = json.dumps(messages, sort_keys=True);
-    rid: str = id_prefix + "_" + hashlib.md5(basis.encode()).hexdigest()[:12];
+    content_hash: str = hashlib.md5(basis.encode()).hexdigest()[:12];
+    rid: str = id_prefix + "_" + content_hash;
     return {
         "id": rid,
         "category": "conversion",
@@ -108,7 +137,18 @@ def normalize_legacy_conversion(rec: dict, task_type: str, id_prefix: str) -> di
         "complexity": meta.get("difficulty", "unknown"),
         "compiler_pass": meta.get("compiler_pass", None),
         "test_pass": meta.get("behavioral_pass", None),
+        "manually_reviewed": False,
         "generator": meta.get("generator", "unknown"),
+        "generator_model_id": LEGACY_GENERATOR_MODEL_ID,
+        "gate_class": "behavioral",
+        "variant_idx": 0,
+        "generation_date": LEGACY_GENERATION_DATE,
+        "source_prompt_version": LEGACY_VERSION_TAG,
+        "context_bundle_version": LEGACY_VERSION_TAG,
+        "validator_version": LEGACY_VERSION_TAG,
+        "dataset_version": LEGACY_VERSION_TAG,
+        "run_tag": run_tag,
+        "seed_id": "legacy_" + content_hash,
         "seed_source": meta.get("source", "unknown"),
         "seed_tier": 0,
         "messages": messages
@@ -176,7 +216,7 @@ with entry:__main__ {
         }
         raw: list[dict] = load_jsonl(path);
         for rec in raw {
-            norm: dict = normalize_legacy_conversion(rec, "python_to_jac_function", "convtier_" + prefix);
+            norm: dict = normalize_legacy_conversion(rec, "python_to_jac_function", "convtier_" + prefix, tag);
             if norm["id"] in exclude_ids {
                 continue;
             }
