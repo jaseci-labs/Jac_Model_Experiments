@@ -10,18 +10,26 @@ with two very different generation stories:
 
   Part A ("free" phase) -- correctness (dpo-plan.md 2.3), auth_security
     (2.4), typing (2.5). These are assembled directly from gen_debug.jac's
-    already-persisted raw_output/debug/buggy_variants.jsonl -- no LLM call,
-    no gate needed (Task 9's dual-gate already proved buggy_code diverges/
-    fails and clean_code passes). Runs synchronously, writes straight to
-    releases/dpo_train_free.jsonl. No JAC_BATCH_PHASE handoff involved.
+    already-persisted raw_output/debug/buggy_variants.jsonl -- no LLM call
+    (Task 9's dual-gate already proved buggy_code diverges/fails and
+    clean_code passes), but `compiler_pass_rejected` is still verified for
+    real here via a fresh gate.run_jac_local(buggy_code) call rather than
+    inferred from bug_type -- a behavioral-class bug can easily compile fine
+    and only diverge at runtime, so bug_type category membership alone can't
+    tell us whether a given buggy_code compiles. Runs synchronously, writes
+    straight to releases/dpo_train_free.jsonl. No JAC_BATCH_PHASE handoff
+    involved.
 
   Part B (prepare/collect phases) -- idiomatic (2.1, flagship, 40% weight)
     and graph_native (2.2, 15% weight). These need a genuinely new
     generation (a less-idiomatic / object-shoehorned rewrite of an idiomatic
     seed), so they go through the normal batch handoff: prepare writes
-    pending items, an external orchestrator dispatches Fable against them,
-    collect reads responses, gates (both chosen and rejected must compile),
-    and writes to releases/dpo_train_llm.jsonl.
+    pending items (carrying expected_output/gate_class from the seed, same
+    as gen_debug.jac/gen_code_gen.jac), an external orchestrator dispatches
+    Fable against them, collect reads responses, gates (rejected must
+    compile; chosen must compile AND, for behavioral-gate_class seeds, pass
+    the same final sanity behavioral re-check gen_debug.jac/gen_code_gen.jac
+    use on already-proven seed code), and writes to releases/dpo_train_llm.jsonl.
 
 Two output files, not one, so Task 17's merge step knows exactly which rows
 came from which path: dpo_train_free.jsonl (Part A, no LLM) and
@@ -68,24 +76,11 @@ import json;
 import from pathlib { Path }
 import from datetime { datetime }
 import from common { require_run_tag, data_root, append_jsonl, existing_keys, example_key }
-import from gate { run_jac_local }
+import from gate { run_jac_local, behavioral_gate }
 import from batch { make_batch_id, write_pending_batch, read_response_batch, pending_path, responses_path }
 
 glob CATEGORY: str = "dpo";
 glob SEED_POOL_PATH: str = "model-experiments/04-cpt-sft/dataset/shared/seed_pool.jsonl";
-glob GENERATOR_MODEL_ID: str = "claude-fable-5";
-
-"""Bug types whose gen_debug.jac gate_class was compile_only (both buggy and
-clean variants proven to compile, no behavioral divergence check) rather
-than behavioral (buggy variant proven to actually fail/diverge). Duplicated
-from gen_debug.jac's COMPILE_ONLY_GATE_BUG_TYPES rather than imported -- see
-gate.jac's top docstring for why cross-file relative imports don't survive
-`jac run` in this repo layout. Only auth_leak uses compile_only in the
-current pilot bug-type set; every other bug type (including syntax_typo,
-the other bug_type present in the real buggy_variants.jsonl) is
-behavioral-gated, so its rejected/buggy side is proven to actually fail or
-diverge."""
-glob COMPILE_ONLY_GATE_BUG_TYPES: list[str] = ["auth_leak"];
 
 """dpo-plan.md 2.2's graph-shaped domains -- a seed is eligible for the
 graph_native axis if any of these appear in its `domains` list."""
@@ -174,7 +169,12 @@ def run_free() {
         buggy_code: str = str(variant["buggy_code"]);
         clean_code: str = str(variant["clean_code"]);
         symptom: str = str(variant["symptom"]);
-        rejected_compiles: bool = bug_type in COMPILE_ONLY_GATE_BUG_TYPES;
+        # Real compile check, not a static bug_type lookup -- a behavioral-
+        # class bug (e.g. wrong_edge_direction, off_by_one_logic) can easily
+        # compile fine and only diverge at runtime, so bug_type category
+        # membership alone can't tell us whether THIS buggy_code compiles.
+        (rej_exit, rej_out, rej_err) = run_jac_local(buggy_code);
+        rejected_compiles: bool = (rej_exit == 0);
 
         for axis in axes_for_bug_type(bug_type) {
             rec_id: str = example_key(seed_id, axis, 0);
@@ -304,7 +304,9 @@ def run_prepare() {
             "seed_id": s["seed_id"],
             "seed_tier": s["seed_tier"],
             "origin": s["origin"],
-            "jac_code": s["jac_code"]
+            "jac_code": s["jac_code"],
+            "gate_class": s["gate_class"],
+            "expected_output": s["expected_output"]
         });
         idiomatic_written += 1;
     }
@@ -328,7 +330,9 @@ def run_prepare() {
             "seed_id": s["seed_id"],
             "seed_tier": s["seed_tier"],
             "origin": s["origin"],
-            "jac_code": s["jac_code"]
+            "jac_code": s["jac_code"],
+            "gate_class": s["gate_class"],
+            "expected_output": s["expected_output"]
         });
         graph_native_written += 1;
     }
@@ -439,6 +443,13 @@ def run_collect() {
         }
 
         jac_code: str = str(ctx["jac_code"]);
+        # .get() rather than ctx["gate_class"]/ctx["expected_output"] --
+        # pending items written before this field was added to run_prepare
+        # (already on disk, idempotent-skipped pairs) won't carry these
+        # keys; falls back to the compile-only check below for those, same
+        # as before this fix.
+        seed_gate_class: str | None = ctx.get("gate_class", None);
+        seed_expected_output: str | None = ctx.get("expected_output", None);
 
         # Gate: both chosen (the seed's own idiomatic code) and rejected
         # (Fable's less-idiomatic rewrite) must compile -- see this file's
@@ -453,6 +464,25 @@ def run_collect() {
                 "axis": axis, "reason": reason
             });
             continue;
+        }
+        # Final sanity re-check on the chosen side (dpo-plan.md 5: "every
+        # chosen example must independently pass the same gate class as its
+        # SFT counterpart... behavioral where observable") -- same pattern
+        # gen_debug.jac/gen_code_gen.jac use to re-verify already-proven seed
+        # code. compile_only seeds (or pending items missing the field,
+        # see the .get() note above) keep the exit-0-only check as
+        # sufficient, matching gen_code_gen.jac's compile_only handling.
+        if seed_gate_class == "behavioral" and seed_expected_output {
+            (chosen_behaves_ok, chosen_behave_reason) = behavioral_gate(jac_code, seed_expected_output);
+            if not chosen_behaves_ok {
+                reason: str = "chosen (seed's own code) failed behavioral re-check: " + chosen_behave_reason;
+                reason_counts[reason] = reason_counts.get(reason, 0) + 1;
+                append_jsonl(rejected_path, {
+                    "batch_id": batch_id, "category": CATEGORY, "seed_id": ctx["seed_id"],
+                    "axis": axis, "reason": reason
+                });
+                continue;
+            }
         }
         (rej_exit, rej_out, rej_err) = run_jac_local(rejected_code);
         if rej_exit != 0 {
