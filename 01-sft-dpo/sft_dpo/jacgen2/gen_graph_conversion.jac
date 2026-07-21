@@ -52,9 +52,10 @@ import hashlib;
 import subprocess;
 import tempfile;
 import from pathlib { Path }
-import from common { require_run_tag, append_jsonl, existing_keys }
+import from common { require_run_tag, append_jsonl, existing_keys, example_key }
 import from gate { run_jac_local, make_example_v2 }
 import from batch { make_batch_id, write_pending_batch, read_response_batch, pending_path, responses_path }
+import from dedup2 { rouge_l }
 
 glob CATEGORY: str = "conversion";
 glob TASK_TYPE: str = "python_to_jac_graph";
@@ -63,6 +64,11 @@ glob GENERATOR_MODEL_ID: str = "claude-opus-4-8";
 
 glob GROWTH_PATH: str = "model-experiments/04-cpt-sft/dataset/shared/graph_conversion_growth.jsonl";
 glob REJECTED_PATH: str = "model-experiments/04-cpt-sft/dataset/shared/graph_conversion_rejected.jsonl";
+
+"""The existing (frozen) 31-example graph tier this new growth must be
+near-dup-checked against, per spec.md section 4.1's Dedup bullet."""
+glob EXISTING_TIER31_PATH: str = "model-experiments/01-sft-dpo/sft_dpo/jacgen/graph_data/train.json";
+glob NEAR_DUP_THRESHOLD: float = 0.85;
 
 """New graph/tree/relational problem shapes, invented to widen coverage past
 the existing 31-example tier (which is all reachable-count / leaf-count /
@@ -251,6 +257,64 @@ def dual_language_gate(python_code: str, jac_code: str) -> tuple[bool, str] {
 }
 
 
+"""Builds the "existing corpus" of Jac code to near-dup-check new candidates
+against: the frozen 31-example tier (train.json's "jac" field) plus every
+Jac code block already accepted into GROWTH_PATH in a prior collect run (so
+within-this-tier duplicates across multiple collect runs are also caught,
+not just against the original 31). Returns a list of (label, jac_code)
+pairs so a rejection can name which existing entry it matched."""
+def load_existing_jac_corpus() -> list[tuple[str, str]] {
+    corpus: list[tuple[str, str]] = [];
+
+    train_path: Path = Path(EXISTING_TIER31_PATH);
+    if train_path.exists() {
+        with open(str(train_path), "r") as f {
+            tier31: list[dict] = json.load(f);
+        }
+        for entry in tier31 {
+            corpus.append(("train31:" + str(entry.get("name", "?")), str(entry.get("jac", ""))));
+        }
+    }
+
+    if Path(GROWTH_PATH).exists() {
+        with open(GROWTH_PATH, "r") as f {
+            growth_lines: list[str] = f.readlines();
+        }
+        for line in growth_lines {
+            s: str = line.strip();
+            if not s {
+                continue;
+            }
+            rec: dict = json.loads(s);
+            for msg in rec.get("messages", []) {
+                if msg.get("role") == "assistant" {
+                    jac_code: str = extract_fenced(str(msg.get("content", "")), "jac");
+                    if jac_code {
+                        corpus.append(("growth:" + str(rec.get("id", "?")), jac_code));
+                    }
+                }
+            }
+        }
+    }
+
+    return corpus;
+}
+
+
+"""Direct loop-and-compare near-dup check (no bucketing -- the corpus is
+only ~41 entries at this tier's target scale, so a full pairwise scan is
+plenty fast and far more readable). Returns (is_dup, matched_label, score)."""
+def near_dup_match(jac_code: str, corpus: list[tuple[str, str]]) -> tuple[bool, str, float] {
+    for (label, existing_code) in corpus {
+        score: float = rouge_l(jac_code, existing_code);
+        if score >= NEAR_DUP_THRESHOLD {
+            return (True, label, score);
+        }
+    }
+    return (False, "", 0.0);
+}
+
+
 def run_collect() {
     tag: str = require_run_tag();
     p_path: str = pending_path(tag, PENDING_CATEGORY);
@@ -282,6 +346,8 @@ def run_collect() {
     }
 
     already_persisted: dict = existing_keys(GROWTH_PATH);
+    existing_corpus: list[tuple[str, str]] = load_existing_jac_corpus();
+    print("near-dup corpus loaded: " + str(len(existing_corpus)) + " existing Jac examples (31-tier + prior growth)");
 
     processed: int = 0;
     accepted: int = 0;
@@ -335,6 +401,23 @@ def run_collect() {
             continue;
         }
 
+        candidate_id: str = example_key(str(ctx["seed_id"]), TASK_TYPE, 0);
+        if candidate_id in already_persisted {
+            already_persisted_skipped += 1;
+            continue;
+        }
+
+        (is_dup, dup_label, dup_score) = near_dup_match(jac_code, existing_corpus);
+        if is_dup {
+            reason: str = "near-dup of " + dup_label + " (rouge_l=" + str(round(dup_score, 3)) + ")";
+            reason_counts[reason] = reason_counts.get(reason, 0) + 1;
+            append_jsonl(REJECTED_PATH, {
+                "batch_id": batch_id, "category": CATEGORY, "seed_id": ctx["seed_id"],
+                "scenario": ctx["scenario"], "reason": reason
+            });
+            continue;
+        }
+
         # Matches the existing conversion category's record shape --
         # jacgen/writer.jac's make_sft_example user-turn wording, verbatim.
         user: str = "Convert this Python to idiomatic Jac:\n\n```python\n" + python_code.strip() + "\n```";
@@ -362,13 +445,10 @@ def run_collect() {
                     + "exists yet for the Agent-dispatch (Opus/Fable subagent) path"
             }
         );
-        if rec["id"] in already_persisted {
-            already_persisted_skipped += 1;
-            continue;
-        }
 
         append_jsonl(GROWTH_PATH, rec);
         already_persisted[rec["id"]] = True;
+        existing_corpus.append(("growth:" + str(rec["id"]), jac_code));
         accepted += 1;
     }
 
