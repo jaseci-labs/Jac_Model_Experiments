@@ -5,7 +5,7 @@ handoff protocol in batch.jac. Same two-phase shape as gen_code_gen.jac --
 read that file's docstring for the general pattern, not repeated here.
 
 This is a SCOPED-DOWN v1, not the full 15-bug-type x 21-domain fan-out from
-spec.md's domain x bug coverage table: it covers 5 bug types across 4
+spec.md's domain x bug coverage table: it covers 6 bug types across 5
 domains (6 (domain,bug_type) pairs), 1 variant per eligible (seed,bug_type)
 pair, capped at JAC_PILOT_LIMIT total pending items. Chosen subset:
 
@@ -23,6 +23,23 @@ paired .sv.jac/.cl.jac project-level gate via gate.run_jac_project) and
 `code_critique` (prose-only, no compiler gate) -- both are structurally
 distinct extended task types, future work once this single-file
 inject-one-bug template is proven end to end.
+
+KNOWN GAP -- disclosed, not fixed (matches the cross_boundary_debug /
+code_critique deferrals above): spec.md section 7's gate matrix requires
+the auth_leak row to be gated compile_only PLUS a second Fable critique
+pass that independently confirms the injected bug is real. This file's
+auth_leak branch (run_collect, the `is_auth_leak` block) does NOT do that
+second critique pass -- it only checks that both the buggy and clean
+variants compile, then trusts the Fable-authored SYMPTOM: text as-is
+(now also guarded by a cheap buggy_code != clean_code no-op check, see
+below). A real critique pass would need a THIRD batch-handoff phase
+(prepare -> collect -> critique-prepare -> critique-collect) on top of
+this file's existing two-phase prepare/collect shape, which is more
+machinery than this pilot task needs to build right now -- deferred for
+the same proportionate-scope reason as cross_boundary_debug/code_critique
+above, and same spirit as Task 8's disclosed generator_model_id
+placeholder gap (see `generator_model_id_note` in run_collect's
+extra_meta below).
 
 Two phases, selected by env var JAC_BATCH_PHASE:
 
@@ -349,17 +366,24 @@ def run_collect() {
             # spec.md section 2's gate-class caveat: auth_leak isn't
             # observable in a single-process `jac run`. Confirm both
             # variants still compile and trust the Fable-written symptom.
-            (orig_code, orig_out, orig_err) = run_jac_local(clean_code);
-            (bug_code_exit, bug_out, bug_err) = run_jac_local(buggy_code);
-            if orig_code != 0 {
+            # (No second critique pass confirming the bug is real -- see
+            # the KNOWN GAP note in this file's top docstring.)
+            if buggy_code == clean_code {
                 gate_ok = False;
-                gate_reason = "original/clean code failed to compile: exit " + str(orig_code) + ": " + orig_err.strip()[:200];
-            } elif bug_code_exit != 0 {
-                gate_ok = False;
-                gate_reason = "buggy code failed to compile (auth_leak bugs should still compile): exit " + str(bug_code_exit) + ": " + bug_err.strip()[:200];
+                gate_reason = "auth_leak candidate rejected: buggy_code identical to clean_code (no actual change)";
             } else {
-                gate_ok = True;
-                gate_reason = "ok: auth_leak compile-only gate, both variants compile, trusting Fable symptom";
+                (orig_code, orig_out, orig_err) = run_jac_local(clean_code);
+                (bug_code_exit, bug_out, bug_err) = run_jac_local(buggy_code);
+                if orig_code != 0 {
+                    gate_ok = False;
+                    gate_reason = "original/clean code failed to compile: exit " + str(orig_code) + ": " + orig_err.strip()[:200];
+                } elif bug_code_exit != 0 {
+                    gate_ok = False;
+                    gate_reason = "buggy code failed to compile (auth_leak bugs should still compile): exit " + str(bug_code_exit) + ": " + bug_err.strip()[:200];
+                } else {
+                    gate_ok = True;
+                    gate_reason = "ok: auth_leak compile-only gate, both variants compile, trusting Fable symptom";
+                }
             }
         } else {
             expected_output: str = str(ctx["expected_output"]);
