@@ -24,7 +24,8 @@ glob POOL_FILES: list = [
     "model-experiments/04-cpt-sft/dataset/shared/seed_pool.jsonl",
     "model-experiments/04-cpt-sft/dataset/shared/doc_chunks.jsonl",
     "model-experiments/01-sft-dpo/sft_dpo/jacgen2/data/deprecated_inventory.jsonl",
-    "model-experiments/01-sft-dpo/sft_dpo/jacgen2/data/app_ideas.jsonl"
+    "model-experiments/01-sft-dpo/sft_dpo/jacgen2/data/app_ideas.jsonl",
+    "model-experiments/04-cpt-sft/dataset/shared/conversion_slice.jsonl"
 ];
 
 glob HASHES_PATH: str = "model-experiments/04-cpt-sft/dataset/shared/pool_hashes.json";
