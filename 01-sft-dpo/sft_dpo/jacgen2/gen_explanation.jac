@@ -73,6 +73,7 @@ Run (from repo root):
 
 import os;
 import json;
+import re;
 import from pathlib { Path }
 import from common { require_run_tag, data_root, append_jsonl, existing_keys }
 import from gate { make_example_v2 }
@@ -116,9 +117,6 @@ glob STOPWORDS: list[str] = [
     "both", "each", "few", "more", "most", "other", "some", "only", "own",
     "same", "just", "because"
 ];
-
-glob PUNCT_CHARS: str = ".,;:!?\"'()[]{}`*_-";
-
 
 def load_doc_chunks() -> list[dict] {
     chunks: list[dict] = [];
@@ -329,14 +327,16 @@ def parse_explanation_response(text: str) -> dict {
     return {"question": question, "answer": answer};
 }
 
-"""Lowercase, strip surrounding punctuation, drop stopwords/empties, dedupe
--- deliberately simple (no stemming, no library) since this is a
+"""Lowercase, split on runs of non-alphanumeric characters (not just
+whitespace -- code-dense chunks glue words together with punctuation like
+`items(=status="processed"`, so a whitespace-only split plus per-token
+strip leaves them fused into unmatchable blobs), drop stopwords/empties,
+dedupe -- deliberately simple (no stemming, no library) since this is a
 pilot-calibrated lexical heuristic, not a real NLP scorer (spec.md section
 3's note on this gate's known false modes)."""
 def significant_words(text: str) -> list[str] {
     words: list[str] = [];
-    for raw in text.lower().split() {
-        w: str = raw.strip(PUNCT_CHARS);
+    for w in re.split(r"[^a-zA-Z0-9_]+", text.lower()) {
         if w and w not in STOPWORDS and w not in words {
             words.append(w);
         }
