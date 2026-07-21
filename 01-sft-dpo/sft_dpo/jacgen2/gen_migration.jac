@@ -36,26 +36,38 @@ category's pilot scale small; this file does not pad with repetition to hit
 a larger number, per spec.md section 7's own instruction ("if it can't
 support 500 distinct examples ... shrink the category").
 
-Gate (spec.md section 7, corrected 2026-07-20 -- two-part, NOT symmetric
-with every other category's never-`jac check` rule):
+Gate (spec.md section 7 plus its 2026-07-21 amendment -- three checks
+total, NOT symmetric with every other category's never-`jac check` rule):
 
-  1. Migrated file must pass `jac run` (the normal generation gate).
-  2. The deprecated ORIGINAL must either fail `jac run` (hard_fail forms)
-     or produce a deprecation warning under the FULL `jac check` (no `-p`
-     -- confirmed by Task 7's investigation that `-p` never surfaces
-     warnings). This is a narrow, explicit exception to the project's
-     standing "never gate on `jac check`" rule: check is used ONLY to
-     detect warnings on the INPUT during PREPARE's sanity check, never to
-     reject generated OUTPUT. Gate part 1 (the only gate that can reject a
-     generated example) still uses plain `jac run`.
+  1. PREPARE-time input check: the deprecated ORIGINAL must either fail
+     `jac run` (hard_fail forms) or produce a deprecation warning under
+     the FULL `jac check` (no `-p` -- confirmed by Task 7's investigation
+     that `-p` never surfaces warnings). This is the exception spec.md
+     section 7 already documented: check is used ONLY to detect warnings
+     on the INPUT, never to reject generated OUTPUT.
 
-  As a nice-to-have beyond spec.md's letter, COLLECT also re-runs the full
-  `jac check` on the MIGRATED code and confirms none of the combo's
-  original check_warning codes still appear -- a correctness signal (did
-  the migration actually remove the deprecated forms, not just happen to
-  compile), not a spec requirement. See run_full_check/verify_combo_reproduces
-  below -- gate.jac's helpers only wrap `-p` parse-only check, so this file
-  adds its own minimal full-check helper rather than modifying gate.jac.
+  2. COLLECT gate part 1 (the primary rejection gate): the MIGRATED file
+     must pass `jac run` -- the normal generation gate, applied to output.
+
+  3. COLLECT gate part 2 (also rejection-capable -- spec.md section 7's
+     2026-07-21 amendment to the migration row of its per-category gate
+     table): re-runs the FULL `jac check` on the MIGRATED code and rejects
+     if any of the combo's own composed check_warning codes still appear.
+     This is a necessary, deliberate extension beyond spec.md section 7's
+     literal "never reject output" wording -- required because gate part 1
+     above (`jac run`) structurally cannot detect a migration that only
+     partially fixed a multi-pattern deprecated file, since `jac run`
+     never surfaces deprecation warnings at all (confirmed in spec.md
+     section 7). Without this check, a response that fixed 2-of-3
+     deprecated patterns in a combo and left one in place would pass gate
+     part 1 cleanly every time and be accepted into training data uncaught.
+     This gate is narrowly scoped: it ONLY searches for the specific
+     warning codes belonging to the combo's own composed patterns -- it
+     never gates on general `jac check` pass/fail, and never introduces
+     new rejection criteria beyond confirming the requested migration was
+     actually completed. See run_full_check/verify_combo_reproduces below
+     -- gate.jac's helpers only wrap `-p` parse-only check, so this file
+     adds its own minimal full-check helper rather than modifying gate.jac.
 
 Two phases, selected by env var JAC_BATCH_PHASE:
 
@@ -159,13 +171,17 @@ snippet -- doesn't need to be a unified program, just needs to contain
 multiple distinct deprecated forms in one file (verified empirically: Jac
 allows multiple top-level `with entry { }` blocks in a single file, each
 executed in order -- confirmed via a manual multi-pattern test run before
-writing this generator)."""
+writing this generator). No trailing newline is appended here: callers
+that embed this inside a ```` ```jac\n...\n``` ```` fence (run_collect's
+persisted messages[0] content) already supply the newline before the
+closing fence -- appending one here too produced a cosmetic blank line
+before the fence in every persisted record."""
 def compose_combo(patterns: list[dict]) -> str {
     parts: list[str] = [];
     for p in patterns {
         parts.append(str(p["example_before"]).rstrip());
     }
-    return "\n\n".join(parts) + "\n";
+    return "\n\n".join(parts);
 }
 
 def build_prompt(combined_code: str) -> str {
@@ -197,10 +213,14 @@ but calls `jac check <file>` (the FULL type-checker, no `-p`) instead of
 `jac run` -- gate.jac's own helpers only wrap `-p` parse-only check (see
 seed_pool.jac/seed_scrape.jac), and `-p` never surfaces deprecation
 warnings (Task 7's finding), so this file needs its own minimal helper
-rather than reusing gate.jac's. Used ONLY to detect warnings on already-
-deprecated INPUT (prepare's sanity check, collect's nice-to-have leftover-
-warning re-check) -- never to reject generated OUTPUT; gate part 1 (the
-only rejection-capable gate) still uses plain run_jac_local (`jac run`)."""
+rather than reusing gate.jac's. Used to detect warnings on already-
+deprecated INPUT (prepare's sanity check) and, per spec.md section 7's
+2026-07-21 amendment, to confirm the combo's warning codes are actually
+gone from the MIGRATED output (collect's gate part 2) -- both uses are
+narrowly scoped to the combo's own composed pattern codes, never a
+general `jac check` pass/fail gate. Gate part 1 (`jac run` on the
+migrated code) still uses plain run_jac_local and is the primary,
+always-applicable rejection gate."""
 def run_full_check(jac_code: str, timeout: int = 30) -> tuple[int, str, str] {
     with tempfile.TemporaryDirectory() as d {
         f = Path(str(d)) / "snippet.jac";
@@ -229,9 +249,12 @@ patterns), the combined file is expected to PASS `jac run` and have every
 pattern's warning code appear in the FULL `jac check` output."""
 def verify_combo_reproduces(patterns: list[dict], combined_code: str) -> tuple[bool, str] {
     has_hard_fail: bool = False;
+    check_warning_patterns: list[dict] = [];
     for p in patterns {
         if str(p["detect"]) == "hard_fail" {
             has_hard_fail = True;
+        } else {
+            check_warning_patterns.append(p);
         }
     }
 
@@ -239,7 +262,41 @@ def verify_combo_reproduces(patterns: list[dict], combined_code: str) -> tuple[b
 
     if has_hard_fail {
         if run_code != 0 {
-            return (True, "ok: hard_fail pattern present, jac run failed as expected (exit " + str(run_code) + ")");
+            if not check_warning_patterns {
+                return (True, "ok: hard_fail pattern present, jac run failed as expected (exit " + str(run_code) + ")");
+            }
+
+            # Mixed combo (hard_fail + check_warning patterns together,
+            # e.g. records 8/9/10's shape): jac run failing only confirms
+            # the hard_fail component. Empirically, `jac check` still
+            # surfaces check_warning codes in its output even when a
+            # hard_fail parse error exists elsewhere in the same file, so
+            # also confirm each check_warning pattern's code is detectable
+            # -- mirroring the check_warning-only verification below,
+            # applied IN ADDITION to (not instead of) the hard_fail
+            # jac-run check just above. Catches a bad combo composition
+            # before spending an Opus call, rather than relying solely on
+            # collect-mode's gate part 2 to catch it after the fact.
+            (mixed_check_code, mixed_check_out, mixed_check_err) = run_full_check(combined_code);
+            mixed_combined_output: str = mixed_check_out + "\n" + mixed_check_err;
+            mixed_found_codes: list[str] = [];
+            mixed_missing_codes: list[str] = [];
+            for p in check_warning_patterns {
+                code: str = pattern_warning_code(p);
+                if code in mixed_combined_output {
+                    mixed_found_codes.append(code);
+                } else {
+                    mixed_missing_codes.append(code);
+                }
+            }
+            if mixed_missing_codes {
+                return (False, "mixed combo: jac run failed as expected (hard_fail component) but "
+                    + "missing expected check_warning code(s) in `jac check` output: "
+                    + ",".join(mixed_missing_codes));
+            }
+            return (True, "ok: mixed combo -- hard_fail component failed jac run as expected (exit "
+                + str(run_code) + "), check_warning code(s) confirmed present under full `jac check`: "
+                + ",".join(mixed_found_codes));
         }
         return (False, "expected jac run to fail (hard_fail pattern present in combo) but it exited 0");
     }
@@ -447,14 +504,19 @@ def run_collect() {
             continue;
         }
 
-        # Gate part 2 nice-to-have (not a spec.md hard requirement -- see
-        # top docstring): re-run the FULL `jac check` on the MIGRATED code
-        # and confirm none of the combo's original check_warning codes are
-        # still present. hard_fail patterns have no meaningful warning
-        # code (pattern_warning_code would return "v1", not a real code) so
-        # they're skipped here by the leading-"W" filter -- gate part 1
-        # already covers them (a hard_fail pattern that survived migration
-        # unfixed would almost certainly also fail `jac run`).
+        # Gate part 2 (spec.md section 7's 2026-07-21 amendment -- a
+        # necessary, deliberate extension beyond spec.md's literal "never
+        # reject output" wording, not a nice-to-have; see top docstring for
+        # the full justification): re-run the FULL `jac check` on the
+        # MIGRATED code and reject if any of the combo's original
+        # check_warning codes are still present -- gate part 1 (`jac run`)
+        # structurally cannot detect this, since `jac run` never surfaces
+        # deprecation warnings at all. hard_fail patterns have no
+        # meaningful warning code (pattern_warning_code would return "v1",
+        # not a real code) so they're skipped here by the leading-"W"
+        # filter -- gate part 1 already covers them (a hard_fail pattern
+        # that survived migration unfixed would almost certainly also fail
+        # `jac run`).
         (check_code, check_out, check_err) = run_full_check(migrated_code);
         migrated_check_output: str = check_out + "\n" + check_err;
         leftover_codes: list[str] = [];

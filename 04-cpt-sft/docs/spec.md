@@ -241,9 +241,14 @@ that are synthesized directly from a doc chunk without a code seed).
 
 Non-negotiable, inherited from `jacgen/`'s existing rule: **never gate
 generated output on `jac check`** — it over-rejects untyped-but-runnable
-Jac. One narrow, audit-driven exception exists (migration input warning
-detection, below): `jac check`/`lint_jac` may be used to *detect
-deprecation warnings on an input*, never to reject generated code.
+Jac. Two narrow, audit-driven exceptions exist, both scoped to
+`migration` (see its row in the per-category summary below): (1) `jac
+check`/`lint_jac` may be used to *detect deprecation warnings on an
+input*, never to reject generated code in general; (2) as a
+combo-specific check (2026-07-21 amendment), the same mechanism may also
+confirm that a migration's own composed deprecation-warning codes are
+actually gone from its output — narrowly scoped to those specific codes,
+never a general `jac check` pass/fail gate.
 
 ### Gate classes
 
@@ -272,6 +277,23 @@ was actually verified:
 | `trajectory` | Final turn `behavioral`/`compile_project`; intermediate turns deliberately ungated (they're supposed to show a plausible error). |
 | `documentation` | `prose_lexical` symbol-existence. Sample manually reviewed. |
 | `migration` | Migrated file passes `jac run`. Deprecated original must fail `jac run` **or** produce a deprecation warning under `jac check`/`lint_jac` (the narrow exception — `jac run` emits no deprecation warnings, verified against jaclang 0.16.1). Pairs where the original passes silently with no check-warning are rejected. |
+
+> **Amendment (2026-07-21):** `migration`'s gate has a necessary third
+> check beyond "migrated passes `jac run`, original fails/warns": the
+> migrated code is ALSO re-checked under full `jac check` to confirm none
+> of the original combo's specific deprecation-warning codes still
+> appear — since `jac run` alone cannot detect a migration that only
+> partially fixed a multi-pattern deprecated file (e.g. fixed 2-of-3
+> deprecated forms and left one in place; such a file still passes
+> `jac run` cleanly, because `jac run` never surfaces deprecation warnings
+> at all). This check is narrowly scoped to the combo's own composed
+> pattern codes — it is never a general `jac check` pass/fail gate, and
+> never introduces rejection criteria beyond confirming the requested
+> migration was actually completed. This is the one other place this
+> project's "never gate output on `jac check`" rule is deliberately
+> relaxed, alongside the input-detection use already documented above.
+> See `sft_dpo/jacgen2/gen_migration.jac`'s `run_collect` ("gate part 2")
+> for the implementation.
 
 ### Dedup + decontamination
 
