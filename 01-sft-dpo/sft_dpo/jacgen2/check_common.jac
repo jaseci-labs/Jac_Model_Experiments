@@ -22,8 +22,8 @@ with entry {
 
     scratch_path = "/tmp/jacgen2_test_existing_keys.jsonl";
     with open(scratch_path, 'w') as f {
-        f.write(json.dumps({"meta": {"id": "key-one"}}) + "\n");
-        f.write(json.dumps({"meta": {"id": "key-two"}}) + "\n");
+        f.write(json.dumps({"id": "key-one"}) + "\n");
+        f.write(json.dumps({"id": "key-two"}) + "\n");
     }
     keys = existing_keys(scratch_path);
     assert "key-one" in keys;

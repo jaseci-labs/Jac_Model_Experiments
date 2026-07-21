@@ -73,7 +73,7 @@ def existing_keys(jsonl_path: str) -> dict {
         s = line.strip();
         if s {
             rec = json.loads(s);
-            keys[rec["meta"]["id"]] = True;
+            keys[rec["id"]] = True;
         }
     }
     return keys;

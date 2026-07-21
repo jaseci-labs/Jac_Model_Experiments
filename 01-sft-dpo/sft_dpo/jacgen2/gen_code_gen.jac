@@ -35,7 +35,7 @@ Run (from repo root):
 import os;
 import json;
 import from pathlib { Path }
-import from common { require_run_tag, data_root, append_jsonl }
+import from common { require_run_tag, data_root, append_jsonl, existing_keys }
 import from gate { behavioral_gate, make_example_v2 }
 import from batch { make_batch_id, write_pending_batch, read_response_batch, pending_path, responses_path }
 
@@ -112,13 +112,13 @@ def run_prepare() {
     pairs: list[dict] = eligible_pairs(seeds);
 
     items: list[dict] = [];
-    skipped: int = 0;
+    capped: int = 0;
     for pair in pairs {
         seed: dict = dict(pair["seed"]);
         task_type: str = str(pair["task_type"]);
         for variant_idx in [0, 1] {
             if len(items) >= limit {
-                skipped += 1;
+                capped += 1;
                 continue;
             }
             prompt: str = build_prompt(str(seed["jac_code"]), variant_idx);
@@ -142,13 +142,15 @@ def run_prepare() {
     }
 
     out_path: str = pending_path(tag, CATEGORY);
-    write_pending_batch(out_path, items);
+    write_result: dict = write_pending_batch(out_path, items);
 
     print("");
     print("=== gen_code_gen prepare summary ===");
     print("eligible (seed,task_type) pairs: " + str(len(pairs)));
-    print("pending items written: " + str(len(items)) + " (JAC_PILOT_LIMIT=" + str(limit) + ")");
-    print("skipped due to cap: " + str(skipped));
+    print("candidate items this run: " + str(len(items)) + " (JAC_PILOT_LIMIT=" + str(limit) + ")");
+    print("skipped due to cap: " + str(capped));
+    print("newly written to pending batch: " + str(write_result["written"]));
+    print("skipped as already-present in pending batch: " + str(write_result["skipped"]));
     print("wrote " + out_path);
 }
 
@@ -185,9 +187,11 @@ def run_collect() {
 
     clean_path: str = data_root(tag) + "/clean_dataset/code_gen/examples.jsonl";
     rejected_path: str = data_root(tag) + "/rejected/code_gen/rejected.jsonl";
+    already_persisted: dict = existing_keys(clean_path);
 
     processed: int = 0;
     accepted: int = 0;
+    already_persisted_skipped: int = 0;
     reason_counts: dict[str, int] = {};
 
     for batch_id in responses {
@@ -287,15 +291,22 @@ def run_collect() {
                     + "exists yet for the Agent-dispatch (Opus/Fable subagent) path"
             }
         );
+        if rec["id"] in already_persisted {
+            already_persisted_skipped += 1;
+            continue;
+        }
+
         append_jsonl(clean_path, rec);
+        already_persisted[rec["id"]] = True;
         accepted += 1;
     }
 
-    rejected_count: int = processed - accepted;
+    rejected_count: int = processed - accepted - already_persisted_skipped;
     print("");
     print("=== gen_code_gen collect summary ===");
     print("responses processed: " + str(processed));
-    print("accepted: " + str(accepted));
+    print("accepted (newly written): " + str(accepted));
+    print("skipped as already-persisted: " + str(already_persisted_skipped));
     print("rejected: " + str(rejected_count));
     for reason in reason_counts {
         print("  - " + reason + ": " + str(reason_counts[reason]));
