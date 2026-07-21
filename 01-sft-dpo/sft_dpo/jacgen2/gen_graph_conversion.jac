@@ -89,7 +89,15 @@ glob SCENARIOS: list[str] = [
     "find the connected components of an undirected graph",
     "find all root nodes (no incoming edges) in a DAG",
     "compute the longest weighted path through a DAG",
-    "serialize a tree into level-order (breadth-first) lists"
+    "serialize a tree into level-order (breadth-first) lists",
+    "check if a binary tree is height-balanced (every subtree's left/right height differs by at most 1)",
+    "count the number of distinct root-to-leaf paths in a tree",
+    "check whether two binary trees are structurally identical (same shape and values)",
+    "find the k-th ancestor of a given node by walking up parent edges",
+    "detect whether an undirected graph is bipartite using 2-coloring",
+    "compute the earliest-finish-time schedule (critical path lengths) for tasks in a weighted dependency DAG",
+    "flatten a binary tree into a right-only linked list in preorder",
+    "find the maximum sum of values along any root-to-leaf path in a tree"
 ];
 
 

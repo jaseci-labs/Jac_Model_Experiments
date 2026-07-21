@@ -13,27 +13,27 @@ unrolling turn-by-turn across separate calls would multiply cost and break
 the "the model writes both sides" framing the category exists to capture.
 model="opus" per spec.md section 4.1 (trajectory is Opus-assigned).
 
-All 5 spec.md section 5 scenario types are implemented, but seed selection
-per type is pilot-scoped (see each pool's construction in run_prepare):
+All 5 spec.md section 5 scenario types are implemented (see each pool's
+construction in run_prepare):
 
     build_from_scratch      -> behavioral seeds (code_gen-eligible spirit)
-    debug_session            -> the 4 real buggy_variants.jsonl entries
-                                 (ALL of them -- see cap note below)
+    debug_session            -> buggy_variants.jsonl entries joined back to
+                                 seed_pool by seed_id
     refactor_session          -> behavioral seeds with >15 lines of code
     add_feature_to_existing   -> any code-bearing seed
     code_review_session       -> any code-bearing seed
 
-CAP NOTE (expected, not a bug): raw_output/debug/buggy_variants.jsonl
-currently has only 4 real records (Task 11/gen_debug's pilot output), so
-debug_session is hard-capped at 4 regardless of JAC_PILOT_LIMIT -- there is
-no larger real pool to draw from yet. JAC_PILOT_LIMIT defaults to 20 (lower
-than prior tasks' 25-30) because each trajectory prompt/response is a whole
-multi-turn conversation, much longer and costlier than a single-turn
-example. With the default 20, the roughly-even 5-way split lands on exactly
-4 per type, which happens to coincide with debug_session's real hard cap --
-convenient, not engineered. If JAC_PILOT_LIMIT is raised, debug_session
-still tops out at 4 and the difference is NOT redistributed to the other
-4 types (see run_prepare) -- a rebalancer is more machinery than this pilot
+PRODUCTION-SCALE NOTE (was CAP NOTE at pilot time): at pilot time,
+raw_output/debug/buggy_variants.jsonl had only 4 real records (Task
+11/gen_debug's pilot output), so debug_session was hard-capped at 4. Since
+then gen_debug.jac was scaled to production volume and buggy_variants.jsonl
+now has ~210 real records, so there is no more artificial
+DEBUG_SESSION_HARD_CAP -- debug_session's real ceiling is simply
+`min(JAC_PILOT_LIMIT-derived target, len(debug_pool))`, exactly like every
+other scenario type's pool (see append_debug_items/append_generic_items).
+The roughly-even 5-way split of JAC_PILOT_LIMIT across the 5 scenario types
+is unchanged -- still no rebalancer redistributing one type's pool-size
+shortfall to the others, a rebalancer is more machinery than this generator
 needs.
 
 Two phases, selected by env var JAC_BATCH_PHASE:
@@ -78,10 +78,6 @@ glob SCENARIO_TYPES: list[str] = [
     "add_feature_to_existing",
     "code_review_session"
 ];
-
-"""Real ceiling: raw_output/debug/buggy_variants.jsonl only has 4 records
-right now (see this file's top docstring CAP NOTE)."""
-glob DEBUG_SESSION_HARD_CAP: int = 4;
 
 glob SCENARIO_DESCRIPTIONS: dict[str, str] = {
     "build_from_scratch": "the user requesting a feature be built from scratch in plain language, the assistant building it up incrementally, and the user asking 1-2 follow-up refinements",
@@ -333,12 +329,10 @@ def run_prepare() {
         targets[name] = t;
         idx += 1;
     }
-    if targets["debug_session"] > DEBUG_SESSION_HARD_CAP {
-        # NOT redistributed to the other 4 types -- see CAP NOTE in this
-        # file's top docstring. With the default JAC_PILOT_LIMIT=20 this
-        # branch never triggers (20 // 5 == 4 == the hard cap exactly).
-        targets["debug_session"] = DEBUG_SESSION_HARD_CAP;
-    }
+    # debug_session's real ceiling is now just its pool size (see
+    # append_debug_items's min(cap, len(pool))) -- no more artificial
+    # DEBUG_SESSION_HARD_CAP now that buggy_variants.jsonl is at production
+    # volume (see PRODUCTION-SCALE NOTE in this file's top docstring).
 
     # add_feature_to_existing and code_review_session both draw from the
     # full (unfiltered) seed pool -- offset review's slice past feature's
@@ -362,7 +356,7 @@ def run_prepare() {
     print("=== gen_trajectory prepare summary ===");
     print("candidate items this run: " + str(len(items)) + " (JAC_PILOT_LIMIT=" + str(limit) + ")");
     print("  build_from_scratch: " + str(n_build) + " (pool size " + str(len(build_pool)) + ")");
-    print("  debug_session: " + str(n_debug) + " (pool size " + str(len(debug_pool)) + ", hard cap " + str(DEBUG_SESSION_HARD_CAP) + ")");
+    print("  debug_session: " + str(n_debug) + " (pool size " + str(len(debug_pool)) + ")");
     print("  refactor_session: " + str(n_refactor) + " (pool size " + str(len(refactor_pool)) + ")");
     print("  add_feature_to_existing: " + str(n_feature) + " (pool size " + str(len(feature_pool)) + ")");
     print("  code_review_session: " + str(n_review) + " (pool size " + str(len(review_pool)) + ")");
