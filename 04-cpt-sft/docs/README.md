@@ -26,6 +26,22 @@ actually produces a better *coder*, independent of whatever CPT-v2's own
 eval says — and, per the status update above, independent of whatever
 CPT-v2's own eval already concluded.
 
+> **Status update (2026-07-22): `fresh` datagen COMPLETE at full production
+> scale.** `jacgen2/` (built this session, see
+> `docs/superpowers/plans/2026-07-20-jacgen2-datagen.md`) ran every
+> generator end to end: `releases/sft_train.jsonl` = **9,608 examples**,
+> `releases/dpo_train.jsonl` = **826 preference pairs**, 0% contamination,
+> pool re-frozen and verified. Real composition undershoots the spec's
+> weight targets for `code_gen`/`debug` (real supply-constrained — only 6 of
+> 34 planned `code_gen` task types are implemented, `debug`'s eligible-pairs
+> pool is genuinely small) and overshoots for `explanation`/`documentation`/
+> `conversion` (their real seed pools were simply larger); `migration` hit a
+> true ceiling of 11/11 possible examples. Full detail, every bug found and
+> fixed, and every problem hit during the run:
+> `docs/reports/2026-07-task18-full-run-report.md`. **`post_cptv2` build
+> and the Arms A/B/C training+eval battery are still not started** — next
+> steps for this phase.
+
 ## Layout
 
 | File | Contents |
