@@ -36,12 +36,22 @@ is_done() { [ -f "$RDIR/.$1.done" ]; }
 
 # --- dry-run (only on a truly fresh start) ---
 LATEST_CKPT="$(ls "$ADAPTER"/*_adapters.safetensors 2>/dev/null | sort -V | tail -1 || true)"
+DRY_RUN_JUST_COMPLETED=0
 if [ -z "$LATEST_CKPT" ] && ! is_done dry && [ "${SKIP_DRY:-0}" != "1" ]; then
   echo ">>> dry-run (${DRY_ITERS} iters) -- bail check"
   mlx_lm.lora --config "$CFG" --iters "$DRY_ITERS" \
     --adapter-path "model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dry" 2>&1 | tail -25
-  echo ">>> dry-run done -- Ctrl-C within 8s to abort"; sleep 8
+  echo ">>> dry-run complete."
   done_mark dry
+  DRY_RUN_JUST_COMPLETED=1
+fi
+
+# --- gate: only proceed to real training if explicitly confirmed ---
+if [ "$DRY_RUN_JUST_COMPLETED" = "1" ]; then
+  if [ "${CONFIRM_FULL_RUN:-}" != "1" ]; then
+    echo "Dry-run complete. Re-run with CONFIRM_FULL_RUN=1 to start the real multi-hour training run."
+    exit 0
+  fi
 fi
 
 TOTAL_ITERS="$(grep -E '^iters:' "$CFG" | grep -oE '[0-9]+' | head -1)"

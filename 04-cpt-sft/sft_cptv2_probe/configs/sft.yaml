@@ -7,19 +7,19 @@ lora_parameters:
   rank: 16
   scale: 2.0
   dropout: 0.05
-batch_size: 2
-iters: 4100
+batch_size: 1
+iters: 8200
 learning_rate: 2.0e-5
 lr_schedule:
   name: cosine_decay
-  warmup: 410
-  arguments: [2.0e-5, 4100, 1.0e-6]
+  warmup: 820
+  arguments: [2.0e-5, 8200, 1.0e-6]
 max_seq_length: 4096
 adapter_path: "model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/sft-on-cptv2"
 resume_adapter_file: "model-experiments/03-cpt-only/adapters/cpt-v2/adapters.safetensors"
-save_every: 500
-steps_per_eval: 250
-steps_per_report: 25
+save_every: 820
+steps_per_eval: 500
+steps_per_report: 50
 val_batches: 25
 seed: 42
 mask_prompt: true
