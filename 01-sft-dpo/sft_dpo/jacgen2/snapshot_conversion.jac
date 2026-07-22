@@ -22,11 +22,17 @@ Idempotent: a second run, once the recorded hash in pool_hashes.json
 matches the file on disk, is a no-op -- this mirrors seed_pool.jsonl's
 frozen-after-fresh-build convention (spec.md §8).
 
+Set JAC_RESNAPSHOT_CONVERSION=1 to force a re-snapshot even when the
+existing output's hash matches the recorded one -- needed when an input
+source (e.g. graph_conversion_growth.jsonl) has grown and the snapshot
+needs to pick up the new rows.
+
 Run (from repo root):
     JAC_RUN_TAG=fresh /Volumes/ExtremePro/JaseciLabs/jac_model_studio/.venv/bin/jac \
         run model-experiments/01-sft-dpo/sft_dpo/jacgen2/snapshot_conversion.jac
 """
 
+import os;
 import json;
 import hashlib;
 import from pathlib { Path }
@@ -99,7 +105,8 @@ def merge_hash(hashes_path: str, file_hash: str) {
 with entry:__main__ {
     require_run_tag();
 
-    if already_snapshotted(OUT_PATH, HASHES_PATH) {
+    force_resnapshot: bool = os.environ.get("JAC_RESNAPSHOT_CONVERSION") == "1";
+    if (not force_resnapshot) and already_snapshotted(OUT_PATH, HASHES_PATH) {
         print("conversion_slice.jsonl already snapshotted and hash-verified at " + OUT_PATH + " -- no-op");
     } else {
         records: list[dict] = [];
