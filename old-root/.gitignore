@@ -39,3 +39,9 @@ model-experiments/04-cpt-sft/dataset/
 # JMS product user data — per-user project dirs (dataset/sources/jobs/runs/evals +
 # project.json snapshots) created by jms_projects.sv.jac; never repo source
 jms-projects/
+
+# sft_cptv2_probe hypothesis-probe run: adapters/checkpoints are multi-GB, not repo source
+model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/
+
+# subagent-driven-development ledger/scratch (survives locally, not committed)
+.superpowers/
