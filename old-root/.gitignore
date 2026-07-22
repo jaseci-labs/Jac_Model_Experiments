@@ -14,6 +14,11 @@ model-experiments/*/adapters/
 results/_builder/
 results/_evals/
 
+# studio runtime artifacts (per-user job dirs, heavy-job lock, audit log)
+model-experiments/01-sft-dpo/results/users/
+model-experiments/01-sft-dpo/results/.heavy-lock.json
+audit/
+
 # LaTeX build output (rebuild via model-experiments/02-rl-grpo/presentation/build.sh)
 model-experiments/02-rl-grpo/presentation/main.pdf
 model-experiments/02-rl-grpo/presentation/main.aux
