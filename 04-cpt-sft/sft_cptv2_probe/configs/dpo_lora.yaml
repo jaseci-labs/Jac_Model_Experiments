@@ -1,0 +1,16 @@
+lora_parameters:
+  rank: 16
+  scale: 2.0
+  dropout: 0.05
+fuse: false   # mlx_lm_lora's CONFIG_DEFAULTS default this to true, which after
+              # training unconditionally calls save_pretrained_merged(...,
+              # de_quantize=True) -- i.e. dequantizes the full 30.5B-param
+              # model to fp16 (~61GB) and writes it into --adapter-path.
+              # That's not what we want (we want adapter-only checkpoints,
+              # see run_dpo.sh's DPO_ADAPTER/RDIR), and it OOMs unconditionally
+              # on a 48GB machine regardless of max_seq_length/batch_size --
+              # confirmed empirically (Task 6): actual DPO training itself
+              # completed cleanly at max_seq_length 512 and 1024 (sane losses
+              # ~0.67-0.75, no NaN/Inf across all 8 dry-run iters), and only
+              # this post-training auto-fuse step crashed with Metal
+              # kIOGPUCommandBufferCallbackErrorOutOfMemory.
