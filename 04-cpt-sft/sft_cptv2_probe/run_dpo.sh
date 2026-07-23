@@ -55,14 +55,28 @@ if [ -f "$SFT_FUSED/config.json" ]; then echo "  reuse $SFT_FUSED"; else
   mlx_lm.fuse --model models/qwen-q4 --adapter-path "$SFT_ADAPTER" --save-path "$SFT_FUSED"
 fi
 
-echo ">>> DPO dry-run (8 iters) -- bail check"
-python -m mlx_lm_lora.train --model "$SFT_FUSED" --train --data model-experiments/04-cpt-sft/sft_cptv2_probe/dataset/dpo \
-  --train-mode dpo --config model-experiments/04-cpt-sft/sft_cptv2_probe/configs/dpo_lora.yaml \
-  --adapter-path model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-dry \
-  --train-type lora --num-layers 16 --grad-checkpoint --batch-size 1 --max-seq-length "$DPO_MAXLEN" \
-  --iters 8 --learning-rate "$DPO_LR" --beta "$DPO_BETA" --dpo-cpo-loss-type sigmoid \
-  --steps-per-report 2 --steps-per-eval 100000 --val-batches 1 --save-every 100 2>&1 | tail -25
-echo ">>> dry-run done -- Ctrl-C within 8s to abort"; sleep 8
+DRY_DONE_MARK="$RDIR/.dry.done"
+if [ ! -f "$DRY_DONE_MARK" ]; then
+  echo ">>> DPO dry-run (8 iters) -- bail check"
+  python -m mlx_lm_lora.train --model "$SFT_FUSED" --train --data model-experiments/04-cpt-sft/sft_cptv2_probe/dataset/dpo \
+    --train-mode dpo --config model-experiments/04-cpt-sft/sft_cptv2_probe/configs/dpo_lora.yaml \
+    --adapter-path model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-dry \
+    --train-type lora --num-layers 16 --grad-checkpoint --batch-size 1 --max-seq-length "$DPO_MAXLEN" \
+    --iters 8 --learning-rate "$DPO_LR" --beta "$DPO_BETA" --dpo-cpo-loss-type sigmoid \
+    --steps-per-report 2 --steps-per-eval 100000 --val-batches 1 --save-every 100 2>&1 | tail -25
+  touch "$DRY_DONE_MARK"
+fi
+
+# Persisted-state gate (same pattern as run_sft.sh's fix): only waives once a
+# real DPO checkpoint already exists, so it re-triggers correctly on every
+# invocation, not just the process that happened to run the dry-run --
+# session-local flags reset every invocation, which is exactly the bug this
+# script had (auto-continued into the real 250-iter run unattended, unlike
+# run_sft.sh which was fixed for this after the same failure mode).
+if [ ! -f "$DPO_ADAPTER/adapters.safetensors" ] && [ "${CONFIRM_FULL_RUN:-}" != "1" ]; then
+  echo "Dry-run complete. Re-run with CONFIRM_FULL_RUN=1 to start the real DPO training run."
+  exit 0
+fi
 
 echo ">>> DPO training ($DPO_ITERS iters)"
 : > "$RDIR/train.log"
