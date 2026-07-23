@@ -3,8 +3,12 @@
 Extends eval_probe.jac's mechanism (load model once, generate, extract fenced
 jac, execute via run_jac) to the full 7-category sft_train.jsonl schema instead
 of the narrow func_name/test_cases conversion-only shape. Uses batched generation
-(mlx_lm.batch_generate) for ~10-50x speedup vs single-row streaming. There is no
-per-example expected-output here (most categories never had test_cases), so
+(mlx_lm.batch_generate) for ~2-4x measured speedup vs single-row streaming.
+NOTE: batched and single-row generation produce DIFFERENT text due to floating-
+point non-determinism in 4-bit quantized matmul (early argmax tie-breaks cascade
+through autoregressive generation) -- only aggregate pass-rate statistics across
+a consistent generation mechanism are valid for comparison.
+There is no per-example expected-output here (most categories never had test_cases), so
 this measures ONLY "runs (compiles+executes)" -- not behavioral correctness.
 Rows are routed by their own `gate_class` field: "prose_lexical" rows (mostly
 explanation/documentation) are generated but NOT code-graded (no code output
@@ -12,7 +16,7 @@ expected) -- reported separately, never silently dropped from the totals.
 
     JAC_EVAL_MODE=mlx JAC_EVAL_MODEL=models/qwen-q4 [JAC_EVAL_ADAPTER=path] \
       JAC_HOLDOUT=model-experiments/04-cpt-sft/sft_cptv2_probe/dataset/sft/valid.jsonl \
-      [JAC_EVAL_LIMIT=100] [JAC_EVAL_BATCH_SIZE=16] [JAC_EVAL_METRICS_OUT=path] [JAC_EVAL_STEP=0] \
+      [JAC_EVAL_LIMIT=100] [JAC_EVAL_BATCH_SIZE=32] [JAC_EVAL_METRICS_OUT=path] [JAC_EVAL_STEP=0] \
       jac run model-experiments/04-cpt-sft/sft_cptv2_probe/jacgen/eval_functional.jac
 """
 
@@ -25,7 +29,7 @@ import from typing { Any }
 
 glob HOLDOUT: str = "model-experiments/04-cpt-sft/sft_cptv2_probe/dataset/sft/valid.jsonl";
 glob CODE_GATES: set = {"behavioral", "compile_project", "compile_only"};
-glob BATCH_SIZE: int = 16;
+glob BATCH_SIZE: int = 32;
 
 
 def load_model(mp: str, adapter: str) -> tuple {
