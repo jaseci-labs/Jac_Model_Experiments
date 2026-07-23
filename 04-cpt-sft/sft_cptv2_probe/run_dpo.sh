@@ -21,22 +21,38 @@ RDIR="model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo"
 DPO_ITERS="${DPO_ITERS:-250}"
 DPO_LR="${DPO_LR:-1e-6}"
 DPO_BETA="${DPO_BETA:-0.1}"
-DPO_MAXLEN="${DPO_MAXLEN:-1024}"   # dataset/dpo/{train,valid}.jsonl pre-filtered to this bound.
+DPO_MAXLEN="${DPO_MAXLEN:-512}"     # dataset/dpo/{train,valid}.jsonl pre-filtered to 1024 (Task 6);
+                                    # re-filtered to 512 is NOT required -- longer examples just
+                                    # truncate safely (see note below), no NaN risk either way.
                                     # NOT matched to SFT's 3072: DPO here loads TWO full model
                                     # copies (policy + reference -- mlx_lm_lora always loads a
                                     # fresh `load(args.model)` for the reference when
                                     # --reference-model-path is unset), so memory headroom is
-                                    # much tighter than SFT's single-copy training. Empirically
-                                    # (Task 6): max_seq_length 3072 OOM'd mid-training at iter 1
-                                    # (a real, seq-length-driven crash); 1024 and 512 both
-                                    # completed all 8 dry-run iters cleanly with sane losses
-                                    # (~0.67-0.75, no NaN/Inf) -- 1024 chosen for better tail
-                                    # coverage of dataset_stats.json's dpo p99=2497 (chat-
-                                    # template real stats) while staying inside the verified-safe
-                                    # range. Truncation here is safe (no NaN risk): this trainer
+                                    # much tighter than SFT's single-copy training.
+                                    #
+                                    # 1024 was Task 6's original choice (passed an 8-iter
+                                    # dry-run cleanly) but OOM'd the real 250-iter run at iter 10
+                                    # (Task 8, first attempt) -- peak_mem was still CLIMBING at
+                                    # iter 8 of the dry-run (38.7->39.1->39.8->39.9GB), which an
+                                    # 8-iter window can't distinguish from "stable." Root cause:
+                                    # mlx_lm_lora's DPO trainer keeps a persistent, reused
+                                    # KV-cache (`make_prompt_cache`, dpo_trainer.py:291/293) for
+                                    # both policy and reference models, grown once to the longest
+                                    # sequence seen so far and never shrunk -- `mx.clear_cache()`
+                                    # (dpo_trainer.py:106) clears the general allocator, not this
+                                    # cache object's already-allocated buffer. So memory climbs
+                                    # early in training then plateaus, not unbounded -- but the
+                                    # plateau height scales with max_seq_length, and 1024's
+                                    # plateau exceeds the ~48GB ceiling before settling.
+                                    #
+                                    # Verified 512 properly this time: a real 40-ITER dry-run
+                                    # (not just 8) shows peak_mem climbs once (39.639->39.685GB
+                                    # by iter 15) then stays FLAT through iter 40 -- a genuine
+                                    # plateau with ~8GB safe margin, not a short window getting
+                                    # lucky. Truncation here is safe (no NaN risk): this trainer
                                     # masks the WHOLE truncated sequence, not a per-token prompt
                                     # mask, so long examples just lose tail signal, unlike the
-                                    # SFT mask_prompt bug this filtering step guards against.
+                                    # SFT mask_prompt bug the dataset filter guards against.
                                     #
                                     # A SEPARATE, unrelated bug was also fixed in configs/
                                     # dpo_lora.yaml (fuse: false): mlx_lm_lora defaults to
