@@ -94,13 +94,42 @@ if [ ! -f "$DPO_ADAPTER/adapters.safetensors" ] && [ "${CONFIRM_FULL_RUN:-}" != 
   exit 0
 fi
 
-echo ">>> DPO training ($DPO_ITERS iters)"
-: > "$RDIR/train.log"
-python -m mlx_lm_lora.train --model "$SFT_FUSED" --train --data model-experiments/04-cpt-sft/sft_cptv2_probe/dataset/dpo \
-  --train-mode dpo --config model-experiments/04-cpt-sft/sft_cptv2_probe/configs/dpo_lora.yaml \
-  --adapter-path "$DPO_ADAPTER" --train-type lora --num-layers 16 --grad-checkpoint \
-  --batch-size 1 --max-seq-length "$DPO_MAXLEN" --iters "$DPO_ITERS" \
-  --learning-rate "$DPO_LR" --beta "$DPO_BETA" --dpo-cpo-loss-type sigmoid \
-  --steps-per-report 10 --steps-per-eval 50 --val-batches 1 --save-every 50 \
-  > "$RDIR/train.log" 2>&1
+# Resumable training loop: real crashes hit twice tonight (iter 10, then iter
+# 51) at DIFFERENT max_seq_length values -- root cause (dpo_trainer.py's
+# persistent, never-shrunk policy+reference KV-cache growing step-wise
+# whenever a new longest-so-far example is encountered) is order-dependent,
+# not something a fixed seq_length or a short dry-run can reliably predict.
+# Each segment's own checkpoint (save_every=50) survives a crash, so resume
+# from the latest one with the remaining iter count rather than restart from
+# scratch -- mirrors run_sft.sh's resumable design, which this script should
+# have had from the start.
+: > "$RDIR/train.log"   # fresh log for this invocation's segments (each appended below)
+while true; do
+  LATEST_CKPT="$(ls "$DPO_ADAPTER"/*_adapters.safetensors 2>/dev/null | sort -V | tail -1 || true)"
+  DONE_STEPS=0
+  RESUME_FLAG=()
+  if [ -n "$LATEST_CKPT" ]; then
+    DONE_STEPS="$(basename "$LATEST_CKPT" | grep -oE '^[0-9]+' | sed 's/^0*//')"; DONE_STEPS="${DONE_STEPS:-0}"
+    RESUME_FLAG=(--resume-adapter-file "$LATEST_CKPT")
+  fi
+  REMAIN=$(( DPO_ITERS - DONE_STEPS ))
+  if [ "$REMAIN" -le 0 ]; then break; fi
+  echo ">>> DPO training segment: ${REMAIN} more iters (from ${DONE_STEPS}/${DPO_ITERS})" | tee -a "$RDIR/train.log"
+  RC=0
+  python -m mlx_lm_lora.train --model "$SFT_FUSED" --train --data model-experiments/04-cpt-sft/sft_cptv2_probe/dataset/dpo \
+    --train-mode dpo --config model-experiments/04-cpt-sft/sft_cptv2_probe/configs/dpo_lora.yaml \
+    --adapter-path "$DPO_ADAPTER" --train-type lora --num-layers 16 --grad-checkpoint \
+    --batch-size 1 --max-seq-length "$DPO_MAXLEN" --iters "$REMAIN" "${RESUME_FLAG[@]}" \
+    --learning-rate "$DPO_LR" --beta "$DPO_BETA" --dpo-cpo-loss-type sigmoid \
+    --steps-per-report 10 --steps-per-eval 50 --val-batches 1 --save-every 50 \
+    >> "$RDIR/train.log" 2>&1 || RC=$?
+  if [ "$RC" -ne 0 ]; then
+    NEW_LATEST="$(ls "$DPO_ADAPTER"/*_adapters.safetensors 2>/dev/null | sort -V | tail -1 || true)"
+    if [ "$NEW_LATEST" = "$LATEST_CKPT" ] && [ -n "$LATEST_CKPT" ]; then
+      echo "!!! segment crashed (exit $RC) with NO new checkpoint saved -- would loop forever, stopping." | tee -a "$RDIR/train.log"
+      tail -20 "$RDIR/train.log"; exit 1
+    fi
+    echo "!!! segment crashed (exit $RC) -- resuming from latest checkpoint" | tee -a "$RDIR/train.log"
+  fi
+done
 echo "=== DPO training done: $RDIR/train.log ==="
