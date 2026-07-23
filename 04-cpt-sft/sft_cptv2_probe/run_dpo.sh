@@ -133,19 +133,32 @@ while true; do
   REMAIN=$(( DPO_ITERS - DONE_STEPS ))
   if [ "$REMAIN" -le 0 ]; then break; fi
   SEG_ITERS=$(( REMAIN < SEGMENT_ITERS ? REMAIN : SEGMENT_ITERS ))
-  RESUME_FLAG=()
-  if [ "$DONE_STEPS" -gt 0 ] && [ -f "$DPO_ADAPTER/adapters.safetensors" ]; then
-    RESUME_FLAG=(--resume-adapter-file "$DPO_ADAPTER/adapters.safetensors")
-  fi
   echo ">>> DPO training segment: ${SEG_ITERS} iters this process (${DONE_STEPS}/${DPO_ITERS} done, ${REMAIN} remaining overall)" | tee -a "$RDIR/train.log"
   RC=0
-  python -m mlx_lm_lora.train --model "$SFT_FUSED" --train --data model-experiments/04-cpt-sft/sft_cptv2_probe/dataset/dpo \
-    --train-mode dpo --config model-experiments/04-cpt-sft/sft_cptv2_probe/configs/dpo_lora.yaml \
-    --adapter-path "$DPO_ADAPTER" --train-type lora --num-layers 16 --grad-checkpoint \
-    --batch-size 1 --max-seq-length "$DPO_MAXLEN" --iters "$SEG_ITERS" "${RESUME_FLAG[@]}" \
-    --learning-rate "$DPO_LR" --beta "$DPO_BETA" --dpo-cpo-loss-type sigmoid \
-    --steps-per-report 10 --steps-per-eval "$SEG_ITERS" --val-batches 1 --save-every "$SEG_ITERS" \
-    >> "$RDIR/train.log" 2>&1 || RC=$?
+  # Two branches (not a possibly-empty array expansion) -- macOS's system bash
+  # 3.2 treats "${ARR[@]}" as an unbound-variable error under `set -u` when
+  # ARR has zero elements (same gotcha run_sft.sh already documents). Latent
+  # in this script since v1's real run never actually exercised a true
+  # DONE_STEPS=0 fresh start (its progress file was manually seeded mid-way
+  # after the bookkeeping-bug recovery) -- caught when v2 hit it on iteration 1.
+  if [ "$DONE_STEPS" -gt 0 ] && [ -f "$DPO_ADAPTER/adapters.safetensors" ]; then
+    python -m mlx_lm_lora.train --model "$SFT_FUSED" --train --data model-experiments/04-cpt-sft/sft_cptv2_probe/dataset/dpo \
+      --train-mode dpo --config model-experiments/04-cpt-sft/sft_cptv2_probe/configs/dpo_lora.yaml \
+      --adapter-path "$DPO_ADAPTER" --train-type lora --num-layers 16 --grad-checkpoint \
+      --batch-size 1 --max-seq-length "$DPO_MAXLEN" --iters "$SEG_ITERS" \
+      --resume-adapter-file "$DPO_ADAPTER/adapters.safetensors" \
+      --learning-rate "$DPO_LR" --beta "$DPO_BETA" --dpo-cpo-loss-type sigmoid \
+      --steps-per-report 10 --steps-per-eval "$SEG_ITERS" --val-batches 1 --save-every "$SEG_ITERS" \
+      >> "$RDIR/train.log" 2>&1 || RC=$?
+  else
+    python -m mlx_lm_lora.train --model "$SFT_FUSED" --train --data model-experiments/04-cpt-sft/sft_cptv2_probe/dataset/dpo \
+      --train-mode dpo --config model-experiments/04-cpt-sft/sft_cptv2_probe/configs/dpo_lora.yaml \
+      --adapter-path "$DPO_ADAPTER" --train-type lora --num-layers 16 --grad-checkpoint \
+      --batch-size 1 --max-seq-length "$DPO_MAXLEN" --iters "$SEG_ITERS" \
+      --learning-rate "$DPO_LR" --beta "$DPO_BETA" --dpo-cpo-loss-type sigmoid \
+      --steps-per-report 10 --steps-per-eval "$SEG_ITERS" --val-batches 1 --save-every "$SEG_ITERS" \
+      >> "$RDIR/train.log" 2>&1 || RC=$?
+  fi
   if [ "$RC" -ne 0 ]; then
     CONSECUTIVE_FAILS=$(( CONSECUTIVE_FAILS + 1 ))
     if [ "$CONSECUTIVE_FAILS" -ge 5 ]; then
