@@ -55,6 +55,11 @@ def extract_jac(output: str) -> str {
 }
 
 
+# Inlined verbatim from model-experiments/01-sft-dpo/sft_dpo/jacgen/writer.jac's
+# run_jac -- plain .jac files have no cross-directory relative-import syntax
+# (confirmed: only .cl.jac client imports support dotted-relative paths), and
+# this project has no PYTHONPATH/jac.toml convention for reaching a sibling
+# tree's module. Keep byte-identical with the original if either changes.
 def run_jac(jac_code: str, timeout: int = 30) -> tuple[int, str, str] {
     with tempfile.TemporaryDirectory() as d {
         f = Path(str(d)) / "snippet.jac";
