@@ -107,19 +107,36 @@ fi
 # process restart (which resets the cache to empty) well before the observed
 # ~50-iter danger zone, instead of requesting the full remaining count in one
 # continuous process.
+#
+# IMPORTANT: mlx_lm_lora's checkpoint filenames use a per-invocation LOCAL
+# iteration counter too (the same bug class already documented for
+# mlx_lm.lora's SFT checkpoints) -- a freshly-resumed 20-iter segment saves
+# "0000020_adapters.safetensors", which a numeric sort ranks BELOW an older
+# "0000050" file despite being chronologically newer real progress. Confirmed
+# live: this caused the first version of this loop to silently re-resume from
+# the same stale checkpoint 5 times in a row, discarding each segment's real
+# progress and never advancing (a genuine infinite loop that LOOKED like
+# repeated retries but was actually a bookkeeping bug, not a memory crash --
+# each individual segment was completing successfully). Fixed by tracking
+# progress in our own explicit counter file instead of trying to infer it
+# from the library's unreliable checkpoint filenames, and always resuming
+# from mlx_lm_lora's "adapters.safetensors" (its own always-current-state
+# pointer file, confirmed via mtime to update after every segment,
+# regardless of that segment's numbered-checkpoint filename).
 SEGMENT_ITERS="${DPO_SEGMENT_ITERS:-20}"
+PROGRESS_FILE="$RDIR/.dpo_progress_steps"
+[ -f "$PROGRESS_FILE" ] || echo 0 > "$PROGRESS_FILE"
 : > "$RDIR/train.log"   # fresh log for this invocation's segments (each appended below)
+CONSECUTIVE_FAILS=0
 while true; do
-  LATEST_CKPT="$(ls "$DPO_ADAPTER"/*_adapters.safetensors 2>/dev/null | sort -V | tail -1 || true)"
-  DONE_STEPS=0
-  RESUME_FLAG=()
-  if [ -n "$LATEST_CKPT" ]; then
-    DONE_STEPS="$(basename "$LATEST_CKPT" | grep -oE '^[0-9]+' | sed 's/^0*//')"; DONE_STEPS="${DONE_STEPS:-0}"
-    RESUME_FLAG=(--resume-adapter-file "$LATEST_CKPT")
-  fi
+  DONE_STEPS="$(cat "$PROGRESS_FILE")"
   REMAIN=$(( DPO_ITERS - DONE_STEPS ))
   if [ "$REMAIN" -le 0 ]; then break; fi
   SEG_ITERS=$(( REMAIN < SEGMENT_ITERS ? REMAIN : SEGMENT_ITERS ))
+  RESUME_FLAG=()
+  if [ "$DONE_STEPS" -gt 0 ] && [ -f "$DPO_ADAPTER/adapters.safetensors" ]; then
+    RESUME_FLAG=(--resume-adapter-file "$DPO_ADAPTER/adapters.safetensors")
+  fi
   echo ">>> DPO training segment: ${SEG_ITERS} iters this process (${DONE_STEPS}/${DPO_ITERS} done, ${REMAIN} remaining overall)" | tee -a "$RDIR/train.log"
   RC=0
   python -m mlx_lm_lora.train --model "$SFT_FUSED" --train --data model-experiments/04-cpt-sft/sft_cptv2_probe/dataset/dpo \
@@ -130,12 +147,15 @@ while true; do
     --steps-per-report 10 --steps-per-eval "$SEG_ITERS" --val-batches 1 --save-every "$SEG_ITERS" \
     >> "$RDIR/train.log" 2>&1 || RC=$?
   if [ "$RC" -ne 0 ]; then
-    NEW_LATEST="$(ls "$DPO_ADAPTER"/*_adapters.safetensors 2>/dev/null | sort -V | tail -1 || true)"
-    if [ "$NEW_LATEST" = "$LATEST_CKPT" ] && [ -n "$LATEST_CKPT" ]; then
-      echo "!!! segment crashed (exit $RC) with NO new checkpoint saved -- would loop forever, stopping." | tee -a "$RDIR/train.log"
+    CONSECUTIVE_FAILS=$(( CONSECUTIVE_FAILS + 1 ))
+    if [ "$CONSECUTIVE_FAILS" -ge 5 ]; then
+      echo "!!! segment crashed ${CONSECUTIVE_FAILS}x in a row at the same ${DONE_STEPS}/${DPO_ITERS} point -- giving up." | tee -a "$RDIR/train.log"
       tail -20 "$RDIR/train.log"; exit 1
     fi
-    echo "!!! segment crashed (exit $RC) -- resuming from latest checkpoint" | tee -a "$RDIR/train.log"
+    echo "!!! segment crashed (exit $RC, attempt ${CONSECUTIVE_FAILS}/5) -- retrying same segment from last good state" | tee -a "$RDIR/train.log"
+    continue
   fi
+  CONSECUTIVE_FAILS=0
+  echo $(( DONE_STEPS + SEG_ITERS )) > "$PROGRESS_FILE"
 done
 echo "=== DPO training done: $RDIR/train.log ==="
