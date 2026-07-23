@@ -94,15 +94,20 @@ if [ ! -f "$DPO_ADAPTER/adapters.safetensors" ] && [ "${CONFIRM_FULL_RUN:-}" != 
   exit 0
 fi
 
-# Resumable training loop: real crashes hit twice tonight (iter 10, then iter
-# 51) at DIFFERENT max_seq_length values -- root cause (dpo_trainer.py's
-# persistent, never-shrunk policy+reference KV-cache growing step-wise
-# whenever a new longest-so-far example is encountered) is order-dependent,
-# not something a fixed seq_length or a short dry-run can reliably predict.
-# Each segment's own checkpoint (save_every=50) survives a crash, so resume
-# from the latest one with the remaining iter count rather than restart from
-# scratch -- mirrors run_sft.sh's resumable design, which this script should
-# have had from the start.
+# Resumable, SEGMENTED training loop. Real crashes hit twice at DIFFERENT
+# max_seq_length values (iter 10 at 1024, iter 51 at 512) -- and a 3rd crash
+# after resuming from checkpoint 50 landed again before reaching 100, i.e.
+# within roughly the same ~50-iters-since-process-start window both times,
+# starting from DIFFERENT points in the dataset shuffle. That pattern points
+# at PROCESS-LIFETIME-driven cache growth (dpo_trainer.py's persistent,
+# never-shrunk policy+reference KV-cache, dpo_trainer.py:291/293) rather than
+# purely "which long example happens to appear" -- a fixed seq_length or a
+# short dry-run can't rule this out. Real fix: cap each invocation to a small
+# SEGMENT_ITERS regardless of how much overall remains, forcing a fresh
+# process restart (which resets the cache to empty) well before the observed
+# ~50-iter danger zone, instead of requesting the full remaining count in one
+# continuous process.
+SEGMENT_ITERS="${DPO_SEGMENT_ITERS:-20}"
 : > "$RDIR/train.log"   # fresh log for this invocation's segments (each appended below)
 while true; do
   LATEST_CKPT="$(ls "$DPO_ADAPTER"/*_adapters.safetensors 2>/dev/null | sort -V | tail -1 || true)"
@@ -114,14 +119,15 @@ while true; do
   fi
   REMAIN=$(( DPO_ITERS - DONE_STEPS ))
   if [ "$REMAIN" -le 0 ]; then break; fi
-  echo ">>> DPO training segment: ${REMAIN} more iters (from ${DONE_STEPS}/${DPO_ITERS})" | tee -a "$RDIR/train.log"
+  SEG_ITERS=$(( REMAIN < SEGMENT_ITERS ? REMAIN : SEGMENT_ITERS ))
+  echo ">>> DPO training segment: ${SEG_ITERS} iters this process (${DONE_STEPS}/${DPO_ITERS} done, ${REMAIN} remaining overall)" | tee -a "$RDIR/train.log"
   RC=0
   python -m mlx_lm_lora.train --model "$SFT_FUSED" --train --data model-experiments/04-cpt-sft/sft_cptv2_probe/dataset/dpo \
     --train-mode dpo --config model-experiments/04-cpt-sft/sft_cptv2_probe/configs/dpo_lora.yaml \
     --adapter-path "$DPO_ADAPTER" --train-type lora --num-layers 16 --grad-checkpoint \
-    --batch-size 1 --max-seq-length "$DPO_MAXLEN" --iters "$REMAIN" "${RESUME_FLAG[@]}" \
+    --batch-size 1 --max-seq-length "$DPO_MAXLEN" --iters "$SEG_ITERS" "${RESUME_FLAG[@]}" \
     --learning-rate "$DPO_LR" --beta "$DPO_BETA" --dpo-cpo-loss-type sigmoid \
-    --steps-per-report 10 --steps-per-eval 50 --val-batches 1 --save-every 50 \
+    --steps-per-report 10 --steps-per-eval "$SEG_ITERS" --val-batches 1 --save-every "$SEG_ITERS" \
     >> "$RDIR/train.log" 2>&1 || RC=$?
   if [ "$RC" -ne 0 ]; then
     NEW_LATEST="$(ls "$DPO_ADAPTER"/*_adapters.safetensors 2>/dev/null | sort -V | tail -1 || true)"
