@@ -17,7 +17,7 @@
 - Same git branch (`sft-cptv2-probe`) — no new branch.
 - Every real (non-dry-run) training invocation stays gated behind `CONFIRM_FULL_RUN=1` — never auto-proceed from dry-run to the multi-hour real run.
 - Reuse existing generic (env-var-driven, no hardcoded path) scripts as-is: `jacgen/eval_functional.jac`, `jacgen/plot_functional.jac`, `jacgen/plot_dpo.jac`, and `01-sft-dpo/sft_dpo/jacgen/plot_metrics.jac`. Only copy files that have hardcoded paths inside them (`make_dashboard.jac`) or that need CPT-specific line removal (`sft.yaml`, `run_sft.sh`).
-- **No task dies unattended.** Both `run_sft.sh` and `run_dpo.sh` are watchdog-supervised: segmented into small chunks, actively polled (log growth, not the child process's self-report), auto-restarted on crash, auto-killed-and-restarted on stall (no log growth for `*_STALL_SECS`). This directly targets a documented failure mode in this repo (`[[project-04-cpt-sft-design]]`: dispatched agents/processes reporting plausible "still running" status while making zero real progress).
+- **No task dies unattended.** Both `run_sft.sh` and `run_dpo.sh` are watchdog-supervised: actively polled (log growth, not the child process's self-report), auto-restarted on crash, auto-killed-and-restarted on stall (no log growth for `*_STALL_SECS`). `run_dpo.sh` segments into small fixed chunks (proven necessary in this repo for a real KV-cache-growth OOM, and safe to segment because DPO uses a flat learning rate — no schedule to disrupt). `run_sft.sh` deliberately does NOT segment on a routine cadence — SFT's config has a `cosine_decay` LR schedule, and since `mlx_lm.lora` rebuilds its optimizer (and the schedule's internal step counter) fresh on every process launch, routine segmenting would silently keep the run inside LR warmup forever (caught in Task 2's code review, see that task's notes) — instead it runs as one continuous process and only relaunches (accepting one schedule reset, same tradeoff the CPT-v2 arm's own real crash already had) on an actual stall or crash. This directly targets a documented failure mode in this repo (`[[project-04-cpt-sft-design]]`: dispatched agents/processes reporting plausible "still running" status while making zero real progress).
 - **OOM auto-recovery ladder** (both scripts): on a crash whose log contains an OOM signature, shrink `SEGMENT_ITERS` (halve, floor 5-50 depending on script) for the first 2 recoveries; DPO additionally drops `max_seq_length` 512→384 as a documented last resort on a 3rd OOM. Give up (exit 1, do not spin forever) if OOM persists past the ladder. Both scripts preflight-check for a competing resident-model process (`jac start` / another `mlx_lm` process) before starting — the documented dual-model-load OOM gotcha from the CPT work.
 - **DPO done right, not repeating the cptv2 arm's two flagged mistakes**: (1) `val_batches` raised 1→10 (`FULL-RESULTS.md` explicitly flagged n=1 validation reads as noise, unusable for checkpoint selection); (2) snapshots are evaluated **during** training (inline subset functional eval after every 20-iter segment), not only after the full run completes — if functional pass rate collapses relative to this arm's own SFT baseline for 2 consecutive snapshots, the run **stops early** instead of blindly burning the remaining budget on an already-collapsed policy (the cptv2 arm's v2 report found collapse had already happened by iteration 15/250 — this arm can now detect that in-flight). The best-scoring snapshot is tracked and kept (`adapters/dpo-on-sft-best/`) regardless of where training stops.
 
@@ -118,15 +118,28 @@ grad_checkpoint: true
 
 ```bash
 #!/usr/bin/env bash
-# SFT-on-fresh-Qwen probe runner, watchdog-supervised. Unlike
-# sft_cptv2_probe/run_sft.sh (one long-lived process for the whole remaining
-# iter count -- that arm's NaN-crash-and-resume had to be caught and resumed
-# by hand), this segments training into save_every-sized chunks and actively
-# polls each segment: log growth (not the child's self-report) proves real
-# progress, a stalled segment gets killed and restarted, a crashed segment
-# gets retried, and a detected OOM shrinks the segment size (then, if that's
-# not enough, would need a human -- this script does not silently degrade
-# past a documented floor).
+# SFT-on-fresh-Qwen probe runner, watchdog-supervised. Runs training as ONE
+# continuous mlx_lm.lora process whenever possible -- an earlier draft of
+# this script artificially chunked training into fixed-size segments every
+# save_every=820 iters (like the DPO runner does) and was caught in code
+# review: mlx_lm's LoRA optimizer rebuilds fresh on every process launch,
+# and --resume-adapter-file only restores WEIGHTS, not optimizer/schedule
+# state (verified directly against .venv/lib/.../mlx/optimizers/
+# optimizers.py -- this is the SAME documented risk already known in this
+# repo for CPT-v2's multi-leg training, see project memory). With
+# warmup==820==the old segment size, that design would have kept EVERY
+# segment inside the LR warmup ramp for the entire 8200-iter run, never
+# reaching the configured cosine decay -- a silent, no-error defect that
+# would have made this arm's SFT run not comparable to the CPT-v2 arm's
+# (which ran as one continuous process, resuming only once after a real
+# crash). Fixed: DPO's segmenting is unaffected by this (it uses a flat
+# `--learning-rate`, no schedule to reset) so it's untouched; SFT here
+# only relaunches (which DOES reset the schedule -- same accepted tradeoff
+# the CPT-v2 arm's own one-time crash-resume already had) on a REAL stall
+# or crash, never as a routine cadence. Log growth (not the child's exit
+# status alone) proves real progress; a stalled process gets killed and
+# retried; a detected OOM caps the next attempt(s) at a small recovery
+# size until one succeeds, then reverts to requesting the full remainder.
 set -euo pipefail
 
 if [ -z "${CAFFEINATED:-}" ] && command -v caffeinate >/dev/null 2>&1; then
@@ -144,8 +157,8 @@ RDIR="model-experiments/04-cpt-sft/sft_fresh_probe/results/sft"
 TRAIN_LOG="$RDIR/train.log"
 DRY_ITERS="${DRY_ITERS:-30}"
 EVAL_EVERY="${EVAL_EVERY:-60}"
-SEGMENT_ITERS="${SFT_SEGMENT_ITERS:-820}"    # = save_every, so every segment boundary is a real checkpoint
 STALL_SECS="${SFT_STALL_SECS:-900}"          # 15min with no new log line => treat as hung
+OOM_RECOVERY_ITERS="${SFT_OOM_RECOVERY_ITERS:-100}"  # capped attempt size right after an OOM; reverts to full-remaining once one attempt succeeds
 
 need() { command -v "$1" >/dev/null 2>&1 || { echo "MISSING: $1"; exit 1; }; }
 need jac "pip install jaclang"; need mlx_lm.lora "pip install mlx-lm"
@@ -170,7 +183,7 @@ is_done() { [ -f "$RDIR/.$1.done" ]; }
 ADAPTER_FILE="$ADAPTER/adapters.safetensors"
 PROGRESS_FILE="$RDIR/.sft_progress_steps"
 
-# --- dry-run (only on a truly fresh start) ---
+# --- dry-run (only on a truly fresh start; purely advisory, does not gate) ---
 if [ ! -f "$ADAPTER_FILE" ] && ! is_done dry && [ "${SKIP_DRY:-0}" != "1" ]; then
   echo ">>> dry-run (${DRY_ITERS} iters) -- bail check"
   mlx_lm.lora --config "$CFG" --iters "$DRY_ITERS" \
@@ -179,9 +192,16 @@ if [ ! -f "$ADAPTER_FILE" ] && ! is_done dry && [ "${SKIP_DRY:-0}" != "1" ]; the
   done_mark dry
 fi
 
-# --- gate: only proceed to real training if explicitly confirmed ---
-if [ ! -f "$ADAPTER_FILE" ] && is_done dry && [ "${CONFIRM_FULL_RUN:-}" != "1" ]; then
-  echo "Dry-run complete. Re-run with CONFIRM_FULL_RUN=1 to start the real multi-hour training run."
+# --- gate: only proceed to real training if explicitly confirmed. This check
+# is UNCONDITIONAL on ADAPTER_FILE existence -- NOT additionally gated on
+# "did a dry-run happen" (is_done dry). An earlier draft chained both with
+# &&, which review caught as a real bypass: with SKIP_DRY=1 on a fresh
+# start, is_done dry stays false forever, so that AND-gate never fired and
+# training launched with ZERO confirmation required. Fixed by dropping the
+# is_done dry condition entirely -- the dry-run above is an advisory sanity
+# check, this is the actual safety gate and must hold regardless.
+if [ ! -f "$ADAPTER_FILE" ] && [ "${CONFIRM_FULL_RUN:-}" != "1" ]; then
+  echo "Dry-run complete (or skipped). Re-run with CONFIRM_FULL_RUN=1 to start the real multi-hour training run."
   exit 0
 fi
 
@@ -194,23 +214,19 @@ if is_done train && [ -f "$ADAPTER_FILE" ]; then
   exit 0
 fi
 
-# Watchdog-supervised segmented loop. Progress is tracked via an EXPLICIT
-# counter file, NOT by parsing mlx_lm.lora's own checkpoint filenames.
-# VERIFIED against the installed package (.venv/lib/.../mlx_lm/tuner/
-# trainer.py:374-375): checkpoints are named "{it:07d}_adapters.safetensors"
-# where `it` is the LOCAL per-invocation loop counter, not a global step --
-# since every segment here calls `--iters "$SEG" --save-every "$SEG"`
-# (forcing exactly one numbered save per segment, always at local iter
-# $SEG), a naive "parse the latest numbered file" resume would read the
-# SAME filename every segment and never detect real progress. This is the
-# same bug CLASS already hit and fixed in this repo's DPO runner (a
-# checkpoint-bookkeeping bug that silently re-resumed from the same stale
-# checkpoint 5 times) -- fixed here the same way DPO fixed it: an explicit
-# progress file, and resuming from the POINTER file (adapters.safetensors,
-# confirmed elsewhere in this repo via mtime to always be the real current
-# state), never from a numbered file.
+# Watchdog-supervised loop: launches ONE continuous mlx_lm.lora process
+# sized to run the REST of training in one shot (preserving the LR
+# schedule -- see the file header comment for why this matters), and only
+# relaunches on a REAL stall or crash, never as a routine cadence. Progress
+# is tracked via an EXPLICIT counter file, driven only by REAL persisted
+# state (a clean RC==0 exit, or newly-written numbered checkpoint files on
+# a crash) -- never by parsing a numbered checkpoint filename directly,
+# since that number is LOCAL to each invocation (verified against
+# .venv/lib/.../mlx_lm/tuner/trainer.py:374-375) and would be ambiguous
+# across more than one resume.
 consecutive_fails=0
 oom_shrinks=0
+attempt_iters_override=""
 while true; do
   DONE_STEPS="$(cat "$PROGRESS_FILE")"
   REMAIN=$(( TOTAL_ITERS - DONE_STEPS ))
@@ -219,19 +235,26 @@ while true; do
     echo "=== SFT training done ($DONE_STEPS/$TOTAL_ITERS). Next: functional eval sweep ==="
     break
   fi
-  SEG=$(( REMAIN < SEGMENT_ITERS ? REMAIN : SEGMENT_ITERS ))
-  echo ">>> SFT segment: ${SEG} iters (${DONE_STEPS}/${TOTAL_ITERS} done, ${REMAIN} remaining)" | tee -a "$TRAIN_LOG"
-
-  : > "$RDIR/.segment.log"
-  RESUME_FLAGS=()
-  if [ "$DONE_STEPS" -gt 0 ] && [ -f "$ADAPTER_FILE" ]; then
-    RESUME_FLAGS=(--resume-adapter-file "$ADAPTER_FILE")
+  ATTEMPT_ITERS="$REMAIN"
+  if [ -n "$attempt_iters_override" ] && [ "$attempt_iters_override" -lt "$REMAIN" ]; then
+    ATTEMPT_ITERS="$attempt_iters_override"
   fi
-  # --save-every "$SEG" (CLI override, not the config's static 820) guarantees
-  # exactly one numbered checkpoint per segment even if the OOM ladder below
-  # later shrinks SEGMENT_ITERS to something that no longer divides evenly.
-  mlx_lm.lora --config "$CFG" --adapter-path "$ADAPTER" --iters "$SEG" --save-every "$SEG" \
-    "${RESUME_FLAGS[@]}" >> "$RDIR/.segment.log" 2>&1 &
+  echo ">>> SFT attempt: requesting ${ATTEMPT_ITERS} iters (${DONE_STEPS}/${TOTAL_ITERS} done, ${REMAIN} remaining)" | tee -a "$TRAIN_LOG"
+
+  BEFORE_CKPTS="$(ls "$ADAPTER"/*_adapters.safetensors 2>/dev/null | xargs -n1 basename 2>/dev/null || true)"
+  : > "$RDIR/.segment.log"
+  # Two explicit branches, NOT an empty-array expansion -- macOS's system
+  # bash 3.2 treats "${ARR[@]}" as an unbound-variable error under `set -u`
+  # when ARR has zero elements (documented gotcha, already worked around
+  # this way in run_dpo.sh -- caught LIVE here on the real launch attempt,
+  # since a fresh start always has DONE_STEPS=0/empty RESUME_FLAGS).
+  if [ "$DONE_STEPS" -gt 0 ] && [ -f "$ADAPTER_FILE" ]; then
+    mlx_lm.lora --config "$CFG" --adapter-path "$ADAPTER" --iters "$ATTEMPT_ITERS" \
+      --resume-adapter-file "$ADAPTER_FILE" >> "$RDIR/.segment.log" 2>&1 &
+  else
+    mlx_lm.lora --config "$CFG" --adapter-path "$ADAPTER" --iters "$ATTEMPT_ITERS" \
+      >> "$RDIR/.segment.log" 2>&1 &
+  fi
   SEG_PID=$!
 
   # Poll: refresh the live graphs every EVAL_EVERY; kill+treat-as-failed if
@@ -243,7 +266,7 @@ while true; do
     cur_size="$(wc -l < "$RDIR/.segment.log" 2>/dev/null || echo 0)"; now="$(date +%s)"
     if [ "$cur_size" -gt "$last_size" ]; then last_size="$cur_size"; last_growth="$now"; fi
     if [ $(( now - last_growth )) -ge "$STALL_SECS" ]; then
-      echo "!!! stalled: no log growth for ${STALL_SECS}s -- killing PID $SEG_PID and treating as a failed segment" | tee -a "$TRAIN_LOG"
+      echo "!!! stalled: no log growth for ${STALL_SECS}s -- killing PID $SEG_PID and treating as a failed attempt" | tee -a "$TRAIN_LOG"
       kill -9 "$SEG_PID" 2>/dev/null || true
       break
     fi
@@ -253,40 +276,54 @@ while true; do
   RC=0; wait "$SEG_PID" 2>/dev/null || RC=$?
   cat "$RDIR/.segment.log" >> "$TRAIN_LOG"
 
+  # Archive any newly-written numbered checkpoints under their TRUE global
+  # step name, regardless of success or failure. The new local number is
+  # LOCAL to this invocation; true_global = DONE_STEPS (the value BEFORE
+  # this invocation started) + new_local_number.
+  AFTER_CKPTS="$(ls "$ADAPTER"/*_adapters.safetensors 2>/dev/null | xargs -n1 basename 2>/dev/null || true)"
+  NEW_CKPTS="$(comm -13 <(echo "$BEFORE_CKPTS" | sort) <(echo "$AFTER_CKPTS" | sort) 2>/dev/null || true)"
+  MAX_NEW_LOCAL=0
+  for f in $NEW_CKPTS; do
+    ln="$(echo "$f" | grep -oE '^[0-9]+' | sed 's/^0*//')"; ln="${ln:-0}"
+    true_step=$(( DONE_STEPS + ln ))
+    cp "$ADAPTER/$f" "$CKPT_DIR/$(printf '%07d' "$true_step")_adapters.safetensors"
+    [ "$ln" -gt "$MAX_NEW_LOCAL" ] && MAX_NEW_LOCAL="$ln"
+  done
+
   if [ "$RC" -ne 0 ]; then
     consecutive_fails=$(( consecutive_fails + 1 ))
-    echo "!!! segment failed (attempt ${consecutive_fails})" | tee -a "$TRAIN_LOG"
+    echo "!!! attempt failed (attempt ${consecutive_fails})" | tee -a "$TRAIN_LOG"
+    if [ "$MAX_NEW_LOCAL" -gt 0 ]; then
+      NEW_DONE=$(( DONE_STEPS + MAX_NEW_LOCAL ))
+      echo "$NEW_DONE" > "$PROGRESS_FILE"
+      echo "  real progress persisted before the crash: now at ${NEW_DONE}/${TOTAL_ITERS}" | tee -a "$TRAIN_LOG"
+    fi
     if grep -qEi "out of memory|OutOfMemory|kIOGPUCommandBuffer|MTL::.*(OOM|Insufficient)" "$RDIR/.segment.log"; then
       echo "!!! OOM signature detected in segment log" | tee -a "$TRAIN_LOG"
       if [ "$oom_shrinks" -lt 2 ]; then
         oom_shrinks=$(( oom_shrinks + 1 ))
-        SEGMENT_ITERS=$(( SEGMENT_ITERS / 2 )); [ "$SEGMENT_ITERS" -lt 50 ] && SEGMENT_ITERS=50
-        echo "!!! OOM-recovery ${oom_shrinks}/2: shrinking SEGMENT_ITERS to ${SEGMENT_ITERS} and retrying" | tee -a "$TRAIN_LOG"
+        attempt_iters_override="$OOM_RECOVERY_ITERS"
+        echo "!!! OOM-recovery ${oom_shrinks}/2: next attempt(s) capped at ${OOM_RECOVERY_ITERS} iters until one succeeds, then reverting to full-remaining requests" | tee -a "$TRAIN_LOG"
       else
         echo "!!! OOM persisted through the shrink ladder (2/2 already applied) -- giving up. Check for a competing process (the preflight check above should have caught one that started BEFORE this run; a new one may have started since)." | tee -a "$TRAIN_LOG"
         exit 1
       fi
     fi
     if [ "$consecutive_fails" -ge 5 ]; then
-      echo "!!! segment failed 5x in a row at the same ${DONE_STEPS}/${TOTAL_ITERS} point -- giving up." | tee -a "$TRAIN_LOG"
+      echo "!!! attempt failed 5x in a row at the same ${DONE_STEPS}/${TOTAL_ITERS} point -- giving up." | tee -a "$TRAIN_LOG"
       tail -20 "$TRAIN_LOG"; exit 1
     fi
     continue
   fi
-  consecutive_fails=0
 
-  NEW_DONE=$(( DONE_STEPS + SEG ))
+  # Success: RC==0 means mlx_lm.lora completed all ATTEMPT_ITERS iters and
+  # wrote the final pointer (trainer.py always does a final save at loop
+  # end, regardless of save_every alignment) -- trust the requested count
+  # directly rather than re-deriving it from checkpoint filenames.
+  consecutive_fails=0
+  attempt_iters_override=""
+  NEW_DONE=$(( DONE_STEPS + ATTEMPT_ITERS ))
   echo "$NEW_DONE" > "$PROGRESS_FILE"
-  # Snapshot this segment's checkpoint under its TRUE global step. The
-  # numbered file mlx_lm.lora just wrote is named by LOCAL iteration count
-  # (see the comment above the loop) -- copy it immediately under an
-  # unambiguous global-step name so Task 5's sweep can trust filenames
-  # directly, no "+N" offset correction needed afterward.
-  LOCAL_NAME="$(printf '%07d' "$SEG")_adapters.safetensors"
-  if [ -f "$ADAPTER/$LOCAL_NAME" ]; then
-    cp "$ADAPTER/$LOCAL_NAME" "$CKPT_DIR/$(printf '%07d' "$NEW_DONE")_adapters.safetensors"
-    echo "  checkpoint snapshot: $CKPT_DIR/$(printf '%07d' "$NEW_DONE")_adapters.safetensors" | tee -a "$TRAIN_LOG"
-  fi
 done
 ```
 
@@ -345,7 +382,7 @@ grep -n "adapters/" .gitignore model-experiments/04-cpt-sft/.gitignore 2>/dev/nu
 cd /Volumes/ExtremePro/JaseciLabs/jac_model_studio
 CONFIRM_FULL_RUN=1 bash model-experiments/04-cpt-sft/sft_fresh_probe/run_sft.sh
 ```
-This is a multi-hour run (the CPT-v2 arm's identical-size run took multiple sessions — 8200 iters, batch_size 1, seq_len 3072). The watchdog loop inside `run_sft.sh` now supervises this itself: it segments into 820-iter chunks (each a real checkpoint), polls for log growth, kills+restarts a stalled segment, retries a crashed one, and shrinks the segment size automatically on a detected OOM — you do not need to babysit it or manually re-run on a crash. Still run it in a dedicated terminal/background session since it's genuinely multi-hour; if the whole process is killed externally (e.g. laptop sleep with `caffeinate` somehow bypassed), re-running the same command resumes cleanly from the latest checkpoint either way.
+This is a multi-hour run (the CPT-v2 arm's identical-size run took multiple sessions — 8200 iters, batch_size 1, seq_len 3072). The watchdog loop inside `run_sft.sh` now supervises this itself: it runs training as ONE continuous process (preserving the LR schedule intact — deliberately NOT chunked into fixed segments, see the script's header comment for why that would have silently defeated the cosine decay), polls for log growth, and only kills+relaunches on a REAL stall or crash (capping the next attempt's size on a detected OOM until one succeeds, then reverting to requesting the full remainder) — you do not need to babysit it or manually re-run on a crash. Still run it in a dedicated terminal/background session since it's genuinely multi-hour; if the whole process is killed externally (e.g. laptop sleep with `caffeinate` somehow bypassed), re-running the same command resumes cleanly from the latest checkpoint either way.
 
 - [ ] **Step 2: Verify completion**
 
@@ -354,13 +391,13 @@ tail -30 model-experiments/04-cpt-sft/sft_fresh_probe/results/sft/train.log
 ls model-experiments/04-cpt-sft/sft_fresh_probe/adapters/sft-on-fresh/adapters.safetensors
 grep -c "OOM-recovery\|stalled:" model-experiments/04-cpt-sft/sft_fresh_probe/results/sft/train.log || true
 ```
-Expected: log ends `=== SFT training done (8200/8200). Next: functional eval sweep ===`; `adapters.safetensors` exists and is non-empty; train loss well below its starting value with no `nan` anywhere in the log. If the OOM/stall grep found hits, that's fine (the watchdog is designed to recover from exactly that) — note in the commit message how many recoveries happened. Checkpoint step numbers in `adapters/sft-on-fresh/checkpoints/*_adapters.safetensors` are already true global steps by construction (each segment is copied there under its real cumulative step, see the script's comment) — no offset correction needed in Task 5 regardless of how many OOM/stall recoveries happened.
+Expected: log ends `=== SFT training done (8200/8200). Next: functional eval sweep ===`; `adapters.safetensors` exists and is non-empty; train loss well below its starting value with no `nan` anywhere in the log. If the OOM/stall grep found hits, that's fine (the watchdog is designed to recover from exactly that, at the cost of one LR-schedule reset for the remainder — a rare-path tradeoff, not the routine behavior) — note in the commit message how many recoveries happened and whether training completed as a single uninterrupted process (the common, LR-schedule-clean case) or needed a resume. Checkpoint step numbers in `adapters/sft-on-fresh/checkpoints/*_adapters.safetensors` are already true global steps by construction (each numbered checkpoint mlx_lm.lora writes gets copied there under `DONE_STEPS_before_this_attempt + local_iter`, per the script's comment) — no offset correction needed in Task 5 regardless of how many OOM/stall recoveries happened.
 
 ```bash
 ls model-experiments/04-cpt-sft/sft_fresh_probe/adapters/sft-on-fresh/checkpoints/
 cat model-experiments/04-cpt-sft/sft_fresh_probe/results/sft/.sft_progress_steps
 ```
-Expected: `.sft_progress_steps` reads `8200`; the `checkpoints/` dir has one file per completed segment (normally 10, at true steps 820,1640,...,8200 — fewer/irregularly-spaced if the OOM ladder shrank `SEGMENT_ITERS` partway through, which is fine).
+Expected: `.sft_progress_steps` reads `8200`; the `checkpoints/` dir has one file per `save_every`-aligned checkpoint written during training (normally 10, at true steps 820,1640,...,8200 — irregularly-spaced if a stall/crash forced a resume partway through, which is fine and expected to be rare).
 
 - [ ] **Step 3: Commit the log + graphs (not the multi-GB adapter weights, already gitignored)**
 
@@ -602,17 +639,31 @@ while true; do
   echo ">>> DPO segment: ${SEG_ITERS} iters (${DONE_STEPS}/${DPO_ITERS} done)" | tee -a "$RDIR/train.log"
 
   : > "$RDIR/.segment.log"
-  RESUME_FLAGS=()
+  # Two explicit branches, NOT an empty-array expansion -- macOS's system
+  # bash 3.2 treats "${ARR[@]}" as an unbound-variable error under `set -u`
+  # when ARR has zero elements. This exact bug was hit LIVE on the SFT
+  # runner's real launch attempt (a fresh start always has DONE_STEPS=0,
+  # so every attempt crashed instantly) and fixed there the same way --
+  # applying the fix here too before this script ever runs for real,
+  # instead of waiting to hit it a second time.
   if [ "$DONE_STEPS" -gt 0 ] && [ -f "$DPO_ADAPTER/adapters.safetensors" ]; then
-    RESUME_FLAGS=(--resume-adapter-file "$DPO_ADAPTER/adapters.safetensors")
+    python -m mlx_lm_lora.train --model "$SFT_FUSED" --train --data model-experiments/04-cpt-sft/sft_fresh_probe/dataset/dpo \
+      --train-mode dpo --config model-experiments/04-cpt-sft/sft_fresh_probe/configs/dpo_lora.yaml \
+      --adapter-path "$DPO_ADAPTER" --train-type lora --num-layers 16 --grad-checkpoint \
+      --batch-size 1 --max-seq-length "$DPO_MAXLEN" --iters "$SEG_ITERS" \
+      --resume-adapter-file "$DPO_ADAPTER/adapters.safetensors" \
+      --learning-rate "$DPO_LR" --beta "$DPO_BETA" --dpo-cpo-loss-type sigmoid \
+      --steps-per-report 5 --steps-per-eval "$SEG_ITERS" --val-batches "$DPO_VAL_BATCHES" --save-every "$SEG_ITERS" \
+      > "$RDIR/.segment.log" 2>&1 &
+  else
+    python -m mlx_lm_lora.train --model "$SFT_FUSED" --train --data model-experiments/04-cpt-sft/sft_fresh_probe/dataset/dpo \
+      --train-mode dpo --config model-experiments/04-cpt-sft/sft_fresh_probe/configs/dpo_lora.yaml \
+      --adapter-path "$DPO_ADAPTER" --train-type lora --num-layers 16 --grad-checkpoint \
+      --batch-size 1 --max-seq-length "$DPO_MAXLEN" --iters "$SEG_ITERS" \
+      --learning-rate "$DPO_LR" --beta "$DPO_BETA" --dpo-cpo-loss-type sigmoid \
+      --steps-per-report 5 --steps-per-eval "$SEG_ITERS" --val-batches "$DPO_VAL_BATCHES" --save-every "$SEG_ITERS" \
+      > "$RDIR/.segment.log" 2>&1 &
   fi
-  python -m mlx_lm_lora.train --model "$SFT_FUSED" --train --data model-experiments/04-cpt-sft/sft_fresh_probe/dataset/dpo \
-    --train-mode dpo --config model-experiments/04-cpt-sft/sft_fresh_probe/configs/dpo_lora.yaml \
-    --adapter-path "$DPO_ADAPTER" --train-type lora --num-layers 16 --grad-checkpoint \
-    --batch-size 1 --max-seq-length "$DPO_MAXLEN" --iters "$SEG_ITERS" "${RESUME_FLAGS[@]}" \
-    --learning-rate "$DPO_LR" --beta "$DPO_BETA" --dpo-cpo-loss-type sigmoid \
-    --steps-per-report 5 --steps-per-eval "$SEG_ITERS" --val-batches "$DPO_VAL_BATCHES" --save-every "$SEG_ITERS" \
-    > "$RDIR/.segment.log" 2>&1 &
   SEG_PID=$!
 
   last_growth=$(date +%s); last_size=0
@@ -1148,7 +1199,8 @@ git commit -m "docs: cross-arm comparison -- does CPT-v2 help once SFT/DPO train
 ## Self-Review Notes
 
 - **Spec coverage:** every design element (scaffold, SFT config w/ resume_adapter_file removed, dry-run gate, full run, eval sweep w/ true base row, DPO v1 only, DPO dry-run/full-run/eval, per-probe dashboard, cross-arm comparison) has a task. Branch decision (same branch) required no task — already true.
-- **Real bug caught pre-dispatch and fixed:** the first draft of `run_sft.sh`'s segmented watchdog loop inferred resume progress by parsing the latest `*_adapters.safetensors` filename — verified against the installed `mlx_lm` source (`tuner/trainer.py:374-375`) that this filename uses a LOCAL per-invocation iteration counter, so every fixed-size segment would have saved an identically-named file (`0000820_adapters.safetensors`), silently breaking both progress-tracking and Task 5's interim-checkpoint sweep. Same bug class this repo's DPO runner already hit and fixed (a checkpoint-bookkeeping bug that silently re-resumed from a stale checkpoint 5 times, per `.superpowers/sdd/progress.md`). Fixed by adopting DPO's proven pattern: an explicit `.sft_progress_steps` counter file, resuming only from the pointer file (`adapters.safetensors`), and copying each segment's checkpoint into `checkpoints/` under its true global step immediately after the segment completes.
+- **Real bug caught pre-dispatch and fixed:** the first draft of `run_sft.sh`'s segmented watchdog loop inferred resume progress by parsing the latest `*_adapters.safetensors` filename — verified against the installed `mlx_lm` source (`tuner/trainer.py:374-375`) that this filename uses a LOCAL per-invocation iteration counter, so every fixed-size segment would have saved an identically-named file (`0000820_adapters.safetensors`), silently breaking both progress-tracking and Task 5's interim-checkpoint sweep. Same bug class this repo's DPO runner already hit and fixed (a checkpoint-bookkeeping bug that silently re-resumed from a stale checkpoint 5 times, per the archived cptv2-probe ledger).
+- **Second, more serious real bug caught during Task 2's actual code review (not pre-dispatch)** — even after the fix above, the "always segment into 820-iter chunks" design itself was wrong for SFT specifically: `mlx_lm.lora` rebuilds its optimizer fresh on every process launch, `--resume-adapter-file` only restores weights (verified against `mlx/optimizers/optimizers.py`), and the LR schedule is driven by that optimizer's own step counter — so with `warmup: 820` exactly equal to the segment size, EVERY segment would have stayed inside LR warmup for the entire 8200-iter run, never reaching the configured cosine decay, silently making this arm's training not comparable to the CPT-v2 arm's (which ran as one continuous process). This is the same risk class already documented and solved with a heavier custom optimizer-state-persisting driver for CPT-v2's multi-leg training (`[[project-attempt03-cpt-design]]`). Fixed here with a right-sized (not over-engineered) solution: `run_sft.sh` runs as ONE continuous process whenever possible and only relaunches — accepting the same one-time schedule-reset tradeoff the CPT-v2 arm's own real crash already had — on an actual stall or crash, never on a routine cadence. `run_dpo.sh`'s segmenting is unaffected by this bug class (DPO uses a flat learning rate, no schedule to reset) and was left as-is.
 - **Watchdog / OOM / DPO-rigor additions (this revision):** both `run_sft.sh` and `run_dpo.sh` are segmented + actively polled (log growth, not child self-report) + auto-restarted on crash + auto-killed-and-restarted on stall + OOM-shrink-laddered before giving up — directly answers "keep a watchdog so no task dies" and "if it OOMs, have a fix." DPO additionally fixes the two concrete mistakes `sft_cptv2_probe/results/FULL-RESULTS.md` flagged in its own "honest methodological limitation" section: `val_batches` 1→10, and snapshot-time functional eval (not post-hoc only) with an early-stop-on-collapse gate + best-snapshot tracking — answers "do DPO as it should be, don't repeat the same mistakes." None of this touches the hyperparameters themselves (β/lr/iters stay v1, per your scope decision) — it's instrumentation and failure-recovery, not a third DPO config.
 - **Placeholder scan:** no TBD/TODO; the one open unknown (whether resumed-crash step correction is needed in Task 5) is explicitly flagged as a conditional check, not a silent gap. The early-stop scenario (Task 8/9) is explicitly documented as a valid, non-failure outcome, not glossed over.
 - **Type/path consistency:** `sft-on-fresh` / `dpo-on-sft` / `dpo-on-sft-best` / `sft-fresh-fused-q4` names used consistently across Tasks 2, 4-10; `metrics_functional.jsonl` schema (`category`, `step`, `runs_pct`, `total`, `runs`, `gate_class`) matches `eval_functional.jac`'s actual output field names (verified by reading `sft_cptv2_probe/jacgen/{plot_functional,make_dashboard}.jac`, which already consume that exact schema). The `LAST_EVAL_STEP`/`BEST_EVAL_STEP` offset scheme in Task 9 (`+1000000`/`+500000`) is a deliberate, documented device so `make_dashboard.jac`'s existing unmodified "max step wins" logic still picks the right row — not a magic number.

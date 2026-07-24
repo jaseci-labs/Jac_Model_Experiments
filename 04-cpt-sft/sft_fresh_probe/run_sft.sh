@@ -124,12 +124,19 @@ while true; do
 
   BEFORE_CKPTS="$(ls "$ADAPTER"/*_adapters.safetensors 2>/dev/null | xargs -n1 basename 2>/dev/null || true)"
   : > "$RDIR/.segment.log"
-  RESUME_FLAGS=()
+  # Two explicit branches, NOT an empty-array expansion -- macOS's system
+  # bash 3.2 treats "${ARR[@]}" as an unbound-variable error under `set -u`
+  # when ARR has zero elements (same documented gotcha run_dpo.sh already
+  # works around; missed here on the first pass and hit live on the real
+  # launch attempt -- fresh start always has DONE_STEPS=0, so this crashed
+  # every single attempt).
   if [ "$DONE_STEPS" -gt 0 ] && [ -f "$ADAPTER_FILE" ]; then
-    RESUME_FLAGS=(--resume-adapter-file "$ADAPTER_FILE")
+    mlx_lm.lora --config "$CFG" --adapter-path "$ADAPTER" --iters "$ATTEMPT_ITERS" \
+      --resume-adapter-file "$ADAPTER_FILE" >> "$RDIR/.segment.log" 2>&1 &
+  else
+    mlx_lm.lora --config "$CFG" --adapter-path "$ADAPTER" --iters "$ATTEMPT_ITERS" \
+      >> "$RDIR/.segment.log" 2>&1 &
   fi
-  mlx_lm.lora --config "$CFG" --adapter-path "$ADAPTER" --iters "$ATTEMPT_ITERS" \
-    "${RESUME_FLAGS[@]}" >> "$RDIR/.segment.log" 2>&1 &
   SEG_PID=$!
 
   # Poll: refresh the live graphs every EVAL_EVERY; kill+treat-as-failed if
