@@ -1,0 +1,9 @@
+{"step": 15, "category": "code_gen", "gate_class": "behavioral", "total": 86, "runs": 1, "runs_pct": 1}
+{"step": 15, "category": "code_gen", "gate_class": "compile_only", "total": 227, "runs": 0, "runs_pct": 0}
+{"step": 15, "category": "debug", "gate_class": "behavioral", "total": 33, "runs": 24, "runs_pct": 72}
+{"step": 15, "category": "debug", "gate_class": "compile_only", "total": 3, "runs": 3, "runs_pct": 100}
+{"step": 15, "category": "migration", "gate_class": "behavioral", "total": 1, "runs": 0, "runs_pct": 0}
+{"step": 15, "category": "trajectory", "gate_class": "behavioral", "total": 70, "runs": 13, "runs_pct": 18}
+{"step": 15, "category": "trajectory", "gate_class": "compile_only", "total": 113, "runs": 65, "runs_pct": 57}
+{"step": 15, "category": "conversion", "gate_class": "behavioral", "total": 322, "runs": 7, "runs_pct": 2}
+{"step": 15, "category": "__overall__", "gate_class": "__all__", "total": 855, "runs": 113, "runs_pct": 13}

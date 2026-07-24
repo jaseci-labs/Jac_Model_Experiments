@@ -1,0 +1,519 @@
+>>> DPO training segment: 15 iters this process (0/150 done, 150 remaining overall)
+
+[96m╔══════════════════════════════════════════════════════════════════════════════════════════╗[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m║[0m [1m[35m███╗   ███╗██╗     ██╗  ██╗    ██╗     ███╗   ███╗    ██╗      ██████╗ ██████╗  █████╗[0m   [96m║[0m
+[96m║[0m [1m[35m████╗ ████║██║     ╚██╗██╔╝    ██║     ████╗ ████║    ██║     ██╔═══██╗██╔══██╗██╔══██╗[0m  [96m║[0m
+[96m║[0m [1m[94m██╔████╔██║██║      ╚███╔╝     ██║     ██╔████╔██║    ██║     ██║   ██║██████╔╝███████║[0m  [96m║[0m
+[96m║[0m [1m[94m██║╚██╔╝██║██║      ██╔██╗     ██║     ██║╚██╔╝██║    ██║     ██║   ██║██╔══██╗██╔══██║[0m  [96m║[0m
+[96m║[0m [1m[96m██║ ╚═╝ ██║███████╗██╔╝ ██╗    ███████╗██║ ╚═╝ ██║    ███████╗╚██████╔╝██║  ██║██║  ██║[0m  [96m║[0m
+[96m║[0m [1m[96m╚═╝     ╚═╝╚══════╝╚═╝  ╚═╝    ╚══════╝╚═╝     ╚═╝    ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝[0m  [96m║[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m║[0m [93m[1mAdvanced Fine-Tuning Framework[0m                                                           [96m║[0m
+[96m║[0m [2m[97mLoRA • (Online-)DPO • XPO • CPO • CPO • ORPO • PPO • GRPO • DrGRPO • GSPO • RLHF • SFT[0m   [96m║[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m╚══════════════════════════════════════════════════════════════════════════════════════════╝[0m
+    
+
+[96m============================================================[0m
+[1m[97m                   Configuration Summary                    [0m
+[96m============================================================[0m
+
+[97mModel:[0m models/sft-cptv2-fused-q4
+[97mTraining Mode:[0m DPO
+[97mTraining Type:[0m lora
+[97mBatch Size:[0m 1
+[97mLearning Rate:[0m 5e-07
+[97mOptimizer:[0m adam
+[94m[INFO][0m Loading model: [96mmodels/sft-cptv2-fused-q4[0m
+Loading model models/sft-cptv2-fused-q4
+Loading LoRA adapters with config: {'rank': 16, 'dropout': 0.05, 'scale': 2.0, 'use_dora': False, 'num_layers': 16}
+Loading pretrained reference model (using main model)
+[94m[INFO][0m Loading datasets
+
+[96m============================================================[0m
+[1m[97m                          Training                          [0m
+[96m============================================================[0m
+
+Trainable parameters: 0.923% (281.838M/30532.123M)
+[94m[INFO][0m Training mode: [93mDPO[0m
+Training:   0%|          | 0/15 [00:00<?, ?it/s]                                                Training:   0%|          | 0/15 [00:07<?, ?it/s]Training:   7%|▋         | 1/15 [00:10<02:29, 10.66s/it]Training:  13%|█▎        | 2/15 [00:12<01:07,  5.21s/it]Training:  20%|██        | 3/15 [00:14<00:45,  3.78s/it]Training:  27%|██▋       | 4/15 [00:16<00:33,  3.04s/it]Training:  27%|██▋       | 4/15 [00:18<00:33,  3.04s/it, loss=0.620, it/s=0.454]                                                                                Training:  27%|██▋       | 4/15 [00:18<00:33,  3.04s/it, loss=0.620, it/s=0.454]Training:  33%|███▎      | 5/15 [00:18<00:29,  2.99s/it, loss=0.620, it/s=0.454]Training:  40%|████      | 6/15 [00:20<00:22,  2.47s/it, loss=0.620, it/s=0.454]Training:  47%|████▋     | 7/15 [00:21<00:17,  2.18s/it, loss=0.620, it/s=0.454]Training:  53%|█████▎    | 8/15 [00:24<00:16,  2.36s/it, loss=0.620, it/s=0.454]Training:  60%|██████    | 9/15 [00:26<00:13,  2.18s/it, loss=0.620, it/s=0.454]Training:  60%|██████    | 9/15 [00:28<00:13,  2.18s/it, loss=0.916, it/s=0.550]                                                                                Training:  60%|██████    | 9/15 [00:28<00:13,  2.18s/it, loss=0.916, it/s=0.550]Training:  67%|██████▋   | 10/15 [00:28<00:09,  1.98s/it, loss=0.916, it/s=0.550]Training:  73%|███████▎  | 11/15 [00:30<00:08,  2.22s/it, loss=0.916, it/s=0.550]Training:  80%|████████  | 12/15 [00:32<00:06,  2.19s/it, loss=0.916, it/s=0.550]Training:  87%|████████▋ | 13/15 [00:34<00:04,  2.04s/it, loss=0.916, it/s=0.550]Training:  93%|█████████▎| 14/15 [00:36<00:01,  1.97s/it, loss=0.916, it/s=0.550]                                                                                 Training:  93%|█████████▎| 14/15 [00:36<00:01,  1.97s/it, loss=0.916, it/s=0.550]Training:  93%|█████████▎| 14/15 [00:39<00:01,  1.97s/it, loss=0.653, it/s=1.736]                                                                                 Training:  93%|█████████▎| 14/15 [00:39<00:01,  1.97s/it, loss=0.653, it/s=1.736]                                                                                 Training:  93%|█████████▎| 14/15 [01:38<00:01,  1.97s/it, loss=0.653, it/s=1.736]Training: 100%|██████████| 15/15 [01:38<00:00, 20.06s/it, loss=0.653, it/s=1.736]Training: 100%|██████████| 15/15 [01:38<00:00,  6.56s/it, loss=0.653, it/s=1.736]
+Iter 1: Val loss 0.693, Val chosen reward 0.000, Val rejected reward 0.000, Val accuracy 0.000, Val margin 0.000, Val took 7.902s
+
+Iter 5: loss 0.620, chosen_r 0.198, rejected_r -0.177, acc 0.600, margin 0.375, lr 5.000e-07, it/s 0.454, tok/s 275.837, peak_mem 39.639GB
+
+Iter 10: loss 0.916, chosen_r -0.358, rejected_r 0.016, acc 0.400, margin -0.374, lr 5.000e-07, it/s 0.550, tok/s 243.863, peak_mem 39.685GB
+Iter 15: Val loss 0.854, Val chosen reward 0.006, Val rejected reward 0.009, Val accuracy 0.000, Val margin -0.299, Val took 0.570s
+
+Iter 15: loss 0.653, chosen_r 0.541, rejected_r 0.316, acc 0.600, margin 0.225, lr 5.000e-07, it/s 1.736, tok/s 1142.844, peak_mem 39.767GB
+Iter 15: Saved adapter weights to model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/adapters.safetensors and model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/0000015_adapters.safetensors.
+Saved final weights to model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/adapters.safetensors.
+  snapshot saved: model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-v2/snapshots/step_0015/
+>>> DPO training segment: 15 iters this process (15/150 done, 135 remaining overall)
+
+[96m╔══════════════════════════════════════════════════════════════════════════════════════════╗[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m║[0m [1m[35m███╗   ███╗██╗     ██╗  ██╗    ██╗     ███╗   ███╗    ██╗      ██████╗ ██████╗  █████╗[0m   [96m║[0m
+[96m║[0m [1m[35m████╗ ████║██║     ╚██╗██╔╝    ██║     ████╗ ████║    ██║     ██╔═══██╗██╔══██╗██╔══██╗[0m  [96m║[0m
+[96m║[0m [1m[94m██╔████╔██║██║      ╚███╔╝     ██║     ██╔████╔██║    ██║     ██║   ██║██████╔╝███████║[0m  [96m║[0m
+[96m║[0m [1m[94m██║╚██╔╝██║██║      ██╔██╗     ██║     ██║╚██╔╝██║    ██║     ██║   ██║██╔══██╗██╔══██║[0m  [96m║[0m
+[96m║[0m [1m[96m██║ ╚═╝ ██║███████╗██╔╝ ██╗    ███████╗██║ ╚═╝ ██║    ███████╗╚██████╔╝██║  ██║██║  ██║[0m  [96m║[0m
+[96m║[0m [1m[96m╚═╝     ╚═╝╚══════╝╚═╝  ╚═╝    ╚══════╝╚═╝     ╚═╝    ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝[0m  [96m║[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m║[0m [93m[1mAdvanced Fine-Tuning Framework[0m                                                           [96m║[0m
+[96m║[0m [2m[97mLoRA • (Online-)DPO • XPO • CPO • CPO • ORPO • PPO • GRPO • DrGRPO • GSPO • RLHF • SFT[0m   [96m║[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m╚══════════════════════════════════════════════════════════════════════════════════════════╝[0m
+    
+
+[96m============================================================[0m
+[1m[97m                   Configuration Summary                    [0m
+[96m============================================================[0m
+
+[97mModel:[0m models/sft-cptv2-fused-q4
+[97mTraining Mode:[0m DPO
+[97mTraining Type:[0m lora
+[97mBatch Size:[0m 1
+[97mLearning Rate:[0m 5e-07
+[97mOptimizer:[0m adam
+[94m[INFO][0m Loading model: [96mmodels/sft-cptv2-fused-q4[0m
+Loading model models/sft-cptv2-fused-q4
+Loading LoRA adapters with config: {'rank': 16, 'dropout': 0.05, 'scale': 2.0, 'use_dora': False, 'num_layers': 16}
+Loading pretrained reference model (using main model)
+[94m[INFO][0m Loading datasets
+
+[96m============================================================[0m
+[1m[97m                          Training                          [0m
+[96m============================================================[0m
+
+[93m[WARNING][0m Loading fine-tuned weights from [96mmodel-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/adapters.safetensors[0m
+Trainable parameters: 0.923% (281.838M/30532.123M)
+[94m[INFO][0m Training mode: [93mDPO[0m
+Training:   0%|          | 0/15 [00:00<?, ?it/s]                                                Training:   0%|          | 0/15 [00:34<?, ?it/s]Training:   7%|▋         | 1/15 [00:36<08:37, 36.93s/it]Training:  13%|█▎        | 2/15 [00:38<03:28, 16.03s/it]Training:  20%|██        | 3/15 [00:40<01:55,  9.66s/it]Training:  27%|██▋       | 4/15 [00:42<01:12,  6.59s/it]Training:  27%|██▋       | 4/15 [00:45<01:12,  6.59s/it, loss=0.547, it/s=0.456]                                                                                Training:  27%|██▋       | 4/15 [00:45<01:12,  6.59s/it, loss=0.547, it/s=0.456]Training:  33%|███▎      | 5/15 [00:45<00:52,  5.24s/it, loss=0.547, it/s=0.456]Training:  40%|████      | 6/15 [00:46<00:35,  3.95s/it, loss=0.547, it/s=0.456]Training:  47%|████▋     | 7/15 [00:48<00:25,  3.18s/it, loss=0.547, it/s=0.456]Training:  53%|█████▎    | 8/15 [00:50<00:21,  3.04s/it, loss=0.547, it/s=0.456]Training:  60%|██████    | 9/15 [00:52<00:15,  2.65s/it, loss=0.547, it/s=0.456]Training:  60%|██████    | 9/15 [00:54<00:15,  2.65s/it, loss=1.016, it/s=0.552]                                                                                Training:  60%|██████    | 9/15 [00:54<00:15,  2.65s/it, loss=1.016, it/s=0.552]Training:  67%|██████▋   | 10/15 [00:54<00:11,  2.29s/it, loss=1.016, it/s=0.552]Training:  73%|███████▎  | 11/15 [00:56<00:09,  2.43s/it, loss=1.016, it/s=0.552]Training:  80%|████████  | 12/15 [00:59<00:07,  2.34s/it, loss=1.016, it/s=0.552]Training:  87%|████████▋ | 13/15 [01:00<00:04,  2.14s/it, loss=1.016, it/s=0.552]Training:  93%|█████████▎| 14/15 [01:02<00:02,  2.04s/it, loss=1.016, it/s=0.552]                                                                                 Training:  93%|█████████▎| 14/15 [01:03<00:02,  2.04s/it, loss=1.016, it/s=0.552]Training:  93%|█████████▎| 14/15 [01:06<00:02,  2.04s/it, loss=0.833, it/s=1.738]                                                                                 Training:  93%|█████████▎| 14/15 [01:06<00:02,  2.04s/it, loss=0.833, it/s=1.738]                                                                                 Training:  93%|█████████▎| 14/15 [02:04<00:02,  2.04s/it, loss=0.833, it/s=1.738]Training: 100%|██████████| 15/15 [02:04<00:00, 20.09s/it, loss=0.833, it/s=1.738]Training: 100%|██████████| 15/15 [02:04<00:00,  8.30s/it, loss=0.833, it/s=1.738]
+Iter 1: Val loss 0.506, Val chosen reward 0.008, Val rejected reward 0.003, Val accuracy 1.000, Val margin 0.417, Val took 34.181s
+
+Iter 5: loss 0.547, chosen_r 0.453, rejected_r 0.053, acc 0.600, margin 0.400, lr 5.000e-07, it/s 0.456, tok/s 277.281, peak_mem 39.685GB
+
+Iter 10: loss 1.016, chosen_r -0.255, rejected_r 0.096, acc 0.200, margin -0.351, lr 5.000e-07, it/s 0.552, tok/s 244.889, peak_mem 39.767GB
+Iter 15: Val loss 0.749, Val chosen reward 0.000, Val rejected reward 0.001, Val accuracy 0.000, Val margin -0.108, Val took 0.571s
+
+Iter 15: loss 0.833, chosen_r -0.188, rejected_r -0.160, acc 0.600, margin -0.028, lr 5.000e-07, it/s 1.738, tok/s 1143.902, peak_mem 39.767GB
+Iter 15: Saved adapter weights to model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/adapters.safetensors and model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/0000015_adapters.safetensors.
+Saved final weights to model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/adapters.safetensors.
+  snapshot saved: model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-v2/snapshots/step_0030/
+>>> DPO training segment: 15 iters this process (30/150 done, 120 remaining overall)
+
+[96m╔══════════════════════════════════════════════════════════════════════════════════════════╗[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m║[0m [1m[35m███╗   ███╗██╗     ██╗  ██╗    ██╗     ███╗   ███╗    ██╗      ██████╗ ██████╗  █████╗[0m   [96m║[0m
+[96m║[0m [1m[35m████╗ ████║██║     ╚██╗██╔╝    ██║     ████╗ ████║    ██║     ██╔═══██╗██╔══██╗██╔══██╗[0m  [96m║[0m
+[96m║[0m [1m[94m██╔████╔██║██║      ╚███╔╝     ██║     ██╔████╔██║    ██║     ██║   ██║██████╔╝███████║[0m  [96m║[0m
+[96m║[0m [1m[94m██║╚██╔╝██║██║      ██╔██╗     ██║     ██║╚██╔╝██║    ██║     ██║   ██║██╔══██╗██╔══██║[0m  [96m║[0m
+[96m║[0m [1m[96m██║ ╚═╝ ██║███████╗██╔╝ ██╗    ███████╗██║ ╚═╝ ██║    ███████╗╚██████╔╝██║  ██║██║  ██║[0m  [96m║[0m
+[96m║[0m [1m[96m╚═╝     ╚═╝╚══════╝╚═╝  ╚═╝    ╚══════╝╚═╝     ╚═╝    ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝[0m  [96m║[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m║[0m [93m[1mAdvanced Fine-Tuning Framework[0m                                                           [96m║[0m
+[96m║[0m [2m[97mLoRA • (Online-)DPO • XPO • CPO • CPO • ORPO • PPO • GRPO • DrGRPO • GSPO • RLHF • SFT[0m   [96m║[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m╚══════════════════════════════════════════════════════════════════════════════════════════╝[0m
+    
+
+[96m============================================================[0m
+[1m[97m                   Configuration Summary                    [0m
+[96m============================================================[0m
+
+[97mModel:[0m models/sft-cptv2-fused-q4
+[97mTraining Mode:[0m DPO
+[97mTraining Type:[0m lora
+[97mBatch Size:[0m 1
+[97mLearning Rate:[0m 5e-07
+[97mOptimizer:[0m adam
+[94m[INFO][0m Loading model: [96mmodels/sft-cptv2-fused-q4[0m
+Loading model models/sft-cptv2-fused-q4
+Loading LoRA adapters with config: {'rank': 16, 'dropout': 0.05, 'scale': 2.0, 'use_dora': False, 'num_layers': 16}
+Loading pretrained reference model (using main model)
+[94m[INFO][0m Loading datasets
+
+[96m============================================================[0m
+[1m[97m                          Training                          [0m
+[96m============================================================[0m
+
+[93m[WARNING][0m Loading fine-tuned weights from [96mmodel-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/adapters.safetensors[0m
+Trainable parameters: 0.923% (281.838M/30532.123M)
+[94m[INFO][0m Training mode: [93mDPO[0m
+Training:   0%|          | 0/15 [00:00<?, ?it/s]                                                Training:   0%|          | 0/15 [00:34<?, ?it/s]Training:   7%|▋         | 1/15 [00:36<08:34, 36.75s/it]Training:  13%|█▎        | 2/15 [00:38<03:27, 15.95s/it]Training:  20%|██        | 3/15 [00:40<01:55,  9.62s/it]Training:  27%|██▋       | 4/15 [00:42<01:12,  6.57s/it]Training:  27%|██▋       | 4/15 [00:44<01:12,  6.57s/it, loss=0.628, it/s=0.456]                                                                                Training:  27%|██▋       | 4/15 [00:44<01:12,  6.57s/it, loss=0.628, it/s=0.456]Training:  33%|███▎      | 5/15 [00:44<00:52,  5.23s/it, loss=0.628, it/s=0.456]Training:  40%|████      | 6/15 [00:46<00:35,  3.94s/it, loss=0.628, it/s=0.456]Training:  47%|████▋     | 7/15 [00:47<00:25,  3.17s/it, loss=0.628, it/s=0.456]Training:  53%|█████▎    | 8/15 [00:50<00:21,  3.03s/it, loss=0.628, it/s=0.456]Training:  60%|██████    | 9/15 [00:52<00:15,  2.64s/it, loss=0.628, it/s=0.456]Training:  60%|██████    | 9/15 [00:54<00:15,  2.64s/it, loss=0.585, it/s=0.553]                                                                                Training:  60%|██████    | 9/15 [00:54<00:15,  2.64s/it, loss=0.585, it/s=0.553]Training:  67%|██████▋   | 10/15 [00:54<00:11,  2.29s/it, loss=0.585, it/s=0.553]Training:  73%|███████▎  | 11/15 [00:56<00:09,  2.43s/it, loss=0.585, it/s=0.553]Training:  80%|████████  | 12/15 [00:58<00:07,  2.34s/it, loss=0.585, it/s=0.553]Training:  87%|████████▋ | 13/15 [01:00<00:04,  2.14s/it, loss=0.585, it/s=0.553]Training:  93%|█████████▎| 14/15 [01:02<00:02,  2.03s/it, loss=0.585, it/s=0.553]                                                                                 Training:  93%|█████████▎| 14/15 [01:02<00:02,  2.03s/it, loss=0.585, it/s=0.553]Training:  93%|█████████▎| 14/15 [01:05<00:02,  2.03s/it, loss=0.553, it/s=1.745]                                                                                 Training:  93%|█████████▎| 14/15 [01:05<00:02,  2.03s/it, loss=0.553, it/s=1.745]                                                                                 Training:  93%|█████████▎| 14/15 [02:04<00:02,  2.03s/it, loss=0.553, it/s=1.745]Training: 100%|██████████| 15/15 [02:04<00:00, 20.10s/it, loss=0.553, it/s=1.745]Training: 100%|██████████| 15/15 [02:04<00:00,  8.29s/it, loss=0.553, it/s=1.745]
+Iter 1: Val loss 1.099, Val chosen reward 0.000, Val rejected reward 0.007, Val accuracy 0.000, Val margin -0.694, Val took 34.002s
+
+Iter 5: loss 0.628, chosen_r 0.471, rejected_r -0.454, acc 0.800, margin 0.926, lr 5.000e-07, it/s 0.456, tok/s 277.406, peak_mem 39.685GB
+
+Iter 10: loss 0.585, chosen_r 0.250, rejected_r -0.048, acc 0.600, margin 0.298, lr 5.000e-07, it/s 0.553, tok/s 245.267, peak_mem 39.767GB
+Iter 15: Val loss 0.475, Val chosen reward 0.005, Val rejected reward -0.000, Val accuracy 1.000, Val margin 0.498, Val took 0.571s
+
+Iter 15: loss 0.553, chosen_r 0.158, rejected_r -0.377, acc 0.800, margin 0.535, lr 5.000e-07, it/s 1.745, tok/s 1148.402, peak_mem 39.767GB
+Iter 15: Saved adapter weights to model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/adapters.safetensors and model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/0000015_adapters.safetensors.
+Saved final weights to model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/adapters.safetensors.
+  snapshot saved: model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-v2/snapshots/step_0045/
+>>> DPO training segment: 15 iters this process (45/150 done, 105 remaining overall)
+
+[96m╔══════════════════════════════════════════════════════════════════════════════════════════╗[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m║[0m [1m[35m███╗   ███╗██╗     ██╗  ██╗    ██╗     ███╗   ███╗    ██╗      ██████╗ ██████╗  █████╗[0m   [96m║[0m
+[96m║[0m [1m[35m████╗ ████║██║     ╚██╗██╔╝    ██║     ████╗ ████║    ██║     ██╔═══██╗██╔══██╗██╔══██╗[0m  [96m║[0m
+[96m║[0m [1m[94m██╔████╔██║██║      ╚███╔╝     ██║     ██╔████╔██║    ██║     ██║   ██║██████╔╝███████║[0m  [96m║[0m
+[96m║[0m [1m[94m██║╚██╔╝██║██║      ██╔██╗     ██║     ██║╚██╔╝██║    ██║     ██║   ██║██╔══██╗██╔══██║[0m  [96m║[0m
+[96m║[0m [1m[96m██║ ╚═╝ ██║███████╗██╔╝ ██╗    ███████╗██║ ╚═╝ ██║    ███████╗╚██████╔╝██║  ██║██║  ██║[0m  [96m║[0m
+[96m║[0m [1m[96m╚═╝     ╚═╝╚══════╝╚═╝  ╚═╝    ╚══════╝╚═╝     ╚═╝    ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝[0m  [96m║[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m║[0m [93m[1mAdvanced Fine-Tuning Framework[0m                                                           [96m║[0m
+[96m║[0m [2m[97mLoRA • (Online-)DPO • XPO • CPO • CPO • ORPO • PPO • GRPO • DrGRPO • GSPO • RLHF • SFT[0m   [96m║[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m╚══════════════════════════════════════════════════════════════════════════════════════════╝[0m
+    
+
+[96m============================================================[0m
+[1m[97m                   Configuration Summary                    [0m
+[96m============================================================[0m
+
+[97mModel:[0m models/sft-cptv2-fused-q4
+[97mTraining Mode:[0m DPO
+[97mTraining Type:[0m lora
+[97mBatch Size:[0m 1
+[97mLearning Rate:[0m 5e-07
+[97mOptimizer:[0m adam
+[94m[INFO][0m Loading model: [96mmodels/sft-cptv2-fused-q4[0m
+Loading model models/sft-cptv2-fused-q4
+Loading LoRA adapters with config: {'rank': 16, 'dropout': 0.05, 'scale': 2.0, 'use_dora': False, 'num_layers': 16}
+Loading pretrained reference model (using main model)
+[94m[INFO][0m Loading datasets
+
+[96m============================================================[0m
+[1m[97m                          Training                          [0m
+[96m============================================================[0m
+
+[93m[WARNING][0m Loading fine-tuned weights from [96mmodel-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/adapters.safetensors[0m
+Trainable parameters: 0.923% (281.838M/30532.123M)
+[94m[INFO][0m Training mode: [93mDPO[0m
+Training:   0%|          | 0/15 [00:00<?, ?it/s]                                                Training:   0%|          | 0/15 [00:32<?, ?it/s]Training:   7%|▋         | 1/15 [00:35<08:20, 35.74s/it]Training:  13%|█▎        | 2/15 [00:37<03:21, 15.53s/it]Training:  20%|██        | 3/15 [00:39<01:52,  9.39s/it]Training:  27%|██▋       | 4/15 [00:41<01:10,  6.43s/it]Training:  27%|██▋       | 4/15 [00:43<01:10,  6.43s/it, loss=0.265, it/s=0.455]                                                                                Training:  27%|██▋       | 4/15 [00:43<01:10,  6.43s/it, loss=0.265, it/s=0.455]Training:  33%|███▎      | 5/15 [00:43<00:51,  5.15s/it, loss=0.265, it/s=0.455]Training:  40%|████      | 6/15 [00:45<00:35,  3.89s/it, loss=0.265, it/s=0.455]Training:  47%|████▋     | 7/15 [00:47<00:25,  3.13s/it, loss=0.265, it/s=0.455]Training:  53%|█████▎    | 8/15 [00:49<00:21,  3.01s/it, loss=0.265, it/s=0.455]Training:  60%|██████    | 9/15 [00:51<00:15,  2.62s/it, loss=0.265, it/s=0.455]Training:  60%|██████    | 9/15 [00:53<00:15,  2.62s/it, loss=0.506, it/s=0.553]                                                                                Training:  60%|██████    | 9/15 [00:53<00:15,  2.62s/it, loss=0.506, it/s=0.553]Training:  67%|██████▋   | 10/15 [00:53<00:11,  2.28s/it, loss=0.506, it/s=0.553]Training:  73%|███████▎  | 11/15 [00:55<00:09,  2.42s/it, loss=0.506, it/s=0.553]Training:  80%|████████  | 12/15 [00:57<00:06,  2.33s/it, loss=0.506, it/s=0.553]Training:  87%|████████▋ | 13/15 [00:59<00:04,  2.13s/it, loss=0.506, it/s=0.553]Training:  93%|█████████▎| 14/15 [01:01<00:02,  2.03s/it, loss=0.506, it/s=0.553]                                                                                 Training:  93%|█████████▎| 14/15 [01:01<00:02,  2.03s/it, loss=0.506, it/s=0.553]Training:  93%|█████████▎| 14/15 [01:04<00:02,  2.03s/it, loss=0.284, it/s=1.747]                                                                                 Training:  93%|█████████▎| 14/15 [01:04<00:02,  2.03s/it, loss=0.284, it/s=1.747]                                                                                 Training:  93%|█████████▎| 14/15 [02:03<00:02,  2.03s/it, loss=0.284, it/s=1.747]Training: 100%|██████████| 15/15 [02:03<00:00, 20.11s/it, loss=0.284, it/s=1.747]Training: 100%|██████████| 15/15 [02:03<00:00,  8.23s/it, loss=0.284, it/s=1.747]
+Iter 1: Val loss 1.114, Val chosen reward 0.001, Val rejected reward 0.008, Val accuracy 0.000, Val margin -0.717, Val took 32.989s
+
+Iter 5: loss 0.265, chosen_r 0.431, rejected_r -0.803, acc 1.000, margin 1.233, lr 5.000e-07, it/s 0.455, tok/s 276.739, peak_mem 39.657GB
+
+Iter 10: loss 0.506, chosen_r -0.064, rejected_r -0.668, acc 0.800, margin 0.604, lr 5.000e-07, it/s 0.553, tok/s 245.338, peak_mem 39.767GB
+Iter 15: Val loss 0.564, Val chosen reward 0.004, Val rejected reward 0.001, Val accuracy 1.000, Val margin 0.278, Val took 0.570s
+
+Iter 15: loss 0.284, chosen_r 0.728, rejected_r -1.000, acc 0.800, margin 1.729, lr 5.000e-07, it/s 1.747, tok/s 1150.088, peak_mem 39.767GB
+Iter 15: Saved adapter weights to model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/adapters.safetensors and model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/0000015_adapters.safetensors.
+Saved final weights to model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/adapters.safetensors.
+  snapshot saved: model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-v2/snapshots/step_0060/
+>>> DPO training segment: 15 iters this process (60/150 done, 90 remaining overall)
+
+[96m╔══════════════════════════════════════════════════════════════════════════════════════════╗[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m║[0m [1m[35m███╗   ███╗██╗     ██╗  ██╗    ██╗     ███╗   ███╗    ██╗      ██████╗ ██████╗  █████╗[0m   [96m║[0m
+[96m║[0m [1m[35m████╗ ████║██║     ╚██╗██╔╝    ██║     ████╗ ████║    ██║     ██╔═══██╗██╔══██╗██╔══██╗[0m  [96m║[0m
+[96m║[0m [1m[94m██╔████╔██║██║      ╚███╔╝     ██║     ██╔████╔██║    ██║     ██║   ██║██████╔╝███████║[0m  [96m║[0m
+[96m║[0m [1m[94m██║╚██╔╝██║██║      ██╔██╗     ██║     ██║╚██╔╝██║    ██║     ██║   ██║██╔══██╗██╔══██║[0m  [96m║[0m
+[96m║[0m [1m[96m██║ ╚═╝ ██║███████╗██╔╝ ██╗    ███████╗██║ ╚═╝ ██║    ███████╗╚██████╔╝██║  ██║██║  ██║[0m  [96m║[0m
+[96m║[0m [1m[96m╚═╝     ╚═╝╚══════╝╚═╝  ╚═╝    ╚══════╝╚═╝     ╚═╝    ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝[0m  [96m║[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m║[0m [93m[1mAdvanced Fine-Tuning Framework[0m                                                           [96m║[0m
+[96m║[0m [2m[97mLoRA • (Online-)DPO • XPO • CPO • CPO • ORPO • PPO • GRPO • DrGRPO • GSPO • RLHF • SFT[0m   [96m║[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m╚══════════════════════════════════════════════════════════════════════════════════════════╝[0m
+    
+
+[96m============================================================[0m
+[1m[97m                   Configuration Summary                    [0m
+[96m============================================================[0m
+
+[97mModel:[0m models/sft-cptv2-fused-q4
+[97mTraining Mode:[0m DPO
+[97mTraining Type:[0m lora
+[97mBatch Size:[0m 1
+[97mLearning Rate:[0m 5e-07
+[97mOptimizer:[0m adam
+[94m[INFO][0m Loading model: [96mmodels/sft-cptv2-fused-q4[0m
+Loading model models/sft-cptv2-fused-q4
+Loading LoRA adapters with config: {'rank': 16, 'dropout': 0.05, 'scale': 2.0, 'use_dora': False, 'num_layers': 16}
+Loading pretrained reference model (using main model)
+[94m[INFO][0m Loading datasets
+
+[96m============================================================[0m
+[1m[97m                          Training                          [0m
+[96m============================================================[0m
+
+[93m[WARNING][0m Loading fine-tuned weights from [96mmodel-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/adapters.safetensors[0m
+Trainable parameters: 0.923% (281.838M/30532.123M)
+[94m[INFO][0m Training mode: [93mDPO[0m
+Training:   0%|          | 0/15 [00:00<?, ?it/s]                                                Training:   0%|          | 0/15 [00:33<?, ?it/s]Training:   7%|▋         | 1/15 [00:35<08:20, 35.76s/it]Training:  13%|█▎        | 2/15 [00:37<03:22, 15.54s/it]Training:  20%|██        | 3/15 [00:39<01:52,  9.40s/it]Training:  27%|██▋       | 4/15 [00:41<01:10,  6.43s/it]Training:  27%|██▋       | 4/15 [00:43<01:10,  6.43s/it, loss=0.241, it/s=0.457]                                                                                Training:  27%|██▋       | 4/15 [00:43<01:10,  6.43s/it, loss=0.241, it/s=0.457]Training:  33%|███▎      | 5/15 [00:43<00:51,  5.14s/it, loss=0.241, it/s=0.457]Training:  40%|████      | 6/15 [00:45<00:34,  3.88s/it, loss=0.241, it/s=0.457]Training:  47%|████▋     | 7/15 [00:46<00:25,  3.13s/it, loss=0.241, it/s=0.457]Training:  53%|█████▎    | 8/15 [00:49<00:21,  3.01s/it, loss=0.241, it/s=0.457]Training:  60%|██████    | 9/15 [00:51<00:15,  2.62s/it, loss=0.241, it/s=0.457]Training:  60%|██████    | 9/15 [00:53<00:15,  2.62s/it, loss=0.499, it/s=0.553]                                                                                Training:  60%|██████    | 9/15 [00:53<00:15,  2.62s/it, loss=0.499, it/s=0.553]Training:  67%|██████▋   | 10/15 [00:53<00:11,  2.28s/it, loss=0.499, it/s=0.553]Training:  73%|███████▎  | 11/15 [00:55<00:09,  2.42s/it, loss=0.499, it/s=0.553]Training:  80%|████████  | 12/15 [00:57<00:06,  2.33s/it, loss=0.499, it/s=0.553]Training:  87%|████████▋ | 13/15 [00:59<00:04,  2.13s/it, loss=0.499, it/s=0.553]Training:  93%|█████████▎| 14/15 [01:01<00:02,  2.03s/it, loss=0.499, it/s=0.553]                                                                                 Training:  93%|█████████▎| 14/15 [01:01<00:02,  2.03s/it, loss=0.499, it/s=0.553]Training:  93%|█████████▎| 14/15 [01:04<00:02,  2.03s/it, loss=0.564, it/s=1.749]                                                                                 Training:  93%|█████████▎| 14/15 [01:04<00:02,  2.03s/it, loss=0.564, it/s=1.749]                                                                                 Training:  93%|█████████▎| 14/15 [02:03<00:02,  2.03s/it, loss=0.564, it/s=1.749]Training: 100%|██████████| 15/15 [02:03<00:00, 20.08s/it, loss=0.564, it/s=1.749]Training: 100%|██████████| 15/15 [02:03<00:00,  8.22s/it, loss=0.564, it/s=1.749]
+Iter 1: Val loss 0.801, Val chosen reward -0.000, Val rejected reward 0.002, Val accuracy 0.000, Val margin -0.204, Val took 33.012s
+
+Iter 5: loss 0.241, chosen_r 0.498, rejected_r -1.003, acc 1.000, margin 1.501, lr 5.000e-07, it/s 0.457, tok/s 277.684, peak_mem 39.685GB
+
+Iter 10: loss 0.499, chosen_r 0.392, rejected_r -0.364, acc 0.800, margin 0.755, lr 5.000e-07, it/s 0.553, tok/s 245.185, peak_mem 39.685GB
+Iter 15: Val loss 0.678, Val chosen reward -0.003, Val rejected reward -0.004, Val accuracy 1.000, Val margin 0.031, Val took 0.570s
+
+Iter 15: loss 0.564, chosen_r -0.068, rejected_r -0.488, acc 0.800, margin 0.420, lr 5.000e-07, it/s 1.749, tok/s 1150.957, peak_mem 39.767GB
+Iter 15: Saved adapter weights to model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/adapters.safetensors and model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/0000015_adapters.safetensors.
+Saved final weights to model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/adapters.safetensors.
+  snapshot saved: model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-v2/snapshots/step_0075/
+>>> DPO training segment: 15 iters this process (75/150 done, 75 remaining overall)
+
+[96m╔══════════════════════════════════════════════════════════════════════════════════════════╗[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m║[0m [1m[35m███╗   ███╗██╗     ██╗  ██╗    ██╗     ███╗   ███╗    ██╗      ██████╗ ██████╗  █████╗[0m   [96m║[0m
+[96m║[0m [1m[35m████╗ ████║██║     ╚██╗██╔╝    ██║     ████╗ ████║    ██║     ██╔═══██╗██╔══██╗██╔══██╗[0m  [96m║[0m
+[96m║[0m [1m[94m██╔████╔██║██║      ╚███╔╝     ██║     ██╔████╔██║    ██║     ██║   ██║██████╔╝███████║[0m  [96m║[0m
+[96m║[0m [1m[94m██║╚██╔╝██║██║      ██╔██╗     ██║     ██║╚██╔╝██║    ██║     ██║   ██║██╔══██╗██╔══██║[0m  [96m║[0m
+[96m║[0m [1m[96m██║ ╚═╝ ██║███████╗██╔╝ ██╗    ███████╗██║ ╚═╝ ██║    ███████╗╚██████╔╝██║  ██║██║  ██║[0m  [96m║[0m
+[96m║[0m [1m[96m╚═╝     ╚═╝╚══════╝╚═╝  ╚═╝    ╚══════╝╚═╝     ╚═╝    ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝[0m  [96m║[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m║[0m [93m[1mAdvanced Fine-Tuning Framework[0m                                                           [96m║[0m
+[96m║[0m [2m[97mLoRA • (Online-)DPO • XPO • CPO • CPO • ORPO • PPO • GRPO • DrGRPO • GSPO • RLHF • SFT[0m   [96m║[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m╚══════════════════════════════════════════════════════════════════════════════════════════╝[0m
+    
+
+[96m============================================================[0m
+[1m[97m                   Configuration Summary                    [0m
+[96m============================================================[0m
+
+[97mModel:[0m models/sft-cptv2-fused-q4
+[97mTraining Mode:[0m DPO
+[97mTraining Type:[0m lora
+[97mBatch Size:[0m 1
+[97mLearning Rate:[0m 5e-07
+[97mOptimizer:[0m adam
+[94m[INFO][0m Loading model: [96mmodels/sft-cptv2-fused-q4[0m
+Loading model models/sft-cptv2-fused-q4
+Loading LoRA adapters with config: {'rank': 16, 'dropout': 0.05, 'scale': 2.0, 'use_dora': False, 'num_layers': 16}
+Loading pretrained reference model (using main model)
+[94m[INFO][0m Loading datasets
+
+[96m============================================================[0m
+[1m[97m                          Training                          [0m
+[96m============================================================[0m
+
+[93m[WARNING][0m Loading fine-tuned weights from [96mmodel-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/adapters.safetensors[0m
+Trainable parameters: 0.923% (281.838M/30532.123M)
+[94m[INFO][0m Training mode: [93mDPO[0m
+Training:   0%|          | 0/15 [00:00<?, ?it/s]                                                Training:   0%|          | 0/15 [00:34<?, ?it/s]Training:   7%|▋         | 1/15 [00:36<08:37, 36.99s/it]Training:  13%|█▎        | 2/15 [00:38<03:28, 16.05s/it]Training:  20%|██        | 3/15 [00:40<01:56,  9.67s/it]Training:  27%|██▋       | 4/15 [00:42<01:12,  6.59s/it]Training:  27%|██▋       | 4/15 [00:45<01:12,  6.59s/it, loss=0.108, it/s=0.447]                                                                                Training:  27%|██▋       | 4/15 [00:45<01:12,  6.59s/it, loss=0.108, it/s=0.447]Training:  33%|███▎      | 5/15 [00:45<00:52,  5.25s/it, loss=0.108, it/s=0.447]Training:  40%|████      | 6/15 [00:46<00:35,  3.96s/it, loss=0.108, it/s=0.447]Training:  47%|████▋     | 7/15 [00:48<00:25,  3.18s/it, loss=0.108, it/s=0.447]Training:  53%|█████▎    | 8/15 [00:50<00:21,  3.04s/it, loss=0.108, it/s=0.447]Training:  60%|██████    | 9/15 [00:52<00:15,  2.65s/it, loss=0.108, it/s=0.447]Training:  60%|██████    | 9/15 [00:54<00:15,  2.65s/it, loss=0.577, it/s=0.551]                                                                                Training:  60%|██████    | 9/15 [00:54<00:15,  2.65s/it, loss=0.577, it/s=0.551]Training:  67%|██████▋   | 10/15 [00:54<00:11,  2.30s/it, loss=0.577, it/s=0.551]Training:  73%|███████▎  | 11/15 [00:57<00:09,  2.43s/it, loss=0.577, it/s=0.551]Training:  80%|████████  | 12/15 [00:59<00:07,  2.34s/it, loss=0.577, it/s=0.551]Training:  87%|████████▋ | 13/15 [01:00<00:04,  2.14s/it, loss=0.577, it/s=0.551]Training:  93%|█████████▎| 14/15 [01:02<00:02,  2.04s/it, loss=0.577, it/s=0.551]                                                                                 Training:  93%|█████████▎| 14/15 [01:03<00:02,  2.04s/it, loss=0.577, it/s=0.551]Training:  93%|█████████▎| 14/15 [01:06<00:02,  2.04s/it, loss=0.756, it/s=1.750]                                                                                 Training:  93%|█████████▎| 14/15 [01:06<00:02,  2.04s/it, loss=0.756, it/s=1.750]                                                                                 Training:  93%|█████████▎| 14/15 [02:04<00:02,  2.04s/it, loss=0.756, it/s=1.750]Training: 100%|██████████| 15/15 [02:04<00:00, 20.09s/it, loss=0.756, it/s=1.750]Training: 100%|██████████| 15/15 [02:04<00:00,  8.30s/it, loss=0.756, it/s=1.750]
+Iter 1: Val loss 0.923, Val chosen reward -0.002, Val rejected reward 0.002, Val accuracy 0.000, Val margin -0.416, Val took 34.019s
+
+Iter 5: loss 0.108, chosen_r 1.103, rejected_r -1.900, acc 1.000, margin 3.004, lr 5.000e-07, it/s 0.447, tok/s 272.076, peak_mem 39.685GB
+
+Iter 10: loss 0.577, chosen_r -0.260, rejected_r -0.683, acc 0.600, margin 0.423, lr 5.000e-07, it/s 0.551, tok/s 244.429, peak_mem 39.685GB
+Iter 15: Val loss 1.201, Val chosen reward -0.003, Val rejected reward 0.005, Val accuracy 0.000, Val margin -0.843, Val took 0.571s
+
+Iter 15: loss 0.756, chosen_r -0.657, rejected_r -0.804, acc 0.400, margin 0.147, lr 5.000e-07, it/s 1.750, tok/s 1151.773, peak_mem 39.767GB
+Iter 15: Saved adapter weights to model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/adapters.safetensors and model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/0000015_adapters.safetensors.
+Saved final weights to model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/adapters.safetensors.
+  snapshot saved: model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-v2/snapshots/step_0090/
+>>> DPO training segment: 15 iters this process (90/150 done, 60 remaining overall)
+
+[96m╔══════════════════════════════════════════════════════════════════════════════════════════╗[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m║[0m [1m[35m███╗   ███╗██╗     ██╗  ██╗    ██╗     ███╗   ███╗    ██╗      ██████╗ ██████╗  █████╗[0m   [96m║[0m
+[96m║[0m [1m[35m████╗ ████║██║     ╚██╗██╔╝    ██║     ████╗ ████║    ██║     ██╔═══██╗██╔══██╗██╔══██╗[0m  [96m║[0m
+[96m║[0m [1m[94m██╔████╔██║██║      ╚███╔╝     ██║     ██╔████╔██║    ██║     ██║   ██║██████╔╝███████║[0m  [96m║[0m
+[96m║[0m [1m[94m██║╚██╔╝██║██║      ██╔██╗     ██║     ██║╚██╔╝██║    ██║     ██║   ██║██╔══██╗██╔══██║[0m  [96m║[0m
+[96m║[0m [1m[96m██║ ╚═╝ ██║███████╗██╔╝ ██╗    ███████╗██║ ╚═╝ ██║    ███████╗╚██████╔╝██║  ██║██║  ██║[0m  [96m║[0m
+[96m║[0m [1m[96m╚═╝     ╚═╝╚══════╝╚═╝  ╚═╝    ╚══════╝╚═╝     ╚═╝    ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝[0m  [96m║[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m║[0m [93m[1mAdvanced Fine-Tuning Framework[0m                                                           [96m║[0m
+[96m║[0m [2m[97mLoRA • (Online-)DPO • XPO • CPO • CPO • ORPO • PPO • GRPO • DrGRPO • GSPO • RLHF • SFT[0m   [96m║[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m╚══════════════════════════════════════════════════════════════════════════════════════════╝[0m
+    
+
+[96m============================================================[0m
+[1m[97m                   Configuration Summary                    [0m
+[96m============================================================[0m
+
+[97mModel:[0m models/sft-cptv2-fused-q4
+[97mTraining Mode:[0m DPO
+[97mTraining Type:[0m lora
+[97mBatch Size:[0m 1
+[97mLearning Rate:[0m 5e-07
+[97mOptimizer:[0m adam
+[94m[INFO][0m Loading model: [96mmodels/sft-cptv2-fused-q4[0m
+Loading model models/sft-cptv2-fused-q4
+Loading LoRA adapters with config: {'rank': 16, 'dropout': 0.05, 'scale': 2.0, 'use_dora': False, 'num_layers': 16}
+Loading pretrained reference model (using main model)
+[94m[INFO][0m Loading datasets
+
+[96m============================================================[0m
+[1m[97m                          Training                          [0m
+[96m============================================================[0m
+
+[93m[WARNING][0m Loading fine-tuned weights from [96mmodel-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/adapters.safetensors[0m
+Trainable parameters: 0.923% (281.838M/30532.123M)
+[94m[INFO][0m Training mode: [93mDPO[0m
+Training:   0%|          | 0/15 [00:00<?, ?it/s]                                                Training:   0%|          | 0/15 [00:33<?, ?it/s]Training:   7%|▋         | 1/15 [00:36<08:24, 36.03s/it]Training:  13%|█▎        | 2/15 [00:37<03:23, 15.65s/it]Training:  20%|██        | 3/15 [00:39<01:53,  9.45s/it]Training:  27%|██▋       | 4/15 [00:41<01:11,  6.46s/it]Training:  27%|██▋       | 4/15 [00:44<01:11,  6.46s/it, loss=0.047, it/s=0.458]                                                                                Training:  27%|██▋       | 4/15 [00:44<01:11,  6.46s/it, loss=0.047, it/s=0.458]Training:  33%|███▎      | 5/15 [00:44<00:51,  5.16s/it, loss=0.047, it/s=0.458]Training:  40%|████      | 6/15 [00:45<00:35,  3.90s/it, loss=0.047, it/s=0.458]Training:  47%|████▋     | 7/15 [00:47<00:25,  3.14s/it, loss=0.047, it/s=0.458]Training:  53%|█████▎    | 8/15 [00:49<00:21,  3.01s/it, loss=0.047, it/s=0.458]Training:  60%|██████    | 9/15 [00:51<00:15,  2.63s/it, loss=0.047, it/s=0.458]Training:  60%|██████    | 9/15 [00:53<00:15,  2.63s/it, loss=0.255, it/s=0.553]                                                                                Training:  60%|██████    | 9/15 [00:53<00:15,  2.63s/it, loss=0.255, it/s=0.553]Training:  67%|██████▋   | 10/15 [00:53<00:11,  2.28s/it, loss=0.255, it/s=0.553]Training:  73%|███████▎  | 11/15 [00:55<00:09,  2.42s/it, loss=0.255, it/s=0.553]Training:  80%|████████  | 12/15 [00:58<00:06,  2.33s/it, loss=0.255, it/s=0.553]Training:  87%|████████▋ | 13/15 [00:59<00:04,  2.13s/it, loss=0.255, it/s=0.553]Training:  93%|█████████▎| 14/15 [01:01<00:02,  2.03s/it, loss=0.255, it/s=0.553]                                                                                 Training:  93%|█████████▎| 14/15 [01:02<00:02,  2.03s/it, loss=0.255, it/s=0.553]Training:  93%|█████████▎| 14/15 [01:05<00:02,  2.03s/it, loss=0.521, it/s=1.752]                                                                                 Training:  93%|█████████▎| 14/15 [01:05<00:02,  2.03s/it, loss=0.521, it/s=1.752]                                                                                 Training:  93%|█████████▎| 14/15 [02:03<00:02,  2.03s/it, loss=0.521, it/s=1.752]Training: 100%|██████████| 15/15 [02:03<00:00, 20.07s/it, loss=0.521, it/s=1.752]Training: 100%|██████████| 15/15 [02:03<00:00,  8.23s/it, loss=0.521, it/s=1.752]
+Iter 1: Val loss 0.862, Val chosen reward -0.005, Val rejected reward -0.002, Val accuracy 0.000, Val margin -0.313, Val took 33.279s
+
+Iter 5: loss 0.047, chosen_r 1.412, rejected_r -2.239, acc 1.000, margin 3.651, lr 5.000e-07, it/s 0.458, tok/s 278.281, peak_mem 39.685GB
+
+Iter 10: loss 0.255, chosen_r 0.190, rejected_r -1.687, acc 0.800, margin 1.878, lr 5.000e-07, it/s 0.553, tok/s 245.298, peak_mem 39.767GB
+Iter 15: Val loss 1.661, Val chosen reward -0.014, Val rejected reward 0.001, Val accuracy 0.000, Val margin -1.450, Val took 0.570s
+
+Iter 15: loss 0.521, chosen_r -0.279, rejected_r -0.857, acc 0.600, margin 0.578, lr 5.000e-07, it/s 1.752, tok/s 1153.442, peak_mem 39.767GB
+Iter 15: Saved adapter weights to model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/adapters.safetensors and model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/0000015_adapters.safetensors.
+Saved final weights to model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/adapters.safetensors.
+  snapshot saved: model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-v2/snapshots/step_0105/
+>>> DPO training segment: 15 iters this process (105/150 done, 45 remaining overall)
+
+[96m╔══════════════════════════════════════════════════════════════════════════════════════════╗[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m║[0m [1m[35m███╗   ███╗██╗     ██╗  ██╗    ██╗     ███╗   ███╗    ██╗      ██████╗ ██████╗  █████╗[0m   [96m║[0m
+[96m║[0m [1m[35m████╗ ████║██║     ╚██╗██╔╝    ██║     ████╗ ████║    ██║     ██╔═══██╗██╔══██╗██╔══██╗[0m  [96m║[0m
+[96m║[0m [1m[94m██╔████╔██║██║      ╚███╔╝     ██║     ██╔████╔██║    ██║     ██║   ██║██████╔╝███████║[0m  [96m║[0m
+[96m║[0m [1m[94m██║╚██╔╝██║██║      ██╔██╗     ██║     ██║╚██╔╝██║    ██║     ██║   ██║██╔══██╗██╔══██║[0m  [96m║[0m
+[96m║[0m [1m[96m██║ ╚═╝ ██║███████╗██╔╝ ██╗    ███████╗██║ ╚═╝ ██║    ███████╗╚██████╔╝██║  ██║██║  ██║[0m  [96m║[0m
+[96m║[0m [1m[96m╚═╝     ╚═╝╚══════╝╚═╝  ╚═╝    ╚══════╝╚═╝     ╚═╝    ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝[0m  [96m║[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m║[0m [93m[1mAdvanced Fine-Tuning Framework[0m                                                           [96m║[0m
+[96m║[0m [2m[97mLoRA • (Online-)DPO • XPO • CPO • CPO • ORPO • PPO • GRPO • DrGRPO • GSPO • RLHF • SFT[0m   [96m║[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m╚══════════════════════════════════════════════════════════════════════════════════════════╝[0m
+    
+
+[96m============================================================[0m
+[1m[97m                   Configuration Summary                    [0m
+[96m============================================================[0m
+
+[97mModel:[0m models/sft-cptv2-fused-q4
+[97mTraining Mode:[0m DPO
+[97mTraining Type:[0m lora
+[97mBatch Size:[0m 1
+[97mLearning Rate:[0m 5e-07
+[97mOptimizer:[0m adam
+[94m[INFO][0m Loading model: [96mmodels/sft-cptv2-fused-q4[0m
+Loading model models/sft-cptv2-fused-q4
+Loading LoRA adapters with config: {'rank': 16, 'dropout': 0.05, 'scale': 2.0, 'use_dora': False, 'num_layers': 16}
+Loading pretrained reference model (using main model)
+[94m[INFO][0m Loading datasets
+
+[96m============================================================[0m
+[1m[97m                          Training                          [0m
+[96m============================================================[0m
+
+[93m[WARNING][0m Loading fine-tuned weights from [96mmodel-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/adapters.safetensors[0m
+Trainable parameters: 0.923% (281.838M/30532.123M)
+[94m[INFO][0m Training mode: [93mDPO[0m
+Training:   0%|          | 0/15 [00:00<?, ?it/s]                                                Training:   0%|          | 0/15 [00:34<?, ?it/s]Training:   7%|▋         | 1/15 [00:37<08:42, 37.30s/it]Training:  13%|█▎        | 2/15 [00:38<03:30, 16.18s/it]Training:  20%|██        | 3/15 [00:40<01:57,  9.76s/it]Training:  27%|██▋       | 4/15 [00:42<01:13,  6.66s/it]Training:  27%|██▋       | 4/15 [00:45<01:13,  6.66s/it, loss=0.061, it/s=0.453]                                                                                Training:  27%|██▋       | 4/15 [00:45<01:13,  6.66s/it, loss=0.061, it/s=0.453]Training:  33%|███▎      | 5/15 [00:45<00:52,  5.30s/it, loss=0.061, it/s=0.453]Training:  40%|████      | 6/15 [00:47<00:35,  3.99s/it, loss=0.061, it/s=0.453]Training:  47%|████▋     | 7/15 [00:48<00:25,  3.20s/it, loss=0.061, it/s=0.453]Training:  53%|█████▎    | 8/15 [00:51<00:21,  3.05s/it, loss=0.061, it/s=0.453]Training:  60%|██████    | 9/15 [00:53<00:15,  2.66s/it, loss=0.061, it/s=0.453]Training:  60%|██████    | 9/15 [00:54<00:15,  2.66s/it, loss=0.138, it/s=0.552]                                                                                Training:  60%|██████    | 9/15 [00:54<00:15,  2.66s/it, loss=0.138, it/s=0.552]Training:  67%|██████▋   | 10/15 [00:54<00:11,  2.31s/it, loss=0.138, it/s=0.552]Training:  73%|███████▎  | 11/15 [00:57<00:09,  2.44s/it, loss=0.138, it/s=0.552]Training:  80%|████████  | 12/15 [00:59<00:07,  2.35s/it, loss=0.138, it/s=0.552]Training:  87%|████████▋ | 13/15 [01:01<00:04,  2.14s/it, loss=0.138, it/s=0.552]Training:  93%|█████████▎| 14/15 [01:03<00:02,  2.04s/it, loss=0.138, it/s=0.552]                                                                                 Training:  93%|█████████▎| 14/15 [01:03<00:02,  2.04s/it, loss=0.138, it/s=0.552]Training:  93%|█████████▎| 14/15 [01:06<00:02,  2.04s/it, loss=0.332, it/s=1.743]                                                                                 Training:  93%|█████████▎| 14/15 [01:06<00:02,  2.04s/it, loss=0.332, it/s=1.743]                                                                                 Training:  93%|█████████▎| 14/15 [02:05<00:02,  2.04s/it, loss=0.332, it/s=1.743]Training: 100%|██████████| 15/15 [02:05<00:00, 20.13s/it, loss=0.332, it/s=1.743]Training: 100%|██████████| 15/15 [02:05<00:00,  8.34s/it, loss=0.332, it/s=1.743]
+Iter 1: Val loss 0.903, Val chosen reward -0.008, Val rejected reward -0.004, Val accuracy 0.000, Val margin -0.384, Val took 34.546s
+
+Iter 5: loss 0.061, chosen_r 1.134, rejected_r -2.830, acc 1.000, margin 3.964, lr 5.000e-07, it/s 0.453, tok/s 275.317, peak_mem 39.685GB
+
+Iter 10: loss 0.138, chosen_r 0.338, rejected_r -1.931, acc 1.000, margin 2.270, lr 5.000e-07, it/s 0.552, tok/s 244.741, peak_mem 39.767GB
+Iter 15: Val loss 1.486, Val chosen reward -0.013, Val rejected reward 0.000, Val accuracy 0.000, Val margin -1.229, Val took 0.571s
+
+Iter 15: loss 0.332, chosen_r -0.154, rejected_r -1.572, acc 1.000, margin 1.418, lr 5.000e-07, it/s 1.743, tok/s 1147.165, peak_mem 39.767GB
+Iter 15: Saved adapter weights to model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/adapters.safetensors and model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/0000015_adapters.safetensors.
+Saved final weights to model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/adapters.safetensors.
+  snapshot saved: model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-v2/snapshots/step_0120/
+>>> DPO training segment: 15 iters this process (120/150 done, 30 remaining overall)
+
+[96m╔══════════════════════════════════════════════════════════════════════════════════════════╗[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m║[0m [1m[35m███╗   ███╗██╗     ██╗  ██╗    ██╗     ███╗   ███╗    ██╗      ██████╗ ██████╗  █████╗[0m   [96m║[0m
+[96m║[0m [1m[35m████╗ ████║██║     ╚██╗██╔╝    ██║     ████╗ ████║    ██║     ██╔═══██╗██╔══██╗██╔══██╗[0m  [96m║[0m
+[96m║[0m [1m[94m██╔████╔██║██║      ╚███╔╝     ██║     ██╔████╔██║    ██║     ██║   ██║██████╔╝███████║[0m  [96m║[0m
+[96m║[0m [1m[94m██║╚██╔╝██║██║      ██╔██╗     ██║     ██║╚██╔╝██║    ██║     ██║   ██║██╔══██╗██╔══██║[0m  [96m║[0m
+[96m║[0m [1m[96m██║ ╚═╝ ██║███████╗██╔╝ ██╗    ███████╗██║ ╚═╝ ██║    ███████╗╚██████╔╝██║  ██║██║  ██║[0m  [96m║[0m
+[96m║[0m [1m[96m╚═╝     ╚═╝╚══════╝╚═╝  ╚═╝    ╚══════╝╚═╝     ╚═╝    ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝[0m  [96m║[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m║[0m [93m[1mAdvanced Fine-Tuning Framework[0m                                                           [96m║[0m
+[96m║[0m [2m[97mLoRA • (Online-)DPO • XPO • CPO • CPO • ORPO • PPO • GRPO • DrGRPO • GSPO • RLHF • SFT[0m   [96m║[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m╚══════════════════════════════════════════════════════════════════════════════════════════╝[0m
+    
+
+[96m============================================================[0m
+[1m[97m                   Configuration Summary                    [0m
+[96m============================================================[0m
+
+[97mModel:[0m models/sft-cptv2-fused-q4
+[97mTraining Mode:[0m DPO
+[97mTraining Type:[0m lora
+[97mBatch Size:[0m 1
+[97mLearning Rate:[0m 5e-07
+[97mOptimizer:[0m adam
+[94m[INFO][0m Loading model: [96mmodels/sft-cptv2-fused-q4[0m
+Loading model models/sft-cptv2-fused-q4
+Loading LoRA adapters with config: {'rank': 16, 'dropout': 0.05, 'scale': 2.0, 'use_dora': False, 'num_layers': 16}
+Loading pretrained reference model (using main model)
+[94m[INFO][0m Loading datasets
+
+[96m============================================================[0m
+[1m[97m                          Training                          [0m
+[96m============================================================[0m
+
+[93m[WARNING][0m Loading fine-tuned weights from [96mmodel-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/adapters.safetensors[0m
+Trainable parameters: 0.923% (281.838M/30532.123M)
+[94m[INFO][0m Training mode: [93mDPO[0m
+Training:   0%|          | 0/15 [00:00<?, ?it/s]                                                Training:   0%|          | 0/15 [00:33<?, ?it/s]Training:   7%|▋         | 1/15 [00:36<08:27, 36.22s/it]Training:  13%|█▎        | 2/15 [00:37<03:24, 15.73s/it]Training:  20%|██        | 3/15 [00:39<01:54,  9.50s/it]Training:  27%|██▋       | 4/15 [00:41<01:11,  6.49s/it]Training:  27%|██▋       | 4/15 [00:44<01:11,  6.49s/it, loss=0.017, it/s=0.453]                                                                                Training:  27%|██▋       | 4/15 [00:44<01:11,  6.49s/it, loss=0.017, it/s=0.453]Training:  33%|███▎      | 5/15 [00:44<00:51,  5.18s/it, loss=0.017, it/s=0.453]Training:  40%|████      | 6/15 [00:45<00:35,  3.91s/it, loss=0.017, it/s=0.453]Training:  47%|████▋     | 7/15 [00:47<00:25,  3.15s/it, loss=0.017, it/s=0.453]Training:  53%|█████▎    | 8/15 [00:50<00:21,  3.02s/it, loss=0.017, it/s=0.453]Training:  60%|██████    | 9/15 [00:51<00:15,  2.63s/it, loss=0.017, it/s=0.453]Training:  60%|██████    | 9/15 [00:53<00:15,  2.63s/it, loss=0.086, it/s=0.553]                                                                                Training:  60%|██████    | 9/15 [00:53<00:15,  2.63s/it, loss=0.086, it/s=0.553]Training:  67%|██████▋   | 10/15 [00:53<00:11,  2.28s/it, loss=0.086, it/s=0.553]Training:  73%|███████▎  | 11/15 [00:56<00:09,  2.42s/it, loss=0.086, it/s=0.553]Training:  80%|████████  | 12/15 [00:58<00:07,  2.34s/it, loss=0.086, it/s=0.553]Training:  87%|████████▋ | 13/15 [01:00<00:04,  2.13s/it, loss=0.086, it/s=0.553]Training:  93%|█████████▎| 14/15 [01:01<00:02,  2.03s/it, loss=0.086, it/s=0.553]                                                                                 Training:  93%|█████████▎| 14/15 [01:02<00:02,  2.03s/it, loss=0.086, it/s=0.553]Training:  93%|█████████▎| 14/15 [01:05<00:02,  2.03s/it, loss=0.443, it/s=1.746]                                                                                 Training:  93%|█████████▎| 14/15 [01:05<00:02,  2.03s/it, loss=0.443, it/s=1.746]                                                                                 Training:  93%|█████████▎| 14/15 [02:03<00:02,  2.03s/it, loss=0.443, it/s=1.746]Training: 100%|██████████| 15/15 [02:03<00:00, 20.07s/it, loss=0.443, it/s=1.746]Training: 100%|██████████| 15/15 [02:03<00:00,  8.25s/it, loss=0.443, it/s=1.746]
+Iter 1: Val loss 1.223, Val chosen reward -0.013, Val rejected reward -0.004, Val accuracy 0.000, Val margin -0.874, Val took 33.404s
+
+Iter 5: loss 0.017, chosen_r 1.401, rejected_r -3.813, acc 1.000, margin 5.214, lr 5.000e-07, it/s 0.453, tok/s 275.577, peak_mem 39.685GB
+
+Iter 10: loss 0.086, chosen_r -0.041, rejected_r -2.669, acc 1.000, margin 2.628, lr 5.000e-07, it/s 0.553, tok/s 245.271, peak_mem 39.767GB
+Iter 15: Val loss 2.223, Val chosen reward -0.023, Val rejected reward -0.001, Val accuracy 0.000, Val margin -2.108, Val took 0.571s
+
+Iter 15: loss 0.443, chosen_r -0.788, rejected_r -2.220, acc 0.800, margin 1.432, lr 5.000e-07, it/s 1.746, tok/s 1149.139, peak_mem 39.767GB
+Iter 15: Saved adapter weights to model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/adapters.safetensors and model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/0000015_adapters.safetensors.
+Saved final weights to model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/adapters.safetensors.
+  snapshot saved: model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-v2/snapshots/step_0135/
+>>> DPO training segment: 15 iters this process (135/150 done, 15 remaining overall)
+
+[96m╔══════════════════════════════════════════════════════════════════════════════════════════╗[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m║[0m [1m[35m███╗   ███╗██╗     ██╗  ██╗    ██╗     ███╗   ███╗    ██╗      ██████╗ ██████╗  █████╗[0m   [96m║[0m
+[96m║[0m [1m[35m████╗ ████║██║     ╚██╗██╔╝    ██║     ████╗ ████║    ██║     ██╔═══██╗██╔══██╗██╔══██╗[0m  [96m║[0m
+[96m║[0m [1m[94m██╔████╔██║██║      ╚███╔╝     ██║     ██╔████╔██║    ██║     ██║   ██║██████╔╝███████║[0m  [96m║[0m
+[96m║[0m [1m[94m██║╚██╔╝██║██║      ██╔██╗     ██║     ██║╚██╔╝██║    ██║     ██║   ██║██╔══██╗██╔══██║[0m  [96m║[0m
+[96m║[0m [1m[96m██║ ╚═╝ ██║███████╗██╔╝ ██╗    ███████╗██║ ╚═╝ ██║    ███████╗╚██████╔╝██║  ██║██║  ██║[0m  [96m║[0m
+[96m║[0m [1m[96m╚═╝     ╚═╝╚══════╝╚═╝  ╚═╝    ╚══════╝╚═╝     ╚═╝    ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝[0m  [96m║[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m║[0m [93m[1mAdvanced Fine-Tuning Framework[0m                                                           [96m║[0m
+[96m║[0m [2m[97mLoRA • (Online-)DPO • XPO • CPO • CPO • ORPO • PPO • GRPO • DrGRPO • GSPO • RLHF • SFT[0m   [96m║[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m╚══════════════════════════════════════════════════════════════════════════════════════════╝[0m
+    
+
+[96m============================================================[0m
+[1m[97m                   Configuration Summary                    [0m
+[96m============================================================[0m
+
+[97mModel:[0m models/sft-cptv2-fused-q4
+[97mTraining Mode:[0m DPO
+[97mTraining Type:[0m lora
+[97mBatch Size:[0m 1
+[97mLearning Rate:[0m 5e-07
+[97mOptimizer:[0m adam
+[94m[INFO][0m Loading model: [96mmodels/sft-cptv2-fused-q4[0m
+Loading model models/sft-cptv2-fused-q4
+Loading LoRA adapters with config: {'rank': 16, 'dropout': 0.05, 'scale': 2.0, 'use_dora': False, 'num_layers': 16}
+Loading pretrained reference model (using main model)
+[94m[INFO][0m Loading datasets
+
+[96m============================================================[0m
+[1m[97m                          Training                          [0m
+[96m============================================================[0m
+
+[93m[WARNING][0m Loading fine-tuned weights from [96mmodel-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/adapters.safetensors[0m
+Trainable parameters: 0.923% (281.838M/30532.123M)
+[94m[INFO][0m Training mode: [93mDPO[0m
+Training:   0%|          | 0/15 [00:00<?, ?it/s]                                                Training:   0%|          | 0/15 [00:49<?, ?it/s]Training:   7%|▋         | 1/15 [00:52<12:19, 52.83s/it]Training:  13%|█▎        | 2/15 [00:54<04:54, 22.65s/it]Training:  20%|██        | 3/15 [00:56<02:40, 13.34s/it]Training:  27%|██▋       | 4/15 [00:58<01:37,  8.84s/it]Training:  27%|██▋       | 4/15 [01:01<01:37,  8.84s/it, loss=0.007, it/s=0.419]                                                                                Training:  27%|██▋       | 4/15 [01:01<01:37,  8.84s/it, loss=0.007, it/s=0.419]Training:  33%|███▎      | 5/15 [01:01<01:07,  6.73s/it, loss=0.007, it/s=0.419]Training:  40%|████      | 6/15 [01:03<00:44,  4.95s/it, loss=0.007, it/s=0.419]Training:  47%|████▋     | 7/15 [01:04<00:30,  3.85s/it, loss=0.007, it/s=0.419]Training:  53%|█████▎    | 8/15 [01:07<00:24,  3.53s/it, loss=0.007, it/s=0.419]Training:  60%|██████    | 9/15 [01:09<00:18,  3.03s/it, loss=0.007, it/s=0.419]Training:  60%|██████    | 9/15 [01:10<00:18,  3.03s/it, loss=0.159, it/s=0.531]                                                                                Training:  60%|██████    | 9/15 [01:10<00:18,  3.03s/it, loss=0.159, it/s=0.531]Training:  67%|██████▋   | 10/15 [01:10<00:12,  2.58s/it, loss=0.159, it/s=0.531]Training:  73%|███████▎  | 11/15 [01:13<00:10,  2.68s/it, loss=0.159, it/s=0.531]Training:  80%|████████  | 12/15 [01:16<00:07,  2.52s/it, loss=0.159, it/s=0.531]Training:  87%|████████▋ | 13/15 [01:17<00:04,  2.27s/it, loss=0.159, it/s=0.531]Training:  93%|█████████▎| 14/15 [01:19<00:02,  2.16s/it, loss=0.159, it/s=0.531]                                                                                 Training:  93%|█████████▎| 14/15 [01:20<00:02,  2.16s/it, loss=0.159, it/s=0.531]Training:  93%|█████████▎| 14/15 [01:23<00:02,  2.16s/it, loss=0.509, it/s=1.674]                                                                                 Training:  93%|█████████▎| 14/15 [01:23<00:02,  2.16s/it, loss=0.509, it/s=1.674]                                                                                 Training:  93%|█████████▎| 14/15 [02:21<00:02,  2.16s/it, loss=0.509, it/s=1.674]Training: 100%|██████████| 15/15 [02:21<00:00, 20.21s/it, loss=0.509, it/s=1.674]Training: 100%|██████████| 15/15 [02:21<00:00,  9.45s/it, loss=0.509, it/s=1.674]
+Iter 1: Val loss 1.448, Val chosen reward -0.024, Val rejected reward -0.011, Val accuracy 0.000, Val margin -1.181, Val took 49.620s
+
+Iter 5: loss 0.007, chosen_r 1.125, rejected_r -4.893, acc 1.000, margin 6.018, lr 5.000e-07, it/s 0.419, tok/s 255.055, peak_mem 39.683GB
+
+Iter 10: loss 0.159, chosen_r -0.038, rejected_r -3.216, acc 1.000, margin 3.178, lr 5.000e-07, it/s 0.531, tok/s 235.361, peak_mem 39.683GB
+Iter 15: Val loss 1.827, Val chosen reward -0.021, Val rejected reward -0.004, Val accuracy 0.000, Val margin -1.652, Val took 0.620s
+
+Iter 15: loss 0.509, chosen_r -0.971, rejected_r -2.249, acc 0.600, margin 1.277, lr 5.000e-07, it/s 1.674, tok/s 1101.608, peak_mem 39.683GB
+Iter 15: Saved adapter weights to model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/adapters.safetensors and model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/0000015_adapters.safetensors.
+Saved final weights to model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-v2/adapters.safetensors.
+  snapshot saved: model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-v2/snapshots/step_0150/

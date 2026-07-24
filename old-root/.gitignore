@@ -42,6 +42,7 @@ jms-projects/
 
 # sft_cptv2_probe hypothesis-probe run: adapters/checkpoints are multi-GB, not repo source
 model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/
+model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-v2/snapshots/
 
 # subagent-driven-development ledger/scratch (survives locally, not committed)
 .superpowers/
