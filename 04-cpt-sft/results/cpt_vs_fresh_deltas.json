@@ -1,0 +1,11 @@
+{
+  "base_delta_cptv2_minus_fresh": 37.0,
+  "sft_delta_cptv2_minus_fresh": 3.0,
+  "dpo_delta_cptv2_minus_fresh": 0.0,
+  "fresh_base_pct": 10.0,
+  "cptv2_base_pct": 47.0,
+  "fresh_sft_pct": 69.0,
+  "cptv2_sft_pct": 72.0,
+  "fresh_dpo_pct": 12.0,
+  "cptv2_dpo_pct": 12.0
+}
