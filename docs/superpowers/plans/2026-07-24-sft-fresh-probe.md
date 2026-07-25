@@ -589,17 +589,27 @@ fi
 
 # SFT baseline for the collapse gate -- read from Task 5's real result, not
 # hardcoded, so this arm's gate always compares against ITS OWN SFT number.
+# Filters to full-holdout rows (total==855) and takes the highest step among
+# THOSE -- metrics_functional.jsonl also has the base-model row (step 0,
+# total 855) and 10 interim subset rows (total 100, sometimes scoring HIGHER
+# than the true final on the code_gen-only subset, e.g. this arm's own
+# step-4100 interim read 72% vs the true final's 69%) -- a plain max(runs_pct)
+# across all rows would silently pick a noisier interim number instead of the
+# true final (caught in Task 6's review, inherited from this exact snippet).
 SFT_FINAL_PCT="$(python3 -c "
 import json
 best = 0.0
+best_step = -1
 try:
     with open('model-experiments/04-cpt-sft/sft_fresh_probe/results/sft/metrics_functional.jsonl') as f:
         for line in f:
             line = line.strip()
             if not line.startswith('{'): continue
             r = json.loads(line)
-            if r.get('category') == '__overall__':
-                best = max(best, float(r.get('runs_pct', 0)))
+            if r.get('category') == '__overall__' and r.get('total') == 855:
+                if r.get('step', -1) > best_step:
+                    best_step = r.get('step', -1)
+                    best = float(r.get('runs_pct', 0))
 except FileNotFoundError:
     pass
 print(best)
