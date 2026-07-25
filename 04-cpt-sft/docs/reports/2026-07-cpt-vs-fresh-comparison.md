@@ -12,7 +12,9 @@
 |---|---|---|---|
 | base (no SFT) | **10.5%** (90/855) | **47.3%** (404/855) | **+37.0 pp** |
 | +SFT (final, 8200 iters) | **69.8%** (597/855) | **72.6%** (621/855) | **+2.8 pp** |
-| +SFT+DPO v1 (last checkpoint) | **12.0%** (103/855) | **12.3%** (105/855) | **+0.2 pp** |
+| +SFT+DPO v1 (last checkpoint)¹ | **12.0%** (103/855) | **12.3%** (105/855) | **+0.2 pp** |
+
+¹ Iteration counts differ: fresh ran only 40/250 iters (the early-stop collapse gate fired after 2 consecutive failing snapshots); cptv2 ran the full 250. See "DPO stage" below — this doesn't change the reading (both floors are ~12% regardless of how far each got), but the row isn't a like-for-like iteration count.
 
 ![CPT-v2 vs fresh, 3-stage comparison](../../results/images/cpt_vs_fresh_overall.png)
 
