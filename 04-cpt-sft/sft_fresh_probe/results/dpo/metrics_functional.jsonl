@@ -1,0 +1,6 @@
+{"step": 20, "category": "code_gen", "gate_class": "behavioral", "total": 35, "runs": 1, "runs_pct": 2}
+{"step": 20, "category": "code_gen", "gate_class": "compile_only", "total": 65, "runs": 1, "runs_pct": 1}
+{"step": 20, "category": "__overall__", "gate_class": "__all__", "total": 100, "runs": 2, "runs_pct": 2}
+{"step": 40, "category": "code_gen", "gate_class": "behavioral", "total": 35, "runs": 1, "runs_pct": 2}
+{"step": 40, "category": "code_gen", "gate_class": "compile_only", "total": 65, "runs": 1, "runs_pct": 1}
+{"step": 40, "category": "__overall__", "gate_class": "__all__", "total": 100, "runs": 2, "runs_pct": 2}
