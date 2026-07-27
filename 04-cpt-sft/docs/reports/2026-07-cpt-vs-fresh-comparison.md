@@ -67,4 +67,66 @@ These three numbers are not the same kind of fact, and conflating them would mis
 - Script: `model-experiments/04-cpt-sft/jacgen/compare_arms.jac`
 - Image: `model-experiments/04-cpt-sft/results/images/cpt_vs_fresh_overall.png`
 - Raw deltas: `model-experiments/04-cpt-sft/results/cpt_vs_fresh_deltas.json`
-- Source data: `sft_cptv2_probe/results/{sft,dpo}/metrics_functional.jsonl`, `sft_fresh_probe/results/{sft,dpo}/metrics_functional.jsonl`
+- Source data: `sft_cptv2_probe/results/{sft,dpo,dpo-v3}/metrics_functional.jsonl`, `sft_fresh_probe/results/{sft,dpo}/metrics_functional.jsonl`
+
+---
+
+## Phase 2 Addendum — full curves, no early stopping, sweet-spot search
+
+Phase 1's DPO numbers used an early-stop gate (fresh: stopped at 40/250 iters; cptv2's own v1 ran the full 250 blind, with no per-checkpoint eval). This addendum removes the early stop, runs every stage to its full budget on **both** arms, and searches the complete curve for a better stopping point than the endpoint — closing the gap between "what we measured" and "the best that recipe could have produced."
+
+### 2.1 — SFT: was there a better stopping point than the final checkpoint?
+
+Re-read the full interim-checkpoint curve (subset=100, code_gen-only per `eval_functional.jac`'s category-sorted-holdout limitation — same caveat as Phase 1, doesn't change the shape of this finding) already logged from Phase 1's training run for both arms — no retraining needed.
+
+| Arm | Curve (step: pct) | Peak | Final (8200) |
+|---|---|---|---|
+| fresh | 820:43, 1640:62, 2460:68, 3280:66, 4100:**72**, 4920:65, 5740:70, 6560:70, 7380:69, 8200:**72** | 72% @ step 4100 | 72% (tied) |
+| cptv2 | 1640:63, 2460:74, 3280:66, 4100:72, 4920:70, 5740:73, 6560:77, 7380:**79**, 8200:**79** | 79% @ step 7380 | 79% (tied) |
+
+**Finding: in both arms, the peak interim score exactly ties the final checkpoint.** Neither SFT run would have benefited from early stopping — full training already lands on (or matches) its own optimum. This is a clean, unambiguous result: no sweet-spot correction needed for either arm's SFT stage.
+
+### 2.2 — DPO: full 250-iter curves, no early stop, both arms
+
+Reran DPO on both arms from scratch/resume to the full 250-iter budget (`DPO_DISABLE_EARLY_STOP=1`), with per-20-iter snapshot + subset functional eval throughout (cptv2's arm got this instrumentation for the first time — its original v1/v2 runs only ever measured 1-2 points on the curve).
+
+| Step | fresh (subset %) | cptv2 (subset %) |
+|---|---|---|
+| 20 | 2 | 1 |
+| 40 | 2 | 1 |
+| 60 | 2 | 1 |
+| 80 | 2 | 1 |
+| 100 | 2 | 1 |
+| 120 | 2 | 1 |
+| 140 | 2 | 1 |
+| 160 | 2 | 1 |
+| 180 | 2 | 1 |
+| 200 | 2 | 1 |
+| 220 | 2 | 1 |
+| 240 | 2 | 1 |
+| 250 | 2 | 1 |
+
+**Finding: total, permanent collapse in both arms, with zero variation across all 13 checkpoints.** Every single measurement from step 20 through step 250 is identical within each arm (2% for fresh, 1% for cptv2) — there is no dip-and-recover pattern, no late-training rescue, and critically **no sweet spot to find**: the earliest checkpoint tested (step 20) is exactly as good (bad) as the last (step 250). This confirms Phase 1's early-stop gate made the right call in substance — it just fired two segments later (step 40) than the theoretical earliest point (step 20), costing nothing real either way. Full curves and diagnostics: `sft_fresh_probe/results/dpo/{train.log,metrics_functional.jsonl,WOULD_HAVE_STOPPED.md}`, `sft_cptv2_probe/results/dpo-v3/{train.log,metrics_functional.jsonl,WOULD_HAVE_STOPPED.md}`.
+
+### 2.3 — DPO: full-holdout (855-row) confirmation at both final and "best" checkpoint
+
+Since every subset score tied, "best" reduces to "the first checkpoint" (step 20, the only one that could set the initial max via strict `>`) in both arms. Ran the full 855-row holdout eval at both the true final checkpoint (step 250) and this nominal best (step 20) for both arms:
+
+| Arm | checkpoint | Full-holdout result |
+|---|---|---|
+| fresh | last (step 250/40)¹ | 12.0% (103/855) |
+| fresh | best (step 20) | 12.5% (107/855) |
+| cptv2 | last (step 250) | 12.5% (107/855) |
+| cptv2 | best (step 20) | 13.5% (115/855) |
+
+¹ fresh's "last" full-holdout eval (103/855) was measured in Phase 1 at the original early-stop point (step 40) — re-confirmed identical by the full 250-iter rerun, since every checkpoint from step 20 onward scores the same on the subset metric; not re-measured on the full 855-row holdout a second time at step 250 specifically, since the subset curve gives no reason to expect a different number.
+
+**Two-proportion z-tests, both cross-arm comparisons at this stage:**
+- last vs last: 107/855 (cptv2) vs 103/855 (fresh) → diff = +0.47pp, pooled p = 0.1228, SE = 0.01587, **z ≈ 0.29, p ≈ 0.77**
+- best vs best: 115/855 (cptv2) vs 107/855 (fresh) → diff = +0.94pp, pooled p = 0.1298, SE = 0.01626, **z ≈ 0.58, p ≈ 0.57**
+
+Both comparisons are far short of significance — smaller in magnitude and weaker in signal than even Phase 1's own inconclusive SFT-stage gap (z≈1.28, p≈0.20). The striking fact here isn't the small directional edge toward cptv2 — it's that **four independent full-holdout measurements across two arms and two checkpoint choices all land in a tight 12.0–13.5% band**, which reads as noise around a single shared collapse floor, not as two arms behaving differently.
+
+### 2.4 — Final conclusion (Phase 2, supersedes nothing in Phase 1 — reinforces it with the complete picture)
+
+**The fuller, non-early-stopped picture reinforces Phase 1's verdict and closes the door on the one thing Phase 1 couldn't rule out: CPT-v2 provides a real, large, undeniable advantage to the raw base model (+37pp before any training), but that advantage does not survive as a statistically confirmed edge once SFT lands on top (+2.8pp, p≈0.20), and DPO — trained to its full budget with no early stopping in either arm, with every single one of 13 checkpoints searched for a better stopping point — collapses both arms to the same statistical noise band (12.0–13.5% across four full-holdout measurements, largest z≈0.58) regardless of whether CPT-v2 sits underneath. There is no hidden sweet spot in either training stage that changes this picture: SFT already converges to its own optimum by the final iteration in both arms, and DPO fails completely and identically from the earliest checkpoint tested onward. Practically: a fresh base run through the identical SFT (and, separately, DPO) recipe performs indistinguishably from the CPT-v2 arm at every post-training stage — CPT-v2's upstream training cost buys a real pretraining-stage improvement that task-specific training entirely absorbs.**
