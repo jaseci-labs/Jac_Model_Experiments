@@ -7,7 +7,11 @@ __pycache__/
 
 models/
 # every attempt's adapter/optimizer checkpoints, whatever the attempt dir is named
-model-experiments/*/adapters/
+# (** matches any depth -- model-experiments/04-cpt-sft/adapters/ AND
+# model-experiments/04-cpt-sft/sft_fresh_probe/adapters/ alike; the single-*
+# version of this rule only matched one level and silently missed the nested
+# probe dirs, caught while committing Phase 2 DPO results)
+model-experiments/**/adapters/
 .venv/
 
 # root results/ is studio scratch (builder job logs, eval runs) — not repo output
@@ -43,6 +47,8 @@ jms-projects/
 # sft_cptv2_probe hypothesis-probe run: adapters/checkpoints are multi-GB, not repo source
 model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/
 model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-v2/snapshots/
+model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-v3/snapshots/
+model-experiments/04-cpt-sft/sft_fresh_probe/results/dpo/snapshots/
 
 # subagent-driven-development ledger/scratch (survives locally, not committed)
 .superpowers/
