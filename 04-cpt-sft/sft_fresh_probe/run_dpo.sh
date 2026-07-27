@@ -229,17 +229,34 @@ print(p)
   if [ "$BELOW_GATE" = "1" ]; then low_streak=$(( low_streak + 1 )); else low_streak=0; fi
   if [ "$low_streak" -ge 2 ]; then
     GATE_VAL="$(python3 -c "print(max(${COLLAPSE_ABS_FLOOR}, ${COLLAPSE_REL_THRESHOLD}))")"
-    {
-      echo "# DPO early-stopped at step ${NEW_DONE}/${DPO_ITERS}"
-      echo ""
-      echo "Two consecutive snapshots scored below the collapse gate (${GATE_VAL}%, ="
-      echo "max(${COLLAPSE_ABS_FLOOR}% absolute floor, 50% of this arm's SFT baseline ${SFT_FINAL_PCT}%))."
-      echo "Best snapshot seen: step $(cat "$RDIR/.best_step" 2>/dev/null || echo "$NEW_DONE") at ${best_pct}%."
-      echo "Stopped early instead of burning the remaining $(( DPO_ITERS - NEW_DONE )) iters on an already-collapsed policy."
-    } > "$RDIR/EARLY_STOP.md"
-    touch "$RDIR/.early_stopped"
-    echo "!!! EARLY STOP: 2 consecutive snapshots below collapse gate. See $RDIR/EARLY_STOP.md" | tee -a "$RDIR/train.log"
-    break
+    # DPO_DISABLE_EARLY_STOP=1: run the full budget anyway (per user request, to
+    # see the whole curve and find the real sweet spot instead of trusting the
+    # gate's first trigger point) -- record WHERE the gate would have fired the
+    # first time it's crossed, but only actually break the loop when unset.
+    if [ ! -f "$RDIR/.would_have_stopped" ]; then
+      {
+        echo "# DPO gate would have fired at step ${NEW_DONE}/${DPO_ITERS}"
+        echo ""
+        echo "Two consecutive snapshots scored below the collapse gate (${GATE_VAL}%, ="
+        echo "max(${COLLAPSE_ABS_FLOOR}% absolute floor, 50% of this arm's SFT baseline ${SFT_FINAL_PCT}%))."
+        echo "Best snapshot seen so far: step $(cat "$RDIR/.best_step" 2>/dev/null || echo "$NEW_DONE") at ${best_pct}%."
+      } > "$RDIR/WOULD_HAVE_STOPPED.md"
+      touch "$RDIR/.would_have_stopped"
+      echo "!!! gate crossed at step ${NEW_DONE} (recorded, not stopping -- DPO_DISABLE_EARLY_STOP or continuing to full budget)" | tee -a "$RDIR/train.log"
+    fi
+    if [ "${DPO_DISABLE_EARLY_STOP:-0}" != "1" ]; then
+      {
+        echo "# DPO early-stopped at step ${NEW_DONE}/${DPO_ITERS}"
+        echo ""
+        echo "Two consecutive snapshots scored below the collapse gate (${GATE_VAL}%, ="
+        echo "max(${COLLAPSE_ABS_FLOOR}% absolute floor, 50% of this arm's SFT baseline ${SFT_FINAL_PCT}%))."
+        echo "Best snapshot seen: step $(cat "$RDIR/.best_step" 2>/dev/null || echo "$NEW_DONE") at ${best_pct}%."
+        echo "Stopped early instead of burning the remaining $(( DPO_ITERS - NEW_DONE )) iters on an already-collapsed policy."
+      } > "$RDIR/EARLY_STOP.md"
+      touch "$RDIR/.early_stopped"
+      echo "!!! EARLY STOP: 2 consecutive snapshots below collapse gate. See $RDIR/EARLY_STOP.md" | tee -a "$RDIR/train.log"
+      break
+    fi
   fi
 done
 echo "=== DPO training loop done: $RDIR/train.log (best snapshot: step $(cat "$RDIR/.best_step" 2>/dev/null || echo N/A) at ${best_pct}%) ==="

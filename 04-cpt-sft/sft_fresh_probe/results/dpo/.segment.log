@@ -1,0 +1,48 @@
+
+[96m╔══════════════════════════════════════════════════════════════════════════════════════════╗[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m║[0m [1m[35m███╗   ███╗██╗     ██╗  ██╗    ██╗     ███╗   ███╗    ██╗      ██████╗ ██████╗  █████╗[0m   [96m║[0m
+[96m║[0m [1m[35m████╗ ████║██║     ╚██╗██╔╝    ██║     ████╗ ████║    ██║     ██╔═══██╗██╔══██╗██╔══██╗[0m  [96m║[0m
+[96m║[0m [1m[94m██╔████╔██║██║      ╚███╔╝     ██║     ██╔████╔██║    ██║     ██║   ██║██████╔╝███████║[0m  [96m║[0m
+[96m║[0m [1m[94m██║╚██╔╝██║██║      ██╔██╗     ██║     ██║╚██╔╝██║    ██║     ██║   ██║██╔══██╗██╔══██║[0m  [96m║[0m
+[96m║[0m [1m[96m██║ ╚═╝ ██║███████╗██╔╝ ██╗    ███████╗██║ ╚═╝ ██║    ███████╗╚██████╔╝██║  ██║██║  ██║[0m  [96m║[0m
+[96m║[0m [1m[96m╚═╝     ╚═╝╚══════╝╚═╝  ╚═╝    ╚══════╝╚═╝     ╚═╝    ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝[0m  [96m║[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m║[0m [93m[1mAdvanced Fine-Tuning Framework[0m                                                           [96m║[0m
+[96m║[0m [2m[97mLoRA • (Online-)DPO • XPO • CPO • CPO • ORPO • PPO • GRPO • DrGRPO • GSPO • RLHF • SFT[0m   [96m║[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m╚══════════════════════════════════════════════════════════════════════════════════════════╝[0m
+    
+
+[96m============================================================[0m
+[1m[97m                   Configuration Summary                    [0m
+[96m============================================================[0m
+
+[97mModel:[0m models/sft-fresh-fused-q4
+[97mTraining Mode:[0m DPO
+[97mTraining Type:[0m lora
+[97mBatch Size:[0m 1
+[97mLearning Rate:[0m 1e-06
+[97mOptimizer:[0m adam
+[94m[INFO][0m Loading model: [96mmodels/sft-fresh-fused-q4[0m
+Loading model models/sft-fresh-fused-q4
+Loading LoRA adapters with config: {'rank': 16, 'dropout': 0.05, 'scale': 2.0, 'use_dora': False, 'num_layers': 16}
+Loading pretrained reference model (using main model)
+[94m[INFO][0m Loading datasets
+
+[96m============================================================[0m
+[1m[97m                          Training                          [0m
+[96m============================================================[0m
+
+[93m[WARNING][0m Loading fine-tuned weights from [96mmodel-experiments/04-cpt-sft/sft_fresh_probe/adapters/dpo-on-sft/adapters.safetensors[0m
+Trainable parameters: 0.923% (281.838M/30532.123M)
+[94m[INFO][0m Training mode: [93mDPO[0m
+Training:   0%|          | 0/10 [00:00<?, ?it/s]                                                Training:   0%|          | 0/10 [00:15<?, ?it/s]Training:  10%|█         | 1/10 [00:18<02:45, 18.35s/it]Training:  20%|██        | 2/10 [00:19<01:06,  8.37s/it]Training:  30%|███       | 3/10 [00:21<00:38,  5.50s/it]Training:  40%|████      | 4/10 [00:23<00:24,  4.07s/it]Training:  40%|████      | 4/10 [00:26<00:24,  4.07s/it, loss=0.000, it/s=0.456]                                                                                Training:  40%|████      | 4/10 [00:26<00:24,  4.07s/it, loss=0.000, it/s=0.456]Training:  50%|█████     | 5/10 [00:26<00:18,  3.64s/it, loss=0.000, it/s=0.456]Training:  60%|██████    | 6/10 [00:28<00:11,  2.90s/it, loss=0.000, it/s=0.456]Training:  70%|███████   | 7/10 [00:29<00:07,  2.47s/it, loss=0.000, it/s=0.456]Training:  80%|████████  | 8/10 [00:32<00:05,  2.55s/it, loss=0.000, it/s=0.456]Training:  90%|█████████ | 9/10 [00:34<00:02,  2.31s/it, loss=0.000, it/s=0.456]                                                                                Training:  90%|█████████ | 9/10 [00:41<00:02,  2.31s/it, loss=0.000, it/s=0.456]Training:  90%|█████████ | 9/10 [00:43<00:02,  2.31s/it, loss=0.016, it/s=3.314]                                                                                Training:  90%|█████████ | 9/10 [00:43<00:02,  2.31s/it, loss=0.016, it/s=3.314]                                                                                Training:  90%|█████████ | 9/10 [00:45<00:02,  2.31s/it, loss=0.016, it/s=3.314]Training: 100%|██████████| 10/10 [00:45<00:00,  5.10s/it, loss=0.016, it/s=3.314]Training: 100%|██████████| 10/10 [00:45<00:00,  4.55s/it, loss=0.016, it/s=3.314]
+Iter 1: Val loss 0.317, Val chosen reward -0.014, Val rejected reward -0.022, Val accuracy 0.941, Val margin 1.622, Val took 15.596s
+
+Iter 5: loss 0.000, chosen_r -1.468, rejected_r -10.537, acc 1.000, margin 9.069, lr 1.000e-06, it/s 0.456, tok/s 277.408, peak_mem 39.685GB
+Iter 10: Val loss 0.354, Val chosen reward -0.016, Val rejected reward -0.024, Val accuracy 0.839, Val margin 1.516, Val took 7.593s
+
+Iter 10: loss 0.016, chosen_r -2.258, rejected_r -7.529, acc 1.000, margin 5.271, lr 1.000e-06, it/s 3.314, tok/s 1469.986, peak_mem 39.767GB
+Iter 10: Saved adapter weights to model-experiments/04-cpt-sft/sft_fresh_probe/adapters/dpo-on-sft/adapters.safetensors and model-experiments/04-cpt-sft/sft_fresh_probe/adapters/dpo-on-sft/0000010_adapters.safetensors.
+Saved final weights to model-experiments/04-cpt-sft/sft_fresh_probe/adapters/dpo-on-sft/adapters.safetensors.
