@@ -1,0 +1,44 @@
+# CPT LoRA config for mlx_lm.lora. Continual pretrain on raw text (no chat
+# template, no prompt masking) -- mlx_lm's TextDataset auto-detects the
+# {"text": ...} format natively from 03-new/dataset/cpt/packed/{train,valid}.jsonl.
+#
+# Same rank/scale/dropout/num_layers as the proven 01-sft-dpo SFT recipe
+# (docs/training_configs/qwen3coder-r20-rft.json) -- that config is stable on
+# this exact 30B-A3B model at 48GB, and an unattended overnight run is the
+# wrong place to also experiment with LoRA capacity. Two things DO change
+# from the SFT recipe, both forced by the data: max_seq_length 4096 (packed
+# window size, not 2048) and batch_size 1 (so per-step token count stays
+# 4096 -- identical to the proven batch_size=2 * seq_len=2048 SFT footprint,
+# not a new memory regime). LR halved to 1e-5: CPT is broader domain
+# adaptation over more diverse content than SFT's narrow task format, and
+# design.md's CF guard means starting conservative, not aggressive.
+
+model: "models/qwen-q4"
+train: true
+data: "03-new/dataset/cpt/packed"
+
+fine_tune_type: lora
+num_layers: 16
+grad_checkpoint: true
+
+lora_parameters:
+  rank: 16
+  scale: 2.0
+  dropout: 0.05
+
+# 862 train windows, batch 1 -> 862 iters/epoch; 3 epochs = 2586 iters.
+batch_size: 1
+iters: 2586
+learning_rate: 1.0e-5
+lr_schedule:
+  name: cosine_decay
+  warmup: 259
+  arguments: [1.0e-5, 2586, 1.0e-6]
+
+max_seq_length: 4096
+adapter_path: "03-new/adapters/cpt-v1"
+save_every: 100
+steps_per_eval: 50
+steps_per_report: 10
+val_batches: 20
+seed: 42
