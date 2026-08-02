@@ -17,13 +17,32 @@ Specs: `../../docs/spectrum-plan.md` (design), `../../docs/spectrum-workflow.md`
 
 Tests: `.venv/bin/python -m pytest model-experiments/04-cpt-sft/sft_fresh_probe/spectrum/ -v`
 
+## Phases 1-3: RUN, 2026-08-02
+
+| Phase | Result |
+|---|---|
+| 1. SNR scan | **DONE** — 240 dense matrices, `--no-experts`, **88s**, **290MB peak RSS**. `snr/snr_raw.json`, `snr/scan.log`. |
+| 2. Layer selection | **DONE** — `configs/spectrum_layers.json` is **frozen**. Picks `[0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]`, **11/16 overlap** with the stock `{32..47}`, no boundary tie. Read `snr/SELECTION.md` — it is real analysis of this output, including why the marginal picks are soft and how the MoE caveat bites. |
+| 3. `--verify-layers` self-test | **PASS** on the real 30B — 256 LoRA tensors, 48 LoRASwitchLinear, **281.838M** trainable (exactly 281,837,568), control reproduces `{32..47}` at the identical count. |
+
+One bug the real self-test caught: `EXPECTED_TRAINABLE_PARAMS` was pinned at
+`281_838_080`, an off-by-512 read of mlx_lm's rounded "281.838M" banner. The
+exact integer is **281,837,568** (= 17,614,848/block × 16, derived in a test).
+The gate could never have PASSed with the old constant.
+
+Note the two percentages are both correct and are not the same number: mlx_lm's
+own banner prints `0.923% (281.838M/30532.123M)` against the *dequantized* model,
+while `--verify-layers` prints `5.576%` because it divides by
+`tree_flatten(model.parameters())` on the q4 model, which counts packed uint32
+words. Same numerator.
+
+Because `min(picks) == 0`, the §7 eval-time rewrite lands on its documented worst
+case: `num_layers := 48`, i.e. 32 covered-but-untrained blocks, ~564M extra F32
+params ≈ 2.2GB on top of the 16GB q4 base. It fits, but it is the maximum.
+
 ## NOT run — these are yours, they need the GPU / hours
 
-`configs/spectrum_layers.json` does not exist yet. It is the scan's output and is
-frozen once training starts; nothing in this directory invents one.
-
-1. **SNR scan** (spectrum-workflow.md Phase 1). 57GB snapshot, 18,867 tensors;
-   wall-clock and peak RSS are unmeasured and belong in the write-up.
+1. **SNR scan** — already run (above). Reproduce with:
    ```bash
    SNAP=~/.cache/huggingface/hub/models--Qwen--Qwen3-Coder-30B-A3B-Instruct/snapshots/b2cff646eb4bb1d68355c01b18ae02e7cf42d120
    .venv/bin/python model-experiments/04-cpt-sft/sft_fresh_probe/spectrum/snr_scan.py \
@@ -37,24 +56,25 @@ frozen once training starts; nothing in this directory invents one.
    measured on one real shard during development: **+84MB** while reading a
    4.00GB shard, so the 48GB constraint is not a factor for the reader itself.
 
-2. **Layer selection** (Phase 2), then write `snr/SELECTION.md` by hand with the
-   rule used, the MoE finding, ties, and the overlap:
+2. **Layer selection** — already run (above); `snr/SELECTION.md` is written.
+   Reproduce with:
    ```bash
    .venv/bin/python model-experiments/04-cpt-sft/sft_fresh_probe/spectrum/layer_select.py \
      --snr model-experiments/04-cpt-sft/sft_fresh_probe/spectrum/snr/snr_raw.json \
      --layer-scores-out model-experiments/04-cpt-sft/sft_fresh_probe/spectrum/snr/layer_scores.json \
      --selection-out model-experiments/04-cpt-sft/sft_fresh_probe/spectrum/configs/spectrum_layers.json
    ```
-   If it prints `picks == {32..47}`, stop: the probe is answered by construction.
+   It did not print `picks == {32..47}` (11/16 overlap), so the probe is live.
 
-3. **Self-test** (Phase 3) — loads `models/qwen-q4` twice, a few minutes:
+3. **Self-test** — already run and PASSing (above). Re-run any time; loads
+   `models/qwen-q4` twice, a few minutes:
    ```bash
    .venv/bin/python model-experiments/04-cpt-sft/sft_fresh_probe/spectrum/spectrum_lora_layers.py \
      --verify-layers --model models/qwen-q4 \
      --spectrum-layers model-experiments/04-cpt-sft/sft_fresh_probe/spectrum/configs/spectrum_layers.json
    ```
-   Must print 281.838M / 0.923%, 256 tensors, 48 LoRASwitchLinear, and a control
-   run reproducing `{32..47}`. A different trainable count means the selection
+   Must print 281.838M (281,837,568) trainable, 256 tensors, 48
+   LoRASwitchLinear, and a control run reproducing `{32..47}` at the same count. A different trainable count means the selection
    changed capacity, not placement — stop and fix before spending compute.
    `run_sft_spectrum.sh` runs this itself and refuses to train unless it PASSes.
 
@@ -71,6 +91,13 @@ frozen once training starts; nothing in this directory invents one.
 6. **Gate** (Phase 6): paired McNemar vs `sft-on-fresh` (597/855, 69.8%),
    p < 0.05 AND |Δ| ≥ 2.8pp, decision written to `results/sft-spectrum/GATE.md`
    before any Phase-2 work. On a null: stop.
+
+7. **Phase 2 (cptv2 arm)** — scaffolded and self-tested in
+   `../../sft_cptv2_probe/spectrum/`, but CONDITIONAL on step 6. It shares this
+   directory's modules and symlinks this directory's `spectrum_layers.json`; it
+   adds the §8.3 union+freeze base composition and the step-5 merge, because
+   `resume_adapter_file` would otherwise drop 80 of CPT-v2's 256 tensors
+   silently. See that README before launching anything there.
 
 ## Standing caveat
 

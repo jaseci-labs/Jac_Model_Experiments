@@ -258,3 +258,36 @@ def test_verify_layers_fails_on_a_wrong_trainable_param_count():
                                    expect_trainable=281_838_000)
     assert not ok
     assert any("trainable" in p for p in problems)
+
+
+# --- the pinned capacity constant ------------------------------------------
+def test_expected_trainable_params_matches_the_arithmetic_it_claims():
+    """281_837_568, not the 281_838_080 that a naive read of mlx_lm's rounded
+    "281.838M" banner produces. --verify-layers gates training on this exact
+    integer, so an off-by-512 constant means the gate can never PASS.
+
+    Derivation for one Qwen3-Coder-30B-A3B block at rank 16 (hidden 2048,
+    kv 512, 128 experts, moe_intermediate 768).
+    """
+    r = 16
+    dense = (
+        2048 * r + r * 4096      # q_proj
+        + 2048 * r + r * 512     # k_proj
+        + 2048 * r + r * 512     # v_proj
+        + 4096 * r + r * 2048    # o_proj
+        + 2048 * r + r * 128     # mlp.gate (router)
+    )
+    expert = (
+        128 * (2048 * r + r * 768)   # switch_mlp.gate_proj
+        + 128 * (2048 * r + r * 768)  # switch_mlp.up_proj
+        + 128 * (768 * r + r * 2048)  # switch_mlp.down_proj
+    )
+    assert dense + expert == S.PER_BLOCK_TRAINABLE_PARAMS
+    assert S.PER_BLOCK_TRAINABLE_PARAMS * 16 == S.EXPECTED_TRAINABLE_PARAMS
+    assert S.EXPECTED_TRAINABLE_PARAMS == 281_837_568
+    # and it must round to the banner every previous run in this repo printed
+    assert f"{S.EXPECTED_TRAINABLE_PARAMS / 1e6:.3f}M" == "281.838M"
+
+
+def test_expected_lora_tensors_is_16_blocks_x_8_modules_x_2():
+    assert S.EXPECTED_LORA_TENSORS == 16 * len(S.EXPECTED_SUFFIXES) * 2 == 256

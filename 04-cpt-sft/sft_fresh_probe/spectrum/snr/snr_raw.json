@@ -1,0 +1,3469 @@
+{
+  "snapshot": "/Users/ayush/.cache/huggingface/hub/models--Qwen--Qwen3-Coder-30B-A3B-Instruct/snapshots/b2cff646eb4bb1d68355c01b18ae02e7cf42d120",
+  "snapshot_revision": "b2cff646eb4bb1d68355c01b18ae02e7cf42d120",
+  "generated": "2026-08-02T18:43:51.599708+00:00",
+  "num_layers": 48,
+  "dense": {
+    "0": {
+      "mlp.gate": {
+        "snr": 2.2985282685825927,
+        "signal_energy": 0.37429387097125844,
+        "noise_energy": 0.16284066464932798,
+        "n_signal": 7,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.0065517388505418744,
+        "gamma": 0.0625,
+        "sigma_sq": 0.0041931128643468,
+        "shape": [
+          128,
+          2048
+        ]
+      },
+      "self_attn.k_proj": {
+        "snr": 0.612707802138608,
+        "signal_energy": 0.04080947380245552,
+        "noise_energy": 0.06660511529315162,
+        "n_signal": 49,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0004720364708851789,
+        "gamma": 0.25,
+        "sigma_sq": 0.0002097939870600795,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 1.355960257858371,
+        "signal_energy": 0.3615441775288226,
+        "noise_energy": 0.26663331423876113,
+        "n_signal": 200,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.000893868736190669,
+        "gamma": 0.5,
+        "sigma_sq": 0.00030672725833544474,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.8983714359791297,
+        "signal_energy": 0.29043997049341486,
+        "noise_energy": 0.3232960876331359,
+        "n_signal": 108,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0008733185613359296,
+        "gamma": 2.0,
+        "sigma_sq": 0.0001498377765809262,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.19610350058389006,
+        "signal_energy": 0.013385254826770865,
+        "noise_energy": 0.06825607287435881,
+        "n_signal": 31,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.00035877534770362737,
+        "gamma": 0.25,
+        "sigma_sq": 0.00015945571009050104,
+        "shape": [
+          512,
+          2048
+        ]
+      }
+    },
+    "1": {
+      "mlp.gate": {
+        "snr": 1.6584302623301534,
+        "signal_energy": 0.22122711912946816,
+        "noise_energy": 0.13339549099799722,
+        "n_signal": 5,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.0043287135778094345,
+        "gamma": 0.0625,
+        "sigma_sq": 0.0027703766897980383,
+        "shape": [
+          128,
+          2048
+        ]
+      },
+      "self_attn.k_proj": {
+        "snr": 0.5622020372206744,
+        "signal_energy": 0.08497859715393266,
+        "noise_energy": 0.15115312917405355,
+        "n_signal": 52,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0010376873967731961,
+        "gamma": 0.25,
+        "sigma_sq": 0.000461194398565865,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.5305881142305082,
+        "signal_energy": 0.37433733837752503,
+        "noise_energy": 0.7055139916211886,
+        "n_signal": 160,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0015365807034555003,
+        "gamma": 0.5,
+        "sigma_sq": 0.0005272711387027641,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.8283538394703871,
+        "signal_energy": 0.8372234908661685,
+        "noise_energy": 1.010707563571447,
+        "n_signal": 140,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0026295239604864767,
+        "gamma": 2.0,
+        "sigma_sq": 0.00045115498644945044,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.07732564142880262,
+        "signal_energy": 0.016402307196373922,
+        "noise_energy": 0.2121198983066478,
+        "n_signal": 15,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0010042446211874164,
+        "gamma": 0.25,
+        "sigma_sq": 0.0004463309427499629,
+        "shape": [
+          512,
+          2048
+        ]
+      }
+    },
+    "2": {
+      "self_attn.k_proj": {
+        "snr": 0.5318944741716789,
+        "signal_energy": 0.09605423560222767,
+        "noise_energy": 0.1805888954793397,
+        "n_signal": 51,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0012157168721438586,
+        "gamma": 0.25,
+        "sigma_sq": 0.0005403186098417149,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.7737743899387055,
+        "signal_energy": 0.491800397862437,
+        "noise_energy": 0.6355862952525412,
+        "n_signal": 186,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0016042214571291363,
+        "gamma": 0.5,
+        "sigma_sq": 0.0005504817758870049,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.7487868726175567,
+        "signal_energy": 0.8990334685041408,
+        "noise_energy": 1.2006533519496176,
+        "n_signal": 143,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.002987761025290261,
+        "gamma": 2.0,
+        "sigma_sq": 0.0005126187496803211,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.18800443046592086,
+        "signal_energy": 0.06083699228803646,
+        "noise_energy": 0.32359339690701727,
+        "n_signal": 33,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0016893867704039997,
+        "gamma": 0.25,
+        "sigma_sq": 0.0007508385646239999,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "mlp.gate": {
+        "snr": 1.7014954363020935,
+        "signal_energy": 0.17175140047665205,
+        "noise_energy": 0.1009414405776627,
+        "n_signal": 6,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.00332759435366362,
+        "gamma": 0.0625,
+        "sigma_sq": 0.002129660386344717,
+        "shape": [
+          128,
+          2048
+        ]
+      }
+    },
+    "3": {
+      "mlp.gate": {
+        "snr": 1.6696653143721338,
+        "signal_energy": 0.1794727520162968,
+        "noise_energy": 0.10749025596413393,
+        "n_signal": 6,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.003502273354462371,
+        "gamma": 0.0625,
+        "sigma_sq": 0.0022414549468559174,
+        "shape": [
+          128,
+          2048
+        ]
+      },
+      "self_attn.k_proj": {
+        "snr": 0.8134833625289697,
+        "signal_energy": 0.12252134904020429,
+        "noise_energy": 0.15061322048346265,
+        "n_signal": 60,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.001200296795237161,
+        "gamma": 0.25,
+        "sigma_sq": 0.0005334652423276272,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.3434876153768795,
+        "signal_energy": 0.3113567373822598,
+        "noise_energy": 0.9064569534497909,
+        "n_signal": 122,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0017328950584733602,
+        "gamma": 0.5,
+        "sigma_sq": 0.0005946355753907869,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.7808071038479201,
+        "signal_energy": 0.9864013979109013,
+        "noise_energy": 1.2633099686846925,
+        "n_signal": 148,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.003201238142102938,
+        "gamma": 2.0,
+        "sigma_sq": 0.0005492456324127656,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.18858773787692568,
+        "signal_energy": 0.056925923612768534,
+        "noise_energy": 0.30185379099206855,
+        "n_signal": 33,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.001576667983636619,
+        "gamma": 0.25,
+        "sigma_sq": 0.0007007413260607195,
+        "shape": [
+          512,
+          2048
+        ]
+      }
+    },
+    "4": {
+      "mlp.gate": {
+        "snr": 1.7790983108366194,
+        "signal_energy": 0.15708556133701196,
+        "noise_energy": 0.08829504270797864,
+        "n_signal": 7,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.002993569402100114,
+        "gamma": 0.0625,
+        "sigma_sq": 0.0019158844173440728,
+        "shape": [
+          128,
+          2048
+        ]
+      },
+      "self_attn.k_proj": {
+        "snr": 0.6343631428855807,
+        "signal_energy": 0.11900755547625472,
+        "noise_energy": 0.18760162347218834,
+        "n_signal": 60,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0013474033327526304,
+        "gamma": 0.25,
+        "sigma_sq": 0.0005988459256678358,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.7403614425016565,
+        "signal_energy": 0.494297266848702,
+        "noise_energy": 0.6676431786864645,
+        "n_signal": 192,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.001653389937327727,
+        "gamma": 0.5,
+        "sigma_sq": 0.0005673537309260694,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.7113498163664493,
+        "signal_energy": 0.8926067128152108,
+        "noise_energy": 1.254806977212162,
+        "n_signal": 152,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0030556747118781697,
+        "gamma": 2.0,
+        "sigma_sq": 0.0005242708961572947,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.29235114377438687,
+        "signal_energy": 0.0881018491087168,
+        "noise_energy": 0.3013562662053641,
+        "n_signal": 45,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0017114853162543831,
+        "gamma": 0.25,
+        "sigma_sq": 0.0007606601405575036,
+        "shape": [
+          512,
+          2048
+        ]
+      }
+    },
+    "5": {
+      "self_attn.k_proj": {
+        "snr": 0.573640712787728,
+        "signal_energy": 0.11026919785786557,
+        "noise_energy": 0.19222693822059655,
+        "n_signal": 58,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0013293260704707389,
+        "gamma": 0.25,
+        "sigma_sq": 0.0005908115868758839,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.6723510651697938,
+        "signal_energy": 0.47294596165049224,
+        "noise_energy": 0.7034211532498363,
+        "n_signal": 158,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0016739184226416887,
+        "gamma": 0.5,
+        "sigma_sq": 0.0005743979934259134,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.7253043051807916,
+        "signal_energy": 0.9116563984666359,
+        "noise_energy": 1.256929528688505,
+        "n_signal": 164,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.003085801940214522,
+        "gamma": 2.0,
+        "sigma_sq": 0.0005294399113463908,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.11210246202472204,
+        "signal_energy": 0.03670041192015553,
+        "noise_energy": 0.32738274661676886,
+        "n_signal": 20,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.001599974387239637,
+        "gamma": 0.25,
+        "sigma_sq": 0.0007110997276620609,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "mlp.gate": {
+        "snr": 1.8159966493945203,
+        "signal_energy": 0.15435325482671486,
+        "noise_energy": 0.08499644251996746,
+        "n_signal": 7,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.002919722808430587,
+        "gamma": 0.0625,
+        "sigma_sq": 0.0018686225973955756,
+        "shape": [
+          128,
+          2048
+        ]
+      }
+    },
+    "6": {
+      "mlp.gate": {
+        "snr": 2.0933762058037275,
+        "signal_energy": 0.16133839503268227,
+        "noise_energy": 0.07707090325445744,
+        "n_signal": 6,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.0029082174448336285,
+        "gamma": 0.0625,
+        "sigma_sq": 0.0018612591646935224,
+        "shape": [
+          128,
+          2048
+        ]
+      },
+      "self_attn.k_proj": {
+        "snr": 0.6306638747313138,
+        "signal_energy": 0.10933220794696133,
+        "noise_energy": 0.1733605052192674,
+        "n_signal": 53,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0012423017723780325,
+        "gamma": 0.25,
+        "sigma_sq": 0.0005521341210569033,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.5096491384127005,
+        "signal_energy": 0.42872978074476187,
+        "noise_energy": 0.8412253615890305,
+        "n_signal": 177,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.001807090049087455,
+        "gamma": 0.5,
+        "sigma_sq": 0.0006200952711289663,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.6817194489195079,
+        "signal_energy": 0.8839574757205233,
+        "noise_energy": 1.2966587312736242,
+        "n_signal": 136,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0031029204974389285,
+        "gamma": 2.0,
+        "sigma_sq": 0.000532376991429579,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.004547095007939229,
+        "signal_energy": 0.0018135811017330472,
+        "noise_energy": 0.3988438989215167,
+        "n_signal": 1,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0017607016682456315,
+        "gamma": 0.25,
+        "sigma_sq": 0.0007825340747758362,
+        "shape": [
+          512,
+          2048
+        ]
+      }
+    },
+    "7": {
+      "mlp.gate": {
+        "snr": 2.238448186265888,
+        "signal_energy": 0.1553132213757055,
+        "noise_energy": 0.06938432719981531,
+        "n_signal": 7,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.002741459762479118,
+        "gamma": 0.0625,
+        "sigma_sq": 0.0017545342479866354,
+        "shape": [
+          128,
+          2048
+        ]
+      },
+      "self_attn.k_proj": {
+        "snr": 0.5491191397282654,
+        "signal_energy": 0.10719732127569664,
+        "noise_energy": 0.19521687284246514,
+        "n_signal": 50,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0013289679035298405,
+        "gamma": 0.25,
+        "sigma_sq": 0.000590652401568818,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.5558466429472891,
+        "signal_energy": 0.43108771348441866,
+        "noise_energy": 0.7755515283831599,
+        "n_signal": 167,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0017169940440988512,
+        "gamma": 0.5,
+        "sigma_sq": 0.0005891792098794135,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.6772383711860128,
+        "signal_energy": 0.8742009794702358,
+        "noise_energy": 1.2908320270443219,
+        "n_signal": 152,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0030807460948338566,
+        "gamma": 2.0,
+        "sigma_sq": 0.0005285724654175913,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.005094184841121355,
+        "signal_energy": 0.001885966196529143,
+        "noise_energy": 0.3702194277100467,
+        "n_signal": 1,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0016352248270005438,
+        "gamma": 0.25,
+        "sigma_sq": 0.0007267665897780195,
+        "shape": [
+          512,
+          2048
+        ]
+      }
+    },
+    "8": {
+      "mlp.gate": {
+        "snr": 1.84505149002297,
+        "signal_energy": 0.1494615706523235,
+        "noise_energy": 0.0810067206582201,
+        "n_signal": 7,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.00281206189241925,
+        "gamma": 0.0625,
+        "sigma_sq": 0.0017997196111483199,
+        "shape": [
+          128,
+          2048
+        ]
+      },
+      "self_attn.k_proj": {
+        "snr": 0.684840150166108,
+        "signal_energy": 0.13227871281134204,
+        "noise_energy": 0.1931526835558018,
+        "n_signal": 64,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0014301184336426563,
+        "gamma": 0.25,
+        "sigma_sq": 0.0006356081927300695,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.5745560507114553,
+        "signal_energy": 0.4542515318376604,
+        "noise_energy": 0.7906130851379505,
+        "n_signal": 175,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0017713873231544502,
+        "gamma": 0.5,
+        "sigma_sq": 0.0006078440324435175,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.6858139171557013,
+        "signal_energy": 0.9134442454121544,
+        "noise_energy": 1.3319126698398187,
+        "n_signal": 157,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.003195043744024337,
+        "gamma": 2.0,
+        "sigma_sq": 0.0005481828417239534,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.12107143028270195,
+        "signal_energy": 0.033841218629397575,
+        "noise_energy": 0.2795144862035435,
+        "n_signal": 21,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0013770421215841707,
+        "gamma": 0.25,
+        "sigma_sq": 0.0006120187207040758,
+        "shape": [
+          512,
+          2048
+        ]
+      }
+    },
+    "9": {
+      "self_attn.k_proj": {
+        "snr": 0.6082756808267126,
+        "signal_energy": 0.11104700110082374,
+        "noise_energy": 0.18256031697650452,
+        "n_signal": 55,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0012902665119378259,
+        "gamma": 0.25,
+        "sigma_sq": 0.0005734517830834782,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.5472472710842352,
+        "signal_energy": 0.424321614993169,
+        "noise_energy": 0.7753745654180798,
+        "n_signal": 166,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.001707114689275022,
+        "gamma": 0.5,
+        "sigma_sq": 0.0005857891512538597,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.6829636185222001,
+        "signal_energy": 0.8332397462162188,
+        "noise_energy": 1.2200353336817367,
+        "n_signal": 152,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.002921716886969244,
+        "gamma": 2.0,
+        "sigma_sq": 0.000501287366974924,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.04388151238206473,
+        "signal_energy": 0.015859355971303266,
+        "noise_energy": 0.3614131580794218,
+        "n_signal": 9,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0016579355108691316,
+        "gamma": 0.25,
+        "sigma_sq": 0.0007368602270529474,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "mlp.gate": {
+        "snr": 1.6865423227229566,
+        "signal_energy": 0.1444898744512687,
+        "noise_energy": 0.0856722493734915,
+        "n_signal": 6,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.0028087384889248054,
+        "gamma": 0.0625,
+        "sigma_sq": 0.0017975926329118755,
+        "shape": [
+          128,
+          2048
+        ]
+      }
+    },
+    "10": {
+      "mlp.gate": {
+        "snr": 1.5988731618287189,
+        "signal_energy": 0.13493042846992212,
+        "noise_energy": 0.08439095213506166,
+        "n_signal": 6,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.0026762796505870714,
+        "gamma": 0.0625,
+        "sigma_sq": 0.0017128189763757256,
+        "shape": [
+          128,
+          2048
+        ]
+      },
+      "self_attn.k_proj": {
+        "snr": 0.7627887799969071,
+        "signal_energy": 0.14229861357945273,
+        "noise_energy": 0.18655048069798524,
+        "n_signal": 71,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0014451373723986262,
+        "gamma": 0.25,
+        "sigma_sq": 0.0006422832766216117,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.7217370539232261,
+        "signal_energy": 0.4640044866232498,
+        "noise_energy": 0.6428996323536518,
+        "n_signal": 167,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0015750755575762994,
+        "gamma": 0.5,
+        "sigma_sq": 0.000540480484310727,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.770693235707721,
+        "signal_energy": 0.9665354055732025,
+        "noise_energy": 1.254111702025828,
+        "n_signal": 168,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0031598826498498147,
+        "gamma": 2.0,
+        "sigma_sq": 0.0005421501516993606,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.25319584801528416,
+        "signal_energy": 0.07133096161563421,
+        "noise_energy": 0.28172247757920704,
+        "n_signal": 38,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0015515004914566837,
+        "gamma": 0.25,
+        "sigma_sq": 0.0006895557739807483,
+        "shape": [
+          512,
+          2048
+        ]
+      }
+    },
+    "11": {
+      "mlp.gate": {
+        "snr": 1.6377451211684253,
+        "signal_energy": 0.1274776227304195,
+        "noise_energy": 0.07783727826920495,
+        "n_signal": 8,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.0025054911711280374,
+        "gamma": 0.0625,
+        "sigma_sq": 0.001603514349521944,
+        "shape": [
+          128,
+          2048
+        ]
+      },
+      "self_attn.k_proj": {
+        "snr": 0.5178622434707396,
+        "signal_energy": 0.11190963494193369,
+        "noise_energy": 0.21609923556486668,
+        "n_signal": 56,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0014414452254861568,
+        "gamma": 0.25,
+        "sigma_sq": 0.000640642322438292,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.7899038650890794,
+        "signal_energy": 0.5008748522043105,
+        "noise_energy": 0.6340959632446229,
+        "n_signal": 175,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.001615013353821682,
+        "gamma": 0.5,
+        "sigma_sq": 0.0005541849693769692,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.7732772729946656,
+        "signal_energy": 0.9901156914994365,
+        "noise_energy": 1.280414834468136,
+        "n_signal": 169,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0032308637737337117,
+        "gamma": 2.0,
+        "sigma_sq": 0.0005543285872128676,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.29615667047430333,
+        "signal_energy": 0.0797910261347666,
+        "noise_energy": 0.26942167470676587,
+        "n_signal": 43,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.001534625300904379,
+        "gamma": 0.25,
+        "sigma_sq": 0.0006820556892908351,
+        "shape": [
+          512,
+          2048
+        ]
+      }
+    },
+    "12": {
+      "self_attn.k_proj": {
+        "snr": 0.707271964619254,
+        "signal_energy": 0.1260437287879343,
+        "noise_energy": 0.17821111975757087,
+        "n_signal": 60,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.001337056620419589,
+        "gamma": 0.25,
+        "sigma_sq": 0.0005942473868531506,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.7274530247061268,
+        "signal_energy": 0.49937962189439783,
+        "noise_energy": 0.6864767963486508,
+        "n_signal": 183,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.001687420678895783,
+        "gamma": 0.5,
+        "sigma_sq": 0.0005790312352817708,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.7364797575208327,
+        "signal_energy": 0.950335849014256,
+        "noise_energy": 1.2903760616765818,
+        "n_signal": 152,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0031884340213231463,
+        "gamma": 2.0,
+        "sigma_sq": 0.0005470487925954797,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.13718859855436566,
+        "signal_energy": 0.047043237063579595,
+        "noise_energy": 0.3429092326862506,
+        "n_signal": 25,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0017136569623892079,
+        "gamma": 0.25,
+        "sigma_sq": 0.0007616253166174257,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "mlp.gate": {
+        "snr": 1.5037475479389057,
+        "signal_energy": 0.1237354179974409,
+        "noise_energy": 0.08228470142281356,
+        "n_signal": 7,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.0025143151730449907,
+        "gamma": 0.0625,
+        "sigma_sq": 0.001609161710748794,
+        "shape": [
+          128,
+          2048
+        ]
+      }
+    },
+    "13": {
+      "mlp.gate": {
+        "snr": 1.745147441943674,
+        "signal_energy": 0.10862347549754098,
+        "noise_energy": 0.06224315085753475,
+        "n_signal": 8,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.0020854646581612967,
+        "gamma": 0.0625,
+        "sigma_sq": 0.00133469738122323,
+        "shape": [
+          128,
+          2048
+        ]
+      },
+      "self_attn.k_proj": {
+        "snr": 0.6925914643623488,
+        "signal_energy": 0.12702799765195194,
+        "noise_energy": 0.18340970714807087,
+        "n_signal": 59,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0013642255226610093,
+        "gamma": 0.25,
+        "sigma_sq": 0.0006063224545160041,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.788797773497924,
+        "signal_energy": 0.49679707159816916,
+        "noise_energy": 0.6298155094874601,
+        "n_signal": 171,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0016031198717498943,
+        "gamma": 0.5,
+        "sigma_sq": 0.0005501037715452968,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.659802043236482,
+        "signal_energy": 0.8477223205615002,
+        "noise_energy": 1.284813118194096,
+        "n_signal": 148,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0030345027146487925,
+        "gamma": 2.0,
+        "sigma_sq": 0.0005206383557177848,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.20041736213380995,
+        "signal_energy": 0.0618009505047268,
+        "noise_energy": 0.30836126095435284,
+        "n_signal": 33,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0016266887786558723,
+        "gamma": 0.25,
+        "sigma_sq": 0.000722972790513721,
+        "shape": [
+          512,
+          2048
+        ]
+      }
+    },
+    "14": {
+      "mlp.gate": {
+        "snr": 1.8189541586315106,
+        "signal_energy": 0.12069447212603704,
+        "noise_energy": 0.06635377343255394,
+        "n_signal": 8,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.0022830284840946605,
+        "gamma": 0.0625,
+        "sigma_sq": 0.0014611382298205828,
+        "shape": [
+          128,
+          2048
+        ]
+      },
+      "self_attn.k_proj": {
+        "snr": 0.650573931295467,
+        "signal_energy": 0.10628891720568029,
+        "noise_energy": 0.16337715376026607,
+        "n_signal": 50,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0011850550509669702,
+        "gamma": 0.25,
+        "sigma_sq": 0.0005266911337630979,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.6142056787001673,
+        "signal_energy": 0.4898503490680248,
+        "noise_energy": 0.7975347119953149,
+        "n_signal": 186,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0018318920640266207,
+        "gamma": 0.5,
+        "sigma_sq": 0.0006286059771593675,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.7627410529638046,
+        "signal_energy": 0.9165707624750334,
+        "noise_energy": 1.2016801231735048,
+        "n_signal": 142,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0030141771198118365,
+        "gamma": 2.0,
+        "sigma_sq": 0.0005171510349703643,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.10007508716218652,
+        "signal_energy": 0.03559038292126916,
+        "noise_energy": 0.3556367916381593,
+        "n_signal": 19,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0017192598933298165,
+        "gamma": 0.25,
+        "sigma_sq": 0.0007641155081465851,
+        "shape": [
+          512,
+          2048
+        ]
+      }
+    },
+    "15": {
+      "self_attn.k_proj": {
+        "snr": 0.7570939311690997,
+        "signal_energy": 0.11874676097481296,
+        "noise_energy": 0.15684547991481712,
+        "n_signal": 63,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0012110976813197614,
+        "gamma": 0.25,
+        "sigma_sq": 0.0005382656361421162,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.6167655859248486,
+        "signal_energy": 0.4714602038620102,
+        "noise_energy": 0.7644074420187518,
+        "n_signal": 189,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.001758585085447021,
+        "gamma": 0.5,
+        "sigma_sq": 0.0006034509989772248,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.742592333807416,
+        "signal_energy": 0.9813213497350822,
+        "noise_energy": 1.3214805823589046,
+        "n_signal": 146,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0032767853405077214,
+        "gamma": 2.0,
+        "sigma_sq": 0.0005622074824604443,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.0,
+        "signal_energy": 0.0,
+        "noise_energy": 0.4007782927679029,
+        "n_signal": 0,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0017612327250156527,
+        "gamma": 0.25,
+        "sigma_sq": 0.0007827701000069567,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "mlp.gate": {
+        "snr": 1.7582414813824596,
+        "signal_energy": 0.11649376217139473,
+        "noise_energy": 0.06625583766787183,
+        "n_signal": 7,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.0022305275142431055,
+        "gamma": 0.0625,
+        "sigma_sq": 0.0014275376091155876,
+        "shape": [
+          128,
+          2048
+        ]
+      }
+    },
+    "16": {
+      "mlp.gate": {
+        "snr": 1.8938625126048545,
+        "signal_energy": 0.11495940231601434,
+        "noise_energy": 0.060701028480624496,
+        "n_signal": 8,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.0021440921176957904,
+        "gamma": 0.0625,
+        "sigma_sq": 0.001372218955325306,
+        "shape": [
+          128,
+          2048
+        ]
+      },
+      "self_attn.k_proj": {
+        "snr": 0.6822134371814439,
+        "signal_energy": 0.12244904017409786,
+        "noise_energy": 0.17948787505563435,
+        "n_signal": 62,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0013268571697282539,
+        "gamma": 0.25,
+        "sigma_sq": 0.0005897142976570018,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.59456004961885,
+        "signal_energy": 0.4524114783245265,
+        "noise_energy": 0.7609180580070094,
+        "n_signal": 183,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0017265143124146171,
+        "gamma": 0.5,
+        "sigma_sq": 0.000592446049495661,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.6883568119716573,
+        "signal_energy": 0.8857464148199153,
+        "noise_energy": 1.286754775162137,
+        "n_signal": 150,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.003091371656777918,
+        "gamma": 2.0,
+        "sigma_sq": 0.0005303955236315214,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.004795109862212428,
+        "signal_energy": 0.0018584072708022273,
+        "noise_energy": 0.38756302237145657,
+        "n_signal": 1,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0017113233314071353,
+        "gamma": 0.25,
+        "sigma_sq": 0.0007605881472920601,
+        "shape": [
+          512,
+          2048
+        ]
+      }
+    },
+    "17": {
+      "mlp.gate": {
+        "snr": 1.9392944830740602,
+        "signal_energy": 0.10757553925483065,
+        "noise_energy": 0.05547148212596778,
+        "n_signal": 8,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.001990079023532144,
+        "gamma": 0.0625,
+        "sigma_sq": 0.0012736505750605722,
+        "shape": [
+          128,
+          2048
+        ]
+      },
+      "self_attn.k_proj": {
+        "snr": 0.7365636260379024,
+        "signal_energy": 0.12917928649187407,
+        "noise_energy": 0.17538102877378134,
+        "n_signal": 65,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0013383983481754325,
+        "gamma": 0.25,
+        "sigma_sq": 0.0005948437103001922,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.6201796438778424,
+        "signal_energy": 0.44687775790051837,
+        "noise_energy": 0.72056179578274,
+        "n_signal": 160,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0016612149285770304,
+        "gamma": 0.5,
+        "sigma_sq": 0.0005700388434210272,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.7275696864803373,
+        "signal_energy": 0.9200901865526971,
+        "noise_energy": 1.2646076432948843,
+        "n_signal": 158,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0031087285005963645,
+        "gamma": 2.0,
+        "sigma_sq": 0.0005333734872307836,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.03221925743265133,
+        "signal_energy": 0.012629023937654811,
+        "noise_energy": 0.3919712912084816,
+        "n_signal": 6,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0017780222844467211,
+        "gamma": 0.25,
+        "sigma_sq": 0.000790232126420765,
+        "shape": [
+          512,
+          2048
+        ]
+      }
+    },
+    "18": {
+      "self_attn.k_proj": {
+        "snr": 0.635868901718859,
+        "signal_energy": 0.10815168180470808,
+        "noise_energy": 0.17008487364668434,
+        "n_signal": 56,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0012227192226860048,
+        "gamma": 0.25,
+        "sigma_sq": 0.0005434307656382244,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.6766762381277572,
+        "signal_energy": 0.49295028351041786,
+        "noise_energy": 0.7284876514569562,
+        "n_signal": 181,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.001738052238593403,
+        "gamma": 0.5,
+        "sigma_sq": 0.000596405239833582,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.6961608149593629,
+        "signal_energy": 0.8785629164223253,
+        "noise_energy": 1.2620114455502782,
+        "n_signal": 139,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0030459427974565936,
+        "gamma": 2.0,
+        "sigma_sq": 0.0005226011636182609,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.005127056240707785,
+        "signal_energy": 0.002170585965366456,
+        "noise_energy": 0.4233591096841194,
+        "n_signal": 1,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0018700014412852853,
+        "gamma": 0.25,
+        "sigma_sq": 0.000831111751682349,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "mlp.gate": {
+        "snr": 2.0689380368676855,
+        "signal_energy": 0.1009583673872124,
+        "noise_energy": 0.048797192370275404,
+        "n_signal": 7,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.0018275943098634841,
+        "gamma": 0.0625,
+        "sigma_sq": 0.0011696603583126299,
+        "shape": [
+          128,
+          2048
+        ]
+      }
+    },
+    "19": {
+      "mlp.gate": {
+        "snr": 2.3062307498769585,
+        "signal_energy": 0.10088113511863733,
+        "noise_energy": 0.043742862731328824,
+        "n_signal": 8,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.0017651090717124547,
+        "gamma": 0.0625,
+        "sigma_sq": 0.001129669805895971,
+        "shape": [
+          128,
+          2048
+        ]
+      },
+      "self_attn.k_proj": {
+        "snr": 0.5860210611370128,
+        "signal_energy": 0.11614189178877568,
+        "noise_energy": 0.19818723163879856,
+        "n_signal": 56,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0013813262903466267,
+        "gamma": 0.25,
+        "sigma_sq": 0.0006139227957096118,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.5990911192918044,
+        "signal_energy": 0.45111231396443585,
+        "noise_energy": 0.7529944935550092,
+        "n_signal": 167,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0017133908077360035,
+        "gamma": 0.5,
+        "sigma_sq": 0.0005879427746334279,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.6677326758727056,
+        "signal_energy": 0.9134191827876172,
+        "noise_energy": 1.367941416965715,
+        "n_signal": 155,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0032462753275128604,
+        "gamma": 2.0,
+        "sigma_sq": 0.0005569727918068849,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.023514878399652512,
+        "signal_energy": 0.008467159434319048,
+        "noise_energy": 0.3600766838090122,
+        "n_signal": 5,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.001619574221687987,
+        "gamma": 0.25,
+        "sigma_sq": 0.0007198107651946609,
+        "shape": [
+          512,
+          2048
+        ]
+      }
+    },
+    "20": {
+      "mlp.gate": {
+        "snr": 1.9896641404817719,
+        "signal_energy": 0.10441941869132332,
+        "noise_energy": 0.052480927090558856,
+        "n_signal": 8,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.001915149336123827,
+        "gamma": 0.0625,
+        "sigma_sq": 0.0012256955751192493,
+        "shape": [
+          128,
+          2048
+        ]
+      },
+      "self_attn.k_proj": {
+        "snr": 0.7475156092943835,
+        "signal_energy": 0.14083423645894144,
+        "noise_energy": 0.18840307106346815,
+        "n_signal": 69,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0014468432680097576,
+        "gamma": 0.25,
+        "sigma_sq": 0.0006430414524487811,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.5786499657986882,
+        "signal_energy": 0.4627236026876027,
+        "noise_energy": 0.7996606412115193,
+        "n_signal": 169,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0017963170256928157,
+        "gamma": 0.5,
+        "sigma_sq": 0.0006163985539309766,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.7365648681255282,
+        "signal_energy": 1.0037747786824023,
+        "noise_energy": 1.362778517032576,
+        "n_signal": 163,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0033675001151779044,
+        "gamma": 2.0,
+        "sigma_sq": 0.0005777716771786091,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.03576723806087916,
+        "signal_energy": 0.01165490326837449,
+        "noise_energy": 0.3258541587286321,
+        "n_signal": 7,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0014831917001456004,
+        "gamma": 0.25,
+        "sigma_sq": 0.0006591963111758224,
+        "shape": [
+          512,
+          2048
+        ]
+      }
+    },
+    "21": {
+      "self_attn.k_proj": {
+        "snr": 0.7444612319493383,
+        "signal_energy": 0.1306602970872716,
+        "noise_energy": 0.1755098740939719,
+        "n_signal": 64,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0013454742159706582,
+        "gamma": 0.25,
+        "sigma_sq": 0.0005979885404314037,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.5970591617008155,
+        "signal_energy": 0.45266321081925565,
+        "noise_energy": 0.7581547020060363,
+        "n_signal": 171,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0017229403620202582,
+        "gamma": 0.5,
+        "sigma_sq": 0.0005912196636053117,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.7513386392520107,
+        "signal_energy": 0.9974316348582302,
+        "noise_energy": 1.3275393847056973,
+        "n_signal": 159,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0033083304809658335,
+        "gamma": 2.0,
+        "sigma_sq": 0.0005676197729091279,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.04553566692247263,
+        "signal_energy": 0.01686037805553975,
+        "noise_energy": 0.37026751105338185,
+        "n_signal": 9,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0017012451562778874,
+        "gamma": 0.25,
+        "sigma_sq": 0.0007561089583457278,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "mlp.gate": {
+        "snr": 1.9223892907078577,
+        "signal_energy": 0.10668383141243548,
+        "noise_energy": 0.05549543577261222,
+        "n_signal": 8,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.0019796127438626984,
+        "gamma": 0.0625,
+        "sigma_sq": 0.001266952156072127,
+        "shape": [
+          128,
+          2048
+        ]
+      }
+    },
+    "22": {
+      "mlp.gate": {
+        "snr": 1.8288505852338557,
+        "signal_energy": 0.09896890117967358,
+        "noise_energy": 0.054115356376703894,
+        "n_signal": 7,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.0018685647921329424,
+        "gamma": 0.0625,
+        "sigma_sq": 0.0011958814669650831,
+        "shape": [
+          128,
+          2048
+        ]
+      },
+      "self_attn.k_proj": {
+        "snr": 0.9897121037466532,
+        "signal_energy": 0.1581484007261693,
+        "noise_energy": 0.15979232761475068,
+        "n_signal": 76,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.001397200466037742,
+        "gamma": 0.25,
+        "sigma_sq": 0.0006209779849056631,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.7818007192958868,
+        "signal_energy": 0.5064359943483544,
+        "noise_energy": 0.6477814382218346,
+        "n_signal": 178,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0016424004373848272,
+        "gamma": 0.5,
+        "sigma_sq": 0.0005635827307204596,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.9229923691497336,
+        "signal_energy": 1.1772749275822574,
+        "noise_energy": 1.2754980072768862,
+        "n_signal": 169,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0034901875621668726,
+        "gamma": 2.0,
+        "sigma_sq": 0.0005988215152160557,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.1884147614850221,
+        "signal_energy": 0.06047236746394058,
+        "noise_energy": 0.3209534485903207,
+        "n_signal": 31,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0016761833696358056,
+        "gamma": 0.25,
+        "sigma_sq": 0.0007449703865048025,
+        "shape": [
+          512,
+          2048
+        ]
+      }
+    },
+    "23": {
+      "mlp.gate": {
+        "snr": 1.9543638895865971,
+        "signal_energy": 0.09183490148178289,
+        "noise_energy": 0.04698966347623653,
+        "n_signal": 9,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.001694580936066663,
+        "gamma": 0.0625,
+        "sigma_sq": 0.0010845317990826643,
+        "shape": [
+          128,
+          2048
+        ]
+      },
+      "self_attn.k_proj": {
+        "snr": 0.5445372177436465,
+        "signal_energy": 0.11933809129517153,
+        "noise_energy": 0.21915506857302214,
+        "n_signal": 57,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0014875181639955794,
+        "gamma": 0.25,
+        "sigma_sq": 0.0006611191839980353,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.8342555756584934,
+        "signal_energy": 0.519438440336546,
+        "noise_energy": 0.6226370617020373,
+        "n_signal": 181,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0016251229626001774,
+        "gamma": 0.5,
+        "sigma_sq": 0.0005576540386686044,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.8435547974905974,
+        "signal_energy": 1.1301628570481577,
+        "noise_energy": 1.3397622305156234,
+        "n_signal": 168,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0035145942510151876,
+        "gamma": 2.0,
+        "sigma_sq": 0.0006030090409971863,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.17287453035539208,
+        "signal_energy": 0.05223019360392829,
+        "noise_energy": 0.30212775413795473,
+        "n_signal": 28,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0015572348710218347,
+        "gamma": 0.25,
+        "sigma_sq": 0.0006921043871208155,
+        "shape": [
+          512,
+          2048
+        ]
+      }
+    },
+    "24": {
+      "mlp.gate": {
+        "snr": 1.796341670416425,
+        "signal_energy": 0.08892269778457575,
+        "noise_energy": 0.04950210711526935,
+        "n_signal": 8,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.001689693918302598,
+        "gamma": 0.0625,
+        "sigma_sq": 0.0010814041077136626,
+        "shape": [
+          128,
+          2048
+        ]
+      },
+      "self_attn.k_proj": {
+        "snr": 0.846217986365297,
+        "signal_energy": 0.13952647126855267,
+        "noise_energy": 0.1648824221615181,
+        "n_signal": 67,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0013377342299427753,
+        "gamma": 0.25,
+        "sigma_sq": 0.0005945485466412334,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.7528108268968019,
+        "signal_energy": 0.5054313094010453,
+        "noise_energy": 0.671392189568405,
+        "n_signal": 193,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.001674567454677405,
+        "gamma": 0.5,
+        "sigma_sq": 0.0005746207060109128,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.8463644346406958,
+        "signal_energy": 1.1058561279400665,
+        "noise_energy": 1.3065956964620469,
+        "n_signal": 157,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.003432811870568925,
+        "gamma": 2.0,
+        "sigma_sq": 0.0005889774028389201,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.049366966782385654,
+        "signal_energy": 0.018574563151828545,
+        "noise_energy": 0.3762549000368406,
+        "n_signal": 10,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0017350893054169881,
+        "gamma": 0.25,
+        "sigma_sq": 0.0007711508024075503,
+        "shape": [
+          512,
+          2048
+        ]
+      }
+    },
+    "25": {
+      "self_attn.k_proj": {
+        "snr": 0.6427910369304073,
+        "signal_energy": 0.12667347185641983,
+        "noise_energy": 0.19706788766274339,
+        "n_signal": 56,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0014226915239673827,
+        "gamma": 0.25,
+        "sigma_sq": 0.0006323073439855034,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.7772549707547963,
+        "signal_energy": 0.5020349239982356,
+        "noise_energy": 0.6459076402055131,
+        "n_signal": 184,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0016334715726710166,
+        "gamma": 0.5,
+        "sigma_sq": 0.000560518828737058,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.741991815575844,
+        "signal_energy": 1.0243126855907896,
+        "noise_energy": 1.380490544623922,
+        "n_signal": 155,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.003421926903481371,
+        "gamma": 2.0,
+        "sigma_sq": 0.0005871098377386653,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.12030723627763831,
+        "signal_energy": 0.04161887825625736,
+        "noise_energy": 0.3459382788929806,
+        "n_signal": 22,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0017031288742817684,
+        "gamma": 0.25,
+        "sigma_sq": 0.0007569461663474526,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "mlp.gate": {
+        "snr": 2.0448194460697153,
+        "signal_energy": 0.07432438302238598,
+        "noise_energy": 0.036347650725467515,
+        "n_signal": 9,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.001350970410658436,
+        "gamma": 0.0625,
+        "sigma_sq": 0.000864621062821399,
+        "shape": [
+          128,
+          2048
+        ]
+      }
+    },
+    "26": {
+      "mlp.gate": {
+        "snr": 1.8891929782820696,
+        "signal_energy": 0.07464159704877243,
+        "noise_energy": 0.039509778993910664,
+        "n_signal": 8,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.0013934483547727594,
+        "gamma": 0.0625,
+        "sigma_sq": 0.000891806947054566,
+        "shape": [
+          128,
+          2048
+        ]
+      },
+      "self_attn.k_proj": {
+        "snr": 0.8587387038881504,
+        "signal_energy": 0.12117112754119136,
+        "noise_energy": 0.14110360577968514,
+        "n_signal": 63,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0011525723078004164,
+        "gamma": 0.25,
+        "sigma_sq": 0.0005122543590224073,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.6111254806667442,
+        "signal_energy": 0.5042098404439018,
+        "noise_energy": 0.8250512478939738,
+        "n_signal": 189,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.001891479735274323,
+        "gamma": 0.5,
+        "sigma_sq": 0.0006490532333306616,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.9142953663672762,
+        "signal_energy": 1.1372341309744187,
+        "noise_energy": 1.2438366996137518,
+        "n_signal": 153,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0033881571595608534,
+        "gamma": 2.0,
+        "sigma_sq": 0.0005813158656776372,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.0,
+        "signal_energy": 0.0,
+        "noise_energy": 0.40619404584020835,
+        "n_signal": 0,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0017850312457462756,
+        "gamma": 0.25,
+        "sigma_sq": 0.000793347220331678,
+        "shape": [
+          512,
+          2048
+        ]
+      }
+    },
+    "27": {
+      "mlp.gate": {
+        "snr": 1.98250390456895,
+        "signal_energy": 0.07153241841900146,
+        "noise_energy": 0.03608185499869396,
+        "n_signal": 8,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.0013136507298673254,
+        "gamma": 0.0625,
+        "sigma_sq": 0.0008407364671150883,
+        "shape": [
+          128,
+          2048
+        ]
+      },
+      "self_attn.k_proj": {
+        "snr": 0.9580260356766725,
+        "signal_energy": 0.13335824916049036,
+        "noise_energy": 0.13920106990234019,
+        "n_signal": 71,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0011977701541980963,
+        "gamma": 0.25,
+        "sigma_sq": 0.0005323422907547095,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.6523320551286824,
+        "signal_energy": 0.5089793264562483,
+        "noise_energy": 0.7802457697036587,
+        "n_signal": 193,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0018345103358536384,
+        "gamma": 0.5,
+        "sigma_sq": 0.0006295044260104824,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.9300927807125156,
+        "signal_energy": 1.1963641775163132,
+        "noise_energy": 1.286284768923607,
+        "n_signal": 156,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.003532699383602224,
+        "gamma": 2.0,
+        "sigma_sq": 0.0006061153906519955,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.0,
+        "signal_energy": 0.0,
+        "noise_energy": 0.42711282854307275,
+        "n_signal": 0,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0018769593554268794,
+        "gamma": 0.25,
+        "sigma_sq": 0.000834204157967502,
+        "shape": [
+          512,
+          2048
+        ]
+      }
+    },
+    "28": {
+      "self_attn.k_proj": {
+        "snr": 0.6478468351593081,
+        "signal_energy": 0.11453825059583542,
+        "noise_energy": 0.17679834859063565,
+        "n_signal": 64,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0012802844169581254,
+        "gamma": 0.25,
+        "sigma_sq": 0.0005690152964258335,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.8490814022164977,
+        "signal_energy": 0.5593538968865652,
+        "noise_energy": 0.6587753487785637,
+        "n_signal": 222,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0017333440579428946,
+        "gamma": 0.5,
+        "sigma_sq": 0.0005947896476507378,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.8112718656205608,
+        "signal_energy": 1.0534587451346358,
+        "noise_energy": 1.2985273984927612,
+        "n_signal": 161,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0033467722794112927,
+        "gamma": 2.0,
+        "sigma_sq": 0.0005742153427983428,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.0,
+        "signal_energy": 0.0,
+        "noise_energy": 0.4042377479017695,
+        "n_signal": 0,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0017764273528220454,
+        "gamma": 0.25,
+        "sigma_sq": 0.0007895232679209091,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "mlp.gate": {
+        "snr": 2.0250620573148086,
+        "signal_energy": 0.06487845691539224,
+        "noise_energy": 0.03203776233969825,
+        "n_signal": 9,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.0011830489971928935,
+        "gamma": 0.0625,
+        "sigma_sq": 0.0007571513582034519,
+        "shape": [
+          128,
+          2048
+        ]
+      }
+    },
+    "29": {
+      "mlp.gate": {
+        "snr": 2.013873226968187,
+        "signal_energy": 0.05962237789658244,
+        "noise_energy": 0.0296058247848807,
+        "n_signal": 9,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.0010892103346867108,
+        "gamma": 0.0625,
+        "sigma_sq": 0.0006970946141994949,
+        "shape": [
+          128,
+          2048
+        ]
+      },
+      "self_attn.k_proj": {
+        "snr": 0.7400739100340161,
+        "signal_energy": 0.12406984305056282,
+        "noise_energy": 0.16764520592931073,
+        "n_signal": 66,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0012819499827952873,
+        "gamma": 0.25,
+        "sigma_sq": 0.0005697555479090166,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.6224558729312609,
+        "signal_energy": 0.44036681812919704,
+        "noise_energy": 0.7074667254008344,
+        "n_signal": 166,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0016333164309815884,
+        "gamma": 0.5,
+        "sigma_sq": 0.0005604655925256042,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.8518379356485373,
+        "signal_energy": 1.0743223705703482,
+        "noise_energy": 1.2611816468967478,
+        "n_signal": 158,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.00332331907619697,
+        "gamma": 2.0,
+        "sigma_sq": 0.0005701914092889496,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.01724472634536904,
+        "signal_energy": 0.0069565139421707,
+        "noise_energy": 0.4033994974955823,
+        "n_signal": 3,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0018033219681464134,
+        "gamma": 0.25,
+        "sigma_sq": 0.0008014764302872948,
+        "shape": [
+          512,
+          2048
+        ]
+      }
+    },
+    "30": {
+      "mlp.gate": {
+        "snr": 2.0131880890184024,
+        "signal_energy": 0.05075881734398111,
+        "noise_energy": 0.02521315202531835,
+        "n_signal": 9,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.0009273913051605111,
+        "gamma": 0.0625,
+        "sigma_sq": 0.0005935304353027271,
+        "shape": [
+          128,
+          2048
+        ]
+      },
+      "self_attn.k_proj": {
+        "snr": 0.9663629956636052,
+        "signal_energy": 0.12996413260888542,
+        "noise_energy": 0.13448790277781544,
+        "n_signal": 73,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0011621426135207035,
+        "gamma": 0.25,
+        "sigma_sq": 0.0005165078282314238,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.7881225466974191,
+        "signal_energy": 0.5582876263052465,
+        "noise_energy": 0.7083766714259322,
+        "n_signal": 192,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0018024073509624434,
+        "gamma": 0.5,
+        "sigma_sq": 0.0006184884231664585,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.9151358105396785,
+        "signal_energy": 1.1099515777173203,
+        "noise_energy": 1.2128818093816633,
+        "n_signal": 152,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.00330528829334773,
+        "gamma": 2.0,
+        "sigma_sq": 0.0005670978160324284,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.005227620586453565,
+        "signal_energy": 0.0022833836655247464,
+        "noise_energy": 0.43679215577383773,
+        "n_signal": 1,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0019295292705649896,
+        "gamma": 0.25,
+        "sigma_sq": 0.0008575685646955509,
+        "shape": [
+          512,
+          2048
+        ]
+      }
+    },
+    "31": {
+      "self_attn.k_proj": {
+        "snr": 0.7669021068865057,
+        "signal_energy": 0.13532786529853835,
+        "noise_energy": 0.17646041663380851,
+        "n_signal": 67,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0013701633225229066,
+        "gamma": 0.25,
+        "sigma_sq": 0.0006089614766768474,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.6474736004838706,
+        "signal_energy": 0.4693463613861554,
+        "noise_energy": 0.7248888001540186,
+        "n_signal": 176,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0016993438809405539,
+        "gamma": 0.5,
+        "sigma_sq": 0.0005831226313958777,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.7901805934902268,
+        "signal_energy": 1.0471807868205651,
+        "noise_energy": 1.3252423502267612,
+        "n_signal": 162,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.003375852922347411,
+        "gamma": 2.0,
+        "sigma_sq": 0.000579204792321122,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.028471375986839274,
+        "signal_energy": 0.010634357859555847,
+        "noise_energy": 0.3735104992632431,
+        "n_signal": 6,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0016881318696722616,
+        "gamma": 0.25,
+        "sigma_sq": 0.0007502808309654495,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "mlp.gate": {
+        "snr": 2.1994530526074514,
+        "signal_energy": 0.05270758440711956,
+        "noise_energy": 0.023963950648837322,
+        "n_signal": 10,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.0009359314951764091,
+        "gamma": 0.0625,
+        "sigma_sq": 0.0005989961569129018,
+        "shape": [
+          128,
+          2048
+        ]
+      }
+    },
+    "32": {
+      "mlp.gate": {
+        "snr": 1.8791258460935905,
+        "signal_energy": 0.056513419881596985,
+        "noise_energy": 0.03007431354269304,
+        "n_signal": 9,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.001056976451376893,
+        "gamma": 0.0625,
+        "sigma_sq": 0.0006764649288812115,
+        "shape": [
+          128,
+          2048
+        ]
+      },
+      "self_attn.k_proj": {
+        "snr": 0.8450452671384745,
+        "signal_energy": 0.14391673352166667,
+        "noise_energy": 0.1703065375527197,
+        "n_signal": 71,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0013808628990196418,
+        "gamma": 0.25,
+        "sigma_sq": 0.0006137168440087297,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.626988099092268,
+        "signal_energy": 0.46848751392656157,
+        "noise_energy": 0.747203199877034,
+        "n_signal": 174,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0017298742002757614,
+        "gamma": 0.5,
+        "sigma_sq": 0.0005935989807373948,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.9009334137786078,
+        "signal_energy": 1.1627645819580215,
+        "noise_energy": 1.2906221083323646,
+        "n_signal": 171,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.003491058221162608,
+        "gamma": 2.0,
+        "sigma_sq": 0.0005989708966833197,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.05362180107401662,
+        "signal_energy": 0.01745717026317785,
+        "noise_energy": 0.32556105750869724,
+        "n_signal": 10,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0015074012341962633,
+        "gamma": 0.25,
+        "sigma_sq": 0.0006699561040872282,
+        "shape": [
+          512,
+          2048
+        ]
+      }
+    },
+    "33": {
+      "mlp.gate": {
+        "snr": 1.8272355718793485,
+        "signal_energy": 0.05844716347918154,
+        "noise_energy": 0.031986660274497314,
+        "n_signal": 9,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.0011039216935176655,
+        "gamma": 0.0625,
+        "sigma_sq": 0.000706509883851306,
+        "shape": [
+          128,
+          2048
+        ]
+      },
+      "self_attn.k_proj": {
+        "snr": 0.8766696739684067,
+        "signal_energy": 0.13386351395458623,
+        "noise_energy": 0.15269549971841548,
+        "n_signal": 70,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0012592925015310996,
+        "gamma": 0.25,
+        "sigma_sq": 0.0005596855562360443,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.4913013337718799,
+        "signal_energy": 0.4023809160318519,
+        "noise_energy": 0.8190104287782874,
+        "n_signal": 166,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.001737985913719242,
+        "gamma": 0.5,
+        "sigma_sq": 0.0005963824807348607,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.9130050481399336,
+        "signal_energy": 1.1450950131252977,
+        "noise_energy": 1.2542044706742874,
+        "n_signal": 163,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.003414096185161601,
+        "gamma": 2.0,
+        "sigma_sq": 0.0005857662988812397,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.029510611771198604,
+        "signal_energy": 0.011495845518718718,
+        "noise_energy": 0.38954954942473574,
+        "n_signal": 6,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.001762405382583538,
+        "gamma": 0.25,
+        "sigma_sq": 0.0007832912811482391,
+        "shape": [
+          512,
+          2048
+        ]
+      }
+    },
+    "34": {
+      "self_attn.k_proj": {
+        "snr": 1.0064279798586695,
+        "signal_energy": 0.1446846440558337,
+        "noise_energy": 0.14376055410954638,
+        "n_signal": 74,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0012675806217497551,
+        "gamma": 0.25,
+        "sigma_sq": 0.0005633691652221134,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.7321508736403365,
+        "signal_energy": 0.49019344077334376,
+        "noise_energy": 0.6695251735971397,
+        "n_signal": 184,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0016502283151434887,
+        "gamma": 0.5,
+        "sigma_sq": 0.0005662688337088374,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 1.1331552949951798,
+        "signal_energy": 1.3456240498278,
+        "noise_energy": 1.1875018859030475,
+        "n_signal": 181,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0036045263298294674,
+        "gamma": 2.0,
+        "sigma_sq": 0.0006184389463369045,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.20630095721956435,
+        "signal_energy": 0.06786106267449087,
+        "noise_energy": 0.3289420640073275,
+        "n_signal": 32,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0017437633044798154,
+        "gamma": 0.25,
+        "sigma_sq": 0.0007750059131021402,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "mlp.gate": {
+        "snr": 1.9412486352687846,
+        "signal_energy": 0.05348871687684175,
+        "noise_energy": 0.027553769210730557,
+        "n_signal": 10,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.000989264836669095,
+        "gamma": 0.0625,
+        "sigma_sq": 0.0006331294954682208,
+        "shape": [
+          128,
+          2048
+        ]
+      }
+    },
+    "35": {
+      "mlp.gate": {
+        "snr": 1.7295829414556447,
+        "signal_energy": 0.04727148375185094,
+        "noise_energy": 0.027331145918949976,
+        "n_signal": 8,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.0009106724809767131,
+        "gamma": 0.0625,
+        "sigma_sq": 0.0005828303878250964,
+        "shape": [
+          128,
+          2048
+        ]
+      },
+      "self_attn.k_proj": {
+        "snr": 0.6683659101724896,
+        "signal_energy": 0.1214256876788348,
+        "noise_energy": 0.18167546523654637,
+        "n_signal": 64,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.001331983286939465,
+        "gamma": 0.25,
+        "sigma_sq": 0.0005919925719730956,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.7014547561076349,
+        "signal_energy": 0.4517629289249959,
+        "noise_energy": 0.6440371599044017,
+        "n_signal": 172,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0015592749190020015,
+        "gamma": 0.5,
+        "sigma_sq": 0.0005350585623286499,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 1.0126542218333925,
+        "signal_energy": 1.2001471838365878,
+        "noise_energy": 1.1851500324204867,
+        "n_signal": 184,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.003394172068959157,
+        "gamma": 2.0,
+        "sigma_sq": 0.0005823478609774953,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.12690657800779115,
+        "signal_energy": 0.041084352399358974,
+        "noise_energy": 0.3237369807326827,
+        "n_signal": 21,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0016032187093280518,
+        "gamma": 0.25,
+        "sigma_sq": 0.0007125416485902452,
+        "shape": [
+          512,
+          2048
+        ]
+      }
+    },
+    "36": {
+      "mlp.gate": {
+        "snr": 1.8415488631276056,
+        "signal_energy": 0.04706395827106959,
+        "noise_energy": 0.02555672521832423,
+        "n_signal": 9,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.0008864722626612585,
+        "gamma": 0.0625,
+        "sigma_sq": 0.0005673422481032055,
+        "shape": [
+          128,
+          2048
+        ]
+      },
+      "self_attn.k_proj": {
+        "snr": 0.9638822827389685,
+        "signal_energy": 0.1315028709774867,
+        "noise_energy": 0.13643042654939985,
+        "n_signal": 58,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.00117744078817203,
+        "gamma": 0.25,
+        "sigma_sq": 0.0005233070169653466,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.6163844709251681,
+        "signal_energy": 0.4469507892171404,
+        "noise_energy": 0.7251168877539782,
+        "n_signal": 160,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0016678005483024055,
+        "gamma": 0.5,
+        "sigma_sq": 0.0005722986708442488,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 1.1533574745411412,
+        "signal_energy": 1.3285610730025201,
+        "noise_energy": 1.1519074548253854,
+        "n_signal": 168,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0035295969331525833,
+        "gamma": 2.0,
+        "sigma_sq": 0.0006055830943080182,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.06725445589823963,
+        "signal_energy": 0.024596421418271133,
+        "noise_energy": 0.36572181113898417,
+        "n_signal": 13,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0017152651956535694,
+        "gamma": 0.25,
+        "sigma_sq": 0.0007623400869571419,
+        "shape": [
+          512,
+          2048
+        ]
+      }
+    },
+    "37": {
+      "mlp.gate": {
+        "snr": 2.062178797239725,
+        "signal_energy": 0.036236129009773126,
+        "noise_energy": 0.017571768780804086,
+        "n_signal": 9,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.0006568096837609878,
+        "gamma": 0.0625,
+        "sigma_sq": 0.0004203581976070322,
+        "shape": [
+          128,
+          2048
+        ]
+      },
+      "self_attn.k_proj": {
+        "snr": 0.783513645897222,
+        "signal_energy": 0.12326936586858298,
+        "noise_energy": 0.1573289329599665,
+        "n_signal": 59,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.001233097864456589,
+        "gamma": 0.25,
+        "sigma_sq": 0.0005480434953140396,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.8327330461022326,
+        "signal_energy": 0.5193142024059045,
+        "noise_energy": 0.6236262687504173,
+        "n_signal": 183,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0016263538132173954,
+        "gamma": 0.5,
+        "sigma_sq": 0.0005580763998274125,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 1.0912901601934806,
+        "signal_energy": 1.2955841677088435,
+        "noise_energy": 1.1872041139628187,
+        "n_signal": 179,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.003532896795910207,
+        "gamma": 2.0,
+        "sigma_sq": 0.0006061492612492867,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.1547404272174985,
+        "signal_energy": 0.05208425213283139,
+        "noise_energy": 0.3365911098308093,
+        "n_signal": 26,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0017080449902430006,
+        "gamma": 0.25,
+        "sigma_sq": 0.0007591311067746669,
+        "shape": [
+          512,
+          2048
+        ]
+      }
+    },
+    "38": {
+      "mlp.gate": {
+        "snr": 1.9882699494532456,
+        "signal_energy": 0.03393903232292184,
+        "noise_energy": 0.017069629972657756,
+        "n_signal": 10,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.0006226015857284415,
+        "gamma": 0.0625,
+        "sigma_sq": 0.0003984650148662026,
+        "shape": [
+          128,
+          2048
+        ]
+      },
+      "self_attn.k_proj": {
+        "snr": 1.0594431510616225,
+        "signal_energy": 0.11883661257669564,
+        "noise_energy": 0.11216893748155773,
+        "n_signal": 73,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0010151566387055044,
+        "gamma": 0.25,
+        "sigma_sq": 0.0004511807283135575,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.6962937125593981,
+        "signal_energy": 0.5281444943409989,
+        "noise_energy": 0.7585082053946378,
+        "n_signal": 208,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.001830849850302988,
+        "gamma": 0.5,
+        "sigma_sq": 0.0006282483459489822,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 1.1440906950964036,
+        "signal_energy": 1.2956985460797807,
+        "noise_energy": 1.1325138397097114,
+        "n_signal": 164,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.003455238980781099,
+        "gamma": 2.0,
+        "sigma_sq": 0.0005928252866216568,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.004417198455009889,
+        "signal_energy": 0.001660248366248701,
+        "noise_energy": 0.37586003507849736,
+        "n_signal": 1,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0016590242941466422,
+        "gamma": 0.25,
+        "sigma_sq": 0.000737344130731841,
+        "shape": [
+          512,
+          2048
+        ]
+      }
+    },
+    "39": {
+      "mlp.gate": {
+        "snr": 2.0824864314394245,
+        "signal_energy": 0.030590237629406054,
+        "noise_energy": 0.014689285446273924,
+        "n_signal": 9,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.0005526820495113223,
+        "gamma": 0.0625,
+        "sigma_sq": 0.0003537165116872463,
+        "shape": [
+          128,
+          2048
+        ]
+      },
+      "self_attn.k_proj": {
+        "snr": 1.3658121476294165,
+        "signal_energy": 0.13583671782639853,
+        "noise_energy": 0.09945490531927446,
+        "n_signal": 73,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0010339952551411146,
+        "gamma": 0.25,
+        "sigma_sq": 0.00045955344672938425,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.6996864321300481,
+        "signal_energy": 0.5310384959061363,
+        "noise_energy": 0.7589664048358081,
+        "n_signal": 197,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0018356199976029737,
+        "gamma": 0.5,
+        "sigma_sq": 0.0006298852017242677,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 1.1864540219012927,
+        "signal_energy": 1.3857674169525267,
+        "noise_energy": 1.1679908292879604,
+        "n_signal": 171,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0036338839540773125,
+        "gamma": 2.0,
+        "sigma_sq": 0.0006234759183397282,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.018393154150385595,
+        "signal_energy": 0.007668523793202167,
+        "noise_energy": 0.41692271649022217,
+        "n_signal": 4,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0018658793868469128,
+        "gamma": 0.25,
+        "sigma_sq": 0.0008292797274875168,
+        "shape": [
+          512,
+          2048
+        ]
+      }
+    },
+    "40": {
+      "mlp.gate": {
+        "snr": 2.0044766618530963,
+        "signal_energy": 0.024075816465097648,
+        "noise_energy": 0.012011023586994556,
+        "n_signal": 9,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.0004404920584268279,
+        "gamma": 0.0625,
+        "sigma_sq": 0.00028191491739316986,
+        "shape": [
+          128,
+          2048
+        ]
+      },
+      "self_attn.k_proj": {
+        "snr": 0.5321133497400059,
+        "signal_energy": 0.09030164233121318,
+        "noise_energy": 0.1697037715278806,
+        "n_signal": 53,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0011425973090927349,
+        "gamma": 0.25,
+        "sigma_sq": 0.0005078210262634377,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.7639054655564621,
+        "signal_energy": 0.5163189372101761,
+        "noise_energy": 0.6758937597521532,
+        "n_signal": 218,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.001696465580348616,
+        "gamma": 0.5,
+        "sigma_sq": 0.0005821349547790707,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.8927995251938232,
+        "signal_energy": 1.1250171162508265,
+        "noise_energy": 1.2601004867319903,
+        "n_signal": 163,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0033939160980496143,
+        "gamma": 2.0,
+        "sigma_sq": 0.0005823039433125637,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.0,
+        "signal_energy": 0.0,
+        "noise_energy": 0.3830356990738998,
+        "n_signal": 0,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0016832593056487412,
+        "gamma": 0.25,
+        "sigma_sq": 0.0007481152469549961,
+        "shape": [
+          512,
+          2048
+        ]
+      }
+    },
+    "41": {
+      "self_attn.k_proj": {
+        "snr": 0.8384069649353936,
+        "signal_energy": 0.10894387576307091,
+        "noise_energy": 0.1299415204303151,
+        "n_signal": 69,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0010497878224593074,
+        "gamma": 0.25,
+        "sigma_sq": 0.0004665723655374699,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.7097087352574456,
+        "signal_energy": 0.47957638238766687,
+        "noise_energy": 0.6757369024261782,
+        "n_signal": 179,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0016439597691958012,
+        "gamma": 0.5,
+        "sigma_sq": 0.0005641178088050267,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 1.0476301542197926,
+        "signal_energy": 1.2048901920197168,
+        "noise_energy": 1.150110262831296,
+        "n_signal": 176,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.003351060502646231,
+        "gamma": 2.0,
+        "sigma_sq": 0.0005749510855884914,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.3366233742906703,
+        "signal_energy": 0.10111432429716519,
+        "noise_energy": 0.3003782031186407,
+        "n_signal": 43,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0017643699043717576,
+        "gamma": 0.25,
+        "sigma_sq": 0.0007841644019430034,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "mlp.gate": {
+        "snr": 2.1259387527647378,
+        "signal_energy": 0.021116381937350874,
+        "noise_energy": 0.009932732967913338,
+        "n_signal": 9,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.000378990742799399,
+        "gamma": 0.0625,
+        "sigma_sq": 0.00024255407539161534,
+        "shape": [
+          128,
+          2048
+        ]
+      }
+    },
+    "42": {
+      "mlp.gate": {
+        "snr": 2.0370916170371873,
+        "signal_energy": 0.019659721708559334,
+        "noise_energy": 0.0096508775276161,
+        "n_signal": 8,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.0003577580179986214,
+        "gamma": 0.0625,
+        "sigma_sq": 0.00022896513151911767,
+        "shape": [
+          128,
+          2048
+        ]
+      },
+      "self_attn.k_proj": {
+        "snr": 1.0299079831790112,
+        "signal_energy": 0.1388940317408984,
+        "noise_energy": 0.1348606225113189,
+        "n_signal": 64,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0012030228886238826,
+        "gamma": 0.25,
+        "sigma_sq": 0.0005346768393883922,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.5657998799494486,
+        "signal_energy": 0.4365783234086928,
+        "noise_energy": 0.7716126123033092,
+        "n_signal": 165,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0017192022986220613,
+        "gamma": 0.5,
+        "sigma_sq": 0.0005899369630350923,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 1.1687874824909805,
+        "signal_energy": 1.4129292986846838,
+        "noise_energy": 1.208884694481306,
+        "n_signal": 163,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.003730725430479572,
+        "gamma": 2.0,
+        "sigma_sq": 0.0006400912888898879,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.04931486977844911,
+        "signal_energy": 0.015552986201857154,
+        "noise_energy": 0.31538126880857953,
+        "n_signal": 8,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.001454300835305476,
+        "gamma": 0.25,
+        "sigma_sq": 0.0006463559268024338,
+        "shape": [
+          512,
+          2048
+        ]
+      }
+    },
+    "43": {
+      "mlp.gate": {
+        "snr": 1.9532821853095288,
+        "signal_energy": 0.018261953550224405,
+        "noise_energy": 0.009349367791080584,
+        "n_signal": 7,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.0003370280038167123,
+        "gamma": 0.0625,
+        "sigma_sq": 0.00021569792244269587,
+        "shape": [
+          128,
+          2048
+        ]
+      },
+      "self_attn.k_proj": {
+        "snr": 1.3278723691547958,
+        "signal_energy": 0.1351471866637478,
+        "noise_energy": 0.10177724139991734,
+        "n_signal": 73,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0010411712092191247,
+        "gamma": 0.25,
+        "sigma_sq": 0.0004627427596529443,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.5526596831090613,
+        "signal_energy": 0.451781780009984,
+        "noise_energy": 0.8174683151635467,
+        "n_signal": 159,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0018060859776257608,
+        "gamma": 0.5,
+        "sigma_sq": 0.0006197507282736799,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 1.1631620753911034,
+        "signal_energy": 1.3369475987601547,
+        "noise_energy": 1.1494078315015708,
+        "n_signal": 176,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.003537972757329982,
+        "gamma": 2.0,
+        "sigma_sq": 0.0006070201585447549,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.37398922540202867,
+        "signal_energy": 0.09221923511205823,
+        "noise_energy": 0.24658259877119443,
+        "n_signal": 52,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0014888749229311066,
+        "gamma": 0.25,
+        "sigma_sq": 0.0006617221879693807,
+        "shape": [
+          512,
+          2048
+        ]
+      }
+    },
+    "44": {
+      "self_attn.k_proj": {
+        "snr": 1.3815737154509653,
+        "signal_energy": 0.10053609673147867,
+        "noise_energy": 0.07276925987164012,
+        "n_signal": 62,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0007615947809089184,
+        "gamma": 0.25,
+        "sigma_sq": 0.0003384865692928526,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.41543320453658894,
+        "signal_energy": 0.3549147592283727,
+        "noise_energy": 0.8543244867108687,
+        "n_signal": 135,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0017206940042505654,
+        "gamma": 0.5,
+        "sigma_sq": 0.0005904488354825219,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.932677928058501,
+        "signal_energy": 1.2398555495137054,
+        "noise_energy": 1.3293501563767434,
+        "n_signal": 183,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.003655866106080438,
+        "gamma": 2.0,
+        "sigma_sq": 0.0006272474593631708,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.5455853122889014,
+        "signal_energy": 0.1174654990360052,
+        "noise_energy": 0.2153017986191758,
+        "n_signal": 56,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0014623529947313842,
+        "gamma": 0.25,
+        "sigma_sq": 0.0006499346643250596,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "mlp.gate": {
+        "snr": 1.9373981177995874,
+        "signal_energy": 0.01690531725172595,
+        "noise_energy": 0.00872578387292245,
+        "n_signal": 7,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.0003128667729061493,
+        "gamma": 0.0625,
+        "sigma_sq": 0.00020023473465993557,
+        "shape": [
+          128,
+          2048
+        ]
+      }
+    },
+    "45": {
+      "mlp.gate": {
+        "snr": 2.063282224352923,
+        "signal_energy": 0.014795269358923054,
+        "noise_energy": 0.007170744352999541,
+        "n_signal": 8,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.000268130391160245,
+        "gamma": 0.0625,
+        "sigma_sq": 0.0001716034503425568,
+        "shape": [
+          128,
+          2048
+        ]
+      },
+      "self_attn.k_proj": {
+        "snr": 2.160306819814238,
+        "signal_energy": 0.10921938529502692,
+        "noise_energy": 0.0505573487493867,
+        "n_signal": 57,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0007021430964897922,
+        "gamma": 0.25,
+        "sigma_sq": 0.00031206359843990767,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.03685100804908371,
+        "signal_energy": 0.05162296573266412,
+        "noise_energy": 1.400856271391678,
+        "n_signal": 23,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0020668136543427486,
+        "gamma": 0.5,
+        "sigma_sq": 0.0007092183225788388,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 1.364417273489206,
+        "signal_energy": 1.226485332659596,
+        "noise_energy": 0.8989078022466848,
+        "n_signal": 118,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.003024337035656934,
+        "gamma": 2.0,
+        "sigma_sq": 0.0005188942009442444,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 1.7771990996448925,
+        "signal_energy": 0.31945842968949767,
+        "noise_energy": 0.17975387774691626,
+        "n_signal": 58,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.002193797904923066,
+        "gamma": 0.25,
+        "sigma_sq": 0.0009750212910769182,
+        "shape": [
+          512,
+          2048
+        ]
+      }
+    },
+    "46": {
+      "mlp.gate": {
+        "snr": 1.8069630367351937,
+        "signal_energy": 0.011468612896973669,
+        "noise_energy": 0.006346899556780678,
+        "n_signal": 8,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.0002174734856885981,
+        "gamma": 0.0625,
+        "sigma_sq": 0.0001391830308407028,
+        "shape": [
+          128,
+          2048
+        ]
+      },
+      "self_attn.k_proj": {
+        "snr": 1.051917634160506,
+        "signal_energy": 0.089314933740816,
+        "noise_energy": 0.08490677486559556,
+        "n_signal": 63,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.000765621407885174,
+        "gamma": 0.25,
+        "sigma_sq": 0.00034027618128229953,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.2572208689622913,
+        "signal_energy": 0.2551419221803874,
+        "noise_energy": 0.9919176589742077,
+        "n_signal": 94,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0017745107132861328,
+        "gamma": 0.5,
+        "sigma_sq": 0.0006089158104943818,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.6228031264286121,
+        "signal_energy": 1.00533892108457,
+        "noise_energy": 1.6142162401296254,
+        "n_signal": 150,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0037275113087410104,
+        "gamma": 2.0,
+        "sigma_sq": 0.0006395398327817871,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.34182502418171096,
+        "signal_energy": 0.1016202427915224,
+        "noise_energy": 0.2972873125213385,
+        "n_signal": 41,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0017530113978756446,
+        "gamma": 0.25,
+        "sigma_sq": 0.0007791161768336198,
+        "shape": [
+          512,
+          2048
+        ]
+      }
+    },
+    "47": {
+      "self_attn.k_proj": {
+        "snr": 0.6559854226881597,
+        "signal_energy": 0.08815253734411951,
+        "noise_energy": 0.13438185407059752,
+        "n_signal": 60,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.0009779337470573728,
+        "gamma": 0.25,
+        "sigma_sq": 0.0004346372209143879,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "self_attn.o_proj": {
+        "snr": 0.42171698351633613,
+        "signal_energy": 0.30953716627198946,
+        "noise_energy": 0.7339926499782499,
+        "n_signal": 130,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0014848967403852692,
+        "gamma": 0.5,
+        "sigma_sq": 0.0005095360064058215,
+        "shape": [
+          2048,
+          4096
+        ]
+      },
+      "self_attn.q_proj": {
+        "snr": 0.8740963939553444,
+        "signal_energy": 1.02692792182678,
+        "noise_energy": 1.1748451645931894,
+        "n_signal": 143,
+        "n_eigenvalues": 2048,
+        "upper_edge": 0.0031330256500385115,
+        "gamma": 2.0,
+        "sigma_sq": 0.0005375422190210443,
+        "shape": [
+          4096,
+          2048
+        ]
+      },
+      "self_attn.v_proj": {
+        "snr": 0.026926291102842212,
+        "signal_energy": 0.009633789148471163,
+        "noise_energy": 0.3577837404964498,
+        "n_signal": 5,
+        "n_eigenvalues": 512,
+        "upper_edge": 0.001614626340733222,
+        "gamma": 0.25,
+        "sigma_sq": 0.0007176117069925431,
+        "shape": [
+          512,
+          2048
+        ]
+      },
+      "mlp.gate": {
+        "snr": 2.9076589808498916,
+        "signal_energy": 0.014430313331431598,
+        "noise_energy": 0.004962863054598549,
+        "n_signal": 9,
+        "n_eigenvalues": 128,
+        "upper_edge": 0.000236730717597363,
+        "gamma": 0.0625,
+        "sigma_sq": 0.00015150765926231233,
+        "shape": [
+          128,
+          2048
+        ]
+      }
+    }
+  },
+  "experts": {},
+  "expert_sample": null,
+  "include_experts": false,
+  "wall_clock_s": 88.29068326950073,
+  "peak_rss_mb": 290.209792
+}

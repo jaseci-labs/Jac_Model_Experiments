@@ -97,7 +97,26 @@ EXPECTED_SUFFIXES = (
 
 # spectrum-plan.md §6.4 / §3: the invariant that makes the comparison fair
 EXPECTED_LORA_TENSORS = 256
-EXPECTED_TRAINABLE_PARAMS = 281_838_080   # 281.838M, 0.923% of 30532.123M
+# EXACT count, re-derived against the real 30B model 2026-08-02 by --verify-layers
+# and cross-checked against a real mlx_lm run's own banner
+# (`02-rl-grpo/results/chain1.log:56`: "Trainable parameters: 0.923%
+# (281.838M/30532.123M)" -- mlx_lm prints millions to 3dp, so 281.838M is
+# 281_837_568 rounded, not a 5-significant-figure count).
+#
+#   per block, rank 16:
+#     q_proj  2048*16 + 16*4096 =  98304      o_proj 4096*16 + 16*2048 =  98304
+#     k_proj  2048*16 + 16* 512 =  40960      v_proj 2048*16 + 16* 512 =  40960
+#     mlp.gate 2048*16 + 16*128 =  34816
+#     switch_mlp {gate,up}_proj  128*(2048*16 + 16*768) = 5767168  each
+#     switch_mlp  down_proj      128*( 768*16 + 16*2048) = 5767168
+#   = 17_614_848 per block  x 16 blocks = 281_837_568
+#
+# NOTE the percentage: mlx_lm's banner divides by the DEQUANTIZED 30532.123M
+# (0.923%). `--verify-layers` divides by tree_flatten(model.parameters()) on the
+# q4 model, which counts packed uint32 words, so it prints ~5.576% of 5054.233M.
+# Same numerator, different denominator -- do not "fix" one to match the other.
+EXPECTED_TRAINABLE_PARAMS = 281_837_568
+PER_BLOCK_TRAINABLE_PARAMS = 17_614_848
 DEFAULT_NUM_BLOCKS = 48
 
 _HELP = (

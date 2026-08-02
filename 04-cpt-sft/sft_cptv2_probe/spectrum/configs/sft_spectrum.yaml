@@ -1,0 +1,40 @@
+# sft_cptv2_probe/configs/sft.yaml VERBATIM except `adapter_path`.
+# Same one-key delta the fresh arm's sft_spectrum.yaml has from its own sft.yaml,
+# so the two spectrum arms differ from their incumbents in exactly the same way.
+#
+# `resume_adapter_file` is UNCHANGED and load-bearing: this arm's whole point is
+# that it carries the CPT-v2 lineage. cptv2_spectrum_lora_layers.py converts the
+# union `picks | {32..47}` so all 256 of those keys land, then freezes
+# `{32..47} \ picks` so they stay part of the base (spectrum-plan.md §8.3).
+#
+# `num_layers` stays 16 and means the TRAINABLE budget -- 16 blocks LoRA'd for
+# gradients, identical to the fresh spectrum arm and to both incumbents. The
+# driver cross-checks it against len(spectrum_layers.json) and refuses to run on
+# a mismatch. The union (21 blocks here) is converted regardless and is not a
+# capacity increase; --verify-layers asserts trainable == 281.838M.
+model: "models/qwen-q4"
+train: true
+data: "model-experiments/04-cpt-sft/sft_cptv2_probe/dataset/sft"
+fine_tune_type: lora
+num_layers: 16
+lora_parameters:
+  rank: 16
+  scale: 2.0
+  dropout: 0.05
+batch_size: 1
+iters: 8200
+learning_rate: 2.0e-5
+lr_schedule:
+  name: cosine_decay
+  warmup: 820
+  arguments: [2.0e-5, 8200, 1.0e-6]
+max_seq_length: 3072
+adapter_path: "model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/sft-on-cptv2-spectrum"
+resume_adapter_file: "model-experiments/03-cpt-only/adapters/cpt-v2/adapters.safetensors"
+save_every: 820
+steps_per_eval: 500
+steps_per_report: 50
+val_batches: 8
+seed: 42
+mask_prompt: true
+grad_checkpoint: true

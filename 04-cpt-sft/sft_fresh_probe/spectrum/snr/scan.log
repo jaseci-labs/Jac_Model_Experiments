@@ -1,0 +1,3 @@
+  [200/240] model-00013-of-00016.safetensors model.layers.39.self_attn.v_proj.weight snr=0.0184 (74s, peak RSS 290MB)
+  [240/240] model-00016-of-00016.safetensors model.layers.47.mlp.gate.weight snr=2.9077 (88s, peak RSS 290MB)
+wrote model-experiments/04-cpt-sft/sft_fresh_probe/spectrum/snr/snr_raw.json  wall_clock=88s peak_rss=290MB
