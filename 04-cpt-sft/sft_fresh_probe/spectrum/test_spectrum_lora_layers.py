@@ -9,6 +9,7 @@ exercised without loading 16GB.
 """
 
 import json
+import sys
 
 import mlx.core as mx
 import pytest
@@ -56,6 +57,18 @@ def restore_upstream():
     yield
     tuner_utils.linear_to_lora_layers = stock
     mlx_lm.lora.linear_to_lora_layers = stock
+
+
+@pytest.fixture(autouse=True)
+def dpo_package_not_loaded(monkeypatch):
+    """`S.apply_patch()` refuses to run with `mlx_lm_lora` imported -- correct for
+    the SFT path, whose process (`run_sft_spectrum.sh` -> `spectrum_lora_layers.py`)
+    never imports it. `test_dpo_spectrum_train.py` DOES import it, and a
+    directory-wide pytest run shares one process, so isolate here rather than
+    weaken the guard. The guard itself is still covered, by
+    `test_apply_patch_refuses_when_mlx_lm_lora_the_dpo_package_is_loaded`.
+    """
+    monkeypatch.delitem(sys.modules, "mlx_lm_lora", raising=False)
 
 
 # --- guard -----------------------------------------------------------------

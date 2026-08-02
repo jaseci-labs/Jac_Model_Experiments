@@ -11,6 +11,7 @@ one of those four properties or about the merge that undoes step 3 at save time.
 """
 
 import json
+import sys
 from pathlib import Path
 
 import mlx.core as mx
@@ -80,6 +81,17 @@ def restore_upstream():
     yield
     tuner_utils.linear_to_lora_layers = stock
     mlx_lm.lora.linear_to_lora_layers = stock
+
+
+@pytest.fixture(autouse=True)
+def dpo_package_not_loaded(monkeypatch):
+    """`C.apply_patch()` refuses to run with `mlx_lm_lora` imported -- correct for
+    the SFT path, whose process never imports it. `test_cptv2_dpo_spectrum_train.py`
+    DOES, and a directory-wide pytest run shares one process. Isolate here rather
+    than weaken the guard; the guard itself is still covered by
+    `test_apply_patch_refuses_when_the_dpo_package_is_loaded`.
+    """
+    monkeypatch.delitem(sys.modules, "mlx_lm_lora", raising=False)
 
 
 # --- the real CPT-v2 checkpoint on disk ------------------------------------

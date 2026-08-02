@@ -41,6 +41,28 @@ Nothing in `sft_fresh_probe/` is modified by this arm.
 
 Tests: `.venv/bin/python -m pytest model-experiments/04-cpt-sft/sft_cptv2_probe/spectrum/ -v`
 
+## DPO stage — added 2026-08-02
+
+Scope reversal, same as the fresh arm's README records: DPO now continues the
+*same* Spectrum-picked layers as SFT. On this arm that means the union/freeze/
+merge discipline carries straight through, because the lineage is **21 blocks**,
+not 16.
+
+| File | What it does |
+|---|---|
+| `cptv2_dpo_spectrum_train.py` | Injects `make_union_linear_to_lora_layers` into `dpo_spectrum_train.apply_patches(replacement=…)`, so the three rebind sites, both upstream guards, the chat-template fix and the post-condition are shared code. Adds `assert_frozen_blocks_match_cpt_v2` and `--verify-resume`. |
+| `../run_dpo_spectrum.sh` | The no-fuse DPO recipe + the union merge on the resume file, on every snapshot *before it is scored*, and on the final adapter; §7 rewrite driven with the **union**. Outputs `adapters/dpo-on-sft-cptv2-spectrum{,-best}`, `results/dpo-spectrum/`. |
+| `../eval_dpo_spectrum.sh` | §7 rewrite over the union + the all-keys-present assertion + a frozen-blocks-bit-match assertion on both adapters. |
+
+**Why DPO needs the union too.** The SFT-spectrum adapter it resumes from holds
+336 keys over `picks ∪ {32..47}` (16 trained + 5 frozen CPT-v2 blocks merged back
+by §8.3 step 5). `mlx_lm_lora/train.py:527` applies `--resume-adapter-file` with
+`load_weights(..., strict=False)` **after** conversion, so a picks-only DPO
+conversion would silently drop those 80 tensors — the same bug the SFT side
+already fixed, one stage later. And `mlx_lm_lora/trainer/dpo_trainer.py:672-685`
+saves only `trainable_parameters()`, so every DPO artifact needs the step-5 merge
+before anything reads it.
+
 ## The problem, in one paragraph
 
 `configs/sft.yaml` seeds SFT from `03-cpt-only/adapters/cpt-v2/adapters.safetensors`

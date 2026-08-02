@@ -17,6 +17,35 @@ Specs: `../../docs/spectrum-plan.md` (design), `../../docs/spectrum-workflow.md`
 
 Tests: `.venv/bin/python -m pytest model-experiments/04-cpt-sft/sft_fresh_probe/spectrum/ -v`
 
+## DPO stage — added 2026-08-02
+
+`spectrum-plan.md` §12 lists DPO-on-spectrum as out of scope and §6.2's table
+marks `mlx_lm_lora.utils.linear_to_lora_layers` "no". **The user reversed that on
+2026-08-02**: DPO continues the *same* Spectrum-picked layers as SFT (same LoRA
+lineage, not the stock trailing-16), so it is the existing stock DPO recipe with
+Spectrum's layer set — exactly mirroring how SFT-Spectrum is the stock SFT recipe
+with Spectrum's layer set. The plan document is left as the historical design
+record; these files are the current state.
+
+| File | What it does |
+|---|---|
+| `dpo_spectrum_train.py` | `python -m mlx_lm_lora.train` drop-in carrying **both** fixes: `../dpo_fixed_train.py`'s chat-template patch *and* the Spectrum layer rebind. `--verify-patches` / `--verify-tokenization` / `--verify-layers`. |
+| `../run_dpo_spectrum.sh` | `run_dpo_nofuse.sh` retargeted; adds the two verify gates and the per-snapshot §7 rewrite. Outputs `adapters/dpo-on-sft-fresh-spectrum{,-best}`, `results/dpo-spectrum/`. |
+| `../eval_dpo_spectrum.sh` | `eval_dpo_nofuse.sh` + the §7 rewrite and key assertion on both the last and best adapters. |
+
+**Three rebind sites, not two.** `mlx_lm_lora` has *no* conversion code of its
+own — `mlx_lm_lora/utils.py:15` does `from mlx_lm.tuner.utils import
+linear_to_lora_layers`, i.e. the **same function object** `spectrum_lora_layers.py`
+already copies verbatim. But that `from`-import gives `mlx_lm_lora.utils` its own
+module global, so rebinding `mlx_lm.tuner.utils` does **not** reach the DPO
+training path (`utils.py:197`, called from `train.py:run()`). `dpo_fixed_train.py`
+imports `mlx_lm_lora` at module scope, so "patch early and let the from-import
+pick it up" would be an import-order coincidence. All three are rebound
+explicitly and asserted afterwards.
+
+`spectrum_lora_layers.py` is unchanged — its `apply_patch()` still refuses to run
+with `mlx_lm_lora` imported, which is correct for the SFT process.
+
 ## Phases 1-3: RUN, 2026-08-02
 
 | Phase | Result |
