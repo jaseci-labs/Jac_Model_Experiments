@@ -39,9 +39,9 @@ Design background: `docs/spec.md` (architecture), `docs/workflow.md` (three-arm 
 | +SFT+DPO v3 (β=0.1, lr=1e-6, same as v1, full instrumentation, last @250) | **12.5%** (107/855) | 855 |
 | +SFT+DPO v3 (best snapshot, step 20) | **13.5%** (115/855) | 855 |
 
-**SFT works, large and real** (47.3%→72.6%). **DPO collapses the model, reproduced across three independent attempts** (v1/v2/v3 — different hyperparameters, different iteration budgets, one with full per-checkpoint instrumentation) all landing in the same ~12-13% band. v3's full 250-iter curve (13 checkpoints, steps 20-250) is tied **exactly** at 1% subset pass rate at every single checkpoint — total, permanent, immediate collapse with zero recovery anywhere.
+**SFT works, large and real** (47.3%→72.6%). The v1/v2/v3 DPO rows above all collapsed to ~12-13% — **but this was the `mlx_lm.fuse` measurement bug (see the callout at the top of this file and §3 of the comparison report), not a real DPO failure.** Corrected (fuse-free) DPO for this arm: best 71.7% (613/855, step 40), ties SFT within noise; full 250-iter budget regresses to 64.9% (555/855). The v1/v2/v3 rows above are kept verbatim as the historical record of what the bug produced — do not read them as DPO's real behavior.
 
-Detail: `sft_cptv2_probe/results/FULL-RESULTS.md` (SFT + DPO v1/v2 full writeup), `sft_cptv2_probe/results/sft-results.md` (SFT-stage deep dive).
+Detail: `sft_cptv2_probe/results/FULL-RESULTS.md` (SFT + DPO v1/v2 full writeup, pre-fix), `sft_cptv2_probe/results/sft-results.md` (SFT-stage deep dive), `docs/reports/2026-07-cpt-vs-fresh-comparison.md` §3 (the fix + corrected numbers).
 
 ---
 
@@ -54,13 +54,15 @@ Detail: `sft_cptv2_probe/results/FULL-RESULTS.md` (SFT + DPO v1/v2 full writeup)
 | +SFT+DPO (250 iters, β=0.1, lr=1e-6, full curve, last @250) | **12.0%** (103/855) | 855 |
 | +SFT+DPO (best snapshot, step 20) | **12.5%** (107/855) | 855 |
 
-Same story as Arm 1: **SFT works** (10.5%→69.8%), **DPO collapses permanently** — all 13 checkpoints (steps 20-250) tied exactly at 2% subset pass rate. An early-stop collapse-detection gate (built specifically for this arm, then reused for Arm 1's v3 rerun) correctly fired at step 40 after seeing the collapse in-flight; a full no-early-stop rerun confirmed there was nothing to gain by continuing — the earliest checkpoint tested (step 20) is exactly as good as the last (step 250).
+Same story as Arm 1: **SFT works** (10.5%→69.8%). The DPO row above (~12%, "collapses permanently") is the **pre-fix, `mlx_lm.fuse`-bugged measurement** — see the top-of-file callout. Corrected (fuse-free) DPO for this arm: best 69.8% (597/855, step 20), ties SFT exactly; full 250-iter budget regresses to 62.1% (531/855). The early-stop gate description and engineering-incident list below are accurate history of the pre-fix run and are kept as-is.
 
 Real engineering incidents hit and fixed on this arm, in order: a segmented-training design that would have silently defeated the LR schedule (caught in code review before any real run); a macOS bash-3.2 empty-array crash (hit live on the first real launch, fixed, then proactively backported to Arm 1's DPO script before it could hit there too); a DPO collapse-gate bug that picked a noisy interim row instead of the true final SFT baseline (caught in code review); a systemic stale-venv-shim issue affecting 51 console scripts across the whole project (hit live, fixed in one pass, no version changes); a 14GB gitignore gap for per-segment DPO snapshots (hit live while committing, fixed generally).
 
 ---
 
 ## 4. Cross-arm comparison — did CPT-v2 help?
+
+> **§4.1/4.3/4.4's DPO rows (the ~12-13% band) are all pre-fix, `mlx_lm.fuse`-bugged measurements** — kept verbatim as the historical record of Phase 1/2 (which is what these sections document), not because DPO actually behaves this way. Corrected numbers: fresh best 69.8% (597/855, ties SFT), cptv2 best 71.7% (613/855); see the top-of-file callout and `docs/reports/2026-07-cpt-vs-fresh-comparison.md` §3.
 
 ### 4.1 — Headline (full training budget, no early stopping, either arm)
 
