@@ -130,3 +130,69 @@ Both comparisons are far short of significance — smaller in magnitude and weak
 ### 2.4 — Final conclusion (Phase 2, supersedes nothing in Phase 1 — reinforces it with the complete picture)
 
 **The fuller, non-early-stopped picture reinforces Phase 1's verdict and closes the door on the one thing Phase 1 couldn't rule out: CPT-v2 provides a real, large, undeniable advantage to the raw base model (+37pp before any training), but that advantage does not survive as a statistically confirmed edge once SFT lands on top (+2.8pp, p≈0.20), and DPO — trained to its full budget with no early stopping in either arm, with every single one of 13 checkpoints searched for a better stopping point — collapses both arms to the same statistical noise band (12.0–13.5% across four full-holdout measurements, largest z≈0.58) regardless of whether CPT-v2 sits underneath. There is no hidden sweet spot in either training stage that changes this picture: SFT already converges to its own optimum by the final iteration in both arms, and DPO fails completely and identically from the earliest checkpoint tested onward. Practically: a fresh base run through the identical SFT (and, separately, DPO) recipe performs indistinguishably from the CPT-v2 arm at every post-training stage — CPT-v2's upstream training cost buys a real pretraining-stage improvement that task-specific training entirely absorbs.**
+
+> **⚠ Superseded by Phase 3 below.** The 12.0–13.5% DPO collapse floor documented in 2.2/2.3 was a measurement artifact, not a property of DPO or of the data. §3 explains the real cause and gives corrected numbers. The CPT-vs-fresh verdict for the base and SFT stages above is unaffected (DPO was the only stage that used a fused checkpoint) — only the DPO-stage conclusion changes.
+
+## Phase 3 — the DPO collapse was never DPO: `mlx_lm.fuse` was silently destroying the SFT weights
+
+A second, independent reviewer flagged the same thing Phase 2 should have caught: a collapse this total (12%), this immediate (already at step 20), this uniform (zero variance across 13 checkpoints and two arms), and this immune to hyperparameter changes doesn't look like a hard optimization problem — it looks like the policy was broken *before* DPO ever touched it.
+
+### 3.1 — First hypothesis (wrong, but real): the DPO chat-template bug
+
+`mlx_lm_lora.trainer.datasets.DPODataset` calls `tokenizer.apply_chat_template(msgs, add_generation_prompt=True)` on already-complete assistant turns, appending a spurious `<|im_start|>assistant\n` after the real `<|im_end|>` on every chosen/rejected sequence. This is a real bug (verified at the token level, fixed via a driver script that rebinds the class — `sft_fresh_probe/dpo_fixed_train.py`, following the same "compose the public API, never patch `.venv/`" pattern as `03-cpt-only/cpt_train/run_cpt_leg.py`). But a full 250-iter confirming rerun with this fix applied **still collapsed to 2% on schedule** — ruling this out as the root cause of the collapse (it was worth fixing regardless, and stays fixed in the runs below, but it was never the reason for the 12% floor).
+
+### 3.2 — Real root cause: fusing a LoRA delta into a 4-bit-quantized model silently drops it
+
+Reading raw generations (not just pass/fail) from a "fixed" run's step-20 snapshot showed the model emitting plain React/JSX for a prompt whose SFT training example was genuine Jac (`def:pub`, `sv import`, `<div>` inside a `cl { }` block) — i.e. it wasn't writing *broken* Jac, it wasn't writing Jac at all. Direct comparison confirmed why:
+
+| generation source | output on a held-out Jac-component prompt |
+|---|---|
+| `models/qwen-q4` + SFT adapter, unfused | correct Jac (`def:pub IngredientRow(...) { ... }`) |
+| `mlx_lm.fuse`'d SFT checkpoint, no adapter | plain React/JSX — indistinguishable from raw base |
+| `models/qwen-q4`, no adapter, no fuse at all | plain React/JSX — **near-identical to the fused checkpoint** |
+
+The fused "SFT" model behaves like the untouched base model. `mlx_lm.fuse` dequantizes the int4 base, adds the LoRA delta, and re-quantizes — and re-quantization rounds the fine-grained SFT delta away almost entirely (confirmed at the weight level: ~15% of packed 4-bit elements changed bit-pattern between base and fused, i.e. not a literal no-op, but functionally close to one). Every DPO run before this point — both arms, every β/lr variant, the chat-template fix included — trained on top of `mlx_lm.fuse`'s output, meaning **DPO was training on top of an effectively un-SFT'd base the entire time.** Nothing about the collapse's shape (immediate, total, uniform, hyperparameter-invariant) needed a DPO-specific explanation once this was found — it explains all of it.
+
+### 3.3 — The fix and corrected full-holdout results
+
+Skip fusing entirely. Train DPO directly against `models/qwen-q4` (raw, quantized, untouched), seeding the DPO LoRA from the SFT adapter via `--resume-adapter-file` instead of baking it into weights first (`sft_fresh_probe/run_dpo_nofuse.sh`, `sft_cptv2_probe/run_dpo_v4_nofuse.sh` — both also carry the real chat-template fix from §3.1). Reran both arms to the full 250-iter budget, no early stop, same instrumentation as Phase 2:
+
+**Subset curve (100-row code_gen-only, the training-time gate's own view):**
+
+| step | fresh | cptv2 |
+|---|---|---|
+| 20 | 73% | 78% |
+| 40 | 71% | **79%** (best) |
+| 60 | 68% | 73% |
+| 80 | 70% | 75% |
+| 100 | 64% | 76% |
+| 120 | 62% | 71% |
+| 140 | 66% | 69% |
+| 160 | 62% | 68% |
+| 180 | 64% | 66% |
+| 200 | 64% | 70% |
+| 220 | 63% | 68% |
+| 240 | 63% | 68% |
+| 250 | 59% | 64% |
+
+Peaks early (step 20 fresh / step 40 cptv2), then drifts down — mild overfitting to the 654-pair DPO training set, not collapse.
+
+**Full 855-row holdout, at the SFT baseline, DPO's own-best checkpoint, and DPO's final (step 250) checkpoint:**
+
+| Arm | SFT baseline | DPO best | DPO final (step 250) |
+|---|---|---|---|
+| fresh | 69.8% (597/855) | 69.8% (597/855, step 20) | 62.1% (531/855) |
+| cptv2 | 72.6% (621/855) | 71.7% (613/855, step 40) | 64.9% (555/855) |
+
+The subset gate's "+4 to +9pp win" was real on code_gen specifically but didn't generalize: on the full 7-category holdout, DPO's best checkpoint **ties SFT in the fresh arm exactly (identical 597/855) and lands 0.9pp below it in cptv2** — both differences are noise at n=855. Continuing DPO to its full 250-iter budget makes things measurably worse in both arms (−7.7pp fresh, −7.7pp cptv2 vs. their own SFT baseline).
+
+### 3.4 — Corrected final conclusion (Phase 3, supersedes §2.2–2.4's DPO-stage verdict only)
+
+**DPO does not collapse once trained against the real SFT policy instead of a re-quantization-destroyed stand-in — but at this recipe (β=0.1, lr=1e-6, sigmoid loss, 654 pairs) it does not beat plain SFT either. Its best checkpoint in either arm is statistically indistinguishable from SFT alone, and training it to completion actively regresses both arms by ~8pp. The base-stage and SFT-stage CPT-vs-fresh comparisons in §1–2 are unaffected (they never touched a fused-then-DPO'd checkpoint) — CPT-v2 still shows a real pretraining-stage edge (+37pp) that SFT alone absorbs to statistical noise (+2.8pp, p≈0.20). The corrected, practical recommendation: if using DPO on this recipe, stop at the earliest checkpoint (~20-40 iters) purely to avoid the later-training regression — but don't expect it to outperform SFT alone until the recipe itself changes (see §3.5 for what's actually worth trying next).**
+
+### 3.5 — Where the next real gain is, if any (not yet run)
+
+The full-holdout numbers say this DPO recipe caps out at SFT parity, not that DPO categorically can't help. Two candidate levers were identified; one was tested:
+
+1. **Higher β (more conservative KL regularization) — tested, ruled out.** Ran a 60-iter β=0.3 (3x) confirming test on the fresh arm, same subset-eval methodology: 72% / 70% / 70% at steps 20/40/60, essentially tracking β=0.1's own curve (73% / 71% / 68%) within noise. Training loss dropped steadily each segment (4.234→2.955→2.151 per-segment mean) while `val_accuracy` sat pinned at 0.888 throughout — the model IS optimizing the preference loss, but that optimization isn't translating into more functional passes, at any β tested. **Beta is not the lever** — not worth a full 250-iter rerun at higher β.
+2. **More/better preference data — untested, now the leading hypothesis.** 654 training pairs is thin for DPO. The early-peak-then-decay shape (steady loss improvement, flat-to-declining functional pass rate) is consistent with the model drifting on a small, quickly-exhausted dataset rather than a regularization-strength problem — reinforced by (1) showing regularization strength doesn't change the shape. Requires new preference-pair generation, not just a rerun — flagged for a follow-up, not run in this phase.
