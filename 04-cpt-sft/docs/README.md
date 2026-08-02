@@ -61,6 +61,8 @@ CPT-v2's own eval already concluded.
 | [`spec.md`](spec.md) | Umbrella design: what gets built, why, architecture, schema, validation, rollout. Start here. |
 | [`workflow.md`](workflow.md) | The three-arm comparison protocol (A: pre-CPT×fresh, C: pre-CPT×post_cptv2, B: CPT×post_cptv2, + incumbent reference). B−C isolates CPT, C−A measures dataset noise. |
 | [`dpo-plan.md`](dpo-plan.md) | DPO preference-pair dataset design: idiomatic-vs-non-idiomatic plus additional preference axes. |
+| [`spectrum-plan.md`](spectrum-plan.md) | Spectrum (SNR/Marchenko-Pastur) layer-selection SFT probe: umbrella spec. Changes exactly one variable vs. the existing recipe — *which* 16 of the 48 decoder blocks get LoRA, instead of `mlx_lm`'s default trailing slice (32-47). Spec-only, pre-implementation. |
+| [`spectrum-workflow.md`](spectrum-workflow.md) | Runbook for that probe: SNR scan → layer selection → driver build/self-test → Phase-1 fresh training/eval → gate → Phase-2 cptv2 (conditional) → write-up. |
 | [`datagen/spec.md`](datagen/spec.md) | Full SFT task taxonomy — every category, every task type, gating. Seed sourcing is now 5 tiers (jac-mcp examples/docs, jaclang's own repo, a Fable-reviewed multi-org public Jac scrape, and this repo's own app code) — §8. The "make the model actually write Jac" detail. |
 | [`datagen/workflow.md`](datagen/workflow.md) | Datagen pipeline mechanics: module graph, run order, mermaid diagrams, run-tag isolation, cost/scale accounting. |
 
@@ -71,6 +73,8 @@ CPT-v2's own eval already concluded.
 3. `datagen/workflow.md` — how the catalog gets executed into files on disk.
 4. `dpo-plan.md` — the preference-pair layer on top of the SFT data.
 5. `workflow.md` — what happens after both datasets exist: the two SFT training runs and the CPT-effect comparison.
+6. `spectrum-plan.md` — the one open probe added after the three-arm comparison closed: does *layer selection* move the functional number the way *layer history* (CPT-v2 lineage) moves adapter geometry? Read `RESULTS.md` first; this one builds directly on its §4.
+7. `spectrum-workflow.md` — the phased runbook for that probe, gated so the second arm only runs on a real Phase-1 effect.
 
 ## Related, outside this phase
 
