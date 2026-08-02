@@ -6,6 +6,8 @@
 
 > **DPO numbers below (the ~12% "collapse") were a measurement bug, now fixed — see `docs/reports/2026-07-cpt-vs-fresh-comparison.md` §3.** `mlx_lm.fuse` was silently destroying the SFT LoRA delta when re-quantizing to int4, so every DPO run below trained on top of an effectively un-SFT'd base — nothing to do with DPO itself, β, lr, or the data. Corrected (fuse-free, `--resume-adapter-file`-seeded) reruns show DPO does **not** collapse: fresh arm best 69.8% (597/855, ties SFT exactly), cptv2 arm best 71.7% (613/855, ~1pp below SFT) — both at the earliest checkpoint (step 20-40), with the full 250-iter budget regressing ~8pp past that peak in both arms. Net: DPO at this recipe (β=0.1, lr=1e-6, 654 pairs) caps out at SFT parity, not below it — a materially different (and much less alarming) result than the numbers immediately below.
 
+> **Structural addendum (see §4 of the comparison report):** even though SFT erases CPT-v2's *behavioral* edge, a q_proj LoRA singular-value probe (`lora_svd_qproj.py`) shows the CPT-v2-base SFT adapter's rank-concentration and dominant-direction magnitude both still track the standalone CPT-v2 adapter far more closely than they track the fresh-base SFT adapter — CPT-v2's fingerprint survives SFT structurally, just not functionally.
+
 ---
 
 ## 1. How this phase is organized
