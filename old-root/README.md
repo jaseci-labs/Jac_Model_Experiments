@@ -13,9 +13,7 @@ on what the last one learned:
 |---|---|---|---|
 | **[`model-experiments/01-sft-dpo/`](model-experiments/01-sft-dpo/)** | Supervised finetuning + DPO | done | stock model **0%** runnable Jac → **94%** after one LoRA pass |
 | **[`model-experiments/02-rl-grpo/`](model-experiments/02-rl-grpo/)** | RL (GRPO) on top of attempt 1's model | done | best-of-k + compiler-as-verifier ships **~94%**; GRPO ≈ SFT, no extra lift |
-| **[`model-experiments/03-cpt-only/`](model-experiments/03-cpt-only/)** | Continual pretraining (CPT) on raw Jac/OSP docs, before SFT | done, **rejected** | CPT-v2 0/3 acceptance gates cleared — fabricates plausible wrong-domain syntax instead of admitting uncertainty; a structural limit of next-token CPT on doc prose, not a bad run |
-| **[`model-experiments/04-cpt-sft/`](model-experiments/04-cpt-sft/)** | SFT (+DPO) on top of the rejected CPT-v2 checkpoint vs. a fresh base, identical recipe both arms | done | CPT-v2's real base-stage edge (**+37pp**) is statistically absorbed by SFT (**+2.8pp**, p≈0.20) — but survives *structurally* in the SFT adapter's own weight geometry |
-| **[`model-experiments/05-cpt-sft-grpo/`](model-experiments/05-cpt-sft-grpo/)** | GRPO on top of both attempt-4 arms — closes the loop on the original 4-stage CPT architecture | docs scaffolded, not yet built | does CPT change GRPO's ceiling, not just SFT's? |
+| **[`model-experiments/03-new/`](model-experiments/03-new/)** | TBD | just started | seeded with [`model-experiments/03-new/rui.md`](model-experiments/03-new/rui.md) |
 
 Shared across all attempts, at repo root: `models/` (base + merged checkpoints,
 gitignored), `docs/` (repo-wide strategy + the adapter-hyperparameter registry),
@@ -31,9 +29,7 @@ real Jac codebase RL mines tasks from.
 - [What Jac is (and why models fail at it)](#what-jac-is-and-why-models-fail-at-it)
 - [Attempt 1 — SFT + DPO](#attempt-1--sft--dpo)
 - [Attempt 2 — RL / GRPO](#attempt-2--rl--grpo)
-- [Attempt 3 — CPT (rejected)](#attempt-3--cpt-rejected)
-- [Attempt 4 — SFT/DPO on CPT-v2 vs. fresh](#attempt-4--sftdpo-on-cpt-v2-vs-fresh)
-- [Attempt 5 — GRPO, closing the loop](#attempt-5--grpo-closing-the-loop)
+- [Attempt 3 — next](#attempt-3--next)
 - [Repository layout](#repository-layout)
 - [Environment](#environment)
 - [Documentation map](#documentation-map)
@@ -248,93 +244,10 @@ compute-smart execution order, gotchas) → **[`model-experiments/02-rl-grpo/rl/
 
 ---
 
-## Attempt 3 — CPT (rejected)
+## Attempt 3 — next
 
-**[`model-experiments/03-cpt-only/`](model-experiments/03-cpt-only/)** — attempts 1–2 closed
-with SFT fixing syntax but problem-pass flat around 40%, and GRPO never beating SFT on greedy
-pass@1. Hypothesis: the shared ceiling is syntax-bound because the model never had a domain-
-adaptation stage to learn Jac/OSP *semantics* — SFT few-shot examples teach pattern-matching,
-not the underlying concept. Locked architecture: `base → +CPT → +CPT+SFT/DPO →
-+CPT+SFT/DPO+GRPO`, LoRA continual-pretrain on raw Jac docs/OSP paper/blogs, mixed with
-general-code rehearsal for catastrophic-forgetting insurance.
-
-- **CPT-v1** (2026-07-14): trained clean (loss down, no OOM, CF-check 16/16), but **NULL** —
-  byte-identical MCQ concept-recognition scores before/after (18/20 both, same 2 wrong). Moved
-  free-form generation *vocabulary* (real Jac keywords appear) but not *understanding*.
-- **CPT-v2** (2026-07-20): redesigned corpus (dropped code entirely, shrunk rehearsal to ~10%),
-  added a curation pass and a 12-epoch checkpoint-loop past CPT-v1's cosine-schedule ceiling.
-  Trained clean to the full 12-leg budget. **REJECTED — 0 of 3 acceptance gates cleared**:
-  Track A (cosine-to-oracle) margin vs. base +0.008 (need ≥0.03), vs. CPT-v1 +0.0007
-  (statistically indistinguishable from noise); Track B (blind pairwise judge) — the oracle
-  beat CPT-v2 in 91/100 judgments (need ≥50% win-or-tie).
-- **Root cause** (`model-experiments/03-cpt-only/docs/cpt-2/analysis.md`): not a bad run — corpus
-  dilution, instrument mismatch, and LoRA rank-16 capacity were all ruled out. The model
-  **fabricates plausible, fluent, wrong-domain syntax** (invents Jac constructs, misidentifies
-  the framework as Next.js/Neo4j/Cypher) instead of admitting uncertainty — a structural limit
-  of next-token CPT on doc prose, not something a 3rd attempt would fix.
-  **Recommendation: skip further CPT, go straight to SFT/DPO on the base model.**
-
-Full story → **[`model-experiments/03-cpt-only/docs/cpt-2/analysis.md`](model-experiments/03-cpt-only/docs/cpt-2/analysis.md)**
-(root cause), [`results.md`](model-experiments/03-cpt-only/docs/cpt-2/results.md) (acceptance gates), [`design.md`](model-experiments/03-cpt-only/docs/cpt-2/design.md) (the locked architecture).
-
----
-
-## Attempt 4 — SFT/DPO on CPT-v2 vs. fresh
-
-**[`model-experiments/04-cpt-sft/`](model-experiments/04-cpt-sft/)** — CPT-v2 was rejected on
-its own instrument, but the question of whether it still helps once real task-specific training
-lands on top of it was worth an independent, differently-instrumented answer rather than
-treating attempt 3 as fully closed. Two arms — `sft_cptv2_probe/` (CPT-v2 adapter under the
-hood) and `sft_fresh_probe/` (unmodified base) — trained with the byte-identical SFT/DPO recipe
-and dataset/holdout, differing in exactly one variable.
-
-| Stage | fresh (no CPT) | CPT-v2 | Δ |
-|---|---|---|---|
-| base (no SFT) | 10.5% (90/855) | 47.3% (404/855) | **+37.0pp** |
-| +SFT (8200 iters) | 69.8% (597/855) | 72.6% (621/855) | +2.8pp (p≈0.20, not significant) |
-| +SFT+DPO (corrected, best ckpt) | 69.8% (597/855, ties SFT) | 71.7% (613/855) | ~0pp |
-
-- **CPT-v2 gives a real, large base-stage head start** (+37pp) — but that advantage does **not**
-  survive as a statistically confirmed edge once SFT trains on top. A fresh base put through
-  the identical SFT recipe performs indistinguishably from the CPT-v2 arm at every post-training
-  stage.
-- **A measurement bug, found and fixed:** the first DPO pass showed both arms collapsing to
-  ~12% — traced to `mlx_lm.fuse` silently dropping ~15% of the packed 4-bit weight deltas when
-  re-quantizing the SFT adapter, so every DPO run had been training on an effectively un-SFT'd
-  base. Fixed (fuse-free, `--resume-adapter-file`-seeded); corrected DPO caps out at SFT parity
-  — doesn't beat it, and regresses ~8pp if run to its full 250-iter budget past the early-step
-  peak.
-- **A structural finding SFT's functional numbers don't show:** a q_proj LoRA singular-value
-  probe (`lora_svd_qproj.py`) found the CPT-v2-base SFT adapter's rank-concentration and
-  dominant-direction magnitude still track the standalone CPT-v2 adapter far more closely than
-  they track the fresh-base SFT adapter — trained adapters are genuinely rank-1-concentrated
-  (stable rank ~3-6 of a 16-dim budget), and CPT-v2's fingerprint survives SFT *structurally*
-  even though it's statistically invisible *behaviorally*.
-
-Full results → **[`model-experiments/04-cpt-sft/RESULTS.md`](model-experiments/04-cpt-sft/RESULTS.md)**, deep-dive
-phase-by-phase (including the fuse bug and the SVD finding) →
-**[`model-experiments/04-cpt-sft/docs/reports/2026-07-cpt-vs-fresh-comparison.md`](model-experiments/04-cpt-sft/docs/reports/2026-07-cpt-vs-fresh-comparison.md)**.
-
----
-
-## Attempt 5 — GRPO, closing the loop
-
-**[`model-experiments/05-cpt-sft-grpo/`](model-experiments/05-cpt-sft-grpo/)** — attempt 3's
-original locked architecture was `base → +CPT → +CPT+SFT/DPO → +CPT+SFT/DPO+GRPO`; attempt 4
-covered base/SFT/DPO for both arms but left the GRPO stage unrun. Attempt 5 runs it: does CPT
-change GRPO's ceiling (not just SFT's, which absorbed it to statistical noise), and does
-attempt 2's "GRPO ≡ SFT everywhere" null (confirmed 3× across two corpora) hold on a harness
-upgrade — multi-source corpus (adds task-mining from the other 16 repos in attempt 3's
-already-vetted 17-org code corpus) and Type-B AST-equivalence grading (replacing exact-stdout),
-extending `02-rl-grpo/rl/` rather than rebuilding it.
-
-4 GRPO training lines (fresh/CPT-v2 arms × warm-started-from-SFT/cold-control) × 6 rungs
-(1/3/5/10/20/all) = 24 training runs, lineage-preserving (`--resume-adapter-file`, never
-`mlx_lm.fuse` — the bug attempt 4 found and fixed). **Status: docs scaffolded, harness build and
-training not started.** Design + full runbook →
-**[`model-experiments/05-cpt-sft-grpo/docs/`](model-experiments/05-cpt-sft-grpo/docs/)**
-(`README.md` → `strat.md` → `spec.md` → `workflow.md`, plus an in-depth `dataset/spec.md` +
-`dataset/workflow.md` for the corpus-mining pipeline).
+**[`model-experiments/03-new/`](model-experiments/03-new/)** — not started yet. Seeded with
+[`model-experiments/03-new/rui.md`](model-experiments/03-new/rui.md).
 
 ---
 
@@ -342,14 +255,12 @@ training not started.** Design + full runbook →
 
 | Path | What |
 |---|---|
-| `model-experiments/` | parent dir for all five attempts (see rows below) |
+| `model-experiments/` | parent dir for all three attempts (see rows below) |
 | `model-experiments/01-sft-dpo/` | attempt 1 — code, dataset, adapters, results, docs (see [above](#attempt-1--sft--dpo)) |
-| `model-experiments/02-rl-grpo/` | attempt 2 — code, dataset, adapters, results, docs, the RL slide deck (see [above](#attempt-2--rl--grpo)); harness (`rl/`) is reused/extended by attempt 5 |
-| `model-experiments/03-cpt-only/` | attempt 3 — CPT-v1/v2 continual-pretrain, adapters, docs (see [above](#attempt-3--cpt-rejected)); **rejected**, but its checkpoint feeds attempt 4's CPT-v2 arm |
-| `model-experiments/04-cpt-sft/` | attempt 4 — SFT/DPO on CPT-v2 vs. fresh base, code, dataset, adapters, results, docs (see [above](#attempt-4--sftdpo-on-cpt-v2-vs-fresh)) |
-| `model-experiments/05-cpt-sft-grpo/` | attempt 5 — GRPO on both attempt-4 arms, docs scaffolded (see [above](#attempt-5--grpo-closing-the-loop)) |
-| `models/` *(gitignored)* | base + merged/fused checkpoints, shared across attempts — each later attempt finetunes an earlier one's output |
-| `results/` | JMS scratch space only (`_builder`, `_evals`) — per-attempt run outputs live inside each `model-experiments/0N-.../results/` |
+| `model-experiments/02-rl-grpo/` | attempt 2 — code, dataset, adapters, results, docs, the RL slide deck (see [above](#attempt-2--rl--grpo)) |
+| `model-experiments/03-new/` | attempt 3 — just `rui.md` so far |
+| `models/` *(gitignored)* | base + merged/fused checkpoints, shared across attempts — attempt 2 finetunes attempt 1's output |
+| `results/` | JMS scratch space only (`_builder`, `_evals`) — per-attempt run outputs live inside `model-experiments/01-sft-dpo/results/` and `model-experiments/02-rl-grpo/results/` |
 | `docs/` | repo-wide: `training_configs/` (hyperparameter registry for every adapter, incl. deleted ones — see `docs/ARTIFACT_LOG.md`), `wholestack/` (end-to-end strategy spanning both attempts) |
 | `jms/` | **Jac Model Studio (JMS)** — the app that visualizes/drives all of this (dataset browser, GENERATE panel, RL section, builder jobs) |
 | `model-experiments/02-rl-grpo/dataset/this_is_jac/` | the real open-source Jac codebase attempt 2 mines RL tasks from |
@@ -412,31 +323,6 @@ design in both attempts had to respect.
 | [`model-experiments/02-rl-grpo/resultspub/rl/README.md`](model-experiments/02-rl-grpo/resultspub/rl/README.md) | index of the published (corrected) graphs |
 | [`model-experiments/02-rl-grpo/presentation/main.pdf`](model-experiments/02-rl-grpo/presentation/main.pdf) | slide deck ([source](model-experiments/02-rl-grpo/presentation/main.tex)) |
 
-**Attempt 3 — CPT (rejected)**
-| Doc | What |
-|---|---|
-| [`model-experiments/03-cpt-only/docs/cpt-2/design.md`](model-experiments/03-cpt-only/docs/cpt-2/design.md) | the locked 4-stage architecture (`base→+CPT→+CPT+SFT/DPO→+CPT+SFT/DPO+GRPO`) |
-| [`model-experiments/03-cpt-only/docs/cpt-2/results.md`](model-experiments/03-cpt-only/docs/cpt-2/results.md) | CPT-v2 acceptance gates — 0/3 cleared |
-| [`model-experiments/03-cpt-only/docs/cpt-2/analysis.md`](model-experiments/03-cpt-only/docs/cpt-2/analysis.md) | root cause — structural limit of next-token CPT on doc prose, not a bad run |
-| [`model-experiments/03-cpt-only/docs/cpt-1/`](model-experiments/03-cpt-only/docs/cpt-1/) | CPT-v1 design + null result (MCQ concept-recognition byte-identical before/after) |
-
-**Attempt 4 — SFT/DPO on CPT-v2 vs. fresh**
-| Doc | What |
-|---|---|
-| [`model-experiments/04-cpt-sft/RESULTS.md`](model-experiments/04-cpt-sft/RESULTS.md) | consolidated bottom line — the one doc to share |
-| [`model-experiments/04-cpt-sft/docs/reports/2026-07-cpt-vs-fresh-comparison.md`](model-experiments/04-cpt-sft/docs/reports/2026-07-cpt-vs-fresh-comparison.md) | full phase-by-phase deep dive — base/SFT/DPO comparison, the `mlx_lm.fuse` bug + fix, the q_proj SVD structural finding |
-| [`model-experiments/04-cpt-sft/docs/README.md`](model-experiments/04-cpt-sft/docs/README.md) | docs index — spec, workflow, datagen |
-| [`model-experiments/04-cpt-sft/lora_svd_qproj.py`](model-experiments/04-cpt-sft/lora_svd_qproj.py) | the q_proj LoRA singular-value probe behind the structural finding |
-
-**Attempt 5 — GRPO, closing the loop**
-| Doc | What |
-|---|---|
-| [`model-experiments/05-cpt-sft-grpo/docs/README.md`](model-experiments/05-cpt-sft-grpo/docs/README.md) | docs index — start here |
-| [`model-experiments/05-cpt-sft-grpo/docs/strat.md`](model-experiments/05-cpt-sft-grpo/docs/strat.md) | the *why* — research questions, falsifiable hypotheses, carried scars from attempt 2 |
-| [`model-experiments/05-cpt-sft-grpo/docs/spec.md`](model-experiments/05-cpt-sft-grpo/docs/spec.md) | umbrella design — training matrix, lineage-preservation mechanics, eval design |
-| [`model-experiments/05-cpt-sft-grpo/docs/workflow.md`](model-experiments/05-cpt-sft-grpo/docs/workflow.md) | phased runbook |
-| [`model-experiments/05-cpt-sft-grpo/docs/dataset/`](model-experiments/05-cpt-sft-grpo/docs/dataset/) | multi-source corpus mining + Type-B AST-equivalence grading design |
-
 ---
 
 ## Glossary
@@ -445,7 +331,6 @@ design in both attempts had to respect.
 |---|---|
 | **SFT** | supervised finetuning — train on input→output pairs |
 | **DPO** | direct preference optimization — train on (chosen vs rejected) pairs to push toward a preferred style |
-| **CPT** | continual pretraining — further next-token training on raw domain text (docs/papers/blogs) before SFT, aimed at domain *semantics* rather than task-specific behavior; rejected in attempt 3 (see [above](#attempt-3--cpt-rejected)) |
 | **GRPO** | group-relative policy optimization — the RL method used in attempt 2; sample a group of rollouts per prompt, advantage = `(reward − group mean) / group σ` |
 | **LoRA** | low-rank adapter finetuning — cheap, small, fusable into the base weights; the only way a 30B model trains at all on 48GB |
 | **MLX** | Apple's array/ML framework for Apple Silicon; `mlx-lm` / `mlx-lm-lora` run train/infer locally |

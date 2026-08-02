@@ -42,18 +42,6 @@ CPT-v2's own eval already concluded.
 > and the Arms A/B/C training+eval battery are still not started** — next
 > steps for this phase.
 
-> **Status update (2026-08-02): the three-arm SFT/DPO comparison is
-> DONE.** CPT-v2's real base-stage advantage (+37pp) is statistically
-> absorbed by SFT (+2.8pp, p≈0.20) but survives *structurally* in the SFT
-> adapter's own weight geometry — see `RESULTS.md` (the one doc to share)
-> and `reports/2026-07-cpt-vs-fresh-comparison.md` for the full
-> phase-by-phase story, including a real measurement bug found and fixed
-> (`mlx_lm.fuse` silently dropping the SFT LoRA delta on re-quantization,
-> §3) and the q_proj LoRA-SVD structural finding (§4, `lora_svd_qproj.py`).
-> **Next phase:** `model-experiments/05-cpt-sft-grpo/` runs the still-missing
-> GRPO stage on top of both arms here, closing the loop on the original
-> 4-stage architecture.
-
 ## Layout
 
 | File | Contents |

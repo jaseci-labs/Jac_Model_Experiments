@@ -26,9 +26,3 @@ dense v2 reward + `unwrap_unit` scar (`reward_logic.jac`), fixed stratified hold
 (`build_rl_splits.jac`), rung picker (`pick_rung.jac`), and the one-command ladder
 driver (`run_ladder.jac`, dry by default). Self-check: `jac run 02-rl-grpo/rl/test_ladder.jac`.
 Status: RUN COMPLETE (on the 66-task corpus). Full ladder + tuned-GRPO arm + sg-generalization run all done and recorded (docs + live Studio RL graph). Corpus since squeezed to **84 tasks** (`02-rl-grpo/rl/drivers/`, near the this_is_jac ceiling) — available for a higher-power re-run; the recorded results are from the 66-task split.
-
-**Extended by attempt 5** (`model-experiments/05-cpt-sft-grpo/`, docs-only so far): a multi-source
-corpus (task-mining from attempt 3's other 16 vetted repos, not just `this_is_jac`) and Type-B
-AST-equivalence grading (replacing exact-stdout), reusing this harness rather than rebuilding
-it. Answers whether "GRPO ≡ SFT everywhere" (confirmed 3× here) is a property of GRPO at this
-scale or an artifact of this harness's corpus/grading.

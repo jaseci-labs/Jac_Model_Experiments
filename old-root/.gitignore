@@ -50,5 +50,11 @@ model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-v2/snapshots/
 model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-v3/snapshots/
 model-experiments/04-cpt-sft/sft_fresh_probe/results/dpo/snapshots/
 
+# any per-run DPO/SFT checkpoint snapshot dir, any arm, any run name (each
+# adapters.safetensors is >1GB -- GitHub hard-rejects >100MB without LFS;
+# hit this for real 2026-08-02 with dpo-fixed/dpo-nofuse/dpo-v4-nofuse,
+# generalizing so a new run name never silently re-blocks the push again)
+model-experiments/04-cpt-sft/*_probe/results/*/snapshots/
+
 # subagent-driven-development ledger/scratch (survives locally, not committed)
 .superpowers/
