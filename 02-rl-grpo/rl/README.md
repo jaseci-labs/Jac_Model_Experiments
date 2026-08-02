@@ -1,5 +1,9 @@
 # rl — GRPO on Jac with a verifiable reward
 
+> **Reused by attempt 5** (`../../05-cpt-sft-grpo/`, docs-only so far) — extends this harness
+> in place with a multi-source corpus and Type-B AST-equivalence grading, rather than
+> duplicating it. See `05-cpt-sft-grpo/docs/dataset/` for that design.
+
 Reinforcement-learning stage on top of the SFT+DPO phase (`01-sft-dpo/sft_dpo/`). The
 policy is rewarded for producing **compiler-correct, behaviorally-correct,
 idiomatic Jac** — the reward is the `jac run` gate itself (no learned reward
