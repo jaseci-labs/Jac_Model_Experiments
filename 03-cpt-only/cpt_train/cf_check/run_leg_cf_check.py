@@ -22,6 +22,7 @@ the next leg's run_cpt_leg.py call. Calling it later (e.g. after leg N+1 has
 already started/finished) will silently CF-check the wrong leg's weights.
 """
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -47,7 +48,8 @@ def _save_full_results(adapter_dir: str, results: list):
     try:
         ckpts = sorted(Path(adapter_dir).glob("*_adapters.safetensors"))
         step = ckpts[-1].name.split("_")[0] if ckpts else "unknown"
-        out_dir = Path(__file__).resolve().parents[2] / "results" / "cpt-v2" / "json"
+        default_dir = Path(__file__).resolve().parents[2] / "results" / "cpt-v2" / "json"
+        out_dir = Path(os.environ["JAC_CF_RESULTS_DIR"]) if "JAC_CF_RESULTS_DIR" in os.environ else default_dir
         out_dir.mkdir(parents=True, exist_ok=True)
         (out_dir / f"cf_check_{step}.json").write_text(json.dumps(results, indent=2))
     except Exception as e:

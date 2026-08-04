@@ -56,5 +56,11 @@ model-experiments/04-cpt-sft/sft_fresh_probe/results/dpo/snapshots/
 # generalizing so a new run name never silently re-blocks the push again)
 model-experiments/04-cpt-sft/*_probe/results/*/snapshots/
 
+# CPT-on-Spectrum probe: per-leg/CF-check stdout+stderr logs are large and
+# purely diagnostic; training_state.json, leg_reviews.md, cf_check_*.json,
+# verify_layers.txt etc. under results/cpt-v2-spectrum/ are small text and
+# ARE committed -- only this logs/ subdir is excluded (cpt-spectrum-plan.md §1.4)
+model-experiments/03-cpt-only/results/cpt-v2-spectrum/logs/
+
 # subagent-driven-development ledger/scratch (survives locally, not committed)
 .superpowers/

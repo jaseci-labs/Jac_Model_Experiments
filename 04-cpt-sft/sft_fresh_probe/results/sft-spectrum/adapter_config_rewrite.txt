@@ -1,0 +1,2 @@
+rewrote model-experiments/04-cpt-sft/sft_fresh_probe/adapters/sft-on-fresh-spectrum/adapter_config.json: num_layers 16 -> 48 (covers blocks 0..47), spectrum_layers=[0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
+eval-time cost: 32 covered-but-untrained blocks ~= 563.7M F32 params ~= 2240MB

@@ -18,7 +18,11 @@ from tasks import TASKS
 from mlx_lm import load, generate
 from mlx_lm.sample_utils import make_sampler
 
-ROOT = Path(__file__).resolve().parents[3]
+ROOT = Path(__file__).resolve().parents[4]  # repo root -- was parents[3] (model-experiments/),
+# off by one: "models/qwen-q4" lives at the repo root, not inside model-experiments/. That
+# stale value predates this file ever being exercised post-rename (03-new -> 03-cpt-only,
+# 8c5d421); verified empirically: (parents[3] / "models/qwen-q4").exists() is False,
+# (parents[4] / "models/qwen-q4").exists() is True.
 
 GRADE_TEMPLATE = """
 {code}
@@ -45,7 +49,7 @@ def extract_code(text):
 
 def grade(code, entry_point, tests):
     script = GRADE_TEMPLATE.format(code=code, tests=tests, entry=entry_point)
-    tmp = ROOT / "03-new" / "cpt_train" / "cf_check" / "_grade_tmp.py"
+    tmp = Path(__file__).resolve().parent / "_grade_tmp.py"  # self-relative, rename-proof
     tmp.write_text(script)
     try:
         r = subprocess.run([sys.executable, str(tmp)], capture_output=True,

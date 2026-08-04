@@ -1,0 +1,21 @@
+
+======================================================================
+LOADING cpt-v2-leg (models/qwen-q4) + adapter model-experiments/03-cpt-only/adapters/cpt-spectrum-dry
+======================================================================
+  [is_prime] 4/4 PASS
+  [reverse_string] 3/3 PASS
+  [fibonacci] 3/3 PASS
+  [factorial] 3/3 PASS
+  [is_palindrome] 3/3 PASS
+  [bubble_sort] 3/3 PASS
+  [count_vowels] 3/3 PASS
+  [max_of_list] 3/3 PASS
+  [flatten] 2/2 PASS
+  [remove_duplicates] 2/2 PASS
+  [gcd] 3/3 PASS
+  [binary_search] 3/3 PASS
+  [is_anagram] 2/2 PASS
+  [sum_digits] 3/3 PASS
+  [merge_dicts] 1/1 PASS
+  [caesar_cipher] 3/3 PASS
+CF-check: 16/16

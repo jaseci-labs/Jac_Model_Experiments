@@ -11,7 +11,8 @@ from run_cf_check import run_model
 # regardless of pytest's cwd -- a bare "models/qwen-q4" resolves against cwd,
 # and when that misses, mlx_lm falls back to treating it as a HF repo id
 # (HTTP 404 in offline/headless runs).
-BASE_MODEL = Path(__file__).resolve().parents[3] / "models" / "qwen-q4"
+BASE_MODEL = Path(__file__).resolve().parents[4] / "models" / "qwen-q4"  # repo root; was
+# parents[3] (model-experiments/), the same off-by-one run_cf_check.ROOT had -- fixed together
 
 
 def test_run_leg_cf_check_counts_passes():

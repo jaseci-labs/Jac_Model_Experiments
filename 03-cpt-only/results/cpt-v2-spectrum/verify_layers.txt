@@ -1,0 +1,12 @@
+spectrum picks (16): [0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
+overlap with trailing-16 {32..47}: 11/16
+upstream guard: OK (mlx-lm 0.31.3, source hash matches pin)
+[spectrum] layers          = [0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
+[spectrum] lora tensors    = 256
+[spectrum] LoRASwitchLinear= 48
+[spectrum] trainable       = 281.838M / 5054.233M (5.576%)
+[control] layers          = [32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+[control] lora tensors    = 256
+[control] LoRASwitchLinear= 48
+[control] trainable       = 281.838M / 5054.233M (5.576%)
+VERIFY: PASS
