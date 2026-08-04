@@ -1,5 +1,11 @@
 # 04-cpt-sft — Consolidated Results
 
+> **Five arms, one index:** `docs/five-arms-overview.md` maps all five
+> CPT × layer-selection combinations this phase has run (stock vs Spectrum
+> layer selection, with/without CPT-v2, plus the in-progress "CPT itself on
+> Spectrum" arm) to their results and full reports in one place — read that
+> first if you're resuming this work cold.
+
 **Question this whole phase answers:** once real task-specific training (SFT, then DPO) lands on top of a base model, does a prior CPT-v2 continual-pretraining stage still matter? Two arms — `sft_cptv2_probe/` (CPT-v2 adapter under the hood) and `sft_fresh_probe/` (unmodified base) — were trained with the byte-identical SFT/DPO recipe and dataset/holdout, differing in exactly that one variable.
 
 **Bottom line:** CPT-v2 gives the raw base model a real, large head start (+37pp functional pass rate before any training) — but that advantage does not survive as a statistically confirmed edge once SFT trains on top (+2.8pp, p≈0.20). **A fresh base put through the identical SFT recipe performs indistinguishably from the CPT-v2 arm at every post-training stage.**

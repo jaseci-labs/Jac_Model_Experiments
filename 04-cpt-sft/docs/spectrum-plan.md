@@ -7,6 +7,11 @@ significant difference at SFT, mixed/mostly-not-significant at DPO) and two
 real engineering incidents found and fixed along the way (an MLX in-place-merge
 zero-weight bug, and a DPO OOM resolved via a shorter max sequence length).
 
+A third arm (`cpt-spectrum-plan.md`) is open: re-running CPT itself on
+Spectrum's picks to remove this arm's union/freeze confound. See
+`five-arms-overview.md` for the full five-arm picture and current status of
+that arm (PAUSED mid-run, exact resume instructions in that file's §5).
+
 Companion to `spec.md` (umbrella architecture) and `workflow.md` (the three-arm
 CPT protocol), sibling to `dpo-plan.md` in role: a probe spec that extends this
 phase with one more measurement rather than reopening its umbrella design.

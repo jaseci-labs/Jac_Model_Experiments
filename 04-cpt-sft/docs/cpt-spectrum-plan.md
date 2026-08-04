@@ -1,8 +1,13 @@
 # cpt-spectrum-plan.md — Does CPT itself benefit from Spectrum layer selection?
 
-**Status:** design only. Nothing in this document has been implemented or run. It is written to be
-executed autonomously, overnight and into the following day, by someone who has not read the
-preceding session's transcript.
+**Status (2026-08-03 22:07 EDT): implemented, gated, PAUSED mid-leg-1 by explicit request.**
+Everything in §1–§3 below (the driver, the downstream tree, all 5 pre-existing bug fixes, all
+3 pre-flight gates) is done, verified on the real 30B model, committed and pushed
+(`80516a2`, `4e6a382`). The real ~26–30h run was launched and then killed intentionally ~1
+minute into leg 1, before any checkpoint was written — a clean, resumable stop, not a crash.
+**Exact resume instructions, current status, and the five-arm big picture: `five-arms-overview.md`
+§5.** That file is now the map; read it first, then come back here for the mechanism detail
+below when you need it.
 
 **Where this file lives, and why here.** The CPT *code* it specifies goes under
 `model-experiments/03-cpt-only/cpt_train/spectrum/`, but the *question* is a third arm of the
