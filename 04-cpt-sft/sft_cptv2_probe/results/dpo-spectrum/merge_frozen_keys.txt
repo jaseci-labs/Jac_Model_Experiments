@@ -1,0 +1,2 @@
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-cptv2-spectrum/adapters.safetensors

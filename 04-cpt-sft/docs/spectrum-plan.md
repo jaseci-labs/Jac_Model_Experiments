@@ -1,6 +1,11 @@
 # spectrum-plan.md — Spectrum SNR Layer-Selection SFT Probe
 
-Status: approved, pre-implementation (spec-only). Date: 2026-08-02.
+Status: **DONE (2026-08-03).** Both arms trained, evaluated, and compared —
+see `reports/2026-08-spectrum-vs-stock-comparison.md` for the full result
+(fresh arm: Spectrum significantly beats stock at every stage; cptv2 arm: no
+significant difference at SFT, mixed/mostly-not-significant at DPO) and two
+real engineering incidents found and fixed along the way (an MLX in-place-merge
+zero-weight bug, and a DPO OOM resolved via a shorter max sequence length).
 
 Companion to `spec.md` (umbrella architecture) and `workflow.md` (the three-arm
 CPT protocol), sibling to `dpo-plan.md` in role: a probe spec that extends this

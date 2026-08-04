@@ -1,0 +1,13 @@
+spectrum picks (16): [0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
+CPT-v2 base layers (16): [32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]   [256 tensors, verified]
+union to convert (21): [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+frozen (CPT-v2 delta kept, no gradients) (5): [32, 33, 35, 40, 46]
+[patches] chat-template fix : DPODataset -> FixedDPODataset  (OK)
+[patches] layer rebind      : mlx_lm.tuner.utils.linear_to_lora_layers  (OK)
+[patches] layer rebind      : mlx_lm.lora.linear_to_lora_layers  (OK)
+[patches] layer rebind      : mlx_lm_lora.utils.linear_to_lora_layers  (OK)
+[patches] spectrum layers   : [0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
+[patches] union converted   : [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+[patches] frozen (no grad)  : [32, 33, 35, 40, 46]
+upstream guards: OK (mlx-lm 0.31.3, mlx-lm-lora 2.1.0)
+VERIFY: PASS

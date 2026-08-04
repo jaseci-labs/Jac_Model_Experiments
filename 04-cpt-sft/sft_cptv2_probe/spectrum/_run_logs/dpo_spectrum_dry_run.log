@@ -1,0 +1,80 @@
+>>> deriving the union picks | {32..47} -- what this arm's adapters cover
+picks(16)=[0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
+union(21)=[0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+frozen(5)=[32, 33, 35, 40, 46]
+>>> --verify-patches: chat-template fix AND union layer rebind, all three call sites
+spectrum picks (16): [0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
+CPT-v2 base layers (16): [32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]   [256 tensors, verified]
+union to convert (21): [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+frozen (CPT-v2 delta kept, no gradients) (5): [32, 33, 35, 40, 46]
+[patches] chat-template fix : DPODataset -> FixedDPODataset  (OK)
+[patches] layer rebind      : mlx_lm.tuner.utils.linear_to_lora_layers  (OK)
+[patches] layer rebind      : mlx_lm.lora.linear_to_lora_layers  (OK)
+[patches] layer rebind      : mlx_lm_lora.utils.linear_to_lora_layers  (OK)
+[patches] spectrum layers   : [0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
+[patches] union converted   : [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+[patches] frozen (no grad)  : [32, 33, 35, 40, 46]
+upstream guards: OK (mlx-lm 0.31.3, mlx-lm-lora 2.1.0)
+VERIFY: PASS
+>>> --verify-resume: the SFT-spectrum adapter is union-shaped and its frozen blocks bit-match CPT-v2
+resume adapter: model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/sft-on-cptv2-spectrum/adapters.safetensors
+  covers the union [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47] (336 tensors)
+  frozen blocks [32, 33, 35, 40, 46]: all 80 keys bit-identical to model-experiments/03-cpt-only/adapters/cpt-v2/adapters.safetensors
+VERIFY: PASS
+>>> --verify-layers self-test (loads models/qwen-q4 twice; a few minutes)
+spectrum picks (16): [0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
+CPT-v2 base layers (16): [32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]   [256 tensors, verified]
+union to convert (21): [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+frozen (CPT-v2 delta kept, no gradients) (5): [32, 33, 35, 40, 46]
+resume adapter model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/sft-on-cptv2-spectrum/adapters.safetensors: union-shaped, 80 frozen keys bit-match CPT-v2
+[patches] chat-template fix : DPODataset -> FixedDPODataset  (OK)
+[patches] layer rebind      : mlx_lm.tuner.utils.linear_to_lora_layers  (OK)
+[patches] layer rebind      : mlx_lm.lora.linear_to_lora_layers  (OK)
+[patches] layer rebind      : mlx_lm_lora.utils.linear_to_lora_layers  (OK)
+[patches] spectrum layers   : [0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
+[patches] union converted   : [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+[patches] frozen (no grad)  : [32, 33, 35, 40, 46]
+Loading model models/qwen-q4
+Loading LoRA adapters with config: {'rank': 16, 'scale': 2.0, 'dropout': 0.05, 'use_dora': False, 'num_layers': 16}
+[dpo] adapter_config.json written by from_pretrained: num_layers=16 (eval-time rewrite to 48 over the UNION is adapter_config_fix.py's job)
+[cptv2-dpo-spectrum] layers          = [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+[cptv2-dpo-spectrum] lora tensors    = 256
+[cptv2-dpo-spectrum] LoRASwitchLinear= 63
+[cptv2-dpo-spectrum] trainable       = 281.838M / 5142.307M (5.481%)
+[cptv2-dpo-spectrum] TRAINABLE layers = [0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
+[cptv2-dpo-spectrum] TRAINABLE params = 281.838M (frozen union members contribute 0)
+[dpo] resume: all 336 keys of model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/sft-on-cptv2-spectrum/adapters.safetensors land in the converted model
+[control(stock trailing)] layers          = [32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+[control(stock trailing)] lora tensors    = 256
+[control(stock trailing)] LoRASwitchLinear= 48
+[control(stock trailing)] trainable       = 281.838M / 5054.233M (5.576%)
+VERIFY: PASS
+>>> SFT-spectrum baseline: 70.0% -- collapse gate fires at 2 consecutive snapshots below max(30%, 35.0%)
+>>> DPO dry-run (8 iters), seeded from the SFT-spectrum adapter, no fuse -- bail check
+[1m[97m                   Configuration Summary                    [0m
+[96m============================================================[0m
+
+[97mModel:[0m models/qwen-q4
+[97mTraining Mode:[0m DPO
+[97mTraining Type:[0m lora
+[97mBatch Size:[0m 1
+[97mLearning Rate:[0m 1e-06
+[97mOptimizer:[0m adam
+[94m[INFO][0m Loading model: [96mmodels/qwen-q4[0m
+Loading model models/qwen-q4
+Loading LoRA adapters with config: {'rank': 16, 'dropout': 0.05, 'scale': 2.0, 'use_dora': False, 'num_layers': 16}
+Loading pretrained reference model (using main model)
+[94m[INFO][0m Loading datasets
+
+[96m============================================================[0m
+[1m[97m                          Training                          [0m
+[96m============================================================[0m
+
+[93m[WARNING][0m Loading fine-tuned weights from [96mmodel-experiments/04-cpt-sft/sft_cptv2_probe/adapters/sft-on-cptv2-spectrum/adapters.safetensors[0m
+Trainable parameters: 0.923% (281.838M/30532.123M)
+[94m[INFO][0m Training mode: [93mDPO[0m
+Training:   0%|          | 0/8 [00:00<?, ?it/s]                                               Training:   0%|          | 0/8 [00:23<?, ?it/s]Training:  12%|█▎        | 1/8 [00:27<03:12, 27.46s/it]Training:  12%|█▎        | 1/8 [00:29<03:12, 27.46s/it, loss=0.953, it/s=0.314]                                                                               Training:  12%|█▎        | 1/8 [00:29<03:12, 27.46s/it, loss=0.953, it/s=0.314]Training:  25%|██▌       | 2/8 [00:29<01:15, 12.52s/it, loss=0.953, it/s=0.314]Training:  38%|███▊      | 3/8 [00:32<00:41,  8.27s/it, loss=0.953, it/s=0.314]Training:  38%|███▊      | 3/8 [00:35<00:41,  8.27s/it, loss=1.432, it/s=0.328]                                                                               Training:  38%|███▊      | 3/8 [00:35<00:41,  8.27s/it, loss=1.432, it/s=0.328]Training:  50%|█████     | 4/8 [00:35<00:24,  6.15s/it, loss=1.432, it/s=0.328]Training:  62%|██████▎   | 5/8 [00:40<00:16,  5.56s/it, loss=1.432, it/s=0.328]Training:  62%|██████▎   | 5/8 [00:42<00:16,  5.56s/it, loss=1.610, it/s=0.298]                                                                               Training:  62%|██████▎   | 5/8 [00:42<00:16,  5.56s/it, loss=1.610, it/s=0.298]Training:  75%|███████▌  | 6/8 [00:42<00:08,  4.42s/it, loss=1.610, it/s=0.298]Training:  88%|████████▊ | 7/8 [00:44<00:03,  3.75s/it, loss=1.610, it/s=0.298]                                                                               Training:  88%|████████▊ | 7/8 [00:52<00:03,  3.75s/it, loss=1.610, it/s=0.298]libc++abi: terminating due to uncaught exception of type std::runtime_error: [METAL] Command buffer execution failed: Insufficient Memory (00000008:kIOGPUCommandBufferCallbackErrorOutOfMemory)
+/opt/homebrew/Cellar/python@3.14/3.14.5/Frameworks/Python.framework/Versions/3.14/lib/python3.14/multiprocessing/resource_tracker.py:475: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown: {'/loky-49943-iv_3g8f6'}
+  warnings.warn(
+model-experiments/04-cpt-sft/sft_cptv2_probe/run_dpo_spectrum.sh: line 191: 49943 Abort trap: 6           python "$DRIVER" --spectrum-layers "$LAYERS" --cpt-adapter "$CPT_ADAPTER" --model "$BASE_MODEL" --train --data "$DATA" --train-mode dpo --config "$DPO_CFG" --adapter-path model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-dry-spectrum --resume-adapter-file "$SFT_ADAPTER/adapters.safetensors" --train-type lora --num-layers 16 --grad-checkpoint --batch-size 1 --max-seq-length "$DPO_MAXLEN" --iters 8 --learning-rate "$DPO_LR" --beta "$DPO_BETA" --dpo-cpo-loss-type sigmoid --steps-per-report 2 --steps-per-eval 100000 --val-batches "$DPO_VAL_BATCHES" --save-every 100 2>&1
+     49944 Done                    | tail -25

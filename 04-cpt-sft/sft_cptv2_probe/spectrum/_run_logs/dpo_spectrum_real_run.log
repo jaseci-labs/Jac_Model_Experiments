@@ -1,0 +1,179 @@
+>>> deriving the union picks | {32..47} -- what this arm's adapters cover
+picks(16)=[0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
+union(21)=[0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+frozen(5)=[32, 33, 35, 40, 46]
+>>> SFT-spectrum baseline: 70.0% -- collapse gate fires at 2 consecutive snapshots below max(30%, 35.0%)
+>>> DPO segment: 20 iters (0/250 done)
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/snapshots/step_0020/adapters.safetensors
+  snapshot merged + adapter_config rewritten (union): model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/snapshots/step_0020
+>>> subset functional eval on snapshot step 20 (n=100)
+[batch_generate] Peak memory: 23.854 GB
+=== functional eval on 100 holdout rows (0 prose/ungraded) ===
+  code_gen / behavioral: 100% (35/35)
+  code_gen / compile_only: 70% (46/65)
+OVERALL runs: 81% (81/100)
+  step 20 subset runs_pct: 81.0%
+  new best: step 20 (81.0%)
+>>> DPO segment: 20 iters (20/250 done)
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/.resume_merged.safetensors
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/snapshots/step_0040/adapters.safetensors
+  snapshot merged + adapter_config rewritten (union): model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/snapshots/step_0040
+>>> subset functional eval on snapshot step 40 (n=100)
+[batch_generate] Peak memory: 23.853 GB
+=== functional eval on 100 holdout rows (0 prose/ungraded) ===
+  code_gen / behavioral: 91% (32/35)
+  code_gen / compile_only: 70% (46/65)
+OVERALL runs: 78% (78/100)
+  step 40 subset runs_pct: 78.0%
+>>> DPO segment: 20 iters (40/250 done)
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/.resume_merged.safetensors
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/snapshots/step_0060/adapters.safetensors
+  snapshot merged + adapter_config rewritten (union): model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/snapshots/step_0060
+>>> subset functional eval on snapshot step 60 (n=100)
+[batch_generate] Peak memory: 23.853 GB
+=== functional eval on 100 holdout rows (0 prose/ungraded) ===
+  code_gen / behavioral: 94% (33/35)
+  code_gen / compile_only: 61% (40/65)
+OVERALL runs: 73% (73/100)
+  step 60 subset runs_pct: 73.0%
+>>> DPO segment: 20 iters (60/250 done)
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/.resume_merged.safetensors
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/snapshots/step_0080/adapters.safetensors
+  snapshot merged + adapter_config rewritten (union): model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/snapshots/step_0080
+>>> subset functional eval on snapshot step 80 (n=100)
+[batch_generate] Peak memory: 23.854 GB
+=== functional eval on 100 holdout rows (0 prose/ungraded) ===
+  code_gen / behavioral: 91% (32/35)
+  code_gen / compile_only: 66% (43/65)
+OVERALL runs: 75% (75/100)
+  step 80 subset runs_pct: 75.0%
+>>> DPO segment: 20 iters (80/250 done)
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/.resume_merged.safetensors
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/snapshots/step_0100/adapters.safetensors
+  snapshot merged + adapter_config rewritten (union): model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/snapshots/step_0100
+>>> subset functional eval on snapshot step 100 (n=100)
+[batch_generate] Peak memory: 23.854 GB
+=== functional eval on 100 holdout rows (0 prose/ungraded) ===
+  code_gen / behavioral: 88% (31/35)
+  code_gen / compile_only: 63% (41/65)
+OVERALL runs: 72% (72/100)
+  step 100 subset runs_pct: 72.0%
+>>> DPO segment: 20 iters (100/250 done)
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/.resume_merged.safetensors
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/snapshots/step_0120/adapters.safetensors
+  snapshot merged + adapter_config rewritten (union): model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/snapshots/step_0120
+>>> subset functional eval on snapshot step 120 (n=100)
+[batch_generate] Peak memory: 23.854 GB
+=== functional eval on 100 holdout rows (0 prose/ungraded) ===
+  code_gen / behavioral: 88% (31/35)
+  code_gen / compile_only: 61% (40/65)
+OVERALL runs: 71% (71/100)
+  step 120 subset runs_pct: 71.0%
+>>> DPO segment: 20 iters (120/250 done)
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/.resume_merged.safetensors
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/snapshots/step_0140/adapters.safetensors
+  snapshot merged + adapter_config rewritten (union): model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/snapshots/step_0140
+>>> subset functional eval on snapshot step 140 (n=100)
+[batch_generate] Peak memory: 23.854 GB
+=== functional eval on 100 holdout rows (0 prose/ungraded) ===
+  code_gen / behavioral: 88% (31/35)
+  code_gen / compile_only: 64% (42/65)
+OVERALL runs: 73% (73/100)
+  step 140 subset runs_pct: 73.0%
+>>> DPO segment: 20 iters (140/250 done)
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/.resume_merged.safetensors
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/snapshots/step_0160/adapters.safetensors
+  snapshot merged + adapter_config rewritten (union): model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/snapshots/step_0160
+>>> subset functional eval on snapshot step 160 (n=100)
+[batch_generate] Peak memory: 23.854 GB
+=== functional eval on 100 holdout rows (0 prose/ungraded) ===
+  code_gen / behavioral: 88% (31/35)
+  code_gen / compile_only: 63% (41/65)
+OVERALL runs: 72% (72/100)
+  step 160 subset runs_pct: 72.0%
+>>> DPO segment: 20 iters (160/250 done)
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/.resume_merged.safetensors
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/snapshots/step_0180/adapters.safetensors
+  snapshot merged + adapter_config rewritten (union): model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/snapshots/step_0180
+>>> subset functional eval on snapshot step 180 (n=100)
+[batch_generate] Peak memory: 23.854 GB
+=== functional eval on 100 holdout rows (0 prose/ungraded) ===
+  code_gen / behavioral: 85% (30/35)
+  code_gen / compile_only: 61% (40/65)
+OVERALL runs: 70% (70/100)
+  step 180 subset runs_pct: 70.0%
+>>> DPO segment: 20 iters (180/250 done)
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/.resume_merged.safetensors
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/snapshots/step_0200/adapters.safetensors
+  snapshot merged + adapter_config rewritten (union): model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/snapshots/step_0200
+>>> subset functional eval on snapshot step 200 (n=100)
+[batch_generate] Peak memory: 23.854 GB
+=== functional eval on 100 holdout rows (0 prose/ungraded) ===
+  code_gen / behavioral: 80% (28/35)
+  code_gen / compile_only: 60% (39/65)
+OVERALL runs: 67% (67/100)
+  step 200 subset runs_pct: 67.0%
+>>> DPO segment: 20 iters (200/250 done)
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/.resume_merged.safetensors
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/snapshots/step_0220/adapters.safetensors
+  snapshot merged + adapter_config rewritten (union): model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/snapshots/step_0220
+>>> subset functional eval on snapshot step 220 (n=100)
+[batch_generate] Peak memory: 23.854 GB
+=== functional eval on 100 holdout rows (0 prose/ungraded) ===
+  code_gen / behavioral: 85% (30/35)
+  code_gen / compile_only: 60% (39/65)
+OVERALL runs: 69% (69/100)
+  step 220 subset runs_pct: 69.0%
+>>> DPO segment: 20 iters (220/250 done)
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/.resume_merged.safetensors
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/snapshots/step_0240/adapters.safetensors
+  snapshot merged + adapter_config rewritten (union): model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/snapshots/step_0240
+>>> subset functional eval on snapshot step 240 (n=100)
+[batch_generate] Peak memory: 23.853 GB
+=== functional eval on 100 holdout rows (0 prose/ungraded) ===
+  code_gen / behavioral: 82% (29/35)
+  code_gen / compile_only: 61% (40/65)
+OVERALL runs: 69% (69/100)
+  step 240 subset runs_pct: 69.0%
+>>> DPO segment: 10 iters (240/250 done)
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/.resume_merged.safetensors
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/snapshots/step_0250/adapters.safetensors
+  snapshot merged + adapter_config rewritten (union): model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/snapshots/step_0250
+>>> subset functional eval on snapshot step 250 (n=100)
+[batch_generate] Peak memory: 23.854 GB
+=== functional eval on 100 holdout rows (0 prose/ungraded) ===
+  code_gen / behavioral: 85% (30/35)
+  code_gen / compile_only: 58% (38/65)
+OVERALL runs: 68% (68/100)
+  step 250 subset runs_pct: 68.0%
+=== DPO reached full 250 iters ===
+>>> merging the frozen CPT-v2 blocks back into the final DPO adapter (§8.3 step 5)
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-cptv2-spectrum/adapters.safetensors
+=== DPO-spectrum training loop done: model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-spectrum/train.log (best snapshot: step 20 at 81.0%) ===
+Next: eval_dpo_spectrum.sh

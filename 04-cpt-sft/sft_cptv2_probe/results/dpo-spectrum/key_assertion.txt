@@ -1,0 +1,4 @@
+frozen blocks [32, 33, 35, 40, 46]: all 80 keys bit-identical to the CPT-v2 source
+OK: all 336 adapter keys present in the loaded model, covering 21 blocks -- model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-cptv2-spectrum
+frozen blocks [32, 33, 35, 40, 46]: all 80 keys bit-identical to the CPT-v2 source
+OK: all 336 adapter keys present in the loaded model, covering 21 blocks -- model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/dpo-on-sft-cptv2-spectrum-best

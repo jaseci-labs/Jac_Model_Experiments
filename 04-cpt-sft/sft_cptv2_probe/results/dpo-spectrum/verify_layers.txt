@@ -1,0 +1,27 @@
+spectrum picks (16): [0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
+CPT-v2 base layers (16): [32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]   [256 tensors, verified]
+union to convert (21): [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+frozen (CPT-v2 delta kept, no gradients) (5): [32, 33, 35, 40, 46]
+resume adapter model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/sft-on-cptv2-spectrum/adapters.safetensors: union-shaped, 80 frozen keys bit-match CPT-v2
+[patches] chat-template fix : DPODataset -> FixedDPODataset  (OK)
+[patches] layer rebind      : mlx_lm.tuner.utils.linear_to_lora_layers  (OK)
+[patches] layer rebind      : mlx_lm.lora.linear_to_lora_layers  (OK)
+[patches] layer rebind      : mlx_lm_lora.utils.linear_to_lora_layers  (OK)
+[patches] spectrum layers   : [0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
+[patches] union converted   : [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+[patches] frozen (no grad)  : [32, 33, 35, 40, 46]
+Loading model models/qwen-q4
+Loading LoRA adapters with config: {'rank': 16, 'scale': 2.0, 'dropout': 0.05, 'use_dora': False, 'num_layers': 16}
+[dpo] adapter_config.json written by from_pretrained: num_layers=16 (eval-time rewrite to 48 over the UNION is adapter_config_fix.py's job)
+[cptv2-dpo-spectrum] layers          = [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+[cptv2-dpo-spectrum] lora tensors    = 256
+[cptv2-dpo-spectrum] LoRASwitchLinear= 63
+[cptv2-dpo-spectrum] trainable       = 281.838M / 5142.307M (5.481%)
+[cptv2-dpo-spectrum] TRAINABLE layers = [0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
+[cptv2-dpo-spectrum] TRAINABLE params = 281.838M (frozen union members contribute 0)
+[dpo] resume: all 336 keys of model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/sft-on-cptv2-spectrum/adapters.safetensors land in the converted model
+[control(stock trailing)] layers          = [32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+[control(stock trailing)] lora tensors    = 256
+[control(stock trailing)] LoRASwitchLinear= 48
+[control(stock trailing)] trainable       = 281.838M / 5054.233M (5.576%)
+VERIFY: PASS

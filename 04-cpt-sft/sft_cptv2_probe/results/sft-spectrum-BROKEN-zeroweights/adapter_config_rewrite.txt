@@ -1,0 +1,2 @@
+rewrote model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/sft-on-cptv2-spectrum/adapter_config.json: num_layers 16 -> 48 (covers blocks 0..47), spectrum_layers=[0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+eval-time cost: 27 covered-but-untrained blocks ~= 475.6M F32 params ~= 1890MB

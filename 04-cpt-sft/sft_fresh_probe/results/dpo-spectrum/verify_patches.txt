@@ -1,0 +1,9 @@
+spectrum picks (16): [0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
+overlap with trailing-16 {32..47}: 11/16
+[patches] chat-template fix : DPODataset -> FixedDPODataset  (OK)
+[patches] layer rebind      : mlx_lm.tuner.utils.linear_to_lora_layers  (OK)
+[patches] layer rebind      : mlx_lm.lora.linear_to_lora_layers  (OK)
+[patches] layer rebind      : mlx_lm_lora.utils.linear_to_lora_layers  (OK)
+[patches] spectrum layers   : [0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
+upstream guards: OK (mlx-lm 0.31.3, mlx-lm-lora 2.1.0)
+VERIFY: PASS

@@ -1,0 +1,32 @@
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/sft-on-cptv2-spectrum/adapters.safetensors
+-- 0000820_adapters.safetensors
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/sft-on-cptv2-spectrum/checkpoints/0000820_adapters.safetensors
+-- 0001640_adapters.safetensors
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/sft-on-cptv2-spectrum/checkpoints/0001640_adapters.safetensors
+-- 0002460_adapters.safetensors
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/sft-on-cptv2-spectrum/checkpoints/0002460_adapters.safetensors
+-- 0003280_adapters.safetensors
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/sft-on-cptv2-spectrum/checkpoints/0003280_adapters.safetensors
+-- 0004100_adapters.safetensors
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/sft-on-cptv2-spectrum/checkpoints/0004100_adapters.safetensors
+-- 0004920_adapters.safetensors
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/sft-on-cptv2-spectrum/checkpoints/0004920_adapters.safetensors
+-- 0005740_adapters.safetensors
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/sft-on-cptv2-spectrum/checkpoints/0005740_adapters.safetensors
+-- 0006560_adapters.safetensors
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/sft-on-cptv2-spectrum/checkpoints/0006560_adapters.safetensors
+-- 0007380_adapters.safetensors
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/sft-on-cptv2-spectrum/checkpoints/0007380_adapters.safetensors
+-- 0008200_adapters.safetensors
+merged 256 trained + 80 frozen CPT-v2 keys (blocks [32, 33, 35, 40, 46]) -> 336 keys covering [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+wrote model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/sft-on-cptv2-spectrum/checkpoints/0008200_adapters.safetensors

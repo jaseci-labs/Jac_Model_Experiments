@@ -1,0 +1,18 @@
+spectrum picks (16): [0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
+CPT-v2 base layers (16): [32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]   [256 tensors, verified]
+union to convert (21): [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+frozen (CPT-v2 delta kept, no gradients) (5): [32, 33, 35, 40, 46]
+overlap picks & trailing-16: 11/16
+upstream guard: OK (mlx-lm 0.31.3, source hash matches pin)
+CPT-v2 resume: all 256 keys present in the converted model
+[cptv2-spectrum] layers          = [0, 22, 23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+[cptv2-spectrum] lora tensors    = 256
+[cptv2-spectrum] LoRASwitchLinear= 63
+[cptv2-spectrum] trainable       = 281.838M / 5142.307M (5.481%)
+[cptv2-spectrum] TRAINABLE layers = [0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
+[cptv2-spectrum] TRAINABLE params = 281.838M (frozen union members contribute 0)
+[control(stock trailing)] layers          = [32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+[control(stock trailing)] lora tensors    = 256
+[control(stock trailing)] LoRASwitchLinear= 48
+[control(stock trailing)] trainable       = 281.838M / 5054.233M (5.576%)
+VERIFY: PASS

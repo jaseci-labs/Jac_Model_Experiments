@@ -8,6 +8,16 @@
 
 > **Structural addendum (see §4 of the comparison report):** even though SFT erases CPT-v2's *behavioral* edge, a q_proj LoRA singular-value probe (`lora_svd_qproj.py`) shows the CPT-v2-base SFT adapter's rank-concentration and dominant-direction magnitude both still track the standalone CPT-v2 adapter far more closely than they track the fresh-base SFT adapter — CPT-v2's fingerprint survives SFT structurally, just not functionally.
 
+> **Spectrum layer-selection probe (2026-08-03, DONE):** does *which* 16 of 48 blocks carry
+> the LoRA matter, independent of CPT lineage? `docs/reports/2026-08-spectrum-vs-stock-comparison.md`
+> — Arcee's SNR-based Spectrum picks significantly beat `mlx_lm`'s default trailing-16
+> selection on the fresh arm at every stage (SFT +4.9pp p=0.023, DPO-best +4.3pp p=0.046,
+> DPO-final +10.6pp p<0.0001), but showed no significant difference on the CPT-v2 arm (SFT
+> −2.1pp p=0.34, DPO-best an exact tie, DPO-final +4.1pp p=0.07). Also documents two real
+> engineering incidents: an MLX in-place-safetensors-merge bug that silently zeroed trained
+> weights (root-caused and fixed), and a DPO out-of-memory resolved via a shorter max
+> sequence length.
+
 ---
 
 ## 1. How this phase is organized

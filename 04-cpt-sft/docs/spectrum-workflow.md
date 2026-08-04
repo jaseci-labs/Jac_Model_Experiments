@@ -1,5 +1,8 @@
 # spectrum-workflow.md — Spectrum Layer-Selection Probe Runbook
 
+**Status: DONE (2026-08-03).** All phases below completed for both arms.
+Results: `reports/2026-08-spectrum-vs-stock-comparison.md`.
+
 Companion to `spectrum-plan.md` (the probe's umbrella spec — every design
 decision, rationale, and number cited below lives there) and sibling to
 `workflow.md` (the phase's three-arm protocol, whose §6 significance standard

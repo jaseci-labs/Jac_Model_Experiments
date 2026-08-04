@@ -65,6 +65,16 @@ def merge(trained_file, cpt_file, out_file, picks: Sequence[int],
     union = union_layers(picked, base_layers)
 
     trained = dict(mx.load(str(trained_file)))
+    mx.eval(list(trained.values()))  # force materialization NOW: mx.load is a lazy
+    # mmap of trained_file, and merge()'s --in/--out are the same path in normal
+    # use (in-place merge). Writing out_file before these arrays are evaluated
+    # truncates the very mmap they lazily read from -- every trained key comes
+    # back as all-zero. This is the actual cause of the cptv2-arm corruption
+    # incident (2026-08-02/03): frozen keys, loaded from a *different* file,
+    # were always correct; only trained keys -- read from the file being
+    # overwritten -- went to zero. Root-caused by comparing an untouched
+    # numbered checkpoint (always correct) against the post-merge adapters.safetensors
+    # (always zero on trained keys, byte-identical to CPT-v2 source on frozen keys).
     got_trained_layers = adapter_layer_ids(trained_file)
     if got_trained_layers != picked:
         raise RuntimeError(
