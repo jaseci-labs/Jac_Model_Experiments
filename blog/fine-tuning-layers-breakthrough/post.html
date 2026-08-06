@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Does it matter which layers you fine-tune?</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: #ffffff;
+    color: #111111;
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    font-size: 18.5px;
+    line-height: 1.65;
+    font-kerning: normal;
+  }
+  main {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 64px 24px 120px;
+  }
+  h1 {
+    font-size: 2.05em;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin: 0 0 0.35em;
+    font-weight: 700;
+  }
+  h2 {
+    font-size: 1.4em;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    margin: 2.4em 0 0.7em;
+    font-weight: 700;
+    padding-top: 0.9em;
+    border-top: 1px solid #e2e2e2;
+  }
+  h3 {
+    font-size: 1.13em;
+    line-height: 1.35;
+    margin: 2em 0 0.6em;
+    font-weight: 700;
+  }
+  p { margin: 0 0 1.25em; }
+  .dek {
+    color: #666666;
+    font-style: italic;
+    margin: 0 0 2.4em;
+  }
+  a { color: #111111; text-decoration: underline; text-underline-offset: 2px; }
+  a:hover { color: #000000; background: #f2f2f2; }
+  em { font-style: italic; }
+  strong { font-weight: 700; }
+
+  code {
+    font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.855em;
+    background: #f4f4f4;
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    padding: 0.08em 0.32em;
+  }
+  pre {
+    background: #f7f7f7;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    padding: 15px 17px;
+    overflow-x: auto;
+    margin: 0 0 0.5em;
+    line-height: 1.5;
+  }
+  pre code {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 0.8em;
+    color: #1a1a1a;
+    white-space: pre;
+  }
+  .caption {
+    color: #757575;
+    font-style: italic;
+    font-size: 0.83em;
+    line-height: 1.5;
+    margin: 0 0 2em;
+  }
+  .caption code {
+    font-style: normal;
+    font-size: 0.94em;
+    background: #f4f4f4;
+  }
+
+  figure { margin: 2.2em 0; }
+  img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+    border: 1px solid #e6e6e6;
+    border-radius: 4px;
+  }
+  figcaption {
+    color: #757575;
+    font-style: italic;
+    font-size: 0.85em;
+    line-height: 1.5;
+    text-align: center;
+    margin-top: 0.9em;
+  }
+
+  .table-wrap { overflow-x: auto; margin: 0 0 1.7em; }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.87em;
+    line-height: 1.45;
+  }
+  th, td {
+    text-align: left;
+    padding: 9px 13px 9px 0;
+    border-bottom: 1px solid #e6e6e6;
+    white-space: nowrap;
+  }
+  th {
+    font-weight: 700;
+    border-bottom: 1.5px solid #bbbbbb;
+  }
+  td:first-child, th:first-child { padding-left: 0; }
+  tbody tr:last-child td { border-bottom: 1px solid #bbbbbb; }
+
+  blockquote {
+    margin: 1.6em 0;
+    padding: 0.1em 0 0.1em 1.1em;
+    border-left: 3px solid #d5d5d5;
+    color: #444444;
+  }
+  hr { border: 0; border-top: 1px solid #e2e2e2; margin: 2.6em 0; }
+</style>
+</head>
+<body>
+<main>
+
+<h1>Does it matter <em>which</em> layers you fine-tune?</h1>
+
+<p class="dek">Blog 2 of 4 on our Jac code-model experiments.</p>
+
+<p>Here is a default almost nobody looks at.</p>
+
+<p>When you fine-tune a large language model with LoRA (the cheap technique where, instead of retraining all 30 billion weights, you bolt small trainable matrices onto a handful of them and leave the rest frozen), you have to tell the library how many layers to touch. Our model has 48 decoder blocks. We told <code>mlx_lm</code> to use 16, because 16 is what fits.</p>
+
+<p>What we did not know for months is what <code>num_layers: 16</code> resolves to. One line decides it:</p>
+
+<pre><code>for l in model.layers[-max(num_layers, 0):]:     # trailing 16 -&gt; blocks 32-47</code></pre>
+
+<p class="caption"><code>mlx_lm/tuner/utils.py:103</code>, as quoted in <code>sft_fresh_probe/spectrum/spectrum_lora_layers.py:8</code></p>
+
+<p>The <em>last</em> sixteen, blocks 32 to 47, because slicing off the end of a list is the simplest thing a library can do. Every pass rate we had published in this phase sat on that slice.</p>
+
+<p>So we ran the experiment. Same model, same dataset, same hyperparameters, same holdout. Change one thing: <em>which</em> sixteen.</p>
+
+<h2>Picking layers by signal, not by position</h2>
+
+<p>Arcee AI published a method called <a href="https://github.com/cognitivecomputations/spectrum">Spectrum</a> that answers the "which sixteen" question by measuring instead of guessing.</p>
+
+<p>Think of a multitrack recording where some tracks are real instruments and some are tape hiss. If you only have time to remix sixteen of them, you want the ones carrying actual music, and the track numbers will not tell you which is which. You have to listen.</p>
+
+<p>Spectrum listens to each weight matrix. Every matrix has a <em>singular-value spectrum</em>, a list of numbers describing how much structure it holds along each direction. Pure random noise has a spectrum too, and random matrix theory (specifically Marchenko-Pastur) predicts exactly what it looks like for a matrix of a given shape and scale. That is your hiss floor. Anything above it is structure the model actually learned.</p>
+
+<p>Score each block by how much of its spectral energy sits above the noise floor, rank them, take the top sixteen. On our base model, a 4-bit local copy of Qwen3-Coder-30B-A3B-Instruct, that produces this:</p>
+
+<pre><code>[0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]</code></pre>
+
+<p style="margin-top:1.25em">Eleven of those sixteen also appear in the trailing slice, so the two sets are not wildly different. The disagreements are the interesting part. Spectrum wants block 0, the very first one, sitting right next to the embeddings, plus blocks 22, 23, 27 and 30 from the middle of the stack the default never touches.</p>
+
+<p>Feeding that list into the trainer comes down to one statement. We wrote a driver that reuses every other line of <code>mlx_lm</code>'s function verbatim, so a future upstream change surfaces as a diff instead of being silently overridden:</p>
+
+<pre><code>        # THE ONE CHANGED STATEMENT: explicit indices, not model.layers[-n:]
+        for i in ids:
+            l = model.layers[i]
+            lora_layers = [(k, to_lora(m)) for k, m in l.named_modules() if k in keys]
+            if lora_layers:
+                l.update_modules(tree_unflatten(lora_layers))</code></pre>
+
+<p class="caption"><code>model-experiments/04-cpt-sft/sft_fresh_probe/spectrum/spectrum_lora_layers.py:271</code></p>
+
+<p>That is the entire intervention. Everything else stayed frozen between the two runs: rank 16, scale 2.0, dropout 0.05, batch size 1, 8200 SFT iterations, learning rate 2e-5, the same 8100-row training set, and the same frozen 855-row holdout, where a task counts as passed only if the generated code runs and produces the right output. Both configurations train exactly 281,837,568 parameters. Placement moves, capacity does not.</p>
+
+<h2>On a fresh base, it wins, and it keeps winning</h2>
+
+<p>The first arm took the raw base model with no prior training and ran the full pipeline twice: supervised fine-tuning (SFT, showing the model thousands of correct examples), then DPO (preference tuning, showing it pairs of better and worse answers so it learns which to prefer).</p>
+
+<figure>
+  <img src="images/spectrum_fresh_train_loss.png" alt="Training loss for the Spectrum SFT run on the fresh base, 8200 iterations">
+  <figcaption>An ordinary curve, which is the point. Nothing here was won or lost by luck.</figcaption>
+</figure>
+
+<p>The scores, all on the same 855-row holdout, two-proportion z-test throughout:</p>
+
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>Stage</th><th>Spectrum</th><th>Trailing-16 default</th><th>&Delta;</th><th>p</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>SFT</td><td>74.7% (639/855)</td><td>69.8% (597/855)</td><td>+4.9pp</td><td>0.023</td></tr>
+    <tr><td>DPO, best checkpoint</td><td>74.2% (634/855)</td><td>69.8% (597/855)</td><td>+4.3pp</td><td>0.046</td></tr>
+    <tr><td>DPO, final checkpoint</td><td>72.7% (622/855)</td><td>62.1% (531/855)</td><td>+10.6pp</td><td>&lt;0.0001</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p>Significant at every stage, and the gap <em>widens</em> as training goes on. The final-checkpoint number is the loudest: by the end of DPO the default-layer model has degraded ten and a half points below the Spectrum model, on identical preference data and step counts. The only difference was which blocks carried the update.</p>
+
+<p>If you run LoRA on defaults, go find out what your library's slice actually is. It takes five minutes.</p>
+
+<h2>Then we tried it on a base that had already been trained</h2>
+
+<p>Blog 1 covers our continual-pretraining experiment (CPT, feeding the model a large pile of raw domain text before any instruction tuning). The short version: CPT-v2 gave a large boost at the base stage that mostly washed out after SFT. We kept the checkpoint.</p>
+
+<p>Layering Spectrum on top of it turned out to be awkward. CPT-v2 was trained on the trailing sixteen; Spectrum wants a different sixteen that overlaps only eleven ways. You cannot load one into the other.</p>
+
+<p>The workaround we built is called union-convert-and-freeze. Attach LoRA adapters to the <em>union</em> of both sets, 21 blocks. Load CPT-v2's weights into the five blocks only it cares about and freeze them, so they keep contributing to the forward pass without being retrained, and train only Spectrum's sixteen. Afterwards, merge the frozen five back into every saved artifact so downstream tools see a complete adapter.</p>
+
+<p>It worked. It just didn't help.</p>
+
+<figure>
+  <img src="images/spectrum_delta_asymmetry.png" alt="Spectrum's advantage over the default, on a fresh base versus a CPT-v2 base">
+</figure>
+
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>Stage</th><th>Spectrum</th><th>Trailing-16 default</th><th>&Delta;</th><th>p</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>SFT</td><td>70.5% (603/855)</td><td>72.6% (621/855)</td><td>-2.1pp</td><td>0.335</td></tr>
+    <tr><td>DPO, best checkpoint</td><td>71.7% (613/855)</td><td>71.7% (613/855)</td><td>0.0pp</td><td>1.000</td></tr>
+    <tr><td>DPO, final checkpoint</td><td>69.0% (590/855)</td><td>64.9% (555/855)</td><td>+4.1pp</td><td>0.072</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p>Slightly negative at SFT and nowhere near significant. An exact tie at DPO-best, the same 613 passing rows on both sides, which was a startling thing to read off two independently trained models. A positive lean at DPO-final that misses the conventional 0.05 bar.</p>
+
+<figure>
+  <img src="images/four_arms_summary.png" alt="All four completed arms on the same frozen holdout">
+  <figcaption>Four arms, one holdout. The green Spectrum bars beat the grey default bars on the fresh base at every stage. On the CPT-v2 base (orange versus blue), the pattern disappears.</figcaption>
+</figure>
+
+<p>We have a hypothesis, not a finding. CPT-v2 left a measurable imprint across blocks 32 to 47; our own earlier probe of the adapter weight geometry showed its fingerprint surviving SFT structurally, even after it stopped showing up in the pass rate. Spectrum's non-contiguous picks then have to negotiate with that pre-existing, position-specific adaptation rather than starting clean. Plausible, untested, and flagged as speculation in the internal report too.</p>
+
+<h2>Two bugs worth telling you about</h2>
+
+<h3>The model that trained perfectly and came back empty</h3>
+
+<p>The first full CPT-v2 Spectrum SFT run (8200 iterations, exit code 0, a completely normal loss curve) produced an adapter where all sixteen trained blocks' weights were <em>exactly zero</em>, bit for bit, with no error anywhere.</p>
+
+<p>Our first suspect was <code>mlx_lm</code>'s gradient checkpointing, which monkeypatches a method at the class level, suspicious-looking for a converted-then-refrozen setup like ours. An isolated diagnostic run said no: the weights came out fine. We shrugged, called it environmental, and retrained.</p>
+
+<p>The retry reproduced it, but at a different point, which is what cracked it. All ten raw checkpoints written by the trainer were verified nonzero, including the last. The zeros only appeared <em>after</em> the post-training merge step. And the eighty frozen keys, which came from CPT-v2's separate adapter file, were perfectly intact. Trained keys dead, frozen keys alive, both in the same output file.</p>
+
+<p>That asymmetry pointed straight at the merge script. <code>mx.load()</code> on a safetensors file in MLX returns a <em>lazy memory map</em>: the arrays are file handles, not data, until something forces them to materialize. Our script was called with <code>--in FILE --out FILE</code>, the same path. Writing the output truncated the very file the loaded arrays were still lazily reading from, so every trained key silently read back as zero. The frozen keys survived because they were mapped from a different file the write never touched.</p>
+
+<p>The fix is one line, and it now carries the longest comment in the file:</p>
+
+<pre><code>    trained = dict(mx.load(str(trained_file)))
+    mx.eval(list(trained.values()))  # force materialization NOW: mx.load is a lazy
+    # mmap of trained_file, and merge()'s --in/--out are the same path in normal
+    # use (in-place merge). Writing out_file before these arrays are evaluated
+    # truncates the very mmap they lazily read from -- every trained key comes
+    # back as all-zero. This is the actual cause of the cptv2-arm corruption
+    # incident (2026-08-02/03): frozen keys, loaded from a *different* file,
+    # were always correct; only trained keys -- read from the file being
+    # overwritten -- went to zero. Root-caused by comparing an untouched
+    # numbered checkpoint (always correct) against the post-merge adapters.safetensors
+    # (always zero on trained keys, byte-identical to CPT-v2 source on frozen keys).</code></pre>
+
+<p class="caption"><code>model-experiments/04-cpt-sft/sft_cptv2_probe/spectrum/merge_frozen_keys.py:67</code></p>
+
+<p>If you have a script anywhere that reads a safetensors file with <code>mlx.core</code> and writes back over the same path, go check it now.</p>
+
+<h3>DPO ran out of GPU memory on a machine with 37GB free</h3>
+
+<p>The preference-tuning dry run died at iteration 7 of 8 with a Metal out-of-memory error while <code>vm_stat</code> reported 37GB of free system RAM. DPO holds two full copies of the model at once: the one being trained, and a frozen reference copy it compares against to measure how far preferences have moved. Add roughly 1.9GB of overhead from this arm's 21-block union conversion, and the total cleared macOS's GPU wired-memory ceiling, a separate limit from free RAM that sits near 70-75% of physical memory. Raising it needs <code>sudo</code>. Shortening the max sequence length from 512 to 384 does not, so we did that, and the full 250-iteration run finished across all 13 segments with no further OOMs at a 39.8GB peak.</p>
+
+<p>The runner now does that shrinking on its own. Segment size gets halved twice, and only if OOMs survive both does it touch the sequence length, because that is the knob that changes the recipe:</p>
+
+<pre><code>      if [ "$oom_shrinks" -lt 3 ]; then
+        oom_shrinks=$(( oom_shrinks + 1 ))
+        if [ "$oom_shrinks" -le 2 ]; then
+          SEGMENT_ITERS=$(( SEGMENT_ITERS / 2 )); [ "$SEGMENT_ITERS" -lt 5 ] &amp;&amp; SEGMENT_ITERS=5
+          echo "!!! OOM-recovery ${oom_shrinks}/3: shrinking DPO_SEGMENT_ITERS to ${SEGMENT_ITERS}" | tee -a "$RDIR/train.log"
+        else
+          DPO_MAXLEN=384
+          echo "!!! OOM-recovery 3/3: dropping DPO_MAXLEN to ${DPO_MAXLEN} (last resort -- flag this deviation in the final report)" | tee -a "$RDIR/train.log"
+        fi</code></pre>
+
+<p class="caption"><code>model-experiments/04-cpt-sft/sft_cptv2_probe/run_dpo_spectrum.sh:277</code></p>
+
+<p>Consider this the flag that log line asks for. The CPT-v2 arm's DPO numbers ran at 384 against the fresh arm's 512. Some longer training pairs may have been truncated, and we did not check pair by pair. That is a known limitation of the comparison, stated here rather than buried.</p>
+
+<h2>The open question</h2>
+
+<p>We never actually tested "Spectrum plus CPT." We tested "Spectrum bolted onto a CPT run trained on the <em>other</em> sixteen blocks, held together by a union and a freeze." The confound and the finding are tangled together.</p>
+
+<p>So there is a fifth arm: re-run continual pretraining itself on Spectrum's picks, then SFT and DPO on the same picks. One continuous sixteen-block lineage from base to CPT to SFT to DPO, with no union, no freeze, and no merge step anywhere, which incidentally removes the whole bug class from the first story rather than one instance of it.</p>
+
+<p>It is built, and it is paused. As of 22:07 EDT on 2026-08-03 it sits one minute into leg 1 of 12, stopped deliberately to free the machine, not by a crash. No checkpoint had been written yet, and the loop re-derives its resume point from disk. All three pre-flight gates passed on the real 30B model first: the layer-rebinding self-test, a two-iteration dry leg peaking at 30.058GB against a ceiling near 36GB, and an end-to-end catastrophic-forgetting check at 16/16.</p>
+
+<p>The reason it is paused is boring. It is slow. Spectrum's picks include block 0, so backpropagation has to traverse all 48 decoder blocks instead of only the trailing 16, measured at 1.59 times slower per iteration than the original CPT run. That is 26 to 30 hours for the pretraining stage alone and 37 to 41 end to end, on one laptop with other work to do.</p>
+
+<p>Until it finishes, what we have is an asymmetry we can state confidently and cannot yet explain. Choosing your LoRA layers by signal-to-noise beats taking the last sixteen, repeatedly and by a growing margin, when there is nothing underneath. Once a continual-pretraining stage is already in the chain, the advantage vanishes. Whether that is because CPT genuinely eats the benefit, or only because our workaround for stacking two different layer sets was never going to work, is what arm 5 exists to find out.</p>
+
+</main>
+</body>
+</html>

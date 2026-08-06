@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Does teaching a model your docs first actually help? We ran the control arm</title>
+<style>
+:root { color-scheme: light; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: #ffffff;
+  color: #111111;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  font-size: 19px;
+  line-height: 1.65;
+}
+main { max-width: 700px; margin: 0 auto; padding: 64px 24px 96px; }
+h1 {
+  font-size: 2.05em;
+  line-height: 1.22;
+  letter-spacing: -0.015em;
+  margin: 0 0 0.5em;
+  font-weight: 700;
+}
+h2 {
+  font-size: 1.32em;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  margin: 2.4em 0 0.7em;
+  font-weight: 700;
+}
+p { margin: 0 0 1.25em; }
+.standfirst { color: #555; font-size: 0.92em; margin-bottom: 2.4em; }
+a { color: #111; text-decoration: underline; text-underline-offset: 2px; }
+strong { font-weight: 650; }
+code {
+  font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.85em;
+  background: #f2f2f2;
+  border: 1px solid #e4e4e4;
+  border-radius: 3px;
+  padding: 0.08em 0.32em;
+  word-break: break-word;
+}
+pre {
+  background: #f5f5f5;
+  border: 1px solid #e2e2e2;
+  border-radius: 4px;
+  padding: 16px 18px;
+  margin: 0 0 1.6em;
+  overflow-x: auto;
+  line-height: 1.5;
+}
+pre code {
+  background: none;
+  border: 0;
+  padding: 0;
+  font-size: 0.76em;
+  white-space: pre;
+  word-break: normal;
+}
+pre .c { color: #6b6b6b; }
+figure { margin: 2em 0 2.2em; }
+figure img { display: block; width: 100%; max-width: 100%; height: auto; border: 1px solid #e6e6e6; }
+figcaption { margin-top: 0.6em; font-size: 0.8em; font-style: italic; color: #666; text-align: left; }
+.table-wrap { overflow-x: auto; margin: 0 0 1.7em; }
+table { border-collapse: collapse; width: 100%; font-size: 0.85em; }
+th, td { text-align: left; padding: 8px 14px 8px 0; border-bottom: 1px solid #e6e6e6; vertical-align: top; }
+th { font-weight: 650; border-bottom: 1px solid #bbb; white-space: nowrap; }
+blockquote { margin: 0 0 1.4em; padding-left: 18px; border-left: 3px solid #ddd; color: #444; }
+hr { border: 0; border-top: 1px solid #e2e2e2; margin: 3em 0 2em; }
+.footnote { color: #555; font-size: 0.85em; }
+@media (max-width: 600px) {
+  body { font-size: 17px; }
+  main { padding: 40px 18px 72px; }
+}
+</style>
+</head>
+<body>
+<main>
+<h1>Does teaching a model your docs first actually help? We ran the control arm</h1>
+<p class="standfirst"><em>Blog 1 of 4 on the model work behind Jac Model Studio.</em></p>
+<p>We maintain Jac, a programming language that no off-the-shelf coding model has ever seen much of. Ask a stock 30B code model to write a Jac component and it writes React. It has read a million TypeScript files and approximately zero Jac files, so it pattern-matches to the nearest thing it knows.</p>
+<p>The obvious fix is to fine-tune. The less obvious question, and the one this post is about: before you fine-tune, is it worth spending a day of GPU time pushing the model through your documentation first?</p>
+<p>We built the control arm to find out. It helps, dramatically, right up until the moment you do the fine-tuning you were going to do anyway.</p>
+<h2>The vocabulary, quickly</h2>
+<p>Skip ahead if you already fine-tune models. Our base model, meaning the pretrained weights we start from, is Qwen3-Coder-30B-A3B-Instruct, quantized to 4 bits so it fits on one Mac. Retraining all 30 billion of its weights takes a datacenter, so we use LoRA (Low-Rank Adaptation): freeze the original weights and train a small side matrix that gets added to them. Ours is rank 16 on the last 16 of the model&#x27;s 48 decoder blocks, about 282M trainable parameters instead of 30B. That side matrix is a small file called an adapter.</p>
+<p>CPT (continual pretraining) means more training on raw text from your domain, using the same predict-the-next-token objective the model was originally pretrained with. No question-answer pairs, no task format, just prose. The pitch is that it teaches vocabulary and concepts so downstream training starts from a better place.</p>
+<p>SFT (supervised fine-tuning) trains on explicit input-output pairs: here is a prompt, here is the correct Jac code. That is the step that teaches the task. DPO (direct preference optimization) trains on a better and a worse answer to the same prompt so the model learns to prefer the better one, and usually runs after SFT to polish style and correctness.</p>
+<p>The thing we measure is functional pass rate. We hold out 855 prompts whose answers are code, generate an answer for each, and run it. It compiles and executes, or it doesn&#x27;t. Nothing gets partial credit from a similarity score or an LLM judge.</p>
+<h2>The setup</h2>
+<p>Our CPT run, CPT-v2, finished on 2026-07-18. It trained on a curated 2,406,676-token corpus, mostly Jac documentation, with 235K tokens of general Python folded in as insurance against the model forgetting how to write ordinary code. Twelve epochs, one cosine learning-rate decay spanning all of them, about 16.4 hours of wall clock. Validation loss fell 43%, from 1.371 to 0.783.</p>
+<p>We then rejected it. It failed the evaluation it was built to pass, answering conceptual questions about Jac as well as a retrieval-augmented oracle does, with a 9% win-or-tie rate against a required 50%.</p>
+<p>But a checkpoint that fails a semantic benchmark can still be a good foundation for the training that comes after it. So we built two arms. Arm 1 is fresh: unmodified base, then SFT, then DPO. Arm 2 is the same base with the CPT-v2 adapter underneath, then the identical SFT and DPO.</p>
+<p>The dataset was frozen and MD5-verified byte-identical across both arms. Holdout, hyperparameters, eval harness, and jaclang version were held constant. Exactly one variable differed.</p>
+<h2>Result one: a 37-point head start that doesn&#x27;t survive</h2>
+<figure><img src="images/cpt_vs_fresh_corrected.png" alt="CPT-v2 vs fresh base at every stage"><figcaption>CPT-v2 vs fresh base at every stage</figcaption></figure>
+<p>Before any task-specific training, CPT-v2 wins by a mile. The fresh base passes 90 of 855 (10.5%). The CPT-v2 base passes 404 of 855 (47.3%). That is +37.0 percentage points, z ≈ 16.75, a gap you don&#x27;t need statistics to see. Two million tokens of documentation really did teach the model to write Jac that runs.</p>
+<p>Then we ran SFT on both, 8200 iterations each, and the gap mostly vanished.</p>
+<p>Fresh finished at 69.8% (597/855), CPT-v2 at 72.6% (621/855). A 2.8-point edge in CPT-v2&#x27;s favor sounds like a win until you test it. A two-proportion z-test at n=855 gives z ≈ 1.28, p ≈ 0.20, which clears no conventional threshold. It is what sampling noise looks like on a holdout of 855.</p>
+<p>Maybe SFT overtrained, and an earlier checkpoint still showed the gap? We had interim evaluations every 820 steps, so we checked all of them.</p>
+<figure><img src="images/sft_sweetspot_curves.png" alt="SFT sweet-spot search, both arms"><figcaption>SFT sweet-spot search, both arms</figcaption></figure>
+<p>Fresh peaks at 72% on step 4100 and finishes at 72%. CPT-v2 peaks at 79% on step 7380 and finishes at 79%. Each run ends on its own peak. No better stopping point was hiding in either curve.</p>
+<p>A 37-point head start, absorbed almost entirely by 8200 iterations of supervised fine-tuning. We can&#x27;t prove the residual advantage is zero from one run per arm, but we can&#x27;t show it&#x27;s real either.</p>
+<h2>Result two: the bug that pretended to be a finding</h2>
+<p>DPO came next, and both arms fell off a cliff, from roughly 70% down to roughly 12%.</p>
+<p>Our first reaction was that DPO had eaten the model, a known failure mode when preference data is thin. So we treated it as a real result and characterized it: we removed the early-stopping gate and ran both arms to the full 250 iterations, with an evaluation snapshot every 20 steps, looking for a dip-and-recover pattern.</p>
+<p>There was none. Thirteen consecutive checkpoints, step 20 through step 250, produced the same score within each arm every single time. We tried a more conservative preference-loss setting (β from 0.1 to 0.4, learning rate down to 5e-7) and nothing moved.</p>
+<p>We did find a real bug along the way. The DPO data loader called <code>apply_chat_template(..., add_generation_prompt=True)</code> on already-complete assistant turns, appending a spurious <code>&lt;|im_start|&gt;assistant</code> token to every training sequence. We fixed it in a driver script that swaps the dataset class in before training starts. Because a patch against somebody else&#x27;s installed package rots quietly, the driver refuses to run once the upstream code stops matching what we patched:</p>
+<pre><code data-lang="python"><span class="c"># model-experiments/04-cpt-sft/sft_fresh_probe/dpo_fixed_train.py:127-142</span>
+def _assert_upstream_still_buggy() -&gt; None:
+    &quot;&quot;&quot;Fail loudly if the installed package no longer matches what we patched.&quot;&quot;&quot;
+    orig = getattr(_ds, &quot;DPODataset&quot;, None)
+    if orig is None:
+        raise RuntimeError(
+            &quot;mlx_lm_lora.trainer.datasets.DPODataset is gone -- this driver&#x27;s &quot;
+            &quot;patch target moved. Re-read the installed source before trusting &quot;
+            &quot;any DPO run.&quot;
+        )
+    src = &quot;&quot;.join(inspect.getsource(orig.__init__).split())  # strip all whitespace
+    if &quot;add_generation_prompt=True&quot; not in src:
+        raise RuntimeError(
+            &quot;Installed DPODataset no longer passes add_generation_prompt=True. &quot;
+            &quot;Upstream may have fixed this -- verify, then DELETE this driver &quot;
+            &quot;and go back to `python -m mlx_lm_lora.train`.&quot;
+        )</code></pre>
+<p>We verified the fix at the token level, reran, and the model collapsed on exactly the same schedule.</p>
+<p>That was the tell. A failure this immediate and this indifferent to everything we changed doesn&#x27;t look like an optimization problem, because optimization problems have texture and this had none. Something was broken before DPO ever started.</p>
+<p>On 2026-08-02 we stopped looking at pass/fail counts and read the generated text. The model was emitting plain React and JSX for a prompt whose SFT training example was unambiguous Jac. It wasn&#x27;t writing bad Jac, it wasn&#x27;t writing Jac at all. It read like a model nobody had ever fine-tuned.</p>
+<p>Three generations from the same prompt made the cause obvious:</p>
+<div class="table-wrap"><table><thead><tr><th>what we ran</th><th>what came out</th></tr></thead><tbody><tr><td>4-bit base + SFT adapter, loaded separately</td><td>correct Jac</td></tr><tr><td>the <code>mlx_lm.fuse</code>&#x27;d SFT checkpoint, no adapter</td><td>plain React/JSX</td></tr><tr><td>4-bit base, no adapter, no fusing</td><td>plain React/JSX</td></tr></tbody></table></div>
+<p><code>mlx_lm.fuse</code> bakes a LoRA adapter into base weights by dequantizing the 4-bit weights to full precision, adding the LoRA delta, and requantizing back to 4 bits. Our SFT delta was small and fine-grained relative to the 4-bit quantization grid, so requantization rounded almost all of it away. At the bit level about 15% of packed 4-bit elements changed. In what the model wrote, nothing did.</p>
+<p>Our DPO pipeline fused the SFT adapter into the weights before starting DPO. Four lines of setup, run once, before anything interesting happened:</p>
+<pre><code data-lang="bash"><span class="c"># model-experiments/04-cpt-sft/sft_fresh_probe/run_dpo_fixed.sh:79-82</span>
+echo &quot;&gt;&gt;&gt; fuse SFT adapter -&gt; $SFT_FUSED&quot;
+if [ -f &quot;$SFT_FUSED/config.json&quot; ]; then echo &quot;  reuse $SFT_FUSED&quot;; else
+  mlx_lm.fuse --model models/qwen-q4 --adapter-path &quot;$SFT_ADAPTER&quot; --save-path &quot;$SFT_FUSED&quot;
+fi</code></pre>
+<p>Every DPO invocation downstream then passed <code>--model &quot;$SFT_FUSED&quot;</code>. So every DPO run in that phase, across both arms and every hyperparameter variant including the one with the chat-template fix, had trained on top of an effectively un-fine-tuned base. The &quot;collapse&quot; was DPO doing its job correctly on a policy that had already been wiped.</p>
+<p>The fix was to delete the fuse step. We now train DPO directly against the raw quantized base and seed the DPO adapter from the SFT adapter with <code>--resume-adapter-file</code>, so the SFT delta stays in float where it survives:</p>
+<pre><code data-lang="bash"><span class="c"># model-experiments/04-cpt-sft/sft_fresh_probe/run_dpo_nofuse.sh:138-146</span>
+<span class="c">    # First real segment -- seed from the SFT adapter, not from scratch.</span>
+    python &quot;$DRIVER&quot; --model &quot;$BASE_MODEL&quot; --train --data model-experiments/04-cpt-sft/sft_fresh_probe/dataset/dpo \
+      --train-mode dpo --config model-experiments/04-cpt-sft/sft_fresh_probe/configs/dpo_lora.yaml \
+      --adapter-path &quot;$DPO_ADAPTER&quot; --train-type lora --num-layers 16 --grad-checkpoint \
+      --batch-size 1 --max-seq-length &quot;$DPO_MAXLEN&quot; --iters &quot;$SEG_ITERS&quot; \
+      --resume-adapter-file &quot;$SFT_ADAPTER/adapters.safetensors&quot; \
+      --learning-rate &quot;$DPO_LR&quot; --beta &quot;$DPO_BETA&quot; --dpo-cpo-loss-type sigmoid \
+      --steps-per-report 5 --steps-per-eval &quot;$SEG_ITERS&quot; --val-batches &quot;$DPO_VAL_BATCHES&quot; --save-every &quot;$SEG_ITERS&quot; \
+      &gt; &quot;$RDIR/.segment.log&quot; 2&gt;&amp;1 &amp;</code></pre>
+<p><code>$BASE_MODEL</code> there is <code>models/qwen-q4</code>, the untouched 4-bit base. Corrected numbers:</p>
+<div class="table-wrap"><table><thead><tr><th>Arm</th><th>SFT baseline</th><th>DPO best</th><th>DPO final (step 250)</th></tr></thead><tbody><tr><td>fresh</td><td>69.8% (597/855)</td><td>69.8% (597/855, step 20)</td><td>62.1% (531/855)</td></tr><tr><td>CPT-v2</td><td>72.6% (621/855)</td><td>71.7% (613/855, step 40)</td><td>64.9% (555/855)</td></tr></tbody></table></div>
+<p>No collapse. DPO&#x27;s best checkpoint ties SFT exactly in the fresh arm and lands 0.9 points below it in the CPT-v2 arm, both well within noise. Running DPO to its full budget costs about 8 points in both arms, so at this recipe and 654 preference pairs it is mild overfitting rather than catastrophe, and it doesn&#x27;t beat plain SFT.</p>
+<p>The lesson: when a result is too clean, when there&#x27;s no variance and nothing you change moves it, stop analyzing the numbers and go read what the model actually wrote. Ten days sat between the first &quot;collapse&quot; chart and the root cause.</p>
+<h2>Result three: CPT leaves a fingerprint the benchmark can&#x27;t see</h2>
+<p>That fix cleared the DPO stage but didn&#x27;t change the CPT verdict, which never involved a fused checkpoint. So we asked a different question: if SFT erases CPT-v2&#x27;s behavioral advantage, does it erase CPT-v2 entirely, or does the adapter trained on top of CPT-v2 still look different inside?</p>
+<p>We took the singular value decomposition of the LoRA matrices at <code>self_attn.q_proj</code> across layers 32-47, for three adapters: CPT-v2 alone, the fresh-base SFT adapter, and the CPT-v2-base SFT adapter. SVD splits a matrix into directions ordered by how much of it they explain. We wanted to know how concentrated each update is, measured as stable rank: near 1 means one direction dominates, near 16 means it spreads evenly across the full rank-16 budget.</p>
+<p>The full weight update per layer is a large dense matrix, and we never have to build it. A LoRA update factors as ΔW = P @ Q with P thin, and a QR decomposition of P leaves the singular values untouched, so the SVD runs on a 16-row matrix instead. The probe checks that identity against a dense SVD before it opens a single checkpoint:</p>
+<pre><code data-lang="python"><span class="c"># model-experiments/04-cpt-sft/lora_svd_qproj.py:64-75</span>
+def lowrank_singular_values(P: np.ndarray, Q: np.ndarray) -&gt; np.ndarray:
+    &quot;&quot;&quot;Singular values of P @ Q, P: (in, r) with in &gt;= r, Q: (r, out).&quot;&quot;&quot;
+    Qp, R = np.linalg.qr(P)
+    return np.linalg.svd(R @ Q, compute_uv=False)
+
+
+def _selftest():
+    rng = np.random.default_rng(0)
+    P, Q = rng.normal(size=(64, 5)), rng.normal(size=(5, 40))
+    got = lowrank_singular_values(P, Q)
+    want = np.linalg.svd(P @ Q, compute_uv=False)[:5]
+    assert np.allclose(got, want, atol=1e-8), f&quot;low-rank SVD trick mismatch: {got} vs {want}&quot;</code></pre>
+<figure><img src="images/lora_svd_qproj_heatmap.png" alt="LoRA singular values by rank and layer"><figcaption>LoRA singular values by rank and layer</figcaption></figure>
+<p>All three trained adapters are rank-1 dominated, stable rank 2.7 to 6.0 out of 16, the normal signature of a trained LoRA. An untrained random initialization sits at essentially full stable rank, which is the uniform leftmost panel above and the flat gray line below.</p>
+<figure><img src="images/lora_svd_qproj_spectra.png" alt="Singular-value spectra per layer"><figcaption>Singular-value spectra per layer</figcaption></figure>
+<p>Two patterns hold across all eight sampled layers. The fresh-base SFT adapter is consistently less concentrated (stable rank 4.4 to 6.0) than either adapter with CPT-v2 in its lineage (2.7 to 4.3). And the CPT-v2-base SFT adapter tracks the standalone CPT-v2 adapter closely, while the fresh SFT adapter sits apart from both. At layer 47, stable rank runs 2.70 for CPT-v2 alone, 2.83 for SFT-on-CPT-v2, and 4.42 for SFT-on-fresh. The dominant direction&#x27;s magnitude splits the same way: 1.10, 1.13, and 0.53.</p>
+<p>SFT on top of CPT-v2 produces a weight update shaped like CPT-v2&#x27;s, not like a from-scratch SFT update. The convergence between the two arms is behavioral, not mechanical: both models reach the same pass rate by different internal routes, and one route was visibly inherited from CPT.</p>
+<p>It&#x27;s an interesting result and, for now, a useless one. We have no evidence the fingerprint predicts anything, and we only checked one projection type out of eight, at one stage of training.</p>
+<h2>What we do with this</h2>
+<p>For our pipeline, the recommendation is to skip CPT. A fresh base run through the identical SFT recipe lands statistically indistinguishable from the CPT arm, and CPT-v2 cost 6528 training iterations over roughly 16 hours, plus a corpus curation pass and twelve per-leg regression checks, to produce an advantage that SFT reproduces on its own. If you have curated domain text and are choosing where to spend, spend it on SFT data.</p>
+<p>That verdict is scoped to this recipe and this dataset size. 9608 SFT examples is a lot of supervision for a language as small as Jac. With a tenth of that, CPT&#x27;s head start might well still be visible at the end. We didn&#x27;t test it.</p>
+<p>The next post changes a different variable: which layers the LoRA trains on. That one produced a result we did not expect.</p>
+<hr>
+<p class="footnote"><em>All numbers come from <code>model-experiments/04-cpt-sft/</code> in our repo: <code>RESULTS.md</code> for the consolidated table, <code>docs/reports/2026-07-cpt-vs-fresh-comparison.md</code> for the statistical write-up, the fuse-bug investigation, and the SVD probe.</em></p>
+</main>
+</body>
+</html>
