@@ -110,6 +110,49 @@ The spec's target weights (code_gen 36%, debug 16%, explanation 10%, conversion 
 
 This isn't a bug — every one of these numbers is real supply-constrained or scope-constrained, and each constraint was independently investigated and documented at the time it was found (not just asserted). Hitting the spec's exact weight targets would require implementing code_gen's other 28 task types and finding/inventing far more debug-eligible seed material — both explicitly out of this session's scope.
 
+### Generation token cost (measured retroactively, 2026-08-10)
+
+Nothing metered token usage during the run. These numbers were reconstructed
+afterwards by tokenizing the surviving batch files
+(`dataset/fresh/raw_output/<cat>/{pending,responses}_batch.jsonl`) with the
+Qwen3-Coder tokenizer (`models/qwen-q4`) — `pending` is what was sent to the
+generator, `responses` is what came back.
+
+| category | model | rows | in (prompt) | out (resp) | total | % | out:in |
+|---|---|---:|---:|---:|---:|---:|---:|
+| trajectory | opus | 1,561 | 826,518 | 1,185,680 | 2,012,198 | 31.9% | 1.43 |
+| code_gen | opus | 2,314 | 1,231,120 | 135,885 | 1,367,005 | 21.7% | 0.11 |
+| explanation | fable | 2,678 | 701,016 | 316,285 | 1,017,301 | 16.1% | 0.45 |
+| documentation | fable | 1,373 | 672,277 | 207,395 | 879,672 | 14.0% | 0.31 |
+| dpo | fable | 686 | 341,229 | 313,653 | 654,882 | 10.4% | 0.92 |
+| debug | fable | 363 | 227,371 | 125,290 | 352,661 | 5.6% | 0.55 |
+| graph_conversion | opus | 23 | 6,568 | 10,998 | 17,566 | 0.28% | 1.67 |
+| migration | opus | 11 | 1,519 | 896 | 2,415 | 0.04% | 0.59 |
+| conversion | — | 1,943 | 0 | 0 | 0 | 0% | — |
+| **total** | | **9,009** | **4,007,618** | **2,296,082** | **6,303,700** | **100%** | 0.57 |
+
+By model: opus 3,399,184 (53.9%; in 2,065,725 / out 1,333,459), fable
+2,904,516 (46.1%; in 1,941,893 / out 962,623). By direction: 63.6% in, 36.4%
+out. `conversion` cost zero LLM tokens by design — it is the frozen snapshot.
+
+Two categories carry over half the spend (trajectory + code_gen = 53.6%), for
+opposite reasons: trajectory emits long multi-turn sessions, while code_gen is
+reverse-authored (a full seed program goes in, a short NL request comes out —
+hence its 0.11 out:in ratio).
+
+**6.3M is a floor, not the bill.** It counts only the prompt/response payload
+persisted in the batch files. The batch-handoff architecture (§2) ran every
+"LLM call" through a dispatched Claude Code agent that also carried its own
+system prompt, re-read the pending shard, and was resumed repeatedly — the
+trajectory stalls (§6) alone cost a dozen-plus resumes. Real consumption was
+plausibly 1.5–2× this, i.e. on the order of 10M, but no record exists to
+confirm it.
+
+For contrast, the *released* dataset is 3,967,753 tokens (SFT 3,381,978 —
+2,164,893 of it loss-bearing assistant text; DPO 585,775), and gate rejections
+discarded ~1,511 rows / ~187k tokens (trajectory 1,093 rows / 144k, the rest
+minor).
+
 ## 6. Problems during the full-scale run
 
 ### Fable quota exhaustion (twice)
