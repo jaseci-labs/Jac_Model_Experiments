@@ -1,0 +1,115 @@
+{
+  "legs": [
+    {
+      "leg": 1,
+      "done_steps_after": 544,
+      "duration_s": 8645.6,
+      "train_loss": 1.879,
+      "val_loss": 1.485,
+      "final_lr": 8.328e-06,
+      "cf_passed": true,
+      "cf_score": "16/16",
+      "decision": "continue"
+    },
+    {
+      "leg": 2,
+      "done_steps_after": 1088,
+      "duration_s": 8545.2,
+      "train_loss": 1.05,
+      "val_loss": 1.326,
+      "final_lr": 9.902e-06,
+      "cf_passed": true,
+      "cf_score": "16/16",
+      "decision": "continue"
+    },
+    {
+      "leg": 3,
+      "done_steps_after": 1632,
+      "duration_s": 8526.5,
+      "train_loss": 1.346,
+      "val_loss": 1.085,
+      "final_lr": 9.511e-06,
+      "cf_passed": true,
+      "cf_score": "16/16",
+      "decision": "continue"
+    },
+    {
+      "leg": 4,
+      "done_steps_after": 2176,
+      "duration_s": 8530.8,
+      "train_loss": 1.174,
+      "val_loss": 1.113,
+      "final_lr": 8.846e-06,
+      "cf_passed": true,
+      "cf_score": "16/16",
+      "decision": "continue"
+    },
+    {
+      "leg": 5,
+      "done_steps_after": 2720,
+      "duration_s": 8911.5,
+      "train_loss": 0.971,
+      "val_loss": 0.91,
+      "final_lr": 7.953e-06,
+      "cf_passed": true,
+      "cf_score": "16/16",
+      "decision": "continue"
+    },
+    {
+      "leg": 6,
+      "done_steps_after": 3264,
+      "duration_s": 8582.5,
+      "train_loss": 0.742,
+      "val_loss": 0.999,
+      "final_lr": 6.893e-06,
+      "cf_passed": true,
+      "cf_score": "16/16",
+      "decision": "continue"
+    },
+    {
+      "leg": 7,
+      "done_steps_after": 3808,
+      "duration_s": 8578.9,
+      "train_loss": 0.667,
+      "val_loss": 0.877,
+      "final_lr": 5.738e-06,
+      "cf_passed": true,
+      "cf_score": "16/16",
+      "decision": "continue"
+    },
+    {
+      "leg": 8,
+      "done_steps_after": 4352,
+      "duration_s": 8561.8,
+      "train_loss": 0.764,
+      "val_loss": 0.924,
+      "final_lr": 4.567e-06,
+      "cf_passed": true,
+      "cf_score": "16/16",
+      "decision": "continue"
+    },
+    {
+      "leg": 9,
+      "done_steps_after": 4896,
+      "duration_s": 8567.7,
+      "train_loss": 0.63,
+      "val_loss": 0.903,
+      "final_lr": 3.459e-06,
+      "cf_passed": true,
+      "cf_score": "16/16",
+      "decision": "continue"
+    },
+    {
+      "leg": 10,
+      "done_steps_after": 5440,
+      "duration_s": 8590.3,
+      "train_loss": 0.591,
+      "val_loss": 0.891,
+      "final_lr": 2.491e-06,
+      "cf_passed": true,
+      "cf_score": "16/16",
+      "decision": "continue"
+    }
+  ],
+  "status": "continue"
+}
