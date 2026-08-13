@@ -1,7 +1,0 @@
-[2026-08-12 13:32:47] ================================================================
-[2026-08-12 13:32:47] Arm 5 full chain starting. Estimated 37-41h (cpt-spectrum-plan.md §6.2).
-[2026-08-12 13:32:47] PID 16862  |  log: model-experiments/04-cpt-sft/sft_cptspectrum_probe/results/arm5-chain/chain.log
-[2026-08-12 13:32:47] ================================================================
-[2026-08-12 13:32:47] disk available: 2771 GB (need ~70 GB, R11)
-[2026-08-12 13:32:47] preflight OK: no competing job, base model present, corpus present, layers present
-[2026-08-12 13:32:47] STAGE 1 (CPT): 12 legs on Spectrum's picks, ~26-30h. Resumes from on-disk checkpoints.
