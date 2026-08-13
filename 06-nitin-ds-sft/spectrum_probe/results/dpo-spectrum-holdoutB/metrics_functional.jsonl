@@ -1,0 +1,4 @@
+{"step": 1000250, "category": "conversion", "gate_class": "compile_only", "total": 855, "runs": 825, "runs_pct": 96}
+{"step": 1000250, "category": "__overall__", "gate_class": "__all__", "total": 855, "runs": 825, "runs_pct": 96}
+{"step": 500060, "category": "conversion", "gate_class": "compile_only", "total": 855, "runs": 835, "runs_pct": 97}
+{"step": 500060, "category": "__overall__", "gate_class": "__all__", "total": 855, "runs": 835, "runs_pct": 97}
