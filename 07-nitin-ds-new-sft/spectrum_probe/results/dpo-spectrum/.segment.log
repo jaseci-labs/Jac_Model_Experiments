@@ -1,0 +1,51 @@
+[dpo_spectrum_train] LoRA layers rebound to [0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47] (from model-experiments/07-nitin-ds-new-sft/spectrum_probe/spectrum/configs/spectrum_layers.json);
+  patched: mlx_lm.tuner.utils.linear_to_lora_layers, mlx_lm.lora.linear_to_lora_layers, mlx_lm_lora.utils.linear_to_lora_layers
+  DPODataset patched: add_generation_prompt=False (no spurious tag)
+
+[96m╔══════════════════════════════════════════════════════════════════════════════════════════╗[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m║[0m [1m[35m███╗   ███╗██╗     ██╗  ██╗    ██╗     ███╗   ███╗    ██╗      ██████╗ ██████╗  █████╗[0m   [96m║[0m
+[96m║[0m [1m[35m████╗ ████║██║     ╚██╗██╔╝    ██║     ████╗ ████║    ██║     ██╔═══██╗██╔══██╗██╔══██╗[0m  [96m║[0m
+[96m║[0m [1m[94m██╔████╔██║██║      ╚███╔╝     ██║     ██╔████╔██║    ██║     ██║   ██║██████╔╝███████║[0m  [96m║[0m
+[96m║[0m [1m[94m██║╚██╔╝██║██║      ██╔██╗     ██║     ██║╚██╔╝██║    ██║     ██║   ██║██╔══██╗██╔══██║[0m  [96m║[0m
+[96m║[0m [1m[96m██║ ╚═╝ ██║███████╗██╔╝ ██╗    ███████╗██║ ╚═╝ ██║    ███████╗╚██████╔╝██║  ██║██║  ██║[0m  [96m║[0m
+[96m║[0m [1m[96m╚═╝     ╚═╝╚══════╝╚═╝  ╚═╝    ╚══════╝╚═╝     ╚═╝    ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝[0m  [96m║[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m║[0m [93m[1mAdvanced Fine-Tuning Framework[0m                                                           [96m║[0m
+[96m║[0m [2m[97mLoRA • (Online-)DPO • XPO • CPO • CPO • ORPO • PPO • GRPO • DrGRPO • GSPO • RLHF • SFT[0m   [96m║[0m
+[96m║[0m                                                                                          [96m║[0m
+[96m╚══════════════════════════════════════════════════════════════════════════════════════════╝[0m
+    
+
+[96m============================================================[0m
+[1m[97m                   Configuration Summary                    [0m
+[96m============================================================[0m
+
+[97mModel:[0m models/qwen-q4
+[97mTraining Mode:[0m DPO
+[97mTraining Type:[0m lora
+[97mBatch Size:[0m 1
+[97mLearning Rate:[0m 1e-06
+[97mOptimizer:[0m adam
+[94m[INFO][0m Loading model: [96mmodels/qwen-q4[0m
+Loading model models/qwen-q4
+Loading LoRA adapters with config: {'rank': 16, 'dropout': 0.05, 'scale': 2.0, 'use_dora': False, 'num_layers': 16}
+Loading pretrained reference model (using main model)
+[94m[INFO][0m Loading datasets
+
+[96m============================================================[0m
+[1m[97m                          Training                          [0m
+[96m============================================================[0m
+
+[93m[WARNING][0m Loading fine-tuned weights from [96mmodel-experiments/07-nitin-ds-new-sft/spectrum_probe/adapters/dpo-on-sft-nitin-spectrum/adapters.safetensors[0m
+Trainable parameters: 0.923% (281.838M/30532.123M)
+[94m[INFO][0m Training mode: [93mDPO[0m
+Training:   0%|          | 0/10 [00:00<?, ?it/s]                                                Training:   0%|          | 0/10 [00:22<?, ?it/s]Training:  10%|█         | 1/10 [00:25<03:46, 25.13s/it]Training:  20%|██        | 2/10 [00:27<01:33, 11.65s/it]Training:  30%|███       | 3/10 [00:30<00:54,  7.78s/it]Training:  40%|████      | 4/10 [00:32<00:33,  5.53s/it]Training:  40%|████      | 4/10 [00:34<00:33,  5.53s/it, loss=0.012, it/s=0.416]                                                                                Training:  40%|████      | 4/10 [00:34<00:33,  5.53s/it, loss=0.012, it/s=0.416]Training:  50%|█████     | 5/10 [00:34<00:21,  4.35s/it, loss=0.012, it/s=0.416]Training:  60%|██████    | 6/10 [00:37<00:14,  3.69s/it, loss=0.012, it/s=0.416]Training:  70%|███████   | 7/10 [00:39<00:09,  3.26s/it, loss=0.012, it/s=0.416]Training:  80%|████████  | 8/10 [00:41<00:05,  2.97s/it, loss=0.012, it/s=0.416]Training:  90%|█████████ | 9/10 [00:44<00:02,  2.74s/it, loss=0.012, it/s=0.416]                                                                                Training:  90%|█████████ | 9/10 [00:52<00:02,  2.74s/it, loss=0.012, it/s=0.416]Training:  90%|█████████ | 9/10 [00:54<00:02,  2.74s/it, loss=0.018, it/s=2.183]                                                                                Training:  90%|█████████ | 9/10 [00:54<00:02,  2.74s/it, loss=0.018, it/s=2.183]                                                                                Training:  90%|█████████ | 9/10 [00:57<00:02,  2.74s/it, loss=0.018, it/s=2.183]Training: 100%|██████████| 10/10 [00:57<00:00,  5.86s/it, loss=0.018, it/s=2.183]Training: 100%|██████████| 10/10 [00:57<00:00,  5.71s/it, loss=0.018, it/s=2.183]
+Iter 1: Val loss 1.171, Val chosen reward 0.037, Val rejected reward 0.037, Val accuracy 0.399, Val margin -0.019, Val took 22.857s
+
+Iter 5: loss 0.012, chosen_r 9.170, rejected_r 4.113, acc 1.000, margin 5.057, lr 1.000e-06, it/s 0.416, tok/s 127.853, peak_mem 39.070GB
+Iter 10: Val loss 1.100, Val chosen reward 0.035, Val rejected reward 0.035, Val accuracy 0.292, Val margin 0.098, Val took 8.291s
+
+Iter 10: loss 0.018, chosen_r 8.066, rejected_r 3.044, acc 1.000, margin 5.021, lr 1.000e-06, it/s 2.183, tok/s 596.789, peak_mem 39.070GB
+Iter 10: Saved adapter weights to model-experiments/07-nitin-ds-new-sft/spectrum_probe/adapters/dpo-on-sft-nitin-spectrum/adapters.safetensors and model-experiments/07-nitin-ds-new-sft/spectrum_probe/adapters/dpo-on-sft-nitin-spectrum/0000010_adapters.safetensors.
+Saved final weights to model-experiments/07-nitin-ds-new-sft/spectrum_probe/adapters/dpo-on-sft-nitin-spectrum/adapters.safetensors.

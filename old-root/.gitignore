@@ -64,12 +64,14 @@ model-experiments/04-cpt-sft/sft_fresh_probe/results/dpo/snapshots/
 # generalizing so a new run name never silently re-blocks the push again)
 model-experiments/04-cpt-sft/*_probe/results/*/snapshots/
 model-experiments/06-nitin-ds-sft/*_probe/results/*/snapshots/
+model-experiments/07-nitin-ds-new-sft/*_probe/results/*/snapshots/
 
-# same story for 06-nitin-ds-sft's raw batch-gen intermediates (pending/
-# response shards for the SFT/DPO/holdout-eval reverse-authoring passes) --
-# large, purely intermediate, the gated release JSONLs in dataset/ are the
-# actual repo source
+# same story for 06-nitin-ds-sft's (and 07-nitin-ds-new-sft's) raw batch-gen
+# intermediates (pending/response shards for the SFT/DPO/holdout-eval
+# reverse-authoring passes) -- large, purely intermediate, the gated release
+# JSONLs in dataset/ are the actual repo source
 model-experiments/06-nitin-ds-sft/dataset/raw_output/
+model-experiments/07-nitin-ds-new-sft/dataset/raw_output/
 
 # CPT-on-Spectrum probe: per-leg/CF-check stdout+stderr logs are large and
 # purely diagnostic; training_state.json, leg_reviews.md, cf_check_*.json,

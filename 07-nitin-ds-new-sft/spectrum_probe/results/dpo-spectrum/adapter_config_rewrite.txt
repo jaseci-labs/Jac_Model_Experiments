@@ -1,0 +1,30 @@
+rewrote model-experiments/07-nitin-ds-new-sft/spectrum_probe/results/dpo-spectrum/snapshots/step_0020/adapter_config.json: num_layers 16 -> 48 (covers blocks 0..47), spectrum_layers=[0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
+eval-time cost: 32 covered-but-untrained blocks ~= 563.7M F32 params ~= 2240MB
+rewrote model-experiments/07-nitin-ds-new-sft/spectrum_probe/results/dpo-spectrum/snapshots/step_0040/adapter_config.json: num_layers 16 -> 48 (covers blocks 0..47), spectrum_layers=[0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
+eval-time cost: 32 covered-but-untrained blocks ~= 563.7M F32 params ~= 2240MB
+rewrote model-experiments/07-nitin-ds-new-sft/spectrum_probe/results/dpo-spectrum/snapshots/step_0060/adapter_config.json: num_layers 16 -> 48 (covers blocks 0..47), spectrum_layers=[0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
+eval-time cost: 32 covered-but-untrained blocks ~= 563.7M F32 params ~= 2240MB
+rewrote model-experiments/07-nitin-ds-new-sft/spectrum_probe/results/dpo-spectrum/snapshots/step_0080/adapter_config.json: num_layers 16 -> 48 (covers blocks 0..47), spectrum_layers=[0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
+eval-time cost: 32 covered-but-untrained blocks ~= 563.7M F32 params ~= 2240MB
+rewrote model-experiments/07-nitin-ds-new-sft/spectrum_probe/results/dpo-spectrum/snapshots/step_0100/adapter_config.json: num_layers 16 -> 48 (covers blocks 0..47), spectrum_layers=[0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
+eval-time cost: 32 covered-but-untrained blocks ~= 563.7M F32 params ~= 2240MB
+rewrote model-experiments/07-nitin-ds-new-sft/spectrum_probe/results/dpo-spectrum/snapshots/step_0120/adapter_config.json: num_layers 16 -> 48 (covers blocks 0..47), spectrum_layers=[0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
+eval-time cost: 32 covered-but-untrained blocks ~= 563.7M F32 params ~= 2240MB
+rewrote model-experiments/07-nitin-ds-new-sft/spectrum_probe/results/dpo-spectrum/snapshots/step_0140/adapter_config.json: num_layers 16 -> 48 (covers blocks 0..47), spectrum_layers=[0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
+eval-time cost: 32 covered-but-untrained blocks ~= 563.7M F32 params ~= 2240MB
+rewrote model-experiments/07-nitin-ds-new-sft/spectrum_probe/results/dpo-spectrum/snapshots/step_0160/adapter_config.json: num_layers 16 -> 48 (covers blocks 0..47), spectrum_layers=[0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
+eval-time cost: 32 covered-but-untrained blocks ~= 563.7M F32 params ~= 2240MB
+rewrote model-experiments/07-nitin-ds-new-sft/spectrum_probe/results/dpo-spectrum/snapshots/step_0180/adapter_config.json: num_layers 16 -> 48 (covers blocks 0..47), spectrum_layers=[0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
+eval-time cost: 32 covered-but-untrained blocks ~= 563.7M F32 params ~= 2240MB
+rewrote model-experiments/07-nitin-ds-new-sft/spectrum_probe/results/dpo-spectrum/snapshots/step_0200/adapter_config.json: num_layers 16 -> 48 (covers blocks 0..47), spectrum_layers=[0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
+eval-time cost: 32 covered-but-untrained blocks ~= 563.7M F32 params ~= 2240MB
+rewrote model-experiments/07-nitin-ds-new-sft/spectrum_probe/results/dpo-spectrum/snapshots/step_0220/adapter_config.json: num_layers 16 -> 48 (covers blocks 0..47), spectrum_layers=[0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
+eval-time cost: 32 covered-but-untrained blocks ~= 563.7M F32 params ~= 2240MB
+rewrote model-experiments/07-nitin-ds-new-sft/spectrum_probe/results/dpo-spectrum/snapshots/step_0240/adapter_config.json: num_layers 16 -> 48 (covers blocks 0..47), spectrum_layers=[0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
+eval-time cost: 32 covered-but-untrained blocks ~= 563.7M F32 params ~= 2240MB
+rewrote model-experiments/07-nitin-ds-new-sft/spectrum_probe/results/dpo-spectrum/snapshots/step_0250/adapter_config.json: num_layers 16 -> 48 (covers blocks 0..47), spectrum_layers=[0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
+eval-time cost: 32 covered-but-untrained blocks ~= 563.7M F32 params ~= 2240MB
+rewrote model-experiments/07-nitin-ds-new-sft/spectrum_probe/adapters/dpo-on-sft-nitin-spectrum/adapter_config.json: num_layers 16 -> 48 (covers blocks 0..47), spectrum_layers=[0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
+eval-time cost: 32 covered-but-untrained blocks ~= 563.7M F32 params ~= 2240MB
+rewrote model-experiments/07-nitin-ds-new-sft/spectrum_probe/adapters/dpo-on-sft-nitin-spectrum-best/adapter_config.json: num_layers 16 -> 48 (covers blocks 0..47), spectrum_layers=[0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
+eval-time cost: 32 covered-but-untrained blocks ~= 563.7M F32 params ~= 2240MB
