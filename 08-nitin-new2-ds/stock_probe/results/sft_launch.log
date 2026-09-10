@@ -1,0 +1,17 @@
+>>> dry-run (30 iters) -- bail check
+Loading configuration file model-experiments/08-nitin-new2-ds/stock_probe/configs/sft.yaml
+Loading pretrained model
+Loading datasets
+Training
+Trainable parameters: 0.923% (281.838M/30532.123M)
+Starting training..., iters: 30
+Calculating loss...:   0%|          | 0/8 [00:00<?, ?it/s]Calculating loss...:  12%|█▎        | 1/8 [00:01<00:10,  1.46s/it]Calculating loss...:  25%|██▌       | 2/8 [00:02<00:07,  1.17s/it]Calculating loss...:  38%|███▊      | 3/8 [00:02<00:03,  1.32it/s]Calculating loss...:  50%|█████     | 4/8 [00:02<00:02,  1.87it/s]Calculating loss...:  62%|██████▎   | 5/8 [00:03<00:01,  2.03it/s]Calculating loss...:  75%|███████▌  | 6/8 [00:03<00:00,  2.49it/s]Calculating loss...:  88%|████████▊ | 7/8 [00:03<00:00,  2.88it/s]Calculating loss...: 100%|██████████| 8/8 [00:04<00:00,  2.20it/s]Calculating loss...: 100%|██████████| 8/8 [00:04<00:00,  1.80it/s]
+Iter 1: Val loss 0.687, Val took 4.458s
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3616 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Calculating loss...:   0%|          | 0/8 [00:00<?, ?it/s]Calculating loss...:  12%|█▎        | 1/8 [00:01<00:10,  1.46s/it]Calculating loss...:  25%|██▌       | 2/8 [00:01<00:04,  1.33it/s]Calculating loss...:  38%|███▊      | 3/8 [00:01<00:02,  1.97it/s]Calculating loss...:  50%|█████     | 4/8 [00:02<00:01,  2.47it/s]Calculating loss...:  62%|██████▎   | 5/8 [00:02<00:01,  2.76it/s]Calculating loss...:  75%|███████▌  | 6/8 [00:03<00:00,  2.22it/s]Calculating loss...:  88%|████████▊ | 7/8 [00:03<00:00,  2.31it/s]Calculating loss...: 100%|██████████| 8/8 [00:03<00:00,  2.54it/s]Calculating loss...: 100%|██████████| 8/8 [00:03<00:00,  2.11it/s]
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3251 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 30: Val loss 0.394, Val took 3.799s
+Iter 30: Train loss 1.154, Learning Rate 7.073e-07, It/sec 1.241, Tokens/sec 244.633, Trained Tokens 9859, Peak mem 26.192 GB
+Saved final weights to model-experiments/08-nitin-new2-ds/stock_probe/adapters/dry/adapters.safetensors.
+>>> dry-run complete.
+>>> SFT attempt: requesting 8200 iters (0/8200 done, 8200 remaining)
