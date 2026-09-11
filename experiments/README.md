@@ -11,8 +11,11 @@ NN-name/
 
 08 also keeps `dataset/` (its full dataset, including the shared holdout (a))
 and `docs/` (spec, workflow, CONTEXT_BRIEF, dataset structure, corpus triage,
-funnel stats). New experiments go here too; the pipeline at the repo root
-(`1-scaffold/`, `2-train/`, `3-eval/`) takes `EXP=experiments/NN-name`.
+funnel stats), plus the pipeline itself — `scaffold/`, `train/`, `eval/`.
+There is no shared pipeline at the repo root any more and no `EXP` env var:
+a new experiment copies 08's `scaffold/`, `train/` and `eval/` into its own
+directory, and each script derives its experiment from its own location. See
+[`../PLAYBOOK.md`](../PLAYBOOK.md).
 
 The original experiment trees of 04, 06 and 07 were deleted 2026-09-11. Their
 `adapter/` holds the **single best-scoring final adapter** of that experiment,
@@ -38,7 +41,7 @@ not the same file: 07's (b) is `experiments/08-nitin-new2-ds/dataset/nitin_holdo
 (08 reused it byte-for-byte); 06's (b) was a different 855-row carve that was
 deleted with 06 (its `final_holdoutB.txt` dates from 2026-08-13, before 07's
 holdout existed). So 06's and 07's (b) numbers are not comparable to each other.
-Score = "OVERALL runs" of `3-eval/eval_functional.jac` (compiles + executes).
+Score = "OVERALL runs" of `experiments/08-nitin-new2-ds/eval/eval_functional.jac` (compiles + executes).
 Full history and context: [`../docs/HISTORY.md`](../docs/HISTORY.md).
 
 Result files: `metrics_functional.jsonl`, `final*.txt` (full-holdout eval log;
@@ -57,7 +60,7 @@ were updated to the flattened layout.
 JAC_EVAL_MODE=mlx JAC_EVAL_MODEL=models/qwen-q4 \
   JAC_EVAL_ADAPTER=experiments/06-nitin-ds-sft/adapter \
   JAC_HOLDOUT=experiments/08-nitin-new2-ds/dataset/holdout_a_shared855.jsonl \
-  .venv/bin/jac run 3-eval/eval_functional.jac
+  .venv/bin/jac run experiments/08-nitin-new2-ds/eval/eval_functional.jac
 
 # python
 .venv/bin/python -c "from mlx_lm import load, generate; \

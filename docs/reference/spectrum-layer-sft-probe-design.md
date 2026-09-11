@@ -1,6 +1,6 @@
 # 04-cpt-sft — Spectrum-layer SFT probe — Design Spec
 
-*Historical design doc from 04-cpt-sft (deleted 2026-09-11). Paths below refer to 04's tree. The live code is `2-train/spectrum`; how to use it is in [../PLAYBOOK.md](../../PLAYBOOK.md) step 1.*
+*Historical design doc from 04-cpt-sft (deleted 2026-09-11). Paths below refer to 04's tree. The live code is `experiments/08-nitin-new2-ds/train/spectrum` (a new experiment gets its own copy — see [../PLAYBOOK.md](../../PLAYBOOK.md) step 0.1); how to use it is in [../PLAYBOOK.md](../../PLAYBOOK.md) step 1.*
 
 Status: approved, pre-implementation (spec-only phase).
 Date: 2026-08-02.

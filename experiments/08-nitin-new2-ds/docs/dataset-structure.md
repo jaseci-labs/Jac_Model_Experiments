@@ -58,7 +58,7 @@ six shapes:
 | step4_work | translate_request | python_to_jac_function | 683 | (Python source + prompt from `step4*/work/*.json`, idiomatic target joined from `composer_dataset.jsonl`) |
 | farm_handler | spec_style | farm_crud_module | 2 | same shape as `farm`, near-total content overlap (981/983 deduped away) |
 
-**Wire format** (`1-scaffold/release.jac`): SFT assistant turns are
+**Wire format** (`scaffold/release.jac`): SFT assistant turns are
 ` ```jac ... ``` `-fenced, matching 07's convention (07 is 100% fenced; eval
 scripts strip fences before scoring). All rows carry `id`, `source_type`,
 `task_type`, `tier`, `dataset_version="nitin-new2-ds-v1.0.0"`,

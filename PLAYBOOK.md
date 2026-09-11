@@ -2,14 +2,21 @@
 
 This is the template for every new experiment. It follows what
 [`08-nitin-new2-ds`](experiments/08-nitin-new2-ds/) actually did: **scaffold, Spectrum
-SFT, eval, report**, one directory per step at the repo root:
+SFT, eval, report**, one directory per step inside the experiment itself:
 
 ```
-1-scaffold/   build + split the dataset                    -> $EXP/dataset/
-2-train/      Spectrum SFT (+ optional stock / DPO arms)  -> $EXP/adapter/, $EXP/results/
-3-eval/       score on the holdouts                        -> $EXP/results/
-experiments/  one dir per experiment: adapter/, results/, report.md (+ dataset/, docs/)
+experiments/NN-name/
+  scaffold/   build + split the dataset                    -> dataset/
+  train/      Spectrum SFT (+ optional stock / DPO arms)  -> adapter/, results/
+  eval/       score on the holdouts                        -> results/
+              (+ adapter/, results/, report.md, docs/ once you've written them)
 ```
+
+08 is the template: a new experiment is `mkdir experiments/NN-name && cp -r
+experiments/08-nitin-new2-ds/{scaffold,train,eval} experiments/NN-name/` —
+see [Step 0.1](#01-create-the-experiment-directory). 04, 06 and 07 have no
+scripts of their own (only `adapter/`, `results/`, `report.md`); they predate
+this recipe.
 
 Every script, flag and env var below was read out of the scripts before being
 written down, and the inline Python snippets were run against 08's data. Where
@@ -35,18 +42,21 @@ Contents:
 
 ### Where things run from
 
-Every script resolves paths relative to the **repo root**: the directory that
-contains `1-scaffold/`, `2-train/`, `3-eval/`, `experiments/`, `models/` and
-`.venv/`. The shell wrappers `cd` to the repo root themselves and use paths
-like `$EXP/...` and `models/qwen-q4`, and `setup_env.sh` builds `.venv` next to
-itself. So:
+Every script `cd`s to the **repo root** itself before doing anything — the
+directory that contains `experiments/`, `models/` and `.venv/` — and derives
+which experiment it belongs to from its own location. There is **no `EXP` env
+var**: a script under `experiments/NN-name/{scaffold,train,eval}/` always
+reads and writes that same experiment's own `dataset/`, `adapter/` and
+`results/`. So:
 
 - Clone the repo under any name, anywhere.
-- Run every command in this playbook from the repo root.
-- Every step takes the experiment as **`EXP=experiments/NN-name`** (relative to
-  the repo root; default `experiments/08-nitin-new2-ds`). `export EXP=...` once
-  per shell. Inputs are read from `$EXP/dataset/`, outputs go to
-  `$EXP/adapter/` and `$EXP/results/`.
+- Run every command in this playbook **by path, from anywhere** — e.g.
+  `experiments/08-nitin-new2-ds/scaffold/prep_training_dirs.sh` or
+  `jac run experiments/08-nitin-new2-ds/eval/eval_functional.jac`.
+- To work on a different experiment, run its own copy of the scripts instead
+  of 08's — e.g. `experiments/09-my-dataset/train/run_sft_spectrum.sh`. See
+  [Step 0.1](#01-create-the-experiment-directory) for how a new experiment
+  gets its own copies.
 - Call `jac` as `.venv/bin/jac` (or `source .venv/bin/activate` first). The
   wrappers prepend `.venv/bin` to `PATH` themselves, and the eval harness shells
   out to whatever `jac` is on `PATH`, so a stale global `jac` gives wrong scores.
@@ -108,34 +118,41 @@ run `bash <file>`.
 
 ### 0.1 Create the experiment directory
 
-Pick a name `NN-short-name` (next number, e.g. `09-...`). Nothing is copied:
-the pipeline is shared and parameterized by `EXP`.
+Pick a name `NN-short-name` (next number, e.g. `09-...`). 08 is the template:
+copy its `scaffold/`, `train/` and `eval/` into the new experiment directory —
+the copies target the new experiment automatically, no `EXP`, no edits needed
+just to point them at the right place.
 
 ```bash
-export EXP=experiments/09-my-dataset
-mkdir -p $EXP/dataset $EXP/docs
-cp experiments/08-nitin-new2-ds/dataset/holdout_a_shared855.jsonl $EXP/dataset/
+mkdir experiments/09-my-dataset
+cp -r experiments/08-nitin-new2-ds/{scaffold,train,eval} experiments/09-my-dataset/
+mkdir experiments/09-my-dataset/dataset experiments/09-my-dataset/docs
+cp experiments/08-nitin-new2-ds/dataset/holdout_a_shared855.jsonl experiments/09-my-dataset/dataset/
 ```
 
-What the shared pipeline gives you, and what to edit for a new experiment:
+The rest of this playbook says **"your experiment dir"** for
+`experiments/09-my-dataset/` — swap in whatever you actually named it.
+
+What the copied `scaffold/`, `train/` and `eval/` give you, and what to edit
+for a new experiment (paths below are relative to your experiment dir):
 
 | Path | Edit needed |
 |---|---|
-| `3-eval/eval_functional.jac` | none. This is the one scoring harness. Never change how it grades, or no number is comparable any more. |
-| `1-scaffold/nan_guard.jac`, `prep_training_dirs.sh` | none |
-| `3-eval/plot_metrics.jac`, `plot_progress.jac` | none |
-| `3-eval/gen_eval_detail.jac`, `grade_eval_detail.jac`, `grade_reference.jac` | `gen_eval_detail.jac` reads `$EXP/dataset/holdout_a_shared855.jsonl` (A) and `$EXP/dataset/nitin_holdout_eval.jsonl` (B) from its `HOLDOUTS` dict. Point `B` at your holdout (b) file. |
-| `1-scaffold/pipeline.jac` | 08-specific: merges 7 `jac-data-gen` sources at a pinned commit. Rewrite for your source (08's version stays in git history). Edit `COMMIT`, `CLONE`, `WORKTREE` (or set `JDG_ROOT`), `DATASET_VERSION`, `RUN_TAG`, and the per-source blocks. |
-| `1-scaffold/copy_holdout.jac` | `HOLDOUT_FILES` names the holdout (b) files (`nitin_holdout.jsonl`, `nitin_holdout_eval.jsonl`). Rename if yours differ. |
-| `1-scaffold/release.jac` | pool schema to trainer schema. Edit `DATASET_VERSION`, `RUN_TAG`, `TASK_TYPE`, `REGISTER` for your sources. |
-| `2-train/` (`run_sft_spectrum.sh`, `spectrum/`, `configs/`) | nothing. |
-| `2-train/stock/` | only if you want a stock control arm; nothing to edit |
-| `$EXP/docs/` | write your own `CONTEXT_BRIEF.md` (settled facts) and `README.md`/`spec.md` (question, design, decision rule) before training |
+| `eval/eval_functional.jac` | none. This is the one scoring harness. Never change how it grades, or no number is comparable any more. |
+| `scaffold/nan_guard.jac`, `scaffold/prep_training_dirs.sh` | none |
+| `eval/plot_metrics.jac`, `eval/plot_progress.jac` | none |
+| `eval/gen_eval_detail.jac`, `eval/grade_eval_detail.jac`, `eval/grade_reference.jac` | `gen_eval_detail.jac` reads holdout (a) (`dataset/holdout_a_shared855.jsonl`) and holdout (b) (`dataset/nitin_holdout_eval.jsonl`) from its `HOLDOUTS` dict. Point `B` at your holdout (b) file. |
+| `scaffold/pipeline.jac` | 08-specific: merges 7 `jac-data-gen` sources at a pinned commit. Rewrite for your source (08's version stays in git history). Edit `COMMIT`, `CLONE`, `WORKTREE` (or set `JDG_ROOT`), `DATASET_VERSION`, `RUN_TAG`, and the per-source blocks. |
+| `scaffold/copy_holdout.jac` | `HOLDOUT_FILES` names the holdout (b) files (`nitin_holdout.jsonl`, `nitin_holdout_eval.jsonl`). Rename if yours differ. |
+| `scaffold/release.jac` | pool schema to trainer schema. Edit `DATASET_VERSION`, `RUN_TAG`, `TASK_TYPE`, `REGISTER` for your sources. |
+| `train/` (`run_sft_spectrum.sh`, `spectrum/`, `configs/`) | nothing. |
+| `train/stock/` | only if you want a stock control arm; nothing to edit |
+| `docs/` | write your own `CONTEXT_BRIEF.md` (settled facts) and `README.md`/`spec.md` (question, design, decision rule) before training |
 
 Verify holdout (a) is byte-identical to every prior experiment's:
 
 ```bash
-shasum -a 256 $EXP/dataset/holdout_a_shared855.jsonl
+shasum -a 256 experiments/09-my-dataset/dataset/holdout_a_shared855.jsonl
 # 51ad3bb36a31725a54de0db8a168f58d76e7cf52d96a708c87e4c581929594cc
 ```
 
@@ -173,30 +190,33 @@ seconds and scored nothing. If a full eval finishes in seconds, it did not run.
 
 ### 0.3 Build the dataset (08's sequence)
 
-Put the holdout (b) files in `$EXP/dataset/` first. 08's `pipeline.jac` reads
-`$EXP/dataset/nitin_holdout.jsonl` as its holdout gate, so it must exist before the
-pipeline runs. All four read `EXP` from the environment.
+Put the holdout (b) files in your experiment dir's `dataset/` first. 08's
+`pipeline.jac` reads `dataset/nitin_holdout.jsonl` as its holdout gate, so it
+must exist before the pipeline runs. All four scripts derive the experiment
+from their own location.
 
 ```bash
-.venv/bin/jac run 1-scaffold/pipeline.jac
-.venv/bin/jac run 1-scaffold/copy_holdout.jac    # HOLDOUT_SRC_DIR=<dir> to import holdout files from elsewhere
-.venv/bin/jac run 1-scaffold/release.jac
-1-scaffold/prep_training_dirs.sh                  # FORCE=1 to overwrite an existing split
+.venv/bin/jac run experiments/09-my-dataset/scaffold/pipeline.jac
+.venv/bin/jac run experiments/09-my-dataset/scaffold/copy_holdout.jac    # HOLDOUT_SRC_DIR=<dir> to import holdout files from elsewhere
+.venv/bin/jac run experiments/09-my-dataset/scaffold/release.jac
+experiments/09-my-dataset/scaffold/prep_training_dirs.sh                  # FORCE=1 to overwrite an existing split
 ```
 
 What each does in 08:
 
 1. **`pipeline.jac`**: merge, filter, dedup, decontaminate. Reads the pinned
-   `jac-data-gen` checkout (a detached worktree under `~/repos/.jdg-worktrees/`
-   created on demand from `~/repos/jac-data-gen`, or `$JDG_ROOT`; it raises if
-   HEAD is not `COMMIT`). In order: eval-denylist drop (upstream
+   `jac-data-gen` checkout: a detached worktree created on demand inside a
+   `.jdg-worktrees/` directory that's a sibling of the repo root, off the
+   clone at `../jac-data-gen` (also a sibling; override the clone location
+   with `$JDG_CLONE`), or `$JDG_ROOT` to point at an existing checkout
+   directly; it raises if HEAD is not `COMMIT`. In order: eval-denylist drop (upstream
    `evals/function/v1/denylist_ids.txt`), composer quality filter
    (`test_count >= 18`), js2jac license filter, per-source dedup, holdout-(b)
    leak drop (numeric id + normalized target hash), global cross-source dedup,
    then a final assertion that nothing in the pool matches the holdout or the
    denylist. Writes `dataset/candidate_pool.jsonl`,
    `dataset/rejected/{sft,dpo}/rejected.jsonl` (every drop with a reason), and
-   funnel stats to `$EXP/docs/funnel/stats.json` (persisted, commit them with the experiment).
+   funnel stats to your experiment dir's `docs/funnel/stats.json` (persisted, commit them with the experiment).
 2. **`copy_holdout.jac`**: re-runs the leak check against the pool **as
    written to disk**, on four surfaces: numeric id, `jac` target hash,
    `jac_rejected` hash, holdout prompt text. If anything collides it rewrites
@@ -214,7 +234,7 @@ What each does in 08:
    without `FORCE=1`. `SPLIT_ONLY=sft|dpo` does one track. Then it runs the NaN
    guard.
 5. **`nan_guard.jac`** (runs inside step 4; standalone:
-   `.venv/bin/jac run 1-scaffold/nan_guard.jac`). Drops SFT
+   `.venv/bin/jac run experiments/09-my-dataset/scaffold/nan_guard.jac`). Drops SFT
    rows whose prompt alone is at least `max_seq_length` (3072) tokens, measured
    with the base tokenizer exactly as mlx computes its prompt mask. Such rows
    have zero loss tokens after truncation and turn the whole run to NaN (see
@@ -235,7 +255,7 @@ only**. No 08 script checks against holdout (a). 08 has zero exact overlap with
 targets against holdout (a):
 
 ````bash
-python3 - $EXP <<'PY'
+python3 - experiments/09-my-dataset <<'PY'
 import json, re, hashlib, sys
 E = sys.argv[1]
 def norm(s): return " ".join(str(s).split()).lower()
@@ -288,7 +308,7 @@ are recorded but not ranked. Every selected block still gets LoRA on all 8
 module types.
 
 The selection for this base, in
-`2-train/spectrum/spectrum_layers.json`:
+`train/spectrum/spectrum_layers.json` (inside your experiment dir):
 
 ```
 [0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]
@@ -312,7 +332,7 @@ Re-scan only for a new base model. The scan reads the **bf16 Hugging Face
 snapshot** (57 GB, streamed one tensor at a time), not the q4 MLX copy:
 
 ```bash
-S=2-train/spectrum
+S=experiments/09-my-dataset/train/spectrum
 .venv/bin/python $S/snr_scan.py \
   --snapshot ~/.cache/huggingface/hub/models--Qwen--Qwen3-Coder-30B-A3B-Instruct/snapshots/b2cff646eb4bb1d68355c01b18ae02e7cf42d120 \
   --out $S/snr/snr_raw.json
@@ -328,14 +348,14 @@ written for Qwen3-Coder-30B-A3B.
 
 ### 1.3 Hyperparameters
 
-From `2-train/configs/sft_spectrum.yaml` (identical to
-`2-train/configs/sft_stock.yaml` except `adapter_path`). Unchanged since 04.
+From `train/configs/sft_spectrum.yaml` (inside your experiment dir; identical
+to `train/configs/sft_stock.yaml` except `adapter_path`). Unchanged since 04.
 Change none of them if you want your number in the lineage table.
 
 | key | value |
 |---|---|
 | model | `models/qwen-q4` |
-| data | `$EXP/dataset/sft` (reads `train.jsonl` + `valid.jsonl`; the runner passes `--data`, which overrides the yaml's 08 default) |
+| data | your experiment dir's `dataset/sft` (reads `train.jsonl` + `valid.jsonl`; the runner passes `--data`, which overrides the yaml's own default) |
 | fine_tune_type | lora |
 | num_layers | 16 (the driver asserts this equals the layer-list length) |
 | lora rank / scale / dropout | 16 / 2.0 / 0.05 |
@@ -357,26 +377,26 @@ First run, without confirmation: self-test and dry run only.
 
 ```bash
 pgrep -fl "jac start|mlx_lm"                                  # empty
-2-train/run_sft_spectrum.sh
+experiments/09-my-dataset/train/run_sft_spectrum.sh
 ```
 
 This does two things and exits:
 
 1. **`--verify-layers` gate** (loads the base twice, a few minutes). Output in
-   `$EXP/results/verify_layers.txt`. It must end in
+   `results/verify_layers.txt` (inside your experiment dir). It must end in
    `VERIFY: PASS`, with both the spectrum and control lines showing
    `lora tensors = 256` and `trainable = 281.838M / 5054.233M (5.576%)`, and
    `upstream guard: OK (mlx-lm 0.31.3, source hash matches pin)`. (The
    percentage uses packed q4 words as the denominator. mlx's own training
    banner prints `281.838M/30532.123M` (0.923%). Same count.) If it fails,
    training does not start.
-2. **Dry run**, 30 iters into `$EXP/tmp/dry-spectrum`
-   (advisory; check the loss lines are finite). `$EXP/tmp/` is throwaway and gitignored.
+2. **Dry run**, 30 iters into `tmp/dry-spectrum`
+   (advisory; check the loss lines are finite). `tmp/` is throwaway and gitignored.
 
 Then the real run:
 
 ```bash
-CONFIRM_FULL_RUN=1 2-train/run_sft_spectrum.sh
+CONFIRM_FULL_RUN=1 experiments/09-my-dataset/train/run_sft_spectrum.sh
 ```
 
 Env knobs: `SKIP_VERIFY=1`, `SKIP_DRY=1`, `DRY_ITERS` (30), `EVAL_EVERY`
@@ -388,7 +408,7 @@ arm, finish one before starting the other.
 
 ### 1.5 What the watchdog does (markers, crash-resume)
 
-Run state lives in `$EXP/results/`:
+Run state lives in your experiment dir's `results/`:
 
 | file | meaning |
 |---|---|
@@ -405,41 +425,41 @@ Run state lives in `$EXP/results/`:
   LR schedule restart. This is accepted, but note it in the report if it happens.
 - mlx saves `NNNNNNN_adapters.safetensors` numbered from the start of each
   attempt. After an attempt ends, the loop copies them into
-  `$EXP/adapter/checkpoints/` (gitignored) under their **true** global step. The eval
-  sweep reads that folder.
+  `adapter/checkpoints/` (gitignored, inside your experiment dir) under their
+  **true** global step. The eval sweep reads that folder.
 - OOM signature: the next attempts are capped at 100 iters, at most twice, then
   it gives up. Five consecutive failures at the same step also give up.
 - **If the whole process tree dies** (lid-close sleep, power), the loop never
   gets to update `.sft_progress_steps` or copy the new checkpoints. Before
   relaunching: true step = the value in `.sft_progress_steps` + the highest
-  local number among `$EXP/adapter/*_adapters.safetensors` from the dead
+  local number among `adapter/*_adapters.safetensors` from the dead
   attempt. Write that into `.sft_progress_steps` and copy the missing
   checkpoints into `checkpoints/` with true-step names. Then run the same
   `CONFIRM_FULL_RUN=1` command.
 - **Guard against training over a finished adapter:** if
-  `$EXP/adapter/adapters.safetensors` exists but neither `.sft_progress_steps` nor
-  `.train.done` does (in `$EXP/results/`), the script refuses to run. This is
+  `adapter/adapters.safetensors` exists but neither `.sft_progress_steps` nor
+  `.train.done` does (in `results/`), the script refuses to run. This is
   what protects every finished adapter under `experiments/`. To retrain, move the
   adapter directory aside. Do not delete it; adapters here are single-copy.
 
 ### 1.6 Monitoring
 
-- The watchdog regenerates PNGs in `$EXP/results/` every poll via
-  `3-eval/plot_metrics.jac`: `train_loss.png`, `val_loss.png`,
+- The watchdog regenerates PNGs in `results/` (inside your experiment dir)
+  every poll via `eval/plot_metrics.jac`: `train_loss.png`, `val_loss.png`,
   `learning_rate.png`, `tokens_per_sec.png`, `iters_per_sec.png`,
   `peak_mem.png`, `trained_tokens.png`.
 - On demand:
 
   ```bash
-  R=$EXP/results
-  .venv/bin/jac run 3-eval/plot_progress.jac \
+  R=experiments/09-my-dataset/results
+  .venv/bin/jac run experiments/09-my-dataset/eval/plot_progress.jac \
     --train-log $R/train.log --out $R/plots/loss.png \
     --eval-curve $R/metrics_functional.jsonl --eval-out $R/plots/eval.png
   ```
 
 - **Grep for NaN.** `mlx_lm.lora` does not crash or exit non-zero when loss
   goes NaN; the log keeps growing and the stall detector sees nothing.
-  `grep -n "nan" $EXP/results/.segment.log`
+  `grep -n "nan" experiments/09-my-dataset/results/.segment.log`
   should print nothing. If it does, stop, find the over-length rows
   (`nan_guard.jac`), and restart from scratch. NaN poisons Adam's state, so a
   resume will not recover.
@@ -453,8 +473,8 @@ To measure Spectrum against stock on a new dataset (RQ1 in 06/07/08), train
 the stock arm with the same data and recipe on blocks 32 to 47:
 
 ```bash
-CONFIRM_FULL_RUN=1 2-train/stock/run_sft.sh     # -> $EXP/stock/{adapter,results}
-3-eval/eval_sft_sweep.sh                         # same HOLDOUT=/RDIR= overrides as below
+CONFIRM_FULL_RUN=1 experiments/09-my-dataset/train/stock/run_sft.sh     # -> experiments/09-my-dataset/stock/{adapter,results}
+experiments/09-my-dataset/eval/eval_sft_sweep.sh                         # same HOLDOUT=/RDIR= overrides as below
 ```
 
 It doubles training time. On the three datasets where both arms were scored
@@ -472,13 +492,13 @@ anything before.
 ```bash
 pgrep -fl "jac start|mlx_lm"     # empty. The eval script does not check.
 
-# holdout (a): defaults are HOLDOUT=$EXP/dataset/holdout_a_shared855.jsonl, RDIR=$EXP/results
-3-eval/eval_sft_spectrum.sh
+# holdout (a): defaults are HOLDOUT=<experiment dir>/dataset/holdout_a_shared855.jsonl, RDIR=<experiment dir>/results
+experiments/09-my-dataset/eval/eval_sft_spectrum.sh
 
 # holdout (b)
-HOLDOUT=$EXP/dataset/<your_holdout_b_eval>.jsonl \
-RDIR=$EXP/results/holdoutB \
-  3-eval/eval_sft_spectrum.sh
+HOLDOUT=experiments/09-my-dataset/dataset/<your_holdout_b_eval>.jsonl \
+RDIR=experiments/09-my-dataset/results/holdoutB \
+  experiments/09-my-dataset/eval/eval_sft_spectrum.sh
 ```
 
 Run them one after the other, not in parallel. On 08: holdout (a) took about
@@ -486,7 +506,7 @@ Run them one after the other, not in parallel. On 08: holdout (a) took about
 
 ### 2.2 What `eval_sft_spectrum.sh` does
 
-1. **Rewrites `adapter_config.json`** (`2-train/spectrum/adapter_config_fix.jac`):
+1. **Rewrites `adapter_config.json`** (`train/spectrum/adapter_config_fix.jac`, inside your experiment dir):
    `num_layers` 16 becomes 48 and the layer list is added. Without this,
    `mlx_lm.load` rebuilds LoRA on blocks 32 to 47 from the adapter's own
    `num_layers: 16`, and `load_weights(strict=False)` silently drops blocks 0,
@@ -498,7 +518,7 @@ Run them one after the other, not in parallel. On 08: holdout (a) took about
    `OK: all 256 adapter keys present in the loaded model` (`key_assertion.txt`).
 3. **Base model, full holdout**, step 0 → `base.txt`. The floor: 10.5%
    (90/855) on (a); 0% on the py2jac holdouts.
-4. **Checkpoint sweep**: every file in `$EXP/adapter/checkpoints/`, on the
+4. **Checkpoint sweep**: every file in `adapter/checkpoints/` (inside your experiment dir), on the
    first `SUBSET` rows (default 100). This is the first 100 rows, not a random
    sample: on holdout (a) they are all `code_gen` (65 compile_only, 35
    behavioral). Use it for the trend only, never as a headline number.
@@ -510,7 +530,7 @@ the previous eval in that `RDIR`.
 Outputs in `RDIR`: `adapter_config_rewrite.txt`, `key_assertion.txt`,
 `base.txt`, `final.txt`, `metrics_functional.jsonl`, and an empty `images/`.
 
-### 2.3 The harness: `3-eval/eval_functional.jac`
+### 2.3 The harness: `eval/eval_functional.jac`
 
 Env vars (the wrappers set them):
 
@@ -518,7 +538,7 @@ Env vars (the wrappers set them):
 |---|---|
 | `JAC_EVAL_MODEL` | base model path |
 | `JAC_EVAL_ADAPTER` | adapter dir, empty for base |
-| `JAC_HOLDOUT` | holdout JSONL (default: `$EXP/dataset/holdout_a_shared855.jsonl`, `EXP` defaulting to 08) |
+| `JAC_HOLDOUT` | holdout JSONL (default: the running script's own experiment dir's `dataset/holdout_a_shared855.jsonl`) |
 | `JAC_EVAL_LIMIT` | first N rows only; 0 = all |
 | `JAC_EVAL_BATCH_SIZE` | batch size for `mlx_lm.batch_generate` (32) |
 | `JAC_EVAL_METRICS_OUT` | JSONL to append results to |
@@ -539,8 +559,8 @@ Standalone (e.g. scoring an earlier experiment's adapter):
 ```bash
 JAC_EVAL_MODEL=models/qwen-q4 \
 JAC_EVAL_ADAPTER=experiments/06-nitin-ds-sft/adapter \
-JAC_HOLDOUT=$EXP/dataset/holdout_a_shared855.jsonl \
-  .venv/bin/jac run 3-eval/eval_functional.jac
+JAC_HOLDOUT=experiments/08-nitin-new2-ds/dataset/holdout_a_shared855.jsonl \
+  .venv/bin/jac run experiments/08-nitin-new2-ds/eval/eval_functional.jac
 ```
 
 (Activate the venv first so the harness's inner `jac run` finds the venv `jac`.)
@@ -559,7 +579,7 @@ Per-category table for the final checkpoint, with one decimal (the last block
 of `final.txt` has the same numbers, floored):
 
 ```bash
-python3 - $EXP/results/metrics_functional.jsonl <<'PY'
+python3 - experiments/09-my-dataset/results/metrics_functional.jsonl <<'PY'
 import json, sys
 rows = [json.loads(l) for l in open(sys.argv[1])]
 ends = [i for i, r in enumerate(rows) if r["category"] == "__overall__"]
@@ -600,12 +620,13 @@ For McNemar, dump per-row results for both adapters, then count discordant
 pairs by `id`:
 
 ```bash
-ADAPTER=$EXP/adapter \
-OUT_PREFIX=$EXP/results/failure_data/spectrum_sft HOLDOUTS=A,B \
-  .venv/bin/jac run 3-eval/gen_eval_detail.jac
-IN=$EXP/results/failure_data/spectrum_sft_holdoutA.gen.jsonl \
-OUT=$EXP/results/failure_data/spectrum_sft_holdoutA.graded.jsonl \
-  .venv/bin/jac run 3-eval/grade_eval_detail.jac
+E=experiments/09-my-dataset
+ADAPTER=$E/adapter \
+OUT_PREFIX=$E/results/failure_data/spectrum_sft HOLDOUTS=A,B \
+  .venv/bin/jac run $E/eval/gen_eval_detail.jac
+IN=$E/results/failure_data/spectrum_sft_holdoutA.gen.jsonl \
+OUT=$E/results/failure_data/spectrum_sft_holdoutA.graded.jsonl \
+  .venv/bin/jac run $E/eval/grade_eval_detail.jac
 ```
 
 `gen_eval_detail.jac` uses the same generation path as the harness (batch 32,
@@ -635,7 +656,7 @@ single seed, so p-values cover sampling noise, not training-seed noise.
 
 ## Step 3: report
 
-Write `$EXP/report.md`. Structure, following
+Write `report.md` in your experiment dir. Structure, following
 [08's report](experiments/08-nitin-new2-ds/report.md) and [07's](experiments/07-nitin-ds-new-sft/report.md):
 
 1. **Scope note.** What ran, what was cut, and why, if the design changed.
@@ -678,10 +699,11 @@ share one: 07 Spectrum SFT-final 98.2% (840/855), 07 DPO-best 97.9% (837/855),
 
 ## Optional: DPO pass
 
-The scripts exist and work: `2-train/dpo/run_dpo_spectrum.sh` and
-`3-eval/eval_dpo_spectrum.sh` (stock twins: `2-train/stock/run_dpo_nofuse.sh`,
-`3-eval/eval_dpo_nofuse.sh`). Outputs: `$EXP/dpo/{adapter,adapter-best,results}`
-(stock: `$EXP/stock-dpo/...`). 08 skipped DPO entirely.
+The scripts exist and work: `train/dpo/run_dpo_spectrum.sh` and
+`eval/eval_dpo_spectrum.sh` (stock twins: `train/stock/run_dpo_nofuse.sh`,
+`eval/eval_dpo_nofuse.sh`), all inside your experiment dir. Outputs:
+`dpo/{adapter,adapter-best,results}` (stock: `stock-dpo/...`), also inside
+your experiment dir. 08 skipped DPO entirely.
 
 History says to expect little. DPO's best checkpoint has tied SFT in every
 experiment (04, 06, 07). Running it to the full budget has lost up to 8 pp
@@ -691,14 +713,14 @@ data and a reason to think it teaches something SFT did not.
 
 ```bash
 pgrep -fl "jac start|mlx_lm"
-2-train/dpo/run_dpo_spectrum.sh                     # gates + 8-iter dry run, then exits
-CONFIRM_FULL_RUN=1 2-train/dpo/run_dpo_spectrum.sh
-3-eval/eval_dpo_spectrum.sh                         # HOLDOUT= / RDIR= as in step 2
+experiments/09-my-dataset/train/dpo/run_dpo_spectrum.sh                     # gates + 8-iter dry run, then exits
+CONFIRM_FULL_RUN=1 experiments/09-my-dataset/train/dpo/run_dpo_spectrum.sh
+experiments/09-my-dataset/eval/eval_dpo_spectrum.sh                         # HOLDOUT= / RDIR= as in step 2
 ```
 
 - Needs the SFT adapter (it refuses to start without it). Run the holdout-(a)
   `eval_sft_spectrum.sh` first too: the collapse gate reads the SFT baseline from
-  `$EXP/results/metrics_functional.jsonl`, and only rows with
+  your experiment dir's `results/metrics_functional.jsonl`, and only rows with
   `total == 855`. Train with the default `HOLDOUT` (holdout a). Pointing it at
   another holdout silently leaves only the 30% absolute floor.
 - Gates: `--verify-patches` (chat-template fix and layer rebind both live),
@@ -707,12 +729,12 @@ CONFIRM_FULL_RUN=1 2-train/dpo/run_dpo_spectrum.sh
 - Defaults: `DPO_ITERS=250`, `DPO_LR=1e-6`, `DPO_BETA=0.1`, sigmoid loss,
   `DPO_MAXLEN=512` (OOM ladder can drop it to 384), 20-iter segments, a
   100-row subset eval per snapshot, best snapshot tracked in
-  `$EXP/dpo/results/.best_step` and copied to
-  `$EXP/dpo/adapter-best`.
+  `dpo/results/.best_step` and copied to
+  `dpo/adapter-best` (both inside your experiment dir).
 - The DPO LoRA is seeded from the SFT adapter with `--resume-adapter-file`.
   **Never `mlx_lm.fuse` a LoRA into the 4-bit base**: re-quantization drops the
   SFT delta, and every DPO run then trains on an effectively untrained base
-  (04's "DPO collapse" to 2 to 12%). `2-train/configs/dpo_lora.yaml` sets `fuse: false`
+  (04's "DPO collapse" to 2 to 12%). `train/configs/dpo_lora.yaml` sets `fuse: false`
   for the same reason.
 - `eval_dpo_spectrum.sh` scores both the last and the best snapshot:
   `final_last.txt`, `final_best.txt`.
@@ -721,8 +743,9 @@ CONFIRM_FULL_RUN=1 2-train/dpo/run_dpo_spectrum.sh
 - `.best_step` does not survive a crash-resume. After any resume, diff
   `runs_pct` across all log segments and fix `-best` by hand if needed (06
   incident 2).
-- `nan_guard.jac` does not cover DPO rows. Check `$EXP/dataset/dpo/*.jsonl` prompt
-  lengths against `DPO_MAXLEN` yourself first. 08 never did.
+- `nan_guard.jac` does not cover DPO rows. Check your experiment dir's
+  `dataset/dpo/*.jsonl` prompt lengths against `DPO_MAXLEN` yourself first.
+  08 never did.
 
 ---
 

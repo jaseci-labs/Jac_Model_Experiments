@@ -1,7 +1,7 @@
 # Corpus triage report — 08-nitin-new2-ds
 
-Produced by `1-scaffold/pipeline.jac` + `1-scaffold/copy_holdout.jac` +
-`1-scaffold/release.jac`, 2026-09-09/10. Raw stats:
+Produced by `experiments/08-nitin-new2-ds/scaffold/pipeline.jac` + `scaffold/copy_holdout.jac` +
+`scaffold/release.jac`, 2026-09-09/10. Raw stats:
 `experiments/08-nitin-new2-ds/docs/funnel/stats.json`, `experiments/08-nitin-new2-ds/docs/funnel/release.json`. (persisted in the experiment dir.)
 Independently re-verified end-to-end after a mid-run external-drive
 disconnect (§6) rather than trusted as-is.

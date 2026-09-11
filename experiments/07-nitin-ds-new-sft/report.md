@@ -63,7 +63,7 @@ indistinguishable otherwise.
 
 ## 1. Headline table — Holdout A (the shared 855, cross-dataset comparable)
 
-All n=855, same functional harness (today's [`../../3-eval/eval_functional.jac`](../../3-eval/eval_functional.jac)),
+All n=855, same functional harness (today's [`../08-nitin-new2-ds/eval/eval_functional.jac`](../08-nitin-new2-ds/eval/eval_functional.jac)),
 same method as [06's report](../06-nitin-ds-sft/report.md) and
 [04-cpt-sft's report](../04-cpt-sft/report.md).
 

@@ -16,34 +16,39 @@ generated Jac compiles and runs.
 ## Layout
 
 ```
-./                      repo root; run everything from here
+./                      repo root; run everything from here (scripts cd here themselves)
   PLAYBOOK.md           the step-by-step guide
-  1-scaffold/           dataset build: pipeline.jac, copy_holdout.jac, release.jac,
+  experiments/
+    04-cpt-sft/  06-nitin-ds-sft/  07-nitin-ds-new-sft/
+                        each: adapter/, results/, report.md  (no scripts; predate this recipe)
+    08-nitin-new2-ds/   adapter/, results/, report.md, docs/, dataset/, and the pipeline itself:
+      scaffold/         dataset build: pipeline.jac, copy_holdout.jac, release.jac,
                         prep_training_dirs.sh (85/15 split) + nan_guard.jac
-  2-train/              run_sft_spectrum.sh (the recipe), spectrum/ (layer list, driver,
+      train/            run_sft_spectrum.sh (the recipe), spectrum/ (layer list, driver,
                         adapter_config_fix, SNR scan), configs/;
                         stock/ (trailing-16 control arm) and dpo/ (optional DPO pass)
-  3-eval/               eval_functional.jac (the one scoring harness), eval_*.sh runners,
+      eval/             eval_functional.jac (the one scoring harness), eval_*.sh runners,
                         per-row dump/grade scripts, plotting
-  experiments/
-    04-cpt-sft/  06-nitin-ds-sft/  07-nitin-ds-new-sft/  08-nitin-new2-ds/
-                        each: adapter/, results/, report.md  (08 also dataset/, docs/)
   models/qwen-q4/       base model, MLX 4-bit (gitignored, single copy)
   docs/                 HISTORY.md, history/ (reports of 01 to 05), reference/, blog/, presentation/
   setup_env.sh          builds .venv (here, at the repo root) and sanity-checks the pipeline
   .venv/                python venv (gitignored)
 ```
 
-Every pipeline script runs from the repo root and takes the experiment it
-works on as `EXP=experiments/<name>` (default `experiments/08-nitin-new2-ds`).
-Data is read from `$EXP/dataset/`; the adapter goes to `$EXP/adapter/`,
-logs and evals to `$EXP/results/`.
+There is no `EXP` env var. Every script under an experiment's `scaffold/`,
+`train/` and `eval/` derives that experiment from its own location, and `cd`s
+to the repo root itself — so scripts are invoked by path, from anywhere, e.g.
+`experiments/08-nitin-new2-ds/train/run_sft_spectrum.sh`. Data is read from
+that experiment's `dataset/`; the adapter goes to its `adapter/`, logs and
+evals to its `results/`. A new experiment gets its own copies of
+`scaffold/`, `train/` and `eval/` (see [PLAYBOOK.md](PLAYBOOK.md)).
 
 ## Results
 
 Holdout (a) is the shared 855-row code-graded holdout
 (`experiments/08-nitin-new2-ds/dataset/holdout_a_shared855.jsonl`). The score is
-the share of generations that compile and run under `3-eval/eval_functional.jac`.
+the share of generations that compile and run under
+`experiments/08-nitin-new2-ds/eval/eval_functional.jac`.
 The untrained base scores 10.5% (90/855).
 
 | experiment | adapter | holdout (a) | holdout (b) | report |
@@ -70,14 +75,16 @@ source .venv/bin/activate
 JAC_EVAL_MODEL=models/qwen-q4 \
 JAC_EVAL_ADAPTER=experiments/04-cpt-sft/adapter \
 JAC_HOLDOUT=experiments/08-nitin-new2-ds/dataset/holdout_a_shared855.jsonl \
-  jac run 3-eval/eval_functional.jac
+  jac run experiments/08-nitin-new2-ds/eval/eval_functional.jac
 
 # a new experiment, end to end (details in PLAYBOOK.md)
-export EXP=experiments/09-my-dataset
-1-scaffold/prep_training_dirs.sh                 # after building $EXP/dataset/sft_train.jsonl
-2-train/run_sft_spectrum.sh                      # self-test + dry run, then exits
-CONFIRM_FULL_RUN=1 2-train/run_sft_spectrum.sh   # the ~4 h run
-3-eval/eval_sft_spectrum.sh                      # holdout (a)
+mkdir experiments/09-my-dataset
+cp -r experiments/08-nitin-new2-ds/{scaffold,train,eval} experiments/09-my-dataset/
+# ... build experiments/09-my-dataset/dataset/sft_train.jsonl, then:
+experiments/09-my-dataset/scaffold/prep_training_dirs.sh
+experiments/09-my-dataset/train/run_sft_spectrum.sh                      # self-test + dry run, then exits
+CONFIRM_FULL_RUN=1 experiments/09-my-dataset/train/run_sft_spectrum.sh   # the ~4 h run
+experiments/09-my-dataset/eval/eval_sft_spectrum.sh                      # holdout (a)
 ```
 
 `setup_env.sh` pins `jaclang==0.16.1 mlx==0.31.2 mlx-lm==0.31.3 mlx-lm-lora==2.1.0`,

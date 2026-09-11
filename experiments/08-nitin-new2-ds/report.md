@@ -109,7 +109,7 @@ iter 8200.
    `apply_chat_template(msgs[:last_assistant], add_generation_prompt=True)`
    length ≥ `max_seq_length`. 3 rows dropped from train, 2 from valid, all
    `js2jac`; originals were backed up as `dataset/sft/{train,valid}.jsonl.pre-nanfix.bak`
-   (since deleted). The check is now `1-scaffold/nan_guard.jac`, run by
+   (since deleted). The check is now `experiments/08-nitin-new2-ds/scaffold/nan_guard.jac`, run by
    `prep_training_dirs.sh`.
    Logged in `CONTEXT_BRIEF.md` §11 so it isn't rediscovered. **Note:**
    `dataset/dpo/{train,valid}.jsonl` was never checked for the same risk
@@ -215,7 +215,7 @@ the NaN'd first stock run, the `*.pre-nanfix.bak` dataset backups, and
 ## 7. Open items for a future phase
 
 1. If RQ1 becomes relevant again, retrain the stock arm
-   (`2-train/stock/run_sft.sh`); the stock adapter no longer exists.
+   (`experiments/08-nitin-new2-ds/train/stock/run_sft.sh`); the stock adapter no longer exists.
 2. Check `dataset/dpo/{train,valid}.jsonl` for the same prompt-overflow-NaN
    risk under `DPO_MAXLEN=512` before ever running DPO on this pool.
 3. Run the optional failure-analysis pipeline (`docs/workflow.md` §5.4) to confirm

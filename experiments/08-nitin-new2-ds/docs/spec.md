@@ -179,15 +179,15 @@ lines).
 
 ### 5.2 New in this phase
 
-- The 7-source merge pipeline (`1-scaffold/pipeline.jac`) — not a port, a new
+- The 7-source merge pipeline (`experiments/08-nitin-new2-ds/scaffold/pipeline.jac`) — not a port, a new
   build, since nothing like it existed before (07's `pipeline.jac` read one
   JSONL).
 - The eval-denylist fix (§2.3) and quality-gradient filter (§2.2) — neither
   existed in 06's or 07's pipeline.
-- `1-scaffold/copy_holdout.jac` — copies 07's holdout verbatim and re-verifies
+- `experiments/08-nitin-new2-ds/scaffold/copy_holdout.jac` — copies 07's holdout verbatim and re-verifies
   leakage against it; 07 had no equivalent since it carved its own holdout
   fresh.
-- `1-scaffold/release.jac` — pool-schema → trainer-schema splitter; 07's
+- `experiments/08-nitin-new2-ds/scaffold/release.jac` — pool-schema → trainer-schema splitter; 07's
   equivalent was `collect.jac`, which assumed a single source schema. 08
   needed a new one because it has 7 heterogeneous source schemas to reconcile
   into one trainer-facing format (fenced SFT assistant turns, unfenced DPO
@@ -197,7 +197,7 @@ lines).
 
 Exact and normalized-hash dedup (comments stripped, whitespace collapsed).
 This spec originally said 06/07's 14-token shingle near-duplicate check was
-carried over; `1-scaffold/pipeline.jac` does not contain it. Plus the
+carried over; `experiments/08-nitin-new2-ds/scaffold/pipeline.jac` does not contain it. Plus the
 eval-denylist pass neither 06 nor 07 ran, plus a global cross-source dedup pass
 07 didn't need (07 had one source; 08's `farm_handler` turned out to be a
 near-total content subset of `farm`, caught here — 1,006 rows deduped
@@ -250,7 +250,7 @@ rule as every prior phase.
 statistical test — §4.2 already states neither holdout is graph-native
 in-distribution, so RQ3 can only be read qualitatively from whether the
 aggregate pass rate moved and from the per-source-type failure breakdown
-(`3-eval/gen_eval_detail.jac` + `grade_eval_detail.jac`; never run this
+(`experiments/08-nitin-new2-ds/eval/gen_eval_detail.jac` + `grade_eval_detail.jac`; never run this
 phase) showing whether osp/farm-
 derived generalization shows up on the existing holdouts at all. State this
 limitation plainly in the final report rather than overclaiming a test that

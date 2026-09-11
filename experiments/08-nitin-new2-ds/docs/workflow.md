@@ -47,8 +47,8 @@ release-split pipeline instead.
 ## Stage 0 — Corpus merge, filter, dedup, decontam, holdout reuse (DONE)
 
 ```
-.venv/bin/jac run 1-scaffold/pipeline.jac
-.venv/bin/jac run 1-scaffold/copy_holdout.jac
+.venv/bin/jac run experiments/08-nitin-new2-ds/scaffold/pipeline.jac
+.venv/bin/jac run experiments/08-nitin-new2-ds/scaffold/copy_holdout.jac
 ```
 
 `pipeline.jac` reads all 7 sources at the pin, applies (in order): the
@@ -78,8 +78,8 @@ pool left untouched.
 ## Stage 0b — Build the release + split files (DONE)
 
 ```
-.venv/bin/jac run 1-scaffold/release.jac
-1-scaffold/prep_training_dirs.sh
+.venv/bin/jac run experiments/08-nitin-new2-ds/scaffold/release.jac
+experiments/08-nitin-new2-ds/scaffold/prep_training_dirs.sh
 ```
 
 `release.jac` is 08's `collect.jac` equivalent — reconciles 7 heterogeneous
@@ -104,8 +104,8 @@ re-run post-split against both holdouts — still 0.
 **NaN guard (added after the first stock SFT run NaN'd).** With
 `mask_prompt: true` + `max_seq_length: 3072`, a row whose prompt alone is
 ≥ 3072 tokens has zero loss tokens after truncation → NaN loss.
-`prep_training_dirs.sh` now runs `1-scaffold/nan_guard.jac` right after the SFT
-split (standalone: `.venv/bin/jac run 1-scaffold/nan_guard.jac`).
+`prep_training_dirs.sh` now runs `nan_guard.jac` right after the SFT
+split (standalone: `.venv/bin/jac run experiments/08-nitin-new2-ds/scaffold/nan_guard.jac`).
 It tokenizes `messages[:-1]` with the base tokenizer
 (`apply_chat_template(..., add_generation_prompt=True)`, same as mlx_lm's mask
 offset), drops rows ≥ 3072, rewrites `dataset/sft/{train,valid}.jsonl` in place
@@ -147,7 +147,7 @@ Both must return nothing before starting.
 ### 3.2 Stock arm SFT
 
 ```
-CONFIRM_FULL_RUN=1 2-train/stock/run_sft.sh
+CONFIRM_FULL_RUN=1 experiments/08-nitin-new2-ds/train/stock/run_sft.sh
 ```
 
 Outputs: `experiments/08-nitin-new2-ds/stock/adapter`,
@@ -158,7 +158,7 @@ evaluated, and its adapter and results were deleted on 2026-09-11.
 ### 3.3 Spectrum arm SFT
 
 ```
-CONFIRM_FULL_RUN=1 2-train/run_sft_spectrum.sh
+CONFIRM_FULL_RUN=1 experiments/08-nitin-new2-ds/train/run_sft_spectrum.sh
 ```
 
 `--verify-layers` must print `VERIFY: PASS` at 281.838M trainable params
@@ -168,17 +168,17 @@ spectrum SFT starts.
 ### 3.4 Live monitoring (runs alongside 3.2/3.3)
 
 ```
-.venv/bin/jac run 3-eval/plot_progress.jac \
+.venv/bin/jac run experiments/08-nitin-new2-ds/eval/plot_progress.jac \
     --train-log <results dir>/train.log \
     --out       <results dir>/plots/loss.png \
     --eval-curve <results dir>/metrics_functional.jsonl \
     --eval-out   <results dir>/plots/eval.png
 ```
 
-`3-eval/plot_progress.jac` was copied in from 07 (path-substituted only).
+`experiments/08-nitin-new2-ds/eval/plot_progress.jac` was copied in from 07 (path-substituted only).
 Separately, the SFT runners' watchdog regenerates `train_loss.png`,
 `val_loss.png`, `learning_rate.png` and throughput/memory PNGs directly in
-`<results dir>/` via `3-eval/plot_metrics.jac` on every poll.
+`<results dir>/` via `experiments/08-nitin-new2-ds/eval/plot_metrics.jac` on every poll.
 Also grep `<results dir>/.segment.log` for `nan` while training:
 mlx_lm does not stop on NaN loss.
 
@@ -186,8 +186,8 @@ mlx_lm does not stop on NaN loss.
 
 > **IMPORTANT:** explicit user decision, 2026-09-11 (second call, supersedes
 > an earlier "spectrum-DPO-only" call) — **no DPO runs this phase, either
-> arm.** Neither `2-train/stock/run_dpo_nofuse.sh` nor
-> `2-train/dpo/run_dpo_spectrum.sh` is launched. See
+> arm.** Neither `experiments/08-nitin-new2-ds/train/stock/run_dpo_nofuse.sh` nor
+> `experiments/08-nitin-new2-ds/train/dpo/run_dpo_spectrum.sh` is launched. See
 > `CONTEXT_BRIEF.md`'s status block. Do not launch either without asking
 > first. Pipeline goes straight from spectrum SFT (Stage 3) to eval (Stage
 > 5), spectrum arm only.
@@ -212,25 +212,26 @@ report interpretation must account for it (§3.1).
 ## Stage 5 — Eval: SPECTRUM SFT ONLY × 2 holdouts (scope cut 2026-09-11)
 
 > **IMPORTANT:** per the Stage 4 scope cut, there is no stock-arm eval and
-> no DPO-stage eval this phase. Only `3-eval/eval_sft_spectrum.sh`
-> runs, against both holdouts. `3-eval/eval_sft_sweep.sh` (either
+> no DPO-stage eval this phase. Only
+> `experiments/08-nitin-new2-ds/eval/eval_sft_spectrum.sh`
+> runs, against both holdouts. `eval_sft_sweep.sh` (either
 > holdout) and both `eval_dpo_*.sh` scripts are NOT run. Don't run them
 > without asking first.
 
 Same harness as every prior phase:
-`3-eval/eval_functional.jac`.
+`experiments/08-nitin-new2-ds/eval/eval_functional.jac`.
 
 ### 5.1 Holdout (a) — the shared 855
 
 ```
-3-eval/eval_sft_spectrum.sh
+experiments/08-nitin-new2-ds/eval/eval_sft_spectrum.sh
 ```
 
 ### 5.2 Holdout (b) — 07's holdout, reused
 
 ```
 H=experiments/08-nitin-new2-ds/dataset/nitin_holdout_eval.jsonl
-HOLDOUT=$H RDIR=experiments/08-nitin-new2-ds/results/holdoutB 3-eval/eval_sft_spectrum.sh
+HOLDOUT=$H RDIR=experiments/08-nitin-new2-ds/results/holdoutB experiments/08-nitin-new2-ds/eval/eval_sft_spectrum.sh
 ```
 
 Remember: holdout (b) is 07's content, not 08's own multi-source
@@ -251,8 +252,8 @@ holdout as the floor.
 
 ### 5.4 Failure analysis (optional, after the headline numbers)
 
-Same three-script pipeline as 07 (`3-eval/gen_eval_detail.jac`,
-`3-eval/grade_eval_detail.jac`, `3-eval/grade_reference.jac`, copied in from
+Same three-script pipeline as 07 (`experiments/08-nitin-new2-ds/eval/gen_eval_detail.jac`,
+`grade_eval_detail.jac`, `grade_reference.jac`, copied in from
 07). Not run this phase. Usage is in `../../../PLAYBOOK.md` step 2.5.
 
 ## Stage 6 — Comparison report

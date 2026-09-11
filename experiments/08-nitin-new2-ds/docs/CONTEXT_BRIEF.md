@@ -17,8 +17,8 @@ turns out to be wrong.
 > `../../06-nitin-ds-sft/report.md`, `../../04-cpt-sft/report.md` (and older
 > history in `../../../docs/history/`); the holdout (a) file lives here as
 > `dataset/holdout_a_shared855.jsonl`; the eval harness is
-> `3-eval/eval_functional.jac`. How to run a new experiment from this tree:
-> `../../../PLAYBOOK.md`.
+> `experiments/08-nitin-new2-ds/eval/eval_functional.jac`. How to run a new
+> experiment from this tree: `../../../PLAYBOOK.md`.
 >
 > Dataset: source repo re-pinned (§1), 7-source merge + eval-denylist fix +
 > quality-gradient filter + license filter (§2), triage funnel
@@ -32,9 +32,11 @@ turns out to be wrong.
 > Concretely:
 > - Stock SFT DID run to completion (clean, no NaN) — its adapter/results
 >   are kept on disk as an artifact, but it is **NOT evaluated and NOT in
->   the report**. Do not run `3-eval/eval_sft_sweep.sh` for this phase.
+>   the report**. Do not run `experiments/08-nitin-new2-ds/eval/eval_sft_sweep.sh`
+>   for this phase.
 > - **DPO is skipped entirely, both arms.** Neither
->   `2-train/stock/run_dpo_nofuse.sh` nor `2-train/dpo/run_dpo_spectrum.sh`
+>   `experiments/08-nitin-new2-ds/train/stock/run_dpo_nofuse.sh` nor
+>   `experiments/08-nitin-new2-ds/train/dpo/run_dpo_spectrum.sh`
 >   runs this phase. Do not launch either without asking first.
 > - Pipeline is: spectrum SFT (§6) → eval spectrum SFT only, both holdouts
 >   (§5.1/§5.2, spectrum scripts only) → report.
@@ -94,7 +96,7 @@ way 07-vs-06 was — say so in the headline, don't bury it.
 
 The old `py2jac_dataset_idiomatic.jsonl` (07's only source) barely moved
 (9,367→9,371 records) at this pin. The real update is four sources that did
-not exist at 07's pin. `1-scaffold/pipeline.jac` reads all seven; its `COMMIT`
+not exist at 07's pin. `experiments/08-nitin-new2-ds/scaffold/pipeline.jac` reads all seven; its `COMMIT`
 constant is the single source of truth.
 
 ### 1.1 The 7 sources — what each one is and why it's in or out
@@ -129,7 +131,7 @@ framing into 08's report without re-checking it; it does not hold here.
 
 ## 2. Merge pipeline — denylist fix, quality filter, license filter
 
-**RESOLVED 2026-09-09/10** by `1-scaffold/pipeline.jac` (verified end-to-end by
+**RESOLVED 2026-09-09/10** by `experiments/08-nitin-new2-ds/scaffold/pipeline.jac` (verified end-to-end by
 an independent re-check after a mid-run drive disconnect — see §11).
 
 ### 2.1 Eval-leakage denylist — applied for the first time in this lineage
@@ -195,7 +197,7 @@ used by 04-cpt-sft, 06, and 07. Holding the base fixed across every phase in
 this lineage is what keeps the cross-phase dataset comparison clean.
 
 **Spectrum layer selection: reuse verbatim, do NOT re-run the SNR scan.**
-`2-train/spectrum/spectrum_layers.json` is copied unchanged
+`experiments/08-nitin-new2-ds/train/spectrum/spectrum_layers.json` is copied unchanged
 from 07 (itself sha256-identical to 06's and 04-cpt-sft's) —
 `[0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47]`. Verify the
 sha256 before trusting it rather than re-asserting from memory.
@@ -288,7 +290,7 @@ never a bare `with entry { }`.
 
 ## 6. Training — copy-adapted from 07, paths retargeted only
 
-`2-train/stock` and `2-train` are 07's trees with every
+`experiments/08-nitin-new2-ds/train/stock` and `experiments/08-nitin-new2-ds/train` are 07's trees with every
 `07-nitin-ds-new-sft` path reference substituted for `08-nitin-new2-ds`.
 Hyperparameters unchanged: `iters: 8200`, `batch_size: 1`,
 `learning_rate: 2.0e-5` cosine (warmup 820), `num_layers: 16`, LoRA rank 16 /
@@ -306,7 +308,7 @@ all 5 `.jac` files, zero leftover `07-nitin-ds-new-sft` string references,
 2. That lookup filters on `total == 855`; pointing a DPO training run at
    holdout (b) instead would silently drop the collapse gate to its 30%
    absolute floor. Preserved verbatim from 07, comment intact.
-3. `3-eval/eval_sft_spectrum.sh:85` and `eval_dpo_spectrum.sh:85`
+3. `experiments/08-nitin-new2-ds/eval/eval_sft_spectrum.sh:85` and `eval_dpo_spectrum.sh:85`
    still echo **06** (636/855, 74.4%) as "the incumbent" — inherited from 07
    unchanged. 08's natural comparison baseline is 07, not 06; update these
    echo lines once 07's actual final numbers are confirmed from its report,
@@ -314,7 +316,7 @@ all 5 `.jac` files, zero leftover `07-nitin-ds-new-sft` string references,
 
 Three corrections inherited from 06/07, still authoritative: no
 `spectrum/configs/dpo_spectrum.yaml` (env-var defaults in the runner); the
-functional harness is `3-eval/eval_functional.jac` (moved here from
+functional harness is `experiments/08-nitin-new2-ds/eval/eval_functional.jac` (moved here from
 04-cpt-sft's `sft_cptv2_probe/jacgen/` when 04 was deleted; grading logic
 unchanged) — never change how it grades; the stock DPO runner is
 `run_dpo_nofuse.sh`, never `run_dpo.sh` (fuse re-quantizes and discards the
@@ -325,7 +327,7 @@ return nothing before any launch.
 
 ## 7. Decontamination — reused shingle machinery, extended
 
-`1-scaffold/pipeline.jac` does exact and normalized-hash dedup (comments
+`experiments/08-nitin-new2-ds/scaffold/pipeline.jac` does exact and normalized-hash dedup (comments
 stripped, whitespace collapsed) per source and across sources, plus the
 eval-denylist pass (§2.1) that neither 06 nor 07 ran. It does **not** carry
 06/07's 14-token-shingle near-duplicate check (verified by reading the script
@@ -340,7 +342,7 @@ subset of `farm` (§1.1).
 
 The SFT runners' watchdog regenerates PNGs (train/val loss, LR, throughput,
 memory) into the arm's results dir on every poll via
-`3-eval/plot_metrics.jac`. `3-eval/plot_progress.jac` regenerates loss and
+`experiments/08-nitin-new2-ds/eval/plot_metrics.jac`. `plot_progress.jac` regenerates loss and
 eval-curve PNGs from `train.log` + `metrics_functional.jsonl` on demand,
 conventionally written to `<results dir>/plots/`.
 
@@ -351,6 +353,9 @@ experiments/08-nitin-new2-ds/   (layout after the 2026-09-11 repo flatten)
   report.md                 <- final comparison report
   adapter/                  <- final spectrum SFT adapter (safetensors gitignored)
   results/                  <- train.log, verify/key-assertion logs, base/final evals, plots; holdoutB/
+  scaffold/                 <- pipeline.jac, copy_holdout.jac, release.jac, prep_training_dirs.sh, nan_guard.jac
+  train/                    <- run_sft_spectrum.sh, spectrum/, configs/; stock/ (trailing-16 arm), dpo/
+  eval/                     <- eval_functional.jac, eval_*.sh, plot_*.jac, gen/grade_eval_detail.jac, grade_reference.jac
   docs/
     CONTEXT_BRIEF.md        <- this file
     README.md  spec.md  workflow.md  dataset-structure.md  corpus-triage-report.md
@@ -363,14 +368,13 @@ experiments/08-nitin-new2-ds/   (layout after the 2026-09-11 repo flatten)
     sft_train.jsonl (14,792)  dpo_train.jsonl (1,375)
     sft/{train,valid}.jsonl (12,570 / 2,217 after the NaN guard)  dpo/{train,valid}.jsonl (1,169 / 206)
     rejected/{sft,dpo}/     <- every drop, with a reason (9,404 sft / 224 dpo)
-
-repo root (shared pipeline, run with EXP=experiments/08-nitin-new2-ds, the default):
-  1-scaffold/               <- pipeline.jac, copy_holdout.jac, release.jac, prep_training_dirs.sh, nan_guard.jac
-  2-train/                  <- run_sft_spectrum.sh, spectrum/, configs/; stock/ (trailing-16 arm), dpo/
-  3-eval/                   <- eval_functional.jac, eval_*.sh, plot_*.jac, gen/grade_eval_detail.jac, grade_reference.jac
 ```
 
-Both arms share ONE `dataset/` — they train on identical data by design.
+There is no shared pipeline at the repo root any more and no `EXP` env var:
+each script under `scaffold/`, `train/` and `eval/` derives its experiment
+from its own location. A new experiment (`experiments/NN-name/`) gets its own
+copies of these three directories — see [`../../../PLAYBOOK.md`](../../../PLAYBOOK.md)
+step 0.1. Both arms share ONE `dataset/` — they train on identical data by design.
 
 **Adapter names, matching the lineage's `-nitin` convention** (kept as-is,
 not renamed to `-nitin2`, since the scaffold was a mechanical path
@@ -410,4 +414,4 @@ As planned (12 cells), then as actually run after the 2026-09-11 scope cut:
 | Script runs as a side effect of being imported | `with entry { }` instead of `with entry:__main__ { }` |
 | Cross-directory Jac import dies at runtime but passes `jac check` | relative import with no known parent package — inline the shared logic |
 | A silently-partial merge pipeline looks complete | verify funnel arithmetic closes end-to-end (stage-by-stage subtraction, not just a final total) before trusting any multi-source merge output, especially one resumed after an interruption |
-| SFT train loss goes `nan` partway through and never recovers, `mlx_lm.lora` does NOT crash or exit non-zero | `mask_prompt: true` + a row whose PROMPT ALONE exceeds `max_seq_length` (3072): truncation keeps only prompt tokens, zero unmasked completion tokens survive, cross-entropy over an empty target is NaN, and the NaN gradient poisons Adam's momentum/variance state permanently — every subsequent step stays NaN. Hit live during 08's stock-arm SFT launch (2026-09-10): 5 `js2jac` rows (full_len up to 7521, 2.4x the limit) had prompt-alone length ≥3072; first hit at iter ~2300 (matches the `[WARNING] ... longest sentence 7521 ... truncated` line immediately prior). `mlx_lm.lora`'s own per-report loss line is the only signal — no exception, no stall (log keeps growing), so the watchdog's stall/OOM detectors both miss it; must explicitly grep segment logs for `nan` too. Fix applied: scan `dataset/sft/{train,valid}.jsonl` with the real tokenizer (`mlx_lm.tokenizer_utils.load`), compute `len(apply_chat_template(msgs[:last_assistant_idx], add_generation_prompt=True))` per row, drop any row where that's ≥ `max_seq_length`. 3 dropped from train, 2 from valid, all `js2jac` (the `*.jsonl.pre-nanfix.bak` backups made at the time were removed in the 2026-09-11 cleanup). This check is now `1-scaffold/nan_guard.jac`, run automatically by `prep_training_dirs.sh`. Check `dataset/dpo/{train,valid}.jsonl` separately before any DPO stage (smaller `DPO_MAXLEN=512`, not verified clean; `nan_guard.jac` only reads `messages`, so it does not cover DPO rows). |
+| SFT train loss goes `nan` partway through and never recovers, `mlx_lm.lora` does NOT crash or exit non-zero | `mask_prompt: true` + a row whose PROMPT ALONE exceeds `max_seq_length` (3072): truncation keeps only prompt tokens, zero unmasked completion tokens survive, cross-entropy over an empty target is NaN, and the NaN gradient poisons Adam's momentum/variance state permanently — every subsequent step stays NaN. Hit live during 08's stock-arm SFT launch (2026-09-10): 5 `js2jac` rows (full_len up to 7521, 2.4x the limit) had prompt-alone length ≥3072; first hit at iter ~2300 (matches the `[WARNING] ... longest sentence 7521 ... truncated` line immediately prior). `mlx_lm.lora`'s own per-report loss line is the only signal — no exception, no stall (log keeps growing), so the watchdog's stall/OOM detectors both miss it; must explicitly grep segment logs for `nan` too. Fix applied: scan `dataset/sft/{train,valid}.jsonl` with the real tokenizer (`mlx_lm.tokenizer_utils.load`), compute `len(apply_chat_template(msgs[:last_assistant_idx], add_generation_prompt=True))` per row, drop any row where that's ≥ `max_seq_length`. 3 dropped from train, 2 from valid, all `js2jac` (the `*.jsonl.pre-nanfix.bak` backups made at the time were removed in the 2026-09-11 cleanup). This check is now `experiments/08-nitin-new2-ds/scaffold/nan_guard.jac`, run automatically by `prep_training_dirs.sh`. Check `dataset/dpo/{train,valid}.jsonl` separately before any DPO stage (smaller `DPO_MAXLEN=512`, not verified clean; `nan_guard.jac` only reads `messages`, so it does not cover DPO rows). |
