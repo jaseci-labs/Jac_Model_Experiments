@@ -90,6 +90,14 @@ fi
 
 TOTAL_ITERS="$(grep -E '^iters:' "$CFG" | grep -oE '[0-9]+' | head -1)"
 TOTAL_ITERS="${TOTAL_ITERS:-8200}"
+# Guard for a FINISHED adapter whose run markers (.train.done / .sft_progress_steps)
+# were cleaned out -- same guard as ../run_sft_spectrum.sh. Without it the loop
+# below starts at step 0 WITHOUT --resume-adapter-file and overwrites the adapter.
+if [ -f "$ADAPTER_FILE" ] && [ ! -f "$PROGRESS_FILE" ] && ! is_done train; then
+  echo "!!! $ADAPTER_FILE exists but no run markers ($PROGRESS_FILE / $RDIR/.train.done)."
+  echo "    Refusing to train over it. Move the adapter dir aside to retrain."
+  exit 1
+fi
 [ -f "$PROGRESS_FILE" ] || echo 0 > "$PROGRESS_FILE"
 
 if is_done train && [ -f "$ADAPTER_FILE" ]; then
