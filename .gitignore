@@ -20,6 +20,8 @@ experiments/*/tmp/
 
 # python venv (dir or symlink; setup_env.sh creates it here)
 .venv
+# pinned jac binary for grading jac-data-gen evals (run_function_eval.sh)
+.jac-grader/
 
 # tooling caches
 .jac/
