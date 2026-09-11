@@ -35,5 +35,5 @@ echo "  $EXP/scaffold/prep_training_dirs.sh   # split + NaN guard"
 echo "  $EXP/train/run_sft_spectrum.sh        # spectrum SFT"
 echo "  $EXP/eval/eval_sft_spectrum.sh        # functional eval"
 echo
-echo "JMS (chat + train + data + evals; sibling repo ../jac_model_studio):"
-echo "  ../jac_model_studio/jms/start.sh      # API :8001 + UI :8000"
+echo "JMS (chat + train + data + evals; sibling repo ../Jac_Model_Studio):"
+echo "  ../Jac_Model_Studio/start.sh          # API :8001 + UI :8000"
