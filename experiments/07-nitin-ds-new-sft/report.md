@@ -16,12 +16,12 @@ used in `06-nitin-ds-sft` (same repo @ `7c25aff3110f526eec59e0123ffe6c0c152cce91
 runs (250/250 iters each) end-to-end, completing 2026-08-20 00:00:41. Every
 number below is real, pulled from `metrics_functional.jsonl` under
 `stock_probe/results/*` and `spectrum_probe/results/*`, cross-checked against
-`docs/reports/corpus-triage-report.md` and the raw `train.log`/orchestrator
-logs. See §4 for the one thing worth double-checking before trusting the
+07's `corpus-triage-report.md` (not kept, removed in the 2026-09 cleanup) and the raw
+`train.log`/orchestrator logs. See §4 for the one thing worth double-checking before trusting the
 spectrum DPO numbers (a missing `.train.done` marker — verified benign).
 
-**Pre-registered decision rules** (`../spec.md` §7.2, fixed
-before any number existed):
+**Pre-registered decision rules** (07's `spec.md` §7.2, not kept — removed in the
+2026-09 cleanup; fixed before any number existed):
 **RQ1** replicates iff ≥ 4 of 6 arm-vs-arm comparisons are significant
 spectrum wins at p < 0.05 with no significant losses.
 **RQ2** the new dataset is better iff ≥ 4 of 6 cross-dataset comparisons are
@@ -63,9 +63,9 @@ indistinguishable otherwise.
 
 ## 1. Headline table — Holdout A (the shared 855, cross-dataset comparable)
 
-All n=855, same functional harness
-(`04-cpt-sft/sft_cptv2_probe/jacgen/eval_functional.jac`), same method as 06's
-report and `2026-08-spectrum-vs-stock-comparison.md`.
+All n=855, same functional harness (today's [`../../3-eval/eval_functional.jac`](../../3-eval/eval_functional.jac)),
+same method as [06's report](../06-nitin-ds-sft/report.md) and
+[04-cpt-sft's report](../04-cpt-sft/report.md).
 
 | Stage | Stock | Spectrum | Δ | z | p | Significant? |
 |---|---|---|---|---|---|---|
@@ -90,7 +90,8 @@ step 80 (~44% on the 100-row in-loop subset) and drifts down to 39% by step
 250 — spectrum peaks higher and holds the peak longer, which is exactly what
 produces its two significant DPO wins above.
 
-**Per-slice breakdown** (`../spec.md` §7.2 requires this alongside
+**Per-slice breakdown** (07's `spec.md` §7.2, not kept — removed in the 2026-09
+cleanup, requires this alongside
 the headline — 322 of the 855 graded rows are `conversion`, this corpus's own
 task shape, so a win concentrated there is a *specialization* result, not a
 general one):
@@ -121,7 +122,7 @@ couple of items of stock either way.
 
 `dataset/nitin_holdout_eval.jsonl`, **n = 855** (the pool comfortably cleared
 the 4,000-row floor `pipeline.jac` requires before it will carve the full 855;
-see `corpus-triage-report.md`). Single category
+see 07's `corpus-triage-report.md`, not kept — removed in the 2026-09 cleanup). Single category
 (`conversion`/`python_to_jac_function`), `compile_only` gate only —
 structurally easier and more homogeneous than holdout A's mixed categories and
 behavioral gates. **Not comparable in difficulty to holdout A, and not
@@ -146,7 +147,8 @@ stages reach significance here, and none should be read as "no Spectrum
 effect" — there just isn't enough room left above the ceiling to show one.
 Holdout A, not holdout B, carries the RQ1 decision.
 
-**Power statement** (`../spec.md` §7.3): holdout B landed at the
+**Power statement** (07's `spec.md` §7.3, not kept — removed in the 2026-09 cleanup):
+holdout B landed at the
 full target size (855, same as holdout A), not a shrunk fallback, so this is
 not a sample-size power problem — the limiting factor is ceiling compression
 (§2b), not n. A n=855 two-proportion test at a ~98% baseline can still detect
@@ -161,7 +163,7 @@ differences down to roughly 2pp at conventional power; the observed deltas
 
 07's numbers vs 06's own numbers, **same holdout A**, same base checkpoint
 (`models/qwen-q4`), same recipe, same harness. 06's column is real and final,
-from `06-nitin-ds-sft/docs/reports/2026-08-final-comparison.md` §1.
+from [`../06-nitin-ds-sft/report.md`](../06-nitin-ds-sft/report.md) §1.
 
 | Comparison | 07 (new corpus) | 06 (previous corpus) | Δ | z | p | Significant? |
 |---|---|---|---|---|---|---|
@@ -173,7 +175,7 @@ from `06-nitin-ds-sft/docs/reports/2026-08-final-comparison.md` §1.
 | Spectrum DPO-final | 71.0% (607/855) | 74.4% (636/855) | −3.4pp | −1.574 | 0.1155 | No |
 
 **Three-way lineage view** — the same cells against the original jacgen2
-fresh-arm numbers (`04-cpt-sft/docs/reports/2026-08-spectrum-vs-stock-comparison.md`
+fresh-arm numbers ([`../04-cpt-sft/report.md`](../04-cpt-sft/report.md)
 §1), so it is visible whether successive corpora are actually accumulating:
 
 | Stage | 07 | 06 | 04-cpt-sft fresh (jacgen2) |
@@ -203,7 +205,8 @@ specific failure mode for stock, but 06 additionally pushed every other cell
 up from jacgen2's level, while 07 does not — it fixes the stock-DPO-collapse
 failure mode and stops there.
 
-**Known confound, stated plainly (from `corpus-triage-report.md`):** 07's
+**Known confound, stated plainly (from 07's `corpus-triage-report.md`, not kept —
+removed in the 2026-09 cleanup):** 07's
 training pool is **6,781 rows** vs 06's cited 5,474 and the original fresh
 arm's 8,100 — 07's pool is **1.24× (24% larger) than 06's**, the opposite
 direction from 06's own confound (06's pool was 0.68× the fresh arm's, i.e.
@@ -294,13 +297,14 @@ dismiss as noise but too weak in any single cell to call proven* — and the
 
 **Method note.** Numbers reported above are unpaired two-proportion z-tests,
 computed by `scripts/plot_vs_06.jac`, using the identical formula 06's report
-used. `../spec.md` §7.1 additionally calls for **paired McNemar**
+used. 07's `spec.md` §7.1 (not kept — removed in the 2026-09 cleanup) additionally
+calls for **paired McNemar**
 wherever both sides answered identical items (every comparison in §1 and §3).
 That test needs per-row pass/fail vectors from `scripts/gen_eval_detail.jac` +
 `scripts/grade_eval_detail.jac`; **no per-row detail files were generated
 during this run** (only the aggregate `metrics_functional.jsonl` per
-category/gate_class exists for every stage) — `docs/reports/failure_data/` is
-empty. 06's own final report has the identical gap: despite the same spec
+category/gate_class exists for every stage) — 07's `failure_data/` dir (not kept —
+removed in the 2026-09 cleanup) was empty. 06's own final report has the identical gap: despite the same spec
 requirement, it also reports only unpaired z-tests throughout, with no
 McNemar numbers anywhere in its text. This report follows that same
 precedent rather than fabricating paired counts from data that was not
@@ -339,7 +343,7 @@ are the reason `run_dpo_nofuse.sh`/`run_dpo_spectrum.sh` track a separate
 
 ## 7. Data quality notes carried over from generation (not re-litigated here)
 
-From `corpus-triage-report.md`: the source repo changed shape between 06's
+From 07's `corpus-triage-report.md` (not kept, removed in the 2026-09 cleanup): the source repo changed shape between 06's
 pin and 07's — 06's corpus was 7,627 loose `.jac` files
 (`data/jac_outputs/*.jac`); 07's is a single JSONL,
 `data/py2jac_dataset_idiomatic.jsonl`, 9,367 records, `source == "idiomatic"`
@@ -355,12 +359,13 @@ translate into better functional pass rates on this battery.
 **On the docstring/code contradiction issue 06 flagged:** 06's report (§7)
 found source functions whose code contradicted their own docstring, resolved
 inconsistently by different fill agents (some matching documented intent,
-others matching actual code), a real source of label noise. `07`'s
-`corpus-triage-report.md` does not include a dedicated re-audit of this
-specific issue for the new corpus — it was not re-examined this phase. This
-should be read as **unconfirmed either way**, not as "fixed": nothing in the
-812-compile-failure or funnel-drop analysis in `corpus-triage-report.md`
-specifically screens for docstring/code mismatches, so the same class of
+others matching actual code), a real source of label noise. 07's
+`corpus-triage-report.md` (not kept, removed in the 2026-09 cleanup) does not
+include a dedicated re-audit of this specific issue for the new corpus — it
+was not re-examined this phase. This should be read as **unconfirmed
+either way**, not as "fixed": nothing in the 812-compile-failure or
+funnel-drop analysis in that report specifically screens for docstring/code
+mismatches, so the same class of
 label noise may or may not still be present in 07's training set and holdout.
 Flagged as an open item for anyone reusing this dataset, same as 06 did.
 
@@ -380,11 +385,17 @@ Flagged as an open item for anyone reusing this dataset, same as 06 did.
 
 ## 8. Artifacts
 
-- `dataset/{candidate_pool,nitin_holdout,nitin_holdout_eval,sft_train,dpo_train}.jsonl`
+*The `07-nitin-ds-new-sft/` working dir listed below was deleted in the 2026-09 repo
+cleanup; only the DPO-best checkpoint is kept, as [`adapter/`](adapter/) +
+[`results/final_best.txt`](results/final_best.txt) +
+[`results/final_best_holdoutB.txt`](results/final_best_holdoutB.txt) +
+[`results/metrics_functional.jsonl`](results/metrics_functional.jsonl).*
+
+- `dataset/{candidate_pool,nitin_holdout,nitin_holdout_eval,sft_train,dpo_train}.jsonl` — not kept
 - `stock_probe/`, `spectrum_probe/` — full training + eval trees, all
-  checkpoints, all raw eval logs
-- `docs/reports/corpus-triage-report.md` — corpus funnel numbers
-- `docs/reports/failure_data/` — empty this phase; per-row generation dumps
-  from `scripts/gen_eval_detail.jac` were not produced (see §5 Method note)
-- `docs/reports/{spectrum_vs_stock,07_vs_06}.png` — from `scripts/plot_vs_06.jac`
-- `CONTEXT_BRIEF.md` — design decisions and any corrections made during the run
+  checkpoints, all raw eval logs — not kept except the surviving checkpoint noted above
+- 07's `corpus-triage-report.md` — corpus funnel numbers; not kept
+- 07's `failure_data/` — empty this phase; per-row generation dumps
+  from `scripts/gen_eval_detail.jac` were not produced (see §5 Method note); not kept
+- 07's `{spectrum_vs_stock,07_vs_06}.png` — from `scripts/plot_vs_06.jac`; not kept
+- `CONTEXT_BRIEF.md` — design decisions and any corrections made during the run; not kept

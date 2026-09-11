@@ -13,10 +13,12 @@ turns out to be wrong.
 > this file is a *prior* result (07, 06, or 04-cpt-sft) used as the baseline.
 >
 > The 07, 06 and 04-cpt-sft directories referred to below were deleted in the
-> same cleanup. Their reports are in `../docs/history/`; the holdout (a) file
-> lives here as `dataset/holdout_a_shared855.jsonl`; the eval harness is
+> same cleanup. Their reports are in `../../07-nitin-ds-new-sft/report.md`,
+> `../../06-nitin-ds-sft/report.md`, `../../04-cpt-sft/report.md` (and older
+> history in `../../../docs/history/`); the holdout (a) file lives here as
+> `dataset/holdout_a_shared855.jsonl`; the eval harness is
 > `3-eval/eval_functional.jac`. How to run a new experiment from this tree:
-> `../docs/PLAYBOOK.md`.
+> `../../../PLAYBOOK.md`.
 >
 > Dataset: source repo re-pinned (§1), 7-source merge + eval-denylist fix +
 > quality-gradient filter + license filter (§2), triage funnel
@@ -46,7 +48,7 @@ turns out to be wrong.
 ## 0. What this experiment is
 
 Follow-up to `07-nitin-ds-new-sft` (deleted; report at
-`../docs/history/07-nitin-ds-new-sft/07-final-comparison.md`), but **not a clean
+`../../07-nitin-ds-new-sft/report.md`), but **not a clean
 single-variable replication** the way 06→07 was. Nitin's dataset-generation
 repo (`jac-data-gen`) shipped a large volume of *genuinely new* work between
 07's pin and now — not more rows of the same file, but four new source types
@@ -109,7 +111,7 @@ constant is the single source of truth.
 | **total** | **16,167** | | after all filters, dedup, and leakage checks (§2) |
 
 **Skipped entirely** (verdict from investigation, not laziness):
-- `data/golden_client_jac/` (6,210 bare `.jac` files) — no paired prompt JSONL exists (deliberately gitignored upstream); this project's own CPT-v2 result (`../docs/history/03-cpt-only/cpt-2-results.md`) already rejected further CPT-only training. Would need a prompt-pairing pass to be usable at all.
+- `data/golden_client_jac/` (6,210 bare `.jac` files) — no paired prompt JSONL exists (deliberately gitignored upstream); this project's own CPT-v2 result (`../../../docs/history/03-cpt-only/cpt-2-results.md`) already rejected further CPT-only training. Would need a prompt-pairing pass to be usable at all.
 - `data/graph_targets/` — gitignored discovery metadata upstream, not in the repo at this pin. Its only committed descendant, the 540-row `mm4_issue_problems.jsonl` prompt pool, has **no Jac target** (32/540 already appear as `osp` prompts; the other 508 are an input queue, not training data).
 
 ### 1.2 Warning that inverts 06/07's warning — read this before writing anything comparing 08 to 07
@@ -163,7 +165,7 @@ field. Rows with no joinable `work/*.json` (no computable test count) are
 excluded rather than assumed good: 2,850 rows, logged as
 `no_work_join_no_test_signal`. 3,108 more rows were dropped for scoring below
 18. This is the plausible root-cause fix for the finding in 07's own
-report (`../docs/history/07-nitin-ds-new-sft/07-final-comparison.md`) that 07 (larger pool, weaker average
+report (`../../07-nitin-ds-new-sft/report.md`) that 07 (larger pool, weaker average
 quality) underperformed 06 despite more rows.
 
 ### 2.3 License filter on `js2jac`
@@ -237,7 +239,7 @@ real work, it did not just confirm an empty set.
 All of the following are **prior results**, not this phase's.
 
 **07-nitin-ds-new-sft, holdout A (the shared 855)** —
-`../docs/history/07-nitin-ds-new-sft/07-final-comparison.md` §1. 07 did
+`../../07-nitin-ds-new-sft/report.md` §1. 07 did
 **not** beat 06 (0/6 significant, all 6 point estimates favor 06) despite a
 larger pool; that finding is the direct motivation for §2.2's quality filter.
 
@@ -252,7 +254,7 @@ larger pool; that finding is the direct motivation for §2.2's quality filter.
 arms.
 
 **06-nitin-ds-sft, holdout A** —
-`../docs/history/06-nitin-ds-sft/2026-08-final-comparison.md` §1:
+`../../06-nitin-ds-sft/report.md` §1:
 
 | Stage | Stock | Spectrum |
 |---|---|---|

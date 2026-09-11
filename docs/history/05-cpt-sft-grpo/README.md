@@ -21,15 +21,15 @@ GRPO at this scale or an artifact of that phase's harness (exact-stdout grading,
 
 ## Prerequisite reading (in this order)
 
-1. `../../04-cpt-sft/RESULTS.md` — the consolidated
-   two-arm result 05 builds directly on.
-2. [`04-cpt-sft/docs/reports/2026-07-cpt-vs-fresh-comparison.md`](../04-cpt-sft/2026-07-cpt-vs-fresh-comparison.md)
+1. `../../../experiments/04-cpt-sft/report.md` — the consolidated
+   two-arm result 05 builds directly on (`RESULTS.md` itself was not kept).
+2. [`04-cpt-sft/2026-07-cpt-vs-fresh-comparison.md`](../04-cpt-sft/2026-07-cpt-vs-fresh-comparison.md)
    — especially **§3** (the `mlx_lm.fuse` root cause, which dictates 05's
    lineage-preservation rule) and **§4** (the q_proj SVD probe, which is 05's whole
    motivation).
-3. `../../02-rl-grpo/docs/rl/strat.md` +
-   `01-design.md` — the ladder convention,
-   the carried scars, and the harness 05 extends.
+3. `strat.md` + `01-design.md` (not kept) — the ladder convention,
+   the carried scars, and the harness 05 extends; see item 4 below for the
+   surviving, corrected RL results.
 4. [`02-rl-grpo/RL_FINDINGS.md`](../02-rl-grpo/RL_FINDINGS.md) —
    **authoritative** corrected RL results (the pre-correction verdicts inside
    `docs/rl/` are superseded there).
@@ -54,18 +54,18 @@ GRPO at this scale or an artifact of that phase's harness (exact-stdout grading,
 
 ## Where the code lives
 
-**Not here.** Harness code stays in
-`../../02-rl-grpo/rl/` and is extended in place, not duplicated
-into 05 — `build_tasks.jac` (HOLE-marker mining), `build_rl_splits.jac`
+**Not here.** Harness code stayed in
+`02-rl-grpo/rl/` (not kept — experiment directory deleted 2026-09-11) and was extended
+in place, not duplicated into 05 — `build_tasks.jac` (HOLE-marker mining), `build_rl_splits.jac`
 (family-interleave + file-disjoint holdout), `reward_logic.jac` (tiered reward + the
 `unwrap_unit` scar), `pick_rung.jac` (ladder slicing), `eval_rl.jac` (holdout scoring),
-`run_grpo.sh` (the `mlx_lm_lora` GRPO launcher). 05 owns the **data, adapters, results
-and docs**; 02 owns the machinery.
+`run_grpo.sh` (the `mlx_lm_lora` GRPO launcher). 05 owned the **data, adapters, results
+and docs**; 02 owned the machinery.
 
 ## Related, outside this phase
 
-- `03-cpt-only/adapters/cpt-v2/` — the CPT-v2 LoRA checkpoint (rejected on its own
-  gates, `03-cpt-only/docs/cpt-2/results.md`) that both `cptv2-*` lines resume from.
+- `03-cpt-only/adapters/cpt-v2/` (not kept) — the CPT-v2 LoRA checkpoint (rejected on its own
+  gates, [`../03-cpt-only/cpt-2-results.md`](../03-cpt-only/cpt-2-results.md)) that both `cptv2-*` lines resume from.
 - `03-cpt-only/dataset/cpt/manifest.json` — the pinned 17-repo code corpus (+ the
   docs-only 18th repo) that 05's task mining re-uses; SHAs recorded there.
 - `04-cpt-sft/lora_svd_qproj.py` — the q_proj SVD probe whose output is the structural

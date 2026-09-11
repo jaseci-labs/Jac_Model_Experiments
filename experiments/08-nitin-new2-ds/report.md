@@ -25,7 +25,7 @@ the exact "bigger pool, worse result" pattern 07 hit against 06):
 | (a) shared 855 | **70.5% (603/855)** | 72.4% (619/855) | 74.4% (636/855) | 74.7% (639/855) |
 | (b) 07's holdout | **37.7% (322/855)** | 98.2% (840/855) | not run on this file (97.9% on 06's own holdout B) | not run |
 
-(07 column filled in from `../../../docs/history/07-nitin-ds-new-sft/07-final-comparison.md`
+(07 column filled in from `../07-nitin-ds-new-sft/report.md`
 after this report was first written; 07's best adapter overall was its
 Spectrum DPO-best at 73.0%, 624/855.)
 
@@ -218,7 +218,7 @@ the NaN'd first stock run, the `*.pre-nanfix.bak` dataset backups, and
    (`2-train/stock/run_sft.sh`); the stock adapter no longer exists.
 2. Check `dataset/dpo/{train,valid}.jsonl` for the same prompt-overflow-NaN
    risk under `DPO_MAXLEN=512` before ever running DPO on this pool.
-3. Run the optional failure-analysis pipeline (`../workflow.md` §5.4) to confirm
+3. Run the optional failure-analysis pipeline (`docs/workflow.md` §5.4) to confirm
    §4's per-source-type dilution hypothesis directly instead of by inference.
 4. Keep the laptop lid open (or attach an external display) for any future
    unattended multi-hour run — `caffeinate` alone does not prevent

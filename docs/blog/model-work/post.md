@@ -176,4 +176,4 @@ The next post changes a different variable: which layers the LoRA trains on. Tha
 
 ---
 
-*All numbers come from `model-experiments/04-cpt-sft/` in our repo: `RESULTS.md` for the consolidated table, `docs/reports/2026-07-cpt-vs-fresh-comparison.md` for the statistical write-up, the fuse-bug investigation, and the SVD probe.*
+*All numbers come from `experiments/04-cpt-sft/report.md` for the consolidated table and `docs/history/04-cpt-sft/2026-07-cpt-vs-fresh-comparison.md` for the statistical write-up, the fuse-bug investigation, and the SVD probe.*

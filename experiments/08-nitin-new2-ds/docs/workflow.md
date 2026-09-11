@@ -19,7 +19,8 @@ facts).
 The generic version of this runbook, for new experiments, is
 [`../../../PLAYBOOK.md`](../../../PLAYBOOK.md). The 07/06/04 directories
 mentioned below were deleted on 2026-09-11; their reports are in
-`../../docs/history/`.
+`../../07-nitin-ds-new-sft/report.md`, `../../06-nitin-ds-sft/report.md`,
+`../../04-cpt-sft/report.md` (older history in `../../../docs/history/`).
 
 Stages 1-2 (SFT/DPO-pair *authoring*) from 06/07's runbook don't apply here —
 08's source material already comes as complete pairs from `jac-data-gen`
@@ -116,7 +117,7 @@ offset), drops rows ≥ 3072, rewrites `dataset/sft/{train,valid}.jsonl` in plac
 
 ### 3.0 The probe directories (as built)
 
-Identical structure and layout to 07's — see `../CONTEXT_BRIEF.md` §9 for the
+Identical structure and layout to 07's — see `CONTEXT_BRIEF.md` §9 for the
 tree and §6 for the three inherited open items (holdout default in DPO
 runners, the `total==855` collapse-gate filter, the stale "06 incumbent" echo
 lines) that were not re-decided during scaffolding.
@@ -187,7 +188,7 @@ mlx_lm does not stop on NaN loss.
 > an earlier "spectrum-DPO-only" call) — **no DPO runs this phase, either
 > arm.** Neither `2-train/stock/run_dpo_nofuse.sh` nor
 > `2-train/dpo/run_dpo_spectrum.sh` is launched. See
-> `../CONTEXT_BRIEF.md`'s status block. Do not launch either without asking
+> `CONTEXT_BRIEF.md`'s status block. Do not launch either without asking
 > first. Pipeline goes straight from spectrum SFT (Stage 3) to eval (Stage
 > 5), spectrum arm only.
 
@@ -252,7 +253,7 @@ holdout as the floor.
 
 Same three-script pipeline as 07 (`3-eval/gen_eval_detail.jac`,
 `3-eval/grade_eval_detail.jac`, `3-eval/grade_reference.jac`, copied in from
-07). Not run this phase. Usage is in `../../docs/PLAYBOOK.md` step 2.5.
+07). Not run this phase. Usage is in `../../../PLAYBOOK.md` step 2.5.
 
 ## Stage 6 — Comparison report
 
@@ -288,5 +289,5 @@ Contents, per `spec.md` §7:
 
 ## Quick reference — failure modes already paid for
 
-See `../CONTEXT_BRIEF.md` §11 for the full table, now including the Stage 0
+See `CONTEXT_BRIEF.md` §11 for the full table, now including the Stage 0
 drive-disconnect incident from this phase's own build.

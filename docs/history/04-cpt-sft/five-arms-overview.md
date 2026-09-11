@@ -45,12 +45,12 @@ number below is directly comparable. n=855 unless noted.
 Read as prose:
 
 - **Arm 1 vs Arm 2** answers "does CPT-v2 help?" (the phase's original question,
-  `docs/reports/2026-07-cpt-vs-fresh-comparison.md`) — CPT gives a huge base-stage
+  [`2026-07-cpt-vs-fresh-comparison.md`](2026-07-cpt-vs-fresh-comparison.md)) — CPT gives a huge base-stage
   edge (+37pp) that's statistically absorbed by SFT (+2.8pp, not significant)
   but survives structurally in the SFT adapter's own weight geometry (that
   report's §4, SVD probe).
 - **Arm 1 vs Arm 3**, and **Arm 2 vs Arm 4**, answer "does Spectrum layer
-  selection help?" (`docs/reports/2026-08-spectrum-vs-stock-comparison.md`) —
+  selection help?" ([`../../../experiments/04-cpt-sft/report.md`](../../../experiments/04-cpt-sft/report.md)) —
   Spectrum **significantly** beats stock on the fresh base at every stage
   (SFT +4.9pp p=0.023, DPO-best +4.3pp p=0.046, DPO-final +10.6pp p<0.0001),
   but shows **no significant difference** once CPT-v2 is already in the chain
@@ -69,8 +69,8 @@ Read as prose:
 
 | Arm | Design docs | Results | Full report |
 |---|---|---|---|
-| 1, 2 | `spec.md`, `workflow.md`, `dpo-plan.md` | `RESULTS.md` §2–3 | `docs/reports/2026-07-cpt-vs-fresh-comparison.md` |
-| 3, 4 | `spectrum-plan.md`, `spectrum-workflow.md` | `RESULTS.md` (Spectrum callout) | `docs/reports/2026-08-spectrum-vs-stock-comparison.md` |
+| 1, 2 | `spec.md`, `workflow.md`, `dpo-plan.md` | `RESULTS.md` §2–3 | [`2026-07-cpt-vs-fresh-comparison.md`](2026-07-cpt-vs-fresh-comparison.md) |
+| 3, 4 | `spectrum-plan.md`, `spectrum-workflow.md` | `RESULTS.md` (Spectrum callout) | [`../../../experiments/04-cpt-sft/report.md`](../../../experiments/04-cpt-sft/report.md) |
 | 5 | `cpt-spectrum-plan.md` (design, ~1050 lines, exact recipe/paths/mechanism) | *(not yet written — arm incomplete)* | `docs/reports/2026-08-cpt-spectrum-three-way.md` *(does not exist yet — write this when arm 5 finishes, see §6)* |
 
 `cpt-spectrum-plan.md` is the one to actually read before resuming arm 5 — it
@@ -87,7 +87,7 @@ gate sequence, and the exact 6 z-tests the final report needs to run.
    result back to the *same path* — truncating the mmap the loaded arrays were
    still lazily reading from, silently zeroing every trained key. Fixed with
    `mx.eval(list(trained.values()))` before any write. Full incident writeup:
-   `docs/reports/2026-08-spectrum-vs-stock-comparison.md` §3.1. This is why
+   [`../../../experiments/04-cpt-sft/report.md`](../../../experiments/04-cpt-sft/report.md) §3.1. This is why
    arm 5's design deliberately has **no merge step at all** — removing the
    union/freeze machinery removes the whole bug class, not just this instance
    (`cpt-spectrum-plan.md` §2.2c audits every remaining safetensors read site

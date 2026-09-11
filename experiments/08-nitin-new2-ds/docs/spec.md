@@ -77,7 +77,7 @@ and applies **`test_count >= 18`**:
 | survive into `composer` source_type | 2,898 |
 
 This is the direct, testable candidate explanation for 07's own finding
-(`../../docs/history/07-nitin-ds-new-sft/07-final-comparison.md`): 07 trained on the full unfiltered pool and did not
+(`../../07-nitin-ds-new-sft/report.md`): 07 trained on the full unfiltered pool and did not
 beat 06 despite more rows. If 08 does beat 07 on RQ2, the per-slice breakdown
 should check whether the win concentrates in `composer`-sourced rows
 specifically — that would corroborate the mechanism rather than just the
@@ -230,8 +230,8 @@ Significance bar: p < 0.05, two-sided.
 
 **RQ2 — is 08 better than 07?** Paired McNemar of each holdout-(a) cell
 against 07's corresponding cell (once 07's own final numbers are read from
-`../../docs/history/07-nitin-ds-new-sft/07-final-comparison.md`; they are
-now in `../CONTEXT_BRIEF.md` §4.1). Better iff ≥4/6
+`../../07-nitin-ds-new-sft/report.md`; they are
+now in `CONTEXT_BRIEF.md` §4.1). Better iff ≥4/6
 significant wins with no significant losses; worse iff the mirror holds;
 indistinguishable otherwise — a legitimate result, not a failure (07 landed
 there against 06 and said so).
@@ -276,13 +276,13 @@ Unchanged from 06/07 — see `CONTEXT_BRIEF.md` §8.
 
 ## 9. Directory layout
 
-See `../CONTEXT_BRIEF.md` §9.
+See `CONTEXT_BRIEF.md` §9.
 
 ## 10. Out of scope
 
 - Re-running the SNR scan (unchanged base model weights).
-- Any CPT stage (03's CPT-v2 was rejected: `../../docs/history/03-cpt-only/cpt-2-results.md`).
-- GRPO / RL (05's planned scope, never run: `../../docs/HISTORY.md`).
+- Any CPT stage (03's CPT-v2 was rejected: `../../../docs/history/03-cpt-only/cpt-2-results.md`).
+- GRPO / RL (05's planned scope, never run: `../../../docs/HISTORY.md`).
 - **A graph-native-in-distribution holdout carve.** RQ3 is deliberately
   answered only indirectly this phase (§4.2, §7.2) — building a proper
   in-distribution eval set from the osp/farm content is real scope for a

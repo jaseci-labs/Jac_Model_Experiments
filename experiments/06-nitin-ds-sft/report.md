@@ -12,7 +12,7 @@ throughout `04-cpt-sft`?
 - **RQ1 — Spectrum does NOT cleanly replicate on this dataset.** One
   significant win (DPO-final, holdout A, +6.2pp), one significant **loss**
   (SFT-final, holdout B, −1.4pp), four non-significant. The original
-  fresh-arm finding (`2026-08-spectrum-vs-stock-comparison.md`) was
+  fresh-arm finding ([`../04-cpt-sft/report.md`](../04-cpt-sft/report.md)) was
   significant at every one of 3 stages on the old dataset; this replication
   clears the ≥4-of-6-significant-wins-no-losses bar on **neither** holdout.
 - **RQ2 — Weak, inconsistent evidence Nitin's dataset is better.** One
@@ -39,7 +39,7 @@ a stronger conclusion either way.
 
 ## 1. Headline table — Holdout A (existing `04-cpt-sft` holdout, cross-dataset)
 
-All n=855, two-proportion z-test, same method as `2026-08-spectrum-vs-stock-comparison.md`.
+All n=855, two-proportion z-test, same method as [`../04-cpt-sft/report.md`](../04-cpt-sft/report.md).
 
 | Stage | Stock | Spectrum | Δ | z | p | Significant? |
 |---|---|---|---|---|---|---|
@@ -101,7 +101,8 @@ famously collapsed to 62.1%). Three non-significant, all directionally mixed
 here to call Nitin's dataset unambiguously better — the DPO-final win is real
 but isolated.
 
-**Known confound, stated plainly (from `corpus-triage-report.md`):** Nitin's
+**Known confound, stated plainly (from 06's `corpus-triage-report.md`, not kept — removed
+in the 2026-09 cleanup):** Nitin's
 training pool is 5,474 rows vs the old fresh-arm's 8,100 (0.68×). A smaller
 training set makes the DPO-final win *more* impressive if real (less data,
 still better DPO robustness) but also means this comparison isn't a clean
@@ -177,7 +178,8 @@ session's monitor loop. Located at:
 
 ## 7. Data quality notes carried over from generation (not re-litigated here)
 
-From `corpus-triage-report.md` and the SFT/DPO batch-fill agents: several
+From 06's `corpus-triage-report.md` (not kept, removed in the 2026-09 cleanup) and the
+SFT/DPO batch-fill agents: several
 source functions in the corpus have code that contradicts their own
 docstring (pre-existing in the upstream `jac-data-gen` repo, not introduced
 by this pipeline). Fill agents resolved these inconsistently — some wrote
@@ -189,9 +191,13 @@ numbers correct for; flagged for anyone reusing this dataset.
 
 ## 8. Artifacts
 
-- `dataset/{candidate_pool,nitin_holdout,nitin_holdout_eval,sft_train,dpo_train}.jsonl`
+*The `06-nitin-ds-sft/` working dir listed below was deleted in the 2026-09 repo cleanup;
+none of it is kept except the SFT-final checkpoint under `experiments/06-nitin-ds-sft/`
+(`adapter/`, `results/final.txt`, `results/final_holdoutB.txt`, `results/metrics_functional.jsonl`).*
+
+- `dataset/{candidate_pool,nitin_holdout,nitin_holdout_eval,sft_train,dpo_train}.jsonl` — not kept
 - `stock_probe/`, `spectrum_probe/` — full training + eval trees, all
   checkpoints (including archived intermediate ones where the archival step
-  completed), all raw eval logs
-- `docs/reports/corpus-triage-report.md` — corpus funnel numbers
-- `CONTEXT_BRIEF.md` — design decisions and corrections made during the run
+  completed), all raw eval logs — not kept except the surviving checkpoint noted above
+- 06's `corpus-triage-report.md` — corpus funnel numbers; not kept
+- `CONTEXT_BRIEF.md` — design decisions and corrections made during the run; not kept

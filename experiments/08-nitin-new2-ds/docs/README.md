@@ -15,7 +15,7 @@ lineage has run three times before.
 3. **RQ3 — new — does real graph-native (OSP) and CRUD-walker (farm) content
    change the picture, beyond a same-shape-more-data effect?** 06 and 07 both
    verified zero OSP archetypes in their corpus; 08 has 2,537 genuinely
-   graph-native rows (15.7% of the pool). See `../CONTEXT_BRIEF.md` §1.2.
+   graph-native rows (15.7% of the pool). See `CONTEXT_BRIEF.md` §1.2.
 
 > **Status (2026-09-11): complete, reduced scope.** The design was cut to
 > Spectrum SFT only, evaluated on both holdouts. RQ1 and the DPO questions were
@@ -44,7 +44,7 @@ version of the recipe is [`../../../PLAYBOOK.md`](../../../PLAYBOOK.md).
 ## Reading order
 
 1. `../report.md` — what happened.
-2. `../CONTEXT_BRIEF.md` — the settled facts, especially §1.2 (the
+2. `CONTEXT_BRIEF.md` — the settled facts, especially §1.2 (the
    graph-native framing reversal), §4 (why holdout (b) is reused rather than
    re-carved) and §11 (failure modes).
 3. `spec.md` §7 — the pre-registered decision rule.
@@ -58,7 +58,7 @@ version of the recipe is [`../../../PLAYBOOK.md`](../../../PLAYBOOK.md).
   beat 06's) motivated 08's quality-gradient filter.
 - [`../../06-nitin-ds-sft/report.md`](../../06-nitin-ds-sft/report.md)
   — its §4 incident log is the origin of several rows in
-  `../CONTEXT_BRIEF.md` §11.
+  `CONTEXT_BRIEF.md` §11.
 - [`../../04-cpt-sft/report.md`](../../04-cpt-sft/report.md)
   — the original Spectrum result and the lineage baseline.
 - `~/repos/jac-data-gen/docs/PY2JAC_QUALITY_GRADIENT.md` — the audit behind

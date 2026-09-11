@@ -1,7 +1,7 @@
 # Dataset structure — 08-nitin-new2-ds
 
 Source: `jac-data-gen@c95b7563c16851010396170c269f1fdc5327ef15`, 7 source
-files merged (`../CONTEXT_BRIEF.md` §1.1). Real counts throughout — the
+files merged (`CONTEXT_BRIEF.md` §1.1). Real counts throughout — the
 dataset build is complete. Both arms train on identical copies of the
 releases below. Both arms eval on two holdouts: `04-cpt-sft`'s unchanged
 1,428-row set (855 code-graded), and 07's `nitin_holdout_eval.jsonl` reused

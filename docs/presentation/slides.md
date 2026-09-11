@@ -1036,9 +1036,9 @@ Every number above traces to one of these files (paths relative to the repo root
   Arm 5's exact paused status and resume instructions.
 - `model-experiments/04-cpt-sft/RESULTS.md` — consolidated results, the fuse-bug callout,
   the historical pre-fix numbers kept verbatim as a record.
-- `model-experiments/04-cpt-sft/docs/reports/2026-07-cpt-vs-fresh-comparison.md` — Arms 1 vs 2,
+- `docs/history/04-cpt-sft/2026-07-cpt-vs-fresh-comparison.md` — Arms 1 vs 2,
   the `mlx_lm.fuse` discovery (§3) and the q_proj SVD probe (§4).
-- `model-experiments/04-cpt-sft/docs/reports/2026-08-spectrum-vs-stock-comparison.md` —
+- `experiments/04-cpt-sft/report.md` —
   Arms 3 and 4, the lazy-mmap incident (§3.1) and the DPO OOM (§3.2).
 - `model-experiments/04-cpt-sft/docs/spectrum-plan.md` — what Spectrum is and what this probe
   deliberately changed (§2, §3).

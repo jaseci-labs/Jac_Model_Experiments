@@ -17,7 +17,8 @@ asymmetric result, not a clean win — see §4 for why that asymmetry is plausib
 
 ## 1. Headline table
 
-Two-proportion z-test throughout, same method as `2026-07-cpt-vs-fresh-comparison.md`:
+Two-proportion z-test throughout, same method as
+[`../../docs/history/04-cpt-sft/2026-07-cpt-vs-fresh-comparison.md`](../../docs/history/04-cpt-sft/2026-07-cpt-vs-fresh-comparison.md):
 z = (p1−p2) / sqrt(p_pool·(1−p_pool)·(1/n1+1/n2)), p_pool = (x1+x2)/(n1+n2). All n=855
 (full holdout) unless noted.
 
@@ -38,14 +39,16 @@ DPO-final leans positive but doesn't clear the conventional 0.05 bar.
 
 ## 2. Per-stage detail
 
-### 2.1 — Fresh arm (`sft_fresh_probe/`)
+### 2.1 — Fresh arm (`sft_fresh_probe/`, working dir removed in the 2026-09 cleanup)
 
-No incidents on this arm — SFT and DPO both ran clean the first time. Full detail already
-lives in `spectrum-plan.md`/`spectrum-workflow.md`'s per-phase logs; the numbers above are
-the full 855-row holdout scores pulled from `sft_fresh_probe/results/sft-spectrum/final.txt`
-and `.../dpo-spectrum/final_best.txt` + `final_last.txt`.
+No incidents on this arm — SFT and DPO both ran clean the first time. Full detail lived in
+this arm's `docs/spectrum-plan.md`/`spectrum-workflow.md` per-phase logs (not kept, removed
+in the 2026-09 cleanup); the numbers above are the full 855-row holdout scores pulled from
+this arm's SFT-final eval log — the one checkpoint kept, now [`results/final.txt`](results/final.txt)
+— and its DPO-spectrum eval logs (`final_best.txt` + `final_last.txt`, not kept, removed in
+the 2026-09 cleanup).
 
-### 2.2 — CPT-v2 arm (`sft_cptv2_probe/`) — SFT
+### 2.2 — CPT-v2 arm (`sft_cptv2_probe/`, working dir removed in the 2026-09 cleanup) — SFT
 
 SFT-spectrum checkpoint sweep (subset=100 rows, `metrics_functional.jsonl`), full 8200-iter
 run, `resume_adapter_file` seeded from CPT-v2's real adapter, union-convert-and-freeze
@@ -168,7 +171,8 @@ at any stage. One plausible (not proven) explanation: on the fresh arm, Spectrum
 are the *only* adaptation happening — there's no prior training to interact with, so a
 better-chosen 16 blocks has clean room to matter. On the cptv2 arm, the base model already
 carries a real, structurally significant CPT-v2 delta across blocks 32–47 (see
-`2026-07-cpt-vs-fresh-comparison.md` §4's SVD finding — CPT-v2's fingerprint survives SFT
+[`../../docs/history/04-cpt-sft/2026-07-cpt-vs-fresh-comparison.md`](../../docs/history/04-cpt-sft/2026-07-cpt-vs-fresh-comparison.md)
+§4's SVD finding — CPT-v2's fingerprint survives SFT
 structurally even when it washes out behaviorally). Spectrum's non-contiguous 16 picks then
 have to interact with that pre-existing, block-position-specific adaptation rather than
 starting from a blank slate, which may blunt whatever advantage the SNR-based selection
@@ -183,11 +187,18 @@ once a CPT stage has already reshaped part of the same layer range.
 
 ## 5. Artifacts
 
+*Working dirs for both arms were deleted in the 2026-09 repo cleanup; only the fresh arm's
+SFT-final checkpoint (the number reported in §1) was kept, as [`adapter/`](adapter/) +
+[`results/final.txt`](results/final.txt) + [`results/metrics_functional.jsonl`](results/metrics_functional.jsonl).
+Everything else below is listed for the record and is not kept.*
+
 - `sft_fresh_probe/spectrum/`, `sft_cptv2_probe/spectrum/` — drivers, configs, merge script
-  (with the fix from §3.1)
+  (with the fix from §3.1); not kept
 - `sft_fresh_probe/results/{sft-spectrum,dpo-spectrum}/`, `sft_cptv2_probe/results/{sft-spectrum,dpo-spectrum}/`
-  — per-stage metrics, full-holdout `final*.txt`, sweep curves
+  — per-stage metrics, full-holdout `final*.txt`, sweep curves; not kept except the one
+  surviving file named above
 - `sft_cptv2_probe/adapters/sft-on-cptv2-spectrum-BROKEN-zeroweights/`,
   `results/sft-spectrum-BROKEN-zeroweights/` — the first, corrupted cptv2 SFT attempt,
-  archived (not deleted) per this project's never-delete-models convention
-- `docs/spectrum-plan.md`, `docs/spectrum-workflow.md` — original design + runbook
+  was archived (not deleted) per this project's never-delete-models convention at the time;
+  not kept after the 2026-09 cleanup
+- `docs/spectrum-plan.md`, `docs/spectrum-workflow.md` — original design + runbook; not kept
