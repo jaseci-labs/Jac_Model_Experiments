@@ -13,10 +13,11 @@ Hardware for everything: one Apple Silicon Mac with 48 GB unified memory, MLX
 LoRA. Base model since 01: **Qwen3-Coder-30B-A3B-Instruct** (MoE, about 3B
 active), at 4 bits.
 
-The directories for 01 to 07 were deleted on 2026-09-11. Their key reports are
-kept, unedited except for dead links, in [history/](history/). The best
-adapters of 04, 06 and 07 are in [../archive/](../archive/). 08 is kept whole
-in [../08-nitin-new2-ds/](../08-nitin-new2-ds/).
+The directories for 01 to 07 were deleted on 2026-09-11. Every experiment that
+left an adapter (04, 06, 07, 08) now lives under [../experiments/](../experiments/),
+each as `adapter/`, `results/` and `report.md` (08 also keeps its `dataset/` and
+`docs/`). The remaining reports of 01 to 05 are kept, unedited except for dead
+links, in [history/](history/).
 
 ## Summary
 
@@ -32,7 +33,7 @@ in [../08-nitin-new2-ds/](../08-nitin-new2-ds/).
 | 08 | Spectrum SFT on a 7-source merged corpus (2.18x 07) | 70.5% on holdout (a); 37.7% on 07's holdout (b) | Lowest of the lineage |
 
 Holdout (a) scores: 855 code-graded rows of the shared holdout
-(`08-nitin-new2-ds/dataset/holdout_a_shared855.jsonl`), same base, same
+(`experiments/08-nitin-new2-ds/dataset/holdout_a_shared855.jsonl`), same base, same
 harness, from 04 onward. 01 to 03 used different instruments and cannot be put
 in the same column.
 
@@ -148,9 +149,9 @@ had no behavioral effect.
 **Verdict.** CPT's head start washes out under SFT. DPO caps at SFT parity.
 Spectrum is a real win on a fresh base. The fresh-arm Spectrum SFT adapter,
 **74.7% (639/855), is still the best model in the lineage** (in
-[../archive/04-cpt-sft/](../archive/04-cpt-sft/)).
+[../experiments/04-cpt-sft/adapter/](../experiments/04-cpt-sft/adapter/)).
 Reports: [cpt-vs-fresh](history/04-cpt-sft/2026-07-cpt-vs-fresh-comparison.md),
-[spectrum-vs-stock](history/04-cpt-sft/2026-08-spectrum-vs-stock-comparison.md),
+[spectrum-vs-stock](../experiments/04-cpt-sft/report.md),
 [five-arms overview](history/04-cpt-sft/five-arms-overview.md).
 
 ## 05: GRPO on top of 04 (not run)
@@ -180,7 +181,7 @@ new data is about as good as jacgen2 with 32% fewer rows, and if forced to
 choose, better. Incidents: two external-drive disconnects, a best-checkpoint
 tracker that reset across a crash-resume, and a holdout (b) with no `messages`
 field whose first eval "finished" in 30 seconds without running.
-Report: [06 final comparison](history/06-nitin-ds-sft/2026-08-final-comparison.md).
+Report: [06 final comparison](../experiments/06-nitin-ds-sft/report.md).
 
 ## 07: Nitin's dataset v2
 
@@ -198,7 +199,7 @@ p=0.057). Holdout (b), 07's own: 97 to 98% for both arms, ceilinged.
 and "better-written" rows did not give a better model. Significance was the
 unpaired z-test only; the planned paired McNemar was never computed because no
 per-row results were saved.
-Report: [07 final comparison](history/07-nitin-ds-new-sft/07-final-comparison.md).
+Report: [07 final comparison](../experiments/07-nitin-ds-new-sft/report.md).
 
 ## 08: seven-source merged corpus
 
@@ -225,8 +226,8 @@ the stock run, a watchdog that blocked its own relaunch.
 **Verdict.** Folding in a larger, more varied corpus made the model worse on
 both holdouts. 04's 74.7% still stands. 08 is kept as the working template
 because its scripts are the most complete and hardened; see
-[PLAYBOOK.md](PLAYBOOK.md).
-Report: [08 final comparison](../08-nitin-new2-ds/docs/reports/08-final-comparison.md).
+[PLAYBOOK.md](../PLAYBOOK.md).
+Report: [08 final comparison](../experiments/08-nitin-new2-ds/report.md).
 
 ---
 

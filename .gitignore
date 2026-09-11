@@ -1,10 +1,11 @@
 # model weights -- single-copy on the external drive, never in git
 models/
-**/adapters/
-archive/**/*.safetensors
-**/snapshots/
-**/checkpoints/
+experiments/*/adapter/*.safetensors
 *.safetensors
+**/checkpoints/
+**/snapshots/
+# throwaway run dirs (dry-run adapters, per-checkpoint eval copies)
+experiments/*/tmp/
 
 # regenerable data dumps
 **/dataset/raw_output/

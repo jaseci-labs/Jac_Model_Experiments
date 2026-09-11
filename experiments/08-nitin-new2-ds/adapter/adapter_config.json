@@ -1,0 +1,68 @@
+{
+  "adapter_path": "experiments/08-nitin-new2-ds/adapter",
+  "batch_size": 1,
+  "clear_cache_threshold": 0,
+  "config": "2-train/configs/sft_spectrum.yaml",
+  "data": "experiments/08-nitin-new2-ds/dataset/sft",
+  "fine_tune_type": "lora",
+  "grad_accumulation_steps": 1,
+  "grad_checkpoint": true,
+  "iters": 8200,
+  "learning_rate": 2e-05,
+  "lora_parameters": {
+    "rank": 16,
+    "scale": 2.0,
+    "dropout": 0.05
+  },
+  "lr_schedule": {
+    "name": "cosine_decay",
+    "warmup": 820,
+    "arguments": [
+      2e-05,
+      8200,
+      1e-06
+    ]
+  },
+  "mask_prompt": true,
+  "max_seq_length": 3072,
+  "model": "models/qwen-q4",
+  "num_layers": 48,
+  "optimizer": "adam",
+  "optimizer_config": {
+    "adam": {},
+    "adamw": {},
+    "muon": {},
+    "sgd": {},
+    "adafactor": {}
+  },
+  "project_name": null,
+  "report_to": null,
+  "resume_adapter_file": null,
+  "save_every": 820,
+  "seed": 42,
+  "steps_per_eval": 500,
+  "steps_per_report": 50,
+  "test": false,
+  "test_batches": 500,
+  "train": true,
+  "val_batches": 8,
+  "spectrum_num_layers_original": 16,
+  "spectrum_layers": [
+    0,
+    22,
+    23,
+    27,
+    30,
+    34,
+    36,
+    37,
+    38,
+    39,
+    41,
+    42,
+    43,
+    44,
+    45,
+    47
+  ]
+}

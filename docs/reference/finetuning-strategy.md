@@ -1,6 +1,6 @@
 # Whole-Stack Strategy: Jac Model Finetuning
 
-*Historical: the plan written before experiment 01. It names Gemma 4 as the base; the 01 bake-off chose Qwen3-Coder-30B-A3B instead. Paths to `01-sft-dpo/` and `docs/wholestack/` no longer exist. Kept for the synthetic-data recipes. Current recipe: [../PLAYBOOK.md](../PLAYBOOK.md); what happened: [../HISTORY.md](../HISTORY.md).*
+*Historical: the plan written before experiment 01. It names Gemma 4 as the base; the 01 bake-off chose Qwen3-Coder-30B-A3B instead. Paths to `01-sft-dpo/` and `docs/wholestack/` no longer exist. Kept for the synthetic-data recipes. Current recipe: [../PLAYBOOK.md](../../PLAYBOOK.md); what happened: [../HISTORY.md](../HISTORY.md).*
 
 *End-to-end from synthetic data generation to evaluation*
 
