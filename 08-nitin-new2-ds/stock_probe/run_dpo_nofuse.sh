@@ -14,7 +14,7 @@
 # silently-reverted "SFT" base -- nothing to do with add_generation_prompt,
 # beta, or lr.
 #
-# THE FIX: never fuse before DPO. Train directly against models/qwen-q4
+# THE FIX: never fuse before DPO. Train directly against model-experiments/models/qwen-q4
 # (raw, quantized, untouched) and seed DPO's LoRA from the SFT adapter via
 # --resume-adapter-file instead of baking it into weights first. Verified:
 # a manual 20-iter test this way scored 73% subset functional pass rate
@@ -24,7 +24,7 @@
 #
 # Byte-identical to run_dpo_fixed.sh otherwise (still uses the chat-template
 # fix via dpo_fixed_train.jac -- both fixes are real and both are kept):
-#   - no fuse step, no SFT_FUSED var -- BASE_MODEL=models/qwen-q4 throughout
+#   - no fuse step, no SFT_FUSED var -- BASE_MODEL=model-experiments/models/qwen-q4 throughout
 #   - dry-run and the first real segment both pass
 #     --resume-adapter-file "$SFT_ADAPTER/adapters.safetensors" to seed from
 #     the SFT-trained LoRA instead of starting DPO from scratch
@@ -55,7 +55,7 @@ if pgrep -f "jac start" >/dev/null 2>&1 || pgrep -f "mlx_lm" >/dev/null 2>&1; th
 fi
 
 DRIVER="model-experiments/08-nitin-new2-ds/stock_probe/dpo_fixed_train.jac"
-BASE_MODEL="models/qwen-q4"
+BASE_MODEL="model-experiments/models/qwen-q4"
 SFT_ADAPTER="model-experiments/08-nitin-new2-ds/stock_probe/adapters/sft-on-nitin"
 DPO_ADAPTER="model-experiments/08-nitin-new2-ds/stock_probe/adapters/dpo-on-sft-nitin-nofuse"
 BEST_ADAPTER="model-experiments/08-nitin-new2-ds/stock_probe/adapters/dpo-on-sft-nitin-nofuse-best"
@@ -70,7 +70,7 @@ SEGMENT_ITERS="${DPO_SEGMENT_ITERS:-20}"
 STALL_SECS="${DPO_STALL_SECS:-900}"
 EVAL_SUBSET="${DPO_EVAL_SUBSET:-100}"
 COLLAPSE_ABS_FLOOR="${DPO_COLLAPSE_ABS_FLOOR:-30}"
-HOLDOUT="${HOLDOUT:-model-experiments/04-cpt-sft/sft_fresh_probe/dataset/sft/valid.jsonl}"
+HOLDOUT="${HOLDOUT:-model-experiments/08-nitin-new2-ds/dataset/holdout_a_shared855.jsonl}"
 DPO_METRICS="$RDIR/metrics_functional.jsonl"
 
 mkdir -p "$RDIR" "$SNAP_DIR"
@@ -211,7 +211,7 @@ while true; do
   echo ">>> subset functional eval on snapshot step ${NEW_DONE} (n=${EVAL_SUBSET})"
   JAC_EVAL_MODE=mlx JAC_EVAL_MODEL="$BASE_MODEL" JAC_EVAL_ADAPTER="$SNAP" \
     JAC_HOLDOUT="$HOLDOUT" JAC_EVAL_LIMIT="$EVAL_SUBSET" JAC_EVAL_METRICS_OUT="$DPO_METRICS" JAC_EVAL_STEP="$NEW_DONE" \
-    jac run model-experiments/04-cpt-sft/sft_cptv2_probe/jacgen/eval_functional.jac 2>&1 | tail -5 | tee -a "$RDIR/train.log"
+    jac run model-experiments/08-nitin-new2-ds/scripts/eval_functional.jac 2>&1 | tail -5 | tee -a "$RDIR/train.log"
   STEP_PCT="$(python3 -c "
 import json
 p = 0.0

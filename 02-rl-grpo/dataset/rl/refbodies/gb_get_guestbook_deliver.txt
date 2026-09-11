@@ -1,2 +1,0 @@
-        self.results.sort(key=lambda e: GuestEntry : e.created_at, reverse=True);
-        report self.results[:50];

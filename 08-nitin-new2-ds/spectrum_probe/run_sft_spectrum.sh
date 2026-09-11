@@ -76,9 +76,9 @@ PROGRESS_FILE="$RDIR/.sft_progress_steps"
 
 # --- self-test gate (spectrum-plan.md §6.4) -------------------------------
 if ! is_done verify && [ "${SKIP_VERIFY:-0}" != "1" ]; then
-  echo ">>> --verify-layers self-test (loads models/qwen-q4 twice; a few minutes)"
+  echo ">>> --verify-layers self-test (loads model-experiments/models/qwen-q4 twice; a few minutes)"
   jac run "$DRIVER" --verify-layers --spectrum-layers "$LAYERS" \
-    --model models/qwen-q4 2>&1 | tee "$RDIR/verify_layers.txt"
+    --model model-experiments/models/qwen-q4 2>&1 | tee "$RDIR/verify_layers.txt"
   if ! grep -q "^VERIFY: PASS" "$RDIR/verify_layers.txt"; then
     echo "!!! self-test FAILED -- see $RDIR/verify_layers.txt. Not training."
     exit 1
@@ -106,6 +106,14 @@ fi
 
 TOTAL_ITERS="$(grep -E '^iters:' "$CFG" | grep -oE '[0-9]+' | head -1)"
 TOTAL_ITERS="${TOTAL_ITERS:-8200}"
+# Guard for the FINAL model: the run markers (.train.done / .sft_progress_steps)
+# were cleaned out after training finished. Without them the loop below would
+# resume from step 0 on top of the finished adapter and overwrite it.
+if [ -f "$ADAPTER_FILE" ] && [ ! -f "$PROGRESS_FILE" ] && ! is_done train; then
+  echo "!!! $ADAPTER_FILE exists (the finished 8200-iter adapter) but no run markers."
+  echo "    Refusing to train over it. Move the adapter dir aside to retrain."
+  exit 1
+fi
 [ -f "$PROGRESS_FILE" ] || echo 0 > "$PROGRESS_FILE"
 
 if is_done train && [ -f "$ADAPTER_FILE" ]; then
@@ -154,7 +162,7 @@ while true; do
       break
     fi
     JAC_TRAIN_LOG="$RDIR/.segment.log" JAC_METRICS="/dev/null" JAC_PLOT_DIR="$RDIR" \
-      jac run model-experiments/01-sft-dpo/sft_dpo/jacgen/plot_metrics.jac >/dev/null 2>&1 || true
+      jac run model-experiments/08-nitin-new2-ds/scripts/plot_metrics.jac >/dev/null 2>&1 || true
   done
   RC=0; wait "$SEG_PID" 2>/dev/null || RC=$?
   cat "$RDIR/.segment.log" >> "$TRAIN_LOG"

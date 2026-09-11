@@ -35,13 +35,13 @@ import from typing { cast }
 glob ROOT: Path = Path(str(__file__)).resolve().parents[3];
 
 glob HOLDOUTS: dict[str, Path] = {
-    "A": ROOT / "model-experiments/04-cpt-sft/sft_fresh_probe/dataset/sft/valid.jsonl",
+    "A": ROOT / "model-experiments/08-nitin-new2-ds/dataset/holdout_a_shared855.jsonl",
     "B": ROOT / "model-experiments/08-nitin-new2-ds/dataset/nitin_holdout_eval.jsonl"
 };
 
 glob BATCH_SIZE: int = int(os.environ.get("BATCH_SIZE", "32"));
 glob MAX_TOKENS: int = int(os.environ.get("MAX_TOKENS", "768"));
-glob MODEL: str = os.environ.get("MODEL", "models/qwen-q4");
+glob MODEL: str = os.environ.get("MODEL", "model-experiments/models/qwen-q4");
 
 
 def main() -> int {

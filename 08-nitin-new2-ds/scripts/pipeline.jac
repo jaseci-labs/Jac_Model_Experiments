@@ -40,11 +40,13 @@ not ceremonial.
 """
 import os, re, json, glob, random, hashlib, subprocess, collections;
 
-glob EXT: str = "/Volumes/ExtremePro/JaseciLabs/jac_model_studio";
-glob EXP: str = EXT + "/model-experiments/08-nitin-new2-ds";
+# repo-relative: this file lives at <repo>/model-experiments/08-nitin-new2-ds/scripts/
+glob EXP: str = os.path.dirname(os.path.dirname(os.path.abspath(str(__file__))));
+glob EXT: str = os.path.dirname(os.path.dirname(EXP));   # repo root
 glob OUTD: str = EXP + "/dataset";
-glob HOLDOUT_DIR: str = EXT + "/model-experiments/07-nitin-ds-new-sft/dataset";
-glob STATS: str = "/tmp/nitin_new2_triage";
+# 07 is deleted; 08 carries its own verbatim copy of 07's frozen holdout.
+glob HOLDOUT_DIR: str = OUTD;
+glob STATS: str = EXP + "/docs/reports/funnel";   # funnel stats, kept with the experiment
 
 glob CORPUS: str = "jac-data-gen";
 glob COMMIT: str = "c95b7563c16851010396170c269f1fdc5327ef15";

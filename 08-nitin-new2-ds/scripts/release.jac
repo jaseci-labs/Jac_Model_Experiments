@@ -35,10 +35,11 @@ experiments can be sliced by the same reporting code.
 """
 import os, json, collections;
 
-glob EXT: str = "/Volumes/ExtremePro/JaseciLabs/jac_model_studio";
-glob EXP: str = EXT + "/model-experiments/08-nitin-new2-ds";
+# repo-relative: this file lives at <repo>/model-experiments/08-nitin-new2-ds/scripts/
+glob EXP: str = os.path.dirname(os.path.dirname(os.path.abspath(str(__file__))));
+glob EXT: str = os.path.dirname(os.path.dirname(EXP));   # repo root
 glob OUTD: str = EXP + "/dataset";
-glob STATS: str = "/tmp/nitin_new2_triage";
+glob STATS: str = EXP + "/docs/reports/funnel";   # funnel stats, kept with the experiment
 
 glob DATASET_VERSION: str = "nitin-new2-ds-v1.0.0";
 glob RUN_TAG: str = "nitin-new2";

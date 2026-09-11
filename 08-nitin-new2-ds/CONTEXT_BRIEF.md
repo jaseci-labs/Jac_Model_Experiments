@@ -5,24 +5,48 @@ working this experiment shares the same facts instead of re-deriving them —
 do not re-discover what's already answered here; do flag if something here
 turns out to be wrong.
 
-> **Status: DATASET COMPLETE, TRAINING NOT STARTED (2026-09-10).** Corpus
-> merged from 7 sources, triaged, quality-filtered, split; both holdouts in
-> place; zero leakage verified. **No training has run yet, and no number in
-> this file is an 08 result** — every result quoted below is a *prior* result
-> (07, 06, or 04-cpt-sft) carried forward as the baseline this phase will be
-> measured against.
+> **Status: COMPLETE (2026-09-11).** Spectrum SFT trained (8200/8200, no NaN)
+> and evaluated on both holdouts: **70.5% (603/855) on holdout (a), 37.7%
+> (322/855) on holdout (b)**. Write-up: `docs/reports/08-final-comparison.md`.
+> Stock SFT also trained cleanly but was never evaluated, and its adapter was
+> deleted in the 2026-09-11 repo cleanup. No DPO ran. Every other number in
+> this file is a *prior* result (07, 06, or 04-cpt-sft) used as the baseline.
 >
-> Done: source repo re-pinned (§1), 7-source merge + eval-denylist fix +
-> quality-gradient filter + license filter (§2), triage funnel complete
+> The 07, 06 and 04-cpt-sft directories referred to below were deleted in the
+> same cleanup. Their reports are in `../docs/history/`; the holdout (a) file
+> lives here as `dataset/holdout_a_shared855.jsonl`; the eval harness is
+> `scripts/eval_functional.jac`. How to run a new experiment from this tree:
+> `../docs/PLAYBOOK.md`.
+>
+> Dataset: source repo re-pinned (§1), 7-source merge + eval-denylist fix +
+> quality-gradient filter + license filter (§2), triage funnel
 > (17,173 pre-dedup → 16,167 clean pool → 14,792 SFT release + 1,375 DPO
 > release, 0 leaks; see `docs/reports/corpus-triage-report.md`), holdout (b)
 > reused verbatim from 07 for comparability, 85/15 splits built.
-> Next: launch the four serialized training runs (§6), then eval, then the
-> comparison report.
+>
+> **IMPORTANT — scope cut, superseding the original 12-cell design
+> (2026-09-11, two successive explicit user calls, second overrides the
+> first):** this phase now trains and reports **spectrum-arm SFT only**.
+> Concretely:
+> - Stock SFT DID run to completion (clean, no NaN) — its adapter/results
+>   are kept on disk as an artifact, but it is **NOT evaluated and NOT in
+>   the report**. Do not run `stock_probe/eval_sft_sweep.sh` for this phase.
+> - **DPO is skipped entirely, both arms.** Neither
+>   `stock_probe/run_dpo_nofuse.sh` nor `spectrum_probe/run_dpo_spectrum.sh`
+>   runs this phase. Do not launch either without asking first.
+> - Pipeline is: spectrum SFT (§6) → eval spectrum SFT only, both holdouts
+>   (§5.1/§5.2, spectrum scripts only) → report.
+> - Consequence: RQ1 (arm-vs-arm) and the DPO-axis analysis (§2.4) are both
+>   **out of scope this phase** — there is nothing to compare spectrum
+>   against, and no DPO-stage numbers at all. The report is a single-arm,
+>   SFT-only result compared against 07's/06's SFT-stage numbers (§4.1),
+>   not the full 12-cell matrix Stage 6 originally specified. State this
+>   plainly in the report rather than silently produce a partial matrix.
 
 ## 0. What this experiment is
 
-Follow-up to `model-experiments/07-nitin-ds-new-sft/`, but **not a clean
+Follow-up to `07-nitin-ds-new-sft` (deleted; report at
+`../docs/history/07-nitin-ds-new-sft/07-final-comparison.md`), but **not a clean
 single-variable replication** the way 06→07 was. Nitin's dataset-generation
 repo (`jac-data-gen`) shipped a large volume of *genuinely new* work between
 07's pin and now — not more rows of the same file, but four new source types
@@ -68,8 +92,8 @@ way 07-vs-06 was — say so in the headline, don't bury it.
 
 The old `py2jac_dataset_idiomatic.jsonl` (07's only source) barely moved
 (9,367→9,371 records) at this pin. The real update is four sources that did
-not exist at 07's pin. `scripts/pipeline.jac` reads all seven; `SRC_COMMIT`
-inside it is the single source of truth.
+not exist at 07's pin. `scripts/pipeline.jac` reads all seven; its `COMMIT`
+constant is the single source of truth.
 
 ### 1.1 The 7 sources — what each one is and why it's in or out
 
@@ -85,7 +109,7 @@ inside it is the single source of truth.
 | **total** | **16,167** | | after all filters, dedup, and leakage checks (§2) |
 
 **Skipped entirely** (verdict from investigation, not laziness):
-- `data/golden_client_jac/` (6,210 bare `.jac` files) — no paired prompt JSONL exists (deliberately gitignored upstream); this project's own `03-cpt-only/docs/cpt-2/analysis.md` already rejected further CPT-only training. Would need a prompt-pairing pass to be usable at all.
+- `data/golden_client_jac/` (6,210 bare `.jac` files) — no paired prompt JSONL exists (deliberately gitignored upstream); this project's own CPT-v2 result (`../docs/history/03-cpt-only/cpt-2-results.md`) already rejected further CPT-only training. Would need a prompt-pairing pass to be usable at all.
 - `data/graph_targets/` — gitignored discovery metadata upstream, not in the repo at this pin. Its only committed descendant, the 540-row `mm4_issue_problems.jsonl` prompt pool, has **no Jac target** (32/540 already appear as `osp` prompts; the other 508 are an input queue, not training data).
 
 ### 1.2 Warning that inverts 06/07's warning — read this before writing anything comparing 08 to 07
@@ -139,7 +163,7 @@ field. Rows with no joinable `work/*.json` (no computable test count) are
 excluded rather than assumed good: 2,850 rows, logged as
 `no_work_join_no_test_signal`. 3,108 more rows were dropped for scoring below
 18. This is the plausible root-cause fix for the finding in 07's own
-`docs/reports/07-final-comparison.md` that 07 (larger pool, weaker average
+report (`../docs/history/07-nitin-ds-new-sft/07-final-comparison.md`) that 07 (larger pool, weaker average
 quality) underperformed 06 despite more rows.
 
 ### 2.3 License filter on `js2jac`
@@ -164,7 +188,7 @@ would misdescribe what the DPO training signal actually teaches.
 
 ## 3. Base checkpoint — unchanged, explicit standing instruction
 
-`models/qwen-q4` (registry label "Qwen · BASE") — the SAME base checkpoint
+`model-experiments/models/qwen-q4` (registry label "Qwen · BASE") — the SAME base checkpoint
 used by 04-cpt-sft, 06, and 07. Holding the base fixed across every phase in
 this lineage is what keeps the cross-phase dataset comparison clean.
 
@@ -180,7 +204,8 @@ Same convention as 06/07. Per stage (SFT-final, DPO-best, DPO-final), for
 EACH arm (stock, spectrum), eval against:
 
 **(a) The existing shared holdout — reuse UNCHANGED, do not regenerate:**
-`model-experiments/04-cpt-sft/sft_fresh_probe/dataset/sft/valid.jsonl` — 1,428
+`dataset/holdout_a_shared855.jsonl` — a byte-identical copy of 04-cpt-sft's
+`sft_fresh_probe/dataset/sft/valid.jsonl` (that directory is deleted), 1,428
 rows, 855 code-graded. Makes every number directly comparable to 06's and
 07's cells.
 
@@ -199,7 +224,10 @@ sources in this phase — flag this as a real gap if RQ3 needs one.
 **Leakage: verified zero.** Four independent surfaces checked (numeric HF-row
 id, normalized `jac` text hash, normalized `jac_rejected` text hash, normalized
 holdout-prompt text) against the pool as written to disk, both pre-split and
-post-split. 530 candidate rows and 117 DPO pairs were caught and dropped by
+post-split. Note: `pipeline.jac` and `copy_holdout.jac` check against holdout
+(b) only. Holdout (a) is not checked by any 08 script; an exact prompt/target
+match of `dataset/sft/{train,valid}.jsonl` against it was run afterwards
+(2026-09-11) and found 0 hits. 530 candidate rows and 117 DPO pairs were caught and dropped by
 this check before it reached zero (`holdout_leak` in the rejected-reason
 breakdown, §5 of `docs/reports/corpus-triage-report.md`) — the leak-check did
 real work, it did not just confirm an empty set.
@@ -208,14 +236,23 @@ real work, it did not just confirm an empty set.
 
 All of the following are **prior results**, not this phase's.
 
-**07-nitin-ds-new-sft, holdout A (the shared 855)** — pending the actual
-number: `07-nitin-ds-new-sft/docs/reports/07-final-comparison.md` reports 07
-did **not** beat 06 (0/6 significant, all 6 point estimates favor 06) despite
-a larger pool — read that report in full before writing 08's comparison, its
-finding is the direct motivation for §2.2's quality filter.
+**07-nitin-ds-new-sft, holdout A (the shared 855)** —
+`../docs/history/07-nitin-ds-new-sft/07-final-comparison.md` §1. 07 did
+**not** beat 06 (0/6 significant, all 6 point estimates favor 06) despite a
+larger pool; that finding is the direct motivation for §2.2's quality filter.
+
+| Stage | Stock | Spectrum |
+|---|---|---|
+| Base (untrained) | 10.5% (90/855) | 10.5% (90/855) |
+| SFT-final | 68.9% (589/855) | 72.4% (619/855) |
+| DPO-best | 68.2% (583/855) | 73.0% (624/855) |
+| DPO-final | 66.3% (567/855) | 71.0% (607/855) |
+
+07 on its own holdout (b), which 08 reuses: SFT-final 98.2% (840/855) for both
+arms.
 
 **06-nitin-ds-sft, holdout A** —
-`06-nitin-ds-sft/docs/reports/2026-08-final-comparison.md` §1:
+`../docs/history/06-nitin-ds-sft/2026-08-final-comparison.md` §1:
 
 | Stage | Stock | Spectrum |
 |---|---|---|
@@ -235,10 +272,11 @@ in the lineage by a wide margin; report it as a headline confound exactly like
 
 ### 4.2 Eval sweep sizing — unchanged from 06/07
 
-Interim/sweep checkpoints eval against a 15% seeded slice of the holdout
-(≈128 rows); final checkpoints (SFT-final, DPO-best, DPO-final) always eval on
-BOTH holdouts at full size. Never substitute the sweep subset for a headline
-number.
+Interim/sweep checkpoints eval against the **first 100 rows** of the holdout
+(`SUBSET=100` → `JAC_EVAL_LIMIT`, not a random slice; on holdout (a) those 100
+rows are all `code_gen`); final checkpoints (SFT-final, DPO-best, DPO-final)
+always eval on BOTH holdouts at full size. Never substitute the sweep subset
+for a headline number.
 
 ## 5. Everything is Jac — carried forward from 07
 
@@ -259,10 +297,10 @@ all 5 `.jac` files, zero leftover `07-nitin-ds-new-sft` string references,
 
 **Three open items inherited unchanged from 07, not yet re-decided:**
 
-1. Both DPO run scripts still default `HOLDOUT` to
-   `04-cpt-sft/sft_fresh_probe/dataset/sft/valid.jsonl` (holdout (a)) for the
-   in-loop collapse-gate baseline lookup — same as 07. Confirm this is still
-   wanted before the first launch.
+1. Both DPO run scripts default `HOLDOUT` to
+   `dataset/holdout_a_shared855.jsonl` (holdout (a)) for the in-loop
+   collapse-gate baseline lookup — same as 07. Confirm this is still wanted
+   before the first launch.
 2. That lookup filters on `total == 855`; pointing a DPO training run at
    holdout (b) instead would silently drop the collapse gate to its 30%
    absolute floor. Preserved verbatim from 07, comment intact.
@@ -274,31 +312,35 @@ all 5 `.jac` files, zero leftover `07-nitin-ds-new-sft` string references,
 
 Three corrections inherited from 06/07, still authoritative: no
 `spectrum/configs/dpo_spectrum.yaml` (env-var defaults in the runner); the
-functional harness has exactly one copy,
-`04-cpt-sft/sft_cptv2_probe/jacgen/eval_functional.jac` — point at it, don't
-copy it; the stock DPO runner is `run_dpo_nofuse.sh`, never `run_dpo.sh`
-(fuse re-quantizes and discards the SFT delta).
+functional harness is `scripts/eval_functional.jac` (moved here from
+04-cpt-sft's `sft_cptv2_probe/jacgen/` when 04 was deleted; grading logic
+unchanged) — never change how it grades; the stock DPO runner is
+`run_dpo_nofuse.sh`, never `run_dpo.sh` (fuse re-quantizes and discards the
+SFT delta).
 
 **Preflight hazard, unchanged:** `pgrep -f "jac start"; pgrep -f mlx_lm` must
 return nothing before any launch.
 
 ## 7. Decontamination — reused shingle machinery, extended
 
-`scripts/pipeline.jac` carries the same 14-token-shingle / ≥0.5-overlap
-machinery 06/07 used, plus the eval-denylist pass (§2.1) that neither of them
-ran. Global cross-source dedup additionally caught 1,006 rows — mostly
-`farm_handler` being a near-total content subset of `farm` (§1.1).
+`scripts/pipeline.jac` does exact and normalized-hash dedup (comments
+stripped, whitespace collapsed) per source and across sources, plus the
+eval-denylist pass (§2.1) that neither 06 nor 07 ran. It does **not** carry
+06/07's 14-token-shingle near-duplicate check (verified by reading the script
+2026-09-11; earlier drafts of this brief said it did). Global cross-source
+dedup caught 1,006 rows — mostly `farm_handler` being a near-total content
+subset of `farm` (§1.1).
 
 **No silent caps.** Every drop is counted and attributed by reason in
 `docs/reports/corpus-triage-report.md`.
 
 ## 8. Live monitoring — unchanged convention
 
-`scripts/plot_progress.jac` regenerates PNGs from `train.log` +
-`metrics_functional.jsonl` on demand, written to
-`model-experiments/08-nitin-new2-ds/<arm>_probe/results/<stage>/plots/`. The
-orchestrating session publishes these as an Artifact dashboard; subagents keep
-the PNGs current in place.
+The SFT runners' watchdog regenerates PNGs (train/val loss, LR, throughput,
+memory) into `<arm>_probe/results/<stage>/` on every poll via
+`scripts/plot_metrics.jac`. `scripts/plot_progress.jac` regenerates loss and
+eval-curve PNGs from `train.log` + `metrics_functional.jsonl` on demand,
+conventionally written to `<arm>_probe/results/<stage>/plots/`.
 
 ## 9. Directory layout
 
@@ -307,18 +349,20 @@ model-experiments/08-nitin-new2-ds/
   CONTEXT_BRIEF.md          <- this file
   docs/
     README.md  spec.md  workflow.md  dataset-structure.md
-    reports/                <- triage + comparison reports as they land
-    reports/failure_data/   <- per-row generation dumps for failure analysis
+    reports/                <- corpus-triage-report.md, 08-final-comparison.md
   dataset/
+    holdout_a_shared855.jsonl <- holdout (a), 1,428 rows / 855 code-graded, copy of 04's
     candidate_pool.jsonl    <- 16,167 rows, clean/deduped/decontaminated/leak-checked
     nitin_holdout.jsonl     <- REUSED VERBATIM from 07 (855 rows), not carved from 08's pool
     nitin_holdout_eval.jsonl<- same, with authored instructions (07's, byte-identical)
     sft_train.jsonl (14,792)  dpo_train.jsonl (1,375)
-    sft/{train,valid}.jsonl (12,573 / 2,219)  dpo/{train,valid}.jsonl (1,169 / 206)
+    sft/{train,valid}.jsonl (12,570 / 2,217 after the NaN guard)  dpo/{train,valid}.jsonl (1,169 / 206)
     rejected/{sft,dpo}/     <- every drop, with a reason (9,404 sft / 224 dpo)
-  scripts/                  <- all .jac (pipeline.jac, copy_holdout.jac, release.jac, prep_training_dirs.sh)
-  stock_probe/              <- stock arm, trailing-16 LoRA
-  spectrum_probe/           <- spectrum arm, SNR-picked blocks
+  scripts/                  <- pipeline.jac, copy_holdout.jac, release.jac, prep_training_dirs.sh,
+                               nan_guard.jac, eval_functional.jac, plot_*.jac, gen/grade_eval_detail.jac,
+                               grade_reference.jac
+  stock_probe/              <- stock arm, trailing-16 LoRA (scripts + configs only)
+  spectrum_probe/           <- spectrum arm, SNR-picked blocks (adapter + results for SFT)
 ```
 
 Both arms share ONE `dataset/` — they train on identical data by design.
@@ -333,15 +377,18 @@ first launch):
 | stock | `adapters/sft-on-nitin` | `adapters/dpo-on-sft-nitin-nofuse` | `…-nofuse-best` |
 | spectrum | `adapters/sft-on-nitin-spectrum` | `adapters/dpo-on-sft-nitin-spectrum` | `…-spectrum-best` |
 
+Only `spectrum_probe/adapters/sft-on-nitin-spectrum` exists on disk now.
+
 ## 10. Sequencing (respect the dependency order)
+
+As planned (12 cells), then as actually run after the 2026-09-11 scope cut:
 
 ```
 [DONE] pin corpus @ c95b7563 -> 7-source merge -> denylist + quality + license filters
   -> dedup + decontam -> holdout(b) reused from 07 -> leak-check -> 85/15 splits
-[NEXT] SFT training x2 arms   (sequential only — one training process on this box)
-  -> DPO training x2 arms   (each resumes from its OWN arm's SFT adapter)
-  -> eval x2 arms x 2 holdouts x 3 stages
-  -> comparison report (12 cells + cross-phase vs 07 and vs 06)
+[DONE] stock SFT (trained, never evaluated, adapter since deleted)
+[DONE] spectrum SFT -> eval on holdout (a) and (b) -> docs/reports/08-final-comparison.md
+[CUT ] DPO x2 arms, stock-arm eval, 12-cell matrix
 ```
 
 ## 11. Failure modes already paid for — do not rediscover these
@@ -358,3 +405,4 @@ first launch):
 | Script runs as a side effect of being imported | `with entry { }` instead of `with entry:__main__ { }` |
 | Cross-directory Jac import dies at runtime but passes `jac check` | relative import with no known parent package — inline the shared logic |
 | A silently-partial merge pipeline looks complete | verify funnel arithmetic closes end-to-end (stage-by-stage subtraction, not just a final total) before trusting any multi-source merge output, especially one resumed after an interruption |
+| SFT train loss goes `nan` partway through and never recovers, `mlx_lm.lora` does NOT crash or exit non-zero | `mask_prompt: true` + a row whose PROMPT ALONE exceeds `max_seq_length` (3072): truncation keeps only prompt tokens, zero unmasked completion tokens survive, cross-entropy over an empty target is NaN, and the NaN gradient poisons Adam's momentum/variance state permanently — every subsequent step stays NaN. Hit live during 08's stock-arm SFT launch (2026-09-10): 5 `js2jac` rows (full_len up to 7521, 2.4x the limit) had prompt-alone length ≥3072; first hit at iter ~2300 (matches the `[WARNING] ... longest sentence 7521 ... truncated` line immediately prior). `mlx_lm.lora`'s own per-report loss line is the only signal — no exception, no stall (log keeps growing), so the watchdog's stall/OOM detectors both miss it; must explicitly grep segment logs for `nan` too. Fix applied: scan `dataset/sft/{train,valid}.jsonl` with the real tokenizer (`mlx_lm.tokenizer_utils.load`), compute `len(apply_chat_template(msgs[:last_assistant_idx], add_generation_prompt=True))` per row, drop any row where that's ≥ `max_seq_length`. 3 dropped from train, 2 from valid, all `js2jac` (the `*.jsonl.pre-nanfix.bak` backups made at the time were removed in the 2026-09-11 cleanup). This check is now `scripts/nan_guard.jac`, run automatically by `prep_training_dirs.sh`. Check `dataset/dpo/{train,valid}.jsonl` separately before any DPO stage (smaller `DPO_MAXLEN=512`, not verified clean; `nan_guard.jac` only reads `messages`, so it does not cover DPO rows). |

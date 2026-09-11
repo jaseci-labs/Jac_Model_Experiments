@@ -1,85 +1,12 @@
+# repo-wide; each project also has its own .gitignore (jms/, model-experiments/)
 .env
+.venv/
 .jac/
 __pycache__/
 *.pyc
 .DS_Store
+.pytest_cache/
 .playwright-mcp/
-
-models/
-# every attempt's adapter/optimizer checkpoints, whatever the attempt dir is named
-# (** matches any depth -- model-experiments/04-cpt-sft/adapters/ AND
-# model-experiments/04-cpt-sft/sft_fresh_probe/adapters/ alike; the single-*
-# version of this rule only matched one level and silently missed the nested
-# probe dirs, caught while committing Phase 2 DPO results)
-model-experiments/**/adapters/
-.venv/
-
-# root results/ is studio scratch (builder job logs, eval runs) — not repo output
-results/_builder/
-results/_evals/
-
-# studio runtime artifacts (per-user job dirs, heavy-job lock, audit log)
-model-experiments/01-sft-dpo/results/users/
-model-experiments/01-sft-dpo/results/.heavy-lock.json
-audit/
-
-# LaTeX build output (rebuild via model-experiments/02-rl-grpo/presentation/build.sh)
-model-experiments/02-rl-grpo/presentation/main.pdf
-model-experiments/02-rl-grpo/presentation/main.aux
-model-experiments/02-rl-grpo/presentation/main.fdb_latexmk
-model-experiments/02-rl-grpo/presentation/main.fls
-model-experiments/02-rl-grpo/presentation/main.log
-model-experiments/02-rl-grpo/presentation/main.nav
-model-experiments/02-rl-grpo/presentation/main.out
-model-experiments/02-rl-grpo/presentation/main.snm
-model-experiments/02-rl-grpo/presentation/main.toc
-
-# vendored external clone (jac-gpt oracle for CPT-v2 endpoint discovery, Task 14)
-model-experiments/03-new/cpt_train/jac_gpt_oracle/
-
-# LaTeX build output (RL slide deck, no build.sh here — slides.pdf stays tracked)
-presentation/slides.aux
-presentation/slides.log
-presentation/slides.nav
-presentation/slides.out
-presentation/slides.snm
-presentation/slides.toc
-
-# generated CPT+SFT dataset (jacgen2 pipeline output, not repo source)
-model-experiments/04-cpt-sft/dataset/
-
-# JMS product user data — per-user project dirs (dataset/sources/jobs/runs/evals +
-# project.json snapshots) created by jms_projects.sv.jac; never repo source
-jms-projects/
-
-# sft_cptv2_probe hypothesis-probe run: adapters/checkpoints are multi-GB, not repo source
-model-experiments/04-cpt-sft/sft_cptv2_probe/adapters/
-model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-v2/snapshots/
-model-experiments/04-cpt-sft/sft_cptv2_probe/results/dpo-v3/snapshots/
-model-experiments/04-cpt-sft/sft_fresh_probe/results/dpo/snapshots/
-
-# any per-run DPO/SFT checkpoint snapshot dir, any arm, any run name (each
-# adapters.safetensors is >1GB -- GitHub hard-rejects >100MB without LFS;
-# hit this for real 2026-08-02 with dpo-fixed/dpo-nofuse/dpo-v4-nofuse,
-# generalizing so a new run name never silently re-blocks the push again)
-model-experiments/04-cpt-sft/*_probe/results/*/snapshots/
-model-experiments/06-nitin-ds-sft/*_probe/results/*/snapshots/
-model-experiments/07-nitin-ds-new-sft/*_probe/results/*/snapshots/
-model-experiments/08-nitin-new2-ds/*_probe/results/*/snapshots/
-
-# same story for 06-nitin-ds-sft's (and 07-nitin-ds-new-sft's) raw batch-gen
-# intermediates (pending/response shards for the SFT/DPO/holdout-eval
-# reverse-authoring passes) -- large, purely intermediate, the gated release
-# JSONLs in dataset/ are the actual repo source
-model-experiments/06-nitin-ds-sft/dataset/raw_output/
-model-experiments/07-nitin-ds-new-sft/dataset/raw_output/
-model-experiments/08-nitin-new2-ds/dataset/raw_output/
-
-# CPT-on-Spectrum probe: per-leg/CF-check stdout+stderr logs are large and
-# purely diagnostic; training_state.json, leg_reviews.md, cf_check_*.json,
-# verify_layers.txt etc. under results/cpt-v2-spectrum/ are small text and
-# ARE committed -- only this logs/ subdir is excluded (cpt-spectrum-plan.md §1.4)
-model-experiments/03-cpt-only/results/cpt-v2-spectrum/logs/
-
-# subagent-driven-development ledger/scratch (survives locally, not committed)
 .superpowers/
+.claude/worktrees/
+models/

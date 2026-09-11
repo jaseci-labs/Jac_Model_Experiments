@@ -1,0 +1,37 @@
+{
+ "pool_n": 16167,
+ "sft_n": 14792,
+ "dpo_n": 1375,
+ "sft_by_source_type": {
+  "composer": 2898,
+  "farm": 1592,
+  "farm_handler": 2,
+  "js2jac": 8674,
+  "osp": 943,
+  "step4_work": 683
+ },
+ "dpo_by_source_type": {
+  "step4_dpo": 1375
+ },
+ "sft_by_register": {
+  "translate_request": 12255,
+  "spec_style": 1594,
+  "user_request": 943
+ },
+ "sft_by_task_type": {
+  "python_to_jac_function": 3581,
+  "farm_crud_module": 1594,
+  "js_to_jac": 8674,
+  "osp_module": 943
+ },
+ "sft_by_tier": {
+  "idiomatic": 2898,
+  "verified": 2537,
+  "cleaned": 5585,
+  "floor": 3577,
+  "idiomized": 195
+ },
+ "dataset_version": "nitin-new2-ds-v1.0.0",
+ "run_tag": "nitin-new2",
+ "dpo_axis": "idiomaticity"
+}

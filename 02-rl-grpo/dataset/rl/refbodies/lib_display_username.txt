@@ -1,3 +1,0 @@
-    return profileUsername.split("@")[0]
-        if "@" in profileUsername
-        else profileUsername;

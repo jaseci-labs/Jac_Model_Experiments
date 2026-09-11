@@ -82,16 +82,16 @@ USAGE
     jac run dpo_spectrum_train.jac --verify-patches --spectrum-layers configs/spectrum_layers.json
 
     # the chat-template half, against real training rows (from dpo_fixed_train.jac)
-    jac run dpo_spectrum_train.jac --verify-tokenization --model models/qwen-q4 --data <dpo dir>
+    jac run dpo_spectrum_train.jac --verify-tokenization --model model-experiments/models/qwen-q4 --data <dpo dir>
 
     # the expensive gate: real 30B model through the REAL DPO conversion path
-    jac run dpo_spectrum_train.jac --verify-layers --model models/qwen-q4 \\
+    jac run dpo_spectrum_train.jac --verify-layers --model model-experiments/models/qwen-q4 \\
         --spectrum-layers configs/spectrum_layers.json \\
         --resume-adapter-file .../adapters/sft-on-fresh-spectrum/adapters.safetensors
 
     # training: every other flag is stock `python -m mlx_lm_lora.train`
     jac run dpo_spectrum_train.jac --spectrum-layers configs/spectrum_layers.json \\
-        --model models/qwen-q4 --train --train-mode dpo ...
+        --model model-experiments/models/qwen-q4 --train --train-mode dpo ...
 """
 
 import argparse;
@@ -104,8 +104,8 @@ import tempfile;
 import from pathlib { Path }
 import from typing { Callable, Dict, List, Optional, Sequence }
 
-glob SELF_DIR: Path = Path(__file__ as str).resolve().parent;   # .../sft_fresh_probe/spectrum
-glob PROBE_DIR: Path = SELF_DIR.parent;                         # .../sft_fresh_probe
+glob SELF_DIR: Path = Path(__file__ as str).resolve().parent;   # .../08-nitin-new2-ds/spectrum_probe/spectrum
+glob PROBE_DIR: Path = SELF_DIR.parent;                         # .../08-nitin-new2-ds/spectrum_probe
 glob REPO_ROOT: Path = SELF_DIR.parents[3];                     # repo root
 
 with entry {
@@ -491,7 +491,7 @@ def _run_verify_layers(model_path: str, layers_path: str, lora_params: dict,
 # --------------------------------------------------------------------------
 def build_verify_parser(prog: str) -> argparse.ArgumentParser {
     ap = argparse.ArgumentParser(prog=prog);
-    ap.add_argument("--model", default="models/qwen-q4");
+    ap.add_argument("--model", default="model-experiments/models/qwen-q4");
     ap.add_argument("--rank", type=(int as Callable[[str], any]), default=16);
     ap.add_argument("--scale", type=(float as Callable[[str], any]), default=2.0);
     ap.add_argument("--dropout", type=(float as Callable[[str], any]), default=0.05);

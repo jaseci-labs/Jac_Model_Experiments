@@ -3,10 +3,10 @@ set -euo pipefail
 cd "$(cd "$(dirname "$0")/../../.." && pwd)"
 [ -d ".venv/bin" ] && export PATH="$PWD/.venv/bin:$PATH"
 
-BASE_MODEL="models/qwen-q4"
+BASE_MODEL="model-experiments/models/qwen-q4"
 DPO_ADAPTER="model-experiments/08-nitin-new2-ds/stock_probe/adapters/dpo-on-sft-nitin-nofuse"
 BEST_ADAPTER="model-experiments/08-nitin-new2-ds/stock_probe/adapters/dpo-on-sft-nitin-nofuse-best"
-HOLDOUT="${HOLDOUT:-model-experiments/04-cpt-sft/sft_fresh_probe/dataset/sft/valid.jsonl}"
+HOLDOUT="${HOLDOUT:-model-experiments/08-nitin-new2-ds/dataset/holdout_a_shared855.jsonl}"
 RDIR="${RDIR:-model-experiments/08-nitin-new2-ds/stock_probe/results/dpo-nofuse}"
 # Where run_dpo_nofuse.sh wrote its run state. RDIR is redirected per holdout
 # (workflow.md §5.2 -- holdout (b) writes to results/dpo-nofuse-nitinholdout/),
@@ -25,13 +25,13 @@ BEST_EVAL_STEP=$(( BEST_STEP + 500000 ))
 echo ">>> FULL holdout eval: last checkpoint (step $FINAL_STEP)"
 JAC_EVAL_MODE=mlx JAC_EVAL_MODEL="$BASE_MODEL" JAC_EVAL_ADAPTER="$DPO_ADAPTER" \
   JAC_HOLDOUT="$HOLDOUT" JAC_EVAL_METRICS_OUT="$METRICS" JAC_EVAL_STEP="$LAST_EVAL_STEP" \
-  jac run model-experiments/04-cpt-sft/sft_cptv2_probe/jacgen/eval_functional.jac | tee "$RDIR/final_last.txt"
+  jac run model-experiments/08-nitin-new2-ds/scripts/eval_functional.jac | tee "$RDIR/final_last.txt"
 
 if [ -f "$BEST_ADAPTER/adapters.safetensors" ] && [ "$BEST_STEP" != "$FINAL_STEP" ]; then
   echo ">>> FULL holdout eval: best snapshot (step $BEST_STEP)"
   JAC_EVAL_MODE=mlx JAC_EVAL_MODEL="$BASE_MODEL" JAC_EVAL_ADAPTER="$BEST_ADAPTER" \
     JAC_HOLDOUT="$HOLDOUT" JAC_EVAL_METRICS_OUT="$METRICS" JAC_EVAL_STEP="$BEST_EVAL_STEP" \
-    jac run model-experiments/04-cpt-sft/sft_cptv2_probe/jacgen/eval_functional.jac | tee "$RDIR/final_best.txt"
+    jac run model-experiments/08-nitin-new2-ds/scripts/eval_functional.jac | tee "$RDIR/final_best.txt"
 else
   echo ">>> best snapshot == last checkpoint (step $BEST_STEP), skipping duplicate full eval"
 fi

@@ -2,7 +2,7 @@
 # num_layers stays 16 -- the COUNT is unchanged; only membership changes, and
 # spectrum_lora_layers.py cross-checks this value against the length of
 # configs/spectrum_layers.json (spectrum-plan.md §6.1).
-model: "models/qwen-q4"
+model: "model-experiments/models/qwen-q4"
 train: true
 data: "model-experiments/08-nitin-new2-ds/dataset/sft"
 fine_tune_type: lora

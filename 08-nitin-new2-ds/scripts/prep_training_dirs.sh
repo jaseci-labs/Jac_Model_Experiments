@@ -113,6 +113,13 @@ PY
 if [ -z "$SPLIT_ONLY" ] || [ "$SPLIT_ONLY" = "sft" ]; then
   echo ">>> SFT release -> $EXP/dataset/sft/"
   split_one "$EXP/dataset/sft_train.jsonl" "$EXP/dataset/sft" "messages"
+  # NaN guard: drop rows whose prompt alone is >= max_seq_length (3072) tokens --
+  # with mask_prompt they have zero loss tokens and NaN the run. Idempotent;
+  # rewrites dataset/sft/{train,valid}.jsonl in place only if it drops something.
+  if [ -f "$EXP/dataset/sft/train.jsonl" ]; then
+    echo ">>> NaN guard (prompt >= max_seq_length) on $EXP/dataset/sft/"
+    jac run "$EXP/scripts/nan_guard.jac"
+  fi
 fi
 
 if [ -z "$SPLIT_ONLY" ] || [ "$SPLIT_ONLY" = "dpo" ]; then

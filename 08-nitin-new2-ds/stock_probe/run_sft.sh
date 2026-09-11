@@ -153,7 +153,7 @@ while true; do
       break
     fi
     JAC_TRAIN_LOG="$RDIR/.segment.log" JAC_METRICS="/dev/null" JAC_PLOT_DIR="$RDIR" \
-      jac run model-experiments/01-sft-dpo/sft_dpo/jacgen/plot_metrics.jac >/dev/null 2>&1 || true
+      jac run model-experiments/08-nitin-new2-ds/scripts/plot_metrics.jac >/dev/null 2>&1 || true
   done
   RC=0; wait "$SEG_PID" 2>/dev/null || RC=$?
   cat "$RDIR/.segment.log" >> "$TRAIN_LOG"

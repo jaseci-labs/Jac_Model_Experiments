@@ -4,7 +4,7 @@
 #
 # This is run_dpo_nofuse.sh with ONE variable changed: which 16 blocks carry the
 # LoRA. Everything else is the corrected recipe verbatim (comparison report §3):
-# no `mlx_lm.fuse`, BASE_MODEL=models/qwen-q4 throughout, DPO's LoRA seeded from
+# no `mlx_lm.fuse`, BASE_MODEL=model-experiments/models/qwen-q4 throughout, DPO's LoRA seeded from
 # the SFT adapter via --resume-adapter-file, beta 0.1, lr 1e-6, 654 pairs,
 # max_seq_length 512, 250 iters, the same segmented watchdog / OOM shrink ladder
 # / snapshot + subset-eval / collapse-gate machinery, and the same
@@ -17,7 +17,7 @@
 #   1. --verify-patches (seconds, no model load): both monkey-patches live, all
 #      three call sites rebound, on the frozen picks. Composing two patches is
 #      where one silently loses; this refuses to launch if it did.
-#   2. --verify-layers (minutes, loads models/qwen-q4 twice): the REAL DPO
+#   2. --verify-layers (minutes, loads model-experiments/models/qwen-q4 twice): the REAL DPO
 #      conversion path (mlx_lm_lora.utils.from_pretrained) converts the picks,
 #      trainable == 281.838M exactly, and -- the DPO-specific one -- every key of
 #      the SFT-spectrum adapter finds a home in the converted model.
@@ -64,7 +64,7 @@ SPEC_DIR="model-experiments/08-nitin-new2-ds/spectrum_probe/spectrum"
 DRIVER="$SPEC_DIR/dpo_spectrum_train.jac"
 LAYERS="$SPEC_DIR/configs/spectrum_layers.json"
 CFGFIX="$SPEC_DIR/adapter_config_fix.jac"
-BASE_MODEL="models/qwen-q4"
+BASE_MODEL="model-experiments/models/qwen-q4"
 SFT_ADAPTER="model-experiments/08-nitin-new2-ds/spectrum_probe/adapters/sft-on-nitin-spectrum"
 DPO_ADAPTER="model-experiments/08-nitin-new2-ds/spectrum_probe/adapters/dpo-on-sft-nitin-spectrum"
 BEST_ADAPTER="model-experiments/08-nitin-new2-ds/spectrum_probe/adapters/dpo-on-sft-nitin-spectrum-best"
@@ -79,7 +79,7 @@ SEGMENT_ITERS="${DPO_SEGMENT_ITERS:-20}"
 STALL_SECS="${DPO_STALL_SECS:-900}"
 EVAL_SUBSET="${DPO_EVAL_SUBSET:-100}"
 COLLAPSE_ABS_FLOOR="${DPO_COLLAPSE_ABS_FLOOR:-30}"
-HOLDOUT="${HOLDOUT:-model-experiments/04-cpt-sft/sft_fresh_probe/dataset/sft/valid.jsonl}"
+HOLDOUT="${HOLDOUT:-model-experiments/08-nitin-new2-ds/dataset/holdout_a_shared855.jsonl}"
 DPO_METRICS="$RDIR/metrics_functional.jsonl"
 DATA="model-experiments/08-nitin-new2-ds/dataset/dpo"
 DPO_CFG="model-experiments/08-nitin-new2-ds/spectrum_probe/configs/dpo_lora.yaml"
@@ -110,7 +110,7 @@ fi
 
 # --- gate 2: the real conversion path on the real model (minutes) -----------
 if ! is_done verify_layers && [ "${SKIP_VERIFY:-0}" != "1" ]; then
-  echo ">>> --verify-layers self-test (loads models/qwen-q4 twice; a few minutes)"
+  echo ">>> --verify-layers self-test (loads model-experiments/models/qwen-q4 twice; a few minutes)"
   jac run "$DRIVER" --verify-layers --spectrum-layers "$LAYERS" --model "$BASE_MODEL" \
     --resume-adapter-file "$SFT_ADAPTER/adapters.safetensors" 2>&1 | tee "$RDIR/verify_layers.txt"
   grep -q "^VERIFY: PASS" "$RDIR/verify_layers.txt" || {
@@ -261,7 +261,7 @@ while true; do
   echo ">>> subset functional eval on snapshot step ${NEW_DONE} (n=${EVAL_SUBSET})"
   JAC_EVAL_MODE=mlx JAC_EVAL_MODEL="$BASE_MODEL" JAC_EVAL_ADAPTER="$SNAP" \
     JAC_HOLDOUT="$HOLDOUT" JAC_EVAL_LIMIT="$EVAL_SUBSET" JAC_EVAL_METRICS_OUT="$DPO_METRICS" JAC_EVAL_STEP="$NEW_DONE" \
-    jac run model-experiments/04-cpt-sft/sft_cptv2_probe/jacgen/eval_functional.jac 2>&1 | tail -5 | tee -a "$RDIR/train.log"
+    jac run model-experiments/08-nitin-new2-ds/scripts/eval_functional.jac 2>&1 | tail -5 | tee -a "$RDIR/train.log"
   STEP_PCT="$(python3 -c "
 import json
 p = 0.0

@@ -32,10 +32,13 @@ file is kept as candidate_pool.jsonl.preleak). Expected drop count: 0.
 """
 import os, re, json, shutil, hashlib, collections;
 
-glob EXT: str = "/Volumes/ExtremePro/JaseciLabs/jac_model_studio";
-glob EXP: str = EXT + "/model-experiments/08-nitin-new2-ds";
+# repo-relative: this file lives at <repo>/model-experiments/08-nitin-new2-ds/scripts/
+glob EXP: str = os.path.dirname(os.path.dirname(os.path.abspath(str(__file__))));
+glob EXT: str = os.path.dirname(os.path.dirname(EXP));   # repo root
 glob OUTD: str = EXP + "/dataset";
-glob SRC_DIR: str = EXT + "/model-experiments/07-nitin-ds-new-sft/dataset";
+# 07 is deleted; its holdout already lives in OUTD (byte-identical, verified).
+# Set HOLDOUT_SRC_DIR to re-import from elsewhere; default = OUTD (copy is skipped).
+glob SRC_DIR: str = os.environ.get("HOLDOUT_SRC_DIR", OUTD);
 glob HOLDOUT_FILES: list[str] = ["nitin_holdout.jsonl", "nitin_holdout_eval.jsonl"];
 
 def jl(path: str) -> list {
@@ -82,7 +85,7 @@ with entry:__main__ {
     for nm in HOLDOUT_FILES {
         src = os.path.join(SRC_DIR, nm);
         dst = os.path.join(OUTD, nm);
-        shutil.copyfile(src, dst);
+        if os.path.abspath(src) != os.path.abspath(dst) { shutil.copyfile(src, dst); }
         same = open(src, "rb").read() == open(dst, "rb").read();
         print("copied %-26s %8d bytes  byte-identical=%s" % (nm, os.path.getsize(dst), same));
         if not same { raise RuntimeError("copy of " + nm + " is not byte-identical"); }

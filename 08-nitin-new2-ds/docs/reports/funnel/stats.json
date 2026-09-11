@@ -1,0 +1,392 @@
+{
+ "commit": "c95b7563c16851010396170c269f1fdc5327ef15",
+ "corpus_root": "/Users/ayush/repos/.jdg-worktrees/c95b7563",
+ "test_cutoff": 18,
+ "denylist_n": 1404,
+ "eval_status": "candidate_unvalidated",
+ "holdout_ids": 855,
+ "funnel": [
+  [
+   "S1  osp rows at pin",
+   1034,
+   ""
+  ],
+  [
+   "S1  osp ids parsable as numeric HF ids (denylist namespace)",
+   0,
+   "0 expected"
+  ],
+  [
+   "S1  osp -> pool",
+   1034,
+   "0 rejected"
+  ],
+  [
+   "S2  js2jac rows at pin",
+   9828,
+   ""
+  ],
+  [
+   "S2  js2jac ids parsable as numeric HF ids (denylist namespace)",
+   0,
+   "0 expected"
+  ],
+  [
+   "S2  js2jac null js/path/jac dropped",
+   -5,
+   ""
+  ],
+  [
+   "S2  js2jac non-permissive spdx dropped",
+   -1016,
+   "[('', 490), ('AGPL-3.0', 144), ('APACHE-2.0', 170), ('BSD-2-CLAUSE', 33), ('CC0-1.0', 4), ('GPL-2.0', 8), ('GPL-3.0', 165), ('MIT', 8480), ('NOASSERTION', 10), ('OTHER', 214), ('UNLICENSE', 110)]"
+  ],
+  [
+   "S2  js2jac duplicate id/content dropped",
+   -133,
+   ""
+  ],
+  [
+   "S2  js2jac holdout collision dropped",
+   0,
+   ""
+  ],
+  [
+   "S2  js2jac -> pool",
+   8674,
+   ""
+  ],
+  [
+   "S0  step4*/work/*.json loaded",
+   7770,
+   ""
+  ],
+  [
+   "S0  composer_dataset.jsonl rows",
+   15144,
+   ""
+  ],
+  [
+   "S3  step4 sonnet/composer ids joined",
+   7624,
+   "over 4 step4 dirs"
+  ],
+  [
+   "S3  step4 seam-disagreement pairs found",
+   1599,
+   ""
+  ],
+  [
+   "S3  step4_dpo eval-denylist dropped",
+   -103,
+   ""
+  ],
+  [
+   "S3  step4_dpo holdout leak dropped",
+   -117,
+   ""
+  ],
+  [
+   "S3  step4_dpo chosen==rejected dropped",
+   -4,
+   ""
+  ],
+  [
+   "S3  step4_dpo duplicate pair dropped",
+   0,
+   ""
+  ],
+  [
+   "S3  step4_dpo -> pool",
+   1375,
+   ""
+  ],
+  [
+   "S4  work ids considered (sources 4+5)",
+   7770,
+   ""
+  ],
+  [
+   "S4  eval-denylist dropped",
+   -550,
+   ""
+  ],
+  [
+   "S4  holdout leak dropped",
+   -530,
+   ""
+  ],
+  [
+   "S4  below test-count cutoff (>=18) dropped",
+   -3108,
+   ""
+  ],
+  [
+   "S4  duplicate content dropped",
+   -1,
+   ""
+  ],
+  [
+   "S5  composer (idiomatic target) -> pool",
+   2898,
+   ""
+  ],
+  [
+   "S4  step4_work (floor target) -> pool",
+   683,
+   ""
+  ],
+  [
+   "S5  composer idiomatic rows with NO work join excluded (no test signal)",
+   -2850,
+   ""
+  ],
+  [
+   "S6  farm rows at pin",
+   1731,
+   ""
+  ],
+  [
+   "S6  farm ids parsable as numeric HF ids (denylist namespace)",
+   0,
+   "0 expected"
+  ],
+  [
+   "S6  farm -> pool",
+   1592,
+   "139 rejected"
+  ],
+  [
+   "S6  farm_handler rows at pin",
+   983,
+   ""
+  ],
+  [
+   "S6  farm_handler ids parsable as numeric HF ids (denylist namespace)",
+   0,
+   "0 expected"
+  ],
+  [
+   "S6  farm_handler -> pool",
+   917,
+   "66 rejected"
+  ],
+  [
+   "S7  global cross-source duplicate dropped (within task_kind)",
+   -1006,
+   "16167 survive"
+  ],
+  [
+   "S7  candidate pool total",
+   16167,
+   "0 holdout/denylist leaks"
+  ]
+ ],
+ "by_source_type": {
+  "composer": 2898,
+  "farm": 1592,
+  "farm_handler": 2,
+  "js2jac": 8674,
+  "osp": 943,
+  "step4_dpo": 1375,
+  "step4_work": 683
+ },
+ "by_task_kind": {
+  "translation": 12255,
+  "completion": 2537,
+  "pair_dpo": 1375
+ },
+ "by_tier": {
+  "idiomatic": 2898,
+  "verified": 2537,
+  "cleaned": 5585,
+  "floor": 3577,
+  "idiomized": 195,
+  "idiomatic_vs_floor": 1375
+ },
+ "reject_sft": {
+  "license_not_permissive": 1016,
+  "duplicate_id_or_content": 133,
+  "null_source_field": 5,
+  "below_test_count_cutoff": 3108,
+  "eval_denylist": 550,
+  "holdout_leak": 530,
+  "duplicate_content": 206,
+  "no_work_join_no_test_signal": 2850,
+  "global_duplicate_content": 1006
+ },
+ "reject_dpo": {
+  "holdout_leak": 117,
+  "eval_denylist": 103,
+  "chosen_equals_rejected": 4
+ },
+ "test_count_hist": {
+  "6": 219,
+  "58": 27,
+  "76": 14,
+  "16": 132,
+  "48": 42,
+  "71": 19,
+  "132": 3,
+  "15": 130,
+  "5": 215,
+  "29": 94,
+  "1": 247,
+  "49": 44,
+  "28": 90,
+  "41": 55,
+  "26": 86,
+  "7": 192,
+  "56": 43,
+  "25": 89,
+  "9": 167,
+  "46": 59,
+  "52": 36,
+  "27": 83,
+  "43": 56,
+  "8": 192,
+  "99": 8,
+  "10": 145,
+  "12": 155,
+  "33": 66,
+  "38": 77,
+  "45": 59,
+  "70": 20,
+  "11": 158,
+  "23": 115,
+  "35": 80,
+  "31": 89,
+  "22": 107,
+  "2": 232,
+  "3": 240,
+  "44": 46,
+  "74": 20,
+  "19": 115,
+  "4": 239,
+  "121": 6,
+  "54": 39,
+  "62": 21,
+  "14": 161,
+  "105": 8,
+  "42": 59,
+  "30": 91,
+  "17": 134,
+  "47": 45,
+  "39": 53,
+  "18": 114,
+  "53": 38,
+  "159": 1,
+  "32": 68,
+  "69": 31,
+  "24": 99,
+  "64": 20,
+  "34": 78,
+  "13": 150,
+  "83": 17,
+  "21": 114,
+  "114": 4,
+  "109": 4,
+  "96": 5,
+  "50": 40,
+  "36": 66,
+  "20": 104,
+  "37": 64,
+  "136": 4,
+  "51": 39,
+  "72": 22,
+  "66": 22,
+  "65": 21,
+  "111": 5,
+  "160": 1,
+  "68": 24,
+  "57": 34,
+  "73": 18,
+  "55": 30,
+  "89": 11,
+  "78": 21,
+  "103": 8,
+  "87": 8,
+  "59": 26,
+  "61": 38,
+  "40": 60,
+  "117": 3,
+  "75": 17,
+  "77": 14,
+  "63": 20,
+  "86": 12,
+  "80": 16,
+  "88": 11,
+  "174": 1,
+  "60": 28,
+  "110": 2,
+  "90": 12,
+  "115": 3,
+  "67": 17,
+  "135": 1,
+  "145": 2,
+  "101": 10,
+  "184": 1,
+  "81": 12,
+  "134": 3,
+  "91": 4,
+  "97": 3,
+  "118": 3,
+  "107": 3,
+  "177": 1,
+  "140": 3,
+  "92": 5,
+  "98": 11,
+  "137": 2,
+  "82": 16,
+  "93": 8,
+  "131": 2,
+  "94": 6,
+  "146": 1,
+  "79": 15,
+  "95": 6,
+  "100": 6,
+  "84": 6,
+  "144": 1,
+  "128": 4,
+  "231": 1,
+  "148": 1,
+  "127": 4,
+  "85": 4,
+  "183": 1,
+  "116": 4,
+  "125": 2,
+  "173": 1,
+  "162": 1,
+  "122": 6,
+  "149": 1,
+  "210": 1,
+  "106": 6,
+  "123": 1,
+  "113": 1,
+  "169": 2,
+  "129": 3,
+  "152": 1,
+  "133": 2,
+  "104": 2,
+  "139": 2,
+  "181": 1,
+  "130": 1,
+  "138": 1,
+  "180": 1,
+  "119": 1,
+  "108": 2,
+  "213": 1,
+  "167": 1,
+  "142": 2,
+  "147": 1,
+  "112": 2,
+  "175": 1,
+  "219": 1,
+  "156": 1,
+  "172": 1,
+  "102": 1,
+  "126": 1,
+  "179": 1
+ },
+ "pool_n": 16167
+}

@@ -2,7 +2,7 @@
 
 Produced by `scripts/pipeline.jac` + `scripts/copy_holdout.jac` +
 `scripts/release.jac`, 2026-09-09/10. Raw stats:
-`/tmp/nitin_new2_triage/stats.json`, `/tmp/nitin_new2_triage/release.json`.
+`docs/reports/funnel/stats.json`, `docs/reports/funnel/release.json`. (persisted in the experiment dir.)
 Independently re-verified end-to-end after a mid-run external-drive
 disconnect (§6) rather than trusted as-is.
 

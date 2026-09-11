@@ -72,8 +72,8 @@ Split sizes:
 | file | n |
 |---|---:|
 | `dataset/sft_train.jsonl` | 14,792 |
-| `dataset/sft/train.jsonl` | 12,573 (85.0%, seed 42) |
-| `dataset/sft/valid.jsonl` | 2,219 (15.0% — training-time validation split, NOT a scored eval set) |
+| `dataset/sft/train.jsonl` | 12,573 (85.0%, seed 42); **12,570** after `nan_guard.jac` dropped 3 over-length js2jac rows |
+| `dataset/sft/valid.jsonl` | 2,219 (15.0% — training-time validation split, NOT a scored eval set); **2,217** after `nan_guard.jac` |
 | `dataset/nitin_holdout.jsonl` | 855 (reused verbatim from 07) |
 | `dataset/nitin_holdout_eval.jsonl` | 855 (same, with 07's authored instructions) |
 
@@ -124,7 +124,7 @@ lineage with naturally-occurring preference data.
 
 | holdout | rows | code-graded | reused or new |
 |---|---:|---:|---|
-| `04-cpt-sft/sft_fresh_probe/dataset/sft/valid.jsonl` | 1,428 | 855 | reused **unchanged** across the whole lineage |
+| `dataset/holdout_a_shared855.jsonl` (copy of `04-cpt-sft/sft_fresh_probe/dataset/sft/valid.jsonl`) | 1,428 | 855 | reused **unchanged** across the whole lineage |
 | `dataset/nitin_holdout_eval.jsonl` | 855 | 855 | **reused byte-identically from 07** — not a fresh carve from 08's pool |
 
 Composition of the shared 855 (`spec.md` §4.2): unchanged from 06/07 — 322

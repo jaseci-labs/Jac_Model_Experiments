@@ -9,12 +9,17 @@ facts).
 [DONE] pin corpus @ c95b7563                                    [Stage -1]
 [DONE] 7-source merge + denylist + quality + license filters    [Stage 0]
 [DONE] dedup + decontam + holdout(b) reuse + leak-check          [Stage 0]
-[DONE] 85/15 splits (sft_train/dpo_train -> sft/,dpo/)           [Stage 0b]
-[NEXT] SFT training x2 arms (sequential only)                    [Stage 3]
-  -> DPO training x2 arms (each on its own SFT adapter)          [Stage 4]
-  -> eval: 2 arms x 2 holdouts x 3 stages                        [Stage 5]
-  -> comparison report                                           [Stage 6]
+[DONE] 85/15 splits (sft_train/dpo_train -> sft/,dpo/) + NaN guard [Stage 0b]
+[DONE] SFT training: stock (not evaluated), spectrum             [Stage 3]
+[CUT ] DPO training, both arms                                   [Stage 4]
+[DONE] eval: spectrum SFT only x 2 holdouts                      [Stage 5]
+[DONE] report: reports/08-final-comparison.md                    [Stage 6]
 ```
+
+The generic version of this runbook, for new experiments, is
+[`../../docs/PLAYBOOK.md`](../../docs/PLAYBOOK.md). The 07/06/04 directories
+mentioned below were deleted on 2026-09-11; their reports are in
+`../../docs/history/`.
 
 Stages 1-2 (SFT/DPO-pair *authoring*) from 06/07's runbook don't apply here —
 08's source material already comes as complete pairs from `jac-data-gen`
@@ -25,8 +30,9 @@ release-split pipeline instead.
 
 ## Conventions used throughout
 
-- **Run everything from the repo root**
-  (`/Volumes/ExtremePro/JaseciLabs/jac_model_studio`).
+- **Run everything from the workspace root**: the directory that contains
+  `model-experiments/` and `.venv/` (here
+  `/Volumes/ExtremePro/JaseciLabs/jac_model_studio`).
 - **Everything is Jac.** `.sh` wrappers call `jac run <driver>.jac <flags>`.
   Use the absolute venv binary, not bare `jac`:
   `/Volumes/ExtremePro/JaseciLabs/jac_model_studio/.venv/bin/jac`.
@@ -48,14 +54,18 @@ release-split pipeline instead.
 
 `pipeline.jac` reads all 7 sources at the pin, applies (in order): the
 eval-denylist drop, the composer quality-gradient test-count filter (≥18),
-the js2jac license filter, within-corpus exact + near-dup dedup, decontam vs
-the reference holdouts, and a global cross-source dedup pass. Output:
+the js2jac license filter, within-corpus exact + normalized-hash dedup, a
+leak drop against holdout (b) (`dataset/nitin_holdout.jsonl`, which must be in
+place before the pipeline runs), and a global cross-source dedup pass. There
+is no shingle/near-dup pass and no check against holdout (a). Output:
 `dataset/candidate_pool.jsonl` (16,167 rows) and
 `dataset/rejected/{sft,dpo}/rejected.jsonl` (9,404 / 224, every row tagged
 with its drop reason). Full funnel: `docs/reports/corpus-triage-report.md`.
 
-`copy_holdout.jac` copies `07-nitin-ds-new-sft/dataset/{nitin_holdout,
-nitin_holdout_eval}.jsonl` byte-identically (asserted), then re-runs the
+`copy_holdout.jac` copied `07-nitin-ds-new-sft/dataset/{nitin_holdout,
+nitin_holdout_eval}.jsonl` byte-identically (asserted). 07 is deleted, so it
+now defaults to the copies already in `dataset/` (set `HOLDOUT_SRC_DIR` to
+import from elsewhere). It then re-runs the
 four-surface leak check (id / `jac` hash / `jac_rejected` hash / holdout-
 prompt hash) against `candidate_pool.jsonl` on disk — not just against the
 in-memory pool from the same run — and rewrites the pool (keeping a
@@ -64,7 +74,7 @@ pool left untouched.
 
 **Gate to leave Stage 0:** both holdout files present and byte-identical to
 07's; leak-check reports 0 failures; funnel counts in
-`/tmp/nitin_new2_triage/stats.json` sum correctly stage-to-stage.
+`docs/reports/funnel/stats.json` sum correctly stage-to-stage. (summarized in `reports/corpus-triage-report.md`.)
 
 ## Stage 0b — Build the release + split files (DONE)
 
@@ -91,6 +101,18 @@ sort-then-shuffle. Produces `dataset/sft/{train,valid}.jsonl` (12,573 /
 **Gate cleared:** train∩valid = ∅ for both tracks, train∪valid == release for
 both, 0 rows dropped by the splitter's required-field filter, leak-check
 re-run post-split against both holdouts — still 0.
+
+**NaN guard (added after the first stock SFT run NaN'd).** With
+`mask_prompt: true` + `max_seq_length: 3072`, a row whose prompt alone is
+≥ 3072 tokens has zero loss tokens after truncation → NaN loss.
+`prep_training_dirs.sh` now runs `scripts/nan_guard.jac` right after the SFT
+split (standalone: `.venv/bin/jac run model-experiments/08-nitin-new2-ds/scripts/nan_guard.jac`).
+It tokenizes `messages[:-1]` with the base tokenizer
+(`apply_chat_template(..., add_generation_prompt=True)`, same as mlx_lm's mask
+offset), drops rows ≥ 3072, rewrites `dataset/sft/{train,valid}.jsonl` in place
+(no backup), prints dropped counts; idempotent. On this release it dropped
+3 train + 2 valid js2jac rows (3204–3926 prompt tokens) → final split
+**12,570 / 2,217**.
 
 ## Stage 3 — SFT training ×2 arms
 
@@ -130,7 +152,9 @@ CONFIRM_FULL_RUN=1 model-experiments/08-nitin-new2-ds/stock_probe/run_sft.sh
 ```
 
 Outputs: `stock_probe/adapters/sft-on-nitin/`,
-`stock_probe/results/sft/{train.log,metrics_functional.jsonl}`.
+`stock_probe/results/sft/{train.log,metrics_functional.jsonl}`. This ran to
+8200/8200 (after one NaN'd first launch, see the NaN guard above), was never
+evaluated, and its adapter and results were deleted on 2026-09-11.
 
 ### 3.3 Spectrum arm SFT
 
@@ -152,22 +176,24 @@ spectrum SFT starts.
     --eval-out   <arm>_probe/results/<stage>/plots/eval.png
 ```
 
-Note: `plot_progress.jac` was not part of this phase's mechanical scaffold
-pass (it lives in `scripts/`, which the dataset-pipeline agent populated with
-the merge pipeline only). Copy it from
-`07-nitin-ds-new-sft/scripts/plot_progress.jac` (path-substitute only, no
-logic change needed — it's train-log/metrics-driven, not corpus-aware)
-before Stage 3 starts monitoring.
+`scripts/plot_progress.jac` was copied in from 07 (path-substituted only).
+Separately, the SFT runners' watchdog regenerates `train_loss.png`,
+`val_loss.png`, `learning_rate.png` and throughput/memory PNGs directly in
+`<arm>_probe/results/<stage>/` via `scripts/plot_metrics.jac` on every poll.
+Also grep `<arm>_probe/results/<stage>/.segment.log` for `nan` while training:
+mlx_lm does not stop on NaN loss.
 
-## Stage 4 — DPO training ×2 arms
+## Stage 4 — DPO training: SKIPPED ENTIRELY (scope cut 2026-09-11)
 
-```
-CONFIRM_FULL_RUN=1 model-experiments/08-nitin-new2-ds/stock_probe/run_dpo_nofuse.sh
-CONFIRM_FULL_RUN=1 model-experiments/08-nitin-new2-ds/spectrum_probe/run_dpo_spectrum.sh
-```
+> **IMPORTANT:** explicit user decision, 2026-09-11 (second call, supersedes
+> an earlier "spectrum-DPO-only" call) — **no DPO runs this phase, either
+> arm.** Neither `stock_probe/run_dpo_nofuse.sh` nor
+> `spectrum_probe/run_dpo_spectrum.sh` is launched. See
+> `../CONTEXT_BRIEF.md`'s status block. Do not launch either without asking
+> first. Pipeline goes straight from spectrum SFT (Stage 3) to eval (Stage
+> 5), spectrum arm only.
 
-Order: stock SFT → spectrum SFT → stock DPO → spectrum DPO, sequential
-throughout. Each arm's DPO seeds from its own SFT adapter via
+Order: stock SFT → spectrum SFT → eval (spectrum only). No DPO stage. Each arm's DPO seeds from its own SFT adapter via
 `--resume-adapter-file`. `run_dpo_spectrum.sh`'s three gates (`--verify-
 patches`, `--verify-layers`, per-snapshot `adapter_config.json` rewrite)
 unchanged from 07.
@@ -184,31 +210,30 @@ semantics differ from 07's (idiomatic-vs-floor, not correct-vs-buggy). No
 script change is needed for this — the training loop is axis-agnostic — but
 report interpretation must account for it (§3.1).
 
-## Stage 5 — Eval: 2 arms × 2 holdouts × 3 stages
+## Stage 5 — Eval: SPECTRUM SFT ONLY × 2 holdouts (scope cut 2026-09-11)
+
+> **IMPORTANT:** per the Stage 4 scope cut, there is no stock-arm eval and
+> no DPO-stage eval this phase. Only `spectrum_probe/eval_sft_spectrum.sh`
+> runs, against both holdouts. `stock_probe/eval_sft_sweep.sh` (either
+> holdout) and both `eval_dpo_*.sh` scripts are NOT run. Don't run them
+> without asking first.
 
 Same harness as every prior phase:
-`model-experiments/04-cpt-sft/sft_cptv2_probe/jacgen/eval_functional.jac`.
+`model-experiments/08-nitin-new2-ds/scripts/eval_functional.jac`.
 
 ### 5.1 Holdout (a) — the shared 855
 
 ```
-model-experiments/08-nitin-new2-ds/stock_probe/eval_sft_sweep.sh
 model-experiments/08-nitin-new2-ds/spectrum_probe/eval_sft_spectrum.sh
-model-experiments/08-nitin-new2-ds/stock_probe/eval_dpo_nofuse.sh
-model-experiments/08-nitin-new2-ds/spectrum_probe/eval_dpo_spectrum.sh
 ```
 
 ### 5.2 Holdout (b) — 07's holdout, reused
 
 ```
 H=model-experiments/08-nitin-new2-ds/dataset/nitin_holdout_eval.jsonl
-S=model-experiments/08-nitin-new2-ds/stock_probe
 P=model-experiments/08-nitin-new2-ds/spectrum_probe
 
-HOLDOUT=$H RDIR=$S/results/sft-holdoutB          $S/eval_sft_sweep.sh
 HOLDOUT=$H RDIR=$P/results/sft-spectrum-holdoutB $P/eval_sft_spectrum.sh
-HOLDOUT=$H RDIR=$S/results/dpo-nofuse-holdoutB   $S/eval_dpo_nofuse.sh
-HOLDOUT=$H RDIR=$P/results/dpo-spectrum-holdoutB $P/eval_dpo_spectrum.sh
 ```
 
 Remember: holdout (b) is 07's content, not 08's own multi-source
@@ -229,12 +254,15 @@ holdout as the floor.
 
 ### 5.4 Failure analysis (optional, after the headline numbers)
 
-Same three-script pipeline as 07 (`gen_eval_detail.jac`,
-`grade_eval_detail.jac`, `grade_reference.jac`) — copy from
-`07-nitin-ds-new-sft/scripts/` (path-substitute only) before Stage 5.4;
-these were also not part of this phase's dataset-build scaffold.
+Same three-script pipeline as 07 (`scripts/gen_eval_detail.jac`,
+`scripts/grade_eval_detail.jac`, `scripts/grade_reference.jac`, copied in from
+07). Not run this phase. Usage is in `../../docs/PLAYBOOK.md` step 2.5.
 
 ## Stage 6 — Comparison report
+
+Done: [`reports/08-final-comparison.md`](reports/08-final-comparison.md). Only
+the spectrum-SFT cells exist, so items 1, 3 and 4 below were not possible; the
+list is kept as the original plan.
 
 Write to `docs/reports/08-final-comparison.md`, following 07's structure:
 bottom line up front → headline table per holdout → cross-dataset table (vs

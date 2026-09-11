@@ -1,8 +1,0 @@
-Loading configuration file model-experiments/08-nitin-new2-ds/stock_probe/configs/sft.yaml
-Loading pretrained model
-Loading datasets
-Training
-Trainable parameters: 0.923% (281.838M/30532.123M)
-Starting training..., iters: 8200
-Calculating loss...:   0%|          | 0/8 [00:00<?, ?it/s]Calculating loss...:  12%|█▎        | 1/8 [00:00<00:05,  1.34it/s]Calculating loss...:  25%|██▌       | 2/8 [00:01<00:05,  1.20it/s]Calculating loss...:  38%|███▊      | 3/8 [00:01<00:02,  1.73it/s]Calculating loss...:  50%|█████     | 4/8 [00:02<00:01,  2.36it/s]Calculating loss...:  62%|██████▎   | 5/8 [00:02<00:01,  2.38it/s]Calculating loss...:  75%|███████▌  | 6/8 [00:02<00:00,  2.84it/s]Calculating loss...:  88%|████████▊ | 7/8 [00:02<00:00,  3.20it/s]Calculating loss...: 100%|██████████| 8/8 [00:03<00:00,  2.34it/s]Calculating loss...: 100%|██████████| 8/8 [00:03<00:00,  2.20it/s]
-Iter 1: Val loss 0.687, Val took 3.654s

@@ -1,5 +1,0 @@
-        cid = jid(here);
-        if cid not in self.seen {
-            self.seen[cid] = True;
-            self.results.append(here.to_view(False));
-        }

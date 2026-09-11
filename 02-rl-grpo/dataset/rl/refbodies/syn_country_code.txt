@@ -1,2 +1,0 @@
-    m = {"usa": "US", "canada": "CA", "japan": "JP", "brazil": "BR"};
-    return m.get(name, "??");

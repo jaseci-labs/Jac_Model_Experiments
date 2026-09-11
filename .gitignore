@@ -1,0 +1,23 @@
+# model weights -- single-copy on the external drive, never in git
+models/
+**/adapters/
+archive/**/*.safetensors
+**/snapshots/
+**/checkpoints/
+*.safetensors
+
+# regenerable data dumps
+**/dataset/raw_output/
+*.bak
+
+# run logs / watchdog markers (train.log stays trackable)
+**/results/**/*.log
+!**/results/**/train.log
+**/results/**/.*.done
+**/results/**/.*_progress_steps
+**/results/**/.best_step
+
+# tooling caches
+.jac/
+__pycache__/
+.DS_Store

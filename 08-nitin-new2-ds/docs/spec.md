@@ -1,6 +1,9 @@
 # 08-nitin-new2-ds — Design Spec
 
-Status: dataset complete, pre-training.
+Status: design of record as written 2026-09-10, before training. The phase
+ran a reduced scope (Spectrum SFT only, both holdouts); see
+[`reports/08-final-comparison.md`](reports/08-final-comparison.md). The DPO,
+stock-arm and 12-cell parts below were not run.
 Date: 2026-09-10.
 Companion to [`../CONTEXT_BRIEF.md`](../CONTEXT_BRIEF.md) (settled facts) and
 [`workflow.md`](workflow.md) (the runbook).
@@ -15,8 +18,8 @@ types from the same upstream repo.
 1. **RQ1 — does Spectrum replicate on a fourth dataset?** See
    `CONTEXT_BRIEF.md` §4.1 for the full prior-result chain.
 2. **RQ2 — is this corpus better than 07's?** Both arms score on
-   `04-cpt-sft`'s unchanged 855-row holdout (a), directly comparable to 07's
-   and 06's cells.
+   `04-cpt-sft`'s unchanged 855-row holdout (a) (`dataset/holdout_a_shared855.jsonl`),
+   directly comparable to 07's and 06's cells.
 3. **RQ3 — does real graph-native content change the picture?** 06 and 07
    trained on zero OSP archetypes; 08 trains on 2,537 rows of genuine
    `node`/`edge`/`walker` Jac (osp + farm). Neither holdout in this phase is
@@ -74,7 +77,7 @@ and applies **`test_count >= 18`**:
 | survive into `composer` source_type | 2,898 |
 
 This is the direct, testable candidate explanation for 07's own finding
-(`07-final-comparison.md`): 07 trained on the full unfiltered pool and did not
+(`../../docs/history/07-nitin-ds-new-sft/07-final-comparison.md`): 07 trained on the full unfiltered pool and did not
 beat 06 despite more rows. If 08 does beat 07 on RQ2, the per-slice breakdown
 should check whether the win concentrates in `composer`-sourced rows
 specifically — that would corroborate the mechanism rather than just the
@@ -136,7 +139,8 @@ enforced by `--verify-layers`.
 ### 4.2 The holdouts
 
 **(a) unchanged, reused from every prior phase** —
-`04-cpt-sft/sft_fresh_probe/dataset/sft/valid.jsonl`, 1,428 rows / 855
+`dataset/holdout_a_shared855.jsonl` (byte-identical copy of
+`04-cpt-sft/sft_fresh_probe/dataset/sft/valid.jsonl`), 1,428 rows / 855
 code-graded. See `CONTEXT_BRIEF.md` §4.1 for the full baseline table.
 
 **(b) reused from 07, NOT carved fresh from 08's pool — a deliberate,
@@ -191,8 +195,10 @@ lines).
 
 ## 6. Decontamination
 
-Same shingle machinery as 06/07 (14-token, ≥0.5 overlap), plus the
-eval-denylist pass neither of them ran, plus a global cross-source dedup pass
+Exact and normalized-hash dedup (comments stripped, whitespace collapsed).
+This spec originally said 06/07's 14-token shingle near-duplicate check was
+carried over; `scripts/pipeline.jac` does not contain it. Plus the
+eval-denylist pass neither 06 nor 07 ran, plus a global cross-source dedup pass
 07 didn't need (07 had one source; 08's `farm_handler` turned out to be a
 near-total content subset of `farm`, caught here — 1,006 rows deduped
 globally). Full numbers in `reports/corpus-triage-report.md`.
@@ -215,14 +221,17 @@ Unchanged methodology from 06/07:
 
 Unpaired two-proportion z-test for marginal rates; paired McNemar wherever
 both sides answer identical items (every cross-phase comparison against 07 or
-06 on holdout (a), and every arm-vs-arm comparison within a holdout).
+06 on holdout (a), and every arm-vs-arm comparison within a holdout). In
+practice 06 and 07 reported only the z-test (no per-row data was saved), so
+the cross-phase McNemar comparison against them is not possible.
 Significance bar: p < 0.05, two-sided.
 
 ### 7.2 Decision rules
 
 **RQ2 — is 08 better than 07?** Paired McNemar of each holdout-(a) cell
 against 07's corresponding cell (once 07's own final numbers are read from
-`07-final-comparison.md` and copied into this file). Better iff ≥4/6
+`../../docs/history/07-nitin-ds-new-sft/07-final-comparison.md`; they are
+now in `../CONTEXT_BRIEF.md` §4.1). Better iff ≥4/6
 significant wins with no significant losses; worse iff the mirror holds;
 indistinguishable otherwise — a legitimate result, not a failure (07 landed
 there against 06 and said so).
@@ -241,7 +250,8 @@ rule as every prior phase.
 statistical test — §4.2 already states neither holdout is graph-native
 in-distribution, so RQ3 can only be read qualitatively from whether the
 aggregate pass rate moved and from the per-source-type failure breakdown
-(`docs/reports/failure_data/`, once populated) showing whether osp/farm-
+(`scripts/gen_eval_detail.jac` + `grade_eval_detail.jac`; never run this
+phase) showing whether osp/farm-
 derived generalization shows up on the existing holdouts at all. State this
 limitation plainly in the final report rather than overclaiming a test that
 wasn't run.
@@ -271,8 +281,8 @@ See `../CONTEXT_BRIEF.md` §9.
 ## 10. Out of scope
 
 - Re-running the SNR scan (unchanged base model weights).
-- Any CPT stage (`03-cpt-only/docs/cpt-2/analysis.md` recommends against it).
-- GRPO / RL (`05-cpt-sft-grpo/`'s scope).
+- Any CPT stage (03's CPT-v2 was rejected: `../../docs/history/03-cpt-only/cpt-2-results.md`).
+- GRPO / RL (05's planned scope, never run: `../../docs/HISTORY.md`).
 - **A graph-native-in-distribution holdout carve.** RQ3 is deliberately
   answered only indirectly this phase (§4.2, §7.2) — building a proper
   in-distribution eval set from the osp/farm content is real scope for a

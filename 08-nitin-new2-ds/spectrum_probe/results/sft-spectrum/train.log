@@ -1,0 +1,402 @@
+>>> SFT attempt: requesting 8200 iters (0/8200 done, 8200 remaining)
+[spectrum_lora_layers] LoRA layers rebound to [0, 22, 23, 27, 30, 34, 36, 37, 38, 39, 41, 42, 43, 44, 45, 47] (from model-experiments/08-nitin-new2-ds/spectrum_probe/spectrum/configs/spectrum_layers.json); mlx_lm.lora and mlx_lm.tuner.utils both patched
+Loading configuration file model-experiments/08-nitin-new2-ds/spectrum_probe/spectrum/configs/sft_spectrum.yaml
+Loading pretrained model
+Loading datasets
+Training
+Trainable parameters: 0.923% (281.838M/30532.123M)
+Starting training..., iters: 8200
+Calculating loss...:   0%|          | 0/8 [00:00<?, ?it/s]Calculating loss...:  12%|█▎        | 1/8 [00:00<00:03,  2.22it/s]Calculating loss...:  25%|██▌       | 2/8 [00:01<00:04,  1.41it/s]Calculating loss...:  38%|███▊      | 3/8 [00:01<00:02,  1.85it/s]Calculating loss...:  50%|█████     | 4/8 [00:02<00:01,  2.07it/s]Calculating loss...:  62%|██████▎   | 5/8 [00:02<00:01,  2.54it/s]Calculating loss...:  75%|███████▌  | 6/8 [00:02<00:00,  2.88it/s]Calculating loss...:  88%|████████▊ | 7/8 [00:02<00:00,  3.23it/s]Calculating loss...: 100%|██████████| 8/8 [00:03<00:00,  3.55it/s]Calculating loss...: 100%|██████████| 8/8 [00:03<00:00,  2.65it/s]
+Iter 1: Val loss 0.890, Val took 3.038s
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3616 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 50: Train loss 1.235, Learning Rate 1.195e-06, It/sec 0.411, Tokens/sec 138.093, Trained Tokens 16783, Peak mem 27.057 GB
+Iter 100: Train loss 1.175, Learning Rate 2.415e-06, It/sec 0.497, Tokens/sec 135.693, Trained Tokens 30433, Peak mem 27.057 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3298 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 150: Train loss 0.701, Learning Rate 3.634e-06, It/sec 0.363, Tokens/sec 135.485, Trained Tokens 49074, Peak mem 27.057 GB
+Iter 200: Train loss 0.602, Learning Rate 4.854e-06, It/sec 0.472, Tokens/sec 137.787, Trained Tokens 63659, Peak mem 27.057 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3620 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3473 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 250: Train loss 0.427, Learning Rate 6.073e-06, It/sec 0.394, Tokens/sec 131.443, Trained Tokens 80337, Peak mem 27.057 GB
+Iter 300: Train loss 0.392, Learning Rate 7.293e-06, It/sec 0.427, Tokens/sec 141.336, Trained Tokens 96903, Peak mem 27.057 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3332 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 350: Train loss 0.359, Learning Rate 8.512e-06, It/sec 0.503, Tokens/sec 134.131, Trained Tokens 110241, Peak mem 27.057 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 4879 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3323 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3139 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 400: Train loss 0.331, Learning Rate 9.732e-06, It/sec 0.359, Tokens/sec 129.073, Trained Tokens 128194, Peak mem 27.057 GB
+Iter 450: Train loss 0.273, Learning Rate 1.095e-05, It/sec 0.535, Tokens/sec 136.177, Trained Tokens 140917, Peak mem 27.057 GB
+Calculating loss...:   0%|          | 0/8 [00:00<?, ?it/s]Calculating loss...:  12%|█▎        | 1/8 [00:00<00:01,  4.37it/s]Calculating loss...:  25%|██▌       | 2/8 [00:00<00:02,  2.46it/s]Calculating loss...:  38%|███▊      | 3/8 [00:01<00:01,  2.86it/s]Calculating loss...:  50%|█████     | 4/8 [00:01<00:01,  3.37it/s]Calculating loss...:  62%|██████▎   | 5/8 [00:01<00:00,  3.40it/s]Calculating loss...:  75%|███████▌  | 6/8 [00:02<00:01,  1.67it/s]Calculating loss...:  88%|████████▊ | 7/8 [00:03<00:00,  1.64it/s]Calculating loss...: 100%|██████████| 8/8 [00:03<00:00,  1.64it/s]Calculating loss...: 100%|██████████| 8/8 [00:03<00:00,  2.01it/s]
+Iter 500: Val loss 0.266, Val took 3.981s
+Iter 500: Train loss 0.260, Learning Rate 1.217e-05, It/sec 0.424, Tokens/sec 135.295, Trained Tokens 156866, Peak mem 27.057 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 4748 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 550: Train loss 0.212, Learning Rate 1.339e-05, It/sec 0.479, Tokens/sec 136.772, Trained Tokens 171148, Peak mem 27.057 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3626 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 4112 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3102 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3115 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3798 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 600: Train loss 0.212, Learning Rate 1.461e-05, It/sec 0.362, Tokens/sec 127.541, Trained Tokens 188745, Peak mem 27.057 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3629 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 5001 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3313 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 650: Train loss 0.185, Learning Rate 1.583e-05, It/sec 0.421, Tokens/sec 121.735, Trained Tokens 203190, Peak mem 27.058 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3283 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 700: Train loss 0.158, Learning Rate 1.705e-05, It/sec 0.506, Tokens/sec 123.568, Trained Tokens 215410, Peak mem 27.058 GB
+Iter 750: Train loss 0.194, Learning Rate 1.827e-05, It/sec 0.551, Tokens/sec 139.381, Trained Tokens 228050, Peak mem 27.058 GB
+Iter 800: Train loss 0.149, Learning Rate 1.949e-05, It/sec 0.544, Tokens/sec 137.725, Trained Tokens 240698, Peak mem 27.058 GB
+Iter 820: Saved adapter weights to model-experiments/08-nitin-new2-ds/spectrum_probe/adapters/sft-on-nitin-spectrum/adapters.safetensors and model-experiments/08-nitin-new2-ds/spectrum_probe/adapters/sft-on-nitin-spectrum/0000820_adapters.safetensors.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 5617 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 850: Train loss 0.254, Learning Rate 2.000e-05, It/sec 0.478, Tokens/sec 122.826, Trained Tokens 253551, Peak mem 28.084 GB
+Iter 900: Train loss 0.147, Learning Rate 2.000e-05, It/sec 0.549, Tokens/sec 131.414, Trained Tokens 265514, Peak mem 28.084 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3610 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 950: Train loss 0.158, Learning Rate 1.999e-05, It/sec 0.436, Tokens/sec 119.939, Trained Tokens 279270, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3396 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Calculating loss...:   0%|          | 0/8 [00:00<?, ?it/s]Calculating loss...:  12%|█▎        | 1/8 [00:00<00:03,  1.97it/s]Calculating loss...:  25%|██▌       | 2/8 [00:01<00:03,  2.00it/s]Calculating loss...:  38%|███▊      | 3/8 [00:01<00:01,  2.52it/s]Calculating loss...:  50%|█████     | 4/8 [00:01<00:01,  2.96it/s]Calculating loss...:  62%|██████▎   | 5/8 [00:01<00:00,  3.37it/s]Calculating loss...:  75%|███████▌  | 6/8 [00:02<00:01,  1.83it/s]Calculating loss...:  88%|████████▊ | 7/8 [00:03<00:00,  1.88it/s]Calculating loss...: 100%|██████████| 8/8 [00:03<00:00,  2.19it/s]Calculating loss...: 100%|██████████| 8/8 [00:03<00:00,  2.24it/s]
+Iter 1000: Val loss 0.059, Val took 3.584s
+Iter 1000: Train loss 0.145, Learning Rate 1.998e-05, It/sec 0.448, Tokens/sec 129.366, Trained Tokens 293701, Peak mem 28.185 GB
+Iter 1050: Train loss 0.176, Learning Rate 1.996e-05, It/sec 0.456, Tokens/sec 139.561, Trained Tokens 309000, Peak mem 28.185 GB
+Iter 1100: Train loss 0.130, Learning Rate 1.995e-05, It/sec 0.538, Tokens/sec 129.489, Trained Tokens 321033, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 4532 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3428 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3428 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 1150: Train loss 0.143, Learning Rate 1.993e-05, It/sec 0.408, Tokens/sec 128.117, Trained Tokens 336752, Peak mem 28.185 GB
+Iter 1200: Train loss 0.135, Learning Rate 1.990e-05, It/sec 0.403, Tokens/sec 138.836, Trained Tokens 353972, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3142 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 1250: Train loss 0.151, Learning Rate 1.987e-05, It/sec 0.496, Tokens/sec 126.471, Trained Tokens 366710, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3231 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3780 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 1300: Train loss 0.162, Learning Rate 1.984e-05, It/sec 0.371, Tokens/sec 141.446, Trained Tokens 385797, Peak mem 28.185 GB
+Iter 1350: Train loss 0.102, Learning Rate 1.981e-05, It/sec 0.485, Tokens/sec 131.090, Trained Tokens 399299, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3878 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 1400: Train loss 0.155, Learning Rate 1.977e-05, It/sec 0.443, Tokens/sec 136.306, Trained Tokens 414667, Peak mem 28.185 GB
+Iter 1450: Train loss 0.100, Learning Rate 1.973e-05, It/sec 0.466, Tokens/sec 118.912, Trained Tokens 427425, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3157 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Calculating loss...:   0%|          | 0/8 [00:00<?, ?it/s]Calculating loss...:  12%|█▎        | 1/8 [00:00<00:03,  1.83it/s]Calculating loss...:  25%|██▌       | 2/8 [00:02<00:06,  1.15s/it]Calculating loss...:  38%|███▊      | 3/8 [00:02<00:03,  1.30it/s]Calculating loss...:  50%|█████     | 4/8 [00:02<00:02,  1.77it/s]Calculating loss...:  62%|██████▎   | 5/8 [00:03<00:01,  1.70it/s]Calculating loss...:  75%|███████▌  | 6/8 [00:03<00:01,  1.90it/s]Calculating loss...:  88%|████████▊ | 7/8 [00:04<00:00,  2.24it/s]Calculating loss...: 100%|██████████| 8/8 [00:04<00:00,  2.48it/s]Calculating loss...: 100%|██████████| 8/8 [00:04<00:00,  1.85it/s]
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3620 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 1500: Val loss 0.079, Val took 4.317s
+Iter 1500: Train loss 0.149, Learning Rate 1.968e-05, It/sec 0.497, Tokens/sec 118.914, Trained Tokens 439397, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 4070 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 1550: Train loss 0.191, Learning Rate 1.963e-05, It/sec 0.546, Tokens/sec 131.296, Trained Tokens 451422, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3815 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 1600: Train loss 0.143, Learning Rate 1.958e-05, It/sec 0.538, Tokens/sec 128.727, Trained Tokens 463386, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 4530 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 1640: Saved adapter weights to model-experiments/08-nitin-new2-ds/spectrum_probe/adapters/sft-on-nitin-spectrum/adapters.safetensors and model-experiments/08-nitin-new2-ds/spectrum_probe/adapters/sft-on-nitin-spectrum/0001640_adapters.safetensors.
+Iter 1650: Train loss 0.113, Learning Rate 1.953e-05, It/sec 0.494, Tokens/sec 128.516, Trained Tokens 476405, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3452 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 1700: Train loss 0.160, Learning Rate 1.947e-05, It/sec 0.463, Tokens/sec 137.201, Trained Tokens 491226, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3719 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 1750: Train loss 0.161, Learning Rate 1.941e-05, It/sec 0.447, Tokens/sec 142.129, Trained Tokens 507121, Peak mem 28.185 GB
+Iter 1800: Train loss 0.131, Learning Rate 1.934e-05, It/sec 0.413, Tokens/sec 154.208, Trained Tokens 525781, Peak mem 28.185 GB
+Iter 1850: Train loss 0.119, Learning Rate 1.927e-05, It/sec 0.529, Tokens/sec 132.147, Trained Tokens 538271, Peak mem 28.185 GB
+Iter 1900: Train loss 0.097, Learning Rate 1.920e-05, It/sec 0.416, Tokens/sec 130.713, Trained Tokens 553980, Peak mem 28.185 GB
+Iter 1950: Train loss 0.144, Learning Rate 1.913e-05, It/sec 0.526, Tokens/sec 127.987, Trained Tokens 566136, Peak mem 28.185 GB
+Calculating loss...:   0%|          | 0/8 [00:00<?, ?it/s]Calculating loss...:  12%|█▎        | 1/8 [00:00<00:06,  1.03it/s]Calculating loss...:  25%|██▌       | 2/8 [00:01<00:05,  1.04it/s]Calculating loss...:  38%|███▊      | 3/8 [00:02<00:03,  1.40it/s]Calculating loss...:  50%|█████     | 4/8 [00:02<00:02,  1.76it/s]Calculating loss...:  62%|██████▎   | 5/8 [00:03<00:02,  1.38it/s]Calculating loss...:  75%|███████▌  | 6/8 [00:04<00:01,  1.57it/s]Calculating loss...:  88%|████████▊ | 7/8 [00:04<00:00,  1.96it/s]Calculating loss...: 100%|██████████| 8/8 [00:04<00:00,  2.36it/s]Calculating loss...: 100%|██████████| 8/8 [00:04<00:00,  1.72it/s]
+Iter 2000: Val loss 0.144, Val took 4.651s
+Iter 2000: Train loss 0.143, Learning Rate 1.905e-05, It/sec 0.505, Tokens/sec 122.216, Trained Tokens 578240, Peak mem 28.185 GB
+Iter 2050: Train loss 0.147, Learning Rate 1.897e-05, It/sec 0.497, Tokens/sec 127.599, Trained Tokens 591082, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3609 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 2100: Train loss 0.144, Learning Rate 1.888e-05, It/sec 0.470, Tokens/sec 128.117, Trained Tokens 604703, Peak mem 28.185 GB
+Iter 2150: Train loss 0.138, Learning Rate 1.880e-05, It/sec 0.652, Tokens/sec 133.957, Trained Tokens 614982, Peak mem 28.185 GB
+Iter 2200: Train loss 0.161, Learning Rate 1.871e-05, It/sec 0.659, Tokens/sec 126.426, Trained Tokens 624574, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3345 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3510 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 2250: Train loss 0.166, Learning Rate 1.861e-05, It/sec 0.473, Tokens/sec 141.976, Trained Tokens 639567, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3524 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 2300: Train loss 0.145, Learning Rate 1.852e-05, It/sec 0.522, Tokens/sec 142.898, Trained Tokens 653264, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3204 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 2350: Train loss 0.133, Learning Rate 1.842e-05, It/sec 0.515, Tokens/sec 145.399, Trained Tokens 667390, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3101 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3315 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 4419 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 2400: Train loss 0.126, Learning Rate 1.832e-05, It/sec 0.425, Tokens/sec 145.237, Trained Tokens 684463, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3355 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 2450: Train loss 0.114, Learning Rate 1.821e-05, It/sec 0.440, Tokens/sec 135.905, Trained Tokens 699918, Peak mem 28.185 GB
+Iter 2460: Saved adapter weights to model-experiments/08-nitin-new2-ds/spectrum_probe/adapters/sft-on-nitin-spectrum/adapters.safetensors and model-experiments/08-nitin-new2-ds/spectrum_probe/adapters/sft-on-nitin-spectrum/0002460_adapters.safetensors.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3409 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3435 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Calculating loss...:   0%|          | 0/8 [00:00<?, ?it/s]Calculating loss...:  12%|█▎        | 1/8 [00:00<00:02,  3.24it/s]Calculating loss...:  25%|██▌       | 2/8 [00:00<00:01,  3.74it/s]Calculating loss...:  38%|███▊      | 3/8 [00:00<00:01,  3.19it/s]Calculating loss...:  50%|█████     | 4/8 [00:01<00:01,  3.35it/s]Calculating loss...:  62%|██████▎   | 5/8 [00:02<00:01,  1.59it/s]Calculating loss...:  75%|███████▌  | 6/8 [00:02<00:01,  1.69it/s]Calculating loss...:  88%|████████▊ | 7/8 [00:03<00:00,  2.05it/s]Calculating loss...: 100%|██████████| 8/8 [00:03<00:00,  2.03it/s]Calculating loss...: 100%|██████████| 8/8 [00:03<00:00,  2.16it/s]
+Iter 2500: Val loss 0.112, Val took 3.706s
+Iter 2500: Train loss 0.122, Learning Rate 1.810e-05, It/sec 0.420, Tokens/sec 127.167, Trained Tokens 715045, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3107 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 2550: Train loss 0.106, Learning Rate 1.799e-05, It/sec 0.475, Tokens/sec 142.261, Trained Tokens 730017, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3229 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3124 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 2600: Train loss 0.126, Learning Rate 1.788e-05, It/sec 0.452, Tokens/sec 150.507, Trained Tokens 746652, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3379 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3224 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 2650: Train loss 0.136, Learning Rate 1.776e-05, It/sec 0.431, Tokens/sec 129.367, Trained Tokens 761652, Peak mem 28.185 GB
+Iter 2700: Train loss 0.099, Learning Rate 1.765e-05, It/sec 0.457, Tokens/sec 130.243, Trained Tokens 775916, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 4554 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 4002 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3790 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 2750: Train loss 0.115, Learning Rate 1.752e-05, It/sec 0.338, Tokens/sec 141.029, Trained Tokens 796806, Peak mem 28.185 GB
+Iter 2800: Train loss 0.100, Learning Rate 1.740e-05, It/sec 0.465, Tokens/sec 136.108, Trained Tokens 811434, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3096 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 2850: Train loss 0.092, Learning Rate 1.727e-05, It/sec 0.365, Tokens/sec 144.958, Trained Tokens 831294, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 4158 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 4230 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3273 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 2900: Train loss 0.105, Learning Rate 1.715e-05, It/sec 0.382, Tokens/sec 130.776, Trained Tokens 848428, Peak mem 28.185 GB
+Iter 2950: Train loss 0.103, Learning Rate 1.701e-05, It/sec 0.482, Tokens/sec 139.482, Trained Tokens 862905, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3177 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3139 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3141 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Calculating loss...:   0%|          | 0/8 [00:00<?, ?it/s]Calculating loss...:  12%|█▎        | 1/8 [00:00<00:02,  2.85it/s]Calculating loss...:  25%|██▌       | 2/8 [00:00<00:01,  3.40it/s]Calculating loss...:  38%|███▊      | 3/8 [00:00<00:01,  3.03it/s]Calculating loss...:  50%|█████     | 4/8 [00:01<00:01,  2.53it/s]Calculating loss...:  62%|██████▎   | 5/8 [00:01<00:01,  2.44it/s]Calculating loss...:  75%|███████▌  | 6/8 [00:02<00:00,  2.29it/s]Calculating loss...:  88%|████████▊ | 7/8 [00:02<00:00,  2.71it/s]Calculating loss...: 100%|██████████| 8/8 [00:03<00:00,  2.14it/s]Calculating loss...: 100%|██████████| 8/8 [00:03<00:00,  2.42it/s]
+Iter 3000: Val loss 0.471, Val took 3.307s
+Iter 3000: Train loss 0.118, Learning Rate 1.688e-05, It/sec 0.413, Tokens/sec 131.082, Trained Tokens 878758, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3405 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 3050: Train loss 0.122, Learning Rate 1.674e-05, It/sec 0.440, Tokens/sec 149.962, Trained Tokens 895797, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3091 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3208 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3502 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 3100: Train loss 0.104, Learning Rate 1.661e-05, It/sec 0.417, Tokens/sec 139.595, Trained Tokens 912549, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 4847 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 3150: Train loss 0.109, Learning Rate 1.647e-05, It/sec 0.513, Tokens/sec 124.920, Trained Tokens 924717, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3213 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 3200: Train loss 0.162, Learning Rate 1.632e-05, It/sec 0.373, Tokens/sec 128.103, Trained Tokens 941889, Peak mem 28.185 GB
+Iter 3250: Train loss 0.117, Learning Rate 1.618e-05, It/sec 0.487, Tokens/sec 136.308, Trained Tokens 955880, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3571 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 3280: Saved adapter weights to model-experiments/08-nitin-new2-ds/spectrum_probe/adapters/sft-on-nitin-spectrum/adapters.safetensors and model-experiments/08-nitin-new2-ds/spectrum_probe/adapters/sft-on-nitin-spectrum/0003280_adapters.safetensors.
+Iter 3300: Train loss 0.137, Learning Rate 1.603e-05, It/sec 0.497, Tokens/sec 135.578, Trained Tokens 969511, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3233 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 4600 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 3350: Train loss 0.139, Learning Rate 1.588e-05, It/sec 0.443, Tokens/sec 142.658, Trained Tokens 985611, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3480 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3928 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 3400: Train loss 0.123, Learning Rate 1.573e-05, It/sec 0.421, Tokens/sec 131.474, Trained Tokens 1001242, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 4675 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 3450: Train loss 0.134, Learning Rate 1.558e-05, It/sec 0.449, Tokens/sec 133.158, Trained Tokens 1016073, Peak mem 28.185 GB
+Calculating loss...:   0%|          | 0/8 [00:00<?, ?it/s]Calculating loss...:  12%|█▎        | 1/8 [00:00<00:01,  3.96it/s]Calculating loss...:  25%|██▌       | 2/8 [00:00<00:01,  3.28it/s]Calculating loss...:  38%|███▊      | 3/8 [00:00<00:01,  3.59it/s]Calculating loss...:  50%|█████     | 4/8 [00:01<00:01,  3.51it/s]Calculating loss...:  62%|██████▎   | 5/8 [00:01<00:00,  3.72it/s]Calculating loss...:  75%|███████▌  | 6/8 [00:01<00:00,  3.69it/s]Calculating loss...:  88%|████████▊ | 7/8 [00:01<00:00,  3.80it/s]Calculating loss...: 100%|██████████| 8/8 [00:02<00:00,  2.63it/s]Calculating loss...: 100%|██████████| 8/8 [00:02<00:00,  3.16it/s]
+Iter 3500: Val loss 0.059, Val took 2.532s
+Iter 3500: Train loss 0.093, Learning Rate 1.542e-05, It/sec 0.474, Tokens/sec 143.893, Trained Tokens 1031246, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 4133 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3426 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 3550: Train loss 0.103, Learning Rate 1.527e-05, It/sec 0.474, Tokens/sec 133.034, Trained Tokens 1045272, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3131 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 3600: Train loss 0.125, Learning Rate 1.511e-05, It/sec 0.468, Tokens/sec 135.783, Trained Tokens 1059787, Peak mem 28.185 GB
+Iter 3650: Train loss 0.105, Learning Rate 1.495e-05, It/sec 0.377, Tokens/sec 142.080, Trained Tokens 1078617, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3922 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 3700: Train loss 0.128, Learning Rate 1.479e-05, It/sec 0.465, Tokens/sec 139.750, Trained Tokens 1093658, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3675 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 3750: Train loss 0.116, Learning Rate 1.462e-05, It/sec 0.482, Tokens/sec 131.849, Trained Tokens 1107322, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3704 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3192 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 3800: Train loss 0.134, Learning Rate 1.446e-05, It/sec 0.394, Tokens/sec 150.285, Trained Tokens 1126401, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3198 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3233 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 3850: Train loss 0.139, Learning Rate 1.429e-05, It/sec 0.412, Tokens/sec 143.741, Trained Tokens 1143852, Peak mem 28.185 GB
+Iter 3900: Train loss 0.107, Learning Rate 1.413e-05, It/sec 0.407, Tokens/sec 137.479, Trained Tokens 1160743, Peak mem 28.185 GB
+Iter 3950: Train loss 0.127, Learning Rate 1.396e-05, It/sec 0.459, Tokens/sec 142.213, Trained Tokens 1176236, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3853 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3157 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Calculating loss...:   0%|          | 0/8 [00:00<?, ?it/s]Calculating loss...:  12%|█▎        | 1/8 [00:00<00:02,  2.75it/s]Calculating loss...:  25%|██▌       | 2/8 [00:00<00:02,  2.56it/s]Calculating loss...:  38%|███▊      | 3/8 [00:01<00:03,  1.57it/s]Calculating loss...:  50%|█████     | 4/8 [00:02<00:02,  1.85it/s]Calculating loss...:  62%|██████▎   | 5/8 [00:02<00:01,  2.16it/s]Calculating loss...:  75%|███████▌  | 6/8 [00:02<00:00,  2.62it/s]Calculating loss...:  88%|████████▊ | 7/8 [00:02<00:00,  2.71it/s]Calculating loss...: 100%|██████████| 8/8 [00:03<00:00,  2.85it/s]Calculating loss...: 100%|██████████| 8/8 [00:03<00:00,  2.42it/s]
+Iter 4000: Val loss 0.100, Val took 3.304s
+Iter 4000: Train loss 0.101, Learning Rate 1.379e-05, It/sec 0.423, Tokens/sec 148.641, Trained Tokens 1193795, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3221 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3388 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 4059 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3252 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 4050: Train loss 0.071, Learning Rate 1.362e-05, It/sec 0.358, Tokens/sec 136.807, Trained Tokens 1212926, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3547 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 4100: Train loss 0.077, Learning Rate 1.344e-05, It/sec 0.515, Tokens/sec 138.127, Trained Tokens 1226344, Peak mem 28.185 GB
+Iter 4100: Saved adapter weights to model-experiments/08-nitin-new2-ds/spectrum_probe/adapters/sft-on-nitin-spectrum/adapters.safetensors and model-experiments/08-nitin-new2-ds/spectrum_probe/adapters/sft-on-nitin-spectrum/0004100_adapters.safetensors.
+Iter 4150: Train loss 0.162, Learning Rate 1.327e-05, It/sec 0.430, Tokens/sec 153.290, Trained Tokens 1244188, Peak mem 28.185 GB
+Iter 4200: Train loss 0.117, Learning Rate 1.309e-05, It/sec 0.558, Tokens/sec 133.217, Trained Tokens 1256132, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 6049 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3090 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 4250: Train loss 0.090, Learning Rate 1.292e-05, It/sec 0.476, Tokens/sec 125.847, Trained Tokens 1269353, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3176 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 4300: Train loss 0.084, Learning Rate 1.274e-05, It/sec 0.477, Tokens/sec 140.192, Trained Tokens 1284040, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3375 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 4350: Train loss 0.095, Learning Rate 1.257e-05, It/sec 0.440, Tokens/sec 141.499, Trained Tokens 1300134, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3239 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 4400: Train loss 0.124, Learning Rate 1.239e-05, It/sec 0.431, Tokens/sec 145.526, Trained Tokens 1317016, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3558 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3649 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 4450: Train loss 0.087, Learning Rate 1.221e-05, It/sec 0.496, Tokens/sec 133.441, Trained Tokens 1330461, Peak mem 28.185 GB
+Calculating loss...:   0%|          | 0/8 [00:00<?, ?it/s]Calculating loss...:  12%|█▎        | 1/8 [00:00<00:03,  2.26it/s]Calculating loss...:  25%|██▌       | 2/8 [00:00<00:02,  2.93it/s]Calculating loss...:  38%|███▊      | 3/8 [00:01<00:02,  2.26it/s]Calculating loss...:  50%|█████     | 4/8 [00:01<00:01,  2.31it/s]Calculating loss...:  62%|██████▎   | 5/8 [00:02<00:01,  1.95it/s]Calculating loss...:  75%|███████▌  | 6/8 [00:03<00:01,  1.79it/s]Calculating loss...:  88%|████████▊ | 7/8 [00:03<00:00,  1.55it/s]Calculating loss...: 100%|██████████| 8/8 [00:04<00:00,  1.42it/s]Calculating loss...: 100%|██████████| 8/8 [00:04<00:00,  1.72it/s]
+Iter 4500: Val loss 0.086, Val took 4.657s
+Iter 4500: Train loss 0.097, Learning Rate 1.203e-05, It/sec 0.539, Tokens/sec 135.693, Trained Tokens 1343059, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3575 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 4550: Train loss 0.129, Learning Rate 1.185e-05, It/sec 0.399, Tokens/sec 148.208, Trained Tokens 1361617, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3091 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3860 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 4600: Train loss 0.095, Learning Rate 1.167e-05, It/sec 0.455, Tokens/sec 130.527, Trained Tokens 1375961, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 4869 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3383 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3680 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 4650: Train loss 0.100, Learning Rate 1.149e-05, It/sec 0.387, Tokens/sec 143.551, Trained Tokens 1394496, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3520 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 4980 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 4700: Train loss 0.106, Learning Rate 1.131e-05, It/sec 0.451, Tokens/sec 139.846, Trained Tokens 1410016, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3848 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3151 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3499 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 4750: Train loss 0.107, Learning Rate 1.113e-05, It/sec 0.373, Tokens/sec 146.550, Trained Tokens 1429661, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3820 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 4800: Train loss 0.130, Learning Rate 1.094e-05, It/sec 0.443, Tokens/sec 133.622, Trained Tokens 1444733, Peak mem 28.185 GB
+Iter 4850: Train loss 0.124, Learning Rate 1.076e-05, It/sec 0.447, Tokens/sec 145.644, Trained Tokens 1461042, Peak mem 28.185 GB
+Iter 4900: Train loss 0.116, Learning Rate 1.058e-05, It/sec 0.529, Tokens/sec 137.579, Trained Tokens 1474048, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3932 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 4920: Saved adapter weights to model-experiments/08-nitin-new2-ds/spectrum_probe/adapters/sft-on-nitin-spectrum/adapters.safetensors and model-experiments/08-nitin-new2-ds/spectrum_probe/adapters/sft-on-nitin-spectrum/0004920_adapters.safetensors.
+Iter 4950: Train loss 0.104, Learning Rate 1.040e-05, It/sec 0.504, Tokens/sec 123.608, Trained Tokens 1486319, Peak mem 28.185 GB
+Calculating loss...:   0%|          | 0/8 [00:00<?, ?it/s]Calculating loss...:  12%|█▎        | 1/8 [00:00<00:02,  3.37it/s]Calculating loss...:  25%|██▌       | 2/8 [00:00<00:02,  2.26it/s]Calculating loss...:  38%|███▊      | 3/8 [00:01<00:01,  2.65it/s]Calculating loss...:  50%|█████     | 4/8 [00:01<00:01,  2.84it/s]Calculating loss...:  62%|██████▎   | 5/8 [00:01<00:01,  2.80it/s]Calculating loss...:  75%|███████▌  | 6/8 [00:02<00:00,  2.74it/s]Calculating loss...:  88%|████████▊ | 7/8 [00:02<00:00,  3.16it/s]Calculating loss...: 100%|██████████| 8/8 [00:03<00:00,  2.11it/s]Calculating loss...: 100%|██████████| 8/8 [00:03<00:00,  2.47it/s]
+Iter 5000: Val loss 0.058, Val took 3.237s
+Iter 5000: Train loss 0.082, Learning Rate 1.022e-05, It/sec 0.545, Tokens/sec 138.797, Trained Tokens 1499057, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3909 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3433 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 5050: Train loss 0.095, Learning Rate 1.003e-05, It/sec 0.447, Tokens/sec 152.647, Trained Tokens 1516149, Peak mem 28.185 GB
+Iter 5100: Train loss 0.101, Learning Rate 9.853e-06, It/sec 0.549, Tokens/sec 124.368, Trained Tokens 1527480, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 4242 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 5150: Train loss 0.103, Learning Rate 9.671e-06, It/sec 0.446, Tokens/sec 133.741, Trained Tokens 1542461, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3184 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 5200: Train loss 0.077, Learning Rate 9.490e-06, It/sec 0.452, Tokens/sec 142.073, Trained Tokens 1558167, Peak mem 28.185 GB
+Iter 5250: Train loss 0.075, Learning Rate 9.309e-06, It/sec 0.542, Tokens/sec 127.814, Trained Tokens 1569952, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3959 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 5300: Train loss 0.082, Learning Rate 9.129e-06, It/sec 0.547, Tokens/sec 125.537, Trained Tokens 1581423, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3145 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 5350: Train loss 0.132, Learning Rate 8.949e-06, It/sec 0.406, Tokens/sec 152.058, Trained Tokens 1600131, Peak mem 28.185 GB
+Iter 5400: Train loss 0.091, Learning Rate 8.770e-06, It/sec 0.581, Tokens/sec 131.077, Trained Tokens 1611416, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3209 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 5450: Train loss 0.124, Learning Rate 8.591e-06, It/sec 0.458, Tokens/sec 134.321, Trained Tokens 1626074, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3408 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Calculating loss...:   0%|          | 0/8 [00:00<?, ?it/s]Calculating loss...:  12%|█▎        | 1/8 [00:01<00:08,  1.27s/it]Calculating loss...:  25%|██▌       | 2/8 [00:02<00:07,  1.22s/it]Calculating loss...:  38%|███▊      | 3/8 [00:02<00:03,  1.29it/s]Calculating loss...:  50%|█████     | 4/8 [00:03<00:03,  1.28it/s]Calculating loss...:  62%|██████▎   | 5/8 [00:04<00:02,  1.44it/s]Calculating loss...:  75%|███████▌  | 6/8 [00:05<00:01,  1.25it/s]Calculating loss...:  88%|████████▊ | 7/8 [00:05<00:00,  1.61it/s]Calculating loss...: 100%|██████████| 8/8 [00:05<00:00,  1.68it/s]Calculating loss...: 100%|██████████| 8/8 [00:05<00:00,  1.37it/s]
+Iter 5500: Val loss 0.110, Val took 5.834s
+Iter 5500: Train loss 0.118, Learning Rate 8.413e-06, It/sec 0.484, Tokens/sec 149.200, Trained Tokens 1641493, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3155 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 5550: Train loss 0.158, Learning Rate 8.236e-06, It/sec 0.453, Tokens/sec 138.784, Trained Tokens 1656807, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3467 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 5600: Train loss 0.110, Learning Rate 8.060e-06, It/sec 0.449, Tokens/sec 140.302, Trained Tokens 1672433, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3423 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 5650: Train loss 0.099, Learning Rate 7.885e-06, It/sec 0.394, Tokens/sec 147.097, Trained Tokens 1691105, Peak mem 28.185 GB
+Iter 5700: Train loss 0.108, Learning Rate 7.710e-06, It/sec 0.413, Tokens/sec 149.104, Trained Tokens 1709149, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3476 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 5740: Saved adapter weights to model-experiments/08-nitin-new2-ds/spectrum_probe/adapters/sft-on-nitin-spectrum/adapters.safetensors and model-experiments/08-nitin-new2-ds/spectrum_probe/adapters/sft-on-nitin-spectrum/0005740_adapters.safetensors.
+Iter 5750: Train loss 0.105, Learning Rate 7.537e-06, It/sec 0.387, Tokens/sec 141.791, Trained Tokens 1727473, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3089 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3477 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 5800: Train loss 0.091, Learning Rate 7.364e-06, It/sec 0.441, Tokens/sec 134.097, Trained Tokens 1742681, Peak mem 28.185 GB
+Iter 5850: Train loss 0.087, Learning Rate 7.193e-06, It/sec 0.530, Tokens/sec 122.432, Trained Tokens 1754222, Peak mem 28.185 GB
+Iter 5900: Train loss 0.083, Learning Rate 7.023e-06, It/sec 0.418, Tokens/sec 144.399, Trained Tokens 1771475, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3773 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 5950: Train loss 0.090, Learning Rate 6.854e-06, It/sec 0.411, Tokens/sec 142.178, Trained Tokens 1788766, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 4864 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Calculating loss...:   0%|          | 0/8 [00:00<?, ?it/s]Calculating loss...:  12%|█▎        | 1/8 [00:00<00:05,  1.23it/s]Calculating loss...:  25%|██▌       | 2/8 [00:01<00:03,  1.97it/s]Calculating loss...:  38%|███▊      | 3/8 [00:01<00:02,  2.00it/s]Calculating loss...:  50%|█████     | 4/8 [00:02<00:01,  2.14it/s]Calculating loss...:  62%|██████▎   | 5/8 [00:02<00:01,  2.03it/s]Calculating loss...:  75%|███████▌  | 6/8 [00:03<00:01,  1.79it/s]Calculating loss...:  88%|████████▊ | 7/8 [00:03<00:00,  2.14it/s]Calculating loss...: 100%|██████████| 8/8 [00:04<00:00,  1.52it/s]Calculating loss...: 100%|██████████| 8/8 [00:04<00:00,  1.74it/s]
+Iter 6000: Val loss 0.030, Val took 4.590s
+Iter 6000: Train loss 0.080, Learning Rate 6.687e-06, It/sec 0.375, Tokens/sec 149.044, Trained Tokens 1808643, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3432 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 4100 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 6050: Train loss 0.079, Learning Rate 6.521e-06, It/sec 0.440, Tokens/sec 142.070, Trained Tokens 1824792, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3176 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 6100: Train loss 0.101, Learning Rate 6.357e-06, It/sec 0.422, Tokens/sec 151.750, Trained Tokens 1842775, Peak mem 28.185 GB
+Iter 6150: Train loss 0.136, Learning Rate 6.194e-06, It/sec 0.470, Tokens/sec 159.153, Trained Tokens 1859714, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3078 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 6200: Train loss 0.129, Learning Rate 6.032e-06, It/sec 0.463, Tokens/sec 135.179, Trained Tokens 1874313, Peak mem 28.185 GB
+Iter 6250: Train loss 0.090, Learning Rate 5.872e-06, It/sec 0.471, Tokens/sec 138.686, Trained Tokens 1889022, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 4268 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 6300: Train loss 0.115, Learning Rate 5.714e-06, It/sec 0.538, Tokens/sec 121.479, Trained Tokens 1900319, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3160 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 6350: Train loss 0.090, Learning Rate 5.558e-06, It/sec 0.438, Tokens/sec 151.321, Trained Tokens 1917610, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3240 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 4176 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 6400: Train loss 0.090, Learning Rate 5.404e-06, It/sec 0.379, Tokens/sec 143.062, Trained Tokens 1936507, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3174 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3454 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3279 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 6450: Train loss 0.069, Learning Rate 5.251e-06, It/sec 0.490, Tokens/sec 137.727, Trained Tokens 1950568, Peak mem 28.185 GB
+Calculating loss...:   0%|          | 0/8 [00:00<?, ?it/s]Calculating loss...:  12%|█▎        | 1/8 [00:00<00:03,  1.77it/s]Calculating loss...:  25%|██▌       | 2/8 [00:01<00:02,  2.01it/s]Calculating loss...:  38%|███▊      | 3/8 [00:01<00:02,  2.18it/s]Calculating loss...:  50%|█████     | 4/8 [00:01<00:01,  2.47it/s]Calculating loss...:  62%|██████▎   | 5/8 [00:01<00:01,  2.87it/s]Calculating loss...:  75%|███████▌  | 6/8 [00:02<00:00,  2.40it/s]Calculating loss...:  88%|████████▊ | 7/8 [00:02<00:00,  2.41it/s]Calculating loss...: 100%|██████████| 8/8 [00:03<00:00,  2.77it/s]Calculating loss...: 100%|██████████| 8/8 [00:03<00:00,  2.49it/s]
+Iter 6500: Val loss 0.042, Val took 3.212s
+Iter 6500: Train loss 0.129, Learning Rate 5.100e-06, It/sec 0.439, Tokens/sec 135.557, Trained Tokens 1965998, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 4190 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 6550: Train loss 0.094, Learning Rate 4.951e-06, It/sec 0.425, Tokens/sec 132.037, Trained Tokens 1981524, Peak mem 28.185 GB
+Iter 6560: Saved adapter weights to model-experiments/08-nitin-new2-ds/spectrum_probe/adapters/sft-on-nitin-spectrum/adapters.safetensors and model-experiments/08-nitin-new2-ds/spectrum_probe/adapters/sft-on-nitin-spectrum/0006560_adapters.safetensors.
+Iter 6600: Train loss 0.109, Learning Rate 4.805e-06, It/sec 0.568, Tokens/sec 148.584, Trained Tokens 1994610, Peak mem 28.185 GB
+Iter 6650: Train loss 0.103, Learning Rate 4.660e-06, It/sec 0.651, Tokens/sec 131.342, Trained Tokens 2004702, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 4915 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 6700: Train loss 0.113, Learning Rate 4.518e-06, It/sec 0.467, Tokens/sec 140.688, Trained Tokens 2019755, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3214 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3909 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3120 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3528 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 6750: Train loss 0.134, Learning Rate 4.377e-06, It/sec 0.467, Tokens/sec 135.379, Trained Tokens 2034247, Peak mem 28.185 GB
+Iter 6800: Train loss 0.090, Learning Rate 4.239e-06, It/sec 0.450, Tokens/sec 145.660, Trained Tokens 2050449, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 4032 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3204 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 6850: Train loss 0.074, Learning Rate 4.104e-06, It/sec 0.457, Tokens/sec 134.589, Trained Tokens 2065161, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 4921 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 6900: Train loss 0.095, Learning Rate 3.970e-06, It/sec 0.470, Tokens/sec 129.488, Trained Tokens 2078951, Peak mem 28.185 GB
+Iter 6950: Train loss 0.103, Learning Rate 3.839e-06, It/sec 0.407, Tokens/sec 126.393, Trained Tokens 2094493, Peak mem 28.185 GB
+Calculating loss...:   0%|          | 0/8 [00:00<?, ?it/s]Calculating loss...:  12%|█▎        | 1/8 [00:00<00:03,  2.03it/s]Calculating loss...:  25%|██▌       | 2/8 [00:00<00:02,  2.70it/s]Calculating loss...:  38%|███▊      | 3/8 [00:01<00:03,  1.56it/s]Calculating loss...:  50%|█████     | 4/8 [00:02<00:01,  2.00it/s]Calculating loss...:  62%|██████▎   | 5/8 [00:02<00:01,  2.44it/s]Calculating loss...:  75%|███████▌  | 6/8 [00:02<00:00,  2.51it/s]Calculating loss...:  88%|████████▊ | 7/8 [00:03<00:00,  2.58it/s]Calculating loss...: 100%|██████████| 8/8 [00:03<00:00,  2.53it/s]Calculating loss...: 100%|██████████| 8/8 [00:03<00:00,  2.33it/s]
+Iter 7000: Val loss 0.038, Val took 3.432s
+Iter 7000: Train loss 0.141, Learning Rate 3.711e-06, It/sec 0.495, Tokens/sec 143.180, Trained Tokens 2108955, Peak mem 28.185 GB
+Iter 7050: Train loss 0.130, Learning Rate 3.585e-06, It/sec 0.499, Tokens/sec 141.758, Trained Tokens 2123169, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3662 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3119 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 7100: Train loss 0.091, Learning Rate 3.461e-06, It/sec 0.406, Tokens/sec 138.424, Trained Tokens 2140236, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3622 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 7150: Train loss 0.063, Learning Rate 3.340e-06, It/sec 0.443, Tokens/sec 127.825, Trained Tokens 2154655, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3219 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 7200: Train loss 0.101, Learning Rate 3.222e-06, It/sec 0.427, Tokens/sec 145.809, Trained Tokens 2171736, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3542 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3472 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 7250: Train loss 0.105, Learning Rate 3.106e-06, It/sec 0.463, Tokens/sec 125.403, Trained Tokens 2185274, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3122 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 7300: Train loss 0.084, Learning Rate 2.994e-06, It/sec 0.494, Tokens/sec 135.761, Trained Tokens 2199010, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3409 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3314 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3842 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3191 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 7350: Train loss 0.102, Learning Rate 2.883e-06, It/sec 0.352, Tokens/sec 150.970, Trained Tokens 2220472, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3082 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3258 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 7380: Saved adapter weights to model-experiments/08-nitin-new2-ds/spectrum_probe/adapters/sft-on-nitin-spectrum/adapters.safetensors and model-experiments/08-nitin-new2-ds/spectrum_probe/adapters/sft-on-nitin-spectrum/0007380_adapters.safetensors.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3445 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 7400: Train loss 0.097, Learning Rate 2.776e-06, It/sec 0.380, Tokens/sec 136.813, Trained Tokens 2238473, Peak mem 28.185 GB
+Iter 7450: Train loss 0.138, Learning Rate 2.671e-06, It/sec 0.440, Tokens/sec 157.404, Trained Tokens 2256357, Peak mem 28.185 GB
+Calculating loss...:   0%|          | 0/8 [00:00<?, ?it/s]Calculating loss...:  12%|█▎        | 1/8 [00:01<00:10,  1.51s/it]Calculating loss...:  25%|██▌       | 2/8 [00:02<00:06,  1.01s/it]Calculating loss...:  38%|███▊      | 3/8 [00:02<00:04,  1.08it/s]Calculating loss...:  50%|█████     | 4/8 [00:03<00:02,  1.38it/s]Calculating loss...:  62%|██████▎   | 5/8 [00:03<00:01,  1.78it/s]Calculating loss...:  75%|███████▌  | 6/8 [00:03<00:00,  2.23it/s]Calculating loss...:  88%|████████▊ | 7/8 [00:04<00:00,  2.56it/s]Calculating loss...: 100%|██████████| 8/8 [00:04<00:00,  2.80it/s]Calculating loss...: 100%|██████████| 8/8 [00:04<00:00,  1.79it/s]
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 4679 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 7500: Val loss 0.039, Val took 4.477s
+Iter 7500: Train loss 0.086, Learning Rate 2.570e-06, It/sec 0.559, Tokens/sec 125.670, Trained Tokens 2267590, Peak mem 28.185 GB
+Iter 7550: Train loss 0.088, Learning Rate 2.471e-06, It/sec 0.554, Tokens/sec 121.139, Trained Tokens 2278514, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3458 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 7600: Train loss 0.139, Learning Rate 2.375e-06, It/sec 0.439, Tokens/sec 142.364, Trained Tokens 2294713, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3169 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 5024 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 7650: Train loss 0.123, Learning Rate 2.282e-06, It/sec 0.377, Tokens/sec 139.121, Trained Tokens 2313175, Peak mem 28.185 GB
+Iter 7700: Train loss 0.062, Learning Rate 2.193e-06, It/sec 0.420, Tokens/sec 146.627, Trained Tokens 2330647, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3960 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3475 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 7750: Train loss 0.102, Learning Rate 2.106e-06, It/sec 0.383, Tokens/sec 127.540, Trained Tokens 2347318, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3103 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 4413 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 7800: Train loss 0.066, Learning Rate 2.022e-06, It/sec 0.426, Tokens/sec 138.059, Trained Tokens 2363541, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 4850 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3442 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3098 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 7850: Train loss 0.095, Learning Rate 1.942e-06, It/sec 0.375, Tokens/sec 135.324, Trained Tokens 2381561, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3835 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 7900: Train loss 0.095, Learning Rate 1.864e-06, It/sec 0.434, Tokens/sec 142.036, Trained Tokens 2397913, Peak mem 28.185 GB
+Iter 7950: Train loss 0.084, Learning Rate 1.790e-06, It/sec 0.396, Tokens/sec 138.070, Trained Tokens 2415341, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3245 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3136 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Calculating loss...:   0%|          | 0/8 [00:00<?, ?it/s]Calculating loss...:  12%|█▎        | 1/8 [00:00<00:02,  3.18it/s]Calculating loss...:  25%|██▌       | 2/8 [00:00<00:02,  2.23it/s]Calculating loss...:  38%|███▊      | 3/8 [00:01<00:02,  2.35it/s]Calculating loss...:  50%|█████     | 4/8 [00:01<00:01,  2.41it/s]Calculating loss...:  62%|██████▎   | 5/8 [00:01<00:01,  2.65it/s]Calculating loss...:  75%|███████▌  | 6/8 [00:02<00:01,  1.89it/s]Calculating loss...:  88%|████████▊ | 7/8 [00:03<00:00,  1.95it/s]Calculating loss...: 100%|██████████| 8/8 [00:03<00:00,  2.33it/s]Calculating loss...: 100%|██████████| 8/8 [00:03<00:00,  2.27it/s]
+Iter 8000: Val loss 0.072, Val took 3.521s
+Iter 8000: Train loss 0.064, Learning Rate 1.719e-06, It/sec 0.438, Tokens/sec 130.423, Trained Tokens 2430240, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3103 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3529 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 4117 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3229 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3085 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 8050: Train loss 0.070, Learning Rate 1.651e-06, It/sec 0.323, Tokens/sec 149.442, Trained Tokens 2453384, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3941 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 8100: Train loss 0.112, Learning Rate 1.587e-06, It/sec 0.547, Tokens/sec 135.649, Trained Tokens 2465777, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 4948 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 4846 will be truncated to 3072. Consider pre-splitting your data to save memory.
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 4259 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Iter 8150: Train loss 0.076, Learning Rate 1.525e-06, It/sec 0.385, Tokens/sec 130.025, Trained Tokens 2482651, Peak mem 28.185 GB
+[WARNING] Some sequences are longer than 3072 tokens. The longest sentence 3915 will be truncated to 3072. Consider pre-splitting your data to save memory.
+Calculating loss...:   0%|          | 0/8 [00:00<?, ?it/s]Calculating loss...:  12%|█▎        | 1/8 [00:00<00:03,  2.01it/s]Calculating loss...:  25%|██▌       | 2/8 [00:01<00:04,  1.25it/s]Calculating loss...:  38%|███▊      | 3/8 [00:02<00:04,  1.13it/s]Calculating loss...:  50%|█████     | 4/8 [00:02<00:02,  1.45it/s]Calculating loss...:  62%|██████▎   | 5/8 [00:03<00:01,  1.87it/s]Calculating loss...:  75%|███████▌  | 6/8 [00:03<00:00,  2.01it/s]Calculating loss...:  88%|████████▊ | 7/8 [00:04<00:00,  1.64it/s]Calculating loss...: 100%|██████████| 8/8 [00:04<00:00,  2.00it/s]Calculating loss...: 100%|██████████| 8/8 [00:04<00:00,  1.71it/s]
+Iter 8200: Val loss 0.048, Val took 4.679s
+Iter 8200: Train loss 0.083, Learning Rate 1.467e-06, It/sec 0.532, Tokens/sec 130.207, Trained Tokens 2494898, Peak mem 28.185 GB
+Iter 8200: Saved adapter weights to model-experiments/08-nitin-new2-ds/spectrum_probe/adapters/sft-on-nitin-spectrum/adapters.safetensors and model-experiments/08-nitin-new2-ds/spectrum_probe/adapters/sft-on-nitin-spectrum/0008200_adapters.safetensors.
+Saved final weights to model-experiments/08-nitin-new2-ds/spectrum_probe/adapters/sft-on-nitin-spectrum/adapters.safetensors.
