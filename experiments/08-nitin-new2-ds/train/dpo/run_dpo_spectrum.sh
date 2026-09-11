@@ -136,7 +136,7 @@ try:
             line = line.strip()
             if not line.startswith('{'): continue
             r = json.loads(line)
-            if r.get('category') == '__overall__' and r.get('total') == 855:
+            if r.get('category') == '__overall__' and (r['scope'] == 'full' if 'scope' in r else r.get('total') == 855):
                 if r.get('step', -1) > best_step:
                     best_step = r.get('step', -1)
                     best = float(r.get('runs_pct', 0))
@@ -166,6 +166,13 @@ if [ ! -f "$DPO_ADAPTER/adapters.safetensors" ] && [ "${CONFIRM_FULL_RUN:-}" != 
 fi
 
 PROGRESS_FILE="$RDIR/.dpo_progress_steps"
+# Guard for a FINISHED DPO adapter whose progress marker was cleaned out: without
+# it the loop restarts at step 0, re-seeds from the SFT adapter and overwrites it.
+if [ -f "$DPO_ADAPTER/adapters.safetensors" ] && [ ! -f "$PROGRESS_FILE" ]; then
+  echo "!!! $DPO_ADAPTER/adapters.safetensors exists but no run marker ($PROGRESS_FILE)."
+  echo "    Refusing to train over it. Move the adapter dir aside to retrain."
+  exit 1
+fi
 [ -f "$PROGRESS_FILE" ] || echo 0 > "$PROGRESS_FILE"
 [ -f "$RDIR/train.log" ] || : > "$RDIR/train.log"
 consecutive_fails=0
@@ -273,7 +280,7 @@ try:
             line = line.strip()
             if not line.startswith('{'): continue
             r = json.loads(line)
-            if r.get('category') == '__overall__' and r.get('step') == $NEW_DONE:
+            if r.get('category') == '__overall__' and r.get('step') == $NEW_DONE and r.get('scope', 'subset') == 'subset':
                 p = float(r.get('runs_pct', 0))
 except Exception:
     pass

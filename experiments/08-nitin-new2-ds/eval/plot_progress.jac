@@ -115,6 +115,28 @@ def load_eval_curve(path: str) -> dict[str, list] {
         return {};
     }
 
+    # The runners score the last sweep checkpoint on a subset AND the final model
+    # on the full holdout at the same step; mixing them corrupts that point. Rows
+    # carry "scope" (eval_functional.jac); legacy rows lack it, so tag them run by
+    # run (a run ends at its "__overall__" row; full iff its overall total is the
+    # file's largest). Then drop subset rows at any step that has a full eval.
+    if "pass_rate" not in rows[0] {
+        overall_totals = [float(r["total"]) for r in rows if r.get("category") == "__overall__"];
+        max_total = max(overall_totals) if overall_totals else 0.0;
+        run: list = [];
+        for r in rows {
+            run.append(r);
+            if r.get("category") == "__overall__" {
+                sc = "full" if float(r["total"]) == max_total else "subset";
+                for x in run { x.setdefault("scope", sc); }
+                run = [];
+            }
+        }
+        full_steps = set([int(float(r["step"])) for r in rows if r.get("scope") == "full"]);
+        rows = [r for r in rows
+                if not (r.get("scope") == "subset" and int(float(r["step"])) in full_steps)];
+    }
+
     series: dict[str, list] = {};
     totals: dict[int, list[float]] = {};
     for r in rows {

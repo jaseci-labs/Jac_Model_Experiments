@@ -37,8 +37,15 @@ glob BATCH_SIZE: int = 32;
 
 def load_model(mp: str, adapter: str) -> tuple {
     import mlx_lm;
-    if adapter != "" { return mlx_lm.load(mp, adapter_path=adapter); }  # jac:ignore[E1032]
-    return mlx_lm.load(mp);  # jac:ignore[E1032]
+    # The jaclang 0.16.1 type checker crashes on ANY call to `mlx_lm.load`
+    # ("'NoneType' object has no attribute 'is_instantiable_class'"), which made
+    # `jac check` fail on this whole file. Same workaround as gen_eval_detail.jac:
+    # the one call is inline Python. Behavior unchanged.
+    pair: tuple = ();
+    ::py::
+    pair = mlx_lm.load(mp, adapter_path=adapter) if adapter != "" else mlx_lm.load(mp)
+    ::py::
+    return pair;
 }
 
 
@@ -96,7 +103,7 @@ with entry {
         rows.append(rec);
     }
 
-    buckets: dict = {};   # (category, gate_class) -> {"total": n, "runs": n}
+    buckets: dict[tuple[str, str], dict[str, int]] = {};   # (category, gate_class) -> {"total": n, "runs": n}
     prose_total: int = 0;
 
     # Process rows in batches
@@ -130,7 +137,7 @@ with entry {
             }
 
             jac_code: str = extract_jac(out);
-            key: tuple = (category, gate_class);
+            key: tuple[str, str] = (category, gate_class);
             if key not in buckets { buckets[key] = {"total": 0, "runs": 0}; }
             buckets[key]["total"] += 1;
             (code, _sout, _serr) = run_jac(jac_code);
@@ -144,6 +151,12 @@ with entry {
     print("=== functional eval on " + str(total) + " holdout rows (" + str(prose_total) + " prose/ungraded) ===");
     metrics_out: str = os.environ.get("JAC_EVAL_METRICS_OUT", "");
     step: int = int(os.environ.get("JAC_EVAL_STEP", "0"));
+    # "scope" tells a full-holdout eval from a JAC_EVAL_LIMIT subset. The runners
+    # score the last sweep checkpoint (subset) and the final model (full) at the
+    # SAME step, so step alone is ambiguous. Appended after the original keys;
+    # rows written before this field existed simply lack it.
+    n_holdout: int = len([ln for ln in p.read_text().split("\n") if ln.strip() != ""]);
+    scope: str = "full" if len(rows) == n_holdout else "subset";
     rows_out: list[dict] = [];
     for (key, v) in buckets.items() {
         (category, gate_class) = key;
@@ -153,13 +166,15 @@ with entry {
         overall_total += v["total"];
         overall_runs += v["runs"];
         rows_out.append({"step": step, "category": category, "gate_class": gate_class,
-                          "total": v["total"], "runs": v["runs"], "runs_pct": pct});
+                          "total": v["total"], "runs": v["runs"], "runs_pct": pct,
+                          "scope": scope, "limit": limit});
     }
     overall_pct: int = 0;
     if overall_total > 0 { overall_pct = overall_runs * 100 // overall_total; }
     print("OVERALL runs: " + str(overall_pct) + "% (" + str(overall_runs) + "/" + str(overall_total) + ")");
     rows_out.append({"step": step, "category": "__overall__", "gate_class": "__all__",
-                      "total": overall_total, "runs": overall_runs, "runs_pct": overall_pct});
+                      "total": overall_total, "runs": overall_runs, "runs_pct": overall_pct,
+                      "scope": scope, "limit": limit});
 
     if metrics_out != "" {
         with open(metrics_out, "a") as f {
