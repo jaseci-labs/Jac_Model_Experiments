@@ -1,9 +1,9 @@
 {
-  "adapter_path": "model-experiments/06-nitin-ds-sft/spectrum_probe/adapters/sft-on-nitin-spectrum",
+  "adapter_path": "06-nitin-ds-sft/spectrum_probe/adapters/sft-on-nitin-spectrum",
   "batch_size": 1,
   "clear_cache_threshold": 0,
-  "config": "model-experiments/06-nitin-ds-sft/spectrum_probe/spectrum/configs/sft_spectrum.yaml",
-  "data": "model-experiments/06-nitin-ds-sft/dataset/sft",
+  "config": "06-nitin-ds-sft/spectrum_probe/spectrum/configs/sft_spectrum.yaml",
+  "data": "06-nitin-ds-sft/dataset/sft",
   "fine_tune_type": "lora",
   "grad_accumulation_steps": 1,
   "grad_checkpoint": true,
@@ -25,7 +25,7 @@
   },
   "mask_prompt": true,
   "max_seq_length": 3072,
-  "model": "model-experiments/models/qwen-q4",
+  "model": "models/qwen-q4",
   "num_layers": 48,
   "optimizer": "adam",
   "optimizer_config": {

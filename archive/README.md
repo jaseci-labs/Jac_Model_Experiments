@@ -7,7 +7,7 @@ Headline reports live in `../docs/history/<exp>/`.
 
 All three are Spectrum-layer LoRA adapters (rank 16, scale 2.0, 16 SNR-selected
 blocks out of 48 — the layer list is inside each `adapter_config.json`) on the
-base **Qwen3-Coder-30B-A3B 4-bit** at `model-experiments/models/qwen-q4`.
+base **Qwen3-Coder-30B-A3B 4-bit** at `models/qwen-q4`.
 No fused models — adapter only.
 
 | dir | what | holdout (a) shared 855 | holdout (b) Nitin 855 | source path (deleted) |
@@ -29,22 +29,22 @@ Files per dir: `adapters.safetensors` (1.1 GB), `adapter_config.json`,
 `metrics_functional.jsonl`, `final*.txt` (full-holdout eval log; `*_holdoutB.txt` for (b)).
 
 `adapter_config.json` edits vs source: `"model"` retargeted to
-`model-experiments/models/qwen-q4` (07's DPO config had no `model` key; one was
+`models/qwen-q4` (07's DPO config had no `model` key; one was
 added). The `adapter_path` / `data` / `config` fields in 04/06 are training
 provenance only (not read at load time) and still name the deleted dirs.
 
-## Load / eval (run from the directory that contains `model-experiments/`)
+## Load / eval (run from the repo root)
 
 ```bash
 # functional eval (same harness as every reported number)
-JAC_EVAL_MODE=mlx JAC_EVAL_MODEL=model-experiments/models/qwen-q4 \
-  JAC_EVAL_ADAPTER=model-experiments/archive/06-nitin-ds-sft \
-  JAC_HOLDOUT=model-experiments/08-nitin-new2-ds/dataset/holdout_a_shared855.jsonl \
-  .venv/bin/jac run model-experiments/08-nitin-new2-ds/scripts/eval_functional.jac
+JAC_EVAL_MODE=mlx JAC_EVAL_MODEL=models/qwen-q4 \
+  JAC_EVAL_ADAPTER=archive/06-nitin-ds-sft \
+  JAC_HOLDOUT=08-nitin-new2-ds/dataset/holdout_a_shared855.jsonl \
+  .venv/bin/jac run 08-nitin-new2-ds/scripts/eval_functional.jac
 
 # python
 .venv/bin/python -c "from mlx_lm import load, generate; \
-m,t = load('model-experiments/models/qwen-q4', adapter_path='model-experiments/archive/06-nitin-ds-sft'); \
+m,t = load('models/qwen-q4', adapter_path='archive/06-nitin-ds-sft'); \
 print(generate(m, t, prompt='Write a Jac walker that ...', max_tokens=256))"
 ```
 

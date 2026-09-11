@@ -26,5 +26,5 @@
     45,
     47
   ],
-  "model": "model-experiments/models/qwen-q4"
+  "model": "models/qwen-q4"
 }

@@ -17,6 +17,9 @@ archive/**/*.safetensors
 **/results/**/.*_progress_steps
 **/results/**/.best_step
 
+# python venv (dir or symlink; setup_env.sh creates it here)
+.venv
+
 # tooling caches
 .jac/
 __pycache__/

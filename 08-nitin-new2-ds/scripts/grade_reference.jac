@@ -12,7 +12,7 @@ This script measures that ceiling per (category, gate_class). Same
 extract_jac, same run_jac, same binary as grade_eval_detail.jac.
 
     HOLDOUT=<valid.jsonl> OUT=<jsonl> [WORKERS=8] \
-      jac run model-experiments/08-nitin-new2-ds/scripts/grade_reference.jac
+      jac run 08-nitin-new2-ds/scripts/grade_reference.jac
 """
 
 import json;

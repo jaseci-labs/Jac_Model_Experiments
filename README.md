@@ -14,7 +14,7 @@ generated Jac compiles and runs.
 ## Layout
 
 ```
-model-experiments/
+./                      repo root; run everything from here
   08-nitin-new2-ds/     latest experiment, kept whole; the template for new ones
     scripts/            dataset pipeline, NaN guard, eval harness (eval_functional.jac), plotting
     dataset/            holdout_a_shared855.jsonl (shared baseline), holdout (b), SFT/DPO releases + splits
@@ -28,7 +28,8 @@ model-experiments/
     history/            key reports from the deleted experiments 01 to 07
     reference/          Spectrum design, original whole-stack strategy
     blog/  presentation/
-  setup_env.sh          builds ../.venv and sanity-checks 08
+  setup_env.sh          builds .venv (here, at the repo root) and sanity-checks 08
+  .venv/                python venv (gitignored)
 ```
 
 ## Best models
@@ -55,20 +56,19 @@ plain `mlx_lm.load(base, adapter_path=...)` loads every trained block. Details:
 ## Quickstart
 
 ```bash
-# from the directory that contains model-experiments/
-./model-experiments/setup_env.sh
+# from the repo root
+./setup_env.sh
 .venv/bin/pip install jaclang==0.16.1 mlx==0.31.2 mlx-lm==0.31.3 mlx-lm-lora==2.1.0   # the versions every number was produced with
 source .venv/bin/activate
 
 # score the best adapter on holdout (a)  (~1 hour; nothing else may hold a model in memory)
-JAC_EVAL_MODEL=model-experiments/models/qwen-q4 \
-JAC_EVAL_ADAPTER=model-experiments/archive/04-cpt-sft \
-JAC_HOLDOUT=model-experiments/08-nitin-new2-ds/dataset/holdout_a_shared855.jsonl \
-  jac run model-experiments/08-nitin-new2-ds/scripts/eval_functional.jac
+JAC_EVAL_MODEL=models/qwen-q4 \
+JAC_EVAL_ADAPTER=archive/04-cpt-sft \
+JAC_HOLDOUT=08-nitin-new2-ds/dataset/holdout_a_shared855.jsonl \
+  jac run 08-nitin-new2-ds/scripts/eval_functional.jac
 ```
 
-The scripts expect this folder to be named `model-experiments` and to sit
-directly inside the workspace that holds `.venv/`. They `cd` to that
-workspace and use `model-experiments/...` paths. The base model must be at
-`model-experiments/models/qwen-q4`. It is not in git; see the playbook
-prerequisites for how to rebuild it.
+Shell scripts `cd` to the repo root and every script uses paths relative to it
+(`models/qwen-q4`, `08-nitin-new2-ds/...`, `archive/...`), with the venv at
+`.venv/`. The base model must be at `models/qwen-q4`. It is not in git; see
+the playbook prerequisites for how to rebuild it.

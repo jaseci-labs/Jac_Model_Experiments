@@ -26,16 +26,13 @@ Contents:
 
 ### Where things run from
 
-Every script resolves paths relative to a **workspace root**: the directory
-that contains `model-experiments/` and `.venv/`. The shell wrappers `cd` to
-`<script dir>/../../..` and use paths like `model-experiments/<exp>/...`, and
-`setup_env.sh` builds `.venv` one level above itself. So:
+Every script resolves paths relative to the **repo root**: the directory that
+contains `08-nitin-new2-ds/`, `models/`, `archive/` and `.venv/`. The shell
+wrappers `cd` to `<script dir>/../..` and use paths like `<exp>/...` and
+`models/qwen-q4`, and `setup_env.sh` builds `.venv` next to itself. So:
 
-- If `model-experiments` is its own git repo, clone it **as a directory named
-  `model-experiments`** inside some workspace folder, and run everything from
-  that workspace folder. In this checkout the workspace root is
-  `/Volumes/ExtremePro/JaseciLabs/jac_model_studio`.
-- Run every command in this playbook from the workspace root.
+- Clone the repo under any name, anywhere.
+- Run every command in this playbook from the repo root.
 - Call `jac` as `.venv/bin/jac` (or `source .venv/bin/activate` first). The
   wrappers prepend `.venv/bin` to `PATH` themselves, and the eval harness shells
   out to whatever `jac` is on `PATH`, so a stale global `jac` gives wrong scores.
@@ -55,7 +52,7 @@ that contains `model-experiments/` and `.venv/`. The shell wrappers `cd` to
 ### Environment
 
 ```bash
-./model-experiments/setup_env.sh      # creates ../.venv relative to setup_env.sh, installs, sanity-checks 08
+./setup_env.sh      # creates .venv at the repo root, installs, sanity-checks 08
 source .venv/bin/activate
 ```
 
@@ -68,11 +65,11 @@ hash differs from the one it was written against.
 
 ### Base model
 
-`model-experiments/models/qwen-q4` is Qwen3-Coder-30B-A3B-Instruct converted to
+`models/qwen-q4` is Qwen3-Coder-30B-A3B-Instruct converted to
 MLX at 4 bits, group size 64. It is gitignored and exists as a single copy.
 Every experiment since 04 has used this exact checkpoint, so every holdout-(a)
 number is comparable. Do not replace it. If it is ever lost, rebuild it with
-`.venv/bin/python -m mlx_lm convert --hf-path Qwen/Qwen3-Coder-30B-A3B-Instruct -q --q-bits 4 --q-group-size 64 --mlx-path model-experiments/models/qwen-q4`,
+`.venv/bin/python -m mlx_lm convert --hf-path Qwen/Qwen3-Coder-30B-A3B-Instruct -q --q-bits 4 --q-group-size 64 --mlx-path models/qwen-q4`,
 then re-score the base and at least one archived adapter before trusting any
 comparison, because a new quantization is a new base.
 
@@ -101,14 +98,13 @@ Pick a name `NN-short-name` (next number, e.g. `09-...`).
 
 ```bash
 NEW=09-my-dataset
-E=model-experiments
-mkdir -p $E/$NEW/dataset $E/$NEW/docs/reports
+mkdir -p $NEW/dataset $NEW/docs/reports
 rsync -a --exclude adapters --exclude results \
-  $E/08-nitin-new2-ds/scripts $E/08-nitin-new2-ds/spectrum_probe $E/08-nitin-new2-ds/stock_probe $E/$NEW/
-cp $E/08-nitin-new2-ds/dataset/holdout_a_shared855.jsonl $E/$NEW/dataset/
-grep -rl 08-nitin-new2-ds $E/$NEW | xargs sed -i '' "s/08-nitin-new2-ds/$NEW/g"
-grep -rn 08-nitin-new2-ds $E/$NEW                     # must print nothing
-for f in $E/$NEW/scripts/*.sh $E/$NEW/*_probe/*.sh; do bash -n "$f" || echo "SYNTAX: $f"; done
+  08-nitin-new2-ds/scripts 08-nitin-new2-ds/spectrum_probe 08-nitin-new2-ds/stock_probe $NEW/
+cp 08-nitin-new2-ds/dataset/holdout_a_shared855.jsonl $NEW/dataset/
+grep -rl 08-nitin-new2-ds $NEW | xargs sed -i '' "s/08-nitin-new2-ds/$NEW/g"
+grep -rn 08-nitin-new2-ds $NEW                     # must print nothing
+for f in $NEW/scripts/*.sh $NEW/*_probe/*.sh; do bash -n "$f" || echo "SYNTAX: $f"; done
 ```
 
 (Tested: the rsync and sed above produce a 31-file, 312 KB tree with no
@@ -134,7 +130,7 @@ What you get, and what to do with each part:
 Verify holdout (a) is byte-identical to every prior experiment's:
 
 ```bash
-shasum -a 256 $E/$NEW/dataset/holdout_a_shared855.jsonl
+shasum -a 256 $NEW/dataset/holdout_a_shared855.jsonl
 # 51ad3bb36a31725a54de0db8a168f58d76e7cf52d96a708c87e4c581929594cc
 ```
 
@@ -177,10 +173,10 @@ Put the holdout (b) files in `dataset/` first. 08's `pipeline.jac` reads
 pipeline runs.
 
 ```bash
-.venv/bin/jac run model-experiments/$NEW/scripts/pipeline.jac
-.venv/bin/jac run model-experiments/$NEW/scripts/copy_holdout.jac    # HOLDOUT_SRC_DIR=<dir> to import holdout files from elsewhere
-.venv/bin/jac run model-experiments/$NEW/scripts/release.jac
-model-experiments/$NEW/scripts/prep_training_dirs.sh                  # FORCE=1 to overwrite an existing split
+.venv/bin/jac run $NEW/scripts/pipeline.jac
+.venv/bin/jac run $NEW/scripts/copy_holdout.jac    # HOLDOUT_SRC_DIR=<dir> to import holdout files from elsewhere
+.venv/bin/jac run $NEW/scripts/release.jac
+$NEW/scripts/prep_training_dirs.sh                  # FORCE=1 to overwrite an existing split
 ```
 
 What each does in 08:
@@ -213,7 +209,7 @@ What each does in 08:
    without `FORCE=1`. `SPLIT_ONLY=sft|dpo` does one track. Then it runs the NaN
    guard.
 5. **`nan_guard.jac`** (runs inside step 4; standalone:
-   `.venv/bin/jac run model-experiments/$NEW/scripts/nan_guard.jac`). Drops SFT
+   `.venv/bin/jac run $NEW/scripts/nan_guard.jac`). Drops SFT
    rows whose prompt alone is at least `max_seq_length` (3072) tokens, measured
    with the base tokenizer exactly as mlx computes its prompt mask. Such rows
    have zero loss tokens after truncation and turn the whole run to NaN (see
@@ -234,7 +230,7 @@ only**. No 08 script checks against holdout (a). 08 has zero exact overlap with
 targets against holdout (a):
 
 ````bash
-python3 - model-experiments/$NEW <<'PY'
+python3 - $NEW <<'PY'
 import json, re, hashlib, sys
 E = sys.argv[1]
 def norm(s): return " ".join(str(s).split()).lower()
@@ -311,7 +307,7 @@ Re-scan only for a new base model. The scan reads the **bf16 Hugging Face
 snapshot** (57 GB, streamed one tensor at a time), not the q4 MLX copy:
 
 ```bash
-S=model-experiments/$NEW/spectrum_probe/spectrum
+S=$NEW/spectrum_probe/spectrum
 .venv/bin/python $S/snr_scan.py \
   --snapshot ~/.cache/huggingface/hub/models--Qwen--Qwen3-Coder-30B-A3B-Instruct/snapshots/b2cff646eb4bb1d68355c01b18ae02e7cf42d120 \
   --out $S/snr/snr_raw.json
@@ -333,8 +329,8 @@ Change none of them if you want your number in the lineage table.
 
 | key | value |
 |---|---|
-| model | `model-experiments/models/qwen-q4` |
-| data | `model-experiments/<exp>/dataset/sft` (reads `train.jsonl` + `valid.jsonl`) |
+| model | `models/qwen-q4` |
+| data | `<exp>/dataset/sft` (reads `train.jsonl` + `valid.jsonl`) |
 | fine_tune_type | lora |
 | num_layers | 16 (the driver asserts this equals the layer-list length) |
 | lora rank / scale / dropout | 16 / 2.0 / 0.05 |
@@ -356,7 +352,7 @@ First run, without confirmation: self-test and dry run only.
 
 ```bash
 pgrep -fl "jac start|mlx_lm"                                  # empty
-model-experiments/$NEW/spectrum_probe/run_sft_spectrum.sh
+$NEW/spectrum_probe/run_sft_spectrum.sh
 ```
 
 This does two things and exits:
@@ -375,7 +371,7 @@ This does two things and exits:
 Then the real run:
 
 ```bash
-CONFIRM_FULL_RUN=1 model-experiments/$NEW/spectrum_probe/run_sft_spectrum.sh
+CONFIRM_FULL_RUN=1 $NEW/spectrum_probe/run_sft_spectrum.sh
 ```
 
 Env knobs: `SKIP_VERIFY=1`, `SKIP_DRY=1`, `DRY_ITERS` (30), `EVAL_EVERY`
@@ -429,15 +425,15 @@ Run state lives in `spectrum_probe/results/sft-spectrum/`:
 - On demand:
 
   ```bash
-  R=model-experiments/$NEW/spectrum_probe/results/sft-spectrum
-  .venv/bin/jac run model-experiments/$NEW/scripts/plot_progress.jac \
+  R=$NEW/spectrum_probe/results/sft-spectrum
+  .venv/bin/jac run $NEW/scripts/plot_progress.jac \
     --train-log $R/train.log --out $R/plots/loss.png \
     --eval-curve $R/metrics_functional.jsonl --eval-out $R/plots/eval.png
   ```
 
 - **Grep for NaN.** `mlx_lm.lora` does not crash or exit non-zero when loss
   goes NaN; the log keeps growing and the stall detector sees nothing.
-  `grep -n "nan" model-experiments/$NEW/spectrum_probe/results/sft-spectrum/.segment.log`
+  `grep -n "nan" $NEW/spectrum_probe/results/sft-spectrum/.segment.log`
   should print nothing. If it does, stop, find the over-length rows
   (`nan_guard.jac`), and restart from scratch. NaN poisons Adam's state, so a
   resume will not recover.
@@ -451,8 +447,8 @@ To measure Spectrum against stock on a new dataset (RQ1 in 06/07/08), train
 the stock arm with the same data and recipe on blocks 32 to 47:
 
 ```bash
-CONFIRM_FULL_RUN=1 model-experiments/$NEW/stock_probe/run_sft.sh     # adapters/sft-on-nitin, results/sft
-model-experiments/$NEW/stock_probe/eval_sft_sweep.sh                  # same HOLDOUT=/RDIR= overrides as below
+CONFIRM_FULL_RUN=1 $NEW/stock_probe/run_sft.sh     # adapters/sft-on-nitin, results/sft
+$NEW/stock_probe/eval_sft_sweep.sh                  # same HOLDOUT=/RDIR= overrides as below
 ```
 
 It doubles training time. On the three datasets where both arms were scored
@@ -469,13 +465,13 @@ anything before.
 
 ```bash
 pgrep -fl "jac start|mlx_lm"     # empty. The eval script does not check.
-P=model-experiments/$NEW/spectrum_probe
+P=$NEW/spectrum_probe
 
 # holdout (a): defaults are HOLDOUT=dataset/holdout_a_shared855.jsonl, RDIR=results/sft-spectrum
 $P/eval_sft_spectrum.sh
 
 # holdout (b)
-HOLDOUT=model-experiments/$NEW/dataset/<your_holdout_b_eval>.jsonl \
+HOLDOUT=$NEW/dataset/<your_holdout_b_eval>.jsonl \
 RDIR=$P/results/sft-spectrum-holdoutB \
   $P/eval_sft_spectrum.sh
 ```
@@ -536,10 +532,10 @@ not individual rows, across runs.
 Standalone (e.g. scoring an archived adapter):
 
 ```bash
-JAC_EVAL_MODEL=model-experiments/models/qwen-q4 \
-JAC_EVAL_ADAPTER=model-experiments/archive/06-nitin-ds-sft \
-JAC_HOLDOUT=model-experiments/$NEW/dataset/holdout_a_shared855.jsonl \
-  .venv/bin/jac run model-experiments/$NEW/scripts/eval_functional.jac
+JAC_EVAL_MODEL=models/qwen-q4 \
+JAC_EVAL_ADAPTER=archive/06-nitin-ds-sft \
+JAC_HOLDOUT=$NEW/dataset/holdout_a_shared855.jsonl \
+  .venv/bin/jac run $NEW/scripts/eval_functional.jac
 ```
 
 (Activate the venv first so the harness's inner `jac run` finds the venv `jac`.)
@@ -558,7 +554,7 @@ Per-category table for the final checkpoint, with one decimal (the last block
 of `final.txt` has the same numbers, floored):
 
 ```bash
-python3 - model-experiments/$NEW/spectrum_probe/results/sft-spectrum/metrics_functional.jsonl <<'PY'
+python3 - $NEW/spectrum_probe/results/sft-spectrum/metrics_functional.jsonl <<'PY'
 import json, sys
 rows = [json.loads(l) for l in open(sys.argv[1])]
 ends = [i for i, r in enumerate(rows) if r["category"] == "__overall__"]
@@ -599,12 +595,12 @@ For McNemar, dump per-row results for both adapters, then count discordant
 pairs by `id`:
 
 ```bash
-ADAPTER=model-experiments/$NEW/spectrum_probe/adapters/sft-on-nitin-spectrum \
-OUT_PREFIX=model-experiments/$NEW/docs/reports/failure_data/spectrum_sft HOLDOUTS=A,B \
-  .venv/bin/jac run model-experiments/$NEW/scripts/gen_eval_detail.jac
-IN=model-experiments/$NEW/docs/reports/failure_data/spectrum_sft_holdoutA.gen.jsonl \
-OUT=model-experiments/$NEW/docs/reports/failure_data/spectrum_sft_holdoutA.graded.jsonl \
-  .venv/bin/jac run model-experiments/$NEW/scripts/grade_eval_detail.jac
+ADAPTER=$NEW/spectrum_probe/adapters/sft-on-nitin-spectrum \
+OUT_PREFIX=$NEW/docs/reports/failure_data/spectrum_sft HOLDOUTS=A,B \
+  .venv/bin/jac run $NEW/scripts/gen_eval_detail.jac
+IN=$NEW/docs/reports/failure_data/spectrum_sft_holdoutA.gen.jsonl \
+OUT=$NEW/docs/reports/failure_data/spectrum_sft_holdoutA.graded.jsonl \
+  .venv/bin/jac run $NEW/scripts/grade_eval_detail.jac
 ```
 
 `gen_eval_detail.jac` uses the same generation path as the harness (batch 32,
@@ -689,9 +685,9 @@ data and a reason to think it teaches something SFT did not.
 
 ```bash
 pgrep -fl "jac start|mlx_lm"
-model-experiments/$NEW/spectrum_probe/run_dpo_spectrum.sh                     # gates + 8-iter dry run, then exits
-CONFIRM_FULL_RUN=1 model-experiments/$NEW/spectrum_probe/run_dpo_spectrum.sh
-model-experiments/$NEW/spectrum_probe/eval_dpo_spectrum.sh                     # HOLDOUT= / RDIR= as in step 2
+$NEW/spectrum_probe/run_dpo_spectrum.sh                     # gates + 8-iter dry run, then exits
+CONFIRM_FULL_RUN=1 $NEW/spectrum_probe/run_dpo_spectrum.sh
+$NEW/spectrum_probe/eval_dpo_spectrum.sh                     # HOLDOUT= / RDIR= as in step 2
 ```
 
 - Needs the SFT adapter (it refuses to start without it). Run the holdout-(a)

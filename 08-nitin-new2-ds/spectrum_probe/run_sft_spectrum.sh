@@ -27,16 +27,16 @@ if [ -z "${CAFFEINATED:-}" ] && command -v caffeinate >/dev/null 2>&1; then
 fi
 
 SELF_DIR="$(cd "$(dirname "$0")" && pwd)"
-cd "$(cd "$SELF_DIR/../../.." && pwd)"   # repo root
+cd "$(cd "$SELF_DIR/../.." && pwd)"   # repo root
 [ -d ".venv/bin" ] && export PATH="$PWD/.venv/bin:$PATH"
 
-SPEC_DIR="model-experiments/08-nitin-new2-ds/spectrum_probe/spectrum"
+SPEC_DIR="08-nitin-new2-ds/spectrum_probe/spectrum"
 DRIVER="$SPEC_DIR/spectrum_lora_layers.jac"
 LAYERS="$SPEC_DIR/configs/spectrum_layers.json"
 CFG="$SPEC_DIR/configs/sft_spectrum.yaml"
-ADAPTER="model-experiments/08-nitin-new2-ds/spectrum_probe/adapters/sft-on-nitin-spectrum"
+ADAPTER="08-nitin-new2-ds/spectrum_probe/adapters/sft-on-nitin-spectrum"
 CKPT_DIR="$ADAPTER/checkpoints"
-RDIR="model-experiments/08-nitin-new2-ds/spectrum_probe/results/sft-spectrum"
+RDIR="08-nitin-new2-ds/spectrum_probe/results/sft-spectrum"
 TRAIN_LOG="$RDIR/train.log"
 DRY_ITERS="${DRY_ITERS:-30}"
 EVAL_EVERY="${EVAL_EVERY:-60}"
@@ -45,8 +45,8 @@ OOM_RECOVERY_ITERS="${SFT_OOM_RECOVERY_ITERS:-100}"
 
 need() { command -v "$1" >/dev/null 2>&1 || { echo "MISSING: $1"; exit 1; }; }
 need jac; need python
-for f in model-experiments/08-nitin-new2-ds/dataset/sft/train.jsonl \
-         model-experiments/08-nitin-new2-ds/dataset/sft/valid.jsonl \
+for f in 08-nitin-new2-ds/dataset/sft/train.jsonl \
+         08-nitin-new2-ds/dataset/sft/valid.jsonl \
          "$CFG" "$DRIVER"; do
   [ -f "$f" ] || { echo "MISSING: $f"; exit 1; }
 done
@@ -76,9 +76,9 @@ PROGRESS_FILE="$RDIR/.sft_progress_steps"
 
 # --- self-test gate (spectrum-plan.md §6.4) -------------------------------
 if ! is_done verify && [ "${SKIP_VERIFY:-0}" != "1" ]; then
-  echo ">>> --verify-layers self-test (loads model-experiments/models/qwen-q4 twice; a few minutes)"
+  echo ">>> --verify-layers self-test (loads models/qwen-q4 twice; a few minutes)"
   jac run "$DRIVER" --verify-layers --spectrum-layers "$LAYERS" \
-    --model model-experiments/models/qwen-q4 2>&1 | tee "$RDIR/verify_layers.txt"
+    --model models/qwen-q4 2>&1 | tee "$RDIR/verify_layers.txt"
   if ! grep -q "^VERIFY: PASS" "$RDIR/verify_layers.txt"; then
     echo "!!! self-test FAILED -- see $RDIR/verify_layers.txt. Not training."
     exit 1
@@ -90,7 +90,7 @@ fi
 if [ ! -f "$ADAPTER_FILE" ] && ! is_done dry && [ "${SKIP_DRY:-0}" != "1" ]; then
   echo ">>> dry-run (${DRY_ITERS} iters) -- bail check"
   jac run "$DRIVER" --spectrum-layers "$LAYERS" --config "$CFG" --iters "$DRY_ITERS" \
-    --adapter-path "model-experiments/08-nitin-new2-ds/spectrum_probe/adapters/dry-spectrum" 2>&1 | tail -25
+    --adapter-path "08-nitin-new2-ds/spectrum_probe/adapters/dry-spectrum" 2>&1 | tail -25
   echo ">>> dry-run complete."
   done_mark dry
 fi
@@ -162,7 +162,7 @@ while true; do
       break
     fi
     JAC_TRAIN_LOG="$RDIR/.segment.log" JAC_METRICS="/dev/null" JAC_PLOT_DIR="$RDIR" \
-      jac run model-experiments/08-nitin-new2-ds/scripts/plot_metrics.jac >/dev/null 2>&1 || true
+      jac run 08-nitin-new2-ds/scripts/plot_metrics.jac >/dev/null 2>&1 || true
   done
   RC=0; wait "$SEG_PID" 2>/dev/null || RC=$?
   cat "$RDIR/.segment.log" >> "$TRAIN_LOG"

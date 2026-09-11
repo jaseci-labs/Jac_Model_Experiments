@@ -14,7 +14,7 @@
 # silently-reverted "SFT" base -- nothing to do with add_generation_prompt,
 # beta, or lr.
 #
-# THE FIX: never fuse before DPO. Train directly against model-experiments/models/qwen-q4
+# THE FIX: never fuse before DPO. Train directly against models/qwen-q4
 # (raw, quantized, untouched) and seed DPO's LoRA from the SFT adapter via
 # --resume-adapter-file instead of baking it into weights first. Verified:
 # a manual 20-iter test this way scored 73% subset functional pass rate
@@ -24,7 +24,7 @@
 #
 # Byte-identical to run_dpo_fixed.sh otherwise (still uses the chat-template
 # fix via dpo_fixed_train.jac -- both fixes are real and both are kept):
-#   - no fuse step, no SFT_FUSED var -- BASE_MODEL=model-experiments/models/qwen-q4 throughout
+#   - no fuse step, no SFT_FUSED var -- BASE_MODEL=models/qwen-q4 throughout
 #   - dry-run and the first real segment both pass
 #     --resume-adapter-file "$SFT_ADAPTER/adapters.safetensors" to seed from
 #     the SFT-trained LoRA instead of starting DPO from scratch
@@ -41,7 +41,7 @@ set -euo pipefail
 if [ -z "${CAFFEINATED:-}" ] && command -v caffeinate >/dev/null 2>&1; then
   exec caffeinate -dimsu env CAFFEINATED=1 "$0" "$@"
 fi
-cd "$(cd "$(dirname "$0")/../../.." && pwd)"
+cd "$(cd "$(dirname "$0")/../.." && pwd)"
 [ -d ".venv/bin" ] && export PATH="$PWD/.venv/bin:$PATH"
 
 need() { command -v "$1" >/dev/null 2>&1 || { echo "MISSING: $1"; exit 1; }; }
@@ -54,12 +54,12 @@ if pgrep -f "jac start" >/dev/null 2>&1 || pgrep -f "mlx_lm" >/dev/null 2>&1; th
   exit 1
 fi
 
-DRIVER="model-experiments/08-nitin-new2-ds/stock_probe/dpo_fixed_train.jac"
-BASE_MODEL="model-experiments/models/qwen-q4"
-SFT_ADAPTER="model-experiments/08-nitin-new2-ds/stock_probe/adapters/sft-on-nitin"
-DPO_ADAPTER="model-experiments/08-nitin-new2-ds/stock_probe/adapters/dpo-on-sft-nitin-nofuse"
-BEST_ADAPTER="model-experiments/08-nitin-new2-ds/stock_probe/adapters/dpo-on-sft-nitin-nofuse-best"
-RDIR="model-experiments/08-nitin-new2-ds/stock_probe/results/dpo-nofuse"
+DRIVER="08-nitin-new2-ds/stock_probe/dpo_fixed_train.jac"
+BASE_MODEL="models/qwen-q4"
+SFT_ADAPTER="08-nitin-new2-ds/stock_probe/adapters/sft-on-nitin"
+DPO_ADAPTER="08-nitin-new2-ds/stock_probe/adapters/dpo-on-sft-nitin-nofuse"
+BEST_ADAPTER="08-nitin-new2-ds/stock_probe/adapters/dpo-on-sft-nitin-nofuse-best"
+RDIR="08-nitin-new2-ds/stock_probe/results/dpo-nofuse"
 SNAP_DIR="$RDIR/snapshots"
 DPO_ITERS="${DPO_ITERS:-250}"
 DPO_LR="${DPO_LR:-1e-6}"
@@ -70,7 +70,7 @@ SEGMENT_ITERS="${DPO_SEGMENT_ITERS:-20}"
 STALL_SECS="${DPO_STALL_SECS:-900}"
 EVAL_SUBSET="${DPO_EVAL_SUBSET:-100}"
 COLLAPSE_ABS_FLOOR="${DPO_COLLAPSE_ABS_FLOOR:-30}"
-HOLDOUT="${HOLDOUT:-model-experiments/08-nitin-new2-ds/dataset/holdout_a_shared855.jsonl}"
+HOLDOUT="${HOLDOUT:-08-nitin-new2-ds/dataset/holdout_a_shared855.jsonl}"
 DPO_METRICS="$RDIR/metrics_functional.jsonl"
 
 mkdir -p "$RDIR" "$SNAP_DIR"
@@ -88,7 +88,7 @@ import json
 best = 0.0
 best_step = -1
 try:
-    with open('model-experiments/08-nitin-new2-ds/stock_probe/results/sft/metrics_functional.jsonl') as f:
+    with open('08-nitin-new2-ds/stock_probe/results/sft/metrics_functional.jsonl') as f:
         for line in f:
             line = line.strip()
             if not line.startswith('{'): continue
@@ -107,9 +107,9 @@ echo ">>> SFT baseline: ${SFT_FINAL_PCT}% -- collapse gate fires at 2 consecutiv
 DRY_DONE_MARK="$RDIR/.dry.done"
 if [ ! -f "$DRY_DONE_MARK" ]; then
   echo ">>> DPO dry-run (8 iters), seeded from SFT adapter, no fuse -- bail check"
-  jac run "$DRIVER" --model "$BASE_MODEL" --train --data model-experiments/08-nitin-new2-ds/dataset/dpo \
-    --train-mode dpo --config model-experiments/08-nitin-new2-ds/stock_probe/configs/dpo_lora.yaml \
-    --adapter-path model-experiments/08-nitin-new2-ds/stock_probe/adapters/dpo-dry-nofuse \
+  jac run "$DRIVER" --model "$BASE_MODEL" --train --data 08-nitin-new2-ds/dataset/dpo \
+    --train-mode dpo --config 08-nitin-new2-ds/stock_probe/configs/dpo_lora.yaml \
+    --adapter-path 08-nitin-new2-ds/stock_probe/adapters/dpo-dry-nofuse \
     --resume-adapter-file "$SFT_ADAPTER/adapters.safetensors" \
     --train-type lora --num-layers 16 --grad-checkpoint --batch-size 1 --max-seq-length "$DPO_MAXLEN" \
     --iters 8 --learning-rate "$DPO_LR" --beta "$DPO_BETA" --dpo-cpo-loss-type sigmoid \
@@ -138,8 +138,8 @@ while true; do
 
   : > "$RDIR/.segment.log"
   if [ "$DONE_STEPS" -gt 0 ] && [ -f "$DPO_ADAPTER/adapters.safetensors" ]; then
-    jac run "$DRIVER" --model "$BASE_MODEL" --train --data model-experiments/08-nitin-new2-ds/dataset/dpo \
-      --train-mode dpo --config model-experiments/08-nitin-new2-ds/stock_probe/configs/dpo_lora.yaml \
+    jac run "$DRIVER" --model "$BASE_MODEL" --train --data 08-nitin-new2-ds/dataset/dpo \
+      --train-mode dpo --config 08-nitin-new2-ds/stock_probe/configs/dpo_lora.yaml \
       --adapter-path "$DPO_ADAPTER" --train-type lora --num-layers 16 --grad-checkpoint \
       --batch-size 1 --max-seq-length "$DPO_MAXLEN" --iters "$SEG_ITERS" \
       --resume-adapter-file "$DPO_ADAPTER/adapters.safetensors" \
@@ -148,8 +148,8 @@ while true; do
       > "$RDIR/.segment.log" 2>&1 &
   else
     # First real segment -- seed from the SFT adapter, not from scratch.
-    jac run "$DRIVER" --model "$BASE_MODEL" --train --data model-experiments/08-nitin-new2-ds/dataset/dpo \
-      --train-mode dpo --config model-experiments/08-nitin-new2-ds/stock_probe/configs/dpo_lora.yaml \
+    jac run "$DRIVER" --model "$BASE_MODEL" --train --data 08-nitin-new2-ds/dataset/dpo \
+      --train-mode dpo --config 08-nitin-new2-ds/stock_probe/configs/dpo_lora.yaml \
       --adapter-path "$DPO_ADAPTER" --train-type lora --num-layers 16 --grad-checkpoint \
       --batch-size 1 --max-seq-length "$DPO_MAXLEN" --iters "$SEG_ITERS" \
       --resume-adapter-file "$SFT_ADAPTER/adapters.safetensors" \
@@ -211,7 +211,7 @@ while true; do
   echo ">>> subset functional eval on snapshot step ${NEW_DONE} (n=${EVAL_SUBSET})"
   JAC_EVAL_MODE=mlx JAC_EVAL_MODEL="$BASE_MODEL" JAC_EVAL_ADAPTER="$SNAP" \
     JAC_HOLDOUT="$HOLDOUT" JAC_EVAL_LIMIT="$EVAL_SUBSET" JAC_EVAL_METRICS_OUT="$DPO_METRICS" JAC_EVAL_STEP="$NEW_DONE" \
-    jac run model-experiments/08-nitin-new2-ds/scripts/eval_functional.jac 2>&1 | tail -5 | tee -a "$RDIR/train.log"
+    jac run 08-nitin-new2-ds/scripts/eval_functional.jac 2>&1 | tail -5 | tee -a "$RDIR/train.log"
   STEP_PCT="$(python3 -c "
 import json
 p = 0.0

@@ -29,15 +29,15 @@
 # and is NOT touched here -- this script only splits what collect.jac released.
 #
 # USAGE (run from anywhere; resolves the repo root itself):
-#     model-experiments/08-nitin-new2-ds/scripts/prep_training_dirs.sh
+#     08-nitin-new2-ds/scripts/prep_training_dirs.sh
 #     FORCE=1 ... # overwrite existing non-empty splits
 #     SPLIT_SEED=42 TRAIN_FRAC=0.85 ...  # both overridable
 # ----------------------------------------------------------------------------
 set -euo pipefail
-cd "$(cd "$(dirname "$0")/../../.." && pwd)"   # repo root
+cd "$(cd "$(dirname "$0")/../.." && pwd)"   # repo root
 [ -d ".venv/bin" ] && export PATH="$PWD/.venv/bin:$PATH"
 
-EXP="model-experiments/08-nitin-new2-ds"
+EXP="08-nitin-new2-ds"
 SPLIT_SEED="${SPLIT_SEED:-42}"
 TRAIN_FRAC="${TRAIN_FRAC:-0.85}"
 FORCE="${FORCE:-0}"

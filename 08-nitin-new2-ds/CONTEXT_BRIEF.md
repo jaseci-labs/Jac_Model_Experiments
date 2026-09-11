@@ -188,7 +188,7 @@ would misdescribe what the DPO training signal actually teaches.
 
 ## 3. Base checkpoint — unchanged, explicit standing instruction
 
-`model-experiments/models/qwen-q4` (registry label "Qwen · BASE") — the SAME base checkpoint
+`models/qwen-q4` (registry label "Qwen · BASE") — the SAME base checkpoint
 used by 04-cpt-sft, 06, and 07. Holding the base fixed across every phase in
 this lineage is what keeps the cross-phase dataset comparison clean.
 
@@ -345,7 +345,7 @@ conventionally written to `<arm>_probe/results/<stage>/plots/`.
 ## 9. Directory layout
 
 ```
-model-experiments/08-nitin-new2-ds/
+08-nitin-new2-ds/
   CONTEXT_BRIEF.md          <- this file
   docs/
     README.md  spec.md  workflow.md  dataset-structure.md

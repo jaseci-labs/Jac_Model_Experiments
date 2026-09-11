@@ -15,22 +15,22 @@ set -euo pipefail
 # the SAME interpreter/venv that has mlx / mlx_lm / mlx_lm_lora installed. workflow.md's
 # conventions warn a bare `jac` can resolve to a different, stale venv; if so, pin the
 # absolute venv jac here.]
-cd "$(cd "$(dirname "$0")/../../.." && pwd)"
+cd "$(cd "$(dirname "$0")/../.." && pwd)"
 [ -d ".venv/bin" ] && export PATH="$PWD/.venv/bin:$PATH"
 
-SPEC_DIR="model-experiments/08-nitin-new2-ds/spectrum_probe/spectrum"
+SPEC_DIR="08-nitin-new2-ds/spectrum_probe/spectrum"
 LAYERS="$SPEC_DIR/configs/spectrum_layers.json"
-BASE_MODEL="model-experiments/models/qwen-q4"
-DPO_ADAPTER="model-experiments/08-nitin-new2-ds/spectrum_probe/adapters/dpo-on-sft-nitin-spectrum"
-BEST_ADAPTER="model-experiments/08-nitin-new2-ds/spectrum_probe/adapters/dpo-on-sft-nitin-spectrum-best"
-HOLDOUT="${HOLDOUT:-model-experiments/08-nitin-new2-ds/dataset/holdout_a_shared855.jsonl}"
-RDIR="${RDIR:-model-experiments/08-nitin-new2-ds/spectrum_probe/results/dpo-spectrum}"
+BASE_MODEL="models/qwen-q4"
+DPO_ADAPTER="08-nitin-new2-ds/spectrum_probe/adapters/dpo-on-sft-nitin-spectrum"
+BEST_ADAPTER="08-nitin-new2-ds/spectrum_probe/adapters/dpo-on-sft-nitin-spectrum-best"
+HOLDOUT="${HOLDOUT:-08-nitin-new2-ds/dataset/holdout_a_shared855.jsonl}"
+RDIR="${RDIR:-08-nitin-new2-ds/spectrum_probe/results/dpo-spectrum}"
 # Where run_dpo_spectrum.sh wrote its run state. RDIR is redirected per holdout
 # (workflow.md §5.2 -- holdout (b) writes to results/dpo-spectrum-nitinholdout/),
 # so the step counters must be read from the TRAINING dir, not from RDIR:
 # reading them from a redirected RDIR silently falls back to 250/250 and then
 # skips the DPO-best cell entirely via the BEST_STEP != FINAL_STEP test below.
-TRAIN_RDIR="${TRAIN_RDIR:-model-experiments/08-nitin-new2-ds/spectrum_probe/results/dpo-spectrum}"
+TRAIN_RDIR="${TRAIN_RDIR:-08-nitin-new2-ds/spectrum_probe/results/dpo-spectrum}"
 METRICS="$RDIR/metrics_functional.jsonl"
 mkdir -p "$RDIR"
 
@@ -59,7 +59,7 @@ import sys
 from mlx_lm.utils import load
 from adapter_config_fix import assert_adapter_keys_present
 adapter = sys.argv[1]
-model, _ = load("model-experiments/models/qwen-q4", adapter_path=adapter)
+model, _ = load("models/qwen-q4", adapter_path=adapter)
 n = assert_adapter_keys_present(model, adapter + "/adapters.safetensors")
 assert n == 256, f"adapter holds {n} keys, expected 256 (16/block x 16 picked blocks)"
 print(f"OK: all {n} adapter keys present in the loaded model -- {adapter}")
@@ -69,13 +69,13 @@ done
 echo ">>> FULL holdout eval: last checkpoint (step $FINAL_STEP)"
 JAC_EVAL_MODE=mlx JAC_EVAL_MODEL="$BASE_MODEL" JAC_EVAL_ADAPTER="$DPO_ADAPTER" \
   JAC_HOLDOUT="$HOLDOUT" JAC_EVAL_METRICS_OUT="$METRICS" JAC_EVAL_STEP="$LAST_EVAL_STEP" \
-  jac run model-experiments/08-nitin-new2-ds/scripts/eval_functional.jac | tee "$RDIR/final_last.txt"
+  jac run 08-nitin-new2-ds/scripts/eval_functional.jac | tee "$RDIR/final_last.txt"
 
 if [ -f "$BEST_ADAPTER/adapters.safetensors" ] && [ "$BEST_STEP" != "$FINAL_STEP" ]; then
   echo ">>> FULL holdout eval: best snapshot (step $BEST_STEP)"
   JAC_EVAL_MODE=mlx JAC_EVAL_MODEL="$BASE_MODEL" JAC_EVAL_ADAPTER="$BEST_ADAPTER" \
     JAC_HOLDOUT="$HOLDOUT" JAC_EVAL_METRICS_OUT="$METRICS" JAC_EVAL_STEP="$BEST_EVAL_STEP" \
-    jac run model-experiments/08-nitin-new2-ds/scripts/eval_functional.jac | tee "$RDIR/final_best.txt"
+    jac run 08-nitin-new2-ds/scripts/eval_functional.jac | tee "$RDIR/final_best.txt"
 else
   echo ">>> best snapshot == last checkpoint (step $BEST_STEP), skipping duplicate full eval"
 fi

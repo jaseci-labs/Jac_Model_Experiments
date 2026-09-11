@@ -4,7 +4,7 @@
 #
 # This is run_dpo_nofuse.sh with ONE variable changed: which 16 blocks carry the
 # LoRA. Everything else is the corrected recipe verbatim (comparison report §3):
-# no `mlx_lm.fuse`, BASE_MODEL=model-experiments/models/qwen-q4 throughout, DPO's LoRA seeded from
+# no `mlx_lm.fuse`, BASE_MODEL=models/qwen-q4 throughout, DPO's LoRA seeded from
 # the SFT adapter via --resume-adapter-file, beta 0.1, lr 1e-6, 654 pairs,
 # max_seq_length 512, 250 iters, the same segmented watchdog / OOM shrink ladder
 # / snapshot + subset-eval / collapse-gate machinery, and the same
@@ -17,7 +17,7 @@
 #   1. --verify-patches (seconds, no model load): both monkey-patches live, all
 #      three call sites rebound, on the frozen picks. Composing two patches is
 #      where one silently loses; this refuses to launch if it did.
-#   2. --verify-layers (minutes, loads model-experiments/models/qwen-q4 twice): the REAL DPO
+#   2. --verify-layers (minutes, loads models/qwen-q4 twice): the REAL DPO
 #      conversion path (mlx_lm_lora.utils.from_pretrained) converts the picks,
 #      trainable == 281.838M exactly, and -- the DPO-specific one -- every key of
 #      the SFT-spectrum adapter finds a home in the converted model.
@@ -47,7 +47,7 @@ set -euo pipefail
 if [ -z "${CAFFEINATED:-}" ] && command -v caffeinate >/dev/null 2>&1; then
   exec caffeinate -dimsu env CAFFEINATED=1 "$0" "$@"
 fi
-cd "$(cd "$(dirname "$0")/../../.." && pwd)"
+cd "$(cd "$(dirname "$0")/../.." && pwd)"
 [ -d ".venv/bin" ] && export PATH="$PWD/.venv/bin:$PATH"
 
 need() { command -v "$1" >/dev/null 2>&1 || { echo "MISSING: $1"; exit 1; }; }
@@ -60,15 +60,15 @@ if pgrep -f "jac start" >/dev/null 2>&1 || pgrep -f "mlx_lm" >/dev/null 2>&1; th
   exit 1
 fi
 
-SPEC_DIR="model-experiments/08-nitin-new2-ds/spectrum_probe/spectrum"
+SPEC_DIR="08-nitin-new2-ds/spectrum_probe/spectrum"
 DRIVER="$SPEC_DIR/dpo_spectrum_train.jac"
 LAYERS="$SPEC_DIR/configs/spectrum_layers.json"
 CFGFIX="$SPEC_DIR/adapter_config_fix.jac"
-BASE_MODEL="model-experiments/models/qwen-q4"
-SFT_ADAPTER="model-experiments/08-nitin-new2-ds/spectrum_probe/adapters/sft-on-nitin-spectrum"
-DPO_ADAPTER="model-experiments/08-nitin-new2-ds/spectrum_probe/adapters/dpo-on-sft-nitin-spectrum"
-BEST_ADAPTER="model-experiments/08-nitin-new2-ds/spectrum_probe/adapters/dpo-on-sft-nitin-spectrum-best"
-RDIR="model-experiments/08-nitin-new2-ds/spectrum_probe/results/dpo-spectrum"
+BASE_MODEL="models/qwen-q4"
+SFT_ADAPTER="08-nitin-new2-ds/spectrum_probe/adapters/sft-on-nitin-spectrum"
+DPO_ADAPTER="08-nitin-new2-ds/spectrum_probe/adapters/dpo-on-sft-nitin-spectrum"
+BEST_ADAPTER="08-nitin-new2-ds/spectrum_probe/adapters/dpo-on-sft-nitin-spectrum-best"
+RDIR="08-nitin-new2-ds/spectrum_probe/results/dpo-spectrum"
 SNAP_DIR="$RDIR/snapshots"
 DPO_ITERS="${DPO_ITERS:-250}"
 DPO_LR="${DPO_LR:-1e-6}"
@@ -79,10 +79,10 @@ SEGMENT_ITERS="${DPO_SEGMENT_ITERS:-20}"
 STALL_SECS="${DPO_STALL_SECS:-900}"
 EVAL_SUBSET="${DPO_EVAL_SUBSET:-100}"
 COLLAPSE_ABS_FLOOR="${DPO_COLLAPSE_ABS_FLOOR:-30}"
-HOLDOUT="${HOLDOUT:-model-experiments/08-nitin-new2-ds/dataset/holdout_a_shared855.jsonl}"
+HOLDOUT="${HOLDOUT:-08-nitin-new2-ds/dataset/holdout_a_shared855.jsonl}"
 DPO_METRICS="$RDIR/metrics_functional.jsonl"
-DATA="model-experiments/08-nitin-new2-ds/dataset/dpo"
-DPO_CFG="model-experiments/08-nitin-new2-ds/spectrum_probe/configs/dpo_lora.yaml"
+DATA="08-nitin-new2-ds/dataset/dpo"
+DPO_CFG="08-nitin-new2-ds/spectrum_probe/configs/dpo_lora.yaml"
 
 mkdir -p "$RDIR" "$SNAP_DIR"
 for f in "$DRIVER" "$LAYERS" "$CFGFIX" "$DPO_CFG" "$DATA/train.jsonl" "$HOLDOUT"; do
@@ -110,7 +110,7 @@ fi
 
 # --- gate 2: the real conversion path on the real model (minutes) -----------
 if ! is_done verify_layers && [ "${SKIP_VERIFY:-0}" != "1" ]; then
-  echo ">>> --verify-layers self-test (loads model-experiments/models/qwen-q4 twice; a few minutes)"
+  echo ">>> --verify-layers self-test (loads models/qwen-q4 twice; a few minutes)"
   jac run "$DRIVER" --verify-layers --spectrum-layers "$LAYERS" --model "$BASE_MODEL" \
     --resume-adapter-file "$SFT_ADAPTER/adapters.safetensors" 2>&1 | tee "$RDIR/verify_layers.txt"
   grep -q "^VERIFY: PASS" "$RDIR/verify_layers.txt" || {
@@ -129,7 +129,7 @@ import json
 best = 0.0
 best_step = -1
 try:
-    with open('model-experiments/08-nitin-new2-ds/spectrum_probe/results/sft-spectrum/metrics_functional.jsonl') as f:
+    with open('08-nitin-new2-ds/spectrum_probe/results/sft-spectrum/metrics_functional.jsonl') as f:
         for line in f:
             line = line.strip()
             if not line.startswith('{'): continue
@@ -150,7 +150,7 @@ if [ ! -f "$DRY_DONE_MARK" ]; then
   echo ">>> DPO dry-run (8 iters), seeded from the SFT-spectrum adapter, no fuse -- bail check"
   jac run "$DRIVER" --spectrum-layers "$LAYERS" --model "$BASE_MODEL" --train --data "$DATA" \
     --train-mode dpo --config "$DPO_CFG" \
-    --adapter-path model-experiments/08-nitin-new2-ds/spectrum_probe/adapters/dpo-dry-spectrum \
+    --adapter-path 08-nitin-new2-ds/spectrum_probe/adapters/dpo-dry-spectrum \
     --resume-adapter-file "$SFT_ADAPTER/adapters.safetensors" \
     --train-type lora --num-layers 16 --grad-checkpoint --batch-size 1 --max-seq-length "$DPO_MAXLEN" \
     --iters 8 --learning-rate "$DPO_LR" --beta "$DPO_BETA" --dpo-cpo-loss-type sigmoid \
@@ -261,7 +261,7 @@ while true; do
   echo ">>> subset functional eval on snapshot step ${NEW_DONE} (n=${EVAL_SUBSET})"
   JAC_EVAL_MODE=mlx JAC_EVAL_MODEL="$BASE_MODEL" JAC_EVAL_ADAPTER="$SNAP" \
     JAC_HOLDOUT="$HOLDOUT" JAC_EVAL_LIMIT="$EVAL_SUBSET" JAC_EVAL_METRICS_OUT="$DPO_METRICS" JAC_EVAL_STEP="$NEW_DONE" \
-    jac run model-experiments/08-nitin-new2-ds/scripts/eval_functional.jac 2>&1 | tail -5 | tee -a "$RDIR/train.log"
+    jac run 08-nitin-new2-ds/scripts/eval_functional.jac 2>&1 | tail -5 | tee -a "$RDIR/train.log"
   STEP_PCT="$(python3 -c "
 import json
 p = 0.0

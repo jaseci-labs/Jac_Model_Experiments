@@ -14,7 +14,7 @@ opening tag of a new assistant turn so the model knows to start generating. But
 the messages list here already ends with a COMPLETE assistant turn, so every
 chosen AND rejected sequence gets a spurious `<|im_start|>assistant\\n` stitched
 on AFTER the real `<|im_end|>`. Verified against this project's own tokenizer
-(model-experiments/models/qwen-q4):
+(models/qwen-q4):
 
     add_generation_prompt=True   ...HELLO<|im_end|>\\n<|im_start|>assistant\\n
     add_generation_prompt=False  ...HELLO<|im_end|>\\n

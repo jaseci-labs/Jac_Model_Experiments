@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # One-time environment setup (no anaconda). Creates/updates the repo-root .venv
 # on your system python3, installs the training/eval toolchain, and sanity-checks
-# model-experiments/08-nitin-new2-ds. Run from anywhere.
+# 08-nitin-new2-ds. Run from anywhere.
 set -euo pipefail
-cd "$(cd "$(dirname "$0")/.." && pwd)"   # repo root
+cd "$(cd "$(dirname "$0")" && pwd)"   # repo root (this script lives there)
 
-EXP="model-experiments/08-nitin-new2-ds"
-BASE="model-experiments/models/qwen-q4"
+EXP="08-nitin-new2-ds"
+BASE="models/qwen-q4"
 
 [ -x .venv/bin/python ] || python3 -m venv .venv
 .venv/bin/pip install --upgrade pip >/dev/null

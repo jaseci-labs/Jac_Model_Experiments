@@ -32,9 +32,9 @@ file is kept as candidate_pool.jsonl.preleak). Expected drop count: 0.
 """
 import os, re, json, shutil, hashlib, collections;
 
-# repo-relative: this file lives at <repo>/model-experiments/08-nitin-new2-ds/scripts/
+# repo-relative: this file lives at <repo>/08-nitin-new2-ds/scripts/
 glob EXP: str = os.path.dirname(os.path.dirname(os.path.abspath(str(__file__))));
-glob EXT: str = os.path.dirname(os.path.dirname(EXP));   # repo root
+glob EXT: str = os.path.dirname(EXP);   # repo root
 glob OUTD: str = EXP + "/dataset";
 # 07 is deleted; its holdout already lives in OUTD (byte-identical, verified).
 # Set HOLDOUT_SRC_DIR to re-import from elsewhere; default = OUTD (copy is skipped).

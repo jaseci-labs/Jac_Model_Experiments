@@ -14,10 +14,10 @@ Rows are routed by their own `gate_class` field: "prose_lexical" rows (mostly
 explanation/documentation) are generated but NOT code-graded (no code output
 expected) -- reported separately, never silently dropped from the totals.
 
-    JAC_EVAL_MODE=mlx JAC_EVAL_MODEL=model-experiments/models/qwen-q4 [JAC_EVAL_ADAPTER=path] \
-      [JAC_HOLDOUT=model-experiments/08-nitin-new2-ds/dataset/holdout_a_shared855.jsonl] \
+    JAC_EVAL_MODE=mlx JAC_EVAL_MODEL=models/qwen-q4 [JAC_EVAL_ADAPTER=path] \
+      [JAC_HOLDOUT=08-nitin-new2-ds/dataset/holdout_a_shared855.jsonl] \
       [JAC_EVAL_LIMIT=100] [JAC_EVAL_BATCH_SIZE=32] [JAC_EVAL_METRICS_OUT=path] [JAC_EVAL_STEP=0] \
-      jac run model-experiments/08-nitin-new2-ds/scripts/eval_functional.jac
+      jac run 08-nitin-new2-ds/scripts/eval_functional.jac
 """
 
 import json;
@@ -48,7 +48,7 @@ def extract_jac(output: str) -> str {
 }
 
 
-# Inlined verbatim from model-experiments/01-sft-dpo/sft_dpo/jacgen/writer.jac's
+# Inlined verbatim from 01-sft-dpo/sft_dpo/jacgen/writer.jac's
 # run_jac -- plain .jac files have no cross-directory relative-import syntax
 # (confirmed: only .cl.jac client imports support dotted-relative paths), and
 # this project has no PYTHONPATH/jac.toml convention for reaching a sibling

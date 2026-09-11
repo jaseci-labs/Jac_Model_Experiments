@@ -284,7 +284,7 @@ def scan_snapshot(snapshot_dir, layers: Optional[Sequence[int]] = None,
 def main(argv: Optional[List[str]] = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--snapshot", required=True,
-                    help="path to the bf16 HF snapshot dir (NOT model-experiments/models/qwen-q4)")
+                    help="path to the bf16 HF snapshot dir (NOT models/qwen-q4)")
     ap.add_argument("--out", required=True, help="output JSON path (snr/snr_raw.json)")
     ap.add_argument("--no-experts", action="store_true",
                     help="skip the 18432 expert matrices entirely")

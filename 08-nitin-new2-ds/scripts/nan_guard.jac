@@ -15,9 +15,9 @@ Rewrites $DATA_DIR/{train,valid}.jsonl IN PLACE (no backup; a file is only
 rewritten when at least one row is dropped, and kept rows are written
 byte-for-byte). Prints dropped counts. Idempotent.
 
-    [DATA_DIR=model-experiments/08-nitin-new2-ds/dataset/sft] \
-    [MODEL=model-experiments/models/qwen-q4] [MAX_SEQ_LENGTH=3072] \
-      .venv/bin/jac run model-experiments/08-nitin-new2-ds/scripts/nan_guard.jac
+    [DATA_DIR=08-nitin-new2-ds/dataset/sft] \
+    [MODEL=models/qwen-q4] [MAX_SEQ_LENGTH=3072] \
+      .venv/bin/jac run 08-nitin-new2-ds/scripts/nan_guard.jac
 """
 
 import json;
@@ -25,9 +25,9 @@ import os;
 import from pathlib { Path }
 
 glob EXP: Path = Path(str(__file__)).resolve().parents[1];   # .../08-nitin-new2-ds
-glob ROOT: Path = EXP.parents[1];                            # repo root
+glob ROOT: Path = EXP.parent;                                # repo root
 glob DATA_DIR: Path = Path(os.environ.get("DATA_DIR", str(EXP / "dataset" / "sft")));
-glob MODEL: Path = Path(os.environ.get("MODEL", str(ROOT / "model-experiments" / "models" / "qwen-q4")));
+glob MODEL: Path = Path(os.environ.get("MODEL", str(ROOT / "models" / "qwen-q4")));
 glob MAX_SEQ: int = int(os.environ.get("MAX_SEQ_LENGTH", "3072"));
 
 

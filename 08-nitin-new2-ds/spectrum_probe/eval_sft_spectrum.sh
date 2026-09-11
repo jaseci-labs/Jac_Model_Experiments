@@ -16,14 +16,14 @@ set -euo pipefail
 # the SAME interpreter/venv that has mlx / mlx_lm / mlx_lm_lora installed. workflow.md's
 # conventions warn a bare `jac` can resolve to a different, stale venv; if so, pin the
 # absolute venv jac here.]
-cd "$(cd "$(dirname "$0")/../../.." && pwd)"
+cd "$(cd "$(dirname "$0")/../.." && pwd)"
 [ -d ".venv/bin" ] && export PATH="$PWD/.venv/bin:$PATH"
 
-SPEC_DIR="model-experiments/08-nitin-new2-ds/spectrum_probe/spectrum"
+SPEC_DIR="08-nitin-new2-ds/spectrum_probe/spectrum"
 LAYERS="$SPEC_DIR/configs/spectrum_layers.json"
-ADAPTER="model-experiments/08-nitin-new2-ds/spectrum_probe/adapters/sft-on-nitin-spectrum"
-RDIR="${RDIR:-model-experiments/08-nitin-new2-ds/spectrum_probe/results/sft-spectrum}"
-HOLDOUT="${HOLDOUT:-model-experiments/08-nitin-new2-ds/dataset/holdout_a_shared855.jsonl}"
+ADAPTER="08-nitin-new2-ds/spectrum_probe/adapters/sft-on-nitin-spectrum"
+RDIR="${RDIR:-08-nitin-new2-ds/spectrum_probe/results/sft-spectrum}"
+HOLDOUT="${HOLDOUT:-08-nitin-new2-ds/dataset/holdout_a_shared855.jsonl}"
 METRICS="$RDIR/metrics_functional.jsonl"
 SUBSET="${SUBSET:-100}"
 
@@ -47,17 +47,17 @@ import sys
 from mlx_lm.utils import load
 from adapter_config_fix import assert_adapter_keys_present
 adapter = sys.argv[1]
-model, _ = load("model-experiments/models/qwen-q4", adapter_path=adapter)
+model, _ = load("models/qwen-q4", adapter_path=adapter)
 n = assert_adapter_keys_present(model, adapter + "/adapters.safetensors")
 print(f"OK: all {n} adapter keys present in the loaded model")
 PY
 
 echo ">>> base (plain Qwen, no CPT, no SFT) -- FULL holdout"
-JAC_EVAL_MODE=mlx JAC_EVAL_MODEL=model-experiments/models/qwen-q4 JAC_EVAL_ADAPTER="" \
+JAC_EVAL_MODE=mlx JAC_EVAL_MODEL=models/qwen-q4 JAC_EVAL_ADAPTER="" \
   JAC_HOLDOUT="$HOLDOUT" JAC_EVAL_METRICS_OUT="$METRICS" JAC_EVAL_STEP=0 \
-  jac run model-experiments/08-nitin-new2-ds/scripts/eval_functional.jac | tee "$RDIR/base.txt"
+  jac run 08-nitin-new2-ds/scripts/eval_functional.jac | tee "$RDIR/base.txt"
 
-TMPADP="model-experiments/08-nitin-new2-ds/spectrum_probe/adapters/sft-spectrum-ckpt-eval"
+TMPADP="08-nitin-new2-ds/spectrum_probe/adapters/sft-spectrum-ckpt-eval"
 CKPT_DIR="$ADAPTER/checkpoints"
 for CK in "$CKPT_DIR"/*_adapters.safetensors; do
   [ -e "$CK" ] || continue
@@ -68,17 +68,17 @@ for CK in "$CKPT_DIR"/*_adapters.safetensors; do
   cp "$CK" "$TMPADP/adapters.safetensors"
   cp "$ADAPTER/adapter_config.json" "$TMPADP/adapter_config.json"   # already rewritten
   echo ">>> checkpoint $STEP (subset=$SUBSET)"
-  JAC_EVAL_MODE=mlx JAC_EVAL_MODEL=model-experiments/models/qwen-q4 JAC_EVAL_ADAPTER="$TMPADP" \
+  JAC_EVAL_MODE=mlx JAC_EVAL_MODEL=models/qwen-q4 JAC_EVAL_ADAPTER="$TMPADP" \
     JAC_HOLDOUT="$HOLDOUT" JAC_EVAL_LIMIT="$SUBSET" JAC_EVAL_METRICS_OUT="$METRICS" JAC_EVAL_STEP="$STEP" \
-    jac run model-experiments/08-nitin-new2-ds/scripts/eval_functional.jac 2>/dev/null | tail -5
+    jac run 08-nitin-new2-ds/scripts/eval_functional.jac 2>/dev/null | tail -5
 done
 rm -rf "$TMPADP"
 
 echo ">>> final spectrum SFT checkpoint -- FULL holdout"
 TOTAL_ITERS="$(grep -E '^iters:' "$SPEC_DIR/configs/sft_spectrum.yaml" | grep -oE '[0-9]+' | head -1)"
-JAC_EVAL_MODE=mlx JAC_EVAL_MODEL=model-experiments/models/qwen-q4 JAC_EVAL_ADAPTER="$ADAPTER" \
+JAC_EVAL_MODE=mlx JAC_EVAL_MODEL=models/qwen-q4 JAC_EVAL_ADAPTER="$ADAPTER" \
   JAC_HOLDOUT="$HOLDOUT" JAC_EVAL_METRICS_OUT="$METRICS" JAC_EVAL_STEP="$TOTAL_ITERS" \
-  jac run model-experiments/08-nitin-new2-ds/scripts/eval_functional.jac | tee "$RDIR/final.txt"
+  jac run 08-nitin-new2-ds/scripts/eval_functional.jac | tee "$RDIR/final.txt"
 
 echo "=== functional eval sweep done: $METRICS ==="
 echo "Next: paired McNemar vs this phase's OWN stock arm (stock_probe/results/sft/final.txt),"

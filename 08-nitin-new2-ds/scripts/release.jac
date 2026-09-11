@@ -35,9 +35,9 @@ experiments can be sliced by the same reporting code.
 """
 import os, json, collections;
 
-# repo-relative: this file lives at <repo>/model-experiments/08-nitin-new2-ds/scripts/
+# repo-relative: this file lives at <repo>/08-nitin-new2-ds/scripts/
 glob EXP: str = os.path.dirname(os.path.dirname(os.path.abspath(str(__file__))));
-glob EXT: str = os.path.dirname(os.path.dirname(EXP));   # repo root
+glob EXT: str = os.path.dirname(EXP);   # repo root
 glob OUTD: str = EXP + "/dataset";
 glob STATS: str = EXP + "/docs/reports/funnel";   # funnel stats, kept with the experiment
 

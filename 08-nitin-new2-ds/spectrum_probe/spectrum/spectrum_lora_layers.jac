@@ -47,7 +47,7 @@ that package is not even imported rather than silently half-patching it.
 USAGE
 -----
     # self-test before spending compute (spectrum-plan.md §6.4)
-    python spectrum_lora_layers.py --verify-layers --model model-experiments/models/qwen-q4 \\
+    python spectrum_lora_layers.py --verify-layers --model models/qwen-q4 \\
         --spectrum-layers configs/spectrum_layers.json
 
     # training: every other flag is stock `mlx_lm.lora`
@@ -524,7 +524,7 @@ def main(argv: Optional[List[str]] = None) -> int {
     if "--verify-layers" in argv {
         argv.remove("--verify-layers");
         ap = argparse.ArgumentParser(prog="spectrum_lora_layers.py --verify-layers");
-        ap.add_argument("--model", default="model-experiments/models/qwen-q4");
+        ap.add_argument("--model", default="models/qwen-q4");
         ap.add_argument("--rank", type=int, default=16);  # jac:ignore[E1053]
         ap.add_argument("--scale", type=float, default=2.0);  # jac:ignore[E1053]
         ap.add_argument("--dropout", type=float, default=0.05);  # jac:ignore[E1053]

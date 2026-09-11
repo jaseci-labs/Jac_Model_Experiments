@@ -6,7 +6,7 @@ $JAC_PLOT_DIR/*.png: train loss, val loss, learning rate, tokens/sec, and the ho
 test-pass learning curve. (Copied from 01-sft-dpo/sft_dpo/jacgen for 08.)
 
     JAC_TRAIN_LOG=<rdir>/train.log JAC_METRICS=/dev/null JAC_PLOT_DIR=<rdir> \
-        jac run model-experiments/08-nitin-new2-ds/scripts/plot_metrics.jac
+        jac run 08-nitin-new2-ds/scripts/plot_metrics.jac
 """
 
 import json;

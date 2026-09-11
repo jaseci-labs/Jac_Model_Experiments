@@ -21,7 +21,7 @@ Unlike the harness, the exit code, stdout and stderr of every FAILING row are
 persisted -- that error text is the entire point of this exercise.
 
     IN=<gen.jsonl> OUT=<graded.jsonl> [WORKERS=8] [JAC_BIN=...] \
-      jac run model-experiments/08-nitin-new2-ds/scripts/grade_eval_detail.jac
+      jac run 08-nitin-new2-ds/scripts/grade_eval_detail.jac
 """
 
 import json;
@@ -34,7 +34,7 @@ import from concurrent.futures { ThreadPoolExecutor }
 import from pathlib { Path }
 import from typing { cast }
 
-glob ROOT: Path = Path(str(__file__)).resolve().parents[3];
+glob ROOT: Path = Path(str(__file__)).resolve().parents[2];
 glob CODE_GATES: set[str] = {"behavioral", "compile_project", "compile_only"};
 glob JAC_BIN: str = os.environ.get("JAC_BIN", str(ROOT / ".venv/bin/jac"));
 glob WORKERS: int = int(os.environ.get("WORKERS", "8"));

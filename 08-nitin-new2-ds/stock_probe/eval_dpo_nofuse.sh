@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
 set -euo pipefail
-cd "$(cd "$(dirname "$0")/../../.." && pwd)"
+cd "$(cd "$(dirname "$0")/../.." && pwd)"
 [ -d ".venv/bin" ] && export PATH="$PWD/.venv/bin:$PATH"
 
-BASE_MODEL="model-experiments/models/qwen-q4"
-DPO_ADAPTER="model-experiments/08-nitin-new2-ds/stock_probe/adapters/dpo-on-sft-nitin-nofuse"
-BEST_ADAPTER="model-experiments/08-nitin-new2-ds/stock_probe/adapters/dpo-on-sft-nitin-nofuse-best"
-HOLDOUT="${HOLDOUT:-model-experiments/08-nitin-new2-ds/dataset/holdout_a_shared855.jsonl}"
-RDIR="${RDIR:-model-experiments/08-nitin-new2-ds/stock_probe/results/dpo-nofuse}"
+BASE_MODEL="models/qwen-q4"
+DPO_ADAPTER="08-nitin-new2-ds/stock_probe/adapters/dpo-on-sft-nitin-nofuse"
+BEST_ADAPTER="08-nitin-new2-ds/stock_probe/adapters/dpo-on-sft-nitin-nofuse-best"
+HOLDOUT="${HOLDOUT:-08-nitin-new2-ds/dataset/holdout_a_shared855.jsonl}"
+RDIR="${RDIR:-08-nitin-new2-ds/stock_probe/results/dpo-nofuse}"
 # Where run_dpo_nofuse.sh wrote its run state. RDIR is redirected per holdout
 # (workflow.md §5.2 -- holdout (b) writes to results/dpo-nofuse-nitinholdout/),
 # so the step counters must be read from the TRAINING dir, not from RDIR:
 # reading them from a redirected RDIR silently falls back to 250/250 and then
 # skips the DPO-best cell entirely via the BEST_STEP != FINAL_STEP test below.
-TRAIN_RDIR="${TRAIN_RDIR:-model-experiments/08-nitin-new2-ds/stock_probe/results/dpo-nofuse}"
+TRAIN_RDIR="${TRAIN_RDIR:-08-nitin-new2-ds/stock_probe/results/dpo-nofuse}"
 METRICS="$RDIR/metrics_functional.jsonl"
 mkdir -p "$RDIR"
 
@@ -25,13 +25,13 @@ BEST_EVAL_STEP=$(( BEST_STEP + 500000 ))
 echo ">>> FULL holdout eval: last checkpoint (step $FINAL_STEP)"
 JAC_EVAL_MODE=mlx JAC_EVAL_MODEL="$BASE_MODEL" JAC_EVAL_ADAPTER="$DPO_ADAPTER" \
   JAC_HOLDOUT="$HOLDOUT" JAC_EVAL_METRICS_OUT="$METRICS" JAC_EVAL_STEP="$LAST_EVAL_STEP" \
-  jac run model-experiments/08-nitin-new2-ds/scripts/eval_functional.jac | tee "$RDIR/final_last.txt"
+  jac run 08-nitin-new2-ds/scripts/eval_functional.jac | tee "$RDIR/final_last.txt"
 
 if [ -f "$BEST_ADAPTER/adapters.safetensors" ] && [ "$BEST_STEP" != "$FINAL_STEP" ]; then
   echo ">>> FULL holdout eval: best snapshot (step $BEST_STEP)"
   JAC_EVAL_MODE=mlx JAC_EVAL_MODEL="$BASE_MODEL" JAC_EVAL_ADAPTER="$BEST_ADAPTER" \
     JAC_HOLDOUT="$HOLDOUT" JAC_EVAL_METRICS_OUT="$METRICS" JAC_EVAL_STEP="$BEST_EVAL_STEP" \
-    jac run model-experiments/08-nitin-new2-ds/scripts/eval_functional.jac | tee "$RDIR/final_best.txt"
+    jac run 08-nitin-new2-ds/scripts/eval_functional.jac | tee "$RDIR/final_best.txt"
 else
   echo ">>> best snapshot == last checkpoint (step $BEST_STEP), skipping duplicate full eval"
 fi

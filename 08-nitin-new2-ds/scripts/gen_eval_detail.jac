@@ -22,7 +22,7 @@ to the run being reproduced. They are recorded with graded=false.
 Grading happens in `grade_eval_detail.jac` (phase 2).
 
     ADAPTER=<path> OUT_PREFIX=<dir/tag> [HOLDOUTS=A,B] \
-      jac run model-experiments/08-nitin-new2-ds/scripts/gen_eval_detail.jac
+      jac run 08-nitin-new2-ds/scripts/gen_eval_detail.jac
 """
 
 import json;
@@ -32,16 +32,16 @@ import time;
 import from pathlib { Path }
 import from typing { cast }
 
-glob ROOT: Path = Path(str(__file__)).resolve().parents[3];
+glob ROOT: Path = Path(str(__file__)).resolve().parents[2];
 
 glob HOLDOUTS: dict[str, Path] = {
-    "A": ROOT / "model-experiments/08-nitin-new2-ds/dataset/holdout_a_shared855.jsonl",
-    "B": ROOT / "model-experiments/08-nitin-new2-ds/dataset/nitin_holdout_eval.jsonl"
+    "A": ROOT / "08-nitin-new2-ds/dataset/holdout_a_shared855.jsonl",
+    "B": ROOT / "08-nitin-new2-ds/dataset/nitin_holdout_eval.jsonl"
 };
 
 glob BATCH_SIZE: int = int(os.environ.get("BATCH_SIZE", "32"));
 glob MAX_TOKENS: int = int(os.environ.get("MAX_TOKENS", "768"));
-glob MODEL: str = os.environ.get("MODEL", "model-experiments/models/qwen-q4");
+glob MODEL: str = os.environ.get("MODEL", "models/qwen-q4");
 
 
 def main() -> int {

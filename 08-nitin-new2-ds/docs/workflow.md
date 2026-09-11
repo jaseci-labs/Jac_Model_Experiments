@@ -30,12 +30,10 @@ release-split pipeline instead.
 
 ## Conventions used throughout
 
-- **Run everything from the workspace root**: the directory that contains
-  `model-experiments/` and `.venv/` (here
-  `/Volumes/ExtremePro/JaseciLabs/jac_model_studio`).
+- **Run everything from the repo root**: the directory that contains
+  `08-nitin-new2-ds/`, `models/` and `.venv/`.
 - **Everything is Jac.** `.sh` wrappers call `jac run <driver>.jac <flags>`.
-  Use the absolute venv binary, not bare `jac`:
-  `/Volumes/ExtremePro/JaseciLabs/jac_model_studio/.venv/bin/jac`.
+  Use the repo venv's binary, not a bare global `jac`: `.venv/bin/jac`.
 - **`with entry:__main__ { }`**, never a bare `with entry { }`.
 - **No silent caps.** Every dropped item is counted, attributed by reason,
   written under `dataset/rejected/`, and summarized in the triage report.
@@ -48,8 +46,8 @@ release-split pipeline instead.
 ## Stage 0 — Corpus merge, filter, dedup, decontam, holdout reuse (DONE)
 
 ```
-.venv/bin/jac run model-experiments/08-nitin-new2-ds/scripts/pipeline.jac
-.venv/bin/jac run model-experiments/08-nitin-new2-ds/scripts/copy_holdout.jac
+.venv/bin/jac run 08-nitin-new2-ds/scripts/pipeline.jac
+.venv/bin/jac run 08-nitin-new2-ds/scripts/copy_holdout.jac
 ```
 
 `pipeline.jac` reads all 7 sources at the pin, applies (in order): the
@@ -79,8 +77,8 @@ pool left untouched.
 ## Stage 0b — Build the release + split files (DONE)
 
 ```
-.venv/bin/jac run model-experiments/08-nitin-new2-ds/scripts/release.jac
-model-experiments/08-nitin-new2-ds/scripts/prep_training_dirs.sh
+.venv/bin/jac run 08-nitin-new2-ds/scripts/release.jac
+08-nitin-new2-ds/scripts/prep_training_dirs.sh
 ```
 
 `release.jac` is 08's `collect.jac` equivalent — reconciles 7 heterogeneous
@@ -106,7 +104,7 @@ re-run post-split against both holdouts — still 0.
 `mask_prompt: true` + `max_seq_length: 3072`, a row whose prompt alone is
 ≥ 3072 tokens has zero loss tokens after truncation → NaN loss.
 `prep_training_dirs.sh` now runs `scripts/nan_guard.jac` right after the SFT
-split (standalone: `.venv/bin/jac run model-experiments/08-nitin-new2-ds/scripts/nan_guard.jac`).
+split (standalone: `.venv/bin/jac run 08-nitin-new2-ds/scripts/nan_guard.jac`).
 It tokenizes `messages[:-1]` with the base tokenizer
 (`apply_chat_template(..., add_generation_prompt=True)`, same as mlx_lm's mask
 offset), drops rows ≥ 3072, rewrites `dataset/sft/{train,valid}.jsonl` in place
@@ -148,7 +146,7 @@ Both must return nothing before starting.
 ### 3.2 Stock arm SFT
 
 ```
-CONFIRM_FULL_RUN=1 model-experiments/08-nitin-new2-ds/stock_probe/run_sft.sh
+CONFIRM_FULL_RUN=1 08-nitin-new2-ds/stock_probe/run_sft.sh
 ```
 
 Outputs: `stock_probe/adapters/sft-on-nitin/`,
@@ -159,7 +157,7 @@ evaluated, and its adapter and results were deleted on 2026-09-11.
 ### 3.3 Spectrum arm SFT
 
 ```
-CONFIRM_FULL_RUN=1 model-experiments/08-nitin-new2-ds/spectrum_probe/run_sft_spectrum.sh
+CONFIRM_FULL_RUN=1 08-nitin-new2-ds/spectrum_probe/run_sft_spectrum.sh
 ```
 
 `--verify-layers` must print `VERIFY: PASS` at 281.838M trainable params
@@ -169,7 +167,7 @@ spectrum SFT starts.
 ### 3.4 Live monitoring (runs alongside 3.2/3.3)
 
 ```
-.venv/bin/jac run model-experiments/08-nitin-new2-ds/scripts/plot_progress.jac \
+.venv/bin/jac run 08-nitin-new2-ds/scripts/plot_progress.jac \
     --train-log <arm>_probe/results/<stage>/train.log \
     --out       <arm>_probe/results/<stage>/plots/loss.png \
     --eval-curve <arm>_probe/results/<stage>/metrics_functional.jsonl \
@@ -219,19 +217,19 @@ report interpretation must account for it (§3.1).
 > without asking first.
 
 Same harness as every prior phase:
-`model-experiments/08-nitin-new2-ds/scripts/eval_functional.jac`.
+`08-nitin-new2-ds/scripts/eval_functional.jac`.
 
 ### 5.1 Holdout (a) — the shared 855
 
 ```
-model-experiments/08-nitin-new2-ds/spectrum_probe/eval_sft_spectrum.sh
+08-nitin-new2-ds/spectrum_probe/eval_sft_spectrum.sh
 ```
 
 ### 5.2 Holdout (b) — 07's holdout, reused
 
 ```
-H=model-experiments/08-nitin-new2-ds/dataset/nitin_holdout_eval.jsonl
-P=model-experiments/08-nitin-new2-ds/spectrum_probe
+H=08-nitin-new2-ds/dataset/nitin_holdout_eval.jsonl
+P=08-nitin-new2-ds/spectrum_probe
 
 HOLDOUT=$H RDIR=$P/results/sft-spectrum-holdoutB $P/eval_sft_spectrum.sh
 ```
