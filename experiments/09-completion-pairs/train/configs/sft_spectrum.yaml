@@ -1,0 +1,34 @@
+# 09: 08's sft_spectrum.yaml with data/adapter_path -> 09 and a short continuation
+# schedule (iters 3000, lr 1e-5 cosine, warmup 300, save every 500, eval every 250). Training
+# starts FROM 08's adapter (run_sft_spectrum.sh passes --resume-adapter-file
+# $INIT_ADAPTER on a fresh start); everything else is unchanged from 08.
+# run_sft_spectrum.sh overrides data/adapter_path with --data/--adapter-path
+# derived from the experiment it sits in. model: is repo-root-relative (runners cd there).
+# num_layers stays 16 -- the COUNT is unchanged; only membership changes, and
+# spectrum_lora_layers.jac cross-checks this value against the length of
+# <exp>/train/spectrum/spectrum_layers.json (spectrum-plan.md §6.1).
+model: "models/qwen-q4"
+train: true
+data: "experiments/09-completion-pairs/dataset/sft"
+fine_tune_type: lora
+num_layers: 16
+lora_parameters:
+  rank: 16
+  scale: 2.0
+  dropout: 0.05
+batch_size: 1
+iters: 3000
+learning_rate: 1.0e-5
+lr_schedule:
+  name: cosine_decay
+  warmup: 300
+  arguments: [1.0e-5, 3000, 1.0e-6]
+max_seq_length: 3072
+adapter_path: "experiments/09-completion-pairs/adapter"
+save_every: 500
+steps_per_eval: 250
+steps_per_report: 50
+val_batches: 8
+seed: 42
+mask_prompt: true
+grad_checkpoint: true
