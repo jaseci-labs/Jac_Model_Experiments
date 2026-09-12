@@ -13,6 +13,10 @@ HOLDOUT="${HOLDOUT:-$EXP/dataset/holdout_a_shared855.jsonl}"
 METRICS="$RDIR/metrics_functional.jsonl"
 SUBSET="${SUBSET:-100}"
 
+# Fail before truncating $METRICS or spending a full base-model eval on a run
+# whose final step can only crash (no stock adapter trained yet).
+[ -f "$ADAPTER/adapters.safetensors" ] || { echo "MISSING: $ADAPTER/adapters.safetensors (run train/stock/run_sft.sh first)"; exit 1; }
+
 mkdir -p "$RDIR/images"
 : > "$METRICS"
 

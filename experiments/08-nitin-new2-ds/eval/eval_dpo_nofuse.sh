@@ -17,6 +17,7 @@ RDIR="${RDIR:-$EXP/stock-dpo/results}"
 # skips the DPO-best cell entirely via the BEST_STEP != FINAL_STEP test below.
 TRAIN_RDIR="${TRAIN_RDIR:-$EXP/stock-dpo/results}"
 METRICS="$RDIR/metrics_functional.jsonl"
+[ -f "$DPO_ADAPTER/adapters.safetensors" ] || { echo "MISSING: $DPO_ADAPTER/adapters.safetensors (run train/stock/run_dpo_nofuse.sh first)"; exit 1; }
 mkdir -p "$RDIR"
 
 FINAL_STEP="$(cat "$TRAIN_RDIR/.dpo_progress_steps" 2>/dev/null || echo 250)"
