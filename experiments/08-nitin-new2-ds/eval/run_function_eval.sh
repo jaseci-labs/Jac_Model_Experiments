@@ -64,14 +64,13 @@ o = json.load(open(sys.argv[1]))["overall"]
 print("  jac", sys.argv[2], {k: o.get(k) for k in ("samples", "task_success_rate", "check_rate", "behavior_test_rate", "status_counts", "complete")})
 PY
 }
-grade() {  # $1 = stage dir
-  run_grader "$JAC" "$1/samples.jsonl" "$1"
+grade() {  # $1 = stage dir; CROSS_ONLY=1 re-runs just the 0.36.1 cross-check
+  [ -n "${CROSS_ONLY:-}" ] || run_grader "$JAC" "$1/samples.jsonl" "$1"
   [ -n "$CROSS_JAC" ] || return 0
   .venv/bin/python - "$PRIV" "$1/samples.jsonl" > "$1/samples_subset.jsonl" <<'PY'
-import json, sys   # every 20th task of the private file, selected by id so all stages share the subset
-# ponytail: the file alternates completion/translation per source, so this subset is completion-only;
-# use i % 40 in (0, 1) for both variants if translation needs cross-checking
-ids = {json.loads(l)["id"] for i, l in enumerate(open(sys.argv[1])) if i % 20 == 0}
+import json, sys   # every 20th source function, both its task variants (the file alternates
+# completion/translation per source): 25 sources x 2 = 50 tasks, selected by id so all stages share it
+ids = {json.loads(l)["id"] for i, l in enumerate(open(sys.argv[1])) if i % 40 in (0, 1)}
 sys.stdout.writelines(l for l in open(sys.argv[2]) if json.loads(l)["problem_id"] in ids)
 PY
   PYTEST_XDIST_AUTO_NUM_WORKERS=2 WORKERS=4 run_grader "$CROSS_JAC" "$1/samples_subset.jsonl" "$1/jac-0.36.1-subset" 900

@@ -54,6 +54,9 @@ res = {s: r for s, r in res.items() if r}
 cross = {s: load(OUT / s / "jac-0.36.1-subset" / "results.jsonl") for s in res}
 ref = res.get("reference")
 valid = {p for p, r in ref.items() if r.get("task_success")} if ref else set()
+_rt = load(OUT / "reference" / "tests.jsonl")
+if _rt:  # a reference whose tests *errored* on re-run is no valid ceiling either (see strict pass@1)
+    valid = {p for p in valid if _rt[p]["n_passed"] == _rt[p]["n_tests"]}
 print(f"_source: {OUT}; provenance: {(OUT / 'provenance.json').read_text().strip() if (OUT / 'provenance.json').exists() else 'n/a'}_\n")
 
 print("### pass@1 (task_success), jac 0.16.1 grader — rate (k/n) [95% Wilson CI]\n")
@@ -75,6 +78,59 @@ for s, rows in res.items():
     tst = sum(bool(r.get("test_pass")) for r in rows.values())
     sc = ", ".join(f"{k} {v}" for k, v in Counter(r["status"] for r in rows.values()).most_common())
     print(f"| {s} | {fmt(chk, n)} | {fmt(tst, n)} | {sc} |")
+
+print("\n### hidden tests among answers that compile\n")
+print("| stage | compiles | all hidden tests pass, of those | completion | translation |")
+print("|---|---|---|---|---|")
+for s, rows in res.items():
+    comp = [p for p, r in rows.items() if r.get("check_pass")]
+
+    def sub(ids: list) -> str:
+        return fmt(sum(bool(rows[p].get("test_pass")) for p in ids), len(ids))
+    print(f"| {s} | {len(comp)}/{len(rows)} | {sub(comp)} | {sub([p for p in comp if task(p) == 'completion'])} "
+          f"| {sub([p for p in comp if task(p) == 'translation'])} |")
+
+tests = {s: load(OUT / s / "tests.jsonl") for s in res}  # written by rescore_tests.py
+if any(tests.values()):
+    # jaclang 0.16.1 `jac test` exits 0 when a test *errors* (e.g. its __jac_lambda NameError) rather
+    # than fails, and the grader trusts the exit code; strict = grader pass AND every test passed on re-run
+    print("\n### strict pass@1: grader pass AND all hidden tests pass on re-run (0.16.1 exits 0 on test *errors*)\n")
+    print("| stage | grader pass@1 | strict pass@1 | completion | translation | grader passes with errored tests |")
+    print("|---|---|---|---|---|---|")
+    for s, rows in res.items():
+        t = tests.get(s)
+        if not t:
+            continue
+        strict = {p for p, r in rows.items() if r.get("task_success") and t[p]["n_passed"] == t[p]["n_tests"]}
+        k = len(strict)
+        print(f"| {s} | {fmt(*ok(rows, list(rows)))} | {fmt(k, len(rows))} "
+              f"| {fmt(len([p for p in strict if task(p) == 'completion']), len([p for p in rows if task(p) == 'completion']))} "
+              f"| {fmt(len([p for p in strict if task(p) == 'translation']), len([p for p in rows if task(p) == 'translation']))} "
+              f"| {ok(rows, list(rows))[0] - k} |")
+
+    print("\n### per test case (partial credit): share of hidden `test` blocks passed\n")
+    print("| stage | all test cases | completion | translation | mean per-task share | among answers that compile |")
+    print("|---|---|---|---|---|---|")
+
+    def tc(rows: list) -> str:
+        k, n = sum(r["n_passed"] for r in rows), sum(r["n_tests"] for r in rows)
+        return f"{100 * k / n:.1f}% ({k}/{n})" if n else "n/a"
+    for s, t in tests.items():
+        if not t:
+            continue
+        rows = list(t.values())
+        macro = sum(r["n_passed"] / r["n_tests"] for r in rows if r["n_tests"]) / len(rows)
+        print(f"| {s} | {tc(rows)} | {tc([r for r in rows if r['task'] == 'completion'])} "
+              f"| {tc([r for r in rows if r['task'] == 'translation'])} | {100 * macro:.1f}% "
+              f"| {tc([r for r in rows if r['check_pass']])} |")
+
+    print("\n### first compile error per failing answer (full `jac check` re-run)\n")
+    for s, t in tests.items():
+        if not t:
+            continue
+        errs = Counter(re.sub(r"return type .* but", "return type T but", re.sub(r"'[^']{2,}'", "'x'", r["first_error"]))[:80]
+                       for r in t.values() if "first_error" in r)
+        print(f"- **{s}** ({sum(errs.values())} answers): " + "; ".join(f"`{e}` x{v}" for e, v in errs.most_common(6)))
 
 if "base" in res and "adapter" in res:
     print("\n### base vs 08 adapter, paired on the same tasks (exact McNemar)\n")
@@ -112,7 +168,7 @@ if models:
               f"| {fmt(sum(bool(re.search(r'\bfunc \w+', t)) for t in tr), len(tr))} |")
 
 if any(cross.values()):
-    print("\n### toolchain cross-check: same samples graded under jac 0.36.1 (every 20th task)\n")
+    print("\n### toolchain cross-check: same samples graded under jac 0.36.1 (every 20th source, both task types)\n")
     print("| stage | n | success, 0.16.1 | success, 0.36.1 | same verdict | 0.36.1 status counts |")
     print("|---|---|---|---|---|---|")
     for s, c in cross.items():
@@ -129,10 +185,12 @@ if ref:
     for st, v in Counter(r["status"] for r in bad).most_common():
         print(f"- {st}: {v}")
     errs = Counter()
+    full = tests.get("reference") or {}
     for r in bad:
-        text = str(r.get("error", ""))  # the grader keeps only ~600 chars, often all warnings
-        m = re.search(r"error\[(E\d+)\]: ([^\n]*)", text)
-        errs[f"{m.group(1)}: {re.sub(r'return type .* but', 'return type T but', re.sub(r"'[^']*'", "'x'", m.group(2)))[:70]}" if m
+        # prefer rescore_tests.py's full `jac check` error; the grader keeps only ~600 chars, often all warnings
+        text = full.get(r["problem_id"], {}).get("first_error") or str(r.get("error", ""))
+        m = re.search(r"(E\d+)\]?: ([^\n]*)", text)
+        errs[f"{m.group(1)}: {re.sub(r'return type .* but', 'return type T but', re.sub(r"'[^']{2,}'", "'x'", m.group(2)))[:70]}" if m
              else "AssertionError (hidden test)" if "AssertionError" in text
              else "error text cut off by the grader"] += 1
     for e, v in errs.most_common(6):
