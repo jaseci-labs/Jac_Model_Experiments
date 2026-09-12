@@ -1,0 +1,157 @@
+{
+  "configuration": {
+    "jac_tmp": null,
+    "k": [
+      1
+    ],
+    "problems_sha256": "5170c9c08e0b973baf07f1400928eea322d377fad6786c09ce882cda5c3c5576",
+    "samples_sha256": "5d18d9cb0025b5d1f4f80f32cde9e22a6f981e1a7c81f22a597eec61d45cc694",
+    "timeout_s": 120.0,
+    "workers": 8
+  },
+  "created_at": "2026-09-12T05:16:04.098072+00:00",
+  "elapsed_s": 178.584,
+  "jac_version": "_\n  (_) __ _  ___     Jac Language\n  | |/ _` |/ __|\n  | | (_| | (__     Version:  0.16.1\n _/ |\\__,_|\\___|    Python 3.14.5\n|__/                Platform: macOS arm64\n\n\ud83d\udcda Documentation: https://docs.jaseci.org\n\ud83d\udcac Community:     https://discord.gg/6j3QNdtcN6\n\ud83d\udc1b Issues:        https://github.com/Jaseci-Labs/jaseci/issues\n\n\ud83d\udd0c Plugins Detected:\n   byllm==0.6.19\n   jac-client==0.3.22\n   jac-desktop==0.2.0",
+  "notes": [
+    "task_success requires hidden tests and any declared feature contract",
+    "compile-only samples do not contribute to task_success or pass@k",
+    "feature presence and reference similarity are diagnostics, not idiomaticity scores"
+  ],
+  "overall": {
+    "behavior_test_rate": 0.647,
+    "check_rate": 0.844,
+    "compile_only_samples": 0,
+    "complete": true,
+    "contract_rate": 1.0,
+    "feature_presence_samples": {
+      "obj": 3,
+      "report": 2,
+      "typed_def": 996,
+      "typed_has": 5
+    },
+    "infra_errors": 0,
+    "pass_at_k": {
+      "1": {
+        "eligible_problems": 1000,
+        "value": 0.647
+      }
+    },
+    "problems": 1000,
+    "samples": 1000,
+    "static_diagnostics": {
+      "feature_rates": {
+        "ability_entry": 0.0,
+        "disengage": 0.0,
+        "edge": 0.0,
+        "graph_connect": 0.0,
+        "graph_reference": 0.0,
+        "no_dynamic_types": 0.926,
+        "no_import_py": 0.999,
+        "no_python_syntax": 1.0,
+        "no_test_blocks": 1.0,
+        "node": 0.0,
+        "obj": 0.003,
+        "report": 0.002,
+        "spawn": 0.0,
+        "typed_def": 0.996,
+        "typed_has": 0.005,
+        "visit": 0.0,
+        "walker": 0.0
+      },
+      "note": "reported independently; no aggregate idiomaticity score",
+      "readability_diagnostics": {
+        "mean_line_length": 32.950354,
+        "mean_long_lines_over_100": 0.189,
+        "mean_max_brace_depth": 2.112,
+        "mean_source_lines": 12.465
+      },
+      "transpiler_residue": {
+        "mean_range_len_loops": 0.042,
+        "no_embedded_test_blocks_rate": 1.0,
+        "no_import_py_rate": 0.999,
+        "no_python_syntax_rate": 1.0
+      },
+      "typing": {
+        "mean_dynamic_type_mentions": 0.167,
+        "no_dynamic_types_rate": 0.926,
+        "typed_def_rate": 0.996
+      }
+    },
+    "status_counts": {
+      "check_fail": 156,
+      "pass": 647,
+      "test_fail": 197
+    },
+    "task_success_rate": 0.647
+  },
+  "schema_version": 1,
+  "tracks": {
+    "function": {
+      "behavior_test_rate": 0.647,
+      "check_rate": 0.844,
+      "compile_only_samples": 0,
+      "complete": true,
+      "contract_rate": 1.0,
+      "feature_presence_samples": {
+        "obj": 3,
+        "report": 2,
+        "typed_def": 996,
+        "typed_has": 5
+      },
+      "infra_errors": 0,
+      "pass_at_k": {
+        "1": {
+          "eligible_problems": 1000,
+          "value": 0.647
+        }
+      },
+      "problems": 1000,
+      "samples": 1000,
+      "static_diagnostics": {
+        "feature_rates": {
+          "ability_entry": 0.0,
+          "disengage": 0.0,
+          "edge": 0.0,
+          "graph_connect": 0.0,
+          "graph_reference": 0.0,
+          "no_dynamic_types": 0.926,
+          "no_import_py": 0.999,
+          "no_python_syntax": 1.0,
+          "no_test_blocks": 1.0,
+          "node": 0.0,
+          "obj": 0.003,
+          "report": 0.002,
+          "spawn": 0.0,
+          "typed_def": 0.996,
+          "typed_has": 0.005,
+          "visit": 0.0,
+          "walker": 0.0
+        },
+        "note": "reported independently; no aggregate idiomaticity score",
+        "readability_diagnostics": {
+          "mean_line_length": 32.950354,
+          "mean_long_lines_over_100": 0.189,
+          "mean_max_brace_depth": 2.112,
+          "mean_source_lines": 12.465
+        },
+        "transpiler_residue": {
+          "mean_range_len_loops": 0.042,
+          "no_embedded_test_blocks_rate": 1.0,
+          "no_import_py_rate": 0.999,
+          "no_python_syntax_rate": 1.0
+        },
+        "typing": {
+          "mean_dynamic_type_mentions": 0.167,
+          "no_dynamic_types_rate": 0.926,
+          "typed_def_rate": 0.996
+        }
+      },
+      "status_counts": {
+        "check_fail": 156,
+        "pass": 647,
+        "test_fail": 197
+      },
+      "task_success_rate": 0.647
+    }
+  }
+}

@@ -23,17 +23,24 @@ byte-identical (`cmp`) to its source, and `results/` the eval output that
 produced its score. Reports of 01 to 05 that are not an experiment's final
 report stay in `../docs/history/`.
 
-All four are Spectrum-layer LoRA adapters (rank 16, scale 2.0, 16 SNR-selected
+All five are Spectrum-layer LoRA adapters (rank 16, scale 2.0, 16 SNR-selected
 blocks out of 48 — the layer list is inside each `adapter_config.json`) on the
 base **Qwen3-Coder-30B-A3B 4-bit** at `models/qwen-q4`.
-No fused models — adapter only.
+No fused models — adapter only. 09 was trained in place (continued from 08's
+adapter) and keeps its own `scaffold/`, `train/`, `eval/` and `dataset/` like 08.
 
-| dir | what | holdout (a) shared 855 | holdout (b) Nitin 855 | original training path |
-|---|---|---|---|---|
-| `04-cpt-sft/` | fresh-arm Spectrum SFT-final (jacgen2 data, no CPT) — beat its DPO-best 634 and DPO-final 622 | **74.7% (639/855)** | — | `04-cpt-sft/sft_fresh_probe/adapters/sft-on-fresh-spectrum/` |
-| `06-nitin-ds-sft/` | Spectrum SFT-final on Nitin ds v1 (ties its DPO-final 636 on (a); SFT wins on (b) 837 vs 825) | **74.4% (636/855)** | 97.9% (837/855) | `06-nitin-ds-sft/spectrum_probe/adapters/sft-on-nitin-spectrum/` |
-| `07-nitin-ds-new-sft/` | Spectrum DPO-best (step 120 of 250; `.best_step`=120, cmp-identical to `snapshots/step_0120`) on Nitin ds v2 | **73.0% (624/855)** | 97.9% (837/855) | `07-nitin-ds-new-sft/spectrum_probe/adapters/dpo-on-sft-nitin-spectrum-best/` |
-| `08-nitin-new2-ds/` | Spectrum SFT-final on the 7-source merge | 70.5% (603/855) | 37.7% (322/855), 07's holdout | `08-nitin-new2-ds/spectrum_probe/adapters/sft-on-nitin-spectrum/` (pre-flatten) |
+| dir | what | holdout (a) shared 855 | holdout (b) Nitin 855 | function eval pass@1, hidden tests (strict) | original training path |
+|---|---|---|---|---|---|
+| `04-cpt-sft/` | fresh-arm Spectrum SFT-final (jacgen2 data, no CPT) — beat its DPO-best 634 and DPO-final 622 | **74.7% (639/855)** | — | — | `04-cpt-sft/sft_fresh_probe/adapters/sft-on-fresh-spectrum/` |
+| `06-nitin-ds-sft/` | Spectrum SFT-final on Nitin ds v1 (ties its DPO-final 636 on (a); SFT wins on (b) 837 vs 825) | **74.4% (636/855)** | 97.9% (837/855) | — | `06-nitin-ds-sft/spectrum_probe/adapters/sft-on-nitin-spectrum/` |
+| `07-nitin-ds-new-sft/` | Spectrum DPO-best (step 120 of 250; `.best_step`=120, cmp-identical to `snapshots/step_0120`) on Nitin ds v2 | **73.0% (624/855)** | 97.9% (837/855) | — | `07-nitin-ds-new-sft/spectrum_probe/adapters/dpo-on-sft-nitin-spectrum-best/` |
+| `08-nitin-new2-ds/` | Spectrum SFT-final on the 7-source merge | 70.5% (603/855) | 37.7% (322/855), 07's holdout | 57.0% (54.9%) — completion 30.8%, translation 83.2% | `08-nitin-new2-ds/spectrum_probe/adapters/sft-on-nitin-spectrum/` (pre-flatten) |
+| `09-completion-pairs/` | 08 continued 3,000 iters on "finish this partial function" pairs + 08 replay | 71.1% (608/855) | — | **64.7% (62.0%)** — completion **47.6%**, translation 81.8% | `09-completion-pairs/adapter/` (trained here) |
+
+Function eval = jac-data-gen `evals/function/v1` test split (1,000 tasks with
+hidden `test` blocks, graded by its own `eval_jac.py`); see
+[08's function-eval report](08-nitin-new2-ds/function-eval-report.md) and
+[09's report](09-completion-pairs/report.md).
 
 Holdout (a) = `experiments/08-nitin-new2-ds/dataset/holdout_a_shared855.jsonl` (1428 rows, 855
 code-graded). Holdout (b) is each experiment's own py2jac holdout, and they are

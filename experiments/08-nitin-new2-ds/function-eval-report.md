@@ -169,7 +169,9 @@ so the gap is not Jac knowledge. It is the task shape:
 08 was trained on whole-function answers only; "continue this partial function
 from an arbitrary cut" never appeared in its data. Experiment 09
 (`experiments/09-completion-pairs/`) continues 08 on such pairs cut from 08's own
-SFT functions.
+SFT functions. **Result:** completion 30.8% → 47.6% (paired p = 2e-14), unclosed
+braces 122 → 16, fences and repeated signatures 99 → 0, translation 83.2% →
+81.8% (p = 0.23, within noise); see [09's report](../09-completion-pairs/report.md).
 
 ### Toolchain cross-check (jac 0.36.1, the eval's own toolchain)
 
@@ -250,7 +252,7 @@ source ids appear anywhere in 08's `sft_train.jsonl` or `candidate_pool.jsonl`.
   exact McNemar test.
 
 Rerun: `experiments/08-nitin-new2-ds/eval/run_function_eval.sh` (stages
-`reference base adapter`; needs the sibling `../jac-data-gen` clone and
+`reference base adapter`; needs the `jac-data-gen` clone next to this repo and
 `.jac-grader/jac-0.36.1`, both described in the script header; takes
 `/tmp/jac-gpu.lock` around model loads; `CROSS_ONLY=1` re-runs just the 0.36.1
 cross-check), then `.venv/bin/python experiments/08-nitin-new2-ds/eval/rescore_tests.py experiments/08-nitin-new2-ds/results/function_v1_test`

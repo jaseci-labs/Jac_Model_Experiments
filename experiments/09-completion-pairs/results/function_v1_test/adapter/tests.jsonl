@@ -1,0 +1,1000 @@
+{"problem_id": "fn-complete-337455", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 69, "n_passed": 69}
+{"problem_id": "fn-translate-337455", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 69, "n_passed": 69}
+{"problem_id": "fn-complete-309387", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 11, "n_passed": 11}
+{"problem_id": "fn-translate-309387", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 11, "n_passed": 0, "first_error": "E1002: Cannot return float, expected list[float]"}
+{"problem_id": "fn-complete-391504", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 15, "n_passed": 0, "first_error": "E1002: Cannot return <Unknown>, expected str | list[str]"}
+{"problem_id": "fn-translate-391504", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 15, "n_passed": 15}
+{"problem_id": "fn-complete-337979", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 13, "n_passed": 13}
+{"problem_id": "fn-translate-337979", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 13, "n_passed": 13}
+{"problem_id": "fn-complete-34317", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 36, "n_passed": 36}
+{"problem_id": "fn-translate-34317", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 36, "n_passed": 36}
+{"problem_id": "fn-complete-106066", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 24, "n_passed": 5}
+{"problem_id": "fn-translate-106066", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 24, "n_passed": 0, "first_error": "E1002: Cannot return object, expected str | NoneType"}
+{"problem_id": "fn-complete-415115", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 7, "n_passed": 7}
+{"problem_id": "fn-translate-415115", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 7, "n_passed": 7}
+{"problem_id": "fn-complete-217175", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 71, "n_passed": 71}
+{"problem_id": "fn-translate-217175", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 71, "n_passed": 71}
+{"problem_id": "fn-complete-105028", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 32, "n_passed": 32}
+{"problem_id": "fn-translate-105028", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 32, "n_passed": 32}
+{"problem_id": "fn-complete-119449", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 24, "n_passed": 24}
+{"problem_id": "fn-translate-119449", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 24, "n_passed": 24}
+{"problem_id": "fn-complete-12243", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 29, "n_passed": 29}
+{"problem_id": "fn-translate-12243", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 29, "n_passed": 0, "first_error": "E1099: Cannot access attribute \"lower\" for type \"str | int | float | bool\"; attribute is missing from int, float, bool"}
+{"problem_id": "fn-complete-198674", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 21, "n_passed": 10}
+{"problem_id": "fn-translate-198674", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 21, "n_passed": 21}
+{"problem_id": "fn-complete-222432", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 16, "n_passed": 2}
+{"problem_id": "fn-translate-222432", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 16, "n_passed": 16}
+{"problem_id": "fn-complete-186659", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 31, "n_passed": 0}
+{"problem_id": "fn-translate-186659", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 31, "n_passed": 0, "first_error": "E1001: Cannot assign LiteralString to list[LiteralString]"}
+{"problem_id": "fn-complete-272431", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 49, "n_passed": 49}
+{"problem_id": "fn-translate-272431", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 49, "n_passed": 0, "first_error": "E1001: Cannot assign float to str"}
+{"problem_id": "fn-complete-114683", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 42, "n_passed": 42}
+{"problem_id": "fn-translate-114683", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 42, "n_passed": 0, "first_error": "E1001: Cannot assign object | NoneType to dict[str, object] | NoneType"}
+{"problem_id": "fn-complete-124262", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 24, "n_passed": 0, "first_error": "E1053: Cannot assign object to parameter 'element' of type str"}
+{"problem_id": "fn-translate-124262", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 24, "n_passed": 0, "first_error": "E1002: Cannot return dict[<any>, <any>], expected dict[str, str]"}
+{"problem_id": "fn-complete-401798", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 21, "n_passed": 2}
+{"problem_id": "fn-translate-401798", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 21, "n_passed": 0, "first_error": "E1001: Cannot assign LiteralString to list[LiteralString]"}
+{"problem_id": "fn-complete-163482", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 5, "n_passed": 5}
+{"problem_id": "fn-translate-163482", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 5, "n_passed": 5}
+{"problem_id": "fn-complete-43611", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 5, "n_passed": 3}
+{"problem_id": "fn-translate-43611", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 5, "n_passed": 5}
+{"problem_id": "fn-complete-7177", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 40, "n_passed": 2}
+{"problem_id": "fn-translate-7177", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 40, "n_passed": 40}
+{"problem_id": "fn-complete-444946", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 104, "n_passed": 81}
+{"problem_id": "fn-translate-444946", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 104, "n_passed": 104}
+{"problem_id": "fn-complete-152164", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 25, "n_passed": 25}
+{"problem_id": "fn-translate-152164", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 25, "n_passed": 25}
+{"problem_id": "fn-complete-140833", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 47, "n_passed": 47}
+{"problem_id": "fn-translate-140833", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 47, "n_passed": 0, "first_error": "E1020: Cannot unpack non-iterable _T_co"}
+{"problem_id": "fn-complete-249771", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 9, "n_passed": 9}
+{"problem_id": "fn-translate-249771", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 9, "n_passed": 9}
+{"problem_id": "fn-complete-70761", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 26, "n_passed": 0}
+{"problem_id": "fn-translate-70761", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 26, "n_passed": 26}
+{"problem_id": "fn-complete-286797", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 67, "n_passed": 43}
+{"problem_id": "fn-translate-286797", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 67, "n_passed": 67}
+{"problem_id": "fn-complete-256131", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 13, "n_passed": 13}
+{"problem_id": "fn-translate-256131", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 13, "n_passed": 13}
+{"problem_id": "fn-complete-22206", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 9, "n_passed": 9}
+{"problem_id": "fn-translate-22206", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 9, "n_passed": 9}
+{"problem_id": "fn-complete-337265", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 70, "n_passed": 70}
+{"problem_id": "fn-translate-337265", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 70, "n_passed": 70}
+{"problem_id": "fn-complete-127996", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 40, "n_passed": 17}
+{"problem_id": "fn-translate-127996", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 40, "n_passed": 40}
+{"problem_id": "fn-complete-150997", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 19, "n_passed": 7}
+{"problem_id": "fn-translate-150997", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 19, "n_passed": 19}
+{"problem_id": "fn-complete-233781", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 37, "n_passed": 37}
+{"problem_id": "fn-translate-233781", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 37, "n_passed": 37}
+{"problem_id": "fn-complete-154224", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 8, "n_passed": 0}
+{"problem_id": "fn-translate-154224", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 8, "n_passed": 0, "first_error": "E0013: 'obj' is a keyword and cannot be used as a parameter name (prefix with backtick to escape: `obj)"}
+{"problem_id": "fn-complete-84300", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 72, "n_passed": 72}
+{"problem_id": "fn-translate-84300", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 72, "n_passed": 72}
+{"problem_id": "fn-complete-221079", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 38, "n_passed": 38}
+{"problem_id": "fn-translate-221079", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 38, "n_passed": 38}
+{"problem_id": "fn-complete-446297", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 35, "n_passed": 35}
+{"problem_id": "fn-translate-446297", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 35, "n_passed": 35}
+{"problem_id": "fn-complete-359796", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 19, "n_passed": 0, "first_error": "E1002: Cannot return dict[str, str | bool | int | float | NoneType], expected bool | str | int | float | NoneType"}
+{"problem_id": "fn-translate-359796", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 19, "n_passed": 0, "first_error": "E1030: Type \"object\" has no attribute \"get\""}
+{"problem_id": "fn-complete-139131", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 12, "n_passed": 0}
+{"problem_id": "fn-translate-139131", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 12, "n_passed": 12}
+{"problem_id": "fn-complete-278695", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 18, "n_passed": 16}
+{"problem_id": "fn-translate-278695", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 18, "n_passed": 18}
+{"problem_id": "fn-complete-302404", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 20, "n_passed": 13}
+{"problem_id": "fn-translate-302404", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 20, "n_passed": 20}
+{"problem_id": "fn-complete-158990", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 61, "n_passed": 33}
+{"problem_id": "fn-translate-158990", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 61, "n_passed": 0, "first_error": "E0013: 'obj' is a keyword and cannot be used as a parameter name (prefix with backtick to escape: `obj)"}
+{"problem_id": "fn-complete-336867", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 34, "n_passed": 11}
+{"problem_id": "fn-translate-336867", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 34, "n_passed": 34}
+{"problem_id": "fn-complete-83358", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 11, "n_passed": 1}
+{"problem_id": "fn-translate-83358", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 11, "n_passed": 11}
+{"problem_id": "fn-complete-137744", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 27, "n_passed": 0, "first_error": "E0100: Unterminated string literal"}
+{"problem_id": "fn-translate-137744", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 27, "n_passed": 27}
+{"problem_id": "fn-complete-2487", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 44, "n_passed": 43}
+{"problem_id": "fn-translate-2487", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 44, "n_passed": 44}
+{"problem_id": "fn-complete-279217", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 32, "n_passed": 32}
+{"problem_id": "fn-translate-279217", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 32, "n_passed": 32}
+{"problem_id": "fn-complete-186941", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 62, "n_passed": 62}
+{"problem_id": "fn-translate-186941", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 62, "n_passed": 62}
+{"problem_id": "fn-complete-107033", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 76, "n_passed": 76}
+{"problem_id": "fn-translate-107033", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 76, "n_passed": 76}
+{"problem_id": "fn-complete-343063", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 29, "n_passed": 0}
+{"problem_id": "fn-translate-343063", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 29, "n_passed": 0, "first_error": "E1010: Operator \"__sub__\" not supported for type \"_T\""}
+{"problem_id": "fn-complete-176976", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 20, "n_passed": 15}
+{"problem_id": "fn-translate-176976", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 20, "n_passed": 20}
+{"problem_id": "fn-complete-2242", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 38, "n_passed": 38}
+{"problem_id": "fn-translate-2242", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 38, "n_passed": 0, "first_error": "E0013: 'obj' is a keyword and cannot be used as a parameter name (prefix with backtick to escape: `obj)"}
+{"problem_id": "fn-complete-438629", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 17, "n_passed": 1}
+{"problem_id": "fn-translate-438629", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 17, "n_passed": 0, "first_error": "E1001: Cannot assign dict[str, str | list[str]] to dict[str, str]"}
+{"problem_id": "fn-complete-51652", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 34, "n_passed": 7}
+{"problem_id": "fn-translate-51652", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 34, "n_passed": 0, "first_error": "E1030: Type \"DBDocument\" has no attribute \"pop\""}
+{"problem_id": "fn-complete-374604", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 66, "n_passed": 0, "first_error": "E0100: Unterminated string literal"}
+{"problem_id": "fn-translate-374604", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 66, "n_passed": 66}
+{"problem_id": "fn-complete-241576", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 20, "n_passed": 10}
+{"problem_id": "fn-translate-241576", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 20, "n_passed": 0, "first_error": "E1010: Operator \"__rmul__\" not supported for type \"_T\""}
+{"problem_id": "fn-complete-191049", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 21, "n_passed": 0}
+{"problem_id": "fn-translate-191049", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 21, "n_passed": 21}
+{"problem_id": "fn-complete-390954", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 24, "n_passed": 7}
+{"problem_id": "fn-translate-390954", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 24, "n_passed": 24}
+{"problem_id": "fn-complete-284429", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 6, "n_passed": 6}
+{"problem_id": "fn-translate-284429", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 6, "n_passed": 6}
+{"problem_id": "fn-complete-199000", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 8, "n_passed": 8}
+{"problem_id": "fn-translate-199000", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 8, "n_passed": 8}
+{"problem_id": "fn-complete-203912", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 27, "n_passed": 27}
+{"problem_id": "fn-translate-203912", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 27, "n_passed": 27}
+{"problem_id": "fn-complete-181425", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 46, "n_passed": 13}
+{"problem_id": "fn-translate-181425", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 46, "n_passed": 46}
+{"problem_id": "fn-complete-427235", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 106, "n_passed": 106}
+{"problem_id": "fn-translate-427235", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 106, "n_passed": 106}
+{"problem_id": "fn-complete-128146", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 32, "n_passed": 3}
+{"problem_id": "fn-translate-128146", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 32, "n_passed": 32}
+{"problem_id": "fn-complete-375049", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 42, "n_passed": 0, "first_error": "E1010: Operator \"__add__\" not supported for type \"_T\""}
+{"problem_id": "fn-translate-375049", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 42, "n_passed": 42}
+{"problem_id": "fn-complete-442127", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 7, "n_passed": 3}
+{"problem_id": "fn-translate-442127", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 7, "n_passed": 7}
+{"problem_id": "fn-complete-377573", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 25, "n_passed": 25}
+{"problem_id": "fn-translate-377573", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 25, "n_passed": 25}
+{"problem_id": "fn-complete-59018", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 23, "n_passed": 16}
+{"problem_id": "fn-translate-59018", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 23, "n_passed": 23}
+{"problem_id": "fn-complete-318111", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 20, "n_passed": 3}
+{"problem_id": "fn-translate-318111", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 20, "n_passed": 20}
+{"problem_id": "fn-complete-70365", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 10, "n_passed": 6}
+{"problem_id": "fn-translate-70365", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 10, "n_passed": 0, "first_error": "E1001: Cannot assign str to int"}
+{"problem_id": "fn-complete-235686", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 99, "n_passed": 63}
+{"problem_id": "fn-translate-235686", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 99, "n_passed": 99}
+{"problem_id": "fn-complete-201760", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 5, "n_passed": 0}
+{"problem_id": "fn-translate-201760", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 5, "n_passed": 5}
+{"problem_id": "fn-complete-392130", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 10, "n_passed": 0, "first_error": "E1054: No matching overload found for the function call with the given arguments"}
+{"problem_id": "fn-translate-392130", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 10, "n_passed": 0, "first_error": "E1054: No matching overload found for the function call with the given arguments"}
+{"problem_id": "fn-complete-452337", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 23, "n_passed": 23}
+{"problem_id": "fn-translate-452337", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 23, "n_passed": 23}
+{"problem_id": "fn-complete-14317", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 43, "n_passed": 43}
+{"problem_id": "fn-translate-14317", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 43, "n_passed": 43}
+{"problem_id": "fn-complete-307400", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 9, "n_passed": 0}
+{"problem_id": "fn-translate-307400", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 9, "n_passed": 9}
+{"problem_id": "fn-complete-163350", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 10, "n_passed": 0, "first_error": "E0100: Unterminated string literal"}
+{"problem_id": "fn-translate-163350", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 10, "n_passed": 10}
+{"problem_id": "fn-complete-168076", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 41, "n_passed": 5}
+{"problem_id": "fn-translate-168076", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 41, "n_passed": 41}
+{"problem_id": "fn-complete-40399", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 8, "n_passed": 5}
+{"problem_id": "fn-translate-40399", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 8, "n_passed": 8}
+{"problem_id": "fn-complete-136841", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 9, "n_passed": 2}
+{"problem_id": "fn-translate-136841", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 9, "n_passed": 9}
+{"problem_id": "fn-complete-313241", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 70, "n_passed": 70}
+{"problem_id": "fn-translate-313241", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 70, "n_passed": 70}
+{"problem_id": "fn-complete-443749", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 43, "n_passed": 0, "first_error": "E1055: No matching overload found for method \"__add__\" with the given arguments"}
+{"problem_id": "fn-translate-443749", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 43, "n_passed": 43}
+{"problem_id": "fn-complete-192372", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 15, "n_passed": 15}
+{"problem_id": "fn-translate-192372", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 15, "n_passed": 15}
+{"problem_id": "fn-complete-70951", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 18, "n_passed": 9}
+{"problem_id": "fn-translate-70951", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 18, "n_passed": 18}
+{"problem_id": "fn-complete-264051", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 23, "n_passed": 23}
+{"problem_id": "fn-translate-264051", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 23, "n_passed": 23}
+{"problem_id": "fn-complete-38881", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 5, "n_passed": 5}
+{"problem_id": "fn-translate-38881", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 5, "n_passed": 5}
+{"problem_id": "fn-complete-83162", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 30, "n_passed": 30}
+{"problem_id": "fn-translate-83162", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 30, "n_passed": 30}
+{"problem_id": "fn-complete-138647", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 33, "n_passed": 8}
+{"problem_id": "fn-translate-138647", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 33, "n_passed": 33}
+{"problem_id": "fn-complete-205638", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 11, "n_passed": 1}
+{"problem_id": "fn-translate-205638", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 11, "n_passed": 11}
+{"problem_id": "fn-complete-439127", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 9, "n_passed": 8}
+{"problem_id": "fn-translate-439127", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 9, "n_passed": 0, "first_error": "E1001: Cannot assign float to int"}
+{"problem_id": "fn-complete-431645", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 45, "n_passed": 45}
+{"problem_id": "fn-translate-431645", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 45, "n_passed": 45}
+{"problem_id": "fn-complete-350345", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 7, "n_passed": 0}
+{"problem_id": "fn-translate-350345", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 7, "n_passed": 7}
+{"problem_id": "fn-complete-81532", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 20, "n_passed": 15}
+{"problem_id": "fn-translate-81532", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 20, "n_passed": 0, "first_error": "E0002: Missing ';'"}
+{"problem_id": "fn-complete-349928", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 39, "n_passed": 2}
+{"problem_id": "fn-translate-349928", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 39, "n_passed": 39}
+{"problem_id": "fn-complete-424911", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 25, "n_passed": 1}
+{"problem_id": "fn-translate-424911", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 25, "n_passed": 25}
+{"problem_id": "fn-complete-8806", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 27, "n_passed": 0, "first_error": "E1002: Cannot return float, expected int"}
+{"problem_id": "fn-translate-8806", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 27, "n_passed": 27}
+{"problem_id": "fn-complete-230724", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 23, "n_passed": 23}
+{"problem_id": "fn-translate-230724", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 23, "n_passed": 23}
+{"problem_id": "fn-complete-340737", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 5, "n_passed": 0}
+{"problem_id": "fn-translate-340737", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 5, "n_passed": 5}
+{"problem_id": "fn-complete-226012", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 25, "n_passed": 0}
+{"problem_id": "fn-translate-226012", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 25, "n_passed": 25}
+{"problem_id": "fn-complete-421001", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 23, "n_passed": 23}
+{"problem_id": "fn-translate-421001", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 23, "n_passed": 23}
+{"problem_id": "fn-complete-407550", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 37, "n_passed": 0}
+{"problem_id": "fn-translate-407550", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 37, "n_passed": 0, "first_error": "E1054: No matching overload found for the function call with the given arguments"}
+{"problem_id": "fn-complete-366718", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 45, "n_passed": 0, "first_error": "E1002: Cannot return Any, expected object | NoneType"}
+{"problem_id": "fn-translate-366718", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 45, "n_passed": 0, "first_error": "E1002: Cannot return Any, expected object | NoneType"}
+{"problem_id": "fn-complete-105971", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 61, "n_passed": 53}
+{"problem_id": "fn-translate-105971", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 61, "n_passed": 61}
+{"problem_id": "fn-complete-219363", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 9, "n_passed": 0, "first_error": "E1055: No matching overload found for method \"__mul__\" with the given arguments"}
+{"problem_id": "fn-translate-219363", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 9, "n_passed": 0, "first_error": "E0002: Missing ')'"}
+{"problem_id": "fn-complete-93864", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 75, "n_passed": 75}
+{"problem_id": "fn-translate-93864", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 75, "n_passed": 75}
+{"problem_id": "fn-complete-225204", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 8, "n_passed": 5}
+{"problem_id": "fn-translate-225204", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 8, "n_passed": 8}
+{"problem_id": "fn-complete-223628", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 29, "n_passed": 4}
+{"problem_id": "fn-translate-223628", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 29, "n_passed": 0, "first_error": "E1001: Cannot assign float to int"}
+{"problem_id": "fn-complete-222159", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 50, "n_passed": 0}
+{"problem_id": "fn-translate-222159", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 50, "n_passed": 50}
+{"problem_id": "fn-complete-62906", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 20, "n_passed": 20}
+{"problem_id": "fn-translate-62906", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 20, "n_passed": 20}
+{"problem_id": "fn-complete-402730", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 25, "n_passed": 25}
+{"problem_id": "fn-translate-402730", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 25, "n_passed": 25}
+{"problem_id": "fn-complete-252411", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 55, "n_passed": 0, "first_error": "E1053: Cannot assign <any> to parameter 'to_update' of type dict"}
+{"problem_id": "fn-translate-252411", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 55, "n_passed": 0, "first_error": "E1032: Type is Unknown, cannot access attribute \"abc\""}
+{"problem_id": "fn-complete-394237", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 41, "n_passed": 0, "first_error": "E1055: No matching overload found for method \"__truediv__\" with the given arguments"}
+{"problem_id": "fn-translate-394237", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 41, "n_passed": 41}
+{"problem_id": "fn-complete-144753", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 6, "n_passed": 0, "first_error": "E1054: No matching overload found for the function call with the given arguments"}
+{"problem_id": "fn-translate-144753", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 6, "n_passed": 6}
+{"problem_id": "fn-complete-145516", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 16, "n_passed": 0}
+{"problem_id": "fn-translate-145516", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 16, "n_passed": 16}
+{"problem_id": "fn-complete-255449", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 42, "n_passed": 0, "first_error": "E1053: Cannot assign bool to parameter 'iterable' of type Iterable[object]"}
+{"problem_id": "fn-translate-255449", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 42, "n_passed": 0, "first_error": "E1002: Cannot return Any, expected bool"}
+{"problem_id": "fn-complete-42296", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 9, "n_passed": 9}
+{"problem_id": "fn-translate-42296", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 9, "n_passed": 9}
+{"problem_id": "fn-complete-19065", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 71, "n_passed": 59}
+{"problem_id": "fn-translate-19065", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 71, "n_passed": 71}
+{"problem_id": "fn-complete-387938", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 14, "n_passed": 14}
+{"problem_id": "fn-translate-387938", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 14, "n_passed": 14}
+{"problem_id": "fn-complete-111379", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 51, "n_passed": 51}
+{"problem_id": "fn-translate-111379", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 51, "n_passed": 51}
+{"problem_id": "fn-complete-230824", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 9, "n_passed": 7}
+{"problem_id": "fn-translate-230824", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 9, "n_passed": 9}
+{"problem_id": "fn-complete-292572", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 91, "n_passed": 0, "first_error": "E0001: Expected 'in', got ','"}
+{"problem_id": "fn-translate-292572", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 91, "n_passed": 91}
+{"problem_id": "fn-complete-24869", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 23, "n_passed": 23}
+{"problem_id": "fn-translate-24869", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 23, "n_passed": 23}
+{"problem_id": "fn-complete-269504", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 40, "n_passed": 0}
+{"problem_id": "fn-translate-269504", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 40, "n_passed": 0, "first_error": "E1053: Cannot assign int to parameter 'source' of type list[int]"}
+{"problem_id": "fn-complete-180850", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 18, "n_passed": 18}
+{"problem_id": "fn-translate-180850", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 18, "n_passed": 18}
+{"problem_id": "fn-complete-245072", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 9, "n_passed": 9}
+{"problem_id": "fn-translate-245072", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 9, "n_passed": 9}
+{"problem_id": "fn-complete-82323", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 77, "n_passed": 51}
+{"problem_id": "fn-translate-82323", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 77, "n_passed": 77}
+{"problem_id": "fn-complete-163611", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 30, "n_passed": 0, "first_error": "E1032: Type is Unknown, cannot access attribute \"path\""}
+{"problem_id": "fn-translate-163611", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 30, "n_passed": 0, "first_error": "E1032: Type is Unknown, cannot access attribute \"path\""}
+{"problem_id": "fn-complete-330033", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 12, "n_passed": 4}
+{"problem_id": "fn-translate-330033", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 12, "n_passed": 12}
+{"problem_id": "fn-complete-378353", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 32, "n_passed": 32}
+{"problem_id": "fn-translate-378353", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 32, "n_passed": 32}
+{"problem_id": "fn-complete-231713", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 7, "n_passed": 7}
+{"problem_id": "fn-translate-231713", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 7, "n_passed": 7}
+{"problem_id": "fn-complete-400038", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 23, "n_passed": 23}
+{"problem_id": "fn-translate-400038", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 23, "n_passed": 23}
+{"problem_id": "fn-complete-118683", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 33, "n_passed": 33}
+{"problem_id": "fn-translate-118683", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 33, "n_passed": 33}
+{"problem_id": "fn-complete-393953", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 8, "n_passed": 0, "first_error": "E1001: Cannot assign str to LiteralString"}
+{"problem_id": "fn-translate-393953", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 8, "n_passed": 8}
+{"problem_id": "fn-complete-134351", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 96, "n_passed": 0, "first_error": "E1099: Cannot access attribute \"encode\" for type \"str | int | bytes\"; attribute is missing from int, bytes"}
+{"problem_id": "fn-translate-134351", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 96, "n_passed": 96}
+{"problem_id": "fn-complete-382732", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 23, "n_passed": 23}
+{"problem_id": "fn-translate-382732", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 23, "n_passed": 23}
+{"problem_id": "fn-complete-72836", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 25, "n_passed": 25}
+{"problem_id": "fn-translate-72836", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 25, "n_passed": 25}
+{"problem_id": "fn-complete-217876", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 35, "n_passed": 14}
+{"problem_id": "fn-translate-217876", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 35, "n_passed": 35}
+{"problem_id": "fn-complete-141541", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 9, "n_passed": 8}
+{"problem_id": "fn-translate-141541", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 9, "n_passed": 9}
+{"problem_id": "fn-complete-430742", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 12, "n_passed": 3}
+{"problem_id": "fn-translate-430742", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 12, "n_passed": 12}
+{"problem_id": "fn-complete-442773", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 31, "n_passed": 3}
+{"problem_id": "fn-translate-442773", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 31, "n_passed": 0, "first_error": "E1099: Cannot access attribute \"values\" for type \"list[str] | dict[str, str]\"; attribute is missing from list[str]"}
+{"problem_id": "fn-complete-88014", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 41, "n_passed": 22}
+{"problem_id": "fn-translate-88014", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 41, "n_passed": 41}
+{"problem_id": "fn-complete-273370", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 13, "n_passed": 1}
+{"problem_id": "fn-translate-273370", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 13, "n_passed": 13}
+{"problem_id": "fn-complete-27389", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 85, "n_passed": 54}
+{"problem_id": "fn-translate-27389", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 85, "n_passed": 85}
+{"problem_id": "fn-complete-245240", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 13, "n_passed": 13}
+{"problem_id": "fn-translate-245240", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 13, "n_passed": 13}
+{"problem_id": "fn-complete-158273", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 11, "n_passed": 11}
+{"problem_id": "fn-translate-158273", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 11, "n_passed": 11}
+{"problem_id": "fn-complete-9869", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 17, "n_passed": 17}
+{"problem_id": "fn-translate-9869", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 17, "n_passed": 17}
+{"problem_id": "fn-complete-261898", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 7, "n_passed": 7}
+{"problem_id": "fn-translate-261898", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 7, "n_passed": 7}
+{"problem_id": "fn-complete-448774", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 22, "n_passed": 22}
+{"problem_id": "fn-translate-448774", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 22, "n_passed": 22}
+{"problem_id": "fn-complete-291983", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 20, "n_passed": 0, "first_error": "E0100: Unterminated string literal"}
+{"problem_id": "fn-translate-291983", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 20, "n_passed": 20}
+{"problem_id": "fn-complete-118995", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 63, "n_passed": 57}
+{"problem_id": "fn-translate-118995", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 63, "n_passed": 63}
+{"problem_id": "fn-complete-458490", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 11, "n_passed": 11}
+{"problem_id": "fn-translate-458490", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 11, "n_passed": 11}
+{"problem_id": "fn-complete-412861", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 34, "n_passed": 15}
+{"problem_id": "fn-translate-412861", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 34, "n_passed": 0, "first_error": "E1002: Cannot return Any, expected list[str]"}
+{"problem_id": "fn-complete-37435", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 65, "n_passed": 65}
+{"problem_id": "fn-translate-37435", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 65, "n_passed": 65}
+{"problem_id": "fn-complete-210036", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 12, "n_passed": 12}
+{"problem_id": "fn-translate-210036", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 12, "n_passed": 12}
+{"problem_id": "fn-complete-53327", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 16, "n_passed": 13}
+{"problem_id": "fn-translate-53327", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 16, "n_passed": 16}
+{"problem_id": "fn-complete-44159", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 42, "n_passed": 42}
+{"problem_id": "fn-translate-44159", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 42, "n_passed": 42}
+{"problem_id": "fn-complete-411748", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 15, "n_passed": 15}
+{"problem_id": "fn-translate-411748", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 15, "n_passed": 15}
+{"problem_id": "fn-complete-228632", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 45, "n_passed": 45}
+{"problem_id": "fn-translate-228632", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 45, "n_passed": 45}
+{"problem_id": "fn-complete-88030", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 43, "n_passed": 43}
+{"problem_id": "fn-translate-88030", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 43, "n_passed": 43}
+{"problem_id": "fn-complete-354147", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 15, "n_passed": 15}
+{"problem_id": "fn-translate-354147", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 15, "n_passed": 15}
+{"problem_id": "fn-complete-147352", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 15, "n_passed": 9}
+{"problem_id": "fn-translate-147352", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 15, "n_passed": 15}
+{"problem_id": "fn-complete-1072", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 15, "n_passed": 0, "first_error": "E0100: Unterminated string literal"}
+{"problem_id": "fn-translate-1072", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 15, "n_passed": 0, "first_error": "E1020: Cannot unpack non-iterable Any"}
+{"problem_id": "fn-complete-281450", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 11, "n_passed": 0}
+{"problem_id": "fn-translate-281450", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 11, "n_passed": 11}
+{"problem_id": "fn-complete-408184", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 103, "n_passed": 81}
+{"problem_id": "fn-translate-408184", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 103, "n_passed": 103}
+{"problem_id": "fn-complete-158231", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 63, "n_passed": 0, "first_error": "E1002: Cannot return str | int, expected str | NoneType"}
+{"problem_id": "fn-translate-158231", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 63, "n_passed": 0, "first_error": "E1002: Cannot return str | int, expected str | NoneType"}
+{"problem_id": "fn-complete-452471", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 21, "n_passed": 18}
+{"problem_id": "fn-translate-452471", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 21, "n_passed": 21}
+{"problem_id": "fn-complete-39516", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 20, "n_passed": 20}
+{"problem_id": "fn-translate-39516", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 20, "n_passed": 20}
+{"problem_id": "fn-complete-440860", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 17, "n_passed": 0, "first_error": "E1004: Function 'find_subsequence' declared return type bool but may implicitly return None"}
+{"problem_id": "fn-translate-440860", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 17, "n_passed": 0, "first_error": "E1004: Function 'find_subsequence' declared return type bool but may implicitly return None"}
+{"problem_id": "fn-complete-117821", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 18, "n_passed": 18}
+{"problem_id": "fn-translate-117821", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 18, "n_passed": 18}
+{"problem_id": "fn-complete-350245", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 14, "n_passed": 11}
+{"problem_id": "fn-translate-350245", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 14, "n_passed": 14}
+{"problem_id": "fn-complete-190387", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 8, "n_passed": 8}
+{"problem_id": "fn-translate-190387", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 8, "n_passed": 8}
+{"problem_id": "fn-complete-231798", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 12, "n_passed": 0, "first_error": "E0003: Expected identifier, got '='"}
+{"problem_id": "fn-translate-231798", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 12, "n_passed": 12}
+{"problem_id": "fn-complete-217245", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 36, "n_passed": 36}
+{"problem_id": "fn-translate-217245", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 36, "n_passed": 36}
+{"problem_id": "fn-complete-370344", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 21, "n_passed": 21}
+{"problem_id": "fn-translate-370344", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 21, "n_passed": 21}
+{"problem_id": "fn-complete-69138", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 18, "n_passed": 12}
+{"problem_id": "fn-translate-69138", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 18, "n_passed": 18}
+{"problem_id": "fn-complete-96251", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 8, "n_passed": 8}
+{"problem_id": "fn-translate-96251", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 8, "n_passed": 8}
+{"problem_id": "fn-complete-282261", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 22, "n_passed": 22}
+{"problem_id": "fn-translate-282261", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 22, "n_passed": 22}
+{"problem_id": "fn-complete-54478", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 40, "n_passed": 37}
+{"problem_id": "fn-translate-54478", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 40, "n_passed": 40}
+{"problem_id": "fn-complete-216418", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 30, "n_passed": 26}
+{"problem_id": "fn-translate-216418", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 30, "n_passed": 30}
+{"problem_id": "fn-complete-63166", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 31, "n_passed": 18}
+{"problem_id": "fn-translate-63166", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 31, "n_passed": 31}
+{"problem_id": "fn-complete-66171", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 9, "n_passed": 8}
+{"problem_id": "fn-translate-66171", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 9, "n_passed": 0, "first_error": "E1001: Cannot assign str to int"}
+{"problem_id": "fn-complete-55329", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 11, "n_passed": 10}
+{"problem_id": "fn-translate-55329", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 11, "n_passed": 11}
+{"problem_id": "fn-complete-23129", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 158, "n_passed": 0}
+{"problem_id": "fn-translate-23129", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 158, "n_passed": 158}
+{"problem_id": "fn-complete-22294", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 13, "n_passed": 0, "first_error": "E1053: Cannot assign dict[Literal[\"path\"], str | bool] to parameter 'object' of type dict[str, str]"}
+{"problem_id": "fn-translate-22294", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 13, "n_passed": 13}
+{"problem_id": "fn-complete-12758", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 43, "n_passed": 21}
+{"problem_id": "fn-translate-12758", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 43, "n_passed": 43}
+{"problem_id": "fn-complete-283827", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 7, "n_passed": 7}
+{"problem_id": "fn-translate-283827", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 7, "n_passed": 7}
+{"problem_id": "fn-complete-220911", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 15, "n_passed": 15}
+{"problem_id": "fn-translate-220911", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 15, "n_passed": 15}
+{"problem_id": "fn-complete-70451", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 37, "n_passed": 34}
+{"problem_id": "fn-translate-70451", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 37, "n_passed": 37}
+{"problem_id": "fn-complete-154919", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 73, "n_passed": 0, "first_error": "E0002: Missing ';'"}
+{"problem_id": "fn-translate-154919", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 73, "n_passed": 72}
+{"problem_id": "fn-complete-181110", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 21, "n_passed": 0, "first_error": "E1054: No matching overload found for the function call with the given arguments"}
+{"problem_id": "fn-translate-181110", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 21, "n_passed": 0, "first_error": "E1054: No matching overload found for the function call with the given arguments"}
+{"problem_id": "fn-complete-250550", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 38, "n_passed": 38}
+{"problem_id": "fn-translate-250550", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 38, "n_passed": 38}
+{"problem_id": "fn-complete-262001", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 11, "n_passed": 0, "first_error": "E1001: Cannot assign list[str] | dict[str, list[str]] to list[str]"}
+{"problem_id": "fn-translate-262001", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 11, "n_passed": 0, "first_error": "E1099: Cannot access attribute \"get\" for type \"list[str] | dict[str, list[str]]\"; attribute is missing from list[str]"}
+{"problem_id": "fn-complete-10398", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 6, "n_passed": 6}
+{"problem_id": "fn-translate-10398", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 6, "n_passed": 6}
+{"problem_id": "fn-complete-329869", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 14, "n_passed": 14}
+{"problem_id": "fn-translate-329869", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 14, "n_passed": 14}
+{"problem_id": "fn-complete-407375", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 18, "n_passed": 8}
+{"problem_id": "fn-translate-407375", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 18, "n_passed": 18}
+{"problem_id": "fn-complete-205247", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 45, "n_passed": 26}
+{"problem_id": "fn-translate-205247", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 45, "n_passed": 45}
+{"problem_id": "fn-complete-13688", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 11, "n_passed": 11}
+{"problem_id": "fn-translate-13688", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 11, "n_passed": 11}
+{"problem_id": "fn-complete-265030", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 23, "n_passed": 14}
+{"problem_id": "fn-translate-265030", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 23, "n_passed": 23}
+{"problem_id": "fn-complete-329937", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 88, "n_passed": 88}
+{"problem_id": "fn-translate-329937", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 88, "n_passed": 88}
+{"problem_id": "fn-complete-150219", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 21, "n_passed": 21}
+{"problem_id": "fn-translate-150219", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 21, "n_passed": 21}
+{"problem_id": "fn-complete-250882", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 6, "n_passed": 6}
+{"problem_id": "fn-translate-250882", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 6, "n_passed": 6}
+{"problem_id": "fn-complete-404247", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 12, "n_passed": 0}
+{"problem_id": "fn-translate-404247", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 12, "n_passed": 12}
+{"problem_id": "fn-complete-110604", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 12, "n_passed": 0}
+{"problem_id": "fn-translate-110604", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 12, "n_passed": 12}
+{"problem_id": "fn-complete-275702", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 17, "n_passed": 1}
+{"problem_id": "fn-translate-275702", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 17, "n_passed": 17}
+{"problem_id": "fn-complete-290966", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 49, "n_passed": 15}
+{"problem_id": "fn-translate-290966", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 49, "n_passed": 49}
+{"problem_id": "fn-complete-113820", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 102, "n_passed": 50}
+{"problem_id": "fn-translate-113820", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 102, "n_passed": 102}
+{"problem_id": "fn-complete-346568", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 58, "n_passed": 58}
+{"problem_id": "fn-translate-346568", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 58, "n_passed": 58}
+{"problem_id": "fn-complete-187510", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 150, "n_passed": 125}
+{"problem_id": "fn-translate-187510", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 150, "n_passed": 150}
+{"problem_id": "fn-complete-305165", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 8, "n_passed": 8}
+{"problem_id": "fn-translate-305165", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 8, "n_passed": 8}
+{"problem_id": "fn-complete-190404", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 21, "n_passed": 21}
+{"problem_id": "fn-translate-190404", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 21, "n_passed": 21}
+{"problem_id": "fn-complete-370076", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 5, "n_passed": 0}
+{"problem_id": "fn-translate-370076", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 5, "n_passed": 5}
+{"problem_id": "fn-complete-430656", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 8, "n_passed": 8}
+{"problem_id": "fn-translate-430656", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 8, "n_passed": 8}
+{"problem_id": "fn-complete-38101", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 21, "n_passed": 2}
+{"problem_id": "fn-translate-38101", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 21, "n_passed": 21}
+{"problem_id": "fn-complete-317072", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 89, "n_passed": 89}
+{"problem_id": "fn-translate-317072", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 89, "n_passed": 0, "first_error": "E1053: Cannot assign <Unknown> to parameter 'c' of type str | bytes | bytearray"}
+{"problem_id": "fn-complete-237407", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 20, "n_passed": 12}
+{"problem_id": "fn-translate-237407", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 20, "n_passed": 20}
+{"problem_id": "fn-complete-258151", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 14, "n_passed": 7}
+{"problem_id": "fn-translate-258151", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 14, "n_passed": 14}
+{"problem_id": "fn-complete-396358", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 38, "n_passed": 1}
+{"problem_id": "fn-translate-396358", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 38, "n_passed": 0, "first_error": "E1001: Cannot assign float to int"}
+{"problem_id": "fn-complete-47080", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 63, "n_passed": 42}
+{"problem_id": "fn-translate-47080", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 63, "n_passed": 63}
+{"problem_id": "fn-complete-219689", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 16, "n_passed": 16}
+{"problem_id": "fn-translate-219689", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 16, "n_passed": 16}
+{"problem_id": "fn-complete-304772", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 43, "n_passed": 43}
+{"problem_id": "fn-translate-304772", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 43, "n_passed": 43}
+{"problem_id": "fn-complete-435937", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 40, "n_passed": 0, "first_error": "E1010: Operator \"__rmul__\" not supported for type \"_T\""}
+{"problem_id": "fn-translate-435937", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 40, "n_passed": 0, "first_error": "E1010: Operator \"__rmul__\" not supported for type \"_T\""}
+{"problem_id": "fn-complete-166423", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 99, "n_passed": 61}
+{"problem_id": "fn-translate-166423", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 99, "n_passed": 99}
+{"problem_id": "fn-complete-122134", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 19, "n_passed": 0}
+{"problem_id": "fn-translate-122134", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 19, "n_passed": 19}
+{"problem_id": "fn-complete-81332", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 93, "n_passed": 93}
+{"problem_id": "fn-translate-81332", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 93, "n_passed": 93}
+{"problem_id": "fn-complete-79456", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 14, "n_passed": 14}
+{"problem_id": "fn-translate-79456", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 14, "n_passed": 14}
+{"problem_id": "fn-complete-322995", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 30, "n_passed": 0, "first_error": "E0002: Missing '}'"}
+{"problem_id": "fn-translate-322995", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 30, "n_passed": 30}
+{"problem_id": "fn-complete-85132", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 12, "n_passed": 0}
+{"problem_id": "fn-translate-85132", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 12, "n_passed": 12}
+{"problem_id": "fn-complete-46118", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 31, "n_passed": 0, "first_error": "E1030: Type \"tuple[tuple[int | float | str, int | float | str], tuple[int | float | str, int | float | str]]\" has no attribute \"split\""}
+{"problem_id": "fn-translate-46118", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 31, "n_passed": 31}
+{"problem_id": "fn-complete-162158", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 25, "n_passed": 25}
+{"problem_id": "fn-translate-162158", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 25, "n_passed": 25}
+{"problem_id": "fn-complete-144531", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 29, "n_passed": 29}
+{"problem_id": "fn-translate-144531", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 29, "n_passed": 29}
+{"problem_id": "fn-complete-160461", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 33, "n_passed": 28}
+{"problem_id": "fn-translate-160461", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 33, "n_passed": 33}
+{"problem_id": "fn-complete-91158", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 31, "n_passed": 31}
+{"problem_id": "fn-translate-91158", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 31, "n_passed": 31}
+{"problem_id": "fn-complete-324525", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 15, "n_passed": 15}
+{"problem_id": "fn-translate-324525", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 15, "n_passed": 15}
+{"problem_id": "fn-complete-4716", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 45, "n_passed": 37}
+{"problem_id": "fn-translate-4716", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 45, "n_passed": 45}
+{"problem_id": "fn-complete-149340", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 20, "n_passed": 20}
+{"problem_id": "fn-translate-149340", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 20, "n_passed": 20}
+{"problem_id": "fn-complete-186113", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 34, "n_passed": 28}
+{"problem_id": "fn-translate-186113", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 34, "n_passed": 34}
+{"problem_id": "fn-complete-100632", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 10, "n_passed": 10}
+{"problem_id": "fn-translate-100632", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 10, "n_passed": 10}
+{"problem_id": "fn-complete-89062", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 63, "n_passed": 63}
+{"problem_id": "fn-translate-89062", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 63, "n_passed": 63}
+{"problem_id": "fn-complete-60525", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 8, "n_passed": 8}
+{"problem_id": "fn-translate-60525", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 8, "n_passed": 8}
+{"problem_id": "fn-complete-60328", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 24, "n_passed": 0}
+{"problem_id": "fn-translate-60328", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 24, "n_passed": 24}
+{"problem_id": "fn-complete-201115", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 9, "n_passed": 9}
+{"problem_id": "fn-translate-201115", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 9, "n_passed": 9}
+{"problem_id": "fn-complete-11020", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 9, "n_passed": 0}
+{"problem_id": "fn-translate-11020", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 9, "n_passed": 9}
+{"problem_id": "fn-complete-186177", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 71, "n_passed": 71}
+{"problem_id": "fn-translate-186177", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 71, "n_passed": 71}
+{"problem_id": "fn-complete-60719", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 34, "n_passed": 20}
+{"problem_id": "fn-translate-60719", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 34, "n_passed": 34}
+{"problem_id": "fn-complete-264436", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 14, "n_passed": 0, "first_error": "E1055: No matching overload found for method \"__add__\" with the given arguments"}
+{"problem_id": "fn-translate-264436", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 14, "n_passed": 0, "first_error": "E1055: No matching overload found for method \"__add__\" with the given arguments"}
+{"problem_id": "fn-complete-51610", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 17, "n_passed": 2}
+{"problem_id": "fn-translate-51610", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 17, "n_passed": 17}
+{"problem_id": "fn-complete-176114", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 13, "n_passed": 12}
+{"problem_id": "fn-translate-176114", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 13, "n_passed": 13}
+{"problem_id": "fn-complete-132095", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 18, "n_passed": 18}
+{"problem_id": "fn-translate-132095", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 18, "n_passed": 18}
+{"problem_id": "fn-complete-5940", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 24, "n_passed": 24}
+{"problem_id": "fn-translate-5940", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 24, "n_passed": 24}
+{"problem_id": "fn-complete-128036", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 70, "n_passed": 70}
+{"problem_id": "fn-translate-128036", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 70, "n_passed": 70}
+{"problem_id": "fn-complete-212798", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 6, "n_passed": 6}
+{"problem_id": "fn-translate-212798", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 6, "n_passed": 6}
+{"problem_id": "fn-complete-154206", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 37, "n_passed": 4}
+{"problem_id": "fn-translate-154206", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 37, "n_passed": 37}
+{"problem_id": "fn-complete-130948", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 35, "n_passed": 0, "first_error": "E1002: Cannot return list[int], expected list[bytes]"}
+{"problem_id": "fn-translate-130948", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 35, "n_passed": 35}
+{"problem_id": "fn-complete-362938", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 46, "n_passed": 46}
+{"problem_id": "fn-translate-362938", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 46, "n_passed": 46}
+{"problem_id": "fn-complete-124409", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 27, "n_passed": 0}
+{"problem_id": "fn-translate-124409", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 27, "n_passed": 0}
+{"problem_id": "fn-complete-99727", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 40, "n_passed": 23}
+{"problem_id": "fn-translate-99727", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 40, "n_passed": 40}
+{"problem_id": "fn-complete-354991", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 29, "n_passed": 29}
+{"problem_id": "fn-translate-354991", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 29, "n_passed": 29}
+{"problem_id": "fn-complete-294021", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 8, "n_passed": 8}
+{"problem_id": "fn-translate-294021", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 8, "n_passed": 8}
+{"problem_id": "fn-complete-277841", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 6, "n_passed": 2}
+{"problem_id": "fn-translate-277841", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 6, "n_passed": 6}
+{"problem_id": "fn-complete-448121", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 103, "n_passed": 0, "first_error": "E1053: Cannot assign <any> to parameter 'l' of type list | int | float | str | bool"}
+{"problem_id": "fn-translate-448121", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 103, "n_passed": 0, "first_error": "E1002: Cannot return list[list[int | list[int | list[int]]]], expected list[int]"}
+{"problem_id": "fn-complete-25229", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 10, "n_passed": 0}
+{"problem_id": "fn-translate-25229", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 10, "n_passed": 0, "first_error": "E1001: Cannot assign list[dict[str | int, str | int]] to list[dict[str, dict[str, str | int]]]"}
+{"problem_id": "fn-complete-159203", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 30, "n_passed": 21}
+{"problem_id": "fn-translate-159203", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 30, "n_passed": 30}
+{"problem_id": "fn-complete-237195", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 10, "n_passed": 4}
+{"problem_id": "fn-translate-237195", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 10, "n_passed": 0, "first_error": "E0002: Missing ';'"}
+{"problem_id": "fn-complete-82713", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 86, "n_passed": 85}
+{"problem_id": "fn-translate-82713", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 86, "n_passed": 86}
+{"problem_id": "fn-complete-310968", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 22, "n_passed": 20}
+{"problem_id": "fn-translate-310968", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 22, "n_passed": 22}
+{"problem_id": "fn-complete-277272", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 42, "n_passed": 0, "first_error": "E1053: Cannot assign dict | list | int | str | float | bool | NoneType to parameter 'obj' of type Sized"}
+{"problem_id": "fn-translate-277272", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 42, "n_passed": 0, "first_error": "E1053: Cannot assign object to parameter 'x' of type dict[str, object] | list[object] | str | int | float | bool | NoneType"}
+{"problem_id": "fn-complete-133813", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 18, "n_passed": 9}
+{"problem_id": "fn-translate-133813", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 18, "n_passed": 18}
+{"problem_id": "fn-complete-126662", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 9, "n_passed": 9}
+{"problem_id": "fn-translate-126662", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 9, "n_passed": 9}
+{"problem_id": "fn-complete-100866", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 40, "n_passed": 34}
+{"problem_id": "fn-translate-100866", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 40, "n_passed": 40}
+{"problem_id": "fn-complete-321191", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 7, "n_passed": 7}
+{"problem_id": "fn-translate-321191", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 7, "n_passed": 7}
+{"problem_id": "fn-complete-285360", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 9, "n_passed": 7}
+{"problem_id": "fn-translate-285360", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 9, "n_passed": 0, "first_error": "E1001: Cannot assign <Unknown> to int"}
+{"problem_id": "fn-complete-387495", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 56, "n_passed": 56}
+{"problem_id": "fn-translate-387495", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 56, "n_passed": 56}
+{"problem_id": "fn-complete-346956", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 17, "n_passed": 17}
+{"problem_id": "fn-translate-346956", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 17, "n_passed": 17}
+{"problem_id": "fn-complete-177545", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 12, "n_passed": 0, "first_error": "E0100: Unterminated string literal"}
+{"problem_id": "fn-translate-177545", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 12, "n_passed": 0, "first_error": "E1002: Cannot return Any, expected str"}
+{"problem_id": "fn-complete-163514", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 50, "n_passed": 12}
+{"problem_id": "fn-translate-163514", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 50, "n_passed": 0, "first_error": "E0013: 'case' is a keyword and cannot be used as a parameter name (prefix with backtick to escape: `case)"}
+{"problem_id": "fn-complete-337435", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 23, "n_passed": 23}
+{"problem_id": "fn-translate-337435", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 23, "n_passed": 23}
+{"problem_id": "fn-complete-178357", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 35, "n_passed": 0, "first_error": "E1030: Type \"BaseException\" has no attribute \"message\""}
+{"problem_id": "fn-translate-178357", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 35, "n_passed": 35}
+{"problem_id": "fn-complete-389801", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 47, "n_passed": 46}
+{"problem_id": "fn-translate-389801", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 47, "n_passed": 47}
+{"problem_id": "fn-complete-56576", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 37, "n_passed": 13}
+{"problem_id": "fn-translate-56576", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 37, "n_passed": 37}
+{"problem_id": "fn-complete-125247", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 8, "n_passed": 7}
+{"problem_id": "fn-translate-125247", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 8, "n_passed": 8}
+{"problem_id": "fn-complete-300177", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 36, "n_passed": 36}
+{"problem_id": "fn-translate-300177", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 36, "n_passed": 0, "first_error": "E1001: Cannot assign int | float to int"}
+{"problem_id": "fn-complete-434659", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 21, "n_passed": 21}
+{"problem_id": "fn-translate-434659", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 21, "n_passed": 21}
+{"problem_id": "fn-complete-107879", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 68, "n_passed": 0, "first_error": "E0102: Unterminated f-string"}
+{"problem_id": "fn-translate-107879", "task": "translation", "status": "test_fail", "check_pass": true, "n_tests": 68, "n_passed": 0}
+{"problem_id": "fn-complete-119041", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 12, "n_passed": 0}
+{"problem_id": "fn-translate-119041", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 12, "n_passed": 0, "first_error": "E0010: 'pass' is not supported in Jac"}
+{"problem_id": "fn-complete-45346", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 9, "n_passed": 9}
+{"problem_id": "fn-translate-45346", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 9, "n_passed": 9}
+{"problem_id": "fn-complete-50630", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 28, "n_passed": 28}
+{"problem_id": "fn-translate-50630", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 28, "n_passed": 28}
+{"problem_id": "fn-complete-384735", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 9, "n_passed": 9}
+{"problem_id": "fn-translate-384735", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 9, "n_passed": 0, "first_error": "E1053: Cannot assign <any> to parameter 'object' of type str"}
+{"problem_id": "fn-complete-81764", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 24, "n_passed": 0}
+{"problem_id": "fn-translate-81764", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 24, "n_passed": 24}
+{"problem_id": "fn-complete-29041", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 37, "n_passed": 37}
+{"problem_id": "fn-translate-29041", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 37, "n_passed": 37}
+{"problem_id": "fn-complete-222044", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 11, "n_passed": 0}
+{"problem_id": "fn-translate-222044", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 11, "n_passed": 11}
+{"problem_id": "fn-complete-386471", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 19, "n_passed": 8}
+{"problem_id": "fn-translate-386471", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 19, "n_passed": 19}
+{"problem_id": "fn-complete-406179", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 74, "n_passed": 74}
+{"problem_id": "fn-translate-406179", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 74, "n_passed": 74}
+{"problem_id": "fn-complete-163493", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 41, "n_passed": 14}
+{"problem_id": "fn-translate-163493", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 41, "n_passed": 41}
+{"problem_id": "fn-complete-158327", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 47, "n_passed": 47}
+{"problem_id": "fn-translate-158327", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 47, "n_passed": 47}
+{"problem_id": "fn-complete-450951", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 28, "n_passed": 28}
+{"problem_id": "fn-translate-450951", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 28, "n_passed": 28}
+{"problem_id": "fn-complete-420695", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 18, "n_passed": 18}
+{"problem_id": "fn-translate-420695", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 18, "n_passed": 18}
+{"problem_id": "fn-complete-272140", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 27, "n_passed": 26}
+{"problem_id": "fn-translate-272140", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 27, "n_passed": 27}
+{"problem_id": "fn-complete-101908", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 61, "n_passed": 58}
+{"problem_id": "fn-translate-101908", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 61, "n_passed": 61}
+{"problem_id": "fn-complete-458563", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 85, "n_passed": 85}
+{"problem_id": "fn-translate-458563", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 85, "n_passed": 85}
+{"problem_id": "fn-complete-10981", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 12, "n_passed": 12}
+{"problem_id": "fn-translate-10981", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 12, "n_passed": 12}
+{"problem_id": "fn-complete-9338", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 7, "n_passed": 2}
+{"problem_id": "fn-translate-9338", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 7, "n_passed": 7}
+{"problem_id": "fn-complete-82206", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 11, "n_passed": 0}
+{"problem_id": "fn-translate-82206", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 11, "n_passed": 11}
+{"problem_id": "fn-complete-418449", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 20, "n_passed": 20}
+{"problem_id": "fn-translate-418449", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 20, "n_passed": 20}
+{"problem_id": "fn-complete-386315", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 22, "n_passed": 10}
+{"problem_id": "fn-translate-386315", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 22, "n_passed": 22}
+{"problem_id": "fn-complete-376787", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 81, "n_passed": 80}
+{"problem_id": "fn-translate-376787", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 81, "n_passed": 81}
+{"problem_id": "fn-complete-344923", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 69, "n_passed": 50}
+{"problem_id": "fn-translate-344923", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 69, "n_passed": 69}
+{"problem_id": "fn-complete-216645", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 68, "n_passed": 32}
+{"problem_id": "fn-translate-216645", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 68, "n_passed": 68}
+{"problem_id": "fn-complete-178997", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 19, "n_passed": 0, "first_error": "E1001: Cannot assign <any> to dict"}
+{"problem_id": "fn-translate-178997", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 19, "n_passed": 0, "first_error": "E1001: Cannot assign str | list[str] | dict[str, str | list[str]] to dict[str, str | list[str] | dict[str, str | list[str]]]"}
+{"problem_id": "fn-complete-63972", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 19, "n_passed": 19}
+{"problem_id": "fn-translate-63972", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 19, "n_passed": 19}
+{"problem_id": "fn-complete-398648", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 16, "n_passed": 0, "first_error": "E1053: Cannot assign <any> to parameter 'dict2' of type dict"}
+{"problem_id": "fn-translate-398648", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 16, "n_passed": 0, "first_error": "E1053: Cannot assign object to parameter 'dict2' of type dict[str, object]"}
+{"problem_id": "fn-complete-362551", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 20, "n_passed": 0, "first_error": "E1004: Function 'attack' declared return type int but may implicitly return None"}
+{"problem_id": "fn-translate-362551", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 20, "n_passed": 20}
+{"problem_id": "fn-complete-221312", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 23, "n_passed": 3}
+{"problem_id": "fn-translate-221312", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 23, "n_passed": 0, "first_error": "E1001: Cannot assign int to str"}
+{"problem_id": "fn-complete-442134", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 37, "n_passed": 0, "first_error": "E0100: Unterminated string literal"}
+{"problem_id": "fn-translate-442134", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 37, "n_passed": 37}
+{"problem_id": "fn-complete-175718", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 13, "n_passed": 12}
+{"problem_id": "fn-translate-175718", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 13, "n_passed": 13}
+{"problem_id": "fn-complete-442927", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 16, "n_passed": 5}
+{"problem_id": "fn-translate-442927", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 16, "n_passed": 16}
+{"problem_id": "fn-complete-53386", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 11, "n_passed": 11}
+{"problem_id": "fn-translate-53386", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 11, "n_passed": 11}
+{"problem_id": "fn-complete-379332", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 35, "n_passed": 35}
+{"problem_id": "fn-translate-379332", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 35, "n_passed": 35}
+{"problem_id": "fn-complete-172371", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 7, "n_passed": 0, "first_error": "E0004: Unexpected token in expression: 'EOF'"}
+{"problem_id": "fn-translate-172371", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 7, "n_passed": 0, "first_error": "E1001: Cannot assign list[LiteralString] to str | bool"}
+{"problem_id": "fn-complete-302069", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 56, "n_passed": 56}
+{"problem_id": "fn-translate-302069", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 56, "n_passed": 56}
+{"problem_id": "fn-complete-238716", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 27, "n_passed": 0, "first_error": "E1053: Cannot assign <any> to parameter 'prefix' of type str"}
+{"problem_id": "fn-translate-238716", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 27, "n_passed": 0, "first_error": "E1053: Cannot assign object to parameter 'd' of type dict[str, object]"}
+{"problem_id": "fn-complete-25475", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 7, "n_passed": 0, "first_error": "E1053: Cannot assign object to parameter 'struct' of type dict[str, object] | list[object] | tuple[object]"}
+{"problem_id": "fn-translate-25475", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 7, "n_passed": 0, "first_error": "E1053: Cannot assign object to parameter 'struct' of type dict[str, object] | list[object] | tuple[object, <Unknown>]"}
+{"problem_id": "fn-complete-213808", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 49, "n_passed": 49}
+{"problem_id": "fn-translate-213808", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 49, "n_passed": 49}
+{"problem_id": "fn-complete-295645", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 6, "n_passed": 0, "first_error": "E1053: Cannot assign int to parameter 'object' of type str"}
+{"problem_id": "fn-translate-295645", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 6, "n_passed": 6}
+{"problem_id": "fn-complete-269205", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 22, "n_passed": 9}
+{"problem_id": "fn-translate-269205", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 22, "n_passed": 22}
+{"problem_id": "fn-complete-36573", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 25, "n_passed": 25}
+{"problem_id": "fn-translate-36573", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 25, "n_passed": 25}
+{"problem_id": "fn-complete-60330", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 20, "n_passed": 3}
+{"problem_id": "fn-translate-60330", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 20, "n_passed": 20}
+{"problem_id": "fn-complete-116468", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 14, "n_passed": 8}
+{"problem_id": "fn-translate-116468", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 14, "n_passed": 14}
+{"problem_id": "fn-complete-407354", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 44, "n_passed": 44}
+{"problem_id": "fn-translate-407354", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 44, "n_passed": 44}
+{"problem_id": "fn-complete-416134", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 65, "n_passed": 65}
+{"problem_id": "fn-translate-416134", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 65, "n_passed": 65}
+{"problem_id": "fn-complete-150090", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 11, "n_passed": 0, "first_error": "E1032: Type is Unknown, cannot access attribute \"index\""}
+{"problem_id": "fn-translate-150090", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 11, "n_passed": 0, "first_error": "E1032: Type is Unknown, cannot access attribute \"find\""}
+{"problem_id": "fn-complete-165409", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 11, "n_passed": 0}
+{"problem_id": "fn-translate-165409", "task": "translation", "status": "test_fail", "check_pass": true, "n_tests": 11, "n_passed": 0}
+{"problem_id": "fn-complete-54061", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 11, "n_passed": 1}
+{"problem_id": "fn-translate-54061", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 11, "n_passed": 11}
+{"problem_id": "fn-complete-135418", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 16, "n_passed": 3}
+{"problem_id": "fn-translate-135418", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 16, "n_passed": 16}
+{"problem_id": "fn-complete-395411", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 120, "n_passed": 120}
+{"problem_id": "fn-translate-395411", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 120, "n_passed": 120}
+{"problem_id": "fn-complete-181169", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 25, "n_passed": 22}
+{"problem_id": "fn-translate-181169", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 25, "n_passed": 0, "first_error": "E1030: Type \"object\" has no attribute \"__name__\""}
+{"problem_id": "fn-complete-293293", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 39, "n_passed": 39}
+{"problem_id": "fn-translate-293293", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 39, "n_passed": 0, "first_error": "E1004: Function 'get_size' declared return type str but may implicitly return None"}
+{"problem_id": "fn-complete-285589", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 7, "n_passed": 7}
+{"problem_id": "fn-translate-285589", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 7, "n_passed": 0, "first_error": "E1001: Cannot assign int to NoneType"}
+{"problem_id": "fn-complete-296790", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 119, "n_passed": 60}
+{"problem_id": "fn-translate-296790", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 119, "n_passed": 0, "first_error": "E1004: Function 'color_picker' declared return type str but may implicitly return None"}
+{"problem_id": "fn-complete-410920", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 18, "n_passed": 0, "first_error": "E1053: Cannot assign int to parameter 'obj' of type Sized"}
+{"problem_id": "fn-translate-410920", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 18, "n_passed": 0, "first_error": "E1053: Cannot assign int to parameter 'obj' of type Sized"}
+{"problem_id": "fn-complete-218960", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 52, "n_passed": 33}
+{"problem_id": "fn-translate-218960", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 52, "n_passed": 52}
+{"problem_id": "fn-complete-33170", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 29, "n_passed": 29}
+{"problem_id": "fn-translate-33170", "task": "translation", "status": "test_fail", "check_pass": true, "n_tests": 29, "n_passed": 26}
+{"problem_id": "fn-complete-27306", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 112, "n_passed": 112}
+{"problem_id": "fn-translate-27306", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 112, "n_passed": 112}
+{"problem_id": "fn-complete-63959", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 26, "n_passed": 26}
+{"problem_id": "fn-translate-63959", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 26, "n_passed": 26}
+{"problem_id": "fn-complete-363582", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 139, "n_passed": 139}
+{"problem_id": "fn-translate-363582", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 139, "n_passed": 0, "first_error": "E1004: Function 'checkSyntax' declared return type bool but may implicitly return None"}
+{"problem_id": "fn-complete-160255", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 26, "n_passed": 9}
+{"problem_id": "fn-translate-160255", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 26, "n_passed": 26}
+{"problem_id": "fn-complete-187237", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 6, "n_passed": 0}
+{"problem_id": "fn-translate-187237", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 6, "n_passed": 6}
+{"problem_id": "fn-complete-440468", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 11, "n_passed": 11}
+{"problem_id": "fn-translate-440468", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 11, "n_passed": 11}
+{"problem_id": "fn-complete-32739", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 11, "n_passed": 11}
+{"problem_id": "fn-translate-32739", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 11, "n_passed": 11}
+{"problem_id": "fn-complete-123229", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 13, "n_passed": 13}
+{"problem_id": "fn-translate-123229", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 13, "n_passed": 13}
+{"problem_id": "fn-complete-332236", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 6, "n_passed": 4}
+{"problem_id": "fn-translate-332236", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 6, "n_passed": 6}
+{"problem_id": "fn-complete-306717", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 15, "n_passed": 8}
+{"problem_id": "fn-translate-306717", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 15, "n_passed": 15}
+{"problem_id": "fn-complete-92930", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 19, "n_passed": 19}
+{"problem_id": "fn-translate-92930", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 19, "n_passed": 19}
+{"problem_id": "fn-complete-188442", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 6, "n_passed": 6}
+{"problem_id": "fn-translate-188442", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 6, "n_passed": 0, "first_error": "E1054: No matching overload found for the function call with the given arguments"}
+{"problem_id": "fn-complete-64662", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 33, "n_passed": 33}
+{"problem_id": "fn-translate-64662", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 33, "n_passed": 0, "first_error": "E1001: Cannot assign float to int"}
+{"problem_id": "fn-complete-82403", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 36, "n_passed": 0, "first_error": "E1002: Cannot return object | bool, expected bool"}
+{"problem_id": "fn-translate-82403", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 36, "n_passed": 6}
+{"problem_id": "fn-complete-277236", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 13, "n_passed": 9}
+{"problem_id": "fn-translate-277236", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 13, "n_passed": 13}
+{"problem_id": "fn-complete-243669", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 18, "n_passed": 18}
+{"problem_id": "fn-translate-243669", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 18, "n_passed": 18}
+{"problem_id": "fn-complete-141848", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 44, "n_passed": 44}
+{"problem_id": "fn-translate-141848", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 44, "n_passed": 44}
+{"problem_id": "fn-complete-276121", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 6, "n_passed": 4}
+{"problem_id": "fn-translate-276121", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 6, "n_passed": 0, "first_error": "E1001: Cannot assign dict[Literal[\"orig_photo_id\"], str | list[str] | NoneType | NoneType | str | NoneType] to dict[str, str | NoneType]"}
+{"problem_id": "fn-complete-225921", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 7, "n_passed": 1}
+{"problem_id": "fn-translate-225921", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 7, "n_passed": 7}
+{"problem_id": "fn-complete-234465", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 14, "n_passed": 14}
+{"problem_id": "fn-translate-234465", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 14, "n_passed": 0, "first_error": "E1055: No matching overload found for method \"__mul__\" with the given arguments"}
+{"problem_id": "fn-complete-357870", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 24, "n_passed": 7}
+{"problem_id": "fn-translate-357870", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 24, "n_passed": 24}
+{"problem_id": "fn-complete-149491", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 105, "n_passed": 105}
+{"problem_id": "fn-translate-149491", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 105, "n_passed": 105}
+{"problem_id": "fn-complete-198809", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 17, "n_passed": 10}
+{"problem_id": "fn-translate-198809", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 17, "n_passed": 0, "first_error": "E1054: No matching overload found for the function call with the given arguments"}
+{"problem_id": "fn-complete-272798", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 16, "n_passed": 0, "first_error": "E1002: Cannot return dict[NoneType, object], expected dict[str, object]"}
+{"problem_id": "fn-translate-272798", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 16, "n_passed": 0, "first_error": "E0002: Missing ';'"}
+{"problem_id": "fn-complete-281497", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 10, "n_passed": 10}
+{"problem_id": "fn-translate-281497", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 10, "n_passed": 10}
+{"problem_id": "fn-complete-52512", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 38, "n_passed": 38}
+{"problem_id": "fn-translate-52512", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 38, "n_passed": 38}
+{"problem_id": "fn-complete-152015", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 13, "n_passed": 13}
+{"problem_id": "fn-translate-152015", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 13, "n_passed": 13}
+{"problem_id": "fn-complete-319756", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 36, "n_passed": 36}
+{"problem_id": "fn-translate-319756", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 36, "n_passed": 36}
+{"problem_id": "fn-complete-292950", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 40, "n_passed": 0}
+{"problem_id": "fn-translate-292950", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 40, "n_passed": 40}
+{"problem_id": "fn-complete-183426", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 26, "n_passed": 3}
+{"problem_id": "fn-translate-183426", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 26, "n_passed": 26}
+{"problem_id": "fn-complete-207131", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 127, "n_passed": 127}
+{"problem_id": "fn-translate-207131", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 127, "n_passed": 127}
+{"problem_id": "fn-complete-367644", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 25, "n_passed": 0, "first_error": "E1002: Cannot return str, expected bytes"}
+{"problem_id": "fn-translate-367644", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 25, "n_passed": 0, "first_error": "E1002: Cannot return bytes | str, expected bytes"}
+{"problem_id": "fn-complete-351198", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 7, "n_passed": 7}
+{"problem_id": "fn-translate-351198", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 7, "n_passed": 7}
+{"problem_id": "fn-complete-346552", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 38, "n_passed": 35}
+{"problem_id": "fn-translate-346552", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 38, "n_passed": 0, "first_error": "E1001: Cannot assign float to str"}
+{"problem_id": "fn-complete-419639", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 9, "n_passed": 9}
+{"problem_id": "fn-translate-419639", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 9, "n_passed": 9}
+{"problem_id": "fn-complete-292243", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 11, "n_passed": 8}
+{"problem_id": "fn-translate-292243", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 11, "n_passed": 0}
+{"problem_id": "fn-complete-180567", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 17, "n_passed": 0}
+{"problem_id": "fn-translate-180567", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 17, "n_passed": 17}
+{"problem_id": "fn-complete-454796", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 12, "n_passed": 12}
+{"problem_id": "fn-translate-454796", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 12, "n_passed": 12}
+{"problem_id": "fn-complete-65141", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 31, "n_passed": 0, "first_error": "E1001: Cannot assign Any | float to int | float"}
+{"problem_id": "fn-translate-65141", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 31, "n_passed": 31}
+{"problem_id": "fn-complete-2942", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 22, "n_passed": 0, "first_error": "E1002: Cannot return NoneType, expected str | int | float | bool | list[int]"}
+{"problem_id": "fn-translate-2942", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 22, "n_passed": 22}
+{"problem_id": "fn-complete-422236", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 13, "n_passed": 5}
+{"problem_id": "fn-translate-422236", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 13, "n_passed": 13}
+{"problem_id": "fn-complete-205916", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 13, "n_passed": 0}
+{"problem_id": "fn-translate-205916", "task": "translation", "status": "test_fail", "check_pass": true, "n_tests": 13, "n_passed": 11}
+{"problem_id": "fn-complete-120935", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 50, "n_passed": 50}
+{"problem_id": "fn-translate-120935", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 50, "n_passed": 50}
+{"problem_id": "fn-complete-153098", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 22, "n_passed": 22}
+{"problem_id": "fn-translate-153098", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 22, "n_passed": 22}
+{"problem_id": "fn-complete-335203", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 6, "n_passed": 6}
+{"problem_id": "fn-translate-335203", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 6, "n_passed": 6}
+{"problem_id": "fn-complete-106369", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 26, "n_passed": 22}
+{"problem_id": "fn-translate-106369", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 26, "n_passed": 0, "first_error": "E0013: 'obj' is a keyword and cannot be used as a parameter name (prefix with backtick to escape: `obj)"}
+{"problem_id": "fn-complete-93582", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 35, "n_passed": 0, "first_error": "E1053: Cannot assign int | str to parameter 'c' of type str | bytes | bytearray"}
+{"problem_id": "fn-translate-93582", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 35, "n_passed": 0, "first_error": "E1053: Cannot assign str | int to parameter 'c' of type str | bytes | bytearray"}
+{"problem_id": "fn-complete-243064", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 32, "n_passed": 32}
+{"problem_id": "fn-translate-243064", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 32, "n_passed": 32}
+{"problem_id": "fn-complete-107409", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 33, "n_passed": 33}
+{"problem_id": "fn-translate-107409", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 33, "n_passed": 33}
+{"problem_id": "fn-complete-357871", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 29, "n_passed": 29}
+{"problem_id": "fn-translate-357871", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 29, "n_passed": 29}
+{"problem_id": "fn-complete-136925", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 13, "n_passed": 0, "first_error": "E1054: No matching overload found for the function call with the given arguments"}
+{"problem_id": "fn-translate-136925", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 13, "n_passed": 0, "first_error": "E1054: No matching overload found for the function call with the given arguments"}
+{"problem_id": "fn-complete-24165", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 8, "n_passed": 1}
+{"problem_id": "fn-translate-24165", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 8, "n_passed": 8}
+{"problem_id": "fn-complete-77661", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 32, "n_passed": 0, "first_error": "E0002: Missing ';'"}
+{"problem_id": "fn-translate-77661", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 32, "n_passed": 32}
+{"problem_id": "fn-complete-251589", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 10, "n_passed": 0}
+{"problem_id": "fn-translate-251589", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 10, "n_passed": 10}
+{"problem_id": "fn-complete-309934", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 16, "n_passed": 11}
+{"problem_id": "fn-translate-309934", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 16, "n_passed": 16}
+{"problem_id": "fn-complete-169672", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 82, "n_passed": 82}
+{"problem_id": "fn-translate-169672", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 82, "n_passed": 82}
+{"problem_id": "fn-complete-96122", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 22, "n_passed": 20}
+{"problem_id": "fn-translate-96122", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 22, "n_passed": 22}
+{"problem_id": "fn-complete-411936", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 27, "n_passed": 27}
+{"problem_id": "fn-translate-411936", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 27, "n_passed": 27}
+{"problem_id": "fn-complete-418068", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 32, "n_passed": 32}
+{"problem_id": "fn-translate-418068", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 32, "n_passed": 32}
+{"problem_id": "fn-complete-49479", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 12, "n_passed": 10}
+{"problem_id": "fn-translate-49479", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 12, "n_passed": 12}
+{"problem_id": "fn-complete-440062", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 27, "n_passed": 27}
+{"problem_id": "fn-translate-440062", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 27, "n_passed": 27}
+{"problem_id": "fn-complete-113266", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 18, "n_passed": 8}
+{"problem_id": "fn-translate-113266", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 18, "n_passed": 18}
+{"problem_id": "fn-complete-397854", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 29, "n_passed": 0, "first_error": "E0002: Missing ';'"}
+{"problem_id": "fn-translate-397854", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 29, "n_passed": 29}
+{"problem_id": "fn-complete-336277", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 8, "n_passed": 0, "first_error": "E0002: Missing ';'"}
+{"problem_id": "fn-translate-336277", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 8, "n_passed": 8}
+{"problem_id": "fn-complete-345514", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 16, "n_passed": 16}
+{"problem_id": "fn-translate-345514", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 16, "n_passed": 16}
+{"problem_id": "fn-complete-275983", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 69, "n_passed": 69}
+{"problem_id": "fn-translate-275983", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 69, "n_passed": 69}
+{"problem_id": "fn-complete-23410", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 35, "n_passed": 0}
+{"problem_id": "fn-translate-23410", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 35, "n_passed": 35}
+{"problem_id": "fn-complete-39227", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 8, "n_passed": 1}
+{"problem_id": "fn-translate-39227", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 8, "n_passed": 8}
+{"problem_id": "fn-complete-425964", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 10, "n_passed": 5}
+{"problem_id": "fn-translate-425964", "task": "translation", "status": "test_fail", "check_pass": true, "n_tests": 10, "n_passed": 5}
+{"problem_id": "fn-complete-358692", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 9, "n_passed": 9}
+{"problem_id": "fn-translate-358692", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 9, "n_passed": 9}
+{"problem_id": "fn-complete-291442", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 13, "n_passed": 12}
+{"problem_id": "fn-translate-291442", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 13, "n_passed": 13}
+{"problem_id": "fn-complete-81557", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 26, "n_passed": 0, "first_error": "E0100: Unterminated string literal"}
+{"problem_id": "fn-translate-81557", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 26, "n_passed": 0, "first_error": "E1004: Function 'shell_quote' declared return type str but may implicitly return None"}
+{"problem_id": "fn-complete-122120", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 12, "n_passed": 12}
+{"problem_id": "fn-translate-122120", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 12, "n_passed": 12}
+{"problem_id": "fn-complete-451051", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 77, "n_passed": 77}
+{"problem_id": "fn-translate-451051", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 77, "n_passed": 77}
+{"problem_id": "fn-complete-262051", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 25, "n_passed": 25}
+{"problem_id": "fn-translate-262051", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 25, "n_passed": 0, "first_error": "E0002: Missing ';'"}
+{"problem_id": "fn-complete-175341", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 21, "n_passed": 6}
+{"problem_id": "fn-translate-175341", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 21, "n_passed": 21}
+{"problem_id": "fn-complete-107862", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 19, "n_passed": 19}
+{"problem_id": "fn-translate-107862", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 19, "n_passed": 19}
+{"problem_id": "fn-complete-128764", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 11, "n_passed": 7}
+{"problem_id": "fn-translate-128764", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 11, "n_passed": 11}
+{"problem_id": "fn-complete-346614", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 5, "n_passed": 4}
+{"problem_id": "fn-translate-346614", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 5, "n_passed": 5}
+{"problem_id": "fn-complete-459194", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 16, "n_passed": 16}
+{"problem_id": "fn-translate-459194", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 16, "n_passed": 16}
+{"problem_id": "fn-complete-390698", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 10, "n_passed": 10}
+{"problem_id": "fn-translate-390698", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 10, "n_passed": 0, "first_error": "E1054: No matching overload found for the function call with the given arguments"}
+{"problem_id": "fn-complete-37356", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 6, "n_passed": 0, "first_error": "E0002: Missing ';'"}
+{"problem_id": "fn-translate-37356", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 6, "n_passed": 6}
+{"problem_id": "fn-complete-73337", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 7, "n_passed": 2}
+{"problem_id": "fn-translate-73337", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 7, "n_passed": 7}
+{"problem_id": "fn-complete-60371", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 43, "n_passed": 42}
+{"problem_id": "fn-translate-60371", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 43, "n_passed": 43}
+{"problem_id": "fn-complete-411480", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 27, "n_passed": 27}
+{"problem_id": "fn-translate-411480", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 27, "n_passed": 27}
+{"problem_id": "fn-complete-52971", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 32, "n_passed": 32}
+{"problem_id": "fn-translate-52971", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 32, "n_passed": 32}
+{"problem_id": "fn-complete-15062", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 10, "n_passed": 1}
+{"problem_id": "fn-translate-15062", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 10, "n_passed": 10}
+{"problem_id": "fn-complete-371554", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 27, "n_passed": 0, "first_error": "E1053: Cannot assign list[int] to parameter 'values' of type set[int]"}
+{"problem_id": "fn-translate-371554", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 27, "n_passed": 0, "first_error": "E0002: Missing '}'"}
+{"problem_id": "fn-complete-152863", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 43, "n_passed": 31}
+{"problem_id": "fn-translate-152863", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 43, "n_passed": 43}
+{"problem_id": "fn-complete-371954", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 11, "n_passed": 0, "first_error": "E1002: Cannot return dict[str, dict[str, str | int | float | bool]] | list, expected list[dict[str, str | int | float | bool]]"}
+{"problem_id": "fn-translate-371954", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 11, "n_passed": 11}
+{"problem_id": "fn-complete-90832", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 26, "n_passed": 23}
+{"problem_id": "fn-translate-90832", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 26, "n_passed": 0, "first_error": "E1004: Function 'color_text' declared return type str but may implicitly return None"}
+{"problem_id": "fn-complete-184217", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 33, "n_passed": 26}
+{"problem_id": "fn-translate-184217", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 33, "n_passed": 33}
+{"problem_id": "fn-complete-71089", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 45, "n_passed": 0}
+{"problem_id": "fn-translate-71089", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 45, "n_passed": 0, "first_error": "E1053: Cannot assign Any to parameter 'obj' of type Sized"}
+{"problem_id": "fn-complete-389043", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 20, "n_passed": 4}
+{"problem_id": "fn-translate-389043", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 20, "n_passed": 20}
+{"problem_id": "fn-complete-22784", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 27, "n_passed": 6}
+{"problem_id": "fn-translate-22784", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 27, "n_passed": 27}
+{"problem_id": "fn-complete-13426", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 5, "n_passed": 5}
+{"problem_id": "fn-translate-13426", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 5, "n_passed": 5}
+{"problem_id": "fn-complete-318864", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 18, "n_passed": 1}
+{"problem_id": "fn-translate-318864", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 18, "n_passed": 18}
+{"problem_id": "fn-complete-207686", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 9, "n_passed": 9}
+{"problem_id": "fn-translate-207686", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 9, "n_passed": 9}
+{"problem_id": "fn-complete-308493", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 12, "n_passed": 12}
+{"problem_id": "fn-translate-308493", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 12, "n_passed": 12}
+{"problem_id": "fn-complete-7810", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 17, "n_passed": 16}
+{"problem_id": "fn-translate-7810", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 17, "n_passed": 17}
+{"problem_id": "fn-complete-28609", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 10, "n_passed": 10}
+{"problem_id": "fn-translate-28609", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 10, "n_passed": 10}
+{"problem_id": "fn-complete-88429", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 10, "n_passed": 0}
+{"problem_id": "fn-translate-88429", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 10, "n_passed": 10}
+{"problem_id": "fn-complete-347073", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 22, "n_passed": 0, "first_error": "E0002: Missing ';'"}
+{"problem_id": "fn-translate-347073", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 22, "n_passed": 22}
+{"problem_id": "fn-complete-193275", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 24, "n_passed": 0}
+{"problem_id": "fn-translate-193275", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 24, "n_passed": 24}
+{"problem_id": "fn-complete-114552", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 9, "n_passed": 0}
+{"problem_id": "fn-translate-114552", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 9, "n_passed": 9}
+{"problem_id": "fn-complete-224412", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 65, "n_passed": 42}
+{"problem_id": "fn-translate-224412", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 65, "n_passed": 0, "first_error": "E0004: Unexpected token in expression: '='"}
+{"problem_id": "fn-complete-13281", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 57, "n_passed": 57}
+{"problem_id": "fn-translate-13281", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 57, "n_passed": 57}
+{"problem_id": "fn-complete-206723", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 17, "n_passed": 16}
+{"problem_id": "fn-translate-206723", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 17, "n_passed": 17}
+{"problem_id": "fn-complete-341471", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 6, "n_passed": 6}
+{"problem_id": "fn-translate-341471", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 6, "n_passed": 6}
+{"problem_id": "fn-complete-22240", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 20, "n_passed": 0}
+{"problem_id": "fn-translate-22240", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 20, "n_passed": 20}
+{"problem_id": "fn-complete-37724", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 52, "n_passed": 52}
+{"problem_id": "fn-translate-37724", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 52, "n_passed": 0, "first_error": "E1004: Function 'circular_between' declared return type bool but may implicitly return None"}
+{"problem_id": "fn-complete-340173", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 54, "n_passed": 54}
+{"problem_id": "fn-translate-340173", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 54, "n_passed": 54}
+{"problem_id": "fn-complete-231063", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 34, "n_passed": 34}
+{"problem_id": "fn-translate-231063", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 34, "n_passed": 34}
+{"problem_id": "fn-complete-131808", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 11, "n_passed": 11}
+{"problem_id": "fn-translate-131808", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 11, "n_passed": 11}
+{"problem_id": "fn-complete-336459", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 19, "n_passed": 0}
+{"problem_id": "fn-translate-336459", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 19, "n_passed": 0, "first_error": "E1001: Cannot assign str | bool to NoneType | bool"}
+{"problem_id": "fn-complete-181783", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 38, "n_passed": 38}
+{"problem_id": "fn-translate-181783", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 38, "n_passed": 38}
+{"problem_id": "fn-complete-117799", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 17, "n_passed": 17}
+{"problem_id": "fn-translate-117799", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 17, "n_passed": 17}
+{"problem_id": "fn-complete-236888", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 7, "n_passed": 0, "first_error": "E0100: Unterminated string literal"}
+{"problem_id": "fn-translate-236888", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 7, "n_passed": 7}
+{"problem_id": "fn-complete-227493", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 53, "n_passed": 0}
+{"problem_id": "fn-translate-227493", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 53, "n_passed": 53}
+{"problem_id": "fn-complete-334976", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 40, "n_passed": 40}
+{"problem_id": "fn-translate-334976", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 40, "n_passed": 40}
+{"problem_id": "fn-complete-143818", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 33, "n_passed": 33}
+{"problem_id": "fn-translate-143818", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 33, "n_passed": 33}
+{"problem_id": "fn-complete-172400", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 37, "n_passed": 37}
+{"problem_id": "fn-translate-172400", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 37, "n_passed": 37}
+{"problem_id": "fn-complete-342877", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 6, "n_passed": 6}
+{"problem_id": "fn-translate-342877", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 6, "n_passed": 6}
+{"problem_id": "fn-complete-104518", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 12, "n_passed": 0, "first_error": "E0100: Unterminated string literal"}
+{"problem_id": "fn-translate-104518", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 12, "n_passed": 12}
+{"problem_id": "fn-complete-189431", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 17, "n_passed": 0, "first_error": "E1002: Cannot return dict[str, int | dict[str, int]] | NoneType, expected dict[str, int | dict | NoneType]"}
+{"problem_id": "fn-translate-189431", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 17, "n_passed": 0, "first_error": "E0002: Missing '}'"}
+{"problem_id": "fn-complete-380635", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 52, "n_passed": 52}
+{"problem_id": "fn-translate-380635", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 52, "n_passed": 52}
+{"problem_id": "fn-complete-185067", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 6, "n_passed": 1}
+{"problem_id": "fn-translate-185067", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 6, "n_passed": 6}
+{"problem_id": "fn-complete-396471", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 15, "n_passed": 13}
+{"problem_id": "fn-translate-396471", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 15, "n_passed": 15}
+{"problem_id": "fn-complete-430316", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 139, "n_passed": 139}
+{"problem_id": "fn-translate-430316", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 139, "n_passed": 139}
+{"problem_id": "fn-complete-142765", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 27, "n_passed": 12}
+{"problem_id": "fn-translate-142765", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 27, "n_passed": 27}
+{"problem_id": "fn-complete-143603", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 56, "n_passed": 56}
+{"problem_id": "fn-translate-143603", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 56, "n_passed": 56}
+{"problem_id": "fn-complete-289731", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 43, "n_passed": 43}
+{"problem_id": "fn-translate-289731", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 43, "n_passed": 43}
+{"problem_id": "fn-complete-358555", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 16, "n_passed": 16}
+{"problem_id": "fn-translate-358555", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 16, "n_passed": 16}
+{"problem_id": "fn-complete-194119", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 5, "n_passed": 5}
+{"problem_id": "fn-translate-194119", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 5, "n_passed": 5}
+{"problem_id": "fn-complete-176748", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 7, "n_passed": 0, "first_error": "E0002: Missing '}'"}
+{"problem_id": "fn-translate-176748", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 7, "n_passed": 7}
+{"problem_id": "fn-complete-329969", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 7, "n_passed": 1}
+{"problem_id": "fn-translate-329969", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 7, "n_passed": 7}
+{"problem_id": "fn-complete-120806", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 7, "n_passed": 0}
+{"problem_id": "fn-translate-120806", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 7, "n_passed": 7}
+{"problem_id": "fn-complete-163243", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 10, "n_passed": 10}
+{"problem_id": "fn-translate-163243", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 10, "n_passed": 10}
+{"problem_id": "fn-complete-181164", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 9, "n_passed": 5}
+{"problem_id": "fn-translate-181164", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 9, "n_passed": 9}
+{"problem_id": "fn-complete-120452", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 37, "n_passed": 0}
+{"problem_id": "fn-translate-120452", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 37, "n_passed": 37}
+{"problem_id": "fn-complete-1446", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 14, "n_passed": 14}
+{"problem_id": "fn-translate-1446", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 14, "n_passed": 14}
+{"problem_id": "fn-complete-293454", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 10, "n_passed": 10}
+{"problem_id": "fn-translate-293454", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 10, "n_passed": 10}
+{"problem_id": "fn-complete-211976", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 8, "n_passed": 1}
+{"problem_id": "fn-translate-211976", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 8, "n_passed": 8}
+{"problem_id": "fn-complete-212305", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 37, "n_passed": 37}
+{"problem_id": "fn-translate-212305", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 37, "n_passed": 37}
+{"problem_id": "fn-complete-318459", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 7, "n_passed": 7}
+{"problem_id": "fn-translate-318459", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 7, "n_passed": 7}
+{"problem_id": "fn-complete-320690", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 70, "n_passed": 64}
+{"problem_id": "fn-translate-320690", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 70, "n_passed": 70}
+{"problem_id": "fn-complete-51466", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 13, "n_passed": 0, "first_error": "E0003: Expected identifier, got '='"}
+{"problem_id": "fn-translate-51466", "task": "translation", "status": "check_fail", "check_pass": false, "n_tests": 13, "n_passed": 0, "first_error": "E1001: Cannot assign list[tuple | int] to tuple | int"}
+{"problem_id": "fn-complete-272851", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 90, "n_passed": 61}
+{"problem_id": "fn-translate-272851", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 90, "n_passed": 90}
+{"problem_id": "fn-complete-155158", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 14, "n_passed": 12}
+{"problem_id": "fn-translate-155158", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 14, "n_passed": 14}
+{"problem_id": "fn-complete-334332", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 51, "n_passed": 44}
+{"problem_id": "fn-translate-334332", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 51, "n_passed": 51}
+{"problem_id": "fn-complete-269345", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 27, "n_passed": 12}
+{"problem_id": "fn-translate-269345", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 27, "n_passed": 27}
+{"problem_id": "fn-complete-409014", "task": "completion", "status": "check_fail", "check_pass": false, "n_tests": 5, "n_passed": 0, "first_error": "E0100: Unterminated string literal"}
+{"problem_id": "fn-translate-409014", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 5, "n_passed": 5}
+{"problem_id": "fn-complete-17667", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 36, "n_passed": 36}
+{"problem_id": "fn-translate-17667", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 36, "n_passed": 36}
+{"problem_id": "fn-complete-196023", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 20, "n_passed": 20}
+{"problem_id": "fn-translate-196023", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 20, "n_passed": 20}
+{"problem_id": "fn-complete-255762", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 8, "n_passed": 8}
+{"problem_id": "fn-translate-255762", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 8, "n_passed": 8}
+{"problem_id": "fn-complete-92204", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 56, "n_passed": 56}
+{"problem_id": "fn-translate-92204", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 56, "n_passed": 56}
+{"problem_id": "fn-complete-8600", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 15, "n_passed": 8}
+{"problem_id": "fn-translate-8600", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 15, "n_passed": 15}
+{"problem_id": "fn-complete-376087", "task": "completion", "status": "pass", "check_pass": true, "n_tests": 119, "n_passed": 119}
+{"problem_id": "fn-translate-376087", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 119, "n_passed": 119}
+{"problem_id": "fn-complete-370748", "task": "completion", "status": "test_fail", "check_pass": true, "n_tests": 19, "n_passed": 8}
+{"problem_id": "fn-translate-370748", "task": "translation", "status": "pass", "check_pass": true, "n_tests": 19, "n_passed": 19}
