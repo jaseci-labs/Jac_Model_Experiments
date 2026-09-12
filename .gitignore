@@ -22,6 +22,10 @@ experiments/*/tmp/
 .venv
 # pinned jac binary for grading jac-data-gen evals (run_function_eval.sh)
 .jac-grader/
+# jac-data-gen private eval material: grader rows quote hidden test asserts,
+# reference samples are the private solutions ("never train on these")
+**/results/function_v1_*/**/results.jsonl
+**/results/function_v1_*/reference/samples*.jsonl
 
 # tooling caches
 .jac/

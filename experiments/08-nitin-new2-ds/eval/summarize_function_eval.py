@@ -95,6 +95,22 @@ if "base" in res and "adapter" in res:
         print(f"| {name} | {n} | {both} | {bo} | {ao} | {n - both - bo - ao} | "
               f"{100 * (ao - bo) / n:+.1f} | {mcnemar_p(bo, ao):.2g} |")
 
+models = [s for s in ("base", "adapter") if s in res]
+if models:
+    print("\n### output format vs the prompt's rules\n")
+    print("| stage | completion: fenced (rule: no fences) | of which ```python | completion repeats the visible signature | translation: Jac `def f(...) {` | translation: `func` keyword (not Jac) |")
+    print("|---|---|---|---|---|---|")
+    for s in models:
+        smp = [json.loads(l) for l in (OUT / s / "samples.jsonl").open()]
+        comp = [x for x in smp if x["task"] == "completion"]
+        tr = [x["output"] for x in smp if x["task"] == "translation"]
+        sig = sum(bool(re.search(r"\bdef \w+\(", x["completion"])) for x in comp)
+        print(f"| {s} | {fmt(sum('```' in x['completion'] for x in comp), len(comp))} "
+              f"| {sum(bool(re.search(r'```(python|py)\b', x['completion'])) for x in comp)} "
+              f"| {fmt(sig, len(comp))} "
+              f"| {fmt(sum(bool(re.search(r'\bdef \w+\(.*\)\s*(->[^{]*)?\{', t)) for t in tr), len(tr))} "
+              f"| {fmt(sum(bool(re.search(r'\bfunc \w+', t)) for t in tr), len(tr))} |")
+
 if any(cross.values()):
     print("\n### toolchain cross-check: same samples graded under jac 0.36.1 (every 20th task)\n")
     print("| stage | n | success, 0.16.1 | success, 0.36.1 | same verdict | 0.36.1 status counts |")

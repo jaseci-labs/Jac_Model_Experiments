@@ -69,6 +69,8 @@ grade() {  # $1 = stage dir
   [ -n "$CROSS_JAC" ] || return 0
   .venv/bin/python - "$PRIV" "$1/samples.jsonl" > "$1/samples_subset.jsonl" <<'PY'
 import json, sys   # every 20th task of the private file, selected by id so all stages share the subset
+# ponytail: the file alternates completion/translation per source, so this subset is completion-only;
+# use i % 40 in (0, 1) for both variants if translation needs cross-checking
 ids = {json.loads(l)["id"] for i, l in enumerate(open(sys.argv[1])) if i % 20 == 0}
 sys.stdout.writelines(l for l in open(sys.argv[2]) if json.loads(l)["problem_id"] in ids)
 PY

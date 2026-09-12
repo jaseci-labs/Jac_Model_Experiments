@@ -29,6 +29,12 @@ the exact "bigger pool, worse result" pattern 07 hit against 06):
 after this report was first written; 07's best adapter overall was its
 Spectrum DPO-best at 73.0%, 624/855.)
 
+**Added 2026-09-11, behavioral eval:** both holdouts above only check that the
+generated Jac compiles and runs. On jac-data-gen's sealed function eval
+(1,000 tasks with hidden tests), this adapter scores **57.0% pass@1 vs 3.0%
+for the base** (translation 83.2%, completion 30.8%). See
+[function-eval-report.md](function-eval-report.md).
+
 Significance on holdout (a), unpaired two-proportion z-test, the method every
 prior report used: vs 07 SFT-final z=-0.86, p=0.39; vs 06 z=-1.79, p=0.074;
 vs 04 z=-1.95, p=0.051. 08 is numerically the lowest, but not significantly
